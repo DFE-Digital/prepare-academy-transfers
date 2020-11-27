@@ -47,9 +47,9 @@ namespace TRAMS_API.Controllers
 
             var result = await client.GetAsync($"{url}/api/data/v9.1/accounts?$select=name&$filter=statecode eq 0");
 
-            var casterd = await result.Content.ReadAsStringAsync();
+            var resultContent = await result.Content.ReadAsStringAsync();
 
-            return $"Request Status Code: {result.StatusCode}. First 200 chars of response are: {casterd.Substring(0, 200)}";
+            return $"Request Status Code: {result.StatusCode}. First 200 chars of response are: {resultContent.Substring(0, 200)}";
         }
     }
 }
