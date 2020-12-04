@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using API.HttpHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -22,30 +23,22 @@ namespace TRAMS_API.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IConfiguration _config;
+        private readonly AuthenticatedHttpClient _client;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration config)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, 
+                                         IConfiguration config,
+                                         AuthenticatedHttpClient httpClient)
         {
             _logger = logger;
             _config = config;
+            _client = httpClient;
         }
 
         [HttpGet]
         public async Task<string> Get()
         {
-            var authority = _config["D365:Authority"];
-            var clientId = _config["D365:ClientId"];
-            var clientSecret = _config["D365:ClientSecret"];
-            var url = _config["D365:Url"];
-            
-            var authContext = new AuthenticationContext(authority);
-            var clientCredential = new ClientCredential(clientId, clientSecret);
-            var token = await authContext.AcquireTokenAsync(url, clientCredential);
-
-            var client = new HttpClient();
-
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
-
-            var result = await client.GetAsync($"{url}/api/data/v9.1/accounts?$select=name&$filter=statecode eq 0");
+            await _client.AuthenticateAsync();
+            var result = await _client.GetAsync($"accounts?$select=name,sip_companieshousenumber,sip_compositeaddress,_sip_establishmenttypeid_value,_sip_establismenttypegroupid_value,sip_trustreferencenumber,sip_ukprn,sip_upin,sip_urn");
 
             var resultContent = await result.Content.ReadAsStringAsync();
 
