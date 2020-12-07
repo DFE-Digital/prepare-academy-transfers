@@ -11,6 +11,7 @@ namespace API.Mapping
         public static List<string> GetFields(Type modelType)
         {
             var jsonProps = modelType.GetProperties()
+                         .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null)
                          .Select(p => p.GetCustomAttribute<JsonPropertyAttribute>().PropertyName.Split("@").First())
                          .ToList();
 
