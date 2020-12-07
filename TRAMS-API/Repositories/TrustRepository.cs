@@ -1,7 +1,8 @@
 ﻿using API.HttpHelpers;
-using System;
+using API.Mapping;
+using API.Models.GET;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Repositories
@@ -16,38 +17,59 @@ namespace API.Repositories
             _client = client;
         }
 
-        public async Task<string> SearchTrust()
+        public async Task<List<GetTrustD365Model>> SearchTrusts()
         {
-            var fields = new List<string>
-            {
-                "accountid",
-                "name",
-                "sip_companieshousenumber",
-                "sip_compositeaddress",
-                "_sip_establishmenttypeid_value",
-                "_sip_establismenttypegroupid_value",
-                "sip_trustreferencenumber",
-                "sip_ukprn",
-                "sip_upin",
-                "sip_urn"
-            };
+            var fields = JsonFieldExtractor.GetFields(typeof(GetTrustD365Model));
 
-            return null;
+            List<string> filters = BuildFilters();
+
+            await _client.AuthenticateAsync();
+
+            var url = ODataUrlBuilder.BuildUrl(_route, fields, filters);
+
+            var response = await _client.GetAsync(url);
+            var content = await response.Content?.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var results = await response.Content.ReadAsStringAsync();
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustD365Model>>(results);
+
+                return castedResults.Items;
+            }
+
+            return new List<GetTrustD365Model>();
         }
 
-        //var accountid = results.entities[i]["accountid"];
-        //var name = results.entities[i]["name"];
-        //var sip_companieshousenumber = results.entities[i]["sip_companieshousenumber"];
-        //var sip_compositeaddress = results.entities[i]["sip_compositeaddress"];
-        //var _sip_establishmenttypeid_value = results.entities[i]["_sip_establishmenttypeid_value"];
-        //var _sip_establishmenttypeid_value_formatted = results.entities[i]["_sip_establishmenttypeid_value@OData.Community.Display.V1.FormattedValue"];
-        //var _sip_establishmenttypeid_value_lookuplogicalname = results.entities[i]["_sip_establishmenttypeid_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-        //var _sip_establismenttypegroupid_value = results.entities[i]["_sip_establismenttypegroupid_value"];
-        //var _sip_establismenttypegroupid_value_formatted = results.entities[i]["_sip_establismenttypegroupid_value@OData.Community.Display.V1.FormattedValue"];
-        //var _sip_establismenttypegroupid_value_lookuplogicalname = results.entities[i]["_sip_establismenttypegroupid_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-        //var sip_trustreferencenumber = results.entities[i]["sip_trustreferencenumber"];
-        //var sip_ukprn = results.entities[i]["sip_ukprn"];
-        //var sip_upin = results.entities[i]["sip_upin"];
-        //var sip_urn = results.entities[i]["sip_urn"];
+        private List<string> BuildFilters()
+        {
+            var allowedEstablishementTypeIds = new List<string>()
+            {
+                //Multi-academy trust
+                "F0C125ED-6750-E911-A82E-000D3A385A17",
+                //Single-academy trust
+                "81014326-5D51-E911-A82E-000D3A385A17",
+                //Trust
+                "4EEAEE65-9A3E-E911-A828-000D3A385A1C"
+            };
+
+            var allowedStatusCodes = new List<string>()
+            {
+                "907660000",
+                "907660002"
+            };
+
+            var filters = new List<string>()
+            {
+                //status should be active
+                "(statecode eq 0) and",
+                //Restrict establishment types
+                $"{ODataUrlBuilder.BuildInFilter("_sip_establishmenttypeid_value", allowedEstablishementTypeIds)} and",
+                //Restrict status codes
+                $"{ODataUrlBuilder.BuildInFilter("statuscode", allowedStatusCodes)}"
+            };
+
+            return filters;
+        }
     }
 }
