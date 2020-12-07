@@ -39,5 +39,21 @@ namespace API.HttpHelpers
 
             return outerQuery;
         }
+
+        public static string BuildOrSearchQuery(string query, List<string> fieldNames)
+        {
+            if (fieldNames.Count == 0)
+                throw new ArgumentException("The filter requires at least one field name");
+
+            var individualItems = fieldNames.Select(f => $"contains({f},'{query}') or")
+                                            .SkipLast(1)
+                                            .ToList();
+
+            individualItems.Add($"contains({fieldNames.Last()},'{query}')");
+
+            var outerQuery = $"({string.Join(" ", individualItems)})";
+
+            return outerQuery;
+        }
     }
 }

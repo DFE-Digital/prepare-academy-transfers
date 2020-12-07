@@ -35,4 +35,10 @@ namespace API.Models.GET
         [JsonProperty("sip_urn")]
         public string Urn { get; set; }
     }
+
+    public enum TrustStatusReason
+    {
+        Open = 907660000,
+        OpenButProposedToClose = 907660002
+    }
 }

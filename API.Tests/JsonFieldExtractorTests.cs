@@ -2,17 +2,18 @@ using API.Mapping;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Text.Json.Serialization;
 using Xunit;
 
 namespace API.Tests
 {
     public class JsonFieldExtractorTests
     {
+        #region GetAllFieldAnnotationsTests
+
         [Fact]
         public void ClassWithNoAttributesReturnsEmptyList()
         {
-            var result = JsonFieldExtractor.GetFields(typeof(ClassWithNoAttributes));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithNoAttributes));
 
             Assert.NotNull(result);
             Assert.Empty(result);
@@ -21,7 +22,7 @@ namespace API.Tests
         [Fact]
         public void ClassWithNoAnnotatedPropertiesReturnsEmptyList()
         {
-            var result = JsonFieldExtractor.GetFields(typeof(CLassWithOneAttributeNoAnnotation));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(CLassWithOneAttributeNoAnnotation));
 
             Assert.NotNull(result);
             Assert.Empty(result);
@@ -30,7 +31,7 @@ namespace API.Tests
         [Fact]
         public void ClassWithOneAttributeAndAnnotatedReturnsAttributeName()
         {
-            var result = JsonFieldExtractor.GetFields(typeof(ClassWithOneAttributeAndAnnotated));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeAndAnnotated));
 
             Assert.NotNull(result);
             Assert.Single(result);
@@ -40,7 +41,7 @@ namespace API.Tests
         [Fact]
         public void ClassWithOneAttributeAndAnnotatedNoMetadataRetrunsFieldNameWithNoMetadataSection()
         {
-            var result = JsonFieldExtractor.GetFields(typeof(ClassWithOneAttributeAndAnnotatedWithMetadata));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeAndAnnotatedWithMetadata));
 
             Assert.NotNull(result);
             Assert.Single(result);
@@ -50,13 +51,31 @@ namespace API.Tests
         [Fact]
         public void ClassWithMixedAnnotationsTest()
         {
-            var result = JsonFieldExtractor.GetFields(typeof(ClassWithMixedAnnotations1));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithMixedAnnotations1));
 
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
             Assert.Contains(result, r => r == "AnnotatedNoMetadata");
             Assert.Contains(result, r => r == "AnnotatedWithMetadata");
         }
+
+        #endregion
+
+        #region GetPropertyAnnotationTests
+
+        [Fact]
+        public void ExtractingAnnotationFromFieldThrowsException()
+        {
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                return JsonFieldExtractor
+                       .GetPropertyAnnotation(typeof(ClassWithNoAttributes),
+                                                     "_someInt");
+            });
+        }
+
+        #endregion 
     }
 
     internal class ClassWithNoAttributes

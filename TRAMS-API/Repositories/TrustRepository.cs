@@ -4,12 +4,22 @@ using API.Models.GET;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static API.Constants.D365Constants;
 
 namespace API.Repositories
 {
     public class TrustRepository
     {
-        private static string _route = "accounts";
+        private static readonly string _route = "accounts";
+        private static readonly string establishmentTypeFieldName = JsonFieldExtractor
+            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.EstablishmentType));
+        private static readonly string trustNameFieldName = JsonFieldExtractor
+            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.TrustName));
+        private static readonly string companiesHouseFieldName = JsonFieldExtractor
+            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.CompaniesHouseNumber));
+        private static readonly string trustReferenceNumberFieldName = JsonFieldExtractor
+            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.TrustReferenceNumber));
+
         private readonly AuthenticatedHttpClient _client;
 
         public TrustRepository(AuthenticatedHttpClient client)
@@ -17,11 +27,11 @@ namespace API.Repositories
             _client = client;
         }
 
-        public async Task<List<GetTrustD365Model>> SearchTrusts()
+        public async Task<List<GetTrustD365Model>> SearchTrusts(string searchQuery)
         {
-            var fields = JsonFieldExtractor.GetFields(typeof(GetTrustD365Model));
+            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
 
-            List<string> filters = BuildFilters();
+            List<string> filters = BuildSearchFilters(searchQuery);
 
             await _client.AuthenticateAsync();
 
@@ -41,33 +51,43 @@ namespace API.Repositories
             return new List<GetTrustD365Model>();
         }
 
-        private List<string> BuildFilters()
+        private List<string> BuildSearchFilters(string searchQuery)
         {
             var allowedEstablishementTypeIds = new List<string>()
             {
-                //Multi-academy trust
-                "F0C125ED-6750-E911-A82E-000D3A385A17",
-                //Single-academy trust
-                "81014326-5D51-E911-A82E-000D3A385A17",
-                //Trust
-                "4EEAEE65-9A3E-E911-A828-000D3A385A1C"
+                EstablishmentType.MultiAcademyTrustGuid,
+                EstablishmentType.SingleAcademyTrustGuid,
+                EstablishmentType.TrustGuid
             };
 
             var allowedStatusCodes = new List<string>()
             {
-                "907660000",
-                "907660002"
+                ((int)TrustStatusReason.Open).ToString(),
+                ((int)TrustStatusReason.OpenButProposedToClose).ToString()
             };
 
             var filters = new List<string>()
             {
                 //status should be active
-                "(statecode eq 0) and",
+                $"({SharedFieldNames.StateCode} eq 0) and",
                 //Restrict establishment types
-                $"{ODataUrlBuilder.BuildInFilter("_sip_establishmenttypeid_value", allowedEstablishementTypeIds)} and",
+                $"{ODataUrlBuilder.BuildInFilter(establishmentTypeFieldName, allowedEstablishementTypeIds)} and",
                 //Restrict status codes
-                $"{ODataUrlBuilder.BuildInFilter("statuscode", allowedStatusCodes)}"
+                $"{ODataUrlBuilder.BuildInFilter(SharedFieldNames.StatusCode, allowedStatusCodes)}"
             };
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                var searchFields = new List<string>
+                {
+                    trustNameFieldName,
+                    companiesHouseFieldName,
+                    trustReferenceNumberFieldName
+                };
+
+                var reusableSearchFilter = $"and {ODataUrlBuilder.BuildOrSearchQuery(searchQuery, searchFields)}";
+                filters.Add(reusableSearchFilter);
+            }
 
             return filters;
         }

@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace TRAMS_API.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class TrustsController : ControllerBase
@@ -25,9 +27,9 @@ namespace TRAMS_API.Controllers
         }
 
         [HttpGet]
-        public async Task<string> Get()
+        public async Task<string> Get(string searchQuery)
         {
-            var results = await _trustRepostiory.SearchTrusts();
+            var results = await _trustRepostiory.SearchTrusts(searchQuery);
 
             var nrOfTrustsWithNullUrn = results.Where(t => !string.IsNullOrEmpty(t.Urn)).ToList();
 
