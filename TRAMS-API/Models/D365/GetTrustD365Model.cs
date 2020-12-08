@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace API.Models.GET
+namespace API.Models.D365
 {
     public class GetTrustD365Model
     {

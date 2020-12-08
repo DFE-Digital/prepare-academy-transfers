@@ -1,6 +1,6 @@
 ﻿using API.HttpHelpers;
 using API.Mapping;
-using API.Models.GET;
+using API.Models.D365;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace API.Repositories
         {
             var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
 
-            List<string> filters = BuildSearchFilters(searchQuery);
+            List<string> filters = BuildTrustSearchFilters(searchQuery);
 
             await _client.AuthenticateAsync();
 
@@ -74,7 +74,7 @@ namespace API.Repositories
             return new List<GetTrustD365Model>();
         }
 
-        private List<string> BuildSearchFilters(string searchQuery)
+        private List<string> BuildTrustSearchFilters(string searchQuery)
         {
             var allowedEstablishementTypeIds = new List<string>()
             {

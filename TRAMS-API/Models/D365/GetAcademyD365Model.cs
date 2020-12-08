@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Models.D365
+﻿namespace API.Models.D365
 {
     public class GetAcademyD365Model
     {
