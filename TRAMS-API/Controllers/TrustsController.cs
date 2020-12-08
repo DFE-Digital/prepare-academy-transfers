@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,22 @@ namespace TRAMS_API.Controllers
         }
 
         [HttpGet]
-        public async Task<string> Get(string searchQuery)
+        [Route("/trusts/{id}")]
+        public async Task<ActionResult<string>> GetOne(Guid id)
+        {
+            var result = await _trustRepostiory.GetTrustById(id);
+
+            if (result == null)
+            {
+                return NotFound($"The trust with the id: '{id}' was not found");
+            }
+            
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<string> GetMany(string searchQuery)
         {
             var results = await _trustRepostiory.SearchTrusts(searchQuery);
 

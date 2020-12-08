@@ -2,6 +2,7 @@
 using API.Mapping;
 using API.Models.GET;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static API.Constants.D365Constants;
@@ -25,6 +26,28 @@ namespace API.Repositories
         public TrustRepository(AuthenticatedHttpClient client)
         {
             _client = client;
+        }
+
+        public async Task<GetTrustD365Model> GetTrustById(Guid id)
+        {
+            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
+
+            await _client.AuthenticateAsync();
+
+            var url = ODataUrlBuilder.BuildUrl(_route, id, fields);
+
+            var response = await _client.GetAsync(url);
+            var content = await response.Content?.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var castedResult = JsonConvert.DeserializeObject<GetTrustD365Model>(result);
+
+                return castedResult;
+            }
+
+            return null;
         }
 
         public async Task<List<GetTrustD365Model>> SearchTrusts(string searchQuery)

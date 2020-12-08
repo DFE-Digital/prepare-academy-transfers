@@ -20,6 +20,12 @@ namespace API.HttpHelpers
             return url;
         }
 
+        public static string BuildUrl(string route, Guid id, List<string> fields)
+        {
+            var url = $"{route}({id})?$select={string.Join(',', fields)}";
+
+            return url;
+        }
         
         public static string BuildInFilter(string fieldName, List<string> allowedValues)
         {
