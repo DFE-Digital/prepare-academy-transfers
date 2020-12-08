@@ -17,7 +17,7 @@ namespace API.Models.GET
         [JsonProperty("sip_trustreferencenumber")]
         public string TrustReferenceNumber { get; set; }
 
-        [JsonProperty("sip_compositeaddress")]
+        [JsonProperty("address1_composite")]
         public string Address { get; set; }
 
         [JsonProperty("_sip_establishmenttypeid_value@OData.Community.Display.V1.FormattedValue")]
@@ -31,9 +31,6 @@ namespace API.Models.GET
 
         [JsonProperty("sip_upin")]
         public string Upin { get; set; }
-
-        [JsonProperty("sip_urn")]
-        public string Urn { get; set; }
     }
 
     public enum TrustStatusReason

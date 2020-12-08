@@ -34,7 +34,7 @@ namespace API.Repositories
 
             await _client.AuthenticateAsync();
 
-            var url = ODataUrlBuilder.BuildUrl(_route, id, fields);
+            var url = ODataUrlBuilder.BuildRetrieveOneUrl(_route, id, fields);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();
@@ -58,7 +58,7 @@ namespace API.Repositories
 
             await _client.AuthenticateAsync();
 
-            var url = ODataUrlBuilder.BuildUrl(_route, fields, filters);
+            var url = ODataUrlBuilder.BuildFilterUrl(_route, fields, filters);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();

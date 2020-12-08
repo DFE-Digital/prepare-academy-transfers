@@ -22,7 +22,7 @@ namespace API.Tests
         [Fact]
         public void ClassWithNoAnnotatedPropertiesReturnsEmptyList()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(CLassWithOneAttributeNoAnnotation));
+            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeNoAnnotation));
 
             Assert.NotNull(result);
             Assert.Empty(result);
@@ -75,6 +75,37 @@ namespace API.Tests
             });
         }
 
+        [Fact]
+        public void ExtractingAnnotationWhereNoneExistsThrowsException()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                return JsonFieldExtractor
+                       .GetPropertyAnnotation(typeof(ClassWithOneAttributeNoAnnotation),
+                                              nameof(ClassWithOneAttributeNoAnnotation.IntProperty));
+            });
+        }
+
+        [Fact]
+        public void CanExtractNonExtensionAttributeFromField()
+        {
+            var result = JsonFieldExtractor
+                         .GetPropertyAnnotation(typeof(ClassWithOneAttributeAndAnnotated),
+                                                nameof(ClassWithOneAttributeAndAnnotated.IntProperty));
+
+            Assert.Equal("JsonFieldName", result);
+        }
+
+        [Fact]
+        public void CanExtractExtensionAttributeFromField()
+        {
+            var result = JsonFieldExtractor
+                         .GetPropertyAnnotation(typeof(ClassWithOneAttributeAndAnnotatedWithMetadata),
+                                                nameof(ClassWithOneAttributeAndAnnotatedWithMetadata.IntProperty));
+
+            Assert.Equal("JsonFieldName", result);
+        }
+
         #endregion 
     }
 
@@ -84,7 +115,7 @@ namespace API.Tests
         private int _someInt;
     }
 
-    internal class CLassWithOneAttributeNoAnnotation
+    internal class ClassWithOneAttributeNoAnnotation
     {
         public int IntProperty { get; set; }
     }

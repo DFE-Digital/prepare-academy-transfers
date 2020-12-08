@@ -38,7 +38,6 @@ namespace TRAMS_API.Controllers
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
             
-
             return Ok(result);
         }
 
