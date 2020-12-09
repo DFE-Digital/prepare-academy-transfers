@@ -9,38 +9,28 @@ using static API.Constants.D365Constants;
 
 namespace API.Repositories
 {
-    public class TrustRepository
+    public class TrustsRepository
     {
         private static readonly string _route = "accounts";
         private static readonly string establishmentTypeFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.EstablishmentType));
+            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.EstablishmentType));
         private static readonly string trustNameFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.TrustName));
+            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.TrustName));
         private static readonly string companiesHouseFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.CompaniesHouseNumber));
+            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.CompaniesHouseNumber));
         private static readonly string trustReferenceNumberFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustD365Model), nameof(GetTrustD365Model.TrustReferenceNumber));
+            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.TrustReferenceNumber));
 
         private readonly AuthenticatedHttpClient _client;
 
-        public TrustRepository(AuthenticatedHttpClient client)
+        public TrustsRepository(AuthenticatedHttpClient client)
         {
             _client = client;
         }
 
-        public async Task Test()
+        public async Task<GetTrustsD365Model> GetTrustById(Guid id)
         {
-            await _client.AuthenticateAsync();
-
-            var res = await _client.GetAsync("accounts?$select=accountid&$expand=sip_ReligiousCharacterID&$filter=_sip_establishmenttypeid_value ne null&$top=20");
-            var content = await res.Content?.ReadAsStringAsync();
-
-            var debug = 0;
-        }
-
-        public async Task<GetTrustD365Model> GetTrustById(Guid id)
-        {
-            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
+            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustsD365Model));
 
             await _client.AuthenticateAsync();
 
@@ -52,7 +42,7 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                var castedResult = JsonConvert.DeserializeObject<GetTrustD365Model>(result);
+                var castedResult = JsonConvert.DeserializeObject<GetTrustsD365Model>(result);
 
                 return castedResult;
             }
@@ -60,9 +50,9 @@ namespace API.Repositories
             return null;
         }
 
-        public async Task<List<GetTrustD365Model>> SearchTrusts(string searchQuery)
+        public async Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery)
         {
-            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
+            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustsD365Model));
 
             List<string> filters = BuildTrustSearchFilters(searchQuery);
 
@@ -76,12 +66,12 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustsD365Model>>(results);
 
                 return castedResults.Items;
             }
 
-            return new List<GetTrustD365Model>();
+            return new List<GetTrustsD365Model>();
         }
 
         private List<string> BuildTrustSearchFilters(string searchQuery)

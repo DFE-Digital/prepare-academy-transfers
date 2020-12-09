@@ -34,21 +34,9 @@ namespace TRAMS_API
             services.AddControllers();
 
             services.AddSingleton(this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
-            services.AddTransient(typeof(TrustRepository));
-        }
 
-        private AuthenticatedHttpClient CreateHttpClient()
-        {
-            var authority = Configuration["D365:Authority"];
-            var clientId = Configuration["D365:ClientId"];
-            var clientSecret = Configuration["D365:ClientSecret"];
-            var url = Configuration["D365:Url"];
-            var version = Configuration["D365:Version"];
-
-            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
-
-            return client;
+            ConfigureMappers(services);
+            ConfigureRepositories(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +57,34 @@ namespace TRAMS_API
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient(typeof(TrustsRepository));
+            services.AddTransient(typeof(AcademiesRepository));
+        }
+
+        private static void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r =>
+                            new GetTrustD365ModelToGetTrustsModelMapper());
+
+            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
+                new GetAcademiesD365ModelToGetAcademiesModelMapper());
+        }
+
+        private AuthenticatedHttpClient CreateHttpClient()
+        {
+            var authority = Configuration["D365:Authority"];
+            var clientId = Configuration["D365:ClientId"];
+            var clientSecret = Configuration["D365:ClientSecret"];
+            var url = Configuration["D365:Url"];
+            var version = Configuration["D365:Version"];
+
+            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
+
+            return client;
         }
     }
 }

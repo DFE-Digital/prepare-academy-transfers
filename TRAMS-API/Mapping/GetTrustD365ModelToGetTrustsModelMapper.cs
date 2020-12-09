@@ -3,9 +3,9 @@ using API.Models.Response;
 
 namespace API.Mapping
 {
-    public class GetTrustD365ModelToGetTrustsModelMapper : IMapper<GetTrustD365Model, GetTrustsModel>
+    public class GetTrustD365ModelToGetTrustsModelMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
     {
-        public GetTrustsModel Map(GetTrustD365Model input)
+        public GetTrustsModel Map(GetTrustsD365Model input)
         {
             if(input == null)
             {

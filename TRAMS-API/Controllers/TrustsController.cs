@@ -19,17 +19,23 @@ namespace TRAMS_API.Controllers
     public class TrustsController : ControllerBase
     {
         private readonly ILogger<TrustsController> _logger;
-        private readonly TrustRepository _trustRepostiory;
-        private readonly IMapper<GetTrustD365Model, GetTrustsModel> _mapper;
+        private readonly TrustsRepository _trustRepostiory;
+        private readonly AcademiesRepository _academiesRepository;
+        private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
+        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
         public TrustsController(ILogger<TrustsController> logger, 
                                          IConfiguration config,
-                                         TrustRepository trustRepostiory,
-                                         IMapper<GetTrustD365Model, GetTrustsModel> mapper)
+                                         TrustsRepository trustRepostiory,
+                                         AcademiesRepository academiesRepository,
+                                         IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
+                                         IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
         {
             _logger = logger;
             _trustRepostiory = trustRepostiory;
-            _mapper = mapper;
+            _academiesRepository = academiesRepository;
+            _getTrustMapper = mapper;
+            _getAcademiesMapper = getAcademiesMapper;
         }
 
         [HttpGet]
@@ -43,7 +49,7 @@ namespace TRAMS_API.Controllers
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
 
-            var formattedResult = _mapper.Map(result);
+            var formattedResult = _getTrustMapper.Map(result);
             
             return Ok(formattedResult);
         }
@@ -51,10 +57,27 @@ namespace TRAMS_API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GetTrustsModel>>> GetMany(string search)
         {
-            //await _trustRepostiory.Test();
             var results = await _trustRepostiory.SearchTrusts(search);
 
-            var formattedOutput = results.Select(r => _mapper.Map(r)).ToList();
+            var formattedOutput = results.Select(r => _getTrustMapper.Map(r)).ToList();
+
+            return Ok(formattedOutput);
+        }
+
+        [HttpGet]
+        [Route("/trusts/{id}/academies")]
+        public async Task<ActionResult<List<GetAcademiesModel>>> GetTrustAcademies(Guid id)
+        {
+            var trust = await _trustRepostiory.GetTrustById(id);
+
+            if (trust==null)
+            {
+                return NotFound($"Could not find a trust with the id: '{id}'");
+            }
+
+            var academies = await _academiesRepository.GetAcademiesByTrustId(id);
+
+            var formattedOutput = academies.Select(a => _getAcademiesMapper.Map(a)).ToList();
 
             return Ok(formattedOutput);
         }
