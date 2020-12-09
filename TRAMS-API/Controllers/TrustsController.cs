@@ -51,6 +51,7 @@ namespace TRAMS_API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GetTrustsModel>>> GetMany(string search)
         {
+            //await _trustRepostiory.Test();
             var results = await _trustRepostiory.SearchTrusts(search);
 
             var formattedOutput = results.Select(r => _mapper.Map(r)).ToList();

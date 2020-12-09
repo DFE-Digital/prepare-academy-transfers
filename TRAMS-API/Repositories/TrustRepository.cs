@@ -28,6 +28,16 @@ namespace API.Repositories
             _client = client;
         }
 
+        public async Task Test()
+        {
+            await _client.AuthenticateAsync();
+
+            var res = await _client.GetAsync("accounts?$select=accountid&$expand=sip_ReligiousCharacterID&$filter=_sip_establishmenttypeid_value ne null&$top=20");
+            var content = await res.Content?.ReadAsStringAsync();
+
+            var debug = 0;
+        }
+
         public async Task<GetTrustD365Model> GetTrustById(Guid id)
         {
             var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustD365Model));
