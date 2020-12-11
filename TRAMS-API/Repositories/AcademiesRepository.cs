@@ -1,5 +1,4 @@
 ﻿using API.HttpHelpers;
-using API.Mapping;
 using API.Models.D365;
 using Newtonsoft.Json;
 using System;
@@ -12,20 +11,23 @@ namespace API.Repositories
     {
         private static readonly string _route = "accounts";
 
-        private static readonly string _parentTrustIdFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetAcademiesD365Model), nameof(GetAcademiesD365Model.ParentTrustId));
-
         private readonly AuthenticatedHttpClient _client;
+        private readonly IODataModelHelper<GetAcademiesD365Model> _oDataHelper;
 
-        public AcademiesRepository(AuthenticatedHttpClient client)
+        public AcademiesRepository(AuthenticatedHttpClient client, IODataModelHelper<GetAcademiesD365Model> oDataHelper)
         {
             _client = client;
+            _oDataHelper = oDataHelper;
         }
 
         public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
         {
-            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetAcademiesD365Model));
+            var fields = _oDataHelper.GetSelectClause();
+            var expandClause = _oDataHelper.GetExpandClause();
+            var expand = "&$expand=sip_PredecessorEstablishment($select=sip_pfi,sip_predecessorurn,sip_urn)";
+            var expand2 = "/api/data/v9.1/accounts?$select=_parentaccountid_value,_sip_establishmenttypeid_value,sip_pfi,_sip_predecessorestablishment_value,sip_predecessorurn&$expand=sip_PredecessorEstablishment($select=sip_pfi,sip_predecessorurn,sip_urn),sip_previoustrust($select=accountid)&$filter=_parentaccountid_value ne null&$count=true";
 
+            var _parentTrustIdFieldName = _oDataHelper.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
             var filters = new List<string>
             {
                 $"({_parentTrustIdFieldName} eq {id})"

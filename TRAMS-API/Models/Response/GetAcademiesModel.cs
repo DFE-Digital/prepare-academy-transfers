@@ -29,5 +29,7 @@ namespace API.Models.Response
         public string OftstedRating { get; set; }
 
         public DateTime? OfstedInspectionDate { get; set; }
+
+        public string Pfi { get; set; }
     }
 }

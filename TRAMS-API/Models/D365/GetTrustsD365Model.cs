@@ -3,7 +3,7 @@ using System;
 
 namespace API.Models.D365
 {
-    public class GetTrustsD365Model
+    public class GetTrustsD365Model : BaseD365Model
     {
         [JsonProperty("accountid")]
         public Guid Id { get; set; }

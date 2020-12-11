@@ -3,7 +3,7 @@ using System;
 
 namespace API.Models.D365
 {
-    public class GetAcademiesD365Model
+    public class GetAcademiesD365Model : BaseD365Model
     {
         [JsonProperty("accountid")]
         public Guid Id { get; set; }
@@ -43,5 +43,26 @@ namespace API.Models.D365
 
         [JsonProperty("sip_ofstedinspectiondate")]
         public DateTime? OfstedInspectionDate { get; set; }
+
+        [JsonProperty("sip_pfi")]
+        public string Pfi { get; set; }
+
+        [JsonProperty("sip_PredecessorEstablishment")]
+        public PredecessorEstablishment Predecessor { get; set; }
+
+        public class PredecessorEstablishment
+        {
+            [JsonProperty("sip_pfi")]
+            public string Pfi { get; set; }
+        }
+
+        //      //sip_PredecessorEstablishment:{
+
+        //      sip_pfi:"No",
+        //	sip_predecessorurn: null ,
+        //	sip_urn:"110236",
+        //	accountid:"d124565c-eca0-e911-a840-000d3a385c01"
+
+        //}
     }
 }

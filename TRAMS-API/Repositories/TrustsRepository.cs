@@ -1,5 +1,4 @@
 ﻿using API.HttpHelpers;
-using API.Mapping;
 using API.Models.D365;
 using Newtonsoft.Json;
 using System;
@@ -11,26 +10,20 @@ namespace API.Repositories
 {
     public class TrustsRepository
     {
-        private static readonly string _route = "accounts";
-        private static readonly string establishmentTypeFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.EstablishmentType));
-        private static readonly string trustNameFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.TrustName));
-        private static readonly string companiesHouseFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.CompaniesHouseNumber));
-        private static readonly string trustReferenceNumberFieldName = JsonFieldExtractor
-            .GetPropertyAnnotation(typeof(GetTrustsD365Model), nameof(GetTrustsD365Model.TrustReferenceNumber));
+        private readonly string _route = "accounts";
 
+        private readonly IODataModelHelper<GetTrustsD365Model> _odataHelper;
         private readonly AuthenticatedHttpClient _client;
 
-        public TrustsRepository(AuthenticatedHttpClient client)
+        public TrustsRepository(AuthenticatedHttpClient client, IODataModelHelper<GetTrustsD365Model> odataHelper)
         {
             _client = client;
+            _odataHelper = odataHelper;
         }
 
         public async Task<GetTrustsD365Model> GetTrustById(Guid id)
         {
-            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustsD365Model));
+            var fields = _odataHelper.GetSelectClause();
 
             await _client.AuthenticateAsync();
 
@@ -52,9 +45,9 @@ namespace API.Repositories
 
         public async Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery)
         {
-            var fields = JsonFieldExtractor.GetAllFieldAnnotations(typeof(GetTrustsD365Model));
+            var fields = _odataHelper.GetSelectClause();
 
-            List<string> filters = BuildTrustSearchFilters(searchQuery);
+            var filters = BuildTrustSearchFilters(searchQuery);
 
             await _client.AuthenticateAsync();
 
@@ -76,6 +69,13 @@ namespace API.Repositories
 
         private List<string> BuildTrustSearchFilters(string searchQuery)
         {
+            var stateCodeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.StateCode));
+            var statusCodeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.StatusCode));
+            var establishmentTypeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.EstablishmentType));
+            var trustNameFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustName));
+            var companiesHouseFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.CompaniesHouseNumber));
+            var trustReferenceNumberFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustReferenceNumber));
+
             var allowedEstablishementTypeIds = new List<string>()
             {
                 EstablishmentType.MultiAcademyTrustGuid,
@@ -92,11 +92,11 @@ namespace API.Repositories
             var filters = new List<string>()
             {
                 //status should be active
-                $"({SharedFieldNames.StateCode} eq 0) and",
+                $"({stateCodeFieldName} eq 0) and",
                 //Restrict establishment types
                 $"{ODataUrlBuilder.BuildInFilter(establishmentTypeFieldName, allowedEstablishementTypeIds)} and",
                 //Restrict status codes
-                $"{ODataUrlBuilder.BuildInFilter(SharedFieldNames.StatusCode, allowedStatusCodes)}"
+                $"{ODataUrlBuilder.BuildInFilter(statusCodeFieldName, allowedStatusCodes)}"
             };
 
             if (!string.IsNullOrEmpty(searchQuery))

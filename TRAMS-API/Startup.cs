@@ -35,6 +35,12 @@ namespace TRAMS_API
 
             services.AddSingleton(this.CreateHttpClient());
 
+            services.AddTransient<IODataModelHelper<GetTrustsD365Model>>( r => 
+                new ODataModelHelper<GetTrustsD365Model>());
+
+            services.AddTransient<IODataModelHelper<GetAcademiesD365Model>>(r =>
+               new ODataModelHelper<GetAcademiesD365Model>());
+
             ConfigureMappers(services);
             ConfigureRepositories(services);
         }

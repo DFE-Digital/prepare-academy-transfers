@@ -24,6 +24,7 @@ namespace API.Mapping
                 OfstedInspectionDate = input.OfstedInspectionDate,
                 OftstedRating = input.OftstedRating,
                 ParentTrustId = input.ParentTrustId,
+                Pfi = input.Pfi,
                 ReligiousCharacter = input.ReligiousCharacter,
                 ReligiousEthos = input.ReligiousEthos,
                 Urn = input.Urn

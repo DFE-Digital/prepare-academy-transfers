@@ -1,4 +1,5 @@
 using API.Mapping;
+using API.Models.D365;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -13,48 +14,61 @@ namespace API.Tests
         [Fact]
         public void ClassWithNoAttributesReturnsEmptyList()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithNoAttributes));
+            var helper = new ODataModelHelper<ClassWithNoAttributes>();
+            var result = helper.GetSelectClause();
 
             Assert.NotNull(result);
-            Assert.Empty(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, r => r == "statuscode");
+            Assert.Contains(result, r => r == "statecode");
         }
 
         [Fact]
         public void ClassWithNoAnnotatedPropertiesReturnsEmptyList()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeNoAnnotation));
+            var helper = new ODataModelHelper<ClassWithOneAttributeNoAnnotation>();
+            var result = helper.GetSelectClause();
 
             Assert.NotNull(result);
-            Assert.Empty(result);
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, r => r == "statuscode");
+            Assert.Contains(result, r => r == "statecode");
         }
 
         [Fact]
         public void ClassWithOneAttributeAndAnnotatedReturnsAttributeName()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeAndAnnotated));
+            var helper = new ODataModelHelper<ClassWithOneAttributeAndAnnotated>();
+            var result = helper.GetSelectClause();
 
             Assert.NotNull(result);
-            Assert.Single(result);
-            Assert.Equal("JsonFieldName", result.First());
+            Assert.Equal(3, result.Count);
+            Assert.Contains(result, r => r == "statuscode");
+            Assert.Contains(result, r => r == "statecode");
+            Assert.Contains(result, r => r == "JsonFieldName");
         }
 
         [Fact]
-        public void ClassWithOneAttributeAndAnnotatedNoMetadataRetrunsFieldNameWithNoMetadataSection()
+        public void ClassWithOneAttributeAndAnnotatedAndMetadataRetrunsFieldNameWithNoMetadataSection()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithOneAttributeAndAnnotatedWithMetadata));
+            var helper = new ODataModelHelper<ClassWithOneAttributeAndAnnotatedWithMetadata>();
+            var result = helper.GetSelectClause();
 
             Assert.NotNull(result);
-            Assert.Single(result);
-            Assert.Equal("JsonFieldName", result.First());
+            Assert.Equal(3, result.Count);
+            Assert.Contains(result, r => r == "statuscode");
+            Assert.Contains(result, r => r == "statecode");
+            Assert.Contains(result, r => r == "JsonFieldName");
         }
 
         [Fact]
         public void ClassWithMixedAnnotationsTest()
         {
-            var result = JsonFieldExtractor.GetAllFieldAnnotations(typeof(ClassWithMixedAnnotations1));
+            var helper = new ODataModelHelper<ClassWithMixedAnnotations1>();
+            var result = helper.GetSelectClause();
 
             Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
+            Assert.Equal(4, result.Count);
             Assert.Contains(result, r => r == "AnnotatedNoMetadata");
             Assert.Contains(result, r => r == "AnnotatedWithMetadata");
         }
@@ -66,32 +80,31 @@ namespace API.Tests
         [Fact]
         public void ExtractingAnnotationFromFieldThrowsException()
         {
+            var helper = new ODataModelHelper<ClassWithNoAttributes>();
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return JsonFieldExtractor
-                       .GetPropertyAnnotation(typeof(ClassWithNoAttributes),
-                                                     "_someInt");
+                return helper.GetPropertyAnnotation("_someInt");
             });
         }
 
         [Fact]
         public void ExtractingAnnotationWhereNoneExistsThrowsException()
         {
+            var helper = new ODataModelHelper<ClassWithOneAttributeNoAnnotation>();
+
             Assert.Throws<InvalidOperationException>(() =>
             {
-                return JsonFieldExtractor
-                       .GetPropertyAnnotation(typeof(ClassWithOneAttributeNoAnnotation),
-                                              nameof(ClassWithOneAttributeNoAnnotation.IntProperty));
+                return helper.GetPropertyAnnotation(nameof(ClassWithOneAttributeNoAnnotation.IntProperty));
             });
         }
 
         [Fact]
         public void CanExtractNonExtensionAttributeFromField()
         {
-            var result = JsonFieldExtractor
-                         .GetPropertyAnnotation(typeof(ClassWithOneAttributeAndAnnotated),
-                                                nameof(ClassWithOneAttributeAndAnnotated.IntProperty));
+            var helper = new ODataModelHelper<ClassWithOneAttributeAndAnnotated>();
+
+            var result = helper.GetPropertyAnnotation(nameof(ClassWithOneAttributeAndAnnotated.IntProperty));
 
             Assert.Equal("JsonFieldName", result);
         }
@@ -99,9 +112,9 @@ namespace API.Tests
         [Fact]
         public void CanExtractExtensionAttributeFromField()
         {
-            var result = JsonFieldExtractor
-                         .GetPropertyAnnotation(typeof(ClassWithOneAttributeAndAnnotatedWithMetadata),
-                                                nameof(ClassWithOneAttributeAndAnnotatedWithMetadata.IntProperty));
+            var helper = new ODataModelHelper<ClassWithOneAttributeAndAnnotatedWithMetadata>();
+
+            var result = helper.GetPropertyAnnotation(nameof(ClassWithOneAttributeAndAnnotatedWithMetadata.IntProperty));
 
             Assert.Equal("JsonFieldName", result);
         }
@@ -109,30 +122,30 @@ namespace API.Tests
         #endregion 
     }
 
-    internal class ClassWithNoAttributes
+    internal class ClassWithNoAttributes : BaseD365Model
     {
         [JsonProperty("SomAttribute")]
         private int _someInt;
     }
 
-    internal class ClassWithOneAttributeNoAnnotation
+    internal class ClassWithOneAttributeNoAnnotation : BaseD365Model
     {
         public int IntProperty { get; set; }
     }
 
-    internal class ClassWithOneAttributeAndAnnotated
+    internal class ClassWithOneAttributeAndAnnotated : BaseD365Model
     {
         [JsonProperty("JsonFieldName")]
         public int IntProperty { get; set; }
     }
 
-    internal class ClassWithOneAttributeAndAnnotatedWithMetadata
+    internal class ClassWithOneAttributeAndAnnotatedWithMetadata : BaseD365Model
     {
         [JsonProperty("JsonFieldName@OData.Community.Display.V1.FormattedValue")]
         public int IntProperty { get; set; }
     }
 
-    internal class ClassWithMixedAnnotations1
+    internal class ClassWithMixedAnnotations1 : BaseD365Model
     {
         public int NoAnnotation { get; set; }
 
