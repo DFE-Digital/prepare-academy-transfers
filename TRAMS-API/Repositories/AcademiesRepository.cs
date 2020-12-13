@@ -21,7 +21,6 @@ namespace API.Repositories
             _oDataHelper = oDataHelper;
         }
 
-
         public async Task<GetAcademiesD365Model> GetAcademyById(Guid id)
         {
             var fields = _oDataHelper.GetSelectClause();
@@ -69,6 +68,5 @@ namespace API.Repositories
 
             return new List<GetAcademiesD365Model>();
         }
-
     }
 }

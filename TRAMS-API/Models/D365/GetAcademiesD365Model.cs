@@ -55,14 +55,5 @@ namespace API.Models.D365
             [JsonProperty("sip_pfi")]
             public string Pfi { get; set; }
         }
-
-        //      //sip_PredecessorEstablishment:{
-
-        //      sip_pfi:"No",
-        //	sip_predecessorurn: null ,
-        //	sip_urn:"110236",
-        //	accountid:"d124565c-eca0-e911-a840-000d3a385c01"
-
-        //}
     }
 }

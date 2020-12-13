@@ -34,12 +34,7 @@ namespace TRAMS_API
             services.AddControllers();
 
             services.AddSingleton(this.CreateHttpClient());
-
-            services.AddTransient<IODataModelHelper<GetTrustsD365Model>>( r => 
-                new ODataModelHelper<GetTrustsD365Model>());
-
-            services.AddTransient<IODataModelHelper<GetAcademiesD365Model>>(r =>
-               new ODataModelHelper<GetAcademiesD365Model>());
+            ConfigureODataModelHelpers(services);
 
             ConfigureMappers(services);
             ConfigureRepositories(services);
@@ -74,10 +69,19 @@ namespace TRAMS_API
         private static void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r =>
-                            new GetTrustD365ModelToGetTrustsModelMapper());
+                new GetTrustD365ModelToGetTrustsModelMapper());
 
             services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
                 new GetAcademiesD365ModelToGetAcademiesModelMapper());
+        }
+
+        private static void ConfigureODataModelHelpers(IServiceCollection services)
+        {
+            services.AddTransient<IODataModelHelper<GetTrustsD365Model>>(r =>
+                new ODataModelHelper<GetTrustsD365Model>());
+
+            services.AddTransient<IODataModelHelper<GetAcademiesD365Model>>(r =>
+               new ODataModelHelper<GetAcademiesD365Model>());
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
