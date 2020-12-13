@@ -1,5 +1,4 @@
-﻿using API.HttpHelpers;
-using API.Models.D365;
+﻿using API.Models.D365;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,13 +24,13 @@ namespace API.Mapping
         public List<string> GetSelectClause()
         {
             var jsonProps = _type.GetProperties()
-                                 .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && p.PropertyType.FullName.Contains("System."))
+                                 .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && IsSystemType(p))
                                  .Select(p => p.GetCustomAttribute<JsonPropertyAttribute>().PropertyName.Split("@").First())
                                  .ToList();
 
             var props = _type.GetProperties().ToList();
 
-            foreach(var prop in props)
+            foreach (var prop in props)
             {
                 var type = prop.GetType();
                 var isValueType = type.IsValueType;
@@ -40,11 +39,16 @@ namespace API.Mapping
             return jsonProps;
         }
 
+        private static bool IsSystemType(PropertyInfo p)
+        {
+            return p.PropertyType.FullName.Contains("System.");
+        }
+
         public string GetExpandClause()
         {
             var properties = _type.GetProperties()
                                    .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && 
-                                              !p.PropertyType.FullName.Contains("System."))
+                                              !IsSystemType(p))
                                    .ToList();
 
             var individualExpandClauses = new List<string>();
@@ -64,7 +68,7 @@ namespace API.Mapping
                 individualExpandClauses.Add(expandClause);
             }
 
-            var outerClause = $"$expand={string.Join(',', individualExpandClauses)}";
+            var outerClause = individualExpandClauses.Any() ? $"$expand={string.Join(',', individualExpandClauses)}" : string.Empty;
 
             return outerClause;
         }

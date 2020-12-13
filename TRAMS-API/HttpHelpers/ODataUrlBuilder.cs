@@ -7,7 +7,7 @@ namespace API.HttpHelpers
 {
     public static class ODataUrlBuilder
     {
-        public static string BuildFilterUrl(string route, List<string> fields, List<string> filters)
+        public static string BuildFilterUrl(string route, List<string> fields, string expandClause, List<string> filters)
         {
             //A route must be set
             if(string.IsNullOrEmpty(route))
@@ -27,6 +27,11 @@ namespace API.HttpHelpers
                 nextQueryParamSymbol = "&";
             }
 
+            if (!string.IsNullOrEmpty(expandClause))
+            {
+                urlSegments.Append($"{nextQueryParamSymbol}{expandClause}");
+            }
+
             if (filters!= null && filters.Any())
             {
                 urlSegments.Append($"{nextQueryParamSymbol}$filter={string.Join(" ", filters)}");
@@ -37,7 +42,7 @@ namespace API.HttpHelpers
             return url;
         }
 
-        public static string BuildRetrieveOneUrl(string route, Guid id, List<string> fields)
+        public static string BuildRetrieveOneUrl(string route, Guid id, List<string> fields, string expandClause = null)
         {
             //A route must be set
             if (string.IsNullOrEmpty(route))
@@ -46,10 +51,17 @@ namespace API.HttpHelpers
             }
 
             var url = $"{route}({id})";
+            var nextQueryParam = "?";
 
             if (fields != null && fields.Any())
             {
-                url += $"?$select={string.Join(',', fields)}";
+                url += $"{nextQueryParam}$select={string.Join(',', fields)}";
+                nextQueryParam = "&";
+            }
+
+            if (!string.IsNullOrEmpty(expandClause))
+            {
+                url += $"{nextQueryParam}{expandClause}";
             }
 
             return url;

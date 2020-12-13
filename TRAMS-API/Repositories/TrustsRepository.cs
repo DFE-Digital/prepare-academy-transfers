@@ -1,4 +1,5 @@
 ﻿using API.HttpHelpers;
+using API.Mapping;
 using API.Models.D365;
 using Newtonsoft.Json;
 using System;
@@ -24,6 +25,7 @@ namespace API.Repositories
         public async Task<GetTrustsD365Model> GetTrustById(Guid id)
         {
             var fields = _odataHelper.GetSelectClause();
+            var expandClause = string.Empty;
 
             await _client.AuthenticateAsync();
 
@@ -36,6 +38,19 @@ namespace API.Repositories
             {
                 var result = await response.Content.ReadAsStringAsync();
                 var castedResult = JsonConvert.DeserializeObject<GetTrustsD365Model>(result);
+
+                //If this establishment is not a trust, return null. The controller will return a Not Found response
+                var allowedEstablishementTypeIds = new List<string>()
+                {
+                    EstablishmentType.MultiAcademyTrustGuid,
+                    EstablishmentType.SingleAcademyTrustGuid,
+                    EstablishmentType.TrustGuid
+                };
+
+                if (!allowedEstablishementTypeIds.Contains(castedResult.EstablishmentTypeId.ToString().ToUpperInvariant()))
+                {
+                    return null;
+                }
 
                 return castedResult;
             }
@@ -51,7 +66,7 @@ namespace API.Repositories
 
             await _client.AuthenticateAsync();
 
-            var url = ODataUrlBuilder.BuildFilterUrl(_route, fields, filters);
+            var url = ODataUrlBuilder.BuildFilterUrl(_route, fields, string.Empty, filters);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();

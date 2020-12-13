@@ -16,10 +16,11 @@ namespace API.Tests
             var route = (string)null;
             var fields = new List<string>();
             var filters = new List<string>();
+            var expandClause = string.Empty;
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+                return ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
             });
         }
 
@@ -29,10 +30,11 @@ namespace API.Tests
             var route = string.Empty;
             var fields = new List<string>();
             var filters = new List<string>();
+            var expandClause = string.Empty;
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+                return ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
             });
         }
 
@@ -41,9 +43,10 @@ namespace API.Tests
         {
             var fields = (List<string>)null;
             var filters = (List<string>)null;
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal(route, result);
         }
@@ -53,9 +56,10 @@ namespace API.Tests
         {
             var fields = new List<string>();
             var filters = new List<string>();
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal(route, result);
         }
@@ -65,9 +69,10 @@ namespace API.Tests
         {
             var fields = new List<string> { "field" };
             var filters = (List<string>)null;
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$select=field", result);
         }
@@ -77,9 +82,10 @@ namespace API.Tests
         {
             var fields = new List<string> { "field", "another_field", "one_more_field" };
             var filters = (List<string>)null;
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$select=field,another_field,one_more_field", result);
         }
@@ -89,9 +95,10 @@ namespace API.Tests
         {
             var fields = new List<string>();
             var filters = new List<string>{ "filter"};
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$filter=filter", result);
         }
@@ -101,9 +108,10 @@ namespace API.Tests
         {
             var fields = new List<string>();
             var filters = new List<string> { "(someProp eq 1)", "and (anotherProp eq 2)" };
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$filter=(someProp eq 1) and (anotherProp eq 2)", result);
         }
@@ -113,9 +121,10 @@ namespace API.Tests
         {
             var fields = new List<string> { "field" };
             var filters = new List<string> { "(someProp eq 1)" };
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$select=field&$filter=(someProp eq 1)", result);
         }
@@ -125,9 +134,10 @@ namespace API.Tests
         {
             var fields = new List<string> { "field", "another_field", "one_more_field" };
             var filters = new List<string> { "(someProp eq 1)" };
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$select=field,another_field,one_more_field&$filter=(someProp eq 1)", result);
         }
@@ -137,9 +147,10 @@ namespace API.Tests
         {
             var fields = new List<string> { "field", "another_field", "one_more_field" };
             var filters = new List<string> { "(someProp eq 1)", "and (anotherProp eq 2)" };
+            var expandClause = string.Empty;
             var route = "tests";
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, filters);
+            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
 
             Assert.Equal("tests?$select=field,another_field,one_more_field&$filter=(someProp eq 1) and (anotherProp eq 2)", result);
         }

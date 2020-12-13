@@ -72,7 +72,7 @@ namespace TRAMS_API.Controllers
 
             if (trust==null)
             {
-                return NotFound($"Could not find a trust with the id: '{id}'");
+                return NotFound($"The trust with the id: '{id}' was not found");
             }
 
             var academies = await _academiesRepository.GetAcademiesByTrustId(id);
