@@ -20,7 +20,7 @@ namespace API.Models.Response
         [JsonProperty("address")]
         public string Address { get; set; }
 
-        [JsonProperty("estalishmentType")]
+        [JsonProperty("establishmentType")]
         public string EstablishmentType { get; set; }
 
         [JsonProperty("establishmentTypeGroup")]
