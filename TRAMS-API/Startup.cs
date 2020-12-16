@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
 
 namespace TRAMS_API
 {
@@ -34,6 +37,28 @@ namespace TRAMS_API
             services.AddControllers();
 
             services.AddSingleton(this.CreateHttpClient());
+            services.AddTransient<IMapper<GetTrustD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
+            services.AddTransient(typeof(TrustRepository));
+
+            // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
+            // Note: Add this service at the end after AddMvc() or AddMvcCore().
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Academy Transfers Prototype API",
+                    Version = "v1",
+                    Description = "API for the Academy Transfers frontend to talk to Dynamics 365 backend (TRAMS)",
+                    Contact = new OpenApiContact
+                    {
+                        Email = "academytransfers@education.gov.uk",
+                    },
+                });
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "API.xml");
+                c.IncludeXmlComments(filePath);
+            });
+        }
             ConfigureODataModelHelpers(services);
 
             ConfigureMappers(services);
@@ -57,6 +82,19 @@ namespace TRAMS_API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Academy Transfers Prototype API");
+
+                // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
+                c.RoutePrefix = string.Empty;
             });
         }
 

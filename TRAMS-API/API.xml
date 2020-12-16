@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="M:API.Mapping.JsonFieldExtractor.GetAllFieldAnnotations(System.Type)">
+            <summary>
+            Generates a list of all JsonProperty annotations set against a type's properties. Will not include @metadata extensions
+            </summary>
+            <param name="modelType">The type to extract the JsonProperty annotations for</param>
+            <returns>A list of the JsonProperty annotation - excludes any @metadata extensions</returns>
+        </member>
+        <member name="M:API.Mapping.JsonFieldExtractor.GetPropertyAnnotation(System.Type,System.String)">
+            <summary>
+            Gets the JsonProperty annotation of a certain property without any @metadata extensions
+            Throws InvalidOperationException if the field doesn't have a JsonProperty annotation
+            </summary>
+            <param name="t">The type the property is attached to</param>
+            <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
+            <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.Id">
+            <summary>
+            The GUID of the Trust in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.TrustName">
+            <summary>
+            The name of the trust
+            </summary>
+            <example>Sample Multi-Academy Trust</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.CompaniesHouseNumber">
+            <summary>
+            The trust's Companies House Number
+            </summary>
+            <example>07658841</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.TrustReferenceNumber">
+            <summary>
+            The trust's Reference Number
+            </summary>
+            /// <example>TR66684</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.Address">
+            <summary>
+            The multi-line address of the trust
+            </summary>
+            <example>Imaginary Trust "\r\n" Sample Road "\r\n" London SW14 5FJ</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.EstablishmentType">
+            <summary>
+            The trusts's establishment type
+            </summary>
+            <example>Multi-academy trust</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.EstablishmentTypeGroup">
+            <summary>
+            The trusts's establishment type group
+            </summary>
+            <example>Multi-academy trust</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.Ukprn">
+            <summary>
+            Trusts's UKPRN
+            </summary>
+            <example>10752526</example>
+        </member>
+        <member name="P:API.Models.Response.GetTrustsModel.Upin">
+            <summary>
+            The trust's UPIN
+            </summary>
+            <example>142135</example>
+        </member>
+        <member name="T:TRAMS_API.Controllers.TrustsController">
+            <summary>
+            API controller for retrieving information about a trust from TRAMS
+            </summary>
+        </member>
+        <member name="M:TRAMS_API.Controllers.TrustsController.GetById(System.Guid)">
+            <summary>
+            Retrieves information about a trust given its TRAMS Guid
+            </summary>
+            <param name="id"></param>
+            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>A GetTrustsModel object</returns>
+        </member>
+        <member name="M:TRAMS_API.Controllers.TrustsController.SearchTrusts(System.String)">
+            <summary>
+            Searches for trusts via query parameters
+            </summary>
+            <param name="search">Will search for trusts that contain the search query. The searchable fields are: Name, Companies House Number, and Trust Reference Number</param>
+            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>An array of GetTrustsModel</returns>
+        </member>
+    </members>
+</doc>
