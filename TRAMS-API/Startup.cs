@@ -37,8 +37,8 @@ namespace TRAMS_API
             services.AddControllers();
 
             services.AddSingleton(this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
-            services.AddTransient(typeof(TrustRepository));
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
+            services.AddTransient(typeof(TrustsRepository));
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             // Note: Add this service at the end after AddMvc() or AddMvcCore().
@@ -58,7 +58,7 @@ namespace TRAMS_API
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "API.xml");
                 c.IncludeXmlComments(filePath);
             });
-        }
+        
             ConfigureODataModelHelpers(services);
 
             ConfigureMappers(services);
