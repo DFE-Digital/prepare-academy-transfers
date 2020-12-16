@@ -48,7 +48,7 @@ namespace TRAMS_API.Controllers
         /// <summary>
         /// Retrieves information about a trust given its TRAMS Guid
         /// </summary>
-        /// <param name="id">The GUID</param>
+        /// <param name="id">The GUID of the trust</param>
         /// <returns><see cref="GetTrustsModel"/>A GetTrustsModel object</returns>
         [HttpGet]
         [Route("/trusts/{id}")]
@@ -84,8 +84,15 @@ namespace TRAMS_API.Controllers
             return Ok(formattedOutput);
         }
 
+        /// <summary>
+        /// Gets the academies of a given trust. The trust is identified via its TRAMS Guid
+        /// </summary>
+        /// <param name="id">The GUID of the trust in TRAMS</param>
+        /// <returns>A list of <see cref="GetAcademiesModel"/></returns>
         [HttpGet]
         [Route("/trusts/{id}/academies")]
+        [ProducesResponseType(typeof(List<GetAcademiesModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<GetAcademiesModel>>> GetTrustAcademies(Guid id)
         {
             var trust = await _trustRepostiory.GetTrustById(id);

@@ -15,11 +15,11 @@ namespace API.Mapping
         {
             _type = typeof(T);
         }
+
         /// <summary>
         /// Generates a list of all JsonProperty annotations set against a type's properties. Will not include @metadata extensions
         /// Will exclude any nested classes and their annotations
         /// </summary>
-        /// <param name="modelType">The type to extract the JsonProperty annotations for</param>
         /// <returns>A list of the JsonProperty annotation - excludes any @metadata extensions</returns>
         public List<string> GetSelectClause()
         {
@@ -77,7 +77,6 @@ namespace API.Mapping
         /// Gets the JsonProperty annotation of a certain property without any @metadata extensions
         /// Throws InvalidOperationException if the field doesn't have a JsonProperty annotation
         /// </summary>
-        /// <param name="t">The type the property is attached to</param>
         /// <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
         /// <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
         public string GetPropertyAnnotation(string propertyName)

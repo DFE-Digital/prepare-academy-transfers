@@ -4,6 +4,12 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="M:API.Controllers.AcademiesController.GetAcademyById(System.Guid)">
+            <summary>
+            Retrieves information about an academy given its TRAMS Guid
+            </summary>
+            <param name="id">The GUID of the academy</param>
+        </member>
         <member name="M:API.Mapping.JsonFieldExtractor.GetAllFieldAnnotations(System.Type)">
             <summary>
             Generates a list of all JsonProperty annotations set against a type's properties. Will not include @metadata extensions
@@ -19,6 +25,102 @@
             <param name="t">The type the property is attached to</param>
             <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
             <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
+        </member>
+        <member name="M:API.Mapping.ODataModelHelper`1.GetSelectClause">
+            <summary>
+            Generates a list of all JsonProperty annotations set against a type's properties. Will not include @metadata extensions
+            Will exclude any nested classes and their annotations
+            </summary>
+            <returns>A list of the JsonProperty annotation - excludes any @metadata extensions</returns>
+        </member>
+        <member name="M:API.Mapping.ODataModelHelper`1.GetPropertyAnnotation(System.String)">
+            <summary>
+            Gets the JsonProperty annotation of a certain property without any @metadata extensions
+            Throws InvalidOperationException if the field doesn't have a JsonProperty annotation
+            </summary>
+            <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
+            <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.Id">
+            <summary>
+            The GUID of the Academy in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.ParentTrustId">
+            <summary>
+            The GUID of the parent trust in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.AcademyName">
+            <summary>
+            The name of the academy
+            </summary>
+            <example>Imaginary Academy</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.Urn">
+            <summary>
+            The URN of an academy
+            </summary>
+            <example>424242</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.Address">
+            <summary>
+            The multi-line address of an academy
+            </summary>
+            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.EstablishmentType">
+            <summary>
+            The Establishment Type of the academy
+            </summary>
+            <example>Academy Converter</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.LocalAuthorityNumber">
+            <summary>
+            The Local Authority Number of the academy
+            </summary>
+            <example>4242</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.LocalAuthorityName">
+            <summary>
+            The Local Authority Name of the academy
+            </summary>
+            <example>Authority West</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.ReligiousCharacter">
+            <summary>
+            The Religious Character of the academy
+            </summary>
+            <example>Does not apply</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.DioceseName">
+            <summary>
+            The name of the diocese the academy belongs to
+            </summary>
+            <example>Not applicable</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.ReligiousEthos">
+            <summary>
+            The religious ethos of the academy
+            </summary>
+            <example>Does not apply</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.OftstedRating">
+            <summary>
+            The Ofsted Rating of the academy
+            </summary>
+            <example>Good</example>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.OfstedInspectionDate">
+            <summary>
+            The date of the last Oftsed Insepction in ISO format
+            </summary>
+        </member>
+        <member name="P:API.Models.Response.GetAcademiesModel.Pfi">
+            <summary>
+            The PFI of the academy
+            </summary>
+            <example>Full PFI</example>
         </member>
         <member name="P:API.Models.Response.GetTrustsModel.Id">
             <summary>
@@ -47,7 +149,7 @@
             <summary>
             The multi-line address of the trust
             </summary>
-            <example>Imaginary Trust "\r\n" Sample Road "\r\n" London SW14 5FJ</example>
+            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
         </member>
         <member name="P:API.Models.Response.GetTrustsModel.EstablishmentType">
             <summary>
@@ -82,15 +184,22 @@
             <summary>
             Retrieves information about a trust given its TRAMS Guid
             </summary>
-            <param name="id"></param>
+            <param name="id">The GUID of the trust</param>
             <returns><see cref="T:API.Models.Response.GetTrustsModel"/>A GetTrustsModel object</returns>
         </member>
         <member name="M:TRAMS_API.Controllers.TrustsController.SearchTrusts(System.String)">
             <summary>
-            Searches for trusts via query parameters
+            Get all trusts or search via query parameters
             </summary>
             <param name="search">Will search for trusts that contain the search query. The searchable fields are: Name, Companies House Number, and Trust Reference Number</param>
-            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>An array of GetTrustsModel</returns>
+            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>An array of GetTrustsModel objects</returns>
+        </member>
+        <member name="M:TRAMS_API.Controllers.TrustsController.GetTrustAcademies(System.Guid)">
+            <summary>
+            Gets the academies of a given trust. The trust is identified via its TRAMS Guid
+            </summary>
+            <param name="id">The GUID of the trust in TRAMS</param>
+            <returns>A list of <see cref="T:API.Models.Response.GetAcademiesModel"/></returns>
         </member>
     </members>
 </doc>
