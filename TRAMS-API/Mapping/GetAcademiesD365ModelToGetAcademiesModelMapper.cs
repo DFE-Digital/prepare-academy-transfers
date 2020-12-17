@@ -22,7 +22,7 @@ namespace API.Mapping
                 LocalAuthorityName = input.LocalAuthorityName,
                 LocalAuthorityNumber = input.LocalAuthorityNumber,
                 OfstedInspectionDate = input.OfstedInspectionDate,
-                OftstedRating = input.OftstedRating,
+                OfstedRating = input.OftstedRating,
                 ParentTrustId = input.ParentTrustId,
                 Pfi = input.Predecessor.Pfi,
                 ReligiousCharacter = input.ReligiousCharacter,

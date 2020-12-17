@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace TRAMS_API.Controllers
+namespace API.Controllers
 {
     /// <summary>
     /// API controller for retrieving information about a trust from TRAMS
@@ -31,7 +31,7 @@ namespace TRAMS_API.Controllers
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
-        public TrustsController(ILogger<TrustsController> logger, 
+        public TrustsController(ILogger<TrustsController> logger,
                                          IConfiguration config,
                                          TrustsRepository trustRepostiory,
                                          AcademiesRepository academiesRepository,
@@ -64,7 +64,7 @@ namespace TRAMS_API.Controllers
             }
 
             var formattedResult = _getTrustMapper.Map(result);
-            
+
             return Ok(formattedResult);
         }
 
@@ -74,6 +74,7 @@ namespace TRAMS_API.Controllers
         /// <param name="search">Will search for trusts that contain the search query. The searchable fields are: Name, Companies House Number, and Trust Reference Number</param>
         /// <returns><see cref="GetTrustsModel"/>An array of GetTrustsModel objects</returns>
         [HttpGet]
+        [Route("/trusts/")]
         [ProducesResponseType(typeof(List<GetTrustsModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<GetTrustsModel>>> SearchTrusts(string search)
         {
@@ -97,7 +98,7 @@ namespace TRAMS_API.Controllers
         {
             var trust = await _trustRepostiory.GetTrustById(id);
 
-            if (trust==null)
+            if (trust == null)
             {
                 return NotFound($"The trust with the id: '{id}' was not found");
             }

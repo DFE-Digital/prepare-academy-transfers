@@ -72,7 +72,7 @@ namespace API.Models.Response
         /// The Ofsted Rating of the academy
         /// </summary>
         /// <example>Good</example>
-        public string OftstedRating { get; set; }
+        public string OfstedRating { get; set; }
 
         /// <summary>
         /// The date of the last Oftsed Insepction in ISO format
