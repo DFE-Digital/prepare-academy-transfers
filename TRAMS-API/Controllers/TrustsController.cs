@@ -48,7 +48,7 @@ namespace API.Controllers
         /// <summary>
         /// Retrieves information about a trust given its TRAMS Guid
         /// </summary>
-        /// <param name="id">The GUID of the trust</param>
+        /// <param name="id">The Guid of the trust</param>
         /// <returns><see cref="GetTrustsModel"/>A GetTrustsModel object</returns>
         [HttpGet]
         [Route("/trusts/{id}")]
@@ -88,7 +88,7 @@ namespace API.Controllers
         /// <summary>
         /// Gets the academies of a given trust. The trust is identified via its TRAMS Guid
         /// </summary>
-        /// <param name="id">The GUID of the trust in TRAMS</param>
+        /// <param name="id">The Guid of the trust in TRAMS</param>
         /// <returns>A list of <see cref="GetAcademiesModel"/></returns>
         [HttpGet]
         [Route("/trusts/{id}/academies")]

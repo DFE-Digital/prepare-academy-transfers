@@ -30,7 +30,7 @@ namespace API.Controllers
         /// <summary>
         /// Retrieves information about an academy given its TRAMS Guid
         /// </summary>
-        /// <param name="id">The GUID of the academy</param>
+        /// <param name="id">The Guid of the academy</param>
         [HttpGet]
         [Route("/academies/{id}")]
         [ProducesResponseType(typeof(GetAcademiesModel), StatusCodes.Status200OK)]
