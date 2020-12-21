@@ -8,25 +8,23 @@ using System.Threading.Tasks;
 
 namespace API.Repositories
 {
-    public class AcademiesRepository
+    public class AcademiesRepository : IAcademiesRepository
     {
         private static readonly string _route = "accounts";
 
         private readonly AuthenticatedHttpClient _client;
-        private readonly IODataModelHelper<GetAcademiesD365Model> _oDataHelper;
+        private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
 
-        public AcademiesRepository(AuthenticatedHttpClient client, IODataModelHelper<GetAcademiesD365Model> oDataHelper)
+        public AcademiesRepository(AuthenticatedHttpClient client, 
+                                   IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder)
         {
             _client = client;
-            _oDataHelper = oDataHelper;
+            _urlBuilder = urlBuilder;
         }
 
         public async Task<GetAcademiesD365Model> GetAcademyById(Guid id)
         {
-            var fields = _oDataHelper.GetSelectClause();
-            var expandClause = _oDataHelper.GetExpandClause();
-
-            var url = ODataUrlBuilder.BuildRetrieveOneUrl(_route, id, fields, expandClause);
+            var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();
@@ -43,17 +41,14 @@ namespace API.Repositories
         }
 
         public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
-        {
-            var fields = _oDataHelper.GetSelectClause();
-            var expandClause = _oDataHelper.GetExpandClause();
-            
-            var _parentTrustIdFieldName = _oDataHelper.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
+        { 
+            var _parentTrustIdFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
             var filters = new List<string>
             {
                 $"({_parentTrustIdFieldName} eq {id})"
             };
 
-            var url = ODataUrlBuilder.BuildFilterUrl(_route, fields, expandClause, filters);
+            var url = _urlBuilder.BuildFilterUrl(_route, filters);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();

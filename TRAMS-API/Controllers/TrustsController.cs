@@ -26,17 +26,17 @@ namespace API.Controllers
     public class TrustsController : ControllerBase
     {
         private readonly ILogger<TrustsController> _logger;
-        private readonly TrustsRepository _trustRepostiory;
-        private readonly AcademiesRepository _academiesRepository;
+        private readonly ITrustsRepository _trustRepostiory;
+        private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
         public TrustsController(ILogger<TrustsController> logger,
-                                         IConfiguration config,
-                                         TrustsRepository trustRepostiory,
-                                         AcademiesRepository academiesRepository,
-                                         IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
-                                         IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
+                                IConfiguration config,
+                                ITrustsRepository trustRepostiory,
+                                IAcademiesRepository academiesRepository,
+                                IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
+                                IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
         {
             _logger = logger;
             _trustRepostiory = trustRepostiory;

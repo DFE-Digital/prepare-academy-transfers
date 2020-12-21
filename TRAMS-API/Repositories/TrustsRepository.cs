@@ -9,27 +9,24 @@ using static API.Constants.D365Constants;
 
 namespace API.Repositories
 {
-    public class TrustsRepository
+    public class TrustsRepository : ITrustsRepository
     {
         private readonly string _route = "accounts";
 
-        private readonly IODataModelHelper<GetTrustsD365Model> _odataHelper;
+        private readonly IOdataUrlBuilder<GetTrustsD365Model> _urlBuilder;
         private readonly AuthenticatedHttpClient _client;
 
-        public TrustsRepository(AuthenticatedHttpClient client, IODataModelHelper<GetTrustsD365Model> odataHelper)
+        public TrustsRepository(AuthenticatedHttpClient client, IOdataUrlBuilder<GetTrustsD365Model> urlBuilder)
         {
             _client = client;
-            _odataHelper = odataHelper;
+            _urlBuilder = urlBuilder;
         }
 
         public async Task<GetTrustsD365Model> GetTrustById(Guid id)
         {
-            var fields = _odataHelper.GetSelectClause();
-            var expandClause = string.Empty;
-
             await _client.AuthenticateAsync();
 
-            var url = ODataUrlBuilder.BuildRetrieveOneUrl(_route, id, fields);
+            var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();
@@ -60,13 +57,11 @@ namespace API.Repositories
 
         public async Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery)
         {
-            var fields = _odataHelper.GetSelectClause();
-
             var filters = BuildTrustSearchFilters(searchQuery);
 
             await _client.AuthenticateAsync();
 
-            var url = ODataUrlBuilder.BuildFilterUrl(_route, fields, string.Empty, filters);
+            var url = _urlBuilder.BuildFilterUrl(_route, filters);
 
             var response = await _client.GetAsync(url);
             var content = await response.Content?.ReadAsStringAsync();
@@ -84,12 +79,12 @@ namespace API.Repositories
 
         private List<string> BuildTrustSearchFilters(string searchQuery)
         {
-            var stateCodeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.StateCode));
-            var statusCodeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.StatusCode));
-            var establishmentTypeFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.EstablishmentType));
-            var trustNameFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustName));
-            var companiesHouseFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.CompaniesHouseNumber));
-            var trustReferenceNumberFieldName = _odataHelper.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustReferenceNumber));
+            var stateCodeFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.StateCode));
+            var statusCodeFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.StatusCode));
+            var establishmentTypeFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.EstablishmentType));
+            var trustNameFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustName));
+            var companiesHouseFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.CompaniesHouseNumber));
+            var trustReferenceNumberFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetTrustsD365Model.TrustReferenceNumber));
 
             var allowedEstablishementTypeIds = new List<string>()
             {
@@ -109,9 +104,9 @@ namespace API.Repositories
                 //status should be active
                 $"({stateCodeFieldName} eq 0) and",
                 //Restrict establishment types
-                $"{ODataUrlBuilder.BuildInFilter(establishmentTypeFieldName, allowedEstablishementTypeIds)} and",
+                $"{_urlBuilder.BuildInFilter(establishmentTypeFieldName, allowedEstablishementTypeIds)} and",
                 //Restrict status codes
-                $"{ODataUrlBuilder.BuildInFilter(statusCodeFieldName, allowedStatusCodes)}"
+                $"{_urlBuilder.BuildInFilter(statusCodeFieldName, allowedStatusCodes)}"
             };
 
             if (!string.IsNullOrEmpty(searchQuery))
@@ -123,7 +118,7 @@ namespace API.Repositories
                     trustReferenceNumberFieldName
                 };
 
-                var reusableSearchFilter = $"and {ODataUrlBuilder.BuildOrSearchQuery(searchQuery, searchFields)}";
+                var reusableSearchFilter = $"and {_urlBuilder.BuildOrSearchQuery(searchQuery, searchFields)}";
                 filters.Add(reusableSearchFilter);
             }
 

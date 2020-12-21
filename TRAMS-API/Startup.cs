@@ -2,6 +2,7 @@ using API.HttpHelpers;
 using API.Mapping;
 using API.Models.D365;
 using API.Models.Response;
+using API.ODataHelpers;
 using API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +39,6 @@ namespace TRAMS_API
 
             services.AddSingleton(this.CreateHttpClient());
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
-            services.AddTransient(typeof(TrustsRepository));
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             // Note: Add this service at the end after AddMvc() or AddMvcCore().
@@ -59,7 +59,7 @@ namespace TRAMS_API
                 c.IncludeXmlComments(filePath);
             });
         
-            ConfigureODataModelHelpers(services);
+            ConfigureHelpers(services);
 
             ConfigureMappers(services);
             ConfigureRepositories(services);
@@ -100,8 +100,8 @@ namespace TRAMS_API
 
         private static void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddTransient(typeof(TrustsRepository));
-            services.AddTransient(typeof(AcademiesRepository));
+            services.AddTransient<ITrustsRepository, TrustsRepository>();
+            services.AddTransient<IAcademiesRepository,AcademiesRepository>();
         }
 
         private static void ConfigureMappers(IServiceCollection services)
@@ -113,13 +113,16 @@ namespace TRAMS_API
                 new GetAcademiesD365ModelToGetAcademiesModelMapper());
         }
 
-        private static void ConfigureODataModelHelpers(IServiceCollection services)
+        private static void ConfigureHelpers(IServiceCollection services)
         {
-            services.AddTransient<IODataModelHelper<GetTrustsD365Model>>(r =>
-                new ODataModelHelper<GetTrustsD365Model>());
+            services.AddTransient<ID365ModelHelper<GetTrustsD365Model>>(r =>
+                new D365ModelHelper<GetTrustsD365Model>());
 
-            services.AddTransient<IODataModelHelper<GetAcademiesD365Model>>(r =>
-               new ODataModelHelper<GetAcademiesD365Model>());
+            services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>>(r =>
+               new D365ModelHelper<GetAcademiesD365Model>());
+
+            services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()

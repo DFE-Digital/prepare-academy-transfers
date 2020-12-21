@@ -1,224 +1,162 @@
 ﻿using API.HttpHelpers;
+using API.Models.D365;
+using API.ODataHelpers;
+using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace API.Tests
 {
     public class ODataUrlBuilderTests
     {
-        #region Build Retrieve Multiple Url Tests
+        private ODataUrlBuilder<BaseD365Model> _urlBuilderWithMockedHelper;
+
+        public ODataUrlBuilderTests()
+        {
+            var mockedHelper = new Mock<ID365ModelHelper<BaseD365Model>>();
+
+            mockedHelper.Setup(m => m.ExtractModelRepresentation()).Returns(new D365ModelRepresentation());
+            mockedHelper.Setup(m => m.BuildSelectAndExpandClauses(It.IsAny<D365ModelRepresentation>())).Returns("$select=somefield&$expand=expand($select=expand_field)");
+            _urlBuilderWithMockedHelper = new ODataUrlBuilder<BaseD365Model>(mockedHelper.Object);
+        }
+
+        #region Build Filter Url Tests
 
         [Fact]
-        public void BuildFilterUrl_NullRouteThrowsException()
+        public void BuildFilterUrl_MissingRouteThrowsException()
         {
-            var route = (string)null;
-            var fields = new List<string>();
             var filters = new List<string>();
-            var expandClause = string.Empty;
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
+                return _urlBuilderWithMockedHelper.BuildFilterUrl(string.Empty, filters);
+            });
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                return _urlBuilderWithMockedHelper.BuildFilterUrl(null, filters);
             });
         }
 
         [Fact]
-        public void BuildFilterUrl_EmptyRouteThrowsException()
+        public void BuildFilterUrl_EmptyFieldsReturnsCorrectUrl()
         {
-            var route = string.Empty;
-            var fields = new List<string>();
+            var route = "accounts";
             var filters = new List<string>();
-            var expandClause = string.Empty;
 
-            Assert.Throws<ArgumentException>(() =>
-            {
-                return ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-            });
+            var result = _urlBuilderWithMockedHelper.BuildFilterUrl(route, filters);
+
+            Assert.Equal("accounts?$select=somefield&$expand=expand($select=expand_field)", result);
         }
 
         [Fact]
-        public void BuildFilterUrl_NullFieldsNullRouteReturnsRoute()
+        public void BuildFilterUrl_OneFilterReturnsCorrectUrl()
         {
-            var fields = (List<string>)null;
-            var filters = (List<string>)null;
-            var expandClause = string.Empty;
-            var route = "tests";
+            var route = "accounts";
+            var filters = new List<string> { "somefield eq 1" };
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
+            var result = _urlBuilderWithMockedHelper.BuildFilterUrl(route, filters);
 
-            Assert.Equal(route, result);
+            Assert.Equal("accounts?$select=somefield&$expand=expand($select=expand_field)&$filter=somefield eq 1", result);
         }
 
         [Fact]
-        public void BuildFilterUrl_EmptyFieldsEmotyRouteReturnsRoute()
+        public void BuildFilterUrl_ThreeFiltersReturnsCorrectUrl()
         {
-            var fields = new List<string>();
-            var filters = new List<string>();
-            var expandClause = string.Empty;
-            var route = "tests";
+            var route = "accounts";
+            var filters = new List<string> 
+            { 
+                "(someProp eq 1)", 
+                "and (anotherProp eq 2)",
+                "and (yetanotherprop eq 3)"
+            };
 
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
+            var result = _urlBuilderWithMockedHelper.BuildFilterUrl(route, filters);
 
-            Assert.Equal(route, result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesOneFieldNoFilters()
-        {
-            var fields = new List<string> { "field" };
-            var filters = (List<string>)null;
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$select=field", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesThreeFieldNoFilters()
-        {
-            var fields = new List<string> { "field", "another_field", "one_more_field" };
-            var filters = (List<string>)null;
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$select=field,another_field,one_more_field", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesNoFieldsOneFilter()
-        {
-            var fields = new List<string>();
-            var filters = new List<string>{ "filter"};
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$filter=filter", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesNoFieldsMultipleFilters()
-        {
-            var fields = new List<string>();
-            var filters = new List<string> { "(someProp eq 1)", "and (anotherProp eq 2)" };
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$filter=(someProp eq 1) and (anotherProp eq 2)", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesOneFieldOneFilter()
-        {
-            var fields = new List<string> { "field" };
-            var filters = new List<string> { "(someProp eq 1)" };
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$select=field&$filter=(someProp eq 1)", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesMultipleFieldsOneFilter()
-        {
-            var fields = new List<string> { "field", "another_field", "one_more_field" };
-            var filters = new List<string> { "(someProp eq 1)" };
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$select=field,another_field,one_more_field&$filter=(someProp eq 1)", result);
-        }
-
-        [Fact]
-        public void BuildFilterUrl_HandlesMultipleFieldsMultipleFilters()
-        {
-            var fields = new List<string> { "field", "another_field", "one_more_field" };
-            var filters = new List<string> { "(someProp eq 1)", "and (anotherProp eq 2)" };
-            var expandClause = string.Empty;
-            var route = "tests";
-
-            var result = ODataUrlBuilder.BuildFilterUrl(route, fields, expandClause, filters);
-
-            Assert.Equal("tests?$select=field,another_field,one_more_field&$filter=(someProp eq 1) and (anotherProp eq 2)", result);
+            Assert.Equal("accounts?$select=somefield&$expand=expand($select=expand_field)&$filter=(someProp eq 1) and (anotherProp eq 2) and (yetanotherprop eq 3)", result);
         }
 
         #endregion
 
-        #region Build Url For Retrieve One Tests
+        #region Retrieve One Url Tests
 
         [Fact]
-        public void BuildRetrieveOneUrl_NoRouteIdSetThrowsException()
+        public void RetrieveOneUrl_NoRouteThrowsException()
         {
-            var route = string.Empty;
-            var fields = new List<string>();
-            var id = Guid.NewGuid();
+            var guid = Guid.NewGuid();
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildRetrieveOneUrl(route, id, fields);
+                return _urlBuilderWithMockedHelper.BuildRetrieveOneUrl(string.Empty, guid);
+            });
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                return _urlBuilderWithMockedHelper.BuildRetrieveOneUrl(null, guid);
             });
         }
 
         [Fact]
-        public void BuildRetrieveOneUrl_NullRouteIdSetThrowsException()
+        public void RetrieveOneUrl_ReturnsCorrectUrl()
         {
-            var route = string.Empty;
-            var fields = new List<string>();
-            var id = Guid.NewGuid();
+            var route = "accounts";
+            var id = Guid.Parse("834814f9-b0b8-ea11-a812-000d3a122b89");
+
+            var result = _urlBuilderWithMockedHelper.BuildRetrieveOneUrl(route, id);
+
+            Assert.Equal("accounts(834814f9-b0b8-ea11-a812-000d3a122b89)?$select=somefield&$expand=expand($select=expand_field)", result);
+        }
+
+        #endregion 
+
+        #region GetPropertyAnnotationTests
+
+        [Fact]
+        public void ExtractingAnnotationFromFieldThrowsException()
+        {
+            var helper = new D365ModelHelper<ClassWithNoAttributes>();
+            var urlBuilder = new ODataUrlBuilder<ClassWithNoAttributes>(helper);
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildRetrieveOneUrl(route, id, fields);
+                return urlBuilder.GetPropertyAnnotation("_someInt");
             });
         }
 
         [Fact]
-        public void BuildRetrieveOneUrl_HandlesNullFieldsList()
+        public void ExtractingAnnotationWhereNoneExistsThrowsException()
         {
-            var route = "tests";
-            var fields = (List<string>)null;
-            var id = Guid.Parse("834814f9-b0b8-ea11-a812-000d3a122b89");
+            var helper = new D365ModelHelper<ClassWithOneAttributeNoAnnotation>();
+            var urlBuilder = new ODataUrlBuilder<ClassWithOneAttributeNoAnnotation>(helper);
 
-            var result = ODataUrlBuilder.BuildRetrieveOneUrl(route, id, fields);
-
-            Assert.Equal("tests(834814f9-b0b8-ea11-a812-000d3a122b89)", result);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                return urlBuilder.GetPropertyAnnotation(nameof(ClassWithOneAttributeNoAnnotation.IntProperty));
+            });
         }
 
         [Fact]
-        public void BuildRetrieveOneUrl_HandlesOneField()
+        public void CanExtractNonExtensionAttributeFromField()
         {
-            var route = "tests";
-            var fields = new List<string> { "field" };
-            var id = Guid.Parse("834814f9-b0b8-ea11-a812-000d3a122b89");
+            var helper = new D365ModelHelper<ClassWithOneAttributeAndAnnotated>();
+            var urlBuilder = new ODataUrlBuilder<ClassWithOneAttributeAndAnnotated>(helper);
 
-            var result = ODataUrlBuilder.BuildRetrieveOneUrl(route, id, fields);
+            var result = urlBuilder.GetPropertyAnnotation(nameof(ClassWithOneAttributeAndAnnotated.IntProperty));
 
-            Assert.Equal("tests(834814f9-b0b8-ea11-a812-000d3a122b89)?$select=field", result);
+            Assert.Equal("JsonFieldName", result);
         }
 
         [Fact]
-        public void BuildRetrieveOneUrl_HandlesThreeFields()
+        public void CanExtractExtensionAttributeFromField()
         {
-            var route = "tests";
-            var fields = new List<string> { "field", "another_field", "one_more_field" };
-            var id = Guid.Parse("834814f9-b0b8-ea11-a812-000d3a122b89");
+            var helper = new D365ModelHelper<ClassWithOneAttributeAndAnnotatedWithMetadata>();
+            var urlBuilder = new ODataUrlBuilder<ClassWithOneAttributeAndAnnotatedWithMetadata>(helper);
 
-            var result = ODataUrlBuilder.BuildRetrieveOneUrl(route, id, fields);
+            var result = urlBuilder.GetPropertyAnnotation(nameof(ClassWithOneAttributeAndAnnotatedWithMetadata.IntProperty));
 
-            Assert.Equal("tests(834814f9-b0b8-ea11-a812-000d3a122b89)?$select=field,another_field,one_more_field", result);
+            Assert.Equal("JsonFieldName", result);
         }
 
         #endregion
@@ -226,50 +164,34 @@ namespace API.Tests
         #region Build In Filter Tests
 
         [Fact]
-        public void BuildInFilter_NullFieldName_ThrowsException()
+        public void BuildInFilter_NoFieldName_ThrowsException()
         {
-            var fieldName = (string)null;
             var allowedValues = new List<string> { "value" };
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(fieldName, allowedValues);
+                return _urlBuilderWithMockedHelper.BuildInFilter(string.Empty, allowedValues);
             });
-        }
-
-        [Fact]
-        public void BuildInFilter_EmptyFieldName_ThrowsException()
-        {
-            var fieldName = string.Empty;
-            var allowedValues = new List<string> { "value" };
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(fieldName, allowedValues);
+                return _urlBuilderWithMockedHelper.BuildInFilter(null, allowedValues);
             });
         }
 
         [Fact]
-        public void BuildInFilter_NullAllowedValues_ThrowsException()
+        public void BuildInFilter_NoAllowedValues_ThrowsException()
         {
             var fieldName = "field";
-            var allowedValues = (List<string>)null;
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(fieldName, allowedValues);
+                return _urlBuilderWithMockedHelper.BuildInFilter(fieldName, null);
             });
-        }
-
-        [Fact]
-        public void BuildInFilter_EmptyAllowedValues_ThrowsException()
-        {
-            var fieldName = "field";
-            var allowedValues = new List<string>();
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(fieldName, allowedValues);
+                return _urlBuilderWithMockedHelper.BuildInFilter(fieldName, new List<string>());
             });
         }
 
@@ -279,20 +201,9 @@ namespace API.Tests
             var fieldName = "field";
             var allowedFields = new List<string> { "value" };
 
-            var result = ODataUrlBuilder.BuildInFilter(fieldName, allowedFields);
+            var result = _urlBuilderWithMockedHelper.BuildInFilter(fieldName, allowedFields);
 
             Assert.Equal("(field eq value)", result);
-        }
-
-        [Fact]
-        public void BuildInFilter_Handles_TwoAllowedValues()
-        {
-            var fieldName = "field";
-            var allowedFields = new List<string> { "value_one", "value_two" };
-
-            var result = ODataUrlBuilder.BuildInFilter(fieldName, allowedFields);
-
-            Assert.Equal("(field eq value_one or field eq value_two)", result);
         }
 
         [Fact]
@@ -301,60 +212,44 @@ namespace API.Tests
             var fieldName = "field";
             var allowedFields = new List<string> { "value_one", "value_two", "value_three", "value_four" };
 
-            var result = ODataUrlBuilder.BuildInFilter(fieldName, allowedFields);
+            var result = _urlBuilderWithMockedHelper.BuildInFilter(fieldName, allowedFields);
 
             Assert.Equal("(field eq value_one or field eq value_two or field eq value_three or field eq value_four)", result);
         }
 
         #endregion
 
-        #region BuildOrSearchQuery Tests
+        #region Build Or Search Query
 
         [Fact]
         public void BuildOrSearchQuery_EmptyQuery_ThrowsException()
         {
-            var query = string.Empty;
             var fieldNames = new List<string> { "field" };
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(query, fieldNames);
+                return _urlBuilderWithMockedHelper.BuildInFilter(string.Empty, fieldNames);
             });
-        }
-
-        [Fact]
-        public void BuildOrSearchQuery_NullQuery_ThrowsException()
-        {
-            var query = (string)null;
-            var fieldNames = new List<string> { "field" };
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(query, fieldNames);
+                return _urlBuilderWithMockedHelper.BuildInFilter(null, fieldNames);
             });
         }
 
         [Fact]
-        public void BuildOrSearchQuery_NullFieldNames_ThrowsException()
+        public void BuildOrSearchQuery_NoFieldNames_ThrowsException()
         {
             var query = "query";
-            var fieldNames = (List<string>)null;
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(query, fieldNames);
+                return _urlBuilderWithMockedHelper.BuildInFilter(query, null);
             });
-        }
-
-        [Fact]
-        public void BuildOrSearchQuery_EmptyFieldNames_ThrowsException()
-        {
-            var query = "query";
-            var fieldNames = new List<string>();
 
             Assert.Throws<ArgumentException>(() =>
             {
-                return ODataUrlBuilder.BuildInFilter(query, fieldNames);
+                return _urlBuilderWithMockedHelper.BuildInFilter(query, new List<string>());
             });
         }
 
@@ -362,23 +257,13 @@ namespace API.Tests
         public void BuildOrSearchQuery_Handles_OneFieldName()
         {
             var query = "query";
-            var fieldNames = new List<string>{ "field" };
+            var fieldNames = new List<string> { "field" };
 
-            var result = ODataUrlBuilder.BuildOrSearchQuery(query, fieldNames);
+            var result = _urlBuilderWithMockedHelper.BuildOrSearchQuery(query, fieldNames);
 
             Assert.Equal("(contains(field,'query'))", result);
         }
 
-        [Fact]
-        public void BuildOrSearchQuery_Handles_TwoFieldNames()
-        {
-            var query = "query";
-            var fieldNames = new List<string> { "field", "another_field" };
-
-            var result = ODataUrlBuilder.BuildOrSearchQuery(query, fieldNames);
-
-            Assert.Equal("(contains(field,'query') or contains(another_field,'query'))", result);
-        }
 
         [Fact]
         public void BuildOrSearchQuery_Handles_FourFieldNames()
@@ -386,11 +271,48 @@ namespace API.Tests
             var query = "query";
             var fieldNames = new List<string> { "field1", "field2", "field3", "field4" };
 
-            var result = ODataUrlBuilder.BuildOrSearchQuery(query, fieldNames);
+            var result = _urlBuilderWithMockedHelper.BuildOrSearchQuery(query, fieldNames);
 
             Assert.Equal("(contains(field1,'query') or contains(field2,'query') or contains(field3,'query') or contains(field4,'query'))", result);
         }
 
         #endregion
+    }
+
+    internal class ClassWithNoAttributes : BaseD365Model
+    {
+        [JsonProperty("SomAttribute")]
+        private int _someInt;
+    }
+
+    internal class ClassWithOneAttributeNoAnnotation : BaseD365Model
+    {
+        public int IntProperty { get; set; }
+    }
+
+    internal class ClassWithOneAttributeAndAnnotated : BaseD365Model
+    {
+        [JsonProperty("JsonFieldName")]
+        public int IntProperty { get; set; }
+    }
+
+    internal class ClassWithOneAttributeAndAnnotatedWithMetadata : BaseD365Model
+    {
+        [JsonProperty("JsonFieldName@OData.Community.Display.V1.FormattedValue")]
+        public int IntProperty { get; set; }
+    }
+
+    internal class ClassWithMixedAnnotations1 : BaseD365Model
+    {
+        public int NoAnnotation { get; set; }
+
+        [JsonProperty("AnnotatedWithMetadata@OData.Community.Display.V1.FormattedValue")]
+        public int AnnotatedWithMetadata { get; set; }
+
+        [JsonProperty("AnnotatedNoMetadata")]
+        public int AnnotatedNoMetadata { get; set; }
+
+        [JsonProperty("SomAttribute")]
+        private int _someInt;
     }
 }
