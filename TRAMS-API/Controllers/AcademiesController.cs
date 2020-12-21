@@ -17,10 +17,10 @@ namespace API.Controllers
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public class AcademiesController : ControllerBase
     {
-        private readonly AcademiesRepository _academiesRepository;
+        private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
-        public AcademiesController(AcademiesRepository academiesRepository,
+        public AcademiesController(IAcademiesRepository academiesRepository,
                                    IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
         {
             _academiesRepository = academiesRepository;

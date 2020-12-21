@@ -1,16 +1,28 @@
-﻿using System;
+﻿using API.Models.D365;
+using API.ODataHelpers;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace API.HttpHelpers
 {
-    public static class ODataUrlBuilder
+    public class ODataUrlBuilder<T> : IOdataUrlBuilder<T> where T : BaseD365Model
     {
-        public static string BuildFilterUrl(string route, List<string> fields, string expandClause, List<string> filters)
+        private readonly ID365ModelHelper<T> _modelHelper;
+        private readonly Type _type;
+
+        public ODataUrlBuilder(ID365ModelHelper<T> modelHelper)
+        {
+            _modelHelper = modelHelper;
+            _type = typeof(T);
+        }
+
+        public string BuildFilterUrl(string route, List<string> filters)
         {
             //A route must be set
-            if(string.IsNullOrEmpty(route))
+            if (string.IsNullOrEmpty(route))
             {
                 throw new ArgumentException("The route must not be null or empty");
             }
@@ -19,30 +31,23 @@ namespace API.HttpHelpers
 
             urlSegments.Append($"{route}");
 
-            var nextQueryParamSymbol = "?";
+            var modelRepresentation = _modelHelper.ExtractModelRepresentation();
 
-            if(fields!= null && fields.Any())
+            var selectAndExpand = _modelHelper.BuildSelectAndExpandClauses(modelRepresentation);
+
+            urlSegments.Append($"?{selectAndExpand}");
+
+            if (filters != null && filters.Any())
             {
-                urlSegments.Append($"{nextQueryParamSymbol}$select={string.Join(',', fields)}");
-                nextQueryParamSymbol = "&";
+                urlSegments.Append($"&$filter={string.Join(" ", filters)}");
             }
 
-            if (!string.IsNullOrEmpty(expandClause))
-            {
-                urlSegments.Append($"{nextQueryParamSymbol}{expandClause}");
-            }
-
-            if (filters!= null && filters.Any())
-            {
-                urlSegments.Append($"{nextQueryParamSymbol}$filter={string.Join(" ", filters)}");
-            }
-            
             var url = urlSegments.ToString();
 
             return url;
         }
 
-        public static string BuildRetrieveOneUrl(string route, Guid id, List<string> fields, string expandClause = null)
+        public string BuildRetrieveOneUrl(string route, Guid id)
         {
             //A route must be set
             if (string.IsNullOrEmpty(route))
@@ -50,24 +55,41 @@ namespace API.HttpHelpers
                 throw new ArgumentException("The route must not be null or empty");
             }
 
-            var url = $"{route}({id})";
-            var nextQueryParam = "?";
+            var modelRepresentation = _modelHelper.ExtractModelRepresentation();
 
-            if (fields != null && fields.Any())
-            {
-                url += $"{nextQueryParam}$select={string.Join(',', fields)}";
-                nextQueryParam = "&";
-            }
+            var selectAndExpand = _modelHelper.BuildSelectAndExpandClauses(modelRepresentation);
 
-            if (!string.IsNullOrEmpty(expandClause))
-            {
-                url += $"{nextQueryParam}{expandClause}";
-            }
+            var url = $"{route}({id})?{selectAndExpand}";
 
             return url;
         }
-        
-        public static string BuildInFilter(string fieldName, List<string> allowedValues)
+
+        /// <summary>
+        /// Gets the JsonProperty annotation of a certain property without any @metadata extensions
+        /// Throws InvalidOperationException if the field doesn't have a JsonProperty annotation
+        /// </summary>
+        /// <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
+        /// <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
+        public string GetPropertyAnnotation(string propertyName)
+        {
+            var propertyInfo = _type.GetProperty(propertyName);
+
+            if (propertyInfo == null)
+            {
+                throw new ArgumentException($"Class does not define a \"{propertyName}\" Property ");
+            }
+
+            var propJsonAnnotation = propertyInfo.GetCustomAttributes(typeof(JsonPropertyAttribute), false);
+
+            if (propJsonAnnotation.FirstOrDefault() is JsonPropertyAttribute cast)
+            {
+                return cast.PropertyName.Split("@").First();
+            }
+
+            throw new InvalidOperationException("Property does not define a JsonProperty annotation");
+        }
+
+        public string BuildInFilter(string fieldName, List<string> allowedValues)
         {
             if (allowedValues == null || allowedValues.Count == 0)
             {
@@ -91,13 +113,13 @@ namespace API.HttpHelpers
             return outerQuery;
         }
 
-        public static string BuildOrSearchQuery(string query, List<string> fieldNames)
+        public string BuildOrSearchQuery(string query, List<string> fieldNames)
         {
             if (fieldNames == null || fieldNames.Count == 0)
             {
                 throw new ArgumentException("The filter requires at least one field name");
             }
-                
+
             if (string.IsNullOrEmpty(query))
             {
                 throw new ArgumentException("The query must not be null or empty");
