@@ -57,9 +57,9 @@ namespace API.Repositories
 
         public async Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery)
         {
-            var filters = BuildTrustSearchFilters(searchQuery);
-
             await _client.AuthenticateAsync();
+
+            var filters = BuildTrustSearchFilters(searchQuery);
 
             var url = _urlBuilder.BuildFilterUrl(_route, filters);
 

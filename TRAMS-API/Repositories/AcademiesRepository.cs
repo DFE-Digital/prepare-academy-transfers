@@ -24,6 +24,8 @@ namespace API.Repositories
 
         public async Task<GetAcademiesD365Model> GetAcademyById(Guid id)
         {
+            await _client.AuthenticateAsync();
+
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
@@ -41,7 +43,9 @@ namespace API.Repositories
         }
 
         public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
-        { 
+        {
+            await _client.AuthenticateAsync();
+
             var _parentTrustIdFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
             var filters = new List<string>
             {
