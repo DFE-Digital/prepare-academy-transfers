@@ -3,7 +3,7 @@ using System;
 
 namespace API.Models.D365
 {
-    public class GetTrustD365Model
+    public class GetTrustsD365Model : BaseD365Model
     {
         [JsonProperty("accountid")]
         public Guid Id { get; set; }
@@ -22,6 +22,9 @@ namespace API.Models.D365
 
         [JsonProperty("_sip_establishmenttypeid_value@OData.Community.Display.V1.FormattedValue")]
         public string EstablishmentType { get; set; }
+
+        [JsonProperty("_sip_establishmenttypeid_value")]
+        public Guid EstablishmentTypeId { get; set; }
 
         [JsonProperty("_sip_establismenttypegroupid_value@OData.Community.Display.V1.FormattedValue")]
         public string EstablishmentTypeGroup { get; set; }

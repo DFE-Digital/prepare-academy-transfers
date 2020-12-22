@@ -2,6 +2,7 @@ using API.HttpHelpers;
 using API.Mapping;
 using API.Models.D365;
 using API.Models.Response;
+using API.ODataHelpers;
 using API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -37,8 +38,7 @@ namespace TRAMS_API
             services.AddControllers();
 
             services.AddSingleton(this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
-            services.AddTransient(typeof(TrustRepository));
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             // Note: Add this service at the end after AddMvc() or AddMvcCore().
@@ -58,19 +58,11 @@ namespace TRAMS_API
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "API.xml");
                 c.IncludeXmlComments(filePath);
             });
-        }
+        
+            ConfigureHelpers(services);
 
-        private AuthenticatedHttpClient CreateHttpClient()
-        {
-            var authority = Configuration["D365:Authority"];
-            var clientId = Configuration["D365:ClientId"];
-            var clientSecret = Configuration["D365:ClientSecret"];
-            var url = Configuration["D365:Url"];
-            var version = Configuration["D365:Version"];
-
-            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
-
-            return client;
+            ConfigureMappers(services);
+            ConfigureRepositories(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,6 +96,46 @@ namespace TRAMS_API
                 // To serve SwaggerUI at application's root page, set the RoutePrefix property to an empty string.
                 c.RoutePrefix = string.Empty;
             });
+        }
+
+        private static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<ITrustsRepository, TrustsRepository>();
+            services.AddTransient<IAcademiesRepository,AcademiesRepository>();
+        }
+
+        private static void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r =>
+                new GetTrustD365ModelToGetTrustsModelMapper());
+
+            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
+                new GetAcademiesD365ModelToGetAcademiesModelMapper());
+        }
+
+        private static void ConfigureHelpers(IServiceCollection services)
+        {
+            services.AddTransient<ID365ModelHelper<GetTrustsD365Model>>(r =>
+                new D365ModelHelper<GetTrustsD365Model>());
+
+            services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>>(r =>
+               new D365ModelHelper<GetAcademiesD365Model>());
+
+            services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
+        }
+
+        private AuthenticatedHttpClient CreateHttpClient()
+        {
+            var authority = Configuration["D365:Authority"];
+            var clientId = Configuration["D365:ClientId"];
+            var clientSecret = Configuration["D365:ClientSecret"];
+            var url = Configuration["D365:Url"];
+            var version = Configuration["D365:Version"];
+
+            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
+
+            return client;
         }
     }
 }

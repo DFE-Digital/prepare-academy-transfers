@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace TRAMS_API.Controllers
+namespace API.Controllers
 {
     /// <summary>
     /// API controller for retrieving information about a trust from TRAMS
@@ -26,23 +26,29 @@ namespace TRAMS_API.Controllers
     public class TrustsController : ControllerBase
     {
         private readonly ILogger<TrustsController> _logger;
-        private readonly TrustRepository _trustRepostiory;
-        private readonly IMapper<GetTrustD365Model, GetTrustsModel> _mapper;
+        private readonly ITrustsRepository _trustRepostiory;
+        private readonly IAcademiesRepository _academiesRepository;
+        private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
+        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
-        public TrustsController(ILogger<TrustsController> logger, 
-                                         IConfiguration config,
-                                         TrustRepository trustRepostiory,
-                                         IMapper<GetTrustD365Model, GetTrustsModel> mapper)
+        public TrustsController(ILogger<TrustsController> logger,
+                                IConfiguration config,
+                                ITrustsRepository trustRepostiory,
+                                IAcademiesRepository academiesRepository,
+                                IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
+                                IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
         {
             _logger = logger;
             _trustRepostiory = trustRepostiory;
-            _mapper = mapper;
+            _academiesRepository = academiesRepository;
+            _getTrustMapper = mapper;
+            _getAcademiesMapper = getAcademiesMapper;
         }
 
         /// <summary>
         /// Retrieves information about a trust given its TRAMS Guid
         /// </summary>
-        /// <param name="id">The GUID</param>
+        /// <param name="id">The Guid of the trust</param>
         /// <returns><see cref="GetTrustsModel"/>A GetTrustsModel object</returns>
         [HttpGet]
         [Route("/trusts/{id}")]
@@ -57,8 +63,8 @@ namespace TRAMS_API.Controllers
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
 
-            var formattedResult = _mapper.Map(result);
-            
+            var formattedResult = _getTrustMapper.Map(result);
+
             return Ok(formattedResult);
         }
 
@@ -68,12 +74,38 @@ namespace TRAMS_API.Controllers
         /// <param name="search">Will search for trusts that contain the search query. The searchable fields are: Name, Companies House Number, and Trust Reference Number</param>
         /// <returns><see cref="GetTrustsModel"/>An array of GetTrustsModel objects</returns>
         [HttpGet]
+        [Route("/trusts/")]
         [ProducesResponseType(typeof(List<GetTrustsModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<GetTrustsModel>>> SearchTrusts(string search)
         {
             var results = await _trustRepostiory.SearchTrusts(search);
 
-            var formattedOutput = results.Select(r => _mapper.Map(r)).ToList();
+            var formattedOutput = results.Select(r => _getTrustMapper.Map(r)).ToList();
+
+            return Ok(formattedOutput);
+        }
+
+        /// <summary>
+        /// Gets the academies of a given trust. The trust is identified via its TRAMS Guid
+        /// </summary>
+        /// <param name="id">The Guid of the trust in TRAMS</param>
+        /// <returns>A list of <see cref="GetAcademiesModel"/></returns>
+        [HttpGet]
+        [Route("/trusts/{id}/academies")]
+        [ProducesResponseType(typeof(List<GetAcademiesModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<GetAcademiesModel>>> GetTrustAcademies(Guid id)
+        {
+            var trust = await _trustRepostiory.GetTrustById(id);
+
+            if (trust == null)
+            {
+                return NotFound($"The trust with the id: '{id}' was not found");
+            }
+
+            var academies = await _academiesRepository.GetAcademiesByTrustId(id);
+
+            var formattedOutput = academies.Select(a => _getAcademiesMapper.Map(a)).ToList();
 
             return Ok(formattedOutput);
         }
