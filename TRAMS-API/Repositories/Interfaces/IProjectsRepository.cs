@@ -11,5 +11,7 @@ namespace API.Repositories.Interfaces
         public Task<List<GetAcademyTransfersProjectsD365Model>> GetAll();
 
         public Task<GetAcademyTransfersProjectsD365Model> GetProjectById(Guid id);
+
+        public Task InsertProject(PostAcademyTransfersProjectsD365Model project);
     }
 }

@@ -4,7 +4,8 @@ using API.Repositories.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace API.Repositories
@@ -61,6 +62,24 @@ namespace API.Repositories
             }
 
             return null;
+        }
+
+        public async Task InsertProject(PostAcademyTransfersProjectsD365Model project)
+        {
+            await _client.AuthenticateAsync();
+
+            var jsonBody = JsonConvert.SerializeObject(project);
+
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonBody);
+            var byteContent = new ByteArrayContent(buffer);
+
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var result = await _client.PostAsync(_route, byteContent);
+
+            var content = await result.Content.ReadAsStringAsync();
+
+            var debug = 0;
         }
     }
 }

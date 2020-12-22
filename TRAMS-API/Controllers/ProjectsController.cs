@@ -1,4 +1,5 @@
-﻿using API.Repositories;
+﻿using API.Models.D365;
+using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -74,6 +75,48 @@ namespace API.Controllers
         public async Task<IActionResult> GetProjectTrust()
         {
             //Returns full trust information
+            return null;
+        }
+
+        [HttpPost]
+        [Route("/projects/")]
+        public async Task<IActionResult> InsertTrust()
+        {
+            var project = new PostAcademyTransfersProjectsD365Model
+            {
+                ProjectInitiatorFullName = "Mihail Andrici",
+                ProjectInitiatorUid = "mihail.andrici@education.gov.uk",
+                ProjectStatus = 596500000,
+                Academies = new List<PostAcademyTransfersProjectAcademyD365Model>
+                {
+                    new PostAcademyTransfersProjectAcademyD365Model
+                    {
+                        AcademyId = "/accounts(26fad515-0ede-e911-a839-000d3a385a1c)",
+                        Trusts = new List<PostAcademyTransfersProjectAcademyTrustD365Model>
+                        {
+                            new PostAcademyTransfersProjectAcademyTrustD365Model
+                            {
+                                TrustId = "/accounts(26fad515-0ede-e911-a839-000d3a385a1c)"
+                            }
+                        }
+                    },
+                    new PostAcademyTransfersProjectAcademyD365Model
+                    {
+                        AcademyId = "/accounts(9be14625-eaa0-e911-a837-000d3a385a1c)",
+                        Trusts = new List<PostAcademyTransfersProjectAcademyTrustD365Model>
+                        {
+                            new PostAcademyTransfersProjectAcademyTrustD365Model
+                            {
+                                TrustId = "/accounts(9be14625-eaa0-e911-a837-000d3a385a1c)"
+                            }
+                        }
+                    }
+                },
+                Trusts = new List<PostAcademyTransfersProjectTrustD365Model>()
+            };
+
+            await _projectsRepository.InsertProject(project);
+
             return null;
         }
         

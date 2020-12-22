@@ -9,20 +9,23 @@ namespace API.Models.D365
         [JsonProperty("sip_academytransfersprojectid")]
         public Guid ProjectId { get; set; }
 
+        [JsonProperty("sip_projectname")]
+        public string ProjectName { get; set; }
+
         [JsonProperty("sip_projectinitiatorfullname")]
         public string ProjectInitiatorFullName { get; set; }
 
         [JsonProperty("sip_projectinitiatoruniqueid")]
         public string ProjectInitiatorUid { get; set; }
 
-        [JsonProperty("sip_projectname")]
-        public string ProjectName { get; set; }
-
         [JsonProperty("sip_projectstatus")]
         public int ProjectStatus { get; set; }
 
         [JsonProperty("sip_sip_academytransfersproject_sip_academytransfersprojectacademy_AcademyTransfersProjectId")]
         public List<AcademyTransfersProjectAcademy> Academies { get; set; }
+
+        [JsonProperty("sip_sip_academytransfersproject_sip_academytransfersprojecttrust_ATProjectId")]
+        public List<ProjectTrust> Trusts { get; set; }
     }
 
     public class AcademyTransfersProjectAcademy : BaseD365Model
@@ -36,6 +39,9 @@ namespace API.Models.D365
         [JsonProperty("_sip_academyid_value")]
         public Guid AcademyId { get; set; }
 
+        [JsonProperty("_sip_academyid_value@OData.Community.Display.V1.FormattedValue")]
+        public string AcademyName { get; set; }
+
         [JsonProperty("sip_esfainterventionreason")]
         public string EsfaInterventionReasons { get; set; }
 
@@ -48,13 +54,37 @@ namespace API.Models.D365
         [JsonProperty("sip_esfainterventionreasonexplanation")]
         public string RddOrRscInterventionReasonsExplained { get; set; }
 
-        [JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
-        public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
+        //[JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
+        //public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
     }
 
     public class ProjectAcademyTrust : BaseD365Model
     {
         [JsonProperty("sip_atacademytrustid")]
-        public Guid Id { get; set; }
+        public Guid ProjectAcademyTrustId { get; set; }
+
+        [JsonProperty("_sip_atprojectacademyid_value")]
+        public Guid ProjectAcademyId { get; set; }
+
+        [JsonProperty("_sip_trustid_value")]
+        public Guid TrustId { get; set; }
+
+        [JsonProperty("_sip_trustid_value@OData.Community.Display.V1.FormattedValue")]
+        public string TrustName { get; set; }
+    }
+
+    public class ProjectTrust : BaseD365Model
+    {
+        [JsonProperty("sip_academytransfersprojecttrustid")]
+        public Guid ProjectTrustId { get; set; }
+
+        [JsonProperty("_sip_atprojectid_value")]
+        public Guid ProjectId { get; set; }
+
+        [JsonProperty("_sip_trustid_value")]
+        public Guid TrustId { get; set; }
+
+        [JsonProperty("_sip_trustid_value@OData.Community.Display.V1.FormattedValue")]
+        public string TrustName { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace API.ODataHelpers
         /// <returns>The <see cref="D365ModelRepresentation"/> of a D365Model</returns>
         public D365ModelRepresentation ExtractModelRepresentation()
         {
-            var basicProperties = GetBasicProperties(_type);
+            var basicProperties = GetBasicProperties(_type).Distinct().ToList();
 
             var levelOneTypeProperties = GetTypeProperties(_type);
 
@@ -68,7 +68,7 @@ namespace API.ODataHelpers
 
         private D365ModelRepresentation BuildModelRepresentationLevel(PropertyInfo property)
         {
-            var basicProperties = GetBasicProperties(property.PropertyType);
+            var basicProperties = GetBasicProperties(property.PropertyType).Distinct().ToList();
             var typeProperties = GetTypeProperties(property.PropertyType);
 
             var representation = new D365ModelRepresentation
