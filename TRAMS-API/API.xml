@@ -10,6 +10,11 @@
             </summary>
             <param name="id">The Guid of the academy</param>
         </member>
+        <member name="T:API.Controllers.ProjectsController">
+            <summary>
+            API controller for retrieving Academy Transfers projects from TRAMS
+            </summary>
+        </member>
         <member name="T:API.Controllers.TrustsController">
             <summary>
             API controller for retrieving information about a trust from TRAMS

@@ -112,6 +112,13 @@ namespace API.ODataHelpers
         /// <returns>A list of the JsonProperty annotation - excludes any @metadata extensions</returns>
         private List<string> GetBasicProperties(Type type)
         {
+            if (type.IsGenericType)
+            {
+                return type.GenericTypeArguments[0].GetProperties().Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && IsSystemType(p))
+                                .Select(p => ExtractD365PropertyName(p))
+                                .ToList();
+            }
+
             var jsonProps = type.GetProperties()
                                 .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && IsSystemType(p))
                                 .Select(p => ExtractD365PropertyName(p))
@@ -127,9 +134,11 @@ namespace API.ODataHelpers
 
         private List<PropertyInfo> GetTypeProperties(Type type)
         {
-            var typeProperties = type.GetProperties()
-                                     .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
-                                     .ToList();
+            var d365Type = type.IsGenericType ? type.GenericTypeArguments[0] : type;
+
+            var typeProperties = d365Type.GetProperties()
+                                         .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
+                                         .ToList();
 
             return typeProperties;
         }
@@ -141,7 +150,7 @@ namespace API.ODataHelpers
         /// <returns></returns>
         private static bool IsSystemType(PropertyInfo p)
         {
-            return p.PropertyType.FullName.Contains("System.");
+            return p.PropertyType.FullName.Contains("System.") && !p.PropertyType.FullName.Contains("System.Collections.Generic.List");
         }
     }
 }

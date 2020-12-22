@@ -4,6 +4,7 @@ using API.Models.D365;
 using API.Models.Response;
 using API.ODataHelpers;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -101,7 +102,8 @@ namespace TRAMS_API
         private static void ConfigureRepositories(IServiceCollection services)
         {
             services.AddTransient<ITrustsRepository, TrustsRepository>();
-            services.AddTransient<IAcademiesRepository,AcademiesRepository>();
+            services.AddTransient<IAcademiesRepository, AcademiesRepository>();
+            services.AddTransient<IProjectsRepository, ProjectsRepository>();
         }
 
         private static void ConfigureMappers(IServiceCollection services)
@@ -121,8 +123,12 @@ namespace TRAMS_API
             services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>>(r =>
                new D365ModelHelper<GetAcademiesD365Model>());
 
+            services.AddTransient<ID365ModelHelper<GetAcademyTransfersProjectsD365Model>>(r =>
+                new D365ModelHelper<GetAcademyTransfersProjectsD365Model>());
+
             services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
             services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model>, ODataUrlBuilder<GetAcademyTransfersProjectsD365Model>>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
