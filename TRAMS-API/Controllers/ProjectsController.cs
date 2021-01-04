@@ -137,6 +137,8 @@ namespace API.Controllers
             var internalModel = _mapper.Map(model);
 
             await _projectsRepository.InsertProject(internalModel);
+
+            return Accepted();
         }   
     }
 }
