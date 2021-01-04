@@ -1,4 +1,6 @@
-﻿using API.Models.D365;
+﻿using API.Mapping;
+using API.Models.D365;
+using API.Models.Request;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -23,10 +25,19 @@ namespace API.Controllers
     public class ProjectsController : Controller
     {
         private readonly IProjectsRepository _projectsRepository;
+        private readonly IAcademiesRepository _academiesRepository;
+        private readonly ITrustsRepository _trustsRepository;
+        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _mapper;
 
-        public ProjectsController(IProjectsRepository projectsRepository)
+        public ProjectsController(IProjectsRepository projectsRepository,
+                                  IAcademiesRepository academiesRepository,
+                                  ITrustsRepository trustsRepository,
+                                  IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> mapper)
         {
             _projectsRepository = projectsRepository;
+            _academiesRepository = academiesRepository;
+            _trustsRepository = trustsRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -80,45 +91,52 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("/projects/")]
-        public async Task<IActionResult> InsertTrust()
+        public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
         {
-            var project = new PostAcademyTransfersProjectsD365Model
+            var debug = 0;
+
+            var projectAcademiesIds = model.ProjectAcademies.Select(a => a.AcademyId).ToList();
+
+            foreach(var academyId in projectAcademiesIds)
             {
-                ProjectInitiatorFullName = "Mihail Andrici",
-                ProjectInitiatorUid = "mihail.andrici@education.gov.uk",
-                ProjectStatus = 596500000,
-                Academies = new List<PostAcademyTransfersProjectAcademyD365Model>
+                var academy = await _academiesRepository.GetAcademyById(academyId);
+
+                if (academy == null)
                 {
-                    new PostAcademyTransfersProjectAcademyD365Model
+                    return new UnprocessableEntityObjectResult($"No academy found with the id of: {academyId}");
+                }
+            }
+
+            var allTrustIds = new List<Guid>();
+
+            if (model.ProjectAcademies != null && model.ProjectAcademies.Any())
+            {
+                allTrustIds.AddRange(model.ProjectAcademies.Where(a => a.Trusts != null && a.Trusts.Any())
+                                                           .SelectMany(s => s.Trusts)
+                                                           .Select(s => s.TrustId));
+            }
+
+            if (model.ProjectTrusts != null && model.ProjectTrusts.Any())
+            {
+                allTrustIds.AddRange(model.ProjectTrusts.Select(p => p.TrustId));
+            }
+
+            if (allTrustIds.Any())
+            {
+                foreach (var trustId in allTrustIds.Distinct())
+                {
+                    var trust = _trustsRepository.GetTrustById(trustId);
+
+                    if (trust == null)
                     {
-                        AcademyId = "/accounts(26fad515-0ede-e911-a839-000d3a385a1c)",
-                        Trusts = new List<PostAcademyTransfersProjectAcademyTrustD365Model>
-                        {
-                            new PostAcademyTransfersProjectAcademyTrustD365Model
-                            {
-                                TrustId = "/accounts(26fad515-0ede-e911-a839-000d3a385a1c)"
-                            }
-                        }
-                    },
-                    new PostAcademyTransfersProjectAcademyD365Model
-                    {
-                        AcademyId = "/accounts(9be14625-eaa0-e911-a837-000d3a385a1c)",
-                        Trusts = new List<PostAcademyTransfersProjectAcademyTrustD365Model>
-                        {
-                            new PostAcademyTransfersProjectAcademyTrustD365Model
-                            {
-                                TrustId = "/accounts(9be14625-eaa0-e911-a837-000d3a385a1c)"
-                            }
-                        }
+                        return new UnprocessableEntityObjectResult($"No trust found with the id of: {trustId}");
                     }
-                },
-                Trusts = new List<PostAcademyTransfersProjectTrustD365Model>()
-            };
+                }
+            }
 
-            await _projectsRepository.InsertProject(project);
+            var internalModel = _mapper.Map(model);
 
-            return null;
-        }
-        
+            await _projectsRepository.InsertProject(internalModel);
+        }   
     }
 }

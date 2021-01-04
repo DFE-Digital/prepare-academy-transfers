@@ -12,7 +12,7 @@ namespace API.Models.D365
         public string ProjectInitiatorUid { get; set; }
 
         [JsonProperty("sip_projectstatus")]
-        public int ProjectStatus { get; set; }
+        public ProjectStatusEnum ProjectStatus { get; set; }
 
         [JsonProperty("sip_sip_academytransfersproject_sip_academytransfersprojectacademy_AcademyTransfersProjectId")]
         public List<PostAcademyTransfersProjectAcademyD365Model> Academies { get; set; }
@@ -52,5 +52,26 @@ namespace API.Models.D365
     {
         [JsonProperty("sip_TrustId@odata.bind")]
         public string TrustId { get; set; }
+    }
+
+    public enum ProjectStatusEnum
+    {
+        InProgress = 596500000,
+        Completed = 596500001
+    }
+
+    public enum EsfaInterventionReasonEnum
+    {
+        GovernanceConcerns = 596500000,
+        FinanceConcerns = 596500001,
+        IrregularityConcerns = 596500002,
+        SafeguardingConcerns = 596500003
+    }
+
+    public enum RddOrRscInterventionReasonEnum
+    {
+        TerminationWarningNotice = 596500000,
+        RSCMindedToTerminateNotice = 596500001,
+        OfstedInadequateRating = 596500002
     }
 }
