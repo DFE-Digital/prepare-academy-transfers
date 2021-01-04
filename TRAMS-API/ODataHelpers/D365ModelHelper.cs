@@ -137,8 +137,8 @@ namespace API.ODataHelpers
             var d365Type = type.IsGenericType ? type.GenericTypeArguments[0] : type;
 
             var typeProperties = d365Type.GetProperties()
-                                         .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
-                                         .ToList();
+                                     .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
+                                     .ToList();
 
             return typeProperties;
         }
