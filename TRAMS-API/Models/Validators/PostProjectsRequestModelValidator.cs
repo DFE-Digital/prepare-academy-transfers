@@ -11,15 +11,17 @@ namespace API.Models.Validators
         {
             RuleFor(p => p.ProjectInitiatorFullName).NotEmpty().WithMessage("Must not be empty");
             RuleFor(p => p.ProjectInitiatorUid).NotEmpty().WithMessage("Must not be empty");
-            RuleFor(p => p.ProjectStatus).Must(s => MustBeAllowedProjectStatus(s)).WithMessage("Must be 1 for In Progress or 2 for Completed");
+            RuleFor(p => p.ProjectStatus).NotEmpty().WithMessage("Must not be empty");
+
+            RuleFor(p => p.ProjectStatus).Must(s => MustBeAllowedProjectStatus(s)).WithMessage("Invalid status code");
 
             RuleForEach(p => p.ProjectAcademies).SetValidator(new PostProjectsAcademiesModelValidator());
             RuleForEach(p => p.ProjectTrusts).SetValidator(new PostProjectsTrustsModelValidator());
         }
 
-        private static bool MustBeAllowedProjectStatus(int s)
-        { 
-            return Mapping.MappingDictionaries.ProjectStatusMap.Keys.Any(k => k == s);
+        private static bool MustBeAllowedProjectStatus(int statusCode)
+        {
+            return Mapping.MappingDictionaries.ProjectStatusMap.Keys.Any(k => k == statusCode);
         }
 
         internal class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
@@ -28,11 +30,11 @@ namespace API.Models.Validators
             {
                 RuleFor(p => p.AcademyId).NotEmpty().WithMessage("Must not be empty");
 
-                RuleFor(p => p.EsfaInterventionReasons).Must(s => s == null || s.Distinct().Count() == s.Count).WithMessage("Duplicate code detected");
-                RuleFor(p => p.RddOrRscInterventionReasons).Must(s => s == null || s.Distinct().Count() == s.Count).WithMessage("Duplicate code detected");
+                RuleFor(p => p.EsfaInterventionReasons).Must(s => s == null || s.Distinct().Count() == s.Count).WithMessage("Duplicate status code detected");
+                RuleFor(p => p.RddOrRscInterventionReasons).Must(s => s == null || s.Distinct().Count() == s.Count).WithMessage("Duplicate status code detected");
 
-                RuleForEach(p => p.EsfaInterventionReasons).Must(s => MustBeAllowedEsfaInterventionReason(s)).WithMessage("Invalid code");
-                RuleForEach(p => p.RddOrRscInterventionReasons).Must(s => MustBeAllowedRddOrRscInterventionReason(s)).WithMessage("Invalid code");
+                RuleForEach(p => p.EsfaInterventionReasons).Must(s => MustBeAllowedEsfaInterventionReason(s)).WithMessage("Invalid status code");
+                RuleForEach(p => p.RddOrRscInterventionReasons).Must(s => MustBeAllowedRddOrRscInterventionReason(s)).WithMessage("Invalid status code");
 
                 RuleFor(p => p.EsfaInterventionReasonsExplained).Must(s => WordCount(s) < 2000).WithMessage("Must be shorter than 2000 words");
                 RuleFor(p => p.RddOrRscInterventionReasonsExplained).Must(s => WordCount(s) < 2000).WithMessage("Must be shorter than 2000 words");
@@ -42,9 +44,15 @@ namespace API.Models.Validators
 
             private int WordCount(string text)
             {
-                int wordCount = 0, index = 0;
+                if(string.IsNullOrEmpty(text) || string.IsNullOrWhiteSpace(text))
+                {
+                    return 0;
+                }
 
-                // skip whitespace until first word
+                var wordCount = 0;
+                var index = 0;
+
+                //trim to first non-space character
                 while (index < text.Length && char.IsWhiteSpace(text[index]))
                 {
                     index++;
@@ -52,10 +60,12 @@ namespace API.Models.Validators
                     
                 while (index < text.Length)
                 {
-                    // check if current char is part of a word
+                    // skip if part of current word
                     while (index < text.Length && !char.IsWhiteSpace(text[index]))
+                    {
                         index++;
-
+                    }
+                        
                     wordCount++;
 
                     // skip whitespace until next word
@@ -75,6 +85,7 @@ namespace API.Models.Validators
             {
                 return Mapping.MappingDictionaries.EsfaInterventionReasonMap.Keys.Any(k => k == s);
             }
+
 
             internal class PostProjectsAcademiesTrustsModelValidator : AbstractValidator<PostProjectsAcademiesTrustsModel>
             {
