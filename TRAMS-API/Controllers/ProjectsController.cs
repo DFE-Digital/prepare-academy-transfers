@@ -51,9 +51,8 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
         {
-            var debug = 0;
-
             var projectAcademiesIds = model.ProjectAcademies.Select(a => a.AcademyId).ToList();
+            var unprocessableEntityErrors = new List<string>();
 
             foreach(var academyId in projectAcademiesIds)
             {
@@ -61,7 +60,7 @@ namespace API.Controllers
 
                 if (academy == null)
                 {
-                    return new UnprocessableEntityObjectResult($"No academy found with the id of: {academyId}");
+                    unprocessableEntityErrors.Add($"No academy found with the id of: {academyId}");
                 }
             }
 
@@ -87,9 +86,16 @@ namespace API.Controllers
 
                     if (trust == null)
                     {
-                        return new UnprocessableEntityObjectResult($"No trust found with the id of: {trustId}");
+                        unprocessableEntityErrors.Add($"No trust found with the id of: {trustId}");
                     }
                 }
+            }
+
+            if (unprocessableEntityErrors.Any())
+            {
+                var error = string.Join(". ", unprocessableEntityErrors);
+
+                return UnprocessableEntity(error);
             }
 
             var internalModel = _mapper.Map(model);

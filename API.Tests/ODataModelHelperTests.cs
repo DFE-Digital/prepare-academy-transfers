@@ -171,7 +171,7 @@ namespace API.Tests
                 public int LevelOneProp { get; set; }
 
                 [JsonProperty("leveltwoexpand")]
-                public LevelTwoExpand LevelTwoExpandProp { get; set; }
+                public List<LevelTwoExpand> LevelTwoExpandProp { get; set; }
 
                 internal class LevelTwoExpand
                 {

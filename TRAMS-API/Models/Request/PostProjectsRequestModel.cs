@@ -11,6 +11,7 @@ namespace API.Models.Request
         /// </summary>
         /// <example>Joe Bloggs</example>
         [Required]
+        [MaxLength(100)]
         public string ProjectInitiatorFullName { get; set; }
 
         /// <summary>
@@ -18,6 +19,7 @@ namespace API.Models.Request
         /// </summary>
         /// <example>joe.blogs@email.com</example>
         [Required]
+        [MaxLength(100)]
         public string ProjectInitiatorUid { get; set; }
 
         /// <summary>

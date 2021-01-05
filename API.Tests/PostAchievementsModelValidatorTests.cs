@@ -1,5 +1,5 @@
 ﻿using API.Models.Request;
-using API.Models.Validators;
+using API.Models.Validation;
 using System;
 using System.Collections.Generic;
 using System.Text;

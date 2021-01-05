@@ -31,7 +31,6 @@ namespace API.Repositories
             await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
@@ -51,7 +50,6 @@ namespace API.Repositories
             await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
@@ -76,8 +74,6 @@ namespace API.Repositories
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var result = await _client.PostAsync(_route, byteContent);
-
-            var content = await result.Content.ReadAsStringAsync();
 
             var debug = 0;
         }
