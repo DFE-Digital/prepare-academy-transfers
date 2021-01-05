@@ -40,8 +40,15 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// API endpoint for creating a new Academy Transfers Project
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("/projects/")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
         {
             var debug = 0;
@@ -89,7 +96,7 @@ namespace API.Controllers
 
             await _projectsRepository.InsertProject(internalModel);
 
-            return Accepted();
+            return NoContent();
         }   
     }
 }
