@@ -9,7 +9,7 @@ namespace API.Models.D365
         public Guid Id { get; set; }
 
         [JsonProperty("_parentaccountid_value")]
-        public Guid ParentTrustId { get; set; }
+        public Guid? ParentTrustId { get; set; }
 
         [JsonProperty("name")]
         public string AcademyName { get; set; }

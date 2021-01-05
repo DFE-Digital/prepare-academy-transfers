@@ -1,9 +1,12 @@
 using API.HttpHelpers;
 using API.Mapping;
 using API.Models.D365;
+using API.Models.Request;
 using API.Models.Response;
 using API.ODataHelpers;
 using API.Repositories;
+using API.Repositories.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,13 +38,17 @@ namespace TRAMS_API
                         opt.Authority = $"{Configuration["AAD:Instance"]}{Configuration["AAD:TenantId"]}";
                     });
 
-            services.AddControllers();
+            services.AddControllers()
+                    .AddFluentValidation(s =>
+                    {
+                        s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                        s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    }); 
 
             services.AddSingleton(this.CreateHttpClient());
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
-            // Note: Add this service at the end after AddMvc() or AddMvcCore().
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -101,7 +108,8 @@ namespace TRAMS_API
         private static void ConfigureRepositories(IServiceCollection services)
         {
             services.AddTransient<ITrustsRepository, TrustsRepository>();
-            services.AddTransient<IAcademiesRepository,AcademiesRepository>();
+            services.AddTransient<IAcademiesRepository, AcademiesRepository>();
+            services.AddTransient<IProjectsRepository, ProjectsRepository>();
         }
 
         private static void ConfigureMappers(IServiceCollection services)
@@ -111,6 +119,9 @@ namespace TRAMS_API
 
             services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
                 new GetAcademiesD365ModelToGetAcademiesModelMapper());
+
+            services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>(r =>
+                new PostProjectsModelToPostProjectsD365ModelMapper());
         }
 
         private static void ConfigureHelpers(IServiceCollection services)
@@ -121,8 +132,12 @@ namespace TRAMS_API
             services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>>(r =>
                new D365ModelHelper<GetAcademiesD365Model>());
 
+            services.AddTransient<ID365ModelHelper<GetAcademyTransfersProjectsD365Model>>(r =>
+                new D365ModelHelper<GetAcademyTransfersProjectsD365Model>());
+
             services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
             services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model>, ODataUrlBuilder<GetAcademyTransfersProjectsD365Model>>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()

@@ -36,6 +36,11 @@ namespace API.Repositories
                 var result = await response.Content.ReadAsStringAsync();
                 var castedResult = JsonConvert.DeserializeObject<GetAcademiesD365Model>(result);
 
+                if (castedResult.ParentTrustId == null)
+                {
+                    return null;
+                }
+
                 return castedResult;
             }
 
