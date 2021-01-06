@@ -32,3 +32,4 @@ jobs:
         cf_org: dfe-digital
         cf_space: academy-transfers-prototype
         command: push -f manifest.yml
+
