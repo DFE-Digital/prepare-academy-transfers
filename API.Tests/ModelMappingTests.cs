@@ -8,6 +8,12 @@ namespace API.Tests
     public class ModelMappingTests
     {
         [Fact]
+        public void ThisTestFails()
+        {
+            Assert.Equal(1, 0);
+        }
+
+        [Fact]
         public void GetAcademiesD365ModelToGetAcademiesModelMapperTest()
         {
             var academiesD365Model = new GetAcademiesD365Model
