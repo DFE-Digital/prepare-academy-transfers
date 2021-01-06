@@ -5,6 +5,7 @@ using API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -19,12 +20,15 @@ namespace API.Controllers
     {
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
+        private readonly ILogger _logger;
 
         public AcademiesController(IAcademiesRepository academiesRepository,
-                                   IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
+                                   IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
+                                   ILogger logger)
         {
             _academiesRepository = academiesRepository;
             _getAcademiesMapper = getAcademiesMapper;
+            _logger = logger;
         }
 
         /// <summary>
@@ -41,6 +45,9 @@ namespace API.Controllers
 
             if (repoResult.Error != null)
             {
+                _logger.LogError("Downstream API failed with status code of {0}. Error: {1}", 
+                                 repoResult.Error.StatusCode, repoResult.Error.ErrorMessage);
+
                 if (repoResult.Error.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
                 {
                     return StatusCode(429, "Too many requests, please try again later");
