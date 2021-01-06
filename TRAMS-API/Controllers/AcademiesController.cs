@@ -37,14 +37,24 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetAcademiesModel>> GetAcademyById(Guid id)
         {
-            var result = await _academiesRepository.GetAcademyById(id);
+            var repoResult = await _academiesRepository.GetAcademyById(id);
 
-            if (result == null)
+            if (repoResult.Error != null)
+            {
+                if (repoResult.Error.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    return StatusCode(429, "Too many requests, please try again later");
+                }
+            
+                return StatusCode(502, repoResult.Error.ErrorMessage);
+            }
+
+            if (repoResult.Result == null)
             {
                 return NotFound($"The academy with the id: '{id}' was not found");
             }
 
-            var formattedResult = _getAcademiesMapper.Map(result);
+            var formattedResult = _getAcademiesMapper.Map(repoResult.Result);
 
             return Ok(formattedResult);
         }

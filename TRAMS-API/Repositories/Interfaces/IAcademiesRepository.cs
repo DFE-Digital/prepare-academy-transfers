@@ -7,7 +7,7 @@ namespace API.Repositories
 {
     public interface IAcademiesRepository
     {
-        public Task<GetAcademiesD365Model> GetAcademyById(Guid id);
+        public Task<RepositoryResult<GetAcademiesD365Model>> GetAcademyById(Guid id);
 
         public Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id);
     }

@@ -22,14 +22,13 @@ namespace API.Repositories
             _urlBuilder = urlBuilder;
         }
 
-        public async Task<GetAcademiesD365Model> GetAcademyById(Guid id)
+        public async Task<RepositoryResult<GetAcademiesD365Model>> GetAcademyById(Guid id)
         {
             await _client.AuthenticateAsync();
 
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
@@ -38,13 +37,20 @@ namespace API.Repositories
 
                 if (castedResult.ParentTrustId == null)
                 {
-                    return null;
+                    new RepositoryResult<GetAcademiesD365Model> { Result = castedResult };
                 }
 
-                return castedResult;
+                return new RepositoryResult<GetAcademiesD365Model> { Result = castedResult };
             }
 
-            return null;
+            return new RepositoryResult<GetAcademiesD365Model>
+            {
+                Error = new RepositoryResult<GetAcademiesD365Model>.RepositoryError
+                {
+                    StatusCode = response.StatusCode,
+                    ErrorMessage = await response.Content?.ReadAsStringAsync()
+                }
+            };
         }
 
         public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
