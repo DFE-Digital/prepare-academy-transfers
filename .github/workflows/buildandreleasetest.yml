@@ -23,9 +23,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: CF CLI Action
     - uses: actions/checkout@v2
     - uses: citizen-of-planet-earth/cf-cli-action@v2
+    - name: CF CLI Action
       with:
         cf_api: https://api.london.cloud.service.gov.uk
         cf_username: ${{ secrets.CF_USER }}
