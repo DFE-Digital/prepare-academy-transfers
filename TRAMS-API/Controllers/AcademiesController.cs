@@ -20,11 +20,11 @@ namespace API.Controllers
     {
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<AcademiesController> _logger;
 
         public AcademiesController(IAcademiesRepository academiesRepository,
                                    IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
-                                   ILogger logger)
+                                   ILogger<AcademiesController> logger)
         {
             _academiesRepository = academiesRepository;
             _getAcademiesMapper = getAcademiesMapper;
