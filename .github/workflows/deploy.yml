@@ -4,9 +4,10 @@ on:
   push:
     branches: [ main ]
 
-jobs:
-  deploy:
+jobs:   
+  deploy_to_dev:
     runs-on: ubuntu-latest
+    environment: Dev
     steps:
       - uses: actions/checkout@v2
       - name: CF CLI Action
@@ -18,3 +19,4 @@ jobs:
           cf_org: dfe-digital
           cf_space: academy-transfers-prototype
           command: push -f TRAMS-API/manifest.yml -p TRAMS-API 
+                   set-env academy-transfers-prototype-api AAD:TenantId ${{ secrets.AADTenantId }}
