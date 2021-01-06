@@ -150,7 +150,7 @@ namespace API.ODataHelpers
         /// <returns></returns>
         private static bool IsSystemType(PropertyInfo p)
         {
-            return p.PropertyType.FullName.Contains("System.") && !p.PropertyType.IsGenericType;
+            return p.PropertyType.FullName.Contains("System.") && !p.PropertyType.FullName.Contains("System.Collections.Generic.List");
         }
     }
 }
