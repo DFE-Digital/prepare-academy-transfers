@@ -1,0 +1,19 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CF CLI Action
+        uses: citizen-of-planet-earth/cf-cli-action@v2
+        with:
+          cf_api: https://api.london.cloud.service.gov.uk
+          cf_username: ${{ secrets.CF_USER }}
+          cf_password: ${{ secrets.CF_PASSWORD }}
+          cf_org: dfe-digital
+          cf_space: academy-transfers-prototype
+          command: push -f TRAMS-API/manifest.yml -p TRAMS-API 
