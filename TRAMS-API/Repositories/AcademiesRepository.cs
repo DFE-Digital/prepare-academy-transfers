@@ -37,7 +37,7 @@ namespace API.Repositories
 
                 if (castedResult.ParentTrustId == null)
                 {
-                    new RepositoryResult<GetAcademiesD365Model> { Result = castedResult };
+                    new RepositoryResult<GetAcademiesD365Model> { Result = null };
                 }
 
                 return new RepositoryResult<GetAcademiesD365Model> { Result = castedResult };
