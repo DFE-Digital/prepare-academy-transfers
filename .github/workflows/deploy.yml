@@ -18,4 +18,4 @@ jobs:
           cf_password: ${{ secrets.CF_PASSWORD }}
           cf_org: dfe-digital
           cf_space: academy-transfers-prototype
-          command: cf set-env academy-transfers-prototype-api SomeKey SomeValue && cf set-env academy-transfers-prototype-api AnotherKey AnotherValue
+          command: set-env academy-transfers-prototype-api SomeKey SomeValue && set-env academy-transfers-prototype-api AnotherKey AnotherValue
