@@ -2,10 +2,10 @@
 using API.Models.D365;
 using API.Models.Response;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -20,15 +20,15 @@ namespace API.Controllers
     {
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
-        private readonly ILogger<AcademiesController> _logger;
+        private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public AcademiesController(IAcademiesRepository academiesRepository,
                                    IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
-                                   ILogger<AcademiesController> logger)
+                                   IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _academiesRepository = academiesRepository;
             _getAcademiesMapper = getAcademiesMapper;
-            _logger = logger;
+            _repositoryErrorHandler = repositoryErrorHandler;
         }
 
         /// <summary>
@@ -43,17 +43,9 @@ namespace API.Controllers
         {
             var repoResult = await _academiesRepository.GetAcademyById(id);
 
-            if (repoResult.Error != null)
+            if (!repoResult.IsValid)
             {
-                _logger.LogError("Downstream API failed with status code of {0}. Error: {1}", 
-                                 repoResult.Error.StatusCode, repoResult.Error.ErrorMessage);
-
-                if (repoResult.Error.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                {
-                    return StatusCode(429, "Too many requests, please try again later");
-                }
-            
-                return StatusCode(502, repoResult.Error.ErrorMessage);
+                return _repositoryErrorHandler.LogAndCreateResponse(repoResult);
             }
 
             if (repoResult.Result == null)
@@ -65,5 +57,7 @@ namespace API.Controllers
 
             return Ok(formattedResult);
         }
+
+
     }
 }

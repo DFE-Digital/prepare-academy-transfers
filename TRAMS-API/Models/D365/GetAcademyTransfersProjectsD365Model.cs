@@ -54,8 +54,8 @@ namespace API.Models.D365
         [JsonProperty("sip_esfainterventionreasonexplanation")]
         public string RddOrRscInterventionReasonsExplained { get; set; }
 
-        //[JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
-        //public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
+        [JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
+        public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
     }
 
     public class ProjectAcademyTrust : BaseD365Model

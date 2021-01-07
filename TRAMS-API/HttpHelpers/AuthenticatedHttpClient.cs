@@ -27,6 +27,8 @@ namespace API.HttpHelpers
             _url = url;
 
             BaseAddress = new Uri($@"{_url}/api/data/{_version}/");
+            DefaultRequestHeaders.Add("prefer", "odata.include-annotations=\"OData.Community.Display.V1.FormattedValue\"");
+            DefaultRequestHeaders.Add("OData-Version", "4.0");
         }
 
         public async Task AuthenticateAsync()
@@ -37,7 +39,6 @@ namespace API.HttpHelpers
             var result = await authContext.AcquireTokenAsync(_url, clientCredential);
 
             DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
-            DefaultRequestHeaders.Add("prefer", "odata.include-annotations=\"OData.Community.Display.V1.FormattedValue\"");
         }
     }
 }

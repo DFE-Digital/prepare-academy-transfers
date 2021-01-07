@@ -4,6 +4,7 @@ using API.Repositories.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -62,7 +63,7 @@ namespace API.Repositories
             return null;
         }
 
-        public async Task InsertProject(PostAcademyTransfersProjectsD365Model project)
+        public async Task<Guid?> InsertProject(PostAcademyTransfersProjectsD365Model project)
         {
             await _client.AuthenticateAsync();
 
@@ -75,7 +76,22 @@ namespace API.Repositories
 
             var result = await _client.PostAsync(_route, byteContent);
 
-            var debug = 0;
+            var res = await result.Content.ReadAsStringAsync();
+
+            if (result.IsSuccessStatusCode)
+                if (result.Headers.TryGetValues("OData-EntityId", out var headerValues))
+                {
+                    var value = headerValues.First();
+                    var guidString = value.Substring(value.Length - 37, 36);
+
+                    if (Guid.TryParse(guidString, out var guidValue))
+                    {
+                        return guidValue;
+                    }
+                }
+
+
+            return null;
         }
     }
 }

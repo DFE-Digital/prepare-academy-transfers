@@ -47,7 +47,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/projects/")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
         {
@@ -100,9 +100,11 @@ namespace API.Controllers
 
             var internalModel = _mapper.Map(model);
 
-            await _projectsRepository.InsertProject(internalModel);
+            var response = await _projectsRepository.InsertProject(internalModel);
 
-            return NoContent();
+            var retrievedEntity = await _projectsRepository.GetProjectById(response.Value);
+
+            return Created("entityLocation", retrievedEntity);
         }   
     }
 }

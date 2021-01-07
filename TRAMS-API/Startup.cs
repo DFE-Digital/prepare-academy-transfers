@@ -14,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
 using System.IO;
 
 namespace TRAMS_API
@@ -138,6 +137,8 @@ namespace TRAMS_API
             services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
             services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
             services.AddTransient<IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model>, ODataUrlBuilder<GetAcademyTransfersProjectsD365Model>>();
+
+            services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
