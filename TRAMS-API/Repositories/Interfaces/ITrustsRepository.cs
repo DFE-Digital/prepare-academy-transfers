@@ -7,8 +7,8 @@ namespace API.Repositories
 {
     public interface ITrustsRepository
     {
-        public Task<GetTrustsD365Model> GetTrustById(Guid id);
+        public Task<RepositoryResult<GetTrustsD365Model>> GetTrustById(Guid id);
 
-        public Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery);
+        public Task<RepositoryResult<List<GetTrustsD365Model>>> SearchTrusts(string searchQuery);
     }
 }

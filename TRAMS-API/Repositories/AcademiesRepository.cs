@@ -61,7 +61,7 @@ namespace API.Repositories
             };
         }
 
-        public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
+        public async Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id)
         {
             await _client.AuthenticateAsync();
 
@@ -74,17 +74,27 @@ namespace API.Repositories
             var url = _urlBuilder.BuildFilterUrl(_route, filters);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
 
             if (response.IsSuccessStatusCode)
             {
-                var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(responseContent);
 
-                return castedResults.Items;
+                return new RepositoryResult<List<GetAcademiesD365Model>> { Result = castedResults.Items };
             }
 
-            return new List<GetAcademiesD365Model>();
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<List<GetAcademiesD365Model>>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
     }
 }

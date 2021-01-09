@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using API.Models.D365.Enums;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace API.Models.D365
@@ -52,26 +53,5 @@ namespace API.Models.D365
     {
         [JsonProperty("sip_TrustId@odata.bind")]
         public string TrustId { get; set; }
-    }
-
-    public enum ProjectStatusEnum
-    {
-        InProgress = 596500000,
-        Completed = 596500001
-    }
-
-    public enum EsfaInterventionReasonEnum
-    {
-        GovernanceConcerns = 596500000,
-        FinanceConcerns = 596500001,
-        IrregularityConcerns = 596500002,
-        SafeguardingConcerns = 596500003
-    }
-
-    public enum RddOrRscInterventionReasonEnum
-    {
-        TerminationWarningNotice = 596500000,
-        RSCMindedToTerminateNotice = 596500001,
-        OfstedInadequateRating = 596500002
     }
 }

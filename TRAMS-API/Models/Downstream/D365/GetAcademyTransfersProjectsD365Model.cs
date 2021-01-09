@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using API.Models.D365.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +20,7 @@ namespace API.Models.D365
         public string ProjectInitiatorUid { get; set; }
 
         [JsonProperty("sip_projectstatus")]
-        public int ProjectStatus { get; set; }
+        public ProjectStatusEnum ProjectStatus { get; set; }
 
         [JsonProperty("sip_sip_academytransfersproject_sip_academytransfersprojectacademy_AcademyTransfersProjectId")]
         public List<AcademyTransfersProjectAcademy> Academies { get; set; }

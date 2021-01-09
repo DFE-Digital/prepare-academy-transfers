@@ -11,11 +11,16 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// API controller for retrieving information about an academy from TRAMS
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status429TooManyRequests)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     public class AcademiesController : ControllerBase
     {
         private readonly IAcademiesRepository _academiesRepository;

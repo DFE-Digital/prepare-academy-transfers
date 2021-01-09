@@ -4,6 +4,11 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="T:API.Controllers.AcademiesController">
+            <summary>
+            API controller for retrieving information about an academy from TRAMS
+            </summary>
+        </member>
         <member name="M:API.Controllers.AcademiesController.GetAcademyById(System.Guid)">
             <summary>
             Retrieves information about an academy given its TRAMS Guid
@@ -55,6 +60,11 @@
             </summary>
             <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
             <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
+        </member>
+        <member name="T:API.Models.D365.Enums.ProjectStatusEnum">
+            <summary>
+            Description goes here
+            </summary>
         </member>
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorFullName">
             <summary>

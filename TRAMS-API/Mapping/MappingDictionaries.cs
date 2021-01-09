@@ -1,4 +1,4 @@
-﻿using API.Models.D365;
+﻿using API.Models.D365.Enums;
 using System.Collections.Generic;
 
 namespace API.Mapping

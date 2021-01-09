@@ -6,6 +6,7 @@ using API.Mapping;
 using API.Models.D365;
 using API.Models.Response;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,27 +23,28 @@ namespace API.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status429TooManyRequests)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     public class TrustsController : ControllerBase
     {
-        private readonly ILogger<TrustsController> _logger;
         private readonly ITrustsRepository _trustRepostiory;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
+        private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
-        public TrustsController(ILogger<TrustsController> logger,
-                                IConfiguration config,
-                                ITrustsRepository trustRepostiory,
+        public TrustsController(ITrustsRepository trustRepostiory,
                                 IAcademiesRepository academiesRepository,
                                 IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
-                                IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
+                                IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
+                                IRepositoryErrorResultHandler repositoryErrorHandler)
         {
-            _logger = logger;
             _trustRepostiory = trustRepostiory;
             _academiesRepository = academiesRepository;
             _getTrustMapper = mapper;
             _getAcademiesMapper = getAcademiesMapper;
+            _repositoryErrorHandler = repositoryErrorHandler;
         }
 
         /// <summary>
@@ -56,14 +58,19 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetTrustsModel>> GetById(Guid id)
         {
-            var result = await _trustRepostiory.GetTrustById(id);
+            var trustsRepositoryResult = await _trustRepostiory.GetTrustById(id);
 
-            if (result == null)
+            if (!trustsRepositoryResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(trustsRepositoryResult);
+            }
+
+            if (trustsRepositoryResult.Result == null)
             {
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
 
-            var formattedResult = _getTrustMapper.Map(result);
+            var formattedResult = _getTrustMapper.Map(trustsRepositoryResult.Result);
 
             return Ok(formattedResult);
         }
@@ -78,9 +85,16 @@ namespace API.Controllers
         [ProducesResponseType(typeof(List<GetTrustsModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<GetTrustsModel>>> SearchTrusts(string search)
         {
-            var results = await _trustRepostiory.SearchTrusts(search);
+            var trustsRepositoryResult = await _trustRepostiory.SearchTrusts(search);
 
-            var formattedOutput = results.Select(r => _getTrustMapper.Map(r)).ToList();
+            if (!trustsRepositoryResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(trustsRepositoryResult);
+            }
+
+            var formattedOutput = trustsRepositoryResult.Result
+                                                        .Select(r => _getTrustMapper.Map(r))
+                                                        .ToList();
 
             return Ok(formattedOutput);
         }
@@ -96,16 +110,28 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<GetAcademiesModel>>> GetTrustAcademies(Guid id)
         {
-            var trust = await _trustRepostiory.GetTrustById(id);
+            var trustsRepositoryResult = await _trustRepostiory.GetTrustById(id);
 
-            if (trust == null)
+            if (!trustsRepositoryResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(trustsRepositoryResult);
+            }
+
+            if (trustsRepositoryResult.Result == null)
             {
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
 
-            var academies = await _academiesRepository.GetAcademiesByTrustId(id);
+            var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(id);
 
-            var formattedOutput = academies.Select(a => _getAcademiesMapper.Map(a)).ToList();
+            if (!academiesRepoResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(academiesRepoResult);
+            }
+
+            var formattedOutput = academiesRepoResult.Result
+                                                     .Select(a => _getAcademiesMapper.Map(a))
+                                                     .ToList();
 
             return Ok(formattedOutput);
         }

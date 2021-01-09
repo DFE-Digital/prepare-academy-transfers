@@ -1,6 +1,8 @@
 ﻿using API.HttpHelpers;
 using API.Models.D365;
+using API.Models.Response;
 using API.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,12 +19,15 @@ namespace API.Repositories
 
         private readonly AuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model> _urlBuilder;
+        private readonly ILogger<ProjectsRepository> _logger;
 
         public ProjectsRepository(AuthenticatedHttpClient client,
-                                  IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model> urlBuilder)
+                                  IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model> urlBuilder,
+                                  ILogger<ProjectsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
+            _logger = logger;
         }
 
         public async Task<List<GetAcademyTransfersProjectsD365Model>> GetAll()
@@ -44,26 +49,37 @@ namespace API.Repositories
             return new List<GetAcademyTransfersProjectsD365Model>();
         }
 
-        public async Task<GetAcademyTransfersProjectsD365Model> GetProjectById(Guid id)
+        public async Task<RepositoryResult<GetAcademyTransfersProjectsD365Model>> GetProjectById(Guid id)
         {
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
 
             if (response.IsSuccessStatusCode)
-            {
-                var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<GetAcademyTransfersProjectsD365Model>(results);
+            { 
+                var castedResults = JsonConvert.DeserializeObject<GetAcademyTransfersProjectsD365Model>(responseContent);
 
-                return castedResults;
+                return new RepositoryResult<GetAcademyTransfersProjectsD365Model> { Result = castedResults };
             }
 
-            return null;
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<GetAcademyTransfersProjectsD365Model>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
-        public async Task<Guid?> InsertProject(PostAcademyTransfersProjectsD365Model project)
+        public async Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project)
         {
             await _client.AuthenticateAsync();
 
@@ -74,24 +90,33 @@ namespace API.Repositories
 
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var result = await _client.PostAsync(_route, byteContent);
+            var response = await _client.PostAsync(_route, byteContent);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
 
-            var res = await result.Content.ReadAsStringAsync();
-
-            if (result.IsSuccessStatusCode)
-                if (result.Headers.TryGetValues("OData-EntityId", out var headerValues))
+            if (response.IsSuccessStatusCode)
+                if (response.Headers.TryGetValues("OData-EntityId", out var headerValues))
                 {
                     var value = headerValues.First();
                     var guidString = value.Substring(value.Length - 37, 36);
 
                     if (Guid.TryParse(guidString, out var guidValue))
                     {
-                        return guidValue;
+                        return new RepositoryResult<Guid?> { Result = guidValue };
                     }
                 }
 
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
-            return null;
+            return new RepositoryResult<Guid?>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
     }
 }

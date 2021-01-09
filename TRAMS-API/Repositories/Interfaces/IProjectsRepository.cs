@@ -9,8 +9,8 @@ namespace API.Repositories.Interfaces
     {
         public Task<List<GetAcademyTransfersProjectsD365Model>> GetAll();
 
-        public Task<GetAcademyTransfersProjectsD365Model> GetProjectById(Guid id);
+        public Task<RepositoryResult<GetAcademyTransfersProjectsD365Model>> GetProjectById(Guid id);
 
-        public Task<Guid?> InsertProject(PostAcademyTransfersProjectsD365Model project);
+        public Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project);
     }
 }
