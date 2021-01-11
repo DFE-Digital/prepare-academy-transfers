@@ -6,12 +6,6 @@ namespace API.Mapping
 {
     public class MappingDictionaries
     {
-        public static Dictionary<int, Models.D365.Enums.ProjectStatusEnum> ProjectStatusMap = new Dictionary<int, Models.D365.Enums.ProjectStatusEnum>
-        {
-            {1, Models.D365.Enums.ProjectStatusEnum.InProgress },
-            {2, Models.D365.Enums.ProjectStatusEnum.Completed }
-        };
-
         public static Dictionary<Models.Upstream.Enums.ProjectStatusEnum, Models.D365.Enums.ProjectStatusEnum> ProjecStatusEnumMap = new Dictionary<Models.Upstream.Enums.ProjectStatusEnum, Models.D365.Enums.ProjectStatusEnum>
         {
             {
@@ -22,14 +16,6 @@ namespace API.Mapping
                 Models.Upstream.Enums.ProjectStatusEnum.Completed, 
                 Models.D365.Enums.ProjectStatusEnum.Completed 
             }
-        };
-
-        public static Dictionary<int, Models.D365.Enums.EsfaInterventionReasonEnum> EsfaInterventionReasonMap = new Dictionary<int, Models.D365.Enums.EsfaInterventionReasonEnum>
-        {
-            {1, Models.D365.Enums.EsfaInterventionReasonEnum.GovernanceConcerns },
-            {2, Models.D365.Enums.EsfaInterventionReasonEnum.FinanceConcerns },
-            {3, Models.D365.Enums.EsfaInterventionReasonEnum.IrregularityConcerns },
-            {4, Models.D365.Enums.EsfaInterventionReasonEnum.SafeguardingConcerns }
         };
 
         public static Dictionary<Models.Upstream.Enums.EsfaInterventionReasonEnum, 
@@ -52,13 +38,6 @@ namespace API.Mapping
                 Models.Upstream.Enums.EsfaInterventionReasonEnum.SafeguardingConcerns, 
                 Models.D365.Enums.EsfaInterventionReasonEnum.SafeguardingConcerns
             }
-        };
-
-        public static Dictionary<int, RddOrRscInterventionReasonEnum> RddOrRscInterventionReasonMap = new Dictionary<int, RddOrRscInterventionReasonEnum>
-        {
-            {1, RddOrRscInterventionReasonEnum.TerminationWarningNotice },
-            {2, RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice },
-            {3, RddOrRscInterventionReasonEnum.OfstedInadequateRating }
         };
 
         public static Dictionary<Models.Upstream.RddOrRscInterventionReasonEnum, Models.D365.Enums.RddOrRscInterventionReasonEnum> RddOrRscInterventionReasonEnumMap = new Dictionary<Models.Upstream.RddOrRscInterventionReasonEnum, Models.D365.Enums.RddOrRscInterventionReasonEnum>

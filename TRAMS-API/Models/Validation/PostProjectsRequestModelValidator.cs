@@ -21,11 +21,6 @@ namespace API.Models.Validation
             RuleForEach(p => p.ProjectTrusts).SetValidator(new PostProjectsTrustsModelValidator());
         }
 
-        private static bool MustBeAllowedProjectStatus(int statusCode)
-        {
-            return Mapping.MappingDictionaries.ProjectStatusMap.Keys.Any(k => k == statusCode);
-        }
-
         internal class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
         {
             public PostProjectsAcademiesModelValidator()
@@ -77,17 +72,6 @@ namespace API.Models.Validation
 
                 return wordCount;
             }
-
-            private bool MustBeAllowedRddOrRscInterventionReason(int s)
-            {
-                return Mapping.MappingDictionaries.RddOrRscInterventionReasonMap.Keys.Any(k => k == s);
-            }
-
-            private bool MustBeAllowedEsfaInterventionReason(int s)
-            {
-                return Mapping.MappingDictionaries.EsfaInterventionReasonMap.Keys.Any(k => k == s);
-            }
-
 
             internal class PostProjectsAcademiesTrustsModelValidator : AbstractValidator<PostProjectsAcademiesTrustsModel>
             {
