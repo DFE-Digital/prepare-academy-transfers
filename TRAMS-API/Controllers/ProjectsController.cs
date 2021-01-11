@@ -1,6 +1,7 @@
 ﻿using API.Mapping;
 using API.Models.D365;
 using API.Models.Request;
+using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -29,25 +30,28 @@ namespace API.Controllers
         private readonly IProjectsRepository _projectsRepository;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly ITrustsRepository _trustsRepository;
-        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _mapper;
+        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
+        private readonly IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public ProjectsController(IProjectsRepository projectsRepository,
                                   IAcademiesRepository academiesRepository,
                                   ITrustsRepository trustsRepository,
-                                  IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> mapper,
+                                  IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
+                                  IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _projectsRepository = projectsRepository;
             _academiesRepository = academiesRepository;
             _trustsRepository = trustsRepository;
-            _mapper = mapper;
+            _postProjectsMapper = postProjectsMapper;
+            _getProjectsMapper = getProjectsMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
         [HttpGet]
         [Route("/projects/{id}")]
-        [ProducesResponseType(typeof(GetAcademyTransfersProjectsD365Model), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetTrustById(Guid id)
         {
@@ -58,7 +62,14 @@ namespace API.Controllers
                 return _repositoryErrorHandler.LogAndCreateResponse(getProjectRepositoryResult);
             }
 
-            return Ok(getProjectRepositoryResult.Result);
+            if (getProjectRepositoryResult.Result == null)
+            {
+                return NotFound($"Project with id '{id}' not found");
+            }
+
+            var externalModel = _getProjectsMapper.Map(getProjectRepositoryResult.Result);
+
+            return Ok(externalModel);
         }
 
         /// <summary>
@@ -68,7 +79,7 @@ namespace API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/projects/")]
-        [ProducesResponseType(typeof(GetAcademyTransfersProjectsD365Model), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
         {
@@ -134,7 +145,7 @@ namespace API.Controllers
                 return UnprocessableEntity(error);
             }
 
-            var internalModel = _mapper.Map(model);
+            var internalModel = _postProjectsMapper.Map(model);
 
             var insertProjectRepositoryResult = await _projectsRepository.InsertProject(internalModel);
 
@@ -150,7 +161,9 @@ namespace API.Controllers
                 return _repositoryErrorHandler.LogAndCreateResponse(getProjectRepositoryResult);
             }
 
-            return Created("entityLocation", getProjectRepositoryResult.Result);
+            var externalModel = _getProjectsMapper.Map(getProjectRepositoryResult.Result);
+
+            return Created("entityLocation", externalModel);
         }   
     }
 }

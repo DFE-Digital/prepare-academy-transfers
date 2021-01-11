@@ -5,7 +5,7 @@ namespace API.Models.D365
 {
     public class GetAcademiesD365Model : BaseD365Model
     {
-        [JsonProperty("accountidBREAK")]
+        [JsonProperty("accountid")]
         public Guid Id { get; set; }
 
         [JsonProperty("_parentaccountid_value")]

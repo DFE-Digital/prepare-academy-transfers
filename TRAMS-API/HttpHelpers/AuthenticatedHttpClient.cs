@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API.HttpHelpers
 {
-    public class AuthenticatedHttpClient : HttpClient
+    public class AuthenticatedHttpClient : HttpClient, IAuthenticatedHttpClient
     {
         private readonly string _clientId;
         private readonly string _clientSecret;
@@ -20,6 +20,7 @@ namespace API.HttpHelpers
                                        string version,
                                        string url) : base()
         {
+
             _clientId = clientId;
             _clientSecret = clientSecret;
             _authority = authority;
@@ -31,6 +32,7 @@ namespace API.HttpHelpers
             DefaultRequestHeaders.Add("OData-Version", "4.0");
         }
 
+
         public async Task AuthenticateAsync()
         {
             var authContext = new AuthenticationContext(_authority);
@@ -39,6 +41,12 @@ namespace API.HttpHelpers
             var result = await authContext.AcquireTokenAsync(_url, clientCredential);
 
             DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+        }
+
+        public new async Task<HttpResponseMessage> PostAsync(string url, ByteArrayContent content)
+        {
+            var result = await base.PostAsync(url, content);
+            return result;
         }
     }
 }

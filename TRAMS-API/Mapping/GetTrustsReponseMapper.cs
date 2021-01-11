@@ -3,7 +3,7 @@ using API.Models.Response;
 
 namespace API.Mapping
 {
-    public class GetTrustD365ModelToGetTrustsModelMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
+    public class GetTrustsReponseMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
     {
         public GetTrustsModel Map(GetTrustsD365Model input)
         {

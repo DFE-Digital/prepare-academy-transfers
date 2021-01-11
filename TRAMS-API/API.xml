@@ -61,9 +61,20 @@
             <param name="propertyName">The property - use nameof to ensure quasi strong type</param>
             <returns>The name of the JsonProperty without any @metadata extensions applied</returns>
         </member>
-        <member name="T:API.Models.D365.Enums.ProjectStatusEnum">
+        <member name="T:API.Models.Upstream.Enums.EsfaInterventionReasonEnum">
             <summary>
-            Description goes here
+            The enum of accepted values for ESFA Intervention Reasons
+            1. Governance Concerns
+            2. Finance Concerns
+            3. Irregularity Concerns
+            4. Safeguarding Concerns
+            </summary>
+        </member>
+        <member name="T:API.Models.Upstream.Enums.ProjectStatusEnum">
+            <summary>
+            The enum of accepted values for the project status
+            1. In Progress
+            2. Completed
             </summary>
         </member>
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorFullName">

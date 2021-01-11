@@ -3,6 +3,7 @@ using API.Mapping;
 using API.Models.D365;
 using API.Models.Request;
 using API.Models.Response;
+using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -45,7 +46,7 @@ namespace TRAMS_API
                     }); 
 
             services.AddSingleton(this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustD365ModelToGetTrustsModelMapper());
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustsReponseMapper());
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             services.AddSwaggerGen(c =>
@@ -114,13 +115,16 @@ namespace TRAMS_API
         private static void ConfigureMappers(IServiceCollection services)
         {
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r =>
-                new GetTrustD365ModelToGetTrustsModelMapper());
+                new GetTrustsReponseMapper());
 
             services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
-                new GetAcademiesD365ModelToGetAcademiesModelMapper());
+                new GetAcademiesResponseMapper());
 
             services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>(r =>
-                new PostProjectsModelToPostProjectsD365ModelMapper());
+                new PostProjectsRequestMapper());
+
+            services.AddTransient<IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel>>(r =>
+                new GetProjectsResponseMapper());
         }
 
         private static void ConfigureHelpers(IServiceCollection services)

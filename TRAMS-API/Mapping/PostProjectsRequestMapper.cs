@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace API.Mapping
 {
-    public class PostProjectsModelToPostProjectsD365ModelMapper : IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>
+    public class PostProjectsRequestMapper : IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>
     {
         public PostAcademyTransfersProjectsD365Model Map(PostProjectsRequestModel input)
         {
