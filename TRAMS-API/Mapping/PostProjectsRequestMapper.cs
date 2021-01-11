@@ -13,11 +13,11 @@ namespace API.Mapping
             {
                 AcademyId = $"/accounts({p.AcademyId})",
                 EsfaInterventionReasons = p.EsfaInterventionReasons != null ?
-                                          string.Join(',', p.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonMap.GetValueOrDefault(r)).ToString()).ToList()) :
+                                          string.Join(',', p.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonEnumMap.GetValueOrDefault(r)).ToString()).ToList()) :
                                           string.Empty,
                 EsfaInterventionReasonsExplained = p.EsfaInterventionReasonsExplained,
                 RddOrRscInterventionReasons = p.RddOrRscInterventionReasons != null ?
-                                              string.Join(',', p.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonMap.GetValueOrDefault(r)).ToString()).ToList()) :
+                                              string.Join(',', p.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString()).ToList()) :
                                               string.Empty,
                 RddOrRscInterventionReasonsExplained = p.RddOrRscInterventionReasonsExplained,
                 Trusts = p.Trusts != null ? 
@@ -31,7 +31,7 @@ namespace API.Mapping
             {
                 ProjectInitiatorFullName = input.ProjectInitiatorFullName,
                 ProjectInitiatorUid = input.ProjectInitiatorUid,
-                ProjectStatus = MappingDictionaries.ProjectStatusMap.GetValueOrDefault(input.ProjectStatus),
+                ProjectStatus = MappingDictionaries.ProjecStatusEnumMap.GetValueOrDefault(input.ProjectStatus),
                 Academies = academies,
                 Trusts = input.ProjectTrusts != null ?
                          input.ProjectTrusts.Select(t => new PostAcademyTransfersProjectTrustD365Model 

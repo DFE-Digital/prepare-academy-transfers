@@ -49,6 +49,11 @@ namespace API.Controllers
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
+        /// <summary>
+        /// Gets an Academy Transfers project by its ID
+        /// </summary>
+        /// <param name="id">The ID of the project</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("/projects/{id}")]
         [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
@@ -70,6 +75,31 @@ namespace API.Controllers
             var externalModel = _getProjectsMapper.Map(getProjectRepositoryResult.Result);
 
             return Ok(externalModel);
+        }
+
+        /// <summary>
+        /// Gets a Project Academy entity by its id
+        /// </summary>
+        /// <param name="projectId">The ID of the project</param>
+        /// <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/projects/{projectId}/academies/{academyId}")]
+        public async Task<IActionResult> GetProjectAcademy(Guid projectId, Guid projectAcademyId)
+        {
+            var getProjectRepositoryResult = await _projectsRepository.GetProjectById(projectId);
+
+            if (!getProjectRepositoryResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(getProjectRepositoryResult);
+            }
+
+            if (getProjectRepositoryResult.Result == null)
+            {
+                return NotFound($"Project with id '{projectId}' not found");
+            }
+
+            return null;
         }
 
         /// <summary>

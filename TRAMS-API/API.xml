@@ -20,6 +20,21 @@
             API controller for retrieving Academy Transfers projects from TRAMS
             </summary>
         </member>
+        <member name="M:API.Controllers.ProjectsController.GetTrustById(System.Guid)">
+            <summary>
+            Gets an Academy Transfers project by its ID
+            </summary>
+            <param name="id">The ID of the project</param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ProjectsController.GetProjectAcademy(System.Guid,System.Guid)">
+            <summary>
+            Gets a Project Academy entity by its id
+            </summary>
+            <param name="projectId">The ID of the project</param>
+            <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ProjectsController.InsertTrust(API.Models.Request.PostProjectsRequestModel)">
             <summary>
             API endpoint for creating a new Academy Transfers Project
@@ -77,6 +92,103 @@
             2. Completed
             </summary>
         </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectId">
+            <summary>
+            The Project GUID
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectName">
+            <summary>
+            The self-generated name of the project
+            </summary>
+            <example>AT-1034</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectInitiatorFullName">
+            <summary>
+            The full name of the project initiator
+            </summary>
+            <example>Joe Bloggs</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectInitiatorUid">
+            <summary>
+            The unique ID of the project initiator
+            </summary>
+            <example>joe.bloggs@email.com</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectStatus">
+            <summary>
+            The status of the project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectAcademies">
+            <summary>
+            The outgoing academies for this project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectTrusts">
+            <summary>
+            The incoming trusts for this project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.ProjectAcademyId">
+            <summary>
+            The ID of this project's Academy entity
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.ProjectId">
+            <summary>
+            The ID of the parent project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.AcademyId">
+            <summary>
+            The TRAMS ID of the Academy
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.AcademyName">
+            <summary>
+            The name of the academy
+            </summary>
+            <example>Imaginary Academy</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.EsfaInterventionReasons">
+            <summary>
+            The ESFA Intervention Reasons set for this project's academy
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.EsfaInterventionReasonsExplained">
+            <summary>
+            An explanation of the ESFA Intervention Reasons
+            </summary>
+            <example>The ESFA Intervention Reasons explained</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.RddOrRscInterventionReasons">
+            <summary>
+            The RDD or RSC Intervention reasons
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.RddOrRscInterventionReasonsExplained">
+            <summary>
+            An exaplanation of the RDD or RSC Intervention reasons
+            </summary>
+            <example>The RDD or RSC Intervention reasons explained</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsTrustResponseModel.ProjectTrustId">
+            <summary>
+            The ID of the project's identified incoming trust
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsTrustResponseModel.TrustId">
+            <summary>
+            The TRAMS ID of the trust
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsTrustResponseModel.TrustName">
+            <summary>
+            The name of the trust
+            </summary>
+            <example>Imaginary Trust</example>
+        </member>
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorFullName">
             <summary>
             The Project Initiator's Full Name. Mandatory.
@@ -92,10 +204,7 @@
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectStatus">
             <summary>
             The Project Status Code. Mandatory.
-            1 - In Progress
-            2 - Completed
             </summary>
-            <example>1</example>
         </member>
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectAcademies">
             <summary>
