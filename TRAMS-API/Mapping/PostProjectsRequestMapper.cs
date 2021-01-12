@@ -9,7 +9,7 @@ namespace API.Mapping
     {
         public PostAcademyTransfersProjectsD365Model Map(PostProjectsRequestModel input)
         {
-            var academies = input.ProjectAcademies.Select(p => new PostAcademyTransfersProjectAcademyD365Model
+            var academies = input.ProjectAcademies?.Select(p => new PostAcademyTransfersProjectAcademyD365Model
             {
                 AcademyId = $"/accounts({p.AcademyId})",
                 EsfaInterventionReasons = p.EsfaInterventionReasons != null ?
