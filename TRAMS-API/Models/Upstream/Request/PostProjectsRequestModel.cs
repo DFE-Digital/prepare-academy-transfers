@@ -1,5 +1,4 @@
-﻿using API.Models.Upstream;
-using API.Models.Upstream.Enums;
+﻿using API.Models.Upstream.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

@@ -94,7 +94,7 @@
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectId">
             <summary>
-            The Project GUID
+            The ID of the Academy Transfers project
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectName">
@@ -122,27 +122,27 @@
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectAcademies">
             <summary>
-            The outgoing academies for this project
+            The outgoing academies attached to the project
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectTrusts">
             <summary>
-            The incoming trusts for this project
+            The incoming trusts attached to the project
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.ProjectAcademyId">
             <summary>
-            The ID of this project's Academy entity
+            The ID of the project's academy
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.ProjectId">
             <summary>
-            The ID of the parent project
+            The ID of the parent Academy Transfers project
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.AcademyId">
             <summary>
-            The TRAMS ID of the Academy
+            The TRAMS ID of the academy
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.AcademyName">
@@ -153,12 +153,12 @@
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.EsfaInterventionReasons">
             <summary>
-            The ESFA Intervention Reasons set for this project's academy
+            The ESFA intervention reasons selection for this project's academy
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.EsfaInterventionReasonsExplained">
             <summary>
-            An explanation of the ESFA Intervention Reasons
+            An explanation of the ESFA intervention reasons
             </summary>
             <example>The ESFA Intervention Reasons explained</example>
         </member>
@@ -173,6 +173,12 @@
             </summary>
             <example>The RDD or RSC Intervention reasons explained</example>
         </member>
+        <member name="P:API.Models.Upstream.Response.GetProjectsAcademyResponseModel.AcademyTrusts">
+            <summary>
+            Information about the proposed incoming trusts for this academy
+            Data only returned on requesting the project's academy by id
+            </summary>
+        </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsTrustResponseModel.ProjectTrustId">
             <summary>
             The ID of the project's identified incoming trust
@@ -184,6 +190,22 @@
             </summary>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsTrustResponseModel.TrustName">
+            <summary>
+            The name of the trust
+            </summary>
+            <example>Imaginary Trust</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademyTrustsResponseModel.ProjectTrustId">
+            <summary>
+            The ID of the project's identified incoming trust
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademyTrustsResponseModel.TrustId">
+            <summary>
+            The TRAMS ID of the trust
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademyTrustsResponseModel.TrustName">
             <summary>
             The name of the trust
             </summary>

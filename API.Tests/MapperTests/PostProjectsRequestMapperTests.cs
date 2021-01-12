@@ -1,9 +1,8 @@
 ﻿using API.Mapping;
 using API.Models.Request;
-using API.Models.Upstream;
+using API.Models.Upstream.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace API.Tests.MapperTests
@@ -18,7 +17,7 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void AcademyId_OneAcademy_Mapped()
+        public void AcademyId_OneAcademy_MapTest()
         {
             var request = new PostProjectsRequestModel
             {
@@ -37,7 +36,7 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void ProjectInitiator_Fields_Mapped()
+        public void ProjectInitiator_Fields_MapTest()
         {
             var request = new PostProjectsRequestModel
             {
@@ -52,7 +51,7 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void ProjectStatus_Mapped()
+        public void ProjectStatus_MapTest()
         {
             var request = new PostProjectsRequestModel
             {
@@ -65,7 +64,7 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void AcademyId_ThreeAcademies_Mapped()
+        public void AcademyId_ThreeAcademies_MapTest()
         {
             var request = new PostProjectsRequestModel
             {

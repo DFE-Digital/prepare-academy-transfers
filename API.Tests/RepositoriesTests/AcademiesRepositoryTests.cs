@@ -18,9 +18,11 @@ namespace API.Tests.RepositoriesTests
         #region GetAcademyById Tests
 
         [Fact]
-        public async void GetAcademyById_FailedHttpClientCall_CallsLogger_ReturnsCorrectResult()
+        public async void GetAcademyById_FailedHttpClientCall_ReturnsFailedResult()
         {
             //Arrange
+            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             HttpResponseMessage httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.BadRequest,
@@ -29,15 +31,13 @@ namespace API.Tests.RepositoriesTests
             var mockClient = new Mock<IAuthenticatedHttpClient>();
             mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
 
-            var mockedLogger = new Mock<ILogger<AcademiesRepository>>();
+            var mockLogger = new Mock<ILogger<AcademiesRepository>>();
 
             var mockUrlBuilder = new Mock<IOdataUrlBuilder<GetAcademiesD365Model>>();
             mockUrlBuilder.Setup(m => m.BuildRetrieveOneUrl("accounts", It.IsAny<Guid>()))
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
-            var academiesRepository = new AcademiesRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
-
-            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+            var academiesRepository = new AcademiesRepository(mockClient.Object, mockUrlBuilder.Object, mockLogger.Object);
 
             //Execute
             var result = await academiesRepository.GetAcademyById(academyId);
@@ -46,17 +46,19 @@ namespace API.Tests.RepositoriesTests
             mockUrlBuilder.Verify(m => m.BuildRetrieveOneUrl("accounts", academyId), Times.Once);
             mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)"), Times.Once);
-            
+
             Assert.False(result.IsValid);
             Assert.Null(result.Result);
             Assert.Equal(HttpStatusCode.BadRequest, result.Error.StatusCode);
             Assert.Equal("Error - Bad Request", result.Error.ErrorMessage);
-		}
+        }
 
         [Fact]
         public async void GetAcademyById_OkResult_Empty_ReturnsCorrectResult()
         {
             //Arrange
+            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             var returnedEntities = new GetAcademiesD365Model();
             var json = JsonConvert.SerializeObject(returnedEntities);
             HttpResponseMessage httpResponse = new HttpResponseMessage
@@ -64,6 +66,7 @@ namespace API.Tests.RepositoriesTests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
+
             var mockClient = new Mock<IAuthenticatedHttpClient>();
             mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
 
@@ -74,8 +77,6 @@ namespace API.Tests.RepositoriesTests
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
             var academiesRepository = new AcademiesRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
-
-            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
             //Execute
             var result = await academiesRepository.GetAcademyById(academyId);
@@ -90,9 +91,11 @@ namespace API.Tests.RepositoriesTests
         }
 
         [Fact]
-        public async void GetAcademyById_OkNoParentId_Empty_ReturnsCorrectResult()
+        public async void GetAcademyById_Ok_NoParentId_ReturnsCorrectResult()
         {
             //Arrange
+            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             var returnedEntities = new GetAcademiesD365Model
             {
                 AcademyName = "Some Academy",
@@ -117,8 +120,6 @@ namespace API.Tests.RepositoriesTests
 
             var academiesRepository = new AcademiesRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
 
-            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
-
             //Execute
             var result = await academiesRepository.GetAcademyById(academyId);
 
@@ -132,13 +133,13 @@ namespace API.Tests.RepositoriesTests
         }
 
         [Fact]
-        public async void GetAcademyById_OkAndParentIdSet_Empty_ReturnsCorrectResult()
+        public async void GetAcademyById_Ok_ParentIdSet_ReturnsCorrectResult()
         {
             var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
             var trustId = Guid.Parse("b16e9020-9123-4420-8055-851d1b672fb1");
 
             //Arrange
-            var returnedEntities = new GetAcademiesD365Model
+            var returnedEntity = new GetAcademiesD365Model
             {
                 AcademyName = "Some Academy",
                 Id = academyId,
@@ -146,7 +147,7 @@ namespace API.Tests.RepositoriesTests
                 ParentTrustId = trustId
             };
 
-            var json = JsonConvert.SerializeObject(returnedEntities);
+            var json = JsonConvert.SerializeObject(returnedEntity);
             HttpResponseMessage httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK,
@@ -184,7 +185,7 @@ namespace API.Tests.RepositoriesTests
         #region GetAcademiesByTrustId Tests
 
         [Fact]
-        public async void GetAcademiesByTrustId_FailedHttpClientCall_CallsLogger_ReturnsCorrectResult()
+        public async void GetAcademiesByTrustId_FailedHttpClientCall_ReturnsFailedResult()
         {
             //Arrange
             HttpResponseMessage httpResponse = new HttpResponseMessage
@@ -199,7 +200,7 @@ namespace API.Tests.RepositoriesTests
 
             var mockUrlBuilder = new Mock<IOdataUrlBuilder<GetAcademiesD365Model>>();
             mockUrlBuilder.Setup(m => m.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId)))
-                          .Returns("_parentaccountid_value");
+                          .Returns("mockedTrustIdField");
 
             mockUrlBuilder.Setup(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()))
                           .Returns("buildFilterUrl");
@@ -214,7 +215,7 @@ namespace API.Tests.RepositoriesTests
             //Assert
             var expectedFilters = new List<string>
             {
-                "(_parentaccountid_value eq a16e9020-9123-4420-8055-851d1b672fb1)"
+                "(mockedTrustIdField eq a16e9020-9123-4420-8055-851d1b672fb1)"
             };
             mockUrlBuilder.Verify(m => m.BuildFilterUrl("accounts", expectedFilters), Times.Once);
             mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);

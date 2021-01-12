@@ -1,5 +1,4 @@
 ﻿using API.Models.Request;
-using API.Models.Upstream;
 using API.Models.Upstream.Enums;
 using API.Models.Validation;
 using System;
@@ -9,11 +8,11 @@ using Xunit;
 
 namespace API.Tests
 {
-    public class PostAchievementsModelValidatorTests
+    public class PostProjectsModelValidatorTests
     {
         private readonly PostProjectsRequestModelValidator _validator;
 
-        public PostAchievementsModelValidatorTests()
+        public PostProjectsModelValidatorTests()
         {
             _validator = new PostProjectsRequestModelValidator();
         }

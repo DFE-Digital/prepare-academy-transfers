@@ -37,6 +37,11 @@ namespace API.Repositories
             var responseContent = await response.Content?.ReadAsStringAsync();
             var responseStatusCode = response.StatusCode;
 
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<GetTrustsD365Model> { Result = null };
+            }
+
             if (response.IsSuccessStatusCode)
             {
                 var castedResult = JsonConvert.DeserializeObject<GetTrustsD365Model>(responseContent);
@@ -58,7 +63,7 @@ namespace API.Repositories
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
-            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
             return new RepositoryResult<GetTrustsD365Model>
             {
@@ -90,7 +95,7 @@ namespace API.Repositories
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
-            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
             return new RepositoryResult<List<GetTrustsD365Model>>
             {

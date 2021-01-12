@@ -1,6 +1,7 @@
 using API.HttpHelpers;
 using API.Mapping;
 using API.Models.D365;
+using API.Models.Downstream.D365;
 using API.Models.Request;
 using API.Models.Response;
 using API.Models.Upstream.Response;
@@ -115,33 +116,42 @@ namespace TRAMS_API
 
         private static void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r =>
-                new GetTrustsReponseMapper());
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>,
+                                         GetTrustsReponseMapper>();
 
-            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>>(r =>
-                new GetAcademiesResponseMapper());
+            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>, 
+                                  GetAcademiesResponseMapper>();
 
-            services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>(r =>
-                new PostProjectsRequestMapper());
+            services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>, 
+                                  PostProjectsRequestMapper>();
 
-            services.AddTransient<IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel>>(r =>
-                new GetProjectsResponseMapper());
+            services.AddTransient<IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>, 
+                                  GetProjectAcademiesResponseMapper>();
+
+            services.AddTransient<IMapper<GetProjectsD365Model, GetProjectsResponseModel>,
+                                  GetProjectsResponseMapper>();
+            
         }
 
         private static void ConfigureHelpers(IServiceCollection services)
         {
-            services.AddTransient<ID365ModelHelper<GetTrustsD365Model>>(r =>
-                new D365ModelHelper<GetTrustsD365Model>());
+            services.AddTransient<ID365ModelHelper<GetTrustsD365Model>,
+                                  D365ModelHelper<GetTrustsD365Model>>();
+            services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>, 
+                                  D365ModelHelper<GetAcademiesD365Model>>();
+            services.AddTransient<ID365ModelHelper<GetProjectsD365Model>,
+                                  D365ModelHelper<GetProjectsD365Model>>();
+            services.AddTransient<ID365ModelHelper<AcademyTransfersProjectAcademy>, 
+                                  D365ModelHelper<AcademyTransfersProjectAcademy>>();
 
-            services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>>(r =>
-               new D365ModelHelper<GetAcademiesD365Model>());
-
-            services.AddTransient<ID365ModelHelper<GetAcademyTransfersProjectsD365Model>>(r =>
-                new D365ModelHelper<GetAcademyTransfersProjectsD365Model>());
-
-            services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, ODataUrlBuilder<GetTrustsD365Model>>();
-            services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, ODataUrlBuilder<GetAcademiesD365Model>>();
-            services.AddTransient<IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model>, ODataUrlBuilder<GetAcademyTransfersProjectsD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, 
+                                  ODataUrlBuilder<GetTrustsD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, 
+                                  ODataUrlBuilder<GetAcademiesD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<GetProjectsD365Model>, 
+                                  ODataUrlBuilder<GetProjectsD365Model>>();
+            services.AddTransient<IOdataUrlBuilder<AcademyTransfersProjectAcademy>, 
+                                  ODataUrlBuilder<AcademyTransfersProjectAcademy>>();
 
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
         }

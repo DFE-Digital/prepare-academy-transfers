@@ -1,5 +1,6 @@
 ﻿using API.Mapping;
 using API.Models.D365;
+using API.Models.Downstream.D365;
 using API.Models.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
@@ -31,14 +32,17 @@ namespace API.Controllers
         private readonly IAcademiesRepository _academiesRepository;
         private readonly ITrustsRepository _trustsRepository;
         private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
-        private readonly IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
+        private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
+        private readonly IMapper<AcademyTransfersProjectAcademy, 
+                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public ProjectsController(IProjectsRepository projectsRepository,
                                   IAcademiesRepository academiesRepository,
                                   ITrustsRepository trustsRepository,
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
-                                  IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
+                                  IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
+                                  IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _projectsRepository = projectsRepository;
@@ -46,6 +50,7 @@ namespace API.Controllers
             _trustsRepository = trustsRepository;
             _postProjectsMapper = postProjectsMapper;
             _getProjectsMapper = getProjectsMapper;
+            _getProjectAcademyMapper = getProjectAcademyMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
@@ -84,10 +89,24 @@ namespace API.Controllers
         /// <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/projects/{projectId}/academies/{academyId}")]
+        [Route("/projects/{projectId}/academies/{projectAcademyId}")]
+        [ProducesResponseType(typeof(GetProjectsAcademyResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetProjectAcademy(Guid projectId, Guid projectAcademyId)
         {
-            var getProjectRepositoryResult = await _projectsRepository.GetProjectById(projectId);
+            var getProjectResult = await _projectsRepository.GetProjectById(projectId);
+
+            if (!getProjectResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(getProjectResult);
+            }
+
+            if (getProjectResult.Result == null)
+            {
+                return NotFound($"Project with id '{projectId}' not found");
+            }
+
+            var getProjectRepositoryResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
 
             if (!getProjectRepositoryResult.IsValid)
             {
@@ -96,10 +115,12 @@ namespace API.Controllers
 
             if (getProjectRepositoryResult.Result == null)
             {
-                return NotFound($"Project with id '{projectId}' not found");
+                return NotFound($"Project Academy with id '{projectAcademyId}' not found");
             }
 
-            return null;
+            var externalModel = _getProjectAcademyMapper.Map(getProjectRepositoryResult.Result);
+
+            return Ok(externalModel);
         }
 
         /// <summary>

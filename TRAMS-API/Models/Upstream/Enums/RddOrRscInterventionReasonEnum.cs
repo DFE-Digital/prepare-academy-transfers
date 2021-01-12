@@ -1,4 +1,4 @@
-﻿namespace API.Models.Upstream
+﻿namespace API.Models.Upstream.Enums
 {
     public enum RddOrRscInterventionReasonEnum
     {

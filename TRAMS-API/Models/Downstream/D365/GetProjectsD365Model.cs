@@ -1,11 +1,12 @@
-﻿using API.Models.D365.Enums;
+﻿using API.Models.D365;
+using API.Models.D365.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace API.Models.D365
+namespace API.Models.Downstream.D365
 {
-    public class GetAcademyTransfersProjectsD365Model : BaseD365Model
+    public class GetProjectsD365Model : BaseD365Model
     {
         [JsonProperty("sip_academytransfersprojectid")]
         public Guid ProjectId { get; set; }

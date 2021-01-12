@@ -16,9 +16,11 @@ namespace API.Tests.RepositoriesTests
     public class TrustsRepositoryTests
     {
         [Fact]
-        public async void GetTrustById_FailedHttpClientCall_CallsLogger_ReturnsCorrectResult()
+        public async void GetTrustById_FailedHttpClientCall_ReturnsFailedResult()
         {
             //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             HttpResponseMessage httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.BadRequest,
@@ -34,8 +36,6 @@ namespace API.Tests.RepositoriesTests
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
             var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
-
-            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -55,6 +55,8 @@ namespace API.Tests.RepositoriesTests
         public async void GetTrustById_OkResult_IncorrectEstablishmentType_ReturnsCorrectResult()
         {
             //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             var returnedEntity = new GetTrustsD365Model
             {
                 EstablishmentTypeId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1")
@@ -65,6 +67,7 @@ namespace API.Tests.RepositoriesTests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
+
             var mockClient = new Mock<IAuthenticatedHttpClient>();
             mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
 
@@ -75,8 +78,6 @@ namespace API.Tests.RepositoriesTests
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
             var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
-
-            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -94,6 +95,8 @@ namespace API.Tests.RepositoriesTests
         public async void GetTrustById_OkResult_CorrectEstablishmentType_ReturnsCorrectResult()
         {
             //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             var returnedEntity = new GetTrustsD365Model
             {
                 EstablishmentTypeId = Guid.Parse("81014326-5D51-E911-A82E-000D3A385A17"),
@@ -106,6 +109,7 @@ namespace API.Tests.RepositoriesTests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
+
             var mockClient = new Mock<IAuthenticatedHttpClient>();
             mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
 
@@ -117,7 +121,7 @@ namespace API.Tests.RepositoriesTests
 
             var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
 
-            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+            
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -134,9 +138,11 @@ namespace API.Tests.RepositoriesTests
         }
 
         [Fact]
-        public async void SearchTrusts_FailedHttpClientCall_CallsLogger_ReturnsCorrectResult()
+        public async void SearchTrusts_FailedHttpClientCall_ReturnsFailedResult()
         {
             //Arrange
+            var query = "searchQuery";
+
             HttpResponseMessage httpResponse = new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.BadRequest,
@@ -146,19 +152,17 @@ namespace API.Tests.RepositoriesTests
             mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
 
             var mockedLogger = new Mock<ILogger<TrustsRepository>>();
-            var query = "searchQuery";
+            
             Mock<IOdataUrlBuilder<GetTrustsD365Model>> mockUrlBuilder = new Mock<IOdataUrlBuilder<GetTrustsD365Model>>();
             mockUrlBuilder.Setup(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()))
                           .Returns("buildFilterUrl");
+
             var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
-
-
 
             //Execute
             var result = await academiesRepository.SearchTrusts(query);
 
             //Assert
-
             mockUrlBuilder.Verify(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()), Times.Once);
             mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("buildFilterUrl"), Times.Once);

@@ -1,5 +1,4 @@
-﻿using API.Models.D365;
-using API.Models.Upstream;
+﻿using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
 using System;
@@ -8,9 +7,18 @@ using System.Linq;
 
 namespace API.Mapping
 {
-    public class GetProjectsResponseMapper : IMapper<GetAcademyTransfersProjectsD365Model, GetProjectsResponseModel>
+    public class GetProjectsResponseMapper : IMapper<GetProjectsD365Model, GetProjectsResponseModel>
     {
-        public GetProjectsResponseModel Map(GetAcademyTransfersProjectsD365Model input)
+        private readonly IMapper<AcademyTransfersProjectAcademy,
+                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> _academyMapper;
+
+        public GetProjectsResponseMapper(IMapper<AcademyTransfersProjectAcademy,
+                                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> academyMapper)
+        {
+            _academyMapper = academyMapper;
+        }
+
+        public GetProjectsResponseModel Map(GetProjectsD365Model input)
         {
             if (input == null)
             {
@@ -29,7 +37,7 @@ namespace API.Mapping
             };
         }
 
-        private static ProjectStatusEnum ExtractProjectStatus(GetAcademyTransfersProjectsD365Model input)
+        private static ProjectStatusEnum ExtractProjectStatus(GetProjectsD365Model input)
         {
             return input.ProjectStatus != 0
                    ? MappingDictionaries.ProjecStatusEnumMap
@@ -39,55 +47,27 @@ namespace API.Mapping
                    : 0;
         }
 
-        private static List<GetProjectsTrustResponseModel> ExtractTrusts(GetAcademyTransfersProjectsD365Model input)
+        private List<GetProjectsTrustResponseModel> ExtractTrusts(GetProjectsD365Model input)
         {
             return input.Trusts == null || input.Trusts.Count == 0
                    ? new List<GetProjectsTrustResponseModel>()
                    : input.Trusts.Select(t => new GetProjectsTrustResponseModel
-                   {
-                       ProjectTrustId = t.ProjectTrustId,
-                       TrustId = t.TrustId,
-                       TrustName = t.TrustName
-                   }).ToList();
+                                         {
+                                             ProjectTrustId = t.ProjectTrustId,
+                                             TrustId = t.TrustId,
+                                             TrustName = t.TrustName
+                                         })
+                                 .ToList();
         }
 
-        private static List<GetProjectsAcademyResponseModel> ExtractAcademies(GetAcademyTransfersProjectsD365Model input)
+        private List<GetProjectsAcademyResponseModel> ExtractAcademies(GetProjectsD365Model input)
         {
             return input.Academies == null || input.Academies.Count == 0
                    ? new List<GetProjectsAcademyResponseModel>()
-                   : input.Academies?.Select(a => new GetProjectsAcademyResponseModel
-                   {
-                       ProjectAcademyId = a.AcademyTransfersProjectAcademyId,
-                       AcademyId = a.AcademyId,
-                       AcademyName = a.AcademyName,
-                       ProjectId = a.ProjectId,
-                       EsfaInterventionReasons = ExtractEsfaInterventionReasons(a),
-                       EsfaInterventionReasonsExplained = a.EsfaInterventionReasonsExplained,
-                       RddOrRscInterventionReasons = ExtractRddorRscInterventionReason(a),
-                       RddOrRscInterventionReasonsExplained = a.RddOrRscInterventionReasonsExplained
-                   }).ToList();
+                   : input.Academies?.Select(a => _academyMapper.Map(a))
+                                     .ToList();
         }
 
-        private static List<RddOrRscInterventionReasonEnum> ExtractRddorRscInterventionReason(AcademyTransfersProjectAcademy a)
-        {
-            return string.IsNullOrEmpty(a.RddOrRscInterventionReasons)
-                   ? new List<Models.Upstream.RddOrRscInterventionReasonEnum>()
-                   : a.RddOrRscInterventionReasons?
-                      .Split(',')
-                      .Select(v => Enum.Parse<Models.D365.Enums.RddOrRscInterventionReasonEnum>(v))
-                      .Select(v => MappingDictionaries.RddOrRscInterventionReasonEnumMap.Where(d => d.Value == v).FirstOrDefault().Key)
-                      .ToList();
-        }
-
-        private static List<EsfaInterventionReasonEnum> ExtractEsfaInterventionReasons(AcademyTransfersProjectAcademy a)
-        {
-            return string.IsNullOrEmpty(a.EsfaInterventionReasons)
-                   ? new List<EsfaInterventionReasonEnum>()
-                   : a.EsfaInterventionReasons?
-                   .Split(',')
-                   .Select(v => Enum.Parse<Models.D365.Enums.EsfaInterventionReasonEnum>(v))
-                   .Select(v => MappingDictionaries.EsfaInterventionReasonEnumMap.Where(d => d.Value == v).FirstOrDefault().Key)
-                   .ToList();
-        }
+        
     }
 }

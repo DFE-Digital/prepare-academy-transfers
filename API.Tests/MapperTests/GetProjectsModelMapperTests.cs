@@ -1,25 +1,26 @@
 ﻿using API.Mapping;
-using API.Models.D365;
+using API.Models.Downstream.D365;
+using API.Models.Upstream.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
 namespace API.Tests.MapperTests
-{       
+{
     public class GetProjectsModelMapperTests
     {
         private readonly GetProjectsResponseMapper _mapper;
 
         public GetProjectsModelMapperTests()
         {
-            _mapper = new GetProjectsResponseMapper();
+            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper());
         }
 
         [Fact]
         public void NullInputHandlingTest()
         {
-            var model = (GetAcademyTransfersProjectsD365Model)null;
+            var model = (GetProjectsD365Model)null;
 
             var result = _mapper.Map(model);
 
@@ -29,7 +30,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectId_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 ProjectId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9")
             };
@@ -42,7 +43,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectName_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 ProjectName = "Some name"
             };
@@ -55,7 +56,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectStatus_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 ProjectStatus = Models.D365.Enums.ProjectStatusEnum.Completed
             };
@@ -68,7 +69,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectInitiatorDetails_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 ProjectInitiatorFullName = "Joe Bloggs",
                 ProjectInitiatorUid = "joe.bloggs@email.com"
@@ -83,7 +84,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_GuidFields_OneAcademy_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -106,7 +107,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_GuidFields_ThreeAcademies_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -149,7 +150,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_EsfaInterventionReasons_OneAcademy_NullValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -168,7 +169,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_EsfaInterventionReasons_OneAcademy_EmptyValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -187,7 +188,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_EsfaInterventionReasons_OneAcademy_OneValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -207,7 +208,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_EsfaInterventionReasons_OneAcademy_ThreeValues_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -230,7 +231,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_EsfaInterventionReasons_ThreeAcademies_JaggedValues_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -265,7 +266,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_RddOrRscInterventionReasons_OneAcademy_NullValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -284,7 +285,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_RddOrRscInterventionReasons_OneAcademy_EmptyValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -303,7 +304,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_RddOrRscInterventionReasons_OneAcademy_OneValue_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -316,14 +317,14 @@ namespace API.Tests.MapperTests
 
             var result = _mapper.Map(model);
 
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
             Assert.Single(result.ProjectAcademies[0].RddOrRscInterventionReasons);
         }
 
         [Fact]
         public void ProjectAcademy_RddOrRscInterventionReasons_OneAcademy_ThreeValues_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -336,9 +337,9 @@ namespace API.Tests.MapperTests
 
             var result = _mapper.Map(model);
 
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.OfstedInadequateRating, result.ProjectAcademies[0].RddOrRscInterventionReasons[2]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.OfstedInadequateRating, result.ProjectAcademies[0].RddOrRscInterventionReasons[2]);
             Assert.Single(result.ProjectAcademies);
             Assert.Equal(3, result.ProjectAcademies[0].RddOrRscInterventionReasons.Count);
         }
@@ -346,7 +347,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademy_RddOrRscInterventionReasons_ThreeAcademies_JaggedValues_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -367,12 +368,12 @@ namespace API.Tests.MapperTests
 
             var result = _mapper.Map(model);
 
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.OfstedInadequateRating, result.ProjectAcademies[0].RddOrRscInterventionReasons[2]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.OfstedInadequateRating, result.ProjectAcademies[0].RddOrRscInterventionReasons[2]);
             Assert.Equal(3, result.ProjectAcademies[0].RddOrRscInterventionReasons.Count);
 
-            Assert.Equal(Models.Upstream.RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[1].RddOrRscInterventionReasons[0]);
+            Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[1].RddOrRscInterventionReasons[0]);
             Assert.Single(result.ProjectAcademies[1].RddOrRscInterventionReasons);
 
             Assert.Empty(result.ProjectAcademies[2].RddOrRscInterventionReasons);
@@ -381,7 +382,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademies_InterventionExplanationFields_JaggedValues_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model
+            var model = new GetProjectsD365Model
             {
                 Academies = new List<AcademyTransfersProjectAcademy>
                 {
@@ -423,7 +424,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademies_NullList_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Academies = null
             };
@@ -436,7 +437,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectAcademies_EmptyList_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Academies = new List<AcademyTransfersProjectAcademy>()
             };
@@ -449,7 +450,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectTrusts_NullList_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Trusts = null
             };
@@ -462,7 +463,7 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ProjectTrusts_EmptyList_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Trusts = new List<ProjectTrust>()
             };
@@ -473,9 +474,9 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void ProjecTrusts_OneTrust_MapTest()
+        public void ProjectTrusts_OneTrust_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Trusts = new List<ProjectTrust>
                 {
@@ -497,9 +498,9 @@ namespace API.Tests.MapperTests
         }
 
         [Fact]
-        public void ProjecTrusts_ThreeTrusts_MapTest()
+        public void ProjectTrusts_ThreeTrusts_MapTest()
         {
-            var model = new GetAcademyTransfersProjectsD365Model()
+            var model = new GetProjectsD365Model()
             {
                 Trusts = new List<ProjectTrust>
                 {

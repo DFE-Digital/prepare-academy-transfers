@@ -7,7 +7,7 @@ namespace API.Models.Upstream.Response
     public class GetProjectsResponseModel
     {
         /// <summary>
-        /// The Project GUID
+        /// The ID of the Academy Transfers project
         /// </summary>
         public Guid ProjectId { get; set; }
 
@@ -35,12 +35,12 @@ namespace API.Models.Upstream.Response
         public ProjectStatusEnum ProjectStatus { get; set; }
 
         /// <summary>
-        /// The outgoing academies for this project
+        /// The outgoing academies attached to the project
         /// </summary>
         public List<GetProjectsAcademyResponseModel> ProjectAcademies { get; set; }
 
         /// <summary>
-        /// The incoming trusts for this project
+        /// The incoming trusts attached to the project
         /// </summary>
         public List<GetProjectsTrustResponseModel> ProjectTrusts { get; set; }
     }
@@ -48,17 +48,17 @@ namespace API.Models.Upstream.Response
     public class GetProjectsAcademyResponseModel
     {
         /// <summary>
-        /// The ID of this project's Academy entity
+        /// The ID of the project's academy
         /// </summary>
         public Guid ProjectAcademyId { get; set; }
 
         /// <summary>
-        /// The ID of the parent project
+        /// The ID of the parent Academy Transfers project
         /// </summary>
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// The TRAMS ID of the Academy
+        /// The TRAMS ID of the academy
         /// </summary>
         public Guid AcademyId { get; set; }
 
@@ -69,12 +69,12 @@ namespace API.Models.Upstream.Response
         public string AcademyName { get; set; }
 
         /// <summary>
-        /// The ESFA Intervention Reasons set for this project's academy
+        /// The ESFA intervention reasons selection for this project's academy
         /// </summary>
         public List<EsfaInterventionReasonEnum> EsfaInterventionReasons { get; set; }
 
         /// <summary>
-        /// An explanation of the ESFA Intervention Reasons
+        /// An explanation of the ESFA intervention reasons
         /// </summary>
         /// <example>The ESFA Intervention Reasons explained</example>
         public string EsfaInterventionReasonsExplained { get; set; }
@@ -89,6 +89,12 @@ namespace API.Models.Upstream.Response
         /// </summary>
         /// <example>The RDD or RSC Intervention reasons explained</example>
         public string RddOrRscInterventionReasonsExplained { get; set; }
+
+        /// <summary>
+        /// Information about the proposed incoming trusts for this academy
+        /// Data only returned on requesting the project's academy by id
+        /// </summary>
+        public List<GetAcademyTrustsResponseModel> AcademyTrusts { get; set; }
     }
 
     public class GetProjectsTrustResponseModel
@@ -108,5 +114,26 @@ namespace API.Models.Upstream.Response
         /// </summary>
         /// <example>Imaginary Trust</example>
         public string TrustName { get; set; }
+    }
+
+    public class GetAcademyTrustsResponseModel
+    {
+        /// <summary>
+        /// The ID of the project's identified incoming trust
+        /// </summary>
+        public Guid ProjectTrustId { get; set; }
+
+        /// <summary>
+        /// The TRAMS ID of the trust
+        /// </summary>
+        public Guid TrustId { get; set; }
+
+        /// <summary>
+        /// The name of the trust
+        /// </summary>
+        /// <example>Imaginary Trust</example>
+        public string TrustName { get; set; }
+
+        public int Priority { get; set; }
     }
 }

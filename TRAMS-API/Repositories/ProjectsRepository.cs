@@ -1,5 +1,6 @@
 ﻿using API.HttpHelpers;
 using API.Models.D365;
+using API.Models.Downstream.D365;
 using API.Models.Response;
 using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -17,20 +18,23 @@ namespace API.Repositories
     {
         private static readonly string _route = "sip_academytransfersprojects";
 
-        private readonly AuthenticatedHttpClient _client;
-        private readonly IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model> _urlBuilder;
+        private readonly IAuthenticatedHttpClient _client;
+        private readonly IOdataUrlBuilder<GetProjectsD365Model> _urlBuilder;
         private readonly ILogger<ProjectsRepository> _logger;
+        private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
 
-        public ProjectsRepository(AuthenticatedHttpClient client,
-                                  IOdataUrlBuilder<GetAcademyTransfersProjectsD365Model> urlBuilder,
+        public ProjectsRepository(IAuthenticatedHttpClient client,
+                                  IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
+                                  IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
                                   ILogger<ProjectsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
+            _projectAcademyUrlBuilder = projectAcademyUrlBuilder;
             _logger = logger;
         }
 
-        public async Task<List<GetAcademyTransfersProjectsD365Model>> GetAll()
+        public async Task<List<GetProjectsD365Model>> GetAll()
         {
             var url = _urlBuilder.BuildFilterUrl(_route, null);
 
@@ -41,15 +45,50 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademyTransfersProjectsD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetProjectsD365Model>>(results);
 
                 return castedResults.Items;
             }
 
-            return new List<GetAcademyTransfersProjectsD365Model>();
+            return new List<GetProjectsD365Model>();
         }
 
-        public async Task<RepositoryResult<GetAcademyTransfersProjectsD365Model>> GetProjectById(Guid id)
+        public async Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id)
+        {
+            await _client.AuthenticateAsync();
+
+            var url = _projectAcademyUrlBuilder.BuildRetrieveOneUrl("sip_academytransfersprojectacademies", id);
+
+            var response = await _client.GetAsync(url);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<AcademyTransfersProjectAcademy> { Result = null };
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var castedResults = JsonConvert.DeserializeObject<AcademyTransfersProjectAcademy>(responseContent);
+
+                return new RepositoryResult<AcademyTransfersProjectAcademy> { Result = castedResults };
+            }
+
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<AcademyTransfersProjectAcademy>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
+        }
+
+        public async Task<RepositoryResult<GetProjectsD365Model>> GetProjectById(Guid id)
         {
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
@@ -59,17 +98,22 @@ namespace API.Repositories
             var responseContent = await response.Content?.ReadAsStringAsync();
             var responseStatusCode = response.StatusCode;
 
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<GetProjectsD365Model> { Result = null };
+            }
+
             if (response.IsSuccessStatusCode)
             { 
-                var castedResults = JsonConvert.DeserializeObject<GetAcademyTransfersProjectsD365Model>(responseContent);
+                var castedResults = JsonConvert.DeserializeObject<GetProjectsD365Model>(responseContent);
 
-                return new RepositoryResult<GetAcademyTransfersProjectsD365Model> { Result = castedResults };
+                return new RepositoryResult<GetProjectsD365Model> { Result = castedResults };
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
-            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
-            return new RepositoryResult<GetAcademyTransfersProjectsD365Model>
+            return new RepositoryResult<GetProjectsD365Model>
             {
                 Error = new RepositoryResultBase.RepositoryError
                 {
@@ -107,7 +151,7 @@ namespace API.Repositories
                 }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
-            _logger.LogError(ControllerErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
             return new RepositoryResult<Guid?>
             {
