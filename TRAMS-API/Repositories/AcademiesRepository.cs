@@ -13,11 +13,11 @@ namespace API.Repositories
     {
         private static readonly string _route = "accounts";
 
-        private readonly AuthenticatedHttpClient _client;
+        private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
         private readonly ILogger<AcademiesRepository> _logger;
 
-        public AcademiesRepository(AuthenticatedHttpClient client, 
+        public AcademiesRepository(IAuthenticatedHttpClient client, 
                                    IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder,
                                    ILogger<AcademiesRepository> logger)
         {
@@ -40,7 +40,7 @@ namespace API.Repositories
             {
                 var castedResult = JsonConvert.DeserializeObject<GetAcademiesD365Model>(responseContent);
 
-                if (castedResult.ParentTrustId == null)
+                if (castedResult == null || castedResult.ParentTrustId == null)
                 {
                     return new RepositoryResult<GetAcademiesD365Model> { Result = null };
                 }

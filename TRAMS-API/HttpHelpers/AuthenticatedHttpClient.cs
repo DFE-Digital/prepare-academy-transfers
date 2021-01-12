@@ -43,7 +43,7 @@ namespace API.HttpHelpers
             DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
         }
 
-        public new async Task<HttpResponseMessage> PostAsync(string url, ByteArrayContent content)
+        public async Task<HttpResponseMessage> PostAsync(string url, ByteArrayContent content)
         {
             var result = await base.PostAsync(url, content);
             return result;

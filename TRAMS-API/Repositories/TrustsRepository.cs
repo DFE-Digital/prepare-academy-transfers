@@ -15,10 +15,10 @@ namespace API.Repositories
         private readonly string _route = "accounts";
 
         private readonly IOdataUrlBuilder<GetTrustsD365Model> _urlBuilder;
-        private readonly AuthenticatedHttpClient _client;
+        private readonly IAuthenticatedHttpClient _client;
         private readonly ILogger<TrustsRepository> _logger;
 
-        public TrustsRepository(AuthenticatedHttpClient client, 
+        public TrustsRepository(IAuthenticatedHttpClient client, 
                                 IOdataUrlBuilder<GetTrustsD365Model> urlBuilder,
                                 ILogger<TrustsRepository> logger)
         {
