@@ -5,6 +5,13 @@ namespace API.Mapping
 {
     public class GetTrustsReponseMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
     {
+        private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
+
+        public GetTrustsReponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        {
+            _establishmentNameFormatter = establishmentNameFormatter;
+        }
+
         public GetTrustsModel Map(GetTrustsD365Model input)
         {
             if(input == null)
@@ -19,7 +26,7 @@ namespace API.Mapping
                 CompaniesHouseNumber = input.CompaniesHouseNumber,
                 EstablishmentType = input.EstablishmentType,
                 EstablishmentTypeGroup = input.EstablishmentTypeGroup,
-                TrustName = input.TrustName,
+                TrustName = _establishmentNameFormatter.Format(input.TrustName),
                 TrustReferenceNumber = input.TrustReferenceNumber,
                 Ukprn = input.Ukprn,
                 Upin = input.Upin

@@ -48,7 +48,7 @@ namespace TRAMS_API
 
             services.AddSingleton(this.CreateHttpClient());
             services.AddSingleton<IAuthenticatedHttpClient>(r => this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustsReponseMapper());
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             services.AddSwaggerGen(c =>
@@ -139,6 +139,8 @@ namespace TRAMS_API
             services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
             
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
+
+            services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()

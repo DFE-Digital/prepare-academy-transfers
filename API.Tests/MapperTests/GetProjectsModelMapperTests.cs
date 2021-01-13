@@ -14,7 +14,8 @@ namespace API.Tests.MapperTests
 
         public GetProjectsModelMapperTests()
         {
-            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper());
+            var establishmentNameFormatter = new EstablishmentNameFormatter();
+            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper(establishmentNameFormatter), establishmentNameFormatter);
         }
 
         [Fact]

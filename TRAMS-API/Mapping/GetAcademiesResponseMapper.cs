@@ -5,6 +5,13 @@ namespace API.Mapping
 {
     public class GetAcademiesResponseMapper : IMapper<GetAcademiesD365Model, GetAcademiesModel>
     {
+        private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
+
+        public GetAcademiesResponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        {
+            this._establishmentNameFormatter = establishmentNameFormatter;
+        }
+
         public GetAcademiesModel Map(GetAcademiesD365Model input)
         {
             if (input == null)
@@ -15,7 +22,7 @@ namespace API.Mapping
             return new GetAcademiesModel
             {
                 Id = input.Id,
-                AcademyName = input.AcademyName,
+                AcademyName = _establishmentNameFormatter.Format(input.AcademyName),
                 Address = input.Address,
                 DioceseName = input.DioceseName,
                 EstablishmentType = input.EstablishmentType,
