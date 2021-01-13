@@ -30,7 +30,7 @@ namespace API.Tests
                 Urn = "4242"
             };
 
-            var mapper = new GetAcademiesD365ModelToGetAcademiesModelMapper();
+            var mapper = new GetAcademiesResponseMapper();
 
             var result = mapper.Map(academiesD365Model);
 
@@ -67,7 +67,7 @@ namespace API.Tests
                 Upin = "42424",
             };
 
-            var mapper = new GetTrustD365ModelToGetTrustsModelMapper();
+            var mapper = new GetTrustsReponseMapper();
 
             var result = mapper.Map(d365Model);
 

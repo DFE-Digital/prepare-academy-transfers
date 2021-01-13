@@ -114,9 +114,11 @@ namespace API.ODataHelpers
         {
             if (type.IsGenericType)
             {
-                return type.GenericTypeArguments[0].GetProperties().Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && IsSystemType(p))
-                                .Select(p => ExtractD365PropertyName(p))
-                                .ToList();
+                return type.GenericTypeArguments[0]
+                            .GetProperties()
+                            .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && IsSystemType(p))
+                            .Select(p => ExtractD365PropertyName(p))
+                            .ToList();
             }
 
             var jsonProps = type.GetProperties()
@@ -137,8 +139,8 @@ namespace API.ODataHelpers
             var d365Type = type.IsGenericType ? type.GenericTypeArguments[0] : type;
 
             var typeProperties = d365Type.GetProperties()
-                                     .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
-                                     .ToList();
+                                         .Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null && !IsSystemType(p))
+                                         .ToList();
 
             return typeProperties;
         }
@@ -150,7 +152,9 @@ namespace API.ODataHelpers
         /// <returns></returns>
         private static bool IsSystemType(PropertyInfo p)
         {
-            return p.PropertyType.FullName.Contains("System.") && !p.PropertyType.FullName.Contains("System.Collections.Generic.List");
+            return (p.PropertyType.FullName.Contains("System.") && 
+                   !p.PropertyType.FullName.Contains("System.Collections.Generic.List")) ||
+                    p.PropertyType.IsEnum;
         }
     }
 }

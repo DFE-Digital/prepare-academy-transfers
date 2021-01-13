@@ -2,6 +2,7 @@
 using API.Models.D365;
 using API.Models.Response;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,21 +11,29 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// API controller for retrieving information about an academy from TRAMS
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("[controller]")]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status429TooManyRequests)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     public class AcademiesController : ControllerBase
     {
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
+        private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public AcademiesController(IAcademiesRepository academiesRepository,
-                                   IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
+                                   IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
+                                   IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _academiesRepository = academiesRepository;
             _getAcademiesMapper = getAcademiesMapper;
+            _repositoryErrorHandler = repositoryErrorHandler;
         }
 
         /// <summary>
@@ -37,16 +46,23 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<GetAcademiesModel>> GetAcademyById(Guid id)
         {
-            var result = await _academiesRepository.GetAcademyById(id);
+            var repoResult = await _academiesRepository.GetAcademyById(id);
 
-            if (result == null)
+            if (!repoResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(repoResult);
+            }
+
+            if (repoResult.Result == null)
             {
                 return NotFound($"The academy with the id: '{id}' was not found");
             }
 
-            var formattedResult = _getAcademiesMapper.Map(result);
+            var formattedResult = _getAcademiesMapper.Map(repoResult.Result);
 
             return Ok(formattedResult);
         }
+
+
     }
 }

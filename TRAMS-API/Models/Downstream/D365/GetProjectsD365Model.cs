@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using API.Models.D365;
+using API.Models.D365.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace API.Models.D365
+namespace API.Models.Downstream.D365
 {
-    public class GetAcademyTransfersProjectsD365Model : BaseD365Model
+    public class GetProjectsD365Model : BaseD365Model
     {
         [JsonProperty("sip_academytransfersprojectid")]
         public Guid ProjectId { get; set; }
@@ -19,7 +21,7 @@ namespace API.Models.D365
         public string ProjectInitiatorUid { get; set; }
 
         [JsonProperty("sip_projectstatus")]
-        public int ProjectStatus { get; set; }
+        public ProjectStatusEnum ProjectStatus { get; set; }
 
         [JsonProperty("sip_sip_academytransfersproject_sip_academytransfersprojectacademy_AcademyTransfersProjectId")]
         public List<AcademyTransfersProjectAcademy> Academies { get; set; }
@@ -54,8 +56,8 @@ namespace API.Models.D365
         [JsonProperty("sip_esfainterventionreasonexplanation")]
         public string RddOrRscInterventionReasonsExplained { get; set; }
 
-        //[JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
-        //public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
+        [JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
+        public List<ProjectAcademyTrust> ProjectAcademyTrusts { get; set; }
     }
 
     public class ProjectAcademyTrust : BaseD365Model

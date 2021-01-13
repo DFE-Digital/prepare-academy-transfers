@@ -3,7 +3,7 @@ using API.Models.Response;
 
 namespace API.Mapping
 {
-    public class GetAcademiesD365ModelToGetAcademiesModelMapper : IMapper<GetAcademiesD365Model, GetAcademiesModel>
+    public class GetAcademiesResponseMapper : IMapper<GetAcademiesD365Model, GetAcademiesModel>
     {
         public GetAcademiesModel Map(GetAcademiesD365Model input)
         {

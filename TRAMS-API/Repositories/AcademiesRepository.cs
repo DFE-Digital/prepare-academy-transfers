@@ -1,6 +1,7 @@
 ﻿using API.HttpHelpers;
-using API.Mapping;
 using API.Models.D365;
+using API.Models.Response;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,42 +13,60 @@ namespace API.Repositories
     {
         private static readonly string _route = "accounts";
 
-        private readonly AuthenticatedHttpClient _client;
+        private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
+        private readonly ILogger<AcademiesRepository> _logger;
 
-        public AcademiesRepository(AuthenticatedHttpClient client, 
-                                   IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder)
+        public AcademiesRepository(IAuthenticatedHttpClient client, 
+                                   IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder,
+                                   ILogger<AcademiesRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
+            _logger = logger;
         }
 
-        public async Task<GetAcademiesD365Model> GetAcademyById(Guid id)
+        public async Task<RepositoryResult<GetAcademiesD365Model>> GetAcademyById(Guid id)
         {
             await _client.AuthenticateAsync();
 
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<GetAcademiesD365Model> { Result = null };
+            }
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var castedResult = JsonConvert.DeserializeObject<GetAcademiesD365Model>(result);
+                var castedResult = JsonConvert.DeserializeObject<GetAcademiesD365Model>(responseContent);
 
-                if (castedResult.ParentTrustId == null)
+                if (castedResult == null || castedResult.ParentTrustId == null)
                 {
-                    return null;
+                    return new RepositoryResult<GetAcademiesD365Model> { Result = null };
                 }
 
-                return castedResult;
+                return new RepositoryResult<GetAcademiesD365Model> { Result = castedResult };
             }
 
-            return null;
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+                 
+            return new RepositoryResult<GetAcademiesD365Model>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
-        public async Task<List<GetAcademiesD365Model>> GetAcademiesByTrustId(Guid id)
+        public async Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id)
         {
             await _client.AuthenticateAsync();
 
@@ -60,17 +79,27 @@ namespace API.Repositories
             var url = _urlBuilder.BuildFilterUrl(_route, filters);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
 
             if (response.IsSuccessStatusCode)
             {
-                var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(responseContent);
 
-                return castedResults.Items;
+                return new RepositoryResult<List<GetAcademiesD365Model>> { Result = castedResults.Items };
             }
 
-            return new List<GetAcademiesD365Model>();
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<List<GetAcademiesD365Model>>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using API.Models.Request;
+using API.Models.Upstream.Enums;
 using API.Models.Validation;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,11 @@ using Xunit;
 
 namespace API.Tests
 {
-    public class PostAchievementsModelValidatorTests
+    public class PostProjectsModelValidatorTests
     {
         private readonly PostProjectsRequestModelValidator _validator;
 
-        public PostAchievementsModelValidatorTests()
+        public PostProjectsModelValidatorTests()
         {
             _validator = new PostProjectsRequestModelValidator();
         }
@@ -77,7 +78,7 @@ namespace API.Tests
 
             model = new PostProjectsRequestModel
             {
-                ProjectStatus = 8
+                ProjectStatus = (Models.Upstream.Enums.ProjectStatusEnum)8
             };
 
             result = _validator.Validate(model);
@@ -92,7 +93,7 @@ namespace API.Tests
 
             var model = new PostProjectsRequestModel
             {
-                ProjectStatus = 8
+                ProjectStatus = (Models.Upstream.Enums.ProjectStatusEnum)8
             };
 
             var result = _validator.Validate(model);
@@ -103,7 +104,7 @@ namespace API.Tests
 
             model = new PostProjectsRequestModel
             {
-                ProjectStatus = 1
+                ProjectStatus = (Models.Upstream.Enums.ProjectStatusEnum)1
             };
 
             result = _validator.Validate(model);
@@ -162,7 +163,12 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        EsfaInterventionReasons = new List<int> { 1, 2, 1}
+                        EsfaInterventionReasons = new List<EsfaInterventionReasonEnum> 
+                        { 
+                            EsfaInterventionReasonEnum.FinanceConcerns, 
+                            EsfaInterventionReasonEnum.GovernanceConcerns,
+                            EsfaInterventionReasonEnum.FinanceConcerns
+                        }
                     }
                 }
             };
@@ -182,7 +188,7 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        EsfaInterventionReasons = new List<int> { 42 }
+                        EsfaInterventionReasons = new List<EsfaInterventionReasonEnum> { (EsfaInterventionReasonEnum)42 }
                     }
                 }
             };
@@ -199,7 +205,7 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        EsfaInterventionReasons = new List<int> { 1 }
+                        EsfaInterventionReasons = new List<EsfaInterventionReasonEnum> { (EsfaInterventionReasonEnum)1 }
                     }
                 }
             };
@@ -234,7 +240,12 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        RddOrRscInterventionReasons = new List<int> { 1, 2, 1}
+                        RddOrRscInterventionReasons = new List<RddOrRscInterventionReasonEnum> 
+                        { 
+                            RddOrRscInterventionReasonEnum.OfstedInadequateRating,
+                            RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, 
+                            RddOrRscInterventionReasonEnum.OfstedInadequateRating
+                        }
                     }
                 }
             };
@@ -254,7 +265,7 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        RddOrRscInterventionReasons = new List<int> { 42 }
+                        RddOrRscInterventionReasons = new List<RddOrRscInterventionReasonEnum> { (RddOrRscInterventionReasonEnum)42 }
                     }
                 }
             };
@@ -271,7 +282,7 @@ namespace API.Tests
                 {
                     new PostProjectsAcademiesModel
                     {
-                        RddOrRscInterventionReasons = new List<int> { 1 }
+                        RddOrRscInterventionReasons = new List<RddOrRscInterventionReasonEnum> { (RddOrRscInterventionReasonEnum)1 }
                     }
                 }
             };

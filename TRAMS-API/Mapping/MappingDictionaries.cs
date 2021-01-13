@@ -1,32 +1,65 @@
-﻿using API.Models.D365;
-using System;
+﻿using API.Models.Upstream.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API.Mapping
 {
     public class MappingDictionaries
     {
-        public static Dictionary<int, ProjectStatusEnum> ProjectStatusMap = new Dictionary<int, ProjectStatusEnum>
-        {
-            {1, ProjectStatusEnum.InProgress },
-            {2, ProjectStatusEnum.Completed }
-        };
+        public static Dictionary<Models.Upstream.Enums.ProjectStatusEnum, 
+                                 Models.D365.Enums.ProjectStatusEnum> ProjecStatusEnumMap = 
+            new Dictionary<Models.Upstream.Enums.ProjectStatusEnum, 
+                           Models.D365.Enums.ProjectStatusEnum>
+            {
+                {
+                    Models.Upstream.Enums.ProjectStatusEnum.InProgress, 
+                    Models.D365.Enums.ProjectStatusEnum.InProgress
+                },
+                {
+                    Models.Upstream.Enums.ProjectStatusEnum.Completed, 
+                    Models.D365.Enums.ProjectStatusEnum.Completed 
+                }
+            };
 
-        public static Dictionary<int, EsfaInterventionReasonEnum> EsfaInterventionReasonMap = new Dictionary<int, EsfaInterventionReasonEnum>
-        {
-            {1, EsfaInterventionReasonEnum.GovernanceConcerns },
-            {2, EsfaInterventionReasonEnum.FinanceConcerns },
-            {3, EsfaInterventionReasonEnum.IrregularityConcerns },
-            {4, EsfaInterventionReasonEnum.SafeguardingConcerns }
-        };
+        public static Dictionary<Models.Upstream.Enums.EsfaInterventionReasonEnum, 
+                                 Models.D365.Enums.EsfaInterventionReasonEnum> EsfaInterventionReasonEnumMap = 
+            new Dictionary<Models.Upstream.Enums.EsfaInterventionReasonEnum, 
+                           Models.D365.Enums.EsfaInterventionReasonEnum>
+            {
+                {
+                    Models.Upstream.Enums.EsfaInterventionReasonEnum.FinanceConcerns, 
+                    Models.D365.Enums.EsfaInterventionReasonEnum.FinanceConcerns
+                },
+                {
+                    Models.Upstream.Enums.EsfaInterventionReasonEnum.GovernanceConcerns, 
+                    Models.D365.Enums.EsfaInterventionReasonEnum.GovernanceConcerns
+                },
+                {
+                    Models.Upstream.Enums.EsfaInterventionReasonEnum.IrregularityConcerns, 
+                    Models.D365.Enums.EsfaInterventionReasonEnum.IrregularityConcerns
+                },
+                {
+                    Models.Upstream.Enums.EsfaInterventionReasonEnum.SafeguardingConcerns, 
+                    Models.D365.Enums.EsfaInterventionReasonEnum.SafeguardingConcerns
+                }
+            };
 
-        public static Dictionary<int, RddOrRscInterventionReasonEnum> RddOrRscInterventionReasonMap = new Dictionary<int, RddOrRscInterventionReasonEnum>
-        {
-            {1, RddOrRscInterventionReasonEnum.TerminationWarningNotice },
-            {2, RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice },
-            {3, RddOrRscInterventionReasonEnum.OfstedInadequateRating }
-        };
+        public static Dictionary<Models.Upstream.Enums.RddOrRscInterventionReasonEnum, 
+                                 Models.D365.Enums.RddOrRscInterventionReasonEnum> RddOrRscInterventionReasonEnumMap = 
+            new Dictionary<Models.Upstream.Enums.RddOrRscInterventionReasonEnum, 
+                           Models.D365.Enums.RddOrRscInterventionReasonEnum>
+            {
+                {
+                    RddOrRscInterventionReasonEnum.TerminationWarningNotice,
+                    Models.D365.Enums.RddOrRscInterventionReasonEnum.TerminationWarningNotice 
+                },
+                {
+                    RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice,
+                    Models.D365.Enums.RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice 
+                },
+                {
+                    RddOrRscInterventionReasonEnum.OfstedInadequateRating,
+                    Models.D365.Enums.RddOrRscInterventionReasonEnum.OfstedInadequateRating 
+                }
+            };
     }
 }

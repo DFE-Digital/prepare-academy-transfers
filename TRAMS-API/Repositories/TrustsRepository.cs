@@ -1,6 +1,7 @@
 ﻿using API.HttpHelpers;
-using API.Mapping;
 using API.Models.D365;
+using API.Models.Response;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,27 +15,36 @@ namespace API.Repositories
         private readonly string _route = "accounts";
 
         private readonly IOdataUrlBuilder<GetTrustsD365Model> _urlBuilder;
-        private readonly AuthenticatedHttpClient _client;
+        private readonly IAuthenticatedHttpClient _client;
+        private readonly ILogger<TrustsRepository> _logger;
 
-        public TrustsRepository(AuthenticatedHttpClient client, IOdataUrlBuilder<GetTrustsD365Model> urlBuilder)
+        public TrustsRepository(IAuthenticatedHttpClient client, 
+                                IOdataUrlBuilder<GetTrustsD365Model> urlBuilder,
+                                ILogger<TrustsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
+            _logger = logger;
         }
 
-        public async Task<GetTrustsD365Model> GetTrustById(Guid id)
+        public async Task<RepositoryResult<GetTrustsD365Model>> GetTrustById(Guid id)
         {
             await _client.AuthenticateAsync();
 
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<GetTrustsD365Model> { Result = null };
+            }
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var castedResult = JsonConvert.DeserializeObject<GetTrustsD365Model>(result);
+                var castedResult = JsonConvert.DeserializeObject<GetTrustsD365Model>(responseContent);
 
                 //If this establishment is not a trust, return null. The controller will return a Not Found response
                 var allowedEstablishementTypeIds = new List<string>()
@@ -46,16 +56,26 @@ namespace API.Repositories
 
                 if (!allowedEstablishementTypeIds.Contains(castedResult.EstablishmentTypeId.ToString().ToUpperInvariant()))
                 {
-                    return null;
+                    return new RepositoryResult<GetTrustsD365Model> { Result = null };
                 }
 
-                return castedResult;
+                return new RepositoryResult<GetTrustsD365Model> { Result = castedResult };
             }
 
-            return null;
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<GetTrustsD365Model>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
-        public async Task<List<GetTrustsD365Model>> SearchTrusts(string searchQuery)
+        public async Task<RepositoryResult<List<GetTrustsD365Model>>> SearchTrusts(string searchQuery)
         {
             var filters = BuildTrustSearchFilters(searchQuery);
 
@@ -64,17 +84,27 @@ namespace API.Repositories
             var url = _urlBuilder.BuildFilterUrl(_route, filters);
 
             var response = await _client.GetAsync(url);
-            var content = await response.Content?.ReadAsStringAsync();
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
 
             if (response.IsSuccessStatusCode)
-            {
-                var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustsD365Model>>(results);
+            { 
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustsD365Model>>(responseContent);
 
-                return castedResults.Items;
+                return new RepositoryResult<List<GetTrustsD365Model>> { Result = castedResults.Items };
             }
 
-            return new List<GetTrustsD365Model>();
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<List<GetTrustsD365Model>>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
         private List<string> BuildTrustSearchFilters(string searchQuery)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API.Models.Upstream.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,12 +25,9 @@ namespace API.Models.Request
 
         /// <summary>
         /// The Project Status Code. Mandatory.
-        /// 1 - In Progress
-        /// 2 - Completed
         /// </summary>
-        /// <example>1</example>
         [Required]
-        public int ProjectStatus { get; set; }
+        public ProjectStatusEnum ProjectStatus { get; set; }
 
         /// <summary>
         /// An array of outbound academies identified for the project. Optional.
@@ -58,7 +56,7 @@ namespace API.Models.Request
         /// 4 - Safeguarding Concerns
         /// </summary>
         /// <example>[1, 2, 3]</example>
-        public List<int> EsfaInterventionReasons { get; set; }
+        public List<EsfaInterventionReasonEnum> EsfaInterventionReasons { get; set; }
 
         /// <summary>
         /// An explanation of the provided ESFA Intervention Reasons. Optional. Max length: 2000 words
@@ -72,7 +70,7 @@ namespace API.Models.Request
         /// 2 - RSC Minded To Terminate Notice
         /// 3 - Ofsted Inadequate Rating
         /// </summary>
-        public List<int> RddOrRscInterventionReasons { get; set; }
+        public List<RddOrRscInterventionReasonEnum> RddOrRscInterventionReasons { get; set; }
 
         /// <summary>
         /// An explanation of the provided RDD or RSC Intervention Reasons. Optional. Max length: 2000 words
