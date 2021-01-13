@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace API.Mapping
@@ -19,15 +20,39 @@ namespace API.Mapping
 
         private string CapitalizeWord(string word)
         {
+            var brackets = new List<char> { '(', '{', '[', '<' };
             var trimmedWord = word.Trim();
 
             var stringBuilder = new StringBuilder();
 
+            var handlingOpeningBracket = false;
+
+            if (brackets.Any(b => b == trimmedWord[0]))
+            {
+                handlingOpeningBracket = true;
+            }
+            
             stringBuilder.Append(char.ToUpperInvariant(trimmedWord[0]));
 
             for(var i = 1; i < trimmedWord.Length; i++)
             {
-                stringBuilder.Append(char.ToLowerInvariant(trimmedWord[i]));
+                if(handlingOpeningBracket)
+                {
+                    if (!brackets.Any(b => b == trimmedWord[i]))
+                    {
+                        stringBuilder.Append(char.ToUpperInvariant(trimmedWord[i]));
+                        handlingOpeningBracket = false;
+                    }
+                    else
+                    {
+                        stringBuilder.Append(char.ToLowerInvariant(trimmedWord[i]));
+                    }
+                }
+                else
+                {
+                    stringBuilder.Append(char.ToLowerInvariant(trimmedWord[i]));
+                }
+                
             }
 
             return stringBuilder.ToString();

@@ -196,5 +196,37 @@ namespace API.Tests
 
             Assert.Equal("A 5five Word Dash-name Establishment", result);
         }
+
+        [Theory]
+        [InlineData("(Test Brackets)", "(Test Brackets)")]
+        [InlineData("{Test Brackets}", "{Test Brackets}")]
+        [InlineData("<Test Brackets>", "<Test Brackets>")]
+        [InlineData("[Test Brackets]", "[Test Brackets]")]
+        [InlineData("(TEST BRACKETS)", "(Test Brackets)")]
+        [InlineData("{TEST BRACKETS}", "{Test Brackets}")]
+        [InlineData("<TEST BRACKETS>", "<Test Brackets>")]
+        [InlineData("[TEST BRACKETS]", "[Test Brackets]")]
+        [InlineData("(TEST  BRACKETS)", "(Test Brackets)")]
+        [InlineData("{TEST   bRaCKeTS}", "{Test Brackets}")]
+        [InlineData("<TEST bRACKETS>   ", "<Test Brackets>")]
+        [InlineData("[tESt bRACKETs]", "[Test Brackets]")]
+        [InlineData("( Test Brackets )", "( Test Brackets )")]
+        [InlineData("{ Test Brackets }", "{ Test Brackets }")]
+        [InlineData("< Test Brackets >", "< Test Brackets >")]
+        [InlineData("[ Test Brackets ]", "[ Test Brackets ]")]
+        [InlineData("( TEST BRACKETS )", "( Test Brackets )")]
+        [InlineData("{ TEST BRACKETS }", "{ Test Brackets }")]
+        [InlineData("< TEST BRACKETS >", "< Test Brackets >")]
+        [InlineData("[ TEST BRACKETS ]", "[ Test Brackets ]")]
+        [InlineData("( TEST  BRACKETS )", "( Test Brackets )")]
+        [InlineData("{ TEST   bRaCKeTS }", "{ Test Brackets }")]
+        [InlineData("< TEST bRACKETS >   ", "< Test Brackets >")]
+        [InlineData("[ tESt bRACKETs ]", "[ Test Brackets ]")]
+        public void Brackets_TestGroup(string input, string expected)
+        {
+            var result = _formatter.Format(input);
+
+            Assert.Equal(expected, result);
+        }
     }
 }
