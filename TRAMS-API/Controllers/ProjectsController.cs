@@ -8,6 +8,7 @@ using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace API.Controllers
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
+        private readonly IConfiguration _config;
 
         public ProjectsController(IProjectsRepository projectsRepository,
                                   IAcademiesRepository academiesRepository,
@@ -43,7 +45,8 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
-                                  IRepositoryErrorResultHandler repositoryErrorHandler)
+                                  IRepositoryErrorResultHandler repositoryErrorHandler,
+                                  IConfiguration config)
         {
             _projectsRepository = projectsRepository;
             _academiesRepository = academiesRepository;
@@ -52,6 +55,7 @@ namespace API.Controllers
             _getProjectsMapper = getProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
+            _config = config;
         }
 
         /// <summary>
@@ -214,7 +218,9 @@ namespace API.Controllers
 
             var externalModel = _getProjectsMapper.Map(getProjectRepositoryResult.Result);
 
-            return Created("entityLocation", externalModel);
+            var apiBaseUrl = _config["API:Url"];
+
+            return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
         }   
     }
 }
