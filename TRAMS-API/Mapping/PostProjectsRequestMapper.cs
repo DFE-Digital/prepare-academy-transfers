@@ -9,6 +9,11 @@ namespace API.Mapping
     {
         public PostAcademyTransfersProjectsD365Model Map(PostProjectsRequestModel input)
         {
+            if (input == null)
+            {
+                return null;
+            }
+
             var academies = input.ProjectAcademies?.Select(p => new PostAcademyTransfersProjectAcademyD365Model
             {
                 AcademyId = $"/accounts({p.AcademyId})",

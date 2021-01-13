@@ -39,12 +39,17 @@ namespace API.Mapping
 
         private static ProjectStatusEnum ExtractProjectStatus(GetProjectsD365Model input)
         {
-            return input.ProjectStatus != 0
-                   ? MappingDictionaries.ProjecStatusEnumMap
-                                           .Where(v => v.Value == input.ProjectStatus)
-                                           .FirstOrDefault()
-                                           .Key
-                   : 0;
+            return input.ProjectStatus != default
+                   ? MapProjectStatus(input)
+                   : default;
+        }
+
+        private static ProjectStatusEnum MapProjectStatus(GetProjectsD365Model input)
+        {
+            var mappedStatus = MappingDictionaries.ProjecStatusEnumMap
+                                                   .Where(v => v.Value == input.ProjectStatus);
+
+            return mappedStatus.Any() ? mappedStatus.First().Key : default;
         }
 
         private List<GetProjectsTrustResponseModel> ExtractTrusts(GetProjectsD365Model input)
@@ -67,7 +72,5 @@ namespace API.Mapping
                    : input.Academies?.Select(a => _academyMapper.Map(a))
                                      .ToList();
         }
-
-        
     }
 }

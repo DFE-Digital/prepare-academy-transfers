@@ -133,7 +133,5 @@ namespace API.Models.Upstream.Response
         /// </summary>
         /// <example>Imaginary Trust</example>
         public string TrustName { get; set; }
-
-        public int Priority { get; set; }
     }
 }

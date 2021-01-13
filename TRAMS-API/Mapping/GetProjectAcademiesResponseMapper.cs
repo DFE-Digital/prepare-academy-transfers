@@ -13,6 +13,11 @@ namespace API.Mapping
     {
         public GetProjectsAcademyResponseModel Map(AcademyTransfersProjectAcademy academy)
         {
+            if (academy == null)
+            {
+                return null;
+            }
+
             return new GetProjectsAcademyResponseModel
             {
                 ProjectAcademyId = academy.AcademyTransfersProjectAcademyId,
@@ -26,12 +31,12 @@ namespace API.Mapping
                 AcademyTrusts = academy.ProjectAcademyTrusts == null || academy.ProjectAcademyTrusts.Count == 0
                                 ? new List<GetAcademyTrustsResponseModel>()
                                 : academy.ProjectAcademyTrusts.Select(t => new GetAcademyTrustsResponseModel
-                                {
-                                    ProjectTrustId = t.ProjectAcademyTrustId,
-                                    TrustId = t.TrustId,
-                                    TrustName = t.TrustName
-                                })
-                                                        .ToList()
+                                                                     {
+                                                                         ProjectTrustId = t.ProjectAcademyTrustId,
+                                                                         TrustId = t.TrustId,
+                                                                         TrustName = t.TrustName
+                                                                     })
+                                                               .ToList()
             };
         }
 
@@ -42,8 +47,15 @@ namespace API.Mapping
                    : a.RddOrRscInterventionReasons?
                       .Split(',')
                       .Select(v => Enum.Parse<Models.D365.Enums.RddOrRscInterventionReasonEnum>(v))
-                      .Select(v => MappingDictionaries.RddOrRscInterventionReasonEnumMap.Where(d => d.Value == v).FirstOrDefault().Key)
+                      .Select(v => MapRddOrRscInterventionReason(v))
                       .ToList();
+        }
+
+        private static RddOrRscInterventionReasonEnum MapRddOrRscInterventionReason(Models.D365.Enums.RddOrRscInterventionReasonEnum v)
+        {
+            var mappedEnum =  MappingDictionaries.RddOrRscInterventionReasonEnumMap.Where(d => d.Value == v);
+
+            return mappedEnum.Any() ? mappedEnum.First().Key : default;
         }
 
         private static List<EsfaInterventionReasonEnum> ExtractEsfaInterventionReasons(AcademyTransfersProjectAcademy a)
@@ -53,8 +65,15 @@ namespace API.Mapping
                    : a.EsfaInterventionReasons?
                    .Split(',')
                    .Select(v => Enum.Parse<Models.D365.Enums.EsfaInterventionReasonEnum>(v))
-                   .Select(v => MappingDictionaries.EsfaInterventionReasonEnumMap.Where(d => d.Value == v).FirstOrDefault().Key)
+                   .Select(v => MapEsfaInterventionReason(v))
                    .ToList();
+        }
+
+        private static EsfaInterventionReasonEnum MapEsfaInterventionReason(Models.D365.Enums.EsfaInterventionReasonEnum v)
+        {
+            var mappedEnum = MappingDictionaries.EsfaInterventionReasonEnumMap.Where(d => d.Value == v);
+            
+            return mappedEnum.Any() ? mappedEnum.First().Key : default;
         }
     }
 }

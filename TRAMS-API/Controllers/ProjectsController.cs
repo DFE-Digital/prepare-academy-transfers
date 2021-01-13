@@ -63,7 +63,7 @@ namespace API.Controllers
         [Route("/projects/{id}")]
         [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetTrustById(Guid id)
+        public async Task<IActionResult> GetProjectById(Guid id)
         {
             var getProjectRepositoryResult = await _projectsRepository.GetProjectById(id);
 

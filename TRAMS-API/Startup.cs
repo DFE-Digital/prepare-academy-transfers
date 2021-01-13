@@ -135,24 +135,9 @@ namespace TRAMS_API
 
         private static void ConfigureHelpers(IServiceCollection services)
         {
-            services.AddTransient<ID365ModelHelper<GetTrustsD365Model>,
-                                  D365ModelHelper<GetTrustsD365Model>>();
-            services.AddTransient<ID365ModelHelper<GetAcademiesD365Model>, 
-                                  D365ModelHelper<GetAcademiesD365Model>>();
-            services.AddTransient<ID365ModelHelper<GetProjectsD365Model>,
-                                  D365ModelHelper<GetProjectsD365Model>>();
-            services.AddTransient<ID365ModelHelper<AcademyTransfersProjectAcademy>, 
-                                  D365ModelHelper<AcademyTransfersProjectAcademy>>();
-
-            services.AddTransient<IOdataUrlBuilder<GetTrustsD365Model>, 
-                                  ODataUrlBuilder<GetTrustsD365Model>>();
-            services.AddTransient<IOdataUrlBuilder<GetAcademiesD365Model>, 
-                                  ODataUrlBuilder<GetAcademiesD365Model>>();
-            services.AddTransient<IOdataUrlBuilder<GetProjectsD365Model>, 
-                                  ODataUrlBuilder<GetProjectsD365Model>>();
-            services.AddTransient<IOdataUrlBuilder<AcademyTransfersProjectAcademy>, 
-                                  ODataUrlBuilder<AcademyTransfersProjectAcademy>>();
-
+            services.AddTransient(typeof(ID365ModelHelper<>), typeof(D365ModelHelper<>));
+            services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
+            
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
         }
 
