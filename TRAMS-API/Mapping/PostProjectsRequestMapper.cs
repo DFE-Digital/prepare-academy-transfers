@@ -17,15 +17,15 @@ namespace API.Mapping
             var academies = input.ProjectAcademies?.Select(p => new PostAcademyTransfersProjectAcademyD365Model
             {
                 AcademyId = $"/accounts({p.AcademyId})",
-                EsfaInterventionReasons = p.EsfaInterventionReasons != null 
+                EsfaInterventionReasons = p.EsfaInterventionReasons != null && p.EsfaInterventionReasons.Any()
                                           ? string.Join(',', p.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
                                                                                       .ToList()) 
-                                          : string.Empty,
+                                          : null,
                 EsfaInterventionReasonsExplained = p.EsfaInterventionReasonsExplained,
-                RddOrRscInterventionReasons = p.RddOrRscInterventionReasons != null 
+                RddOrRscInterventionReasons = p.RddOrRscInterventionReasons != null && p.RddOrRscInterventionReasons.Any()
                                               ? string.Join(',', p.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
                                                                                               .ToList())
-                                              : string.Empty,
+                                              : null,
                 RddOrRscInterventionReasonsExplained = p.RddOrRscInterventionReasonsExplained,
                 Trusts = p.Trusts != null 
                          ? p.Trusts.Select(t => new PostAcademyTransfersProjectAcademyTrustD365Model { TrustId = $"/accounts({t.TrustId})" })
