@@ -360,7 +360,7 @@ namespace API.Tests.MapperTests
 
             Assert.Equal("596500002,596500001,596500000", result.Academies[0].RddOrRscInterventionReasons);
             Assert.Equal("596500002", result.Academies[1].RddOrRscInterventionReasons);
-            Assert.True(string.IsNullOrEmpty(result.Academies[2].RddOrRscInterventionReasons));
+            Assert.Null(result.Academies[2].RddOrRscInterventionReasons);
         }
 
         [Fact]
