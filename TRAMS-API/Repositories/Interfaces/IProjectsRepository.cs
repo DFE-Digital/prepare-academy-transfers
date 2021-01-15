@@ -8,7 +8,7 @@ namespace API.Repositories.Interfaces
 {
     public interface IProjectsRepository
     {
-        public Task<List<GetProjectsD365Model>> GetAll();
+        public Task<List<GetProjectsD365Model>> GetAll(string academyId);
 
         public Task<RepositoryResult<GetProjectsD365Model>> GetProjectById(Guid id);
 

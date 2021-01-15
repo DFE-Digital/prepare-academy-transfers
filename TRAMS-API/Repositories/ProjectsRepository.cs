@@ -1,15 +1,16 @@
 ﻿using API.HttpHelpers;
 using API.Models.D365;
 using API.Models.Downstream.D365;
-using API.Models.Response;
 using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace API.Repositories
@@ -34,14 +35,61 @@ namespace API.Repositories
             _logger = logger;
         }
 
-        public async Task<List<GetProjectsD365Model>> GetAll()
+        //public async Task<List<GetProjectsD365Model>> GetAll(string searchQuery)
+        //{
+            
+        //}
+
+        public async Task<List<GetProjectsD365Model>> GetAll(string search)
         {
-            var url = _urlBuilder.BuildFilterUrl(_route, null);
+            var fetchXml = new StringBuilder();
+
+            fetchXml.AppendLine("<fetch distinct='true' mapping='logical' output-format='xml-platform' version='1.0'>");
+            fetchXml.AppendLine("<entity name='sip_academytransfersproject'>");
+
+            fetchXml.AppendLine("<attribute name='sip_academytransfersprojectid'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectname'/>");
+            
+            fetchXml.AppendLine("   <link-entity name='sip_academytransfersprojectacademy' from='sip_atprojectid' to='sip_academytransfersprojectid' link-type='outer' alias='projectAcademy'>");
+            fetchXml.AppendLine("   <attribute name='sip_academytransfersprojectacademyid'/>");
+            fetchXml.AppendLine("       <link-entity name='account' from='accountid' to='sip_academyid' link-type='outer' alias='academy'>");
+            fetchXml.AppendLine("       <attribute name='name'/> ");
+            fetchXml.AppendLine("           <link-entity name='account' from='accountid' to='parentaccountid' link-type='outer' alias='academyTrust'>");
+            fetchXml.AppendLine("               <attribute name='name'/> ");
+            fetchXml.AppendLine("               <attribute name='sip_companieshousenumber'/> ");
+            fetchXml.AppendLine("           </link-entity>");
+            fetchXml.AppendLine("       </link-entity>");
+            fetchXml.AppendLine("   </link-entity>");
+
+            if(!string.IsNullOrEmpty(search))
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition entityname='academy' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'sip_companieshousenumber' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectname' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine("</filter >");
+            }
+
+            fetchXml.AppendLine("</entity>");
+            fetchXml.AppendLine("</fetch>");
+
+            var encodedFetchXml = WebUtility.UrlEncode(fetchXml.ToString());
+
+            var url = $"{_route}?fetchXml={encodedFetchXml}";
+
+            //var academiesFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetProjectsD365Model.Academies));
+
+            ////var filter = $"{academyIdField}/any(a: (a/_sip_academyid_value eq {academyId}) or (a/_sip_academyid_value eq da7288e2-eaa0-e911-a833-000d3a385a17))";
+            //var innerFilter = _urlBuilder.BuildInFilter("a/_sip_academyid_value", academyId.Select(a => a.ToString()).ToList());
+            //var filter = $"{academiesFieldName}/any(a: {innerFilter})";
+            //var url = _urlBuilder.BuildFilterUrl(_route, new List<string>{filter});
 
             await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
-
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
             if (response.IsSuccessStatusCode)
             {
                 var results = await response.Content.ReadAsStringAsync();

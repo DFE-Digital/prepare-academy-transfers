@@ -59,6 +59,47 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Search for Academy Transfer Projects.
+        /// </summary>
+        /// <param name="searchTerm">The search term. The searched fields will be: 
+        /// Project Name
+        /// Outgoing Trust Name, 
+        /// Outgoing Trust Companies House Number
+        /// Outgoing Trust Reference Number
+        /// Academy Name
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/projects")]
+        [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
+        public async Task<IActionResult> SearchProjects(string searchTerm)
+        {
+            var academyGuids = new List<Guid>();
+
+            //var trustSearchResult = await _trustsRepository.SearchTrusts(searchTerm);
+
+            //foreach(var trust in trustSearchResult.Result)
+            //{
+            //    var academies = await _academiesRepository.GetAcademiesByTrustId(trust.Id);
+
+            //    foreach(var academy in academies.Result)
+            //    {
+            //        academyGuids.Add(academy.Id);
+            //    }
+            //}
+
+            //var academySearchResult = await _academiesRepository.SearchAcademies(searchTerm);
+
+            //foreach(var academy in academySearchResult.Result)
+            //{
+            //    academyGuids.Add(academy.Id);
+            //}
+
+            var projSearchResult = await _projectsRepository.GetAll(searchTerm);
+
+            return null;
+        }
+
+        /// <summary>
         /// Gets an Academy Transfers project by its ID
         /// </summary>
         /// <param name="id">The ID of the project</param>

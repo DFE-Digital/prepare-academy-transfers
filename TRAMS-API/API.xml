@@ -20,6 +20,7 @@
             API controller for retrieving Academy Transfers projects from TRAMS
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:API.Controllers.ProjectsController.SearchProjects(System.String)" -->
         <member name="M:API.Controllers.ProjectsController.GetProjectById(System.Guid)">
             <summary>
             Gets an Academy Transfers project by its ID
