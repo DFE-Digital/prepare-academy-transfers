@@ -20,12 +20,12 @@ namespace API.Mapping
                 EsfaInterventionReasons = p.EsfaInterventionReasons != null 
                                           ? string.Join(',', p.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
                                                                                       .ToList()) 
-                                          : string.Empty,
+                                          : null,
                 EsfaInterventionReasonsExplained = p.EsfaInterventionReasonsExplained,
                 RddOrRscInterventionReasons = p.RddOrRscInterventionReasons != null 
                                               ? string.Join(',', p.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
                                                                                               .ToList())
-                                              : string.Empty,
+                                              : null,
                 RddOrRscInterventionReasonsExplained = p.RddOrRscInterventionReasonsExplained,
                 Trusts = p.Trusts != null 
                          ? p.Trusts.Select(t => new PostAcademyTransfersProjectAcademyTrustD365Model { TrustId = $"/accounts({t.TrustId})" })

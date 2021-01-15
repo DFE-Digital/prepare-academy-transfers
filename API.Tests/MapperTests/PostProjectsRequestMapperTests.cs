@@ -189,7 +189,7 @@ namespace API.Tests.MapperTests
 
             var result = _mapper.Map(request);
 
-            Assert.Equal(string.Empty, result.Academies[0].EsfaInterventionReasons);
+            Assert.Null(result.Academies[0].EsfaInterventionReasons);
             Assert.Equal("596500001", result.Academies[1].EsfaInterventionReasons);
             Assert.Equal("596500001,596500002,596500003", result.Academies[2].EsfaInterventionReasons);
         }
