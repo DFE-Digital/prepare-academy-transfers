@@ -1,4 +1,5 @@
 ﻿using API.Models.D365;
+using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace API.Repositories.Interfaces
 {
     public interface IProjectsRepository
     {
-        public Task<List<GetProjectsD365Model>> GetAll(string academyId);
+        public Task<List<GetProjectsD365Model>> GetAll(string academyId, ProjectStatusEnum status);
 
         public Task<RepositoryResult<GetProjectsD365Model>> GetProjectById(Guid id);
 

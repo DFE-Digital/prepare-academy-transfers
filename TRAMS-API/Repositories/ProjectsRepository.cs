@@ -1,5 +1,6 @@
 ﻿using API.HttpHelpers;
 using API.Models.D365;
+using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
 using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,7 @@ namespace API.Repositories
             
         //}
 
-        public async Task<List<GetProjectsD365Model>> GetAll(string search)
+        public async Task<List<GetProjectsD365Model>> GetAll(string search, ProjectStatusEnum status)
         {
             var fetchXml = new StringBuilder();
 
@@ -61,6 +62,13 @@ namespace API.Repositories
             fetchXml.AppendLine("       </link-entity>");
             fetchXml.AppendLine("   </link-entity>");
 
+            if(status != default)
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectstatus' operator='eq' value='{status}' />");
+                fetchXml.AppendLine("</filter >");
+            }
+
             if(!string.IsNullOrEmpty(search))
             {
                 fetchXml.AppendLine("<filter type='or'>");
@@ -77,13 +85,6 @@ namespace API.Repositories
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml.ToString());
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";
-
-            //var academiesFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetProjectsD365Model.Academies));
-
-            ////var filter = $"{academyIdField}/any(a: (a/_sip_academyid_value eq {academyId}) or (a/_sip_academyid_value eq da7288e2-eaa0-e911-a833-000d3a385a17))";
-            //var innerFilter = _urlBuilder.BuildInFilter("a/_sip_academyid_value", academyId.Select(a => a.ToString()).ToList());
-            //var filter = $"{academiesFieldName}/any(a: {innerFilter})";
-            //var url = _urlBuilder.BuildFilterUrl(_route, new List<string>{filter});
 
             await _client.AuthenticateAsync();
 

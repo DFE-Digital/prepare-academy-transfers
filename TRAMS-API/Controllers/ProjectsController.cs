@@ -2,6 +2,7 @@
 using API.Models.D365;
 using API.Models.Downstream.D365;
 using API.Models.Request;
+using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -71,30 +72,19 @@ namespace API.Controllers
         [HttpGet]
         [Route("/projects")]
         [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> SearchProjects(string searchTerm)
+        public async Task<IActionResult> SearchProjects(string searchTerm, ProjectStatusEnum status)
         {
-            var academyGuids = new List<Guid>();
+            if (status == 0)
+            {
+                return BadRequest("Invalid Project Status code");
+            }
 
-            //var trustSearchResult = await _trustsRepository.SearchTrusts(searchTerm);
-
-            //foreach(var trust in trustSearchResult.Result)
-            //{
-            //    var academies = await _academiesRepository.GetAcademiesByTrustId(trust.Id);
-
-            //    foreach(var academy in academies.Result)
-            //    {
-            //        academyGuids.Add(academy.Id);
-            //    }
-            //}
-
-            //var academySearchResult = await _academiesRepository.SearchAcademies(searchTerm);
-
-            //foreach(var academy in academySearchResult.Result)
-            //{
-            //    academyGuids.Add(academy.Id);
-            //}
-
-            var projSearchResult = await _projectsRepository.GetAll(searchTerm);
+            if (!MappingDictionaries.ProjecStatusEnumMap.TryGetValue(status, out var internalStatus))
+            {
+                return BadRequest("Project Status not recognised");
+            }
+                
+            var projSearchResult = await _projectsRepository.GetAll(searchTerm, internalStatus);
 
             return null;
         }
