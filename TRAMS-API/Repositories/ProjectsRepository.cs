@@ -36,53 +36,10 @@ namespace API.Repositories
             _logger = logger;
         }
 
-        //public async Task<List<GetProjectsD365Model>> GetAll(string searchQuery)
-        //{
-            
-        //}
-
-        public async Task<List<GetProjectsD365Model>> GetAll(string search, ProjectStatusEnum status)
+        public async Task<RepositoryResult<List<SearchProjectsD365Model>>> SearchProject(string search, ProjectStatusEnum status)
         {
-            var fetchXml = new StringBuilder();
-
-            fetchXml.AppendLine("<fetch distinct='true' mapping='logical' output-format='xml-platform' version='1.0'>");
-            fetchXml.AppendLine("<entity name='sip_academytransfersproject'>");
-
-            fetchXml.AppendLine("<attribute name='sip_academytransfersprojectid'/>");
-            fetchXml.AppendLine("<attribute name='sip_projectname'/>");
-            
-            fetchXml.AppendLine("   <link-entity name='sip_academytransfersprojectacademy' from='sip_atprojectid' to='sip_academytransfersprojectid' link-type='outer' alias='projectAcademy'>");
-            fetchXml.AppendLine("   <attribute name='sip_academytransfersprojectacademyid'/>");
-            fetchXml.AppendLine("       <link-entity name='account' from='accountid' to='sip_academyid' link-type='outer' alias='academy'>");
-            fetchXml.AppendLine("       <attribute name='name'/> ");
-            fetchXml.AppendLine("           <link-entity name='account' from='accountid' to='parentaccountid' link-type='outer' alias='academyTrust'>");
-            fetchXml.AppendLine("               <attribute name='name'/> ");
-            fetchXml.AppendLine("               <attribute name='sip_companieshousenumber'/> ");
-            fetchXml.AppendLine("           </link-entity>");
-            fetchXml.AppendLine("       </link-entity>");
-            fetchXml.AppendLine("   </link-entity>");
-
-            if(status != default)
-            {
-                fetchXml.AppendLine("<filter type='or'>");
-                fetchXml.AppendLine($"   <condition attribute = 'sip_projectstatus' operator='eq' value='{status}' />");
-                fetchXml.AppendLine("</filter >");
-            }
-
-            if(!string.IsNullOrEmpty(search))
-            {
-                fetchXml.AppendLine("<filter type='or'>");
-                fetchXml.AppendLine($"   <condition entityname='academy' attribute = 'name' operator='like' value='%{search}%' />");
-                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'name' operator='like' value='%{search}%' />");
-                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'sip_companieshousenumber' operator='like' value='%{search}%' />");
-                fetchXml.AppendLine($"   <condition attribute = 'sip_projectname' operator='like' value='%{search}%' />");
-                fetchXml.AppendLine("</filter >");
-            }
-
-            fetchXml.AppendLine("</entity>");
-            fetchXml.AppendLine("</fetch>");
-
-            var encodedFetchXml = WebUtility.UrlEncode(fetchXml.ToString());
+            var fetchXml = BuildFetchXMLQuery(search, status);
+            var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";
 
@@ -94,12 +51,22 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetProjectsD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<SearchProjectsD365Model>>(results);
 
-                return castedResults.Items;
+                return new RepositoryResult<List<SearchProjectsD365Model>> { Result = castedResults.Items.Distinct().ToList() };
             }
 
-            return new List<GetProjectsD365Model>();
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<List<SearchProjectsD365Model>>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
         public async Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id)
@@ -210,6 +177,54 @@ namespace API.Repositories
                     ErrorMessage = responseContent
                 }
             };
+        }
+
+        private static string BuildFetchXMLQuery(string search, ProjectStatusEnum status)
+        {
+            var fetchXml = new StringBuilder();
+
+            fetchXml.AppendLine("<fetch distinct='true' mapping='logical' output-format='xml-platform' version='1.0'>");
+            fetchXml.AppendLine("<entity name='sip_academytransfersproject'>");
+
+            fetchXml.AppendLine("<attribute name='sip_academytransfersprojectid'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectname'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectinitiatorfullname'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectinitiatoruniqueid'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectstatus'/>");
+
+            fetchXml.AppendLine("   <link-entity name='sip_academytransfersprojectacademy' from='sip_atprojectid' to='sip_academytransfersprojectid' link-type='outer' alias='projectAcademy'>");
+            fetchXml.AppendLine("   <attribute name='sip_academytransfersprojectacademyid'/>");
+            fetchXml.AppendLine("       <link-entity name='account' from='accountid' to='sip_academyid' link-type='outer' alias='academy'>");
+            fetchXml.AppendLine("       <attribute name='name'/> ");
+            fetchXml.AppendLine("           <link-entity name='account' from='accountid' to='parentaccountid' link-type='outer' alias='academyTrust'>");
+            fetchXml.AppendLine("               <attribute name='name'/> ");
+            fetchXml.AppendLine("               <attribute name='sip_companieshousenumber'/> ");
+            fetchXml.AppendLine("           </link-entity>");
+            fetchXml.AppendLine("       </link-entity>");
+            fetchXml.AppendLine("   </link-entity>");
+
+            if (status != default)
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectstatus' operator='eq' value='{(int)status}' />");
+                fetchXml.AppendLine("</filter >");
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition entityname='academy' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'sip_companieshousenumber' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectname' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine("</filter >");
+            }
+            
+            fetchXml.AppendLine("<order attribute='sip_projectname'/>");
+
+            fetchXml.AppendLine("</entity>");
+            fetchXml.AppendLine("</fetch>");
+            return fetchXml.ToString();
         }
     }
 }

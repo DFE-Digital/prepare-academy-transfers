@@ -20,7 +20,20 @@
             API controller for retrieving Academy Transfers projects from TRAMS
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:API.Controllers.ProjectsController.SearchProjects(System.String)" -->
+        <member name="M:API.Controllers.ProjectsController.SearchProjects(System.String,System.Nullable{API.Models.Upstream.Enums.ProjectStatusEnum})">
+            <summary>
+            Search for Academy Transfer Projects.
+            </summary>
+            <param name="searchTerm">he search term. The searched fields will be: 
+            Project Name
+            Outgoing Trust Name, 
+            Outgoing Trust Companies House Number
+            Academy Name</param>
+            <param name="status">The project status:
+            1. In Progress
+            2. Completed</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ProjectsController.GetProjectById(System.Guid)">
             <summary>
             Gets an Academy Transfers project by its ID
@@ -211,6 +224,31 @@
             The name of the trust
             </summary>
             <example>Imaginary Trust</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectId">
+            <summary>
+            The Id of the Academy Transfers project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectName">
+            <summary>
+            The name of the project
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectInitiatorFullName">
+            <summary>
+            The project initiator's full name
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectInitiatorUid">
+            <summary>
+            The project initiator's unique id
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectStatus">
+            <summary>
+            The status of the project
+            </summary>
         </member>
         <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorFullName">
             <summary>

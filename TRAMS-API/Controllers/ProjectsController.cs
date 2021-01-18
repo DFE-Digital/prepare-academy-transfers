@@ -26,8 +26,8 @@ namespace API.Controllers
     [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(string), StatusCodes.Status429TooManyRequests)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     public class ProjectsController : Controller
     {
         private readonly IProjectsRepository _projectsRepository;
@@ -37,6 +37,7 @@ namespace API.Controllers
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
+        private readonly IMapper<SearchProjectsD365Model, SearchProjectsModel> _searchProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
         private readonly IConfiguration _config;
 
@@ -46,6 +47,7 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
+                                  IMapper<SearchProjectsD365Model, SearchProjectsModel> searchProjectsMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler,
                                   IConfiguration config)
         {
@@ -55,6 +57,7 @@ namespace API.Controllers
             _postProjectsMapper = postProjectsMapper;
             _getProjectsMapper = getProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
+            _searchProjectsMapper = searchProjectsMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
             _config = config;
         }
@@ -62,31 +65,46 @@ namespace API.Controllers
         /// <summary>
         /// Search for Academy Transfer Projects.
         /// </summary>
-        /// <param name="searchTerm">The search term. The searched fields will be: 
+        /// <param name="searchTerm">he search term. The searched fields will be: 
         /// Project Name
         /// Outgoing Trust Name, 
         /// Outgoing Trust Companies House Number
-        /// Outgoing Trust Reference Number
-        /// Academy Name
+        /// Academy Name</param>
+        /// <param name="status">The project status:
+        /// 1. In Progress
+        /// 2. Completed</param>
         /// <returns></returns>
         [HttpGet]
         [Route("/projects")]
-        [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> SearchProjects(string searchTerm, ProjectStatusEnum status)
+        [ProducesResponseType(typeof(SearchProjectsModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchProjects(string searchTerm, ProjectStatusEnum? status)
         {
-            if (status == 0)
-            {
-                return BadRequest("Invalid Project Status code");
-            }
+            Models.D365.Enums.ProjectStatusEnum projectStatus = default;
 
-            if (!MappingDictionaries.ProjecStatusEnumMap.TryGetValue(status, out var internalStatus))
+            if (status.HasValue)
             {
-                return BadRequest("Project Status not recognised");
+                if (MappingDictionaries.ProjecStatusEnumMap.TryGetValue(status.Value, out var internalStatus))
+                {
+                    projectStatus = internalStatus;
+                }
+                else
+                {
+                    //If project status cannot be mapped to D365 Project Status, return an error
+                    return BadRequest("Project Status not recognised");
+                }
             }
                 
-            var projSearchResult = await _projectsRepository.GetAll(searchTerm, internalStatus);
+            var projSearchResult = await _projectsRepository.SearchProject(searchTerm, projectStatus);
 
-            return null;
+            if (!projSearchResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projSearchResult);
+            }
+
+            var externalModels = projSearchResult.Result.Select(r => _searchProjectsMapper.Map(r)).ToList();
+
+            return Ok(externalModels);
         }
 
         /// <summary>
@@ -251,7 +269,7 @@ namespace API.Controllers
 
             var apiBaseUrl = _config["API:Url"];
 
-            return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
+            return Created($"{apiBaseUrl}projects/{externalModel.ProjectId}", externalModel);
         }   
     }
 }
