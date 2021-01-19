@@ -57,7 +57,7 @@ namespace API.Repositories
                 var castedResults = JsonConvert.DeserializeObject<ResultSet<SearchProjectsD365Model>>(results);
 
                 var distinctResults = castedResults.Items.Distinct().ToList();
-                var totalPages = (distinctResults.Count / (int)pageSize) + 1;
+                var totalPages = distinctResults.Count == 0 ? 0 : (distinctResults.Count / (int)pageSize) + 1;
                 var pageResults = distinctResults
                                  .Skip(((int)pageNumber - 1) * (int)pageSize)
                                  .Take((int)pageSize)
