@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace API.Tests
+namespace API.Tests.ODataHelpersTests
 {
     public class ODataModelHelperTests
     {

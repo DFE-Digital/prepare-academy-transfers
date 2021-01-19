@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace API.Tests
+namespace API.Tests.ODataHelpersTests
 {
     public class ODataUrlBuilderTests
     {
@@ -66,9 +66,9 @@ namespace API.Tests
         public void BuildFilterUrl_ThreeFiltersReturnsCorrectUrl()
         {
             var route = "accounts";
-            var filters = new List<string> 
-            { 
-                "(someProp eq 1)", 
+            var filters = new List<string>
+            {
+                "(someProp eq 1)",
                 "and (anotherProp eq 2)",
                 "and (yetanotherprop eq 3)"
             };

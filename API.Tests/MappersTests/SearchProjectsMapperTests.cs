@@ -1,8 +1,6 @@
 ﻿using API.Mapping;
 using API.Models.Downstream.D365;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace API.Tests.MapperTests
