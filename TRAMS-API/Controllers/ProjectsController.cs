@@ -87,9 +87,9 @@ namespace API.Controllers
                                                         uint? pageSize,
                                                         uint? pageNumber)
         {
-            var ascendingOption = ascending.HasValue ? ascending.Value : true;
-            var pageSizeOption = pageSize.HasValue ? pageSize.Value : 10;
-            var pageNumberOption = pageNumber.HasValue ? pageNumber.Value : 1;
+            var ascendingOption = ascending ?? true;
+            var pageSizeOption = pageSize ?? 10;
+            var pageNumberOption = pageNumber ?? 1;
 
             if (pageSizeOption == 0)
             {
