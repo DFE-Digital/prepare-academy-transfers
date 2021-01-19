@@ -6,7 +6,6 @@ using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -36,9 +35,13 @@ namespace API.Repositories
             _logger = logger;
         }
 
-        public async Task<RepositoryResult<List<SearchProjectsD365Model>>> SearchProject(string search, ProjectStatusEnum status)
+        public async Task<RepositoryResult<SearchProjectsD365PageModel>> SearchProject(string search,
+                                                                                       ProjectStatusEnum status,
+                                                                                       bool isAscending = true,
+                                                                                       uint pageSize = 10,
+                                                                                       uint pageNumber = 1)
         {
-            var fetchXml = BuildFetchXMLQuery(search, status);
+            var fetchXml = BuildFetchXMLQuery(search, status, isAscending);
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";
@@ -53,13 +56,27 @@ namespace API.Repositories
                 var results = await response.Content.ReadAsStringAsync();
                 var castedResults = JsonConvert.DeserializeObject<ResultSet<SearchProjectsD365Model>>(results);
 
-                return new RepositoryResult<List<SearchProjectsD365Model>> { Result = castedResults.Items.Distinct().ToList() };
+                var distinctResults = castedResults.Items.Distinct().ToList();
+                var totalPages = (distinctResults.Count / (int)pageSize) + 1;
+                var pageResults = distinctResults
+                                 .Skip(((int)pageNumber - 1) * (int)pageSize)
+                                 .Take((int)pageSize)
+                                 .ToList();
+
+                var pageResult = new SearchProjectsD365PageModel
+                {
+                    CurrentPage = (int)pageNumber,
+                    TotalPages = totalPages,
+                    Projects = pageResults
+                };
+
+                return new RepositoryResult<SearchProjectsD365PageModel> { Result = pageResult };
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
             _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
-            return new RepositoryResult<List<SearchProjectsD365Model>>
+            return new RepositoryResult<SearchProjectsD365PageModel>
             {
                 Error = new RepositoryResultBase.RepositoryError
                 {
@@ -179,8 +196,9 @@ namespace API.Repositories
             };
         }
 
-        private static string BuildFetchXMLQuery(string search, ProjectStatusEnum status)
+        private static string BuildFetchXMLQuery(string search, ProjectStatusEnum status, bool isAscending)
         {
+            var orderDirection = isAscending ? "" : "descending='true'";
             var fetchXml = new StringBuilder();
 
             fetchXml.AppendLine("<fetch distinct='true' mapping='logical' output-format='xml-platform' version='1.0'>");
@@ -220,7 +238,7 @@ namespace API.Repositories
                 fetchXml.AppendLine("</filter >");
             }
             
-            fetchXml.AppendLine("<order attribute='sip_projectname'/>");
+            fetchXml.AppendLine($"<order attribute='sip_projectname' {orderDirection} />");
 
             fetchXml.AppendLine("</entity>");
             fetchXml.AppendLine("</fetch>");

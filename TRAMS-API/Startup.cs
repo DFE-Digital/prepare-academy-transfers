@@ -132,7 +132,10 @@ namespace TRAMS_API
                                   GetProjectsResponseMapper>();
 
             services.AddTransient<IMapper<SearchProjectsD365Model, SearchProjectsModel>,
-                                  SearchProjectsResponseMapper>();
+                                  SearchProjectsItemMapper>();
+
+            services.AddTransient<IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
+                                  SearchProjectsPageResponseMapper>();
         }
 
         private static void ConfigureHelpers(IServiceCollection services)

@@ -9,11 +9,11 @@ namespace API.Tests.MapperTests
 {
     public class SearchProjectsMapperTests
     {
-        private readonly SearchProjectsResponseMapper _mapper;
+        private readonly SearchProjectsItemMapper _mapper;
 
         public SearchProjectsMapperTests()
         {
-            _mapper = new SearchProjectsResponseMapper();
+            _mapper = new SearchProjectsItemMapper();
         }
 
         [Fact]

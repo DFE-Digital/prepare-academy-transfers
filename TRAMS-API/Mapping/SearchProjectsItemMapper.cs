@@ -1,18 +1,21 @@
 ﻿using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Mapping
 {
-    public class SearchProjectsResponseMapper : IMapper<SearchProjectsD365Model, SearchProjectsModel>
+    public class SearchProjectsItemMapper : IMapper<SearchProjectsD365Model, SearchProjectsModel>
     {
         public SearchProjectsModel Map(SearchProjectsD365Model input)
         {
             if (input == null)
             {
                 return null;
-            }
+            };
 
             return new SearchProjectsModel
             {

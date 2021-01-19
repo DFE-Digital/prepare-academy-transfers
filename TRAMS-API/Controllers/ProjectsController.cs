@@ -37,7 +37,7 @@ namespace API.Controllers
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
-        private readonly IMapper<SearchProjectsD365Model, SearchProjectsModel> _searchProjectsMapper;
+        private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
         private readonly IConfiguration _config;
 
@@ -47,7 +47,7 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
-                                  IMapper<SearchProjectsD365Model, SearchProjectsModel> searchProjectsMapper,
+                                  IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler,
                                   IConfiguration config)
         {
@@ -65,7 +65,7 @@ namespace API.Controllers
         /// <summary>
         /// Search for Academy Transfer Projects.
         /// </summary>
-        /// <param name="searchTerm">he search term. The searched fields will be: 
+        /// <param name="searchTerm">The search term. The searched fields will be: 
         /// Project Name
         /// Outgoing Trust Name, 
         /// Outgoing Trust Companies House Number
@@ -73,13 +73,34 @@ namespace API.Controllers
         /// <param name="status">The project status:
         /// 1. In Progress
         /// 2. Completed</param>
+        /// <param name="ascending">Determines if the results should be returned in ascending order. Default value is: true</param>
+        /// <param name="pageSize">The number of items to be returned per page. Must be larger than zero. Default value is: 10</param>
+        /// <param name="pageNumber">The page number to be returned. Must be larger than zero. Default value is: 1</param>
         /// <returns></returns>
         [HttpGet]
         [Route("/projects")]
-        [ProducesResponseType(typeof(SearchProjectsModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SearchProjectsPageModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchProjects(string searchTerm, ProjectStatusEnum? status)
+        public async Task<IActionResult> SearchProjects(string searchTerm, 
+                                                        ProjectStatusEnum? status,
+                                                        bool? ascending,
+                                                        uint? pageSize,
+                                                        uint? pageNumber)
         {
+            var ascendingOption = ascending.HasValue ? ascending.Value : true;
+            var pageSizeOption = pageSize.HasValue ? pageSize.Value : 10;
+            var pageNumberOption = pageNumber.HasValue ? pageNumber.Value : 1;
+
+            if (pageSizeOption == 0)
+            {
+                return BadRequest("Page size cannot be zero");
+            }
+
+            if (pageNumberOption == 0)
+            {
+                return BadRequest("Page number cannot be 0");
+            }
+
             Models.D365.Enums.ProjectStatusEnum projectStatus = default;
 
             if (status.HasValue)
@@ -95,14 +116,18 @@ namespace API.Controllers
                 }
             }
                 
-            var projSearchResult = await _projectsRepository.SearchProject(searchTerm, projectStatus);
+            var projSearchResult = await _projectsRepository.SearchProject(searchTerm, 
+                                                                           projectStatus,
+                                                                           ascendingOption,
+                                                                           pageSizeOption,
+                                                                           pageNumberOption);
 
             if (!projSearchResult.IsValid)
             {
                 return _repositoryErrorHandler.LogAndCreateResponse(projSearchResult);
             }
 
-            var externalModels = projSearchResult.Result.Select(r => _searchProjectsMapper.Map(r)).ToList();
+            var externalModels = _searchProjectsMapper.Map(projSearchResult.Result);
 
             return Ok(externalModels);
         }
