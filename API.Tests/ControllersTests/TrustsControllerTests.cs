@@ -89,6 +89,99 @@ namespace API.Tests.ControllersTests
             Assert.Equal(499, castedResult.StatusCode);
         }
 
+        [Fact]
+        public async void GetById_NotFound_ReturnsNotFoundResult()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock repository to return a null result (not found)
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                           .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                           {
+                               Result = null
+                           });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetById(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should not be called when repo returns valid result
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+            //Mapper not to be called when repo returns null but valid result
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
+
+            //Final result should be a 404 - Not Found with the correct message
+            Assert.Equal("The trust with the id: 'a16e9020-9123-4420-8055-851d1b672fa9' was not found", castedResult.Value);
+            Assert.Equal(404, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void GetById_TrustFound_Returns200OkResult()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock repository to return a valid and set result
+            var trustsRepoMock = new Mock<ITrustsRepository>(); 
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                           .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                           {
+                               Result = new GetTrustsD365Model
+                               {
+                                   Id = trustId
+                               }
+                           });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+
+            //Set up mapper to return a slim result when called with the expected input
+            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(p => p.Id == trustId)))
+                      .Returns(new GetTrustsModel
+                      {
+                          Id = trustId,
+                          Address = "Some address"
+                      });
+
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetById(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should not be called when repo returns valid result
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+            //Mapper to be called once with the expected input
+            mapperMock.Verify(m => m.Map(It.Is<GetTrustsD365Model>(p => p.Id == trustId)), Times.Once);
+
+            //Final result should be a 200 OK with the result of the mapping operation
+            Assert.Equal(trustId, ((GetTrustsModel)castedResult.Value).Id);
+            Assert.Equal("Some address", ((GetTrustsModel)castedResult.Value).Address);
+            Assert.Equal(200, castedResult.StatusCode);
+        }
+
         #endregion
     }
 }
