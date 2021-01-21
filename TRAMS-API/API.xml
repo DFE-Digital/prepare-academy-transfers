@@ -90,6 +90,11 @@
             Sanitizes strings for use with Fetch XML queries
             </summary>
             <param name="input">The input string</param>
+        <member name="M:API.HttpHelpers.IODataSanitizer.Sanitize(System.String)">
+            <summary>
+            Sanitizes search strings for use in OData filters
+            </summary>
+            <param name="input">The input search string</param>
             <returns></returns>
         </member>
         <member name="M:API.HttpHelpers.ODataUrlBuilder`1.GetPropertyAnnotation(System.String)">

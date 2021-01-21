@@ -35,7 +35,9 @@ namespace API.Tests.RepositoriesTests
             mockUrlBuilder.Setup(m => m.BuildRetrieveOneUrl("accounts", It.IsAny<Guid>()))
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
-            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
+            var mockSanitizer = new Mock<IODataSanitizer>();
+
+            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockSanitizer.Object, mockedLogger.Object);
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -77,7 +79,9 @@ namespace API.Tests.RepositoriesTests
             mockUrlBuilder.Setup(m => m.BuildRetrieveOneUrl("accounts", It.IsAny<Guid>()))
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
-            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
+            var mockSanitizer = new Mock<IODataSanitizer>();
+
+            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockSanitizer.Object, mockedLogger.Object);
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -119,9 +123,9 @@ namespace API.Tests.RepositoriesTests
             mockUrlBuilder.Setup(m => m.BuildRetrieveOneUrl("accounts", It.IsAny<Guid>()))
                           .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
-            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
+            var mockSanitizer = new Mock<IODataSanitizer>();
 
-            
+            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockSanitizer.Object, mockedLogger.Object);
 
             //Execute
             var result = await academiesRepository.GetTrustById(trustId);
@@ -157,7 +161,9 @@ namespace API.Tests.RepositoriesTests
             mockUrlBuilder.Setup(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()))
                           .Returns("buildFilterUrl");
 
-            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockedLogger.Object);
+            var mockSanitizer = new Mock<IODataSanitizer>();
+
+            var academiesRepository = new TrustsRepository(mockClient.Object, mockUrlBuilder.Object, mockSanitizer.Object, mockedLogger.Object);
 
             //Execute
             var result = await academiesRepository.SearchTrusts(query);

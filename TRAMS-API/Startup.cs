@@ -148,6 +148,8 @@ namespace TRAMS_API
             services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
           
             services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
+
+            services.AddTransient<IODataSanitizer, ODataSanitizer>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
