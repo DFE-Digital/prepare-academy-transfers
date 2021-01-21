@@ -23,15 +23,18 @@ namespace API.Repositories
         private readonly IOdataUrlBuilder<GetProjectsD365Model> _urlBuilder;
         private readonly ILogger<ProjectsRepository> _logger;
         private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
+        private readonly IFetchXmlSanitizer _fetchXmlSanitizer;
 
         public ProjectsRepository(IAuthenticatedHttpClient client,
                                   IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
                                   IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
+                                  IFetchXmlSanitizer fetchXmlSanitizer,
                                   ILogger<ProjectsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _projectAcademyUrlBuilder = projectAcademyUrlBuilder;
+            _fetchXmlSanitizer = fetchXmlSanitizer;
             _logger = logger;
         }
 
@@ -41,7 +44,9 @@ namespace API.Repositories
                                                                                        uint pageSize = 10,
                                                                                        uint pageNumber = 1)
         {
-            var fetchXml = BuildFetchXMLQuery(search, status, isAscending);
+            var sanitizedSearch = _fetchXmlSanitizer.Sanitize(search);
+                                      
+            var fetchXml = BuildFetchXMLQuery(sanitizedSearch, status, isAscending);
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";

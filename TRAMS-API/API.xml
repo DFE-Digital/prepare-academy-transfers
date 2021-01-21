@@ -85,6 +85,13 @@
             <param name="id">The Guid of the trust in TRAMS</param>
             <returns>A list of <see cref="T:API.Models.Response.GetAcademiesModel"/></returns>
         </member>
+        <member name="M:API.HttpHelpers.IFetchXmlSanitizer.Sanitize(System.String)">
+            <summary>
+            Sanitizes strings for use with Fetch XML queries
+            </summary>
+            <param name="input">The input string</param>
+            <returns></returns>
+        </member>
         <member name="M:API.HttpHelpers.ODataUrlBuilder`1.GetPropertyAnnotation(System.String)">
             <summary>
             Gets the JsonProperty annotation of a certain property without any @metadata extensions

@@ -144,6 +144,8 @@ namespace TRAMS_API
             services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
             
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
+
+            services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
