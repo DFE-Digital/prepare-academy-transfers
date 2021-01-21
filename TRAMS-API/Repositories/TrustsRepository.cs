@@ -16,14 +16,17 @@ namespace API.Repositories
 
         private readonly IOdataUrlBuilder<GetTrustsD365Model> _urlBuilder;
         private readonly IAuthenticatedHttpClient _client;
+        private readonly IODataSanitizer _oDataSanitizer;
         private readonly ILogger<TrustsRepository> _logger;
 
         public TrustsRepository(IAuthenticatedHttpClient client, 
                                 IOdataUrlBuilder<GetTrustsD365Model> urlBuilder,
+                                IODataSanitizer oDataSanitizer,
                                 ILogger<TrustsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
+            _oDataSanitizer = oDataSanitizer;
             _logger = logger;
         }
 
@@ -77,7 +80,8 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<List<GetTrustsD365Model>>> SearchTrusts(string searchQuery)
         {
-            var filters = BuildTrustSearchFilters(searchQuery);
+            var sanitizedQuery = _oDataSanitizer.Sanitize(searchQuery);
+            var filters = BuildTrustSearchFilters(sanitizedQuery);
 
             await _client.AuthenticateAsync();
 

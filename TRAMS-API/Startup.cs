@@ -141,6 +141,8 @@ namespace TRAMS_API
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
 
             services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
+
+            services.AddTransient<IODataSanitizer, ODataSanitizer>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
