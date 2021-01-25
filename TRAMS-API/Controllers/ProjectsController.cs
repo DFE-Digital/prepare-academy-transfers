@@ -1,5 +1,6 @@
 ﻿using API.Mapping;
 using API.Models.Downstream.D365;
+using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;

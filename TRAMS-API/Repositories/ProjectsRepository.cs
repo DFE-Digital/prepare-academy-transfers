@@ -1,4 +1,5 @@
 ﻿using API.HttpHelpers;
+using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
 
 using API.Repositories.Interfaces;
@@ -49,8 +50,6 @@ namespace API.Repositories
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";
-
-            await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
             var responseContent = await response.Content?.ReadAsStringAsync();

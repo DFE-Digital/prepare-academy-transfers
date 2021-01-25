@@ -66,8 +66,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<List<GetAcademiesD365Model>>> SearchAcademies(string name)
         {
-            await _client.AuthenticateAsync();
-
             var academyNameField = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.AcademyName));
 
             var nameSearchFilter = $"{_urlBuilder.BuildOrSearchQuery(name, new List<string> { academyNameField })} and";

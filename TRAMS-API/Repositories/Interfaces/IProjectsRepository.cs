@@ -1,4 +1,5 @@
-﻿using API.Models.Downstream.D365;
+﻿using API.Models.D365.Enums;
+using API.Models.Downstream.D365;
 using System;
 using System.Threading.Tasks;
 
