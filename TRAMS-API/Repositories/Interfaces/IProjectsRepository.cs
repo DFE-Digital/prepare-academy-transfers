@@ -15,5 +15,7 @@ namespace API.Repositories.Interfaces
         public Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project);
 
         public Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id);
+
+        public Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id);
     }
 }

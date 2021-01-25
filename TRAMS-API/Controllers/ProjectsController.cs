@@ -221,6 +221,37 @@ namespace API.Controllers
             var apiBaseUrl = _config["API:Url"];
 
             return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
-        }   
+        }
+        
+        [HttpPatch]
+        [Route("/projects/{projectId}/academies/{projectAcademyId}")]
+        public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PostProjectsAcademiesModel model)
+        {
+            var getProjectResult = await _projectsRepository.GetProjectById(projectId);
+
+            if (!getProjectResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(getProjectResult);
+            }
+
+            if (getProjectResult.Result == null)
+            {
+                return NotFound($"Project with id '{projectId}' not found");
+            }
+
+            var getProjectRepositoryResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
+
+            if (!getProjectRepositoryResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(getProjectRepositoryResult);
+            }
+
+            if (getProjectRepositoryResult.Result == null)
+            {
+                return NotFound($"Project Academy with id '{projectAcademyId}' not found");
+            }
+
+            return null;
+        }
     }
 }

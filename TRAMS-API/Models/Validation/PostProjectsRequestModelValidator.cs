@@ -21,7 +21,7 @@ namespace API.Models.Validation
             RuleForEach(p => p.ProjectTrusts).SetValidator(new PostProjectsTrustsModelValidator());
         }
 
-        internal class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
+        public class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
         {
             public PostProjectsAcademiesModelValidator()
             {

@@ -162,5 +162,40 @@ namespace API.Repositories
                 }
             };
         }
+
+        public async Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id)
+        {
+            await _client.AuthenticateAsync();
+
+            var url = _projectAcademyUrlBuilder.BuildRetrieveOneUrl("sip_academytransfersprojectacademies", id);
+
+            var response = await _client.GetAsync(url);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (responseStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<Guid?> { Result = null };
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var castedResults = JsonConvert.DeserializeObject<AcademyTransfersProjectAcademy>(responseContent);
+
+                return new RepositoryResult<Guid?> { Result = null };
+            }
+
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<Guid?>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
+        }
     }
 }
