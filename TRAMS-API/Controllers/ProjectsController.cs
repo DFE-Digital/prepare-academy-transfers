@@ -2,6 +2,7 @@
 using API.Models.D365;
 using API.Models.Downstream.D365;
 using API.Models.Request;
+using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -25,8 +26,8 @@ namespace API.Controllers
     [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(string), StatusCodes.Status429TooManyRequests)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status502BadGateway)]
     public class ProjectsController : Controller
     {
         private readonly IProjectsRepository _projectsRepository;
@@ -36,6 +37,7 @@ namespace API.Controllers
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
+        private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
         private readonly IConfiguration _config;
 
@@ -45,6 +47,7 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
+                                  IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler,
                                   IConfiguration config)
         {
@@ -54,8 +57,79 @@ namespace API.Controllers
             _postProjectsMapper = postProjectsMapper;
             _getProjectsMapper = getProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
+            _searchProjectsMapper = searchProjectsMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
             _config = config;
+        }
+
+        /// <summary>
+        /// Search for Academy Transfer Projects.
+        /// </summary>
+        /// <param name="searchTerm">The search term. The searched fields will be: 
+        /// Project Name
+        /// Outgoing Trust Name, 
+        /// Outgoing Trust Companies House Number
+        /// Academy Name</param>
+        /// <param name="status">The project status:
+        /// 1. In Progress
+        /// 2. Completed</param>
+        /// <param name="ascending">Determines if the results should be returned in ascending order. Default value is: true</param>
+        /// <param name="pageSize">The number of items to be returned per page. Must be larger than zero. Default value is: 10</param>
+        /// <param name="pageNumber">The page number to be returned. Must be larger than zero. Default value is: 1</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/projects")]
+        [ProducesResponseType(typeof(SearchProjectsPageModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchProjects(string searchTerm, 
+                                                        ProjectStatusEnum? status,
+                                                        bool? ascending,
+                                                        uint? pageSize,
+                                                        uint? pageNumber)
+        {
+            var ascendingOption = ascending ?? true;
+            var pageSizeOption = pageSize ?? 10;
+            var pageNumberOption = pageNumber ?? 1;
+
+            if (pageSizeOption == 0)
+            {
+                return BadRequest("Page size cannot be zero");
+            }
+
+            if (pageNumberOption == 0)
+            {
+                return BadRequest("Page number cannot be 0");
+            }
+
+            Models.D365.Enums.ProjectStatusEnum projectStatus = default;
+
+            if (status.HasValue)
+            {
+                if (MappingDictionaries.ProjecStatusEnumMap.TryGetValue(status.Value, out var internalStatus))
+                {
+                    projectStatus = internalStatus;
+                }
+                else
+                {
+                    //If project status cannot be mapped to D365 Project Status, return an error
+                    return BadRequest("Project Status not recognised");
+                }
+            }
+                
+            var projSearchResult = await _projectsRepository.SearchProject(searchTerm, 
+                                                                           projectStatus,
+                                                                           ascendingOption,
+                                                                           pageSizeOption,
+                                                                           pageNumberOption);
+
+            if (!projSearchResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projSearchResult);
+            }
+
+            var externalModels = _searchProjectsMapper.Map(projSearchResult.Result);
+
+            return Ok(externalModels);
         }
 
         /// <summary>
@@ -220,7 +294,7 @@ namespace API.Controllers
 
             var apiBaseUrl = _config["API:Url"];
 
-            return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
+            return Created($"{apiBaseUrl}projects/{externalModel.ProjectId}", externalModel);
         }   
     }
 }
