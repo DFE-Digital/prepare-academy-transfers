@@ -136,7 +136,12 @@ namespace TRAMS_API
 
             services.AddTransient<IMapper<GetProjectsD365Model, GetProjectsResponseModel>,
                                   GetProjectsResponseMapper>();
-            
+
+            services.AddTransient<IMapper<SearchProjectsD365Model, SearchProjectsModel>,
+                                  SearchProjectsItemMapper>();
+
+            services.AddTransient<IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
+                                  SearchProjectsPageResponseMapper>();
         }
 
         private static void ConfigureHelpers(IServiceCollection services)
@@ -146,6 +151,8 @@ namespace TRAMS_API
             
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
 
+            services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
+          
             services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
 
             services.AddTransient<IODataSanitizer, ODataSanitizer>();

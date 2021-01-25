@@ -20,6 +20,23 @@
             API controller for retrieving Academy Transfers projects from TRAMS
             </summary>
         </member>
+        <member name="M:API.Controllers.ProjectsController.SearchProjects(System.String,System.Nullable{API.Models.Upstream.Enums.ProjectStatusEnum},System.Nullable{System.Boolean},System.Nullable{System.UInt32},System.Nullable{System.UInt32})">
+            <summary>
+            Search for Academy Transfer Projects.
+            </summary>
+            <param name="searchTerm">The search term. The searched fields will be: 
+            Project Name
+            Outgoing Trust Name, 
+            Outgoing Trust Companies House Number
+            Academy Name</param>
+            <param name="status">The project status:
+            1. In Progress
+            2. Completed</param>
+            <param name="ascending">Determines if the results should be returned in ascending order. Default value is: true</param>
+            <param name="pageSize">The number of items to be returned per page. Must be larger than zero. Default value is: 10</param>
+            <param name="pageNumber">The page number to be returned. Must be larger than zero. Default value is: 1</param>
+            <returns></returns>
+        </member>
         <member name="M:API.Controllers.ProjectsController.GetProjectById(System.Guid)">
             <summary>
             Gets an Academy Transfers project by its ID
@@ -76,6 +93,13 @@
             </summary>
             <param name="id">The Guid of the trust in TRAMS</param>
             <returns>A list of <see cref="T:API.Models.Upstream.Response.GetAcademiesModel"/></returns>
+        </member>
+        <member name="M:API.HttpHelpers.IFetchXmlSanitizer.Sanitize(System.String)">
+            <summary>
+            Sanitizes strings for use with Fetch XML queries
+            </summary>
+            <param name="input">The input string</param>
+            <returns></returns>
         </member>
         <member name="M:API.HttpHelpers.IODataSanitizer.Sanitize(System.String)">
             <summary>

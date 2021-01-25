@@ -5,8 +5,8 @@ using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -22,33 +22,72 @@ namespace API.Repositories
         private readonly IOdataUrlBuilder<GetProjectsD365Model> _urlBuilder;
         private readonly ILogger<ProjectsRepository> _logger;
         private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
+        private readonly IFetchXmlSanitizer _fetchXmlSanitizer;
 
         public ProjectsRepository(IAuthenticatedHttpClient client,
                                   IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
                                   IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
+                                  IFetchXmlSanitizer fetchXmlSanitizer,
                                   ILogger<ProjectsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _projectAcademyUrlBuilder = projectAcademyUrlBuilder;
+            _fetchXmlSanitizer = fetchXmlSanitizer;
             _logger = logger;
         }
 
-        public async Task<List<GetProjectsD365Model>> GetAll()
+        public async Task<RepositoryResult<SearchProjectsD365PageModel>> SearchProject(string search,
+                                                                                       ProjectStatusEnum status,
+                                                                                       bool isAscending = true,
+                                                                                       uint pageSize = 10,
+                                                                                       uint pageNumber = 1)
         {
-            var url = _urlBuilder.BuildFilterUrl(_route, null);
+            var sanitizedSearch = _fetchXmlSanitizer.Sanitize(search);
+                                      
+            var fetchXml = BuildFetchXMLQuery(sanitizedSearch, status, isAscending);
+            var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
+
+            var url = $"{_route}?fetchXml={encodedFetchXml}";
+
+            await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
-
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
             if (response.IsSuccessStatusCode)
             {
                 var results = await response.Content.ReadAsStringAsync();
-                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetProjectsD365Model>>(results);
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<SearchProjectsD365Model>>(results);
 
-                return castedResults.Items;
+                var distinctResults = castedResults.Items.Distinct().ToList();
+                var totalPages = distinctResults.Count == 0 ? 0 : (distinctResults.Count / (int)pageSize) + 1;
+                var pageResults = distinctResults
+                                 .Skip(((int)pageNumber - 1) * (int)pageSize)
+                                 .Take((int)pageSize)
+                                 .ToList();
+
+                var pageResult = new SearchProjectsD365PageModel
+                {
+                    CurrentPage = (int)pageNumber,
+                    TotalPages = totalPages,
+                    Projects = pageResults
+                };
+
+                return new RepositoryResult<SearchProjectsD365PageModel> { Result = pageResult };
             }
 
-            return new List<GetProjectsD365Model>();
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<SearchProjectsD365PageModel>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
         }
 
         public async Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id)
@@ -191,6 +230,55 @@ namespace API.Repositories
                     ErrorMessage = responseContent
                 }
             };
+        }
+
+        private static string BuildFetchXMLQuery(string search, ProjectStatusEnum status, bool isAscending)
+        {
+            var orderDirection = isAscending ? "" : "descending='true'";
+            var fetchXml = new StringBuilder();
+
+            fetchXml.AppendLine("<fetch distinct='true' mapping='logical' output-format='xml-platform' version='1.0'>");
+            fetchXml.AppendLine("<entity name='sip_academytransfersproject'>");
+
+            fetchXml.AppendLine("<attribute name='sip_academytransfersprojectid'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectname'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectinitiatorfullname'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectinitiatoruniqueid'/>");
+            fetchXml.AppendLine("<attribute name='sip_projectstatus'/>");
+
+            fetchXml.AppendLine("   <link-entity name='sip_academytransfersprojectacademy' from='sip_atprojectid' to='sip_academytransfersprojectid' link-type='outer' alias='projectAcademy'>");
+            fetchXml.AppendLine("   <attribute name='sip_academytransfersprojectacademyid'/>");
+            fetchXml.AppendLine("       <link-entity name='account' from='accountid' to='sip_academyid' link-type='outer' alias='academy'>");
+            fetchXml.AppendLine("       <attribute name='name'/> ");
+            fetchXml.AppendLine("           <link-entity name='account' from='accountid' to='parentaccountid' link-type='outer' alias='academyTrust'>");
+            fetchXml.AppendLine("               <attribute name='name'/> ");
+            fetchXml.AppendLine("               <attribute name='sip_companieshousenumber'/> ");
+            fetchXml.AppendLine("           </link-entity>");
+            fetchXml.AppendLine("       </link-entity>");
+            fetchXml.AppendLine("   </link-entity>");
+
+            if (status != default)
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectstatus' operator='eq' value='{(int)status}' />");
+                fetchXml.AppendLine("</filter >");
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                fetchXml.AppendLine("<filter type='or'>");
+                fetchXml.AppendLine($"   <condition entityname='academy' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'name' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition entityname='academyTrust' attribute = 'sip_companieshousenumber' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine($"   <condition attribute = 'sip_projectname' operator='like' value='%{search}%' />");
+                fetchXml.AppendLine("</filter >");
+            }
+            
+            fetchXml.AppendLine($"<order attribute='sip_projectname' {orderDirection} />");
+
+            fetchXml.AppendLine("</entity>");
+            fetchXml.AppendLine("</fetch>");
+            return fetchXml.ToString();
         }
     }
 }

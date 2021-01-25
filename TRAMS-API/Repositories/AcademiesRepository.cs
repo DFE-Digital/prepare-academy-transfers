@@ -64,6 +64,41 @@ namespace API.Repositories
             };
         }
 
+        public async Task<RepositoryResult<List<GetAcademiesD365Model>>> SearchAcademies(string name)
+        {
+            await _client.AuthenticateAsync();
+
+            var academyNameField = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.AcademyName));
+
+            var nameSearchFilter = $"{_urlBuilder.BuildOrSearchQuery(name, new List<string> { academyNameField })} and";
+            var parentIdSetFilter = $"({_urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId))} ne null)";
+
+            var url = _urlBuilder.BuildFilterUrl(_route, new List<string> { nameSearchFilter, parentIdSetFilter });
+
+            var response = await _client.GetAsync(url);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(responseContent);
+
+                return new RepositoryResult<List<GetAcademiesD365Model>> { Result = castedResults.Items };
+            }
+
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<List<GetAcademiesD365Model>>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
+        }
+
         public async Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id)
         {
             var _parentTrustIdFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
