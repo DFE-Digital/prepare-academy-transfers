@@ -1,7 +1,6 @@
 ﻿using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,11 +10,14 @@ namespace API.Mapping
     {
         private readonly IMapper<AcademyTransfersProjectAcademy,
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _academyMapper;
+        private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
         public GetProjectsResponseMapper(IMapper<AcademyTransfersProjectAcademy,
-                                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> academyMapper)
+                                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> academyMapper,
+                                         IEstablishmentNameFormatter establishmentNameFormatter)
         {
             _academyMapper = academyMapper;
+            _establishmentNameFormatter = establishmentNameFormatter;
         }
 
         public GetProjectsResponseModel Map(GetProjectsD365Model input)
@@ -60,7 +62,7 @@ namespace API.Mapping
                                          {
                                              ProjectTrustId = t.ProjectTrustId,
                                              TrustId = t.TrustId,
-                                             TrustName = t.TrustName
+                                             TrustName = _establishmentNameFormatter.Format(t.TrustName)
                                          })
                                  .ToList();
         }

@@ -11,6 +11,13 @@ namespace API.Mapping
     public class GetProjectAcademiesResponseMapper : IMapper<AcademyTransfersProjectAcademy,
                                                              Models.Upstream.Response.GetProjectsAcademyResponseModel>
     {
+        private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
+
+        public GetProjectAcademiesResponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        {
+            _establishmentNameFormatter = establishmentNameFormatter;
+        }
+
         public GetProjectsAcademyResponseModel Map(AcademyTransfersProjectAcademy academy)
         {
             if (academy == null)
@@ -22,7 +29,7 @@ namespace API.Mapping
             {
                 ProjectAcademyId = academy.AcademyTransfersProjectAcademyId,
                 AcademyId = academy.AcademyId,
-                AcademyName = academy.AcademyName,
+                AcademyName = _establishmentNameFormatter.Format(academy.AcademyName),
                 ProjectId = academy.ProjectId,
                 EsfaInterventionReasons = ExtractEsfaInterventionReasons(academy),
                 EsfaInterventionReasonsExplained = academy.EsfaInterventionReasonsExplained,
@@ -34,7 +41,7 @@ namespace API.Mapping
                                                                      {
                                                                          ProjectTrustId = t.ProjectAcademyTrustId,
                                                                          TrustId = t.TrustId,
-                                                                         TrustName = t.TrustName
+                                                                         TrustName = _establishmentNameFormatter.Format(t.TrustName)
                                                                      })
                                                                .ToList()
             };
