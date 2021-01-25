@@ -23,7 +23,7 @@ namespace API.Models.Downstream.D365
 
         public override bool Equals(object obj)
         {
-            return ProjectId == ((SearchProjectsD365Model)obj).ProjectId;
+            return ProjectId == (obj as SearchProjectsD365Model)?.ProjectId;
         }
 
         public override int GetHashCode()
