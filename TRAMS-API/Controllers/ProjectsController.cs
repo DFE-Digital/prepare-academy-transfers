@@ -225,8 +225,18 @@ namespace API.Controllers
             return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
         }
         
+        /// <summary>
+        /// Endpoint for updating a Project Academy entity
+        /// </summary>
+        /// <param name="projectId">THe Academy Transfers Project where the Project Academy entity is nested</param>
+        /// <param name="projectAcademyId">The ID of the Project Academy entity. Note: this is the id of the join-table entity, not the id of the academy</param>
+        /// <param name="model">The updated Project Academy entity</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("/projects/{projectId}/academies/{projectAcademyId}")]
+        [ProducesResponseType(typeof(GetProjectsAcademyResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PutProjectAcademiesRequestModel model)
         {
             //Verify that the Id of the ProjectAcademy entity is correct before editing
@@ -240,6 +250,12 @@ namespace API.Controllers
             if (projectAcademyRepoResult.Result == null)
             {
                 return NotFound($"Project Academy with id '{projectAcademyId}' not found");
+            }
+
+            //If the ProjectAcademy doesn't belong to the specified project, return a 422
+            if (projectAcademyRepoResult.Result.ProjectId != projectId)
+            {
+                return UnprocessableEntity($"Project Academy with id '{projectAcademyId}' not found within project with id '{projectId}'");
             }
 
             //Verify that the referenced academy for the ProjectAcademy entity is correct

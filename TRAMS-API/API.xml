@@ -42,6 +42,15 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:API.Controllers.ProjectsController.UpdateProjectAcademy(System.Guid,System.Guid,API.Models.Upstream.Request.PutProjectAcademiesRequestModel)">
+            <summary>
+            Endpoint for updating a Project Academy entity
+            </summary>
+            <param name="projectId">THe Academy Transfers Project where the Project Academy entity is nested</param>
+            <param name="projectAcademyId">The ID of the Project Academy entity. Note: this is the id of the join-table entity, not the id of the academy</param>
+            <param name="model">The updated Project Academy entity</param>
+            <returns></returns>
+        </member>
         <member name="T:API.Controllers.TrustsController">
             <summary>
             API controller for retrieving information about a trust from TRAMS
