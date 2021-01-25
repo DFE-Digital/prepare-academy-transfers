@@ -65,11 +65,7 @@ namespace API.Controllers
         /// <summary>
         /// Search for Academy Transfer Projects.
         /// </summary>
-        /// <param name="searchTerm">The search term. The searched fields will be: 
-        /// Project Name
-        /// Outgoing Trust Name, 
-        /// Outgoing Trust Companies House Number
-        /// Academy Name</param>
+        /// <param name="searchTerm">The search term. The searched fields will be: Project Name, Outgoing Trust Name, Outgoing Trust Companies House Number, Academy Name</param>
         /// <param name="status">The project status:
         /// 1. In Progress
         /// 2. Completed</param>
