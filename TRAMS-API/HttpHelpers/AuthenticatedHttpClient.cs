@@ -45,7 +45,22 @@ namespace API.HttpHelpers
 
         public async Task<HttpResponseMessage> PostAsync(string url, ByteArrayContent content)
         {
+            await AuthenticateAsync();
             var result = await base.PostAsync(url, content);
+            return result;
+        }
+
+        public new async Task<HttpResponseMessage> GetAsync(string url)
+        {
+            await AuthenticateAsync();
+            var result = await base.GetAsync(url);
+            return result;
+        }
+
+        public new async Task<HttpResponseMessage> PatchAsync(string url, HttpContent content)
+        {
+            await AuthenticateAsync();
+            var result = await base.PatchAsync(url, content);
             return result;
         }
     }

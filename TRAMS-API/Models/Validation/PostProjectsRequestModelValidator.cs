@@ -1,4 +1,4 @@
-﻿using API.Models.Request;
+﻿using API.Models.Upstream.Request;
 using FluentValidation;
 using System.Linq;
 

@@ -1,4 +1,4 @@
-﻿using API.Models.D365;
+﻿using API.Models.Downstream.D365;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

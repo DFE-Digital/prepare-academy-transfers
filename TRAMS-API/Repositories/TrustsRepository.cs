@@ -1,6 +1,6 @@
 ﻿using API.HttpHelpers;
-using API.Models.D365;
-using API.Models.Response;
+using API.Models.Downstream.D365;
+
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -32,8 +32,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<GetTrustsD365Model>> GetTrustById(Guid id)
         {
-            await _client.AuthenticateAsync();
-
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
@@ -82,8 +80,6 @@ namespace API.Repositories
         {
             var sanitizedQuery = _oDataSanitizer.Sanitize(searchQuery);
             var filters = BuildTrustSearchFilters(sanitizedQuery);
-
-            await _client.AuthenticateAsync();
 
             var url = _urlBuilder.BuildFilterUrl(_route, filters);
 

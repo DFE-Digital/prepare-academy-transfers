@@ -1,7 +1,6 @@
 ﻿using API.Mapping;
-using API.Models.D365;
 using API.Models.Downstream.D365;
-using API.Models.Request;
+using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -36,6 +35,7 @@ namespace API.Controllers
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
+        private readonly IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> _putProjectAcademiesMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
         private readonly IConfiguration _config;
 
@@ -45,6 +45,7 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
+                                  IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler,
                                   IConfiguration config)
         {
@@ -52,6 +53,7 @@ namespace API.Controllers
             _academiesRepository = academiesRepository;
             _trustsRepository = trustsRepository;
             _postProjectsMapper = postProjectsMapper;
+            _putProjectAcademiesMapper = putProjectAcademiesMapper;
             _getProjectsMapper = getProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
@@ -223,35 +225,58 @@ namespace API.Controllers
             return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
         }
         
-        [HttpPatch]
+        [HttpPut]
         [Route("/projects/{projectId}/academies/{projectAcademyId}")]
-        public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PostProjectsAcademiesModel model)
+        public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PutProjectAcademiesRequestModel model)
         {
-            var getProjectResult = await _projectsRepository.GetProjectById(projectId);
+            //Verify that the Id of the ProjectAcademy entity is correct before editing
+            var projectAcademyRepoResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
 
-            if (!getProjectResult.IsValid)
+            if (!projectAcademyRepoResult.IsValid)
             {
-                return _repositoryErrorHandler.LogAndCreateResponse(getProjectResult);
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
             }
 
-            if (getProjectResult.Result == null)
-            {
-                return NotFound($"Project with id '{projectId}' not found");
-            }
-
-            var getProjectRepositoryResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
-
-            if (!getProjectRepositoryResult.IsValid)
-            {
-                return _repositoryErrorHandler.LogAndCreateResponse(getProjectRepositoryResult);
-            }
-
-            if (getProjectRepositoryResult.Result == null)
+            if (projectAcademyRepoResult.Result == null)
             {
                 return NotFound($"Project Academy with id '{projectAcademyId}' not found");
             }
 
-            return null;
+            //Verify that the referenced academy for the ProjectAcademy entity is correct
+            var referencedAcademyResult = await _academiesRepository.GetAcademyById(model.AcademyId);
+
+            if (!referencedAcademyResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+            }
+
+            if (referencedAcademyResult.Result == null)
+            {
+                return UnprocessableEntity($"No academy found with the id of: {model.AcademyId}");
+            }
+
+            //Map the model to internal representation before updating the entity
+            var internalModel = _putProjectAcademiesMapper.Map(model);
+
+            var updateProjectAcademyResult = await _projectsRepository.UpdateProjectAcademy(projectAcademyId, internalModel);
+
+            if (!updateProjectAcademyResult.IsValid || !updateProjectAcademyResult.Result.HasValue)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+            }
+
+            //Once the entity has been modified, obtain the full entity from D365
+            var retrievedFullProjectAcademy = await _projectsRepository.GetProjectAcademyById(updateProjectAcademyResult.Result.Value);
+
+            if (!retrievedFullProjectAcademy.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(retrievedFullProjectAcademy);
+            }
+
+            //Map the ProjectAcademy representation to the external model
+            var externalModel = _getProjectAcademyMapper.Map(retrievedFullProjectAcademy.Result);
+
+            return Ok(externalModel);
         }
     }
 }

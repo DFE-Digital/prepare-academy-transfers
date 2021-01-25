@@ -1,5 +1,4 @@
-﻿using API.Models.D365;
-using API.Models.D365.Enums;
+﻿using API.Models.D365.Enums;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

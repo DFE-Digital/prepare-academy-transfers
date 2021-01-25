@@ -1,5 +1,5 @@
-﻿using API.Models.Request;
-using API.Models.Upstream.Enums;
+﻿using API.Models.Upstream.Enums;
+using API.Models.Upstream.Request;
 using API.Models.Validation;
 using System;
 using System.Collections.Generic;

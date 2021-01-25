@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Models.D365
+namespace API.Models.Downstream.D365
 {
     public class BaseD365Model
     {

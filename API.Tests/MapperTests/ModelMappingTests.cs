@@ -1,5 +1,7 @@
 ﻿using API.Mapping;
+using API.Mapping.Response;
 using API.Models.D365;
+using API.Models.Downstream.D365;
 using System;
 using Xunit;
 

@@ -1,5 +1,5 @@
 ﻿using API.HttpHelpers;
-using API.Models.D365;
+using API.Models.Downstream.D365;
 using API.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -44,7 +44,6 @@ namespace API.Tests.RepositoriesTests
 
             //Assert
             mockUrlBuilder.Verify(m => m.BuildRetrieveOneUrl("accounts", trustId), Times.Once);
-            mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)"), Times.Once);
 
             Assert.False(result.IsValid);
@@ -88,7 +87,6 @@ namespace API.Tests.RepositoriesTests
 
             //Assert
             mockUrlBuilder.Verify(m => m.BuildRetrieveOneUrl("accounts", trustId), Times.Once);
-            mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)"), Times.Once);
 
             Assert.True(result.IsValid);
@@ -132,7 +130,6 @@ namespace API.Tests.RepositoriesTests
 
             //Assert
             mockUrlBuilder.Verify(m => m.BuildRetrieveOneUrl("accounts", trustId), Times.Once);
-            mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)"), Times.Once);
 
             Assert.True(result.IsValid);
@@ -170,7 +167,6 @@ namespace API.Tests.RepositoriesTests
 
             //Assert
             mockUrlBuilder.Verify(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()), Times.Once);
-            mockClient.Verify(m => m.AuthenticateAsync(), Times.Once);
             mockClient.Verify(m => m.GetAsync("buildFilterUrl"), Times.Once);
 
             Assert.False(result.IsValid);
