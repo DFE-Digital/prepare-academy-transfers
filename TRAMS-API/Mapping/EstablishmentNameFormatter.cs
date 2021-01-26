@@ -15,7 +15,7 @@ namespace API.Mapping
 
             var words = input.Split(' ').Where(w => !string.IsNullOrEmpty(w) && !string.IsNullOrWhiteSpace(w));
 
-            return string.Join(' ', words.Select(w => CapitalizeWord(w)));
+            return words.Select(w => CapitalizeWord(w)).ToDelimitedString(" ");
         }
 
         private string CapitalizeWord(string word)

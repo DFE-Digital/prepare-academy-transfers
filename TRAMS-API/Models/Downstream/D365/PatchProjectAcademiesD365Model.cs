@@ -10,13 +10,13 @@ namespace API.Models.Downstream.D365
         [JsonProperty("sip_esfainterventionreason")]
         public string EsfaInterventionReasons { get; set; }
 
-        [JsonProperty("sip_rddorrscinterventionreasonsexplanation")]
+        [JsonProperty("sip_esfainterventionreasonexplanation")]
         public string EsfaInterventionReasonsExplained { get; set; }
 
         [JsonProperty("sip_rddorrscinterventionreasons")]
         public string RddOrRscInterventionReasons { get; set; }
 
-        [JsonProperty("sip_esfainterventionreasonexplanation")]
+        [JsonProperty("sip_rddorrscinterventionreasonsexplanation")]
         public string RddOrRscInterventionReasonsExplained { get; set; }
     }
 }

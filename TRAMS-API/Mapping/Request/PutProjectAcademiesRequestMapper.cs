@@ -13,13 +13,13 @@ namespace API.Mapping.Request
             {
                 AcademyId = $"/accounts({input.AcademyId})",
                 EsfaInterventionReasons = input.EsfaInterventionReasons != null && input.EsfaInterventionReasons.Any()
-                                          ? string.Join(',', input.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
-                                                                                          .ToList())
+                                          ? input.EsfaInterventionReasons.Select(r => ((int)MappingDictionaries.EsfaInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
+                                                                         .ToDelimitedString()
                                           : null,
                 EsfaInterventionReasonsExplained = input.EsfaInterventionReasonsExplained,
                 RddOrRscInterventionReasons = input.RddOrRscInterventionReasons != null && input.RddOrRscInterventionReasons.Any()
-                                              ? string.Join(',', input.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
-                                                                                                  .ToList())
+                                              ? input.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
+                                                                                 .ToDelimitedString()
                                               : null,
                 RddOrRscInterventionReasonsExplained = input.RddOrRscInterventionReasonsExplained
             };

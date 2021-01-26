@@ -205,17 +205,16 @@ namespace API.Repositories
 
             if (response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
-                    if (response.Headers.TryGetValues("OData-EntityId", out var headerValues))
-                    {
-                        var value = headerValues.First();
-                        var guidString = value.Substring(value.Length - 37, 36);
+                if (response.Headers.TryGetValues("OData-EntityId", out var headerValues))
+                {
+                    var value = headerValues.First();
+                    var guidString = value.Substring(value.Length - 37, 36);
 
-                        if (Guid.TryParse(guidString, out var guidValue))
-                        {
-                            return new RepositoryResult<Guid?> { Result = guidValue };
-                        }
+                    if (Guid.TryParse(guidString, out var guidValue))
+                    {
+                        return new RepositoryResult<Guid?> { Result = guidValue };
                     }
+                }
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed

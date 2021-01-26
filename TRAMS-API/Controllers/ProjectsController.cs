@@ -267,7 +267,7 @@ namespace API.Controllers
             //If errors are detected with entity referencing, return an UnprocessableEntity result
             if (unprocessableEntityErrors.Any())
             {
-                var error = string.Join(". ", unprocessableEntityErrors);
+                var error = unprocessableEntityErrors.ToDelimitedString(". ");
 
                 return UnprocessableEntity(error);
             }
