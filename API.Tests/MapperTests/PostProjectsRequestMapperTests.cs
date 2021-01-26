@@ -1,6 +1,6 @@
-﻿using API.Mapping;
-using API.Models.Request;
+﻿using API.Mapping.Request;
 using API.Models.Upstream.Enums;
+using API.Models.Upstream.Request;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -13,7 +13,7 @@ namespace API.Tests.MapperTests
 
         public PostProjectsRequestMapperTests()
         {
-            _mapper = new PostProjectsRequestMapper();
+            _mapper = new PostProjectsRequestMapper(new PostProjectAcademiesRequestMapper());
         }
 
         [Fact]

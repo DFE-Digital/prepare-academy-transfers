@@ -1,5 +1,4 @@
-﻿using API.Models.D365;
-using API.Models.D365.Enums;
+﻿using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
 using System;
 using System.Threading.Tasks;
@@ -19,5 +18,7 @@ namespace API.Repositories.Interfaces
         public Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project);
 
         public Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id);
+
+        public Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id, PatchProjectAcademiesD365Model model);
     }
 }

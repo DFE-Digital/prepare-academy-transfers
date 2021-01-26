@@ -1,5 +1,5 @@
 ﻿using API.HttpHelpers;
-using API.Models.D365;
+using API.Models.Downstream.D365;
 using API.ODataHelpers;
 using Moq;
 using Newtonsoft.Json;

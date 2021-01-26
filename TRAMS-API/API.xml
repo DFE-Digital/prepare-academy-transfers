@@ -24,11 +24,7 @@
             <summary>
             Search for Academy Transfer Projects.
             </summary>
-            <param name="searchTerm">The search term. The searched fields will be: 
-            Project Name
-            Outgoing Trust Name, 
-            Outgoing Trust Companies House Number
-            Academy Name</param>
+            <param name="searchTerm">The search term. The searched fields will be: Project Name, Outgoing Trust Name, Outgoing Trust Companies House Number, Academy Name</param>
             <param name="status">The project status:
             1. In Progress
             2. Completed</param>
@@ -52,11 +48,20 @@
             <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ProjectsController.InsertTrust(API.Models.Request.PostProjectsRequestModel)">
+        <member name="M:API.Controllers.ProjectsController.InsertTrust(API.Models.Upstream.Request.PostProjectsRequestModel)">
             <summary>
             API endpoint for creating a new Academy Transfers Project
             </summary>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:API.Controllers.ProjectsController.UpdateProjectAcademy(System.Guid,System.Guid,API.Models.Upstream.Request.PutProjectAcademiesRequestModel)">
+            <summary>
+            Endpoint for updating a Project Academy entity
+            </summary>
+            <param name="projectId">THe Academy Transfers Project where the Project Academy entity is nested</param>
+            <param name="projectAcademyId">The ID of the Project Academy entity. Note: this is the id of the join-table entity, not the id of the academy</param>
+            <param name="model">The updated Project Academy entity</param>
             <returns></returns>
         </member>
         <member name="T:API.Controllers.TrustsController">
@@ -69,21 +74,21 @@
             Retrieves information about a trust given its TRAMS Guid
             </summary>
             <param name="id">The Guid of the trust</param>
-            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>A GetTrustsModel object</returns>
+            <returns><see cref="T:API.Models.Upstream.Response.GetTrustsModel"/>A GetTrustsModel object</returns>
         </member>
         <member name="M:API.Controllers.TrustsController.SearchTrusts(System.String)">
             <summary>
             Get all trusts or search via query parameters
             </summary>
             <param name="search">Will search for trusts that contain the search query. The searchable fields are: Name, Companies House Number, and Trust Reference Number</param>
-            <returns><see cref="T:API.Models.Response.GetTrustsModel"/>An array of GetTrustsModel objects</returns>
+            <returns><see cref="T:API.Models.Upstream.Response.GetTrustsModel"/>An array of GetTrustsModel objects</returns>
         </member>
         <member name="M:API.Controllers.TrustsController.GetTrustAcademies(System.Guid)">
             <summary>
             Gets the academies of a given trust. The trust is identified via its TRAMS Guid
             </summary>
             <param name="id">The Guid of the trust in TRAMS</param>
-            <returns>A list of <see cref="T:API.Models.Response.GetAcademiesModel"/></returns>
+            <returns>A list of <see cref="T:API.Models.Upstream.Response.GetAcademiesModel"/></returns>
         </member>
         <member name="M:API.HttpHelpers.IFetchXmlSanitizer.Sanitize(System.String)">
             <summary>
@@ -130,6 +135,199 @@
             2. RSC Minded to Terminate Notice
             3. Ofsted Inadequate Rating
             </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsRequestModel.ProjectInitiatorFullName">
+            <summary>
+            The Project Initiator's Full Name. Mandatory.
+            </summary>
+            <example>Joe Bloggs</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsRequestModel.ProjectInitiatorUid">
+            <summary>
+            The unique id of the project initiator. Mandatory.
+            </summary>
+            <example>joe.blogs@email.com</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsRequestModel.ProjectStatus">
+            <summary>
+            The Project Status Code. Mandatory.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsRequestModel.ProjectAcademies">
+            <summary>
+            An array of outbound academies identified for the project. Optional.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsRequestModel.ProjectTrusts">
+            <summary>
+            An array of inbout trusts identified for the project. Optional.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.AcademyId">
+            <summary>
+            The ID of the academy in TRAMS. Mandatory.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.EsfaInterventionReasons">
+            <summary>
+            An array of ESFA Intervention Reasons. Optional.
+            1 - Governance Concerns
+            2 - Finance Concerns
+            3 - Irregularity Concerns
+            4 - Safeguarding Concerns
+            </summary>
+            <example>[1, 2, 3]</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.EsfaInterventionReasonsExplained">
+            <summary>
+            An explanation of the provided ESFA Intervention Reasons. Optional. Max length: 2000 words
+            </summary>
+            <example>The ESFA Intervention Reasons explained in detail</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.RddOrRscInterventionReasons">
+            <summary>
+            An array of RDD or RSC Intervention Reasons. Optional.
+            1 - Termination Warning Notice
+            2 - RSC Minded To Terminate Notice
+            3 - Ofsted Inadequate Rating
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.RddOrRscInterventionReasonsExplained">
+            <summary>
+            An explanation of the provided RDD or RSC Intervention Reasons. Optional. Max length: 2000 words
+            </summary>
+            <example>The RDD or RSC Intervention Reasons explained in detail </example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesModel.Trusts">
+            <summary>
+            An array of outbound trusts identified for the academy. Optional.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsAcademiesTrustsModel.TrustId">
+            <summary>
+            The Id of the Trust in TRAMS. Mandatory.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PostProjectsTrustsModel.TrustId">
+            <summary>
+            The Id of the Trust In TRAMS. Mandatory.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PutProjectAcademiesRequestModel.AcademyId">
+            <summary>
+            The ID of the academy in TRAMS. Mandatory.
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PutProjectAcademiesRequestModel.EsfaInterventionReasons">
+            <summary>
+            An array of ESFA Intervention Reasons. Optional.
+            1 - Governance Concerns
+            2 - Finance Concerns
+            3 - Irregularity Concerns
+            4 - Safeguarding Concerns
+            </summary>
+            <example>[1, 2, 3]</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PutProjectAcademiesRequestModel.EsfaInterventionReasonsExplained">
+            <summary>
+            An explanation of the provided ESFA Intervention Reasons. Optional. Max length: 2000 words
+            </summary>
+            <example>The ESFA Intervention Reasons explained in detail</example>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PutProjectAcademiesRequestModel.RddOrRscInterventionReasons">
+            <summary>
+            An array of RDD or RSC Intervention Reasons. Optional.
+            1 - Termination Warning Notice
+            2 - RSC Minded To Terminate Notice
+            3 - Ofsted Inadequate Rating
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Request.PutProjectAcademiesRequestModel.RddOrRscInterventionReasonsExplained">
+            <summary>
+            An explanation of the provided RDD or RSC Intervention Reasons. Optional. Max length: 2000 words
+            </summary>
+            <example>The RDD or RSC Intervention Reasons explained in detail </example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.Id">
+            <summary>
+            The GUID of the Academy in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.ParentTrustId">
+            <summary>
+            The GUID of the parent trust in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.AcademyName">
+            <summary>
+            The name of the academy
+            </summary>
+            <example>Imaginary Academy</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.Urn">
+            <summary>
+            The URN of an academy
+            </summary>
+            <example>424242</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.Address">
+            <summary>
+            The multi-line address of an academy
+            </summary>
+            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.EstablishmentType">
+            <summary>
+            The Establishment Type of the academy
+            </summary>
+            <example>Academy Converter</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.LocalAuthorityNumber">
+            <summary>
+            The Local Authority Number of the academy
+            </summary>
+            <example>4242</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.LocalAuthorityName">
+            <summary>
+            The Local Authority Name of the academy
+            </summary>
+            <example>Authority West</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.ReligiousCharacter">
+            <summary>
+            The Religious Character of the academy
+            </summary>
+            <example>Does not apply</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.DioceseName">
+            <summary>
+            The name of the diocese the academy belongs to
+            </summary>
+            <example>Not applicable</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.ReligiousEthos">
+            <summary>
+            The religious ethos of the academy
+            </summary>
+            <example>Does not apply</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.OfstedRating">
+            <summary>
+            The Ofsted Rating of the academy
+            </summary>
+            <example>Good</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.OfstedInspectionDate">
+            <summary>
+            The date of the last Oftsed Insepction in ISO format
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetAcademiesModel.Pfi">
+            <summary>
+            The PFI of the academy
+            </summary>
+            <example>Full PFI</example>
         </member>
         <member name="P:API.Models.Upstream.Response.GetProjectsResponseModel.ProjectId">
             <summary>
@@ -250,6 +448,59 @@
             </summary>
             <example>Imaginary Trust</example>
         </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.Id">
+            <summary>
+            The GUID of the Trust in TRAMS
+            </summary>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.TrustName">
+            <summary>
+            The name of the trust
+            </summary>
+            <example>Sample Multi-Academy Trust</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.CompaniesHouseNumber">
+            <summary>
+            The trust's Companies House Number
+            </summary>
+            <example>07658841</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.TrustReferenceNumber">
+            <summary>
+            The trust's Reference Number
+            </summary>
+            /// <example>TR66684</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.Address">
+            <summary>
+            The multi-line address of the trust
+            </summary>
+            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.EstablishmentType">
+            <summary>
+            The trusts's establishment type
+            </summary>
+            <example>Multi-academy trust</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.EstablishmentTypeGroup">
+            <summary>
+            The trusts's establishment type group
+            </summary>
+            <example>Multi-academy trust</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.Ukprn">
+            <summary>
+            Trusts's UKPRN
+            </summary>
+            <example>10752526</example>
+        </member>
+        <member name="P:API.Models.Upstream.Response.GetTrustsModel.Upin">
+            <summary>
+            The trust's UPIN
+            </summary>
+            <example>142135</example>
+        </member>
         <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectId">
             <summary>
             The Id of the Academy Transfers project
@@ -259,232 +510,24 @@
             <summary>
             The name of the project
             </summary>
+            <example>AT-10000</example>
         </member>
         <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectInitiatorFullName">
             <summary>
             The project initiator's full name
             </summary>
+            <example>Joe Bloggs</example>
         </member>
         <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectInitiatorUid">
             <summary>
             The project initiator's unique id
             </summary>
+            <example>joe.bloggs@email.com</example>
         </member>
         <member name="P:API.Models.Upstream.Response.SearchProjectsModel.ProjectStatus">
             <summary>
             The status of the project
             </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorFullName">
-            <summary>
-            The Project Initiator's Full Name. Mandatory.
-            </summary>
-            <example>Joe Bloggs</example>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectInitiatorUid">
-            <summary>
-            The unique id of the project initiator. Mandatory.
-            </summary>
-            <example>joe.blogs@email.com</example>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectStatus">
-            <summary>
-            The Project Status Code. Mandatory.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectAcademies">
-            <summary>
-            An array of outbound academies identified for the project. Optional.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsRequestModel.ProjectTrusts">
-            <summary>
-            An array of inbout trusts identified for the project. Optional.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.AcademyId">
-            <summary>
-            The ID of the academy in TRAMS. Mandatory.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.EsfaInterventionReasons">
-            <summary>
-            An array of ESFA Intervention Reasons. Optional.
-            1 - Governance Concerns
-            2 - Finance Concerns
-            3 - Irregularity Concerns
-            4 - Safeguarding Concerns
-            </summary>
-            <example>[1, 2, 3]</example>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.EsfaInterventionReasonsExplained">
-            <summary>
-            An explanation of the provided ESFA Intervention Reasons. Optional. Max length: 2000 words
-            </summary>
-            <example>The ESFA Intervention Reasons explained in detail</example>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.RddOrRscInterventionReasons">
-            <summary>
-            An array of RDD or RSC Intervention Reasons. Optional.
-            1 - Termination Warning Notice
-            2 - RSC Minded To Terminate Notice
-            3 - Ofsted Inadequate Rating
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.RddOrRscInterventionReasonsExplained">
-            <summary>
-            An explanation of the provided RDD or RSC Intervention Reasons. Optional. Max length: 2000 words
-            </summary>
-            <example>The RDD or RSC Intervention Reasons explained in detail </example>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesModel.Trusts">
-            <summary>
-            An array of outbound trusts identified for the academy. Optional.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsAcademiesTrustsModel.TrustId">
-            <summary>
-            The Id of the Trust in TRAMS. Mandatory.
-            </summary>
-        </member>
-        <member name="P:API.Models.Request.PostProjectsTrustsModel.TrustId">
-            <summary>
-            The Id of the Trust In TRAMS. Mandatory.
-            </summary>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.Id">
-            <summary>
-            The GUID of the Academy in TRAMS
-            </summary>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.ParentTrustId">
-            <summary>
-            The GUID of the parent trust in TRAMS
-            </summary>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.AcademyName">
-            <summary>
-            The name of the academy
-            </summary>
-            <example>Imaginary Academy</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.Urn">
-            <summary>
-            The URN of an academy
-            </summary>
-            <example>424242</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.Address">
-            <summary>
-            The multi-line address of an academy
-            </summary>
-            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.EstablishmentType">
-            <summary>
-            The Establishment Type of the academy
-            </summary>
-            <example>Academy Converter</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.LocalAuthorityNumber">
-            <summary>
-            The Local Authority Number of the academy
-            </summary>
-            <example>4242</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.LocalAuthorityName">
-            <summary>
-            The Local Authority Name of the academy
-            </summary>
-            <example>Authority West</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.ReligiousCharacter">
-            <summary>
-            The Religious Character of the academy
-            </summary>
-            <example>Does not apply</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.DioceseName">
-            <summary>
-            The name of the diocese the academy belongs to
-            </summary>
-            <example>Not applicable</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.ReligiousEthos">
-            <summary>
-            The religious ethos of the academy
-            </summary>
-            <example>Does not apply</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.OfstedRating">
-            <summary>
-            The Ofsted Rating of the academy
-            </summary>
-            <example>Good</example>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.OfstedInspectionDate">
-            <summary>
-            The date of the last Oftsed Insepction in ISO format
-            </summary>
-        </member>
-        <member name="P:API.Models.Response.GetAcademiesModel.Pfi">
-            <summary>
-            The PFI of the academy
-            </summary>
-            <example>Full PFI</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.Id">
-            <summary>
-            The GUID of the Trust in TRAMS
-            </summary>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.TrustName">
-            <summary>
-            The name of the trust
-            </summary>
-            <example>Sample Multi-Academy Trust</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.CompaniesHouseNumber">
-            <summary>
-            The trust's Companies House Number
-            </summary>
-            <example>07658841</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.TrustReferenceNumber">
-            <summary>
-            The trust's Reference Number
-            </summary>
-            /// <example>TR66684</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.Address">
-            <summary>
-            The multi-line address of the trust
-            </summary>
-            <example>Imaginary Trust \r\n Sample Road \r\n London SW14 5FJ</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.EstablishmentType">
-            <summary>
-            The trusts's establishment type
-            </summary>
-            <example>Multi-academy trust</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.EstablishmentTypeGroup">
-            <summary>
-            The trusts's establishment type group
-            </summary>
-            <example>Multi-academy trust</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.Ukprn">
-            <summary>
-            Trusts's UKPRN
-            </summary>
-            <example>10752526</example>
-        </member>
-        <member name="P:API.Models.Response.GetTrustsModel.Upin">
-            <summary>
-            The trust's UPIN
-            </summary>
-            <example>142135</example>
         </member>
         <member name="M:API.ODataHelpers.D365ModelHelper`1.ExtractModelRepresentation">
             <summary>

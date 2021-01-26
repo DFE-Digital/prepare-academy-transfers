@@ -1,7 +1,7 @@
-﻿using API.Models.D365;
-using API.Models.Response;
+﻿using API.Models.Downstream.D365;
+using API.Models.Upstream.Response;
 
-namespace API.Mapping
+namespace API.Mapping.Response
 {
     public class GetTrustsReponseMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
     {
@@ -14,10 +14,10 @@ namespace API.Mapping
 
         public GetTrustsModel Map(GetTrustsD365Model input)
         {
-            if(input == null)
+            if (input == null)
             {
                 return null;
-            }    
+            }
 
             return new GetTrustsModel
             {

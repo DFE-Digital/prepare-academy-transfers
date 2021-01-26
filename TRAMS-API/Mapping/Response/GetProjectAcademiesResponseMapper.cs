@@ -4,12 +4,11 @@ using API.Models.Upstream.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace API.Mapping
+namespace API.Mapping.Response
 {
     public class GetProjectAcademiesResponseMapper : IMapper<AcademyTransfersProjectAcademy,
-                                                             Models.Upstream.Response.GetProjectsAcademyResponseModel>
+                                                             GetProjectsAcademyResponseModel>
     {
         private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
@@ -38,11 +37,11 @@ namespace API.Mapping
                 AcademyTrusts = academy.ProjectAcademyTrusts == null || academy.ProjectAcademyTrusts.Count == 0
                                 ? new List<GetAcademyTrustsResponseModel>()
                                 : academy.ProjectAcademyTrusts.Select(t => new GetAcademyTrustsResponseModel
-                                                                     {
-                                                                         ProjectTrustId = t.ProjectAcademyTrustId,
-                                                                         TrustId = t.TrustId,
-                                                                         TrustName = _establishmentNameFormatter.Format(t.TrustName)
-                                                                     })
+                                {
+                                    ProjectTrustId = t.ProjectAcademyTrustId,
+                                    TrustId = t.TrustId,
+                                    TrustName = _establishmentNameFormatter.Format(t.TrustName)
+                                })
                                                                .ToList()
             };
         }
@@ -60,7 +59,7 @@ namespace API.Mapping
 
         private static RddOrRscInterventionReasonEnum MapRddOrRscInterventionReason(Models.D365.Enums.RddOrRscInterventionReasonEnum v)
         {
-            var mappedEnum =  MappingDictionaries.RddOrRscInterventionReasonEnumMap.Where(d => d.Value == v);
+            var mappedEnum = MappingDictionaries.RddOrRscInterventionReasonEnumMap.Where(d => d.Value == v);
 
             return mappedEnum.Any() ? mappedEnum.First().Key : default;
         }
@@ -79,7 +78,7 @@ namespace API.Mapping
         private static EsfaInterventionReasonEnum MapEsfaInterventionReason(Models.D365.Enums.EsfaInterventionReasonEnum v)
         {
             var mappedEnum = MappingDictionaries.EsfaInterventionReasonEnumMap.Where(d => d.Value == v);
-            
+
             return mappedEnum.Any() ? mappedEnum.First().Key : default;
         }
     }

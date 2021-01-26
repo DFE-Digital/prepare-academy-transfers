@@ -1,7 +1,7 @@
-﻿using API.Models.D365;
-using API.Models.Response;
+﻿using API.Models.Downstream.D365;
+using API.Models.Upstream.Response;
 
-namespace API.Mapping
+namespace API.Mapping.Response
 {
     public class GetAcademiesResponseMapper : IMapper<GetAcademiesD365Model, GetAcademiesModel>
     {
@@ -9,7 +9,7 @@ namespace API.Mapping
 
         public GetAcademiesResponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
         {
-            this._establishmentNameFormatter = establishmentNameFormatter;
+            _establishmentNameFormatter = establishmentNameFormatter;
         }
 
         public GetAcademiesModel Map(GetAcademiesD365Model input)
