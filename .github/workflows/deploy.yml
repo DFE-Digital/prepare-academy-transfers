@@ -10,6 +10,15 @@ jobs:
     environment: Dev
     steps:
       - uses: actions/checkout@v2
+      - name: Set Env Variable - D365:Authority
+        uses: citizen-of-planet-earth/cf-cli-action@v2
+        with:
+          cf_api: https://api.london.cloud.service.gov.uk
+          cf_username: ${{ secrets.CF_USER }}
+          cf_password: ${{ secrets.CF_PASSWORD }}
+          cf_org: dfe
+          cf_space: academy-transfers
+          command: set-env academy-transfers-api D365:Authority ${{ secrets.D365_AUTHORITY }}
       - name: Set Env Variable - D365:Url
         uses: citizen-of-planet-earth/cf-cli-action@v2
         with:
