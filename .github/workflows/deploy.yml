@@ -16,8 +16,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api D365:Url ${{ secrets.D365_Url }}
       - name: Set Env Variable - D365:ClientId
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -25,8 +25,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api D365:ClientId ${{ secrets.D365_ClientId }}
       - name: Set Env Variable - D365:ClientSecret
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -34,8 +34,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api D365:ClientSecret ${{ secrets.D365_ClientSecret }}
       - name: Set Env Variable - AAD:Instance
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -43,8 +43,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api AAD:Instance ${{ secrets.AAD_INSTANCE }}
       - name: Set Env Variable - AAD:ResourceId
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -52,8 +52,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api AAD:ResourceId ${{ secrets.AAD_ResourceId }}
       - name: Set Env Variable - AAD:TenantId
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -61,8 +61,8 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: set-env academy-transfers-prototype-api AAD:TenantId ${{ secrets.AAD_TenantId }}
       - name: Deploy Code
         uses: citizen-of-planet-earth/cf-cli-action@v2
@@ -70,6 +70,6 @@ jobs:
           cf_api: https://api.london.cloud.service.gov.uk
           cf_username: ${{ secrets.CF_USER }}
           cf_password: ${{ secrets.CF_PASSWORD }}
-          cf_org: dfe-digital
-          cf_space: academy-transfers-prototype
+          cf_org: dfe
+          cf_space: academy-transfers
           command: push -f TRAMS-API/manifest.yml -p TRAMS-API 
