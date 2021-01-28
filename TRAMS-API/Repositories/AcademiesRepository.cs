@@ -1,6 +1,6 @@
 ﻿using API.HttpHelpers;
-using API.Models.D365;
-using API.Models.Response;
+using API.Models.Downstream.D365;
+
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -28,8 +28,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<GetAcademiesD365Model>> GetAcademyById(Guid id)
         {
-            await _client.AuthenticateAsync();
-
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
             var response = await _client.GetAsync(url);
@@ -68,8 +66,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<List<GetAcademiesD365Model>>> SearchAcademies(string name)
         {
-            await _client.AuthenticateAsync();
-
             var academyNameField = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.AcademyName));
 
             var nameSearchFilter = $"{_urlBuilder.BuildOrSearchQuery(name, new List<string> { academyNameField })} and";
@@ -103,8 +99,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id)
         {
-            await _client.AuthenticateAsync();
-
             var _parentTrustIdFieldName = _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
             var filters = new List<string>
             {

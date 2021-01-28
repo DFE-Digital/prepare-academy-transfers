@@ -1,9 +1,9 @@
 using API.HttpHelpers;
 using API.Mapping;
-using API.Models.D365;
+using API.Mapping.Request;
+using API.Mapping.Response;
 using API.Models.Downstream.D365;
-using API.Models.Request;
-using API.Models.Response;
+using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
@@ -48,7 +48,7 @@ namespace TRAMS_API
 
             services.AddSingleton(this.CreateHttpClient());
             services.AddSingleton<IAuthenticatedHttpClient>(r => this.CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>>(r => new GetTrustsReponseMapper());
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
 
             // Register the Swagger Generator service. This service is responsible for genrating Swagger Documents.
             services.AddSwaggerGen(c =>
@@ -122,6 +122,12 @@ namespace TRAMS_API
             services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>, 
                                   GetAcademiesResponseMapper>();
 
+            services.AddTransient<IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>,
+                                  PutProjectAcademiesRequestMapper>();
+
+            services.AddTransient<IMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>,
+                                  PostProjectAcademiesRequestMapper>();
+
             services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>, 
                                   PostProjectsRequestMapper>();
 
@@ -144,6 +150,12 @@ namespace TRAMS_API
             services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
             
             services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
+
+            services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
+          
+            services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
+
+            services.AddTransient<IODataSanitizer, ODataSanitizer>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()

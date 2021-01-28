@@ -1,4 +1,4 @@
-﻿using API.Models.Request;
+﻿using API.Models.Upstream.Request;
 using FluentValidation;
 using System.Linq;
 
@@ -21,7 +21,7 @@ namespace API.Models.Validation
             RuleForEach(p => p.ProjectTrusts).SetValidator(new PostProjectsTrustsModelValidator());
         }
 
-        internal class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
+        public class PostProjectsAcademiesModelValidator : AbstractValidator<PostProjectsAcademiesModel>
         {
             public PostProjectsAcademiesModelValidator()
             {

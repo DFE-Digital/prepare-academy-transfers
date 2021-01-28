@@ -1,8 +1,7 @@
 ﻿using API.Mapping;
-using API.Models.D365;
 using API.Models.Downstream.D365;
-using API.Models.Request;
 using API.Models.Upstream.Enums;
+using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -37,6 +36,7 @@ namespace API.Controllers
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy, 
                                  Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
+        private readonly IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> _putProjectAcademiesMapper;
         private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
         private readonly IConfiguration _config;
@@ -47,6 +47,7 @@ namespace API.Controllers
                                   IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
                                   IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
                                   IMapper<AcademyTransfersProjectAcademy, Models.Upstream.Response.GetProjectsAcademyResponseModel> getProjectAcademyMapper,
+                                  IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesMapper,
                                   IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsMapper,
                                   IRepositoryErrorResultHandler repositoryErrorHandler,
                                   IConfiguration config)
@@ -55,6 +56,7 @@ namespace API.Controllers
             _academiesRepository = academiesRepository;
             _trustsRepository = trustsRepository;
             _postProjectsMapper = postProjectsMapper;
+            _putProjectAcademiesMapper = putProjectAcademiesMapper;
             _getProjectsMapper = getProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
             _searchProjectsMapper = searchProjectsMapper;
@@ -70,6 +72,72 @@ namespace API.Controllers
         /// Outgoing Trust Name, 
         /// Outgoing Trust Companies House Number
         /// Academy Name</param>
+        /// <param name="status">The project status:
+        /// 1. In Progress
+        /// 2. Completed</param>
+        /// <param name="ascending">Determines if the results should be returned in ascending order. Default value is: true</param>
+        /// <param name="pageSize">The number of items to be returned per page. Must be larger than zero. Default value is: 10</param>
+        /// <param name="pageNumber">The page number to be returned. Must be larger than zero. Default value is: 1</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/projects")]
+        [ProducesResponseType(typeof(SearchProjectsPageModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchProjects(string searchTerm, 
+                                                        ProjectStatusEnum? status,
+                                                        bool? ascending,
+                                                        uint? pageSize,
+                                                        uint? pageNumber)
+        {
+            var ascendingOption = ascending ?? true;
+            var pageSizeOption = pageSize ?? 10;
+            var pageNumberOption = pageNumber ?? 1;
+
+            if (pageSizeOption == 0)
+            {
+                return BadRequest("Page size cannot be zero");
+            }
+
+            if (pageNumberOption == 0)
+            {
+                return BadRequest("Page number cannot be 0");
+            }
+
+            Models.D365.Enums.ProjectStatusEnum projectStatus = default;
+
+            if (status.HasValue)
+            {
+                if (MappingDictionaries.ProjecStatusEnumMap.TryGetValue(status.Value, out var internalStatus))
+                {
+                    projectStatus = internalStatus;
+                }
+                else
+                {
+                    //If project status cannot be mapped to D365 Project Status, return an error
+                    return BadRequest("Project Status not recognised");
+                }
+            }
+                
+            var projSearchResult = await _projectsRepository.SearchProject(searchTerm, 
+                                                                           projectStatus,
+                                                                           ascendingOption,
+                                                                           pageSizeOption,
+                                                                           pageNumberOption);
+
+            if (!projSearchResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projSearchResult);
+            }
+
+            var externalModels = _searchProjectsMapper.Map(projSearchResult.Result);
+
+            return Ok(externalModels);
+        }
+
+        /// <summary>
+        /// Search for Academy Transfer Projects.
+        /// </summary>
+        /// <param name="searchTerm">The search term. The searched fields will be: Project Name, Outgoing Trust Name, Outgoing Trust Companies House Number, Academy Name</param>
         /// <param name="status">The project status:
         /// 1. In Progress
         /// 2. Completed</param>
@@ -269,7 +337,7 @@ namespace API.Controllers
             //If errors are detected with entity referencing, return an UnprocessableEntity result
             if (unprocessableEntityErrors.Any())
             {
-                var error = string.Join(". ", unprocessableEntityErrors);
+                var error = unprocessableEntityErrors.ToDelimitedString(". ");
 
                 return UnprocessableEntity(error);
             }
@@ -294,7 +362,77 @@ namespace API.Controllers
 
             var apiBaseUrl = _config["API:Url"];
 
-            return Created($"{apiBaseUrl}projects/{externalModel.ProjectId}", externalModel);
-        }   
+            return Created($"{apiBaseUrl}/projects/{externalModel.ProjectId}", externalModel);
+        }
+        
+        /// <summary>
+        /// Endpoint for updating a Project Academy entity
+        /// </summary>
+        /// <param name="projectId">THe Academy Transfers Project where the Project Academy entity is nested</param>
+        /// <param name="projectAcademyId">The ID of the Project Academy entity. Note: this is the id of the join-table entity, not the id of the academy</param>
+        /// <param name="model">The updated Project Academy entity</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("/projects/{projectId}/academies/{projectAcademyId}")]
+        [ProducesResponseType(typeof(GetProjectsAcademyResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
+        public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PutProjectAcademiesRequestModel model)
+        {
+            //Verify that the Id of the ProjectAcademy entity is correct before editing
+            var projectAcademyRepoResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
+
+            if (!projectAcademyRepoResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+            }
+
+            if (projectAcademyRepoResult.Result == null)
+            {
+                return NotFound($"Project Academy with id '{projectAcademyId}' not found");
+            }
+
+            //If the ProjectAcademy doesn't belong to the specified project, return a 422
+            if (projectAcademyRepoResult.Result.ProjectId != projectId)
+            {
+                return UnprocessableEntity($"Project Academy with id '{projectAcademyId}' not found within project with id '{projectId}'");
+            }
+
+            //Verify that the referenced academy for the ProjectAcademy entity is correct
+            var referencedAcademyResult = await _academiesRepository.GetAcademyById(model.AcademyId);
+
+            if (!referencedAcademyResult.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+            }
+
+            if (referencedAcademyResult.Result == null)
+            {
+                return UnprocessableEntity($"No academy found with the id of: {model.AcademyId}");
+            }
+
+            //Map the model to internal representation before updating the entity
+            var internalModel = _putProjectAcademiesMapper.Map(model);
+
+            var updateProjectAcademyResult = await _projectsRepository.UpdateProjectAcademy(projectAcademyId, internalModel);
+
+            if (!updateProjectAcademyResult.IsValid || !updateProjectAcademyResult.Result.HasValue)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+            }
+
+            //Once the entity has been modified, obtain the full entity from D365
+            var retrievedFullProjectAcademy = await _projectsRepository.GetProjectAcademyById(updateProjectAcademyResult.Result.Value);
+
+            if (!retrievedFullProjectAcademy.IsValid)
+            {
+                return _repositoryErrorHandler.LogAndCreateResponse(retrievedFullProjectAcademy);
+            }
+
+            //Map the ProjectAcademy representation to the external model
+            var externalModel = _getProjectAcademyMapper.Map(retrievedFullProjectAcademy.Result);
+
+            return Ok(externalModel);
+        }
     }
 }

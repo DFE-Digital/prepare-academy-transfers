@@ -1,21 +1,23 @@
 ﻿using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace API.Mapping
+namespace API.Mapping.Response
 {
     public class GetProjectsResponseMapper : IMapper<GetProjectsD365Model, GetProjectsResponseModel>
     {
         private readonly IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> _academyMapper;
+                                 GetProjectsAcademyResponseModel> _academyMapper;
+        private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
         public GetProjectsResponseMapper(IMapper<AcademyTransfersProjectAcademy,
-                                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> academyMapper)
+                                                 GetProjectsAcademyResponseModel> academyMapper,
+                                         IEstablishmentNameFormatter establishmentNameFormatter)
         {
             _academyMapper = academyMapper;
+            _establishmentNameFormatter = establishmentNameFormatter;
         }
 
         public GetProjectsResponseModel Map(GetProjectsD365Model input)
@@ -57,11 +59,11 @@ namespace API.Mapping
             return input.Trusts == null || input.Trusts.Count == 0
                    ? new List<GetProjectsTrustResponseModel>()
                    : input.Trusts.Select(t => new GetProjectsTrustResponseModel
-                                         {
-                                             ProjectTrustId = t.ProjectTrustId,
-                                             TrustId = t.TrustId,
-                                             TrustName = t.TrustName
-                                         })
+                   {
+                       ProjectTrustId = t.ProjectTrustId,
+                       TrustId = t.TrustId,
+                       TrustName = _establishmentNameFormatter.Format(t.TrustName)
+                   })
                                  .ToList();
         }
 

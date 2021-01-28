@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace API.Models.D365
+namespace API.Models.Downstream.D365
 {
     public class PostAcademyTransfersProjectsD365Model
     {
@@ -30,17 +30,17 @@ namespace API.Models.D365
         [JsonProperty("sip_esfainterventionreason")]
         public string EsfaInterventionReasons { get; set; }
 
-        [JsonProperty("sip_rddorrscinterventionreasonsexplanation")]
+        [JsonProperty("sip_esfainterventionreasonexplanation")]
         public string EsfaInterventionReasonsExplained { get; set; }
 
         [JsonProperty("sip_rddorrscinterventionreasons")]
         public string RddOrRscInterventionReasons { get; set; }
 
-        [JsonProperty("sip_esfainterventionreasonexplanation")]
+        [JsonProperty("sip_rddorrscinterventionreasonsexplanation")]
         public string RddOrRscInterventionReasonsExplained { get; set; }
 
         [JsonProperty("sip_sip_academytransfersprojectacademy_sip_atacademytrust_ATProjectAcademyId")]
-        public List<PostAcademyTransfersProjectAcademyTrustD365Model> Trusts { get; set;}
+        public List<PostAcademyTransfersProjectAcademyTrustD365Model> Trusts { get; set; }
     }
 
     public class PostAcademyTransfersProjectAcademyTrustD365Model

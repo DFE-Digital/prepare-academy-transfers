@@ -1,4 +1,5 @@
 ﻿using API.Mapping;
+using API.Mapping.Response;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using System;
@@ -13,7 +14,8 @@ namespace API.Tests.MapperTests
 
         public GetProjectsModelMapperTests()
         {
-            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper());
+            var establishmentNameFormatter = new EstablishmentNameFormatter();
+            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper(establishmentNameFormatter), establishmentNameFormatter);
         }
 
         [Fact]

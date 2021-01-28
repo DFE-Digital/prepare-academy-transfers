@@ -1,5 +1,7 @@
 ﻿using API.Mapping;
+using API.Mapping.Response;
 using API.Models.D365;
+using API.Models.Downstream.D365;
 using System;
 using Xunit;
 
@@ -30,7 +32,7 @@ namespace API.Tests.MapperTests
                 Urn = "4242"
             };
 
-            var mapper = new GetAcademiesResponseMapper();
+            var mapper = new GetAcademiesResponseMapper(new EstablishmentNameFormatter());
 
             var result = mapper.Map(academiesD365Model);
 
@@ -67,7 +69,7 @@ namespace API.Tests.MapperTests
                 Upin = "42424",
             };
 
-            var mapper = new GetTrustsReponseMapper();
+            var mapper = new GetTrustsReponseMapper(new EstablishmentNameFormatter());
 
             var result = mapper.Map(d365Model);
 

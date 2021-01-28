@@ -1,4 +1,4 @@
-﻿using API.Models.D365;
+﻿using API.Models.Downstream.D365;
 
 namespace API.ODataHelpers
 {

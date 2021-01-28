@@ -1,4 +1,4 @@
-﻿using API.Models.Response;
+﻿using API.Models.Upstream.Response;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

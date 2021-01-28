@@ -2,7 +2,7 @@
 
 namespace API.Models.Upstream.Response
 {
-    public class SearchProjectsPageModel
+    public class SearchProjectsPageModel : BasePageModel
     {
         public List<SearchProjectsModel> Projects { get; set; }
 

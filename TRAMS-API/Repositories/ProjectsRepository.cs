@@ -1,7 +1,7 @@
 ﻿using API.HttpHelpers;
-using API.Models.D365;
 using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
+
 using API.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -23,15 +23,18 @@ namespace API.Repositories
         private readonly IOdataUrlBuilder<GetProjectsD365Model> _urlBuilder;
         private readonly ILogger<ProjectsRepository> _logger;
         private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
+        private readonly IFetchXmlSanitizer _fetchXmlSanitizer;
 
         public ProjectsRepository(IAuthenticatedHttpClient client,
                                   IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
                                   IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
+                                  IFetchXmlSanitizer fetchXmlSanitizer,
                                   ILogger<ProjectsRepository> logger)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _projectAcademyUrlBuilder = projectAcademyUrlBuilder;
+            _fetchXmlSanitizer = fetchXmlSanitizer;
             _logger = logger;
         }
 
@@ -41,12 +44,12 @@ namespace API.Repositories
                                                                                        uint pageSize = 10,
                                                                                        uint pageNumber = 1)
         {
-            var fetchXml = BuildFetchXMLQuery(search, status, isAscending);
+            var sanitizedSearch = _fetchXmlSanitizer.Sanitize(search);
+                                      
+            var fetchXml = BuildFetchXMLQuery(sanitizedSearch, status, isAscending);
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
             var url = $"{_route}?fetchXml={encodedFetchXml}";
-
-            await _client.AuthenticateAsync();
 
             var response = await _client.GetAsync(url);
             var responseContent = await response.Content?.ReadAsStringAsync();
@@ -88,8 +91,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id)
         {
-            await _client.AuthenticateAsync();
-
             var url = _projectAcademyUrlBuilder.BuildRetrieveOneUrl("sip_academytransfersprojectacademies", id);
 
             var response = await _client.GetAsync(url);
@@ -125,8 +126,6 @@ namespace API.Repositories
         {
             var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
 
-            await _client.AuthenticateAsync();
-
             var response = await _client.GetAsync(url);
             var responseContent = await response.Content?.ReadAsStringAsync();
             var responseStatusCode = response.StatusCode;
@@ -158,8 +157,6 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project)
         {
-            await _client.AuthenticateAsync();
-
             var jsonBody = JsonConvert.SerializeObject(project);
 
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonBody);
@@ -182,6 +179,43 @@ namespace API.Repositories
                         return new RepositoryResult<Guid?> { Result = guidValue };
                     }
                 }
+
+            //At this point, log the error and configure the repository result to inform the caller that the repo failed
+            _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
+
+            return new RepositoryResult<Guid?>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = responseStatusCode,
+                    ErrorMessage = responseContent
+                }
+            };
+        }
+
+        public async Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id, PatchProjectAcademiesD365Model model)
+        {
+            var url = _projectAcademyUrlBuilder.BuildRetrieveOneUrl("sip_academytransfersprojectacademies", id);
+            var jsonContent = JsonConvert.SerializeObject(model);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            var response = await _client.PatchAsync(url, content);
+            var responseContent = await response.Content?.ReadAsStringAsync();
+            var responseStatusCode = response.StatusCode;
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (response.Headers.TryGetValues("OData-EntityId", out var headerValues))
+                {
+                    var value = headerValues.First();
+                    var guidString = value.Substring(value.Length - 37, 36);
+
+                    if (Guid.TryParse(guidString, out var guidValue))
+                    {
+                        return new RepositoryResult<Guid?> { Result = guidValue };
+                    }
+                }
+            }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
             _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);

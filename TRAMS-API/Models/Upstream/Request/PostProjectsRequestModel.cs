@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Models.Request
+namespace API.Models.Upstream.Request
 {
     public class PostProjectsRequestModel
     {
@@ -32,7 +32,7 @@ namespace API.Models.Request
         /// <summary>
         /// An array of outbound academies identified for the project. Optional.
         /// </summary>
-        public List<PostProjectsAcademiesModel> ProjectAcademies { get; set;}
+        public List<PostProjectsAcademiesModel> ProjectAcademies { get; set; }
 
         /// <summary>
         /// An array of inbout trusts identified for the project. Optional.

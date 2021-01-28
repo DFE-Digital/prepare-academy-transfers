@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace API.Models.D365
+namespace API.Models.Downstream.D365
 {
     public class ResultSet<TEntity>
     {

@@ -1,4 +1,5 @@
-﻿using API.Models.D365;
+﻿using API.Mapping;
+using API.Models.Downstream.D365;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace API.ODataHelpers
         /// <returns>The select and expand clauses (if needed) joined together</returns>
         public string BuildSelectAndExpandClauses(D365ModelRepresentation representation)
         {
-            var select = $"$select={string.Join(',', representation.BaseProperties)}";
+            var select = $"$select={representation.BaseProperties.ToDelimitedString(",")}";
 
             var individualExpands = new List<string>();
 
@@ -63,7 +64,7 @@ namespace API.ODataHelpers
                 return $"{select}";
             }
 
-            return $"{select}&$expand={string.Join(',', individualExpands)}";
+            return $"{select}&$expand={individualExpands.ToDelimitedString(",")}";
         }
 
         private D365ModelRepresentation BuildModelRepresentationLevel(PropertyInfo property)
@@ -87,7 +88,7 @@ namespace API.ODataHelpers
 
         private string BuildNestedLevelSelectAndExpand(D365ModelRepresentation representation)
         {
-            var select = $"$select={string.Join(',', representation.BaseProperties)}";
+            var select = $"$select={representation.BaseProperties.ToDelimitedString(",")}";
 
             var individualExpands = new List<string>();
 
@@ -102,7 +103,7 @@ namespace API.ODataHelpers
                 return select;
             }
 
-            return $"{select};$expand={string.Join(',', individualExpands)}";
+            return $"{select};$expand={individualExpands.ToDelimitedString(",")}";
         }
 
         /// <summary>
