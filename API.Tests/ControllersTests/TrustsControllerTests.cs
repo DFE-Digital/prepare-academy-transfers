@@ -1,7 +1,8 @@
 ﻿using API.Controllers;
 using API.Mapping;
 using API.Models.D365;
-using API.Models.Response;
+using API.Models.Downstream.D365;
+using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
