@@ -1,6 +1,5 @@
 ﻿using API.Controllers;
 using API.Mapping;
-using API.Models.D365;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
 using API.Repositories;
@@ -10,7 +9,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace API.Tests.ControllersTests
@@ -44,24 +42,24 @@ namespace API.Tests.ControllersTests
             //Set up trusts repo to return a failure
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                           .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                           {
-                               Error = new RepositoryResultBase.RepositoryError
-                               {
-                                   StatusCode = HttpStatusCode.BadRequest,
-                                   ErrorMessage = "Bad Request"
-                               }
-                           });
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Error = new RepositoryResultBase.RepositoryError
+                              {
+                                  StatusCode = HttpStatusCode.BadRequest,
+                                  ErrorMessage = "Bad Request"
+                              }
+                          });
 
             var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
 
             //Set up error handler to return a random result
             var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
             errorHandlerMock.Setup(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()))
-                        .Returns(new ObjectResult("Some error message")
-                        {
-                            StatusCode = 499
-                        });
+                            .Returns(new ObjectResult("Some error message")
+                            {
+                                StatusCode = 499
+                            });
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
@@ -99,10 +97,10 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a null result (not found)
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                           .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                           {
-                               Result = null
-                           });
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = null
+                          });
 
             var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
             var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
@@ -139,13 +137,13 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a valid and set result
             var trustsRepoMock = new Mock<ITrustsRepository>(); 
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                           .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                           {
-                               Result = new GetTrustsD365Model
-                               {
-                                   Id = trustId
-                               }
-                           });
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = new GetTrustsD365Model
+                              {
+                                  Id = trustId
+                              }
+                          });
 
             var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
 
@@ -184,5 +182,435 @@ namespace API.Tests.ControllersTests
         }
 
         #endregion
+
+        #region Search Projects Tests
+
+        [Fact]
+        public async void SearchTrusts_InvalidRepoResult()
+        {
+            var searchTerm = "Some search term";
+
+            //Set up mock repository to return a failed D365 call
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           {
+                               Error = new RepositoryResultBase.RepositoryError
+                               {
+                                   StatusCode = HttpStatusCode.BadRequest,
+                                   ErrorMessage = "Bad Request"
+                               }
+                           });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+
+            //Set up error handler to return a random result
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            errorHandlerMock.Setup(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()))
+                        .Returns(new ObjectResult("Some error message")
+                        {
+                            StatusCode = 499
+                        });
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+            //Execute
+            var result = await trustsController.SearchTrusts(searchTerm);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should be called with result from repository
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(
+                It.Is<RepositoryResultBase>(r =>
+                    r.Error.ErrorMessage == "Bad Request" &&
+                    r.Error.StatusCode == HttpStatusCode.BadRequest)),
+                Times.Once);
+            //Mapper not to be called when repo fails
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
+
+            //Final result should be what the error handler returns
+            Assert.Equal("Some error message", castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void SearchTrusts_EmptyButValidSearchResult()
+        {
+            var searchTerm = "Some search term";
+
+            //Set up mock repository to return a failed D365 call
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           {
+                               Result = null
+                           });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+            //Execute
+            var result = await trustsController.SearchTrusts(searchTerm);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should not be called when repo returns valid result
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+            //Mapper not to be called becasue there are no results
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
+
+            //Final result should be a 200OK wrapped around a null list
+            Assert.Null((List<GetTrustsModel>)castedResult.Value);
+            Assert.Equal(200, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void SearchTrusts_ThreeResults()
+        {
+            var searchTerm = "Some search term";
+
+            //Set up mock repository to return a failed D365 call
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           {
+                               Result = new List<GetTrustsD365Model>
+                               {
+                                   new GetTrustsD365Model { TrustName = "Trust 001" },
+                                   new GetTrustsD365Model { TrustName = "Trust 002" },
+                                   new GetTrustsD365Model { TrustName = "Trust 003" }
+                               }
+                           });
+
+            //Set up mock mapper to return slim models
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 001")))
+                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 001" });
+
+            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 002")))
+                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 002" });
+
+            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 003")))
+                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 003" });
+
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+            //Execute
+            var result = await trustsController.SearchTrusts(searchTerm);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should not be called when repo returns valid result
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+            //Mapper to be called three times, once for each result
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Exactly(3));
+
+            //Final result should be a 200OK wrapped around a a list with three results
+            Assert.Equal(3, ((List<GetTrustsModel>)castedResult.Value).Count);
+            Assert.Equal("Mapped Trust 001", ((List<GetTrustsModel>)castedResult.Value)[0].TrustName);
+            Assert.Equal("Mapped Trust 002", ((List<GetTrustsModel>)castedResult.Value)[1].TrustName);
+            Assert.Equal("Mapped Trust 003", ((List<GetTrustsModel>)castedResult.Value)[2].TrustName);
+            Assert.Equal(200, castedResult.StatusCode);
+        }
+
+        #endregion
+
+        #region Get Trust Academies Tests
+
+        [Fact]
+        public async void GetTrustAcademies_TrustRepoFailure()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up trusts repo to return a failure
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Error = new RepositoryResultBase.RepositoryError
+                              {
+                                  StatusCode = HttpStatusCode.BadRequest,
+                                  ErrorMessage = "Bad Request"
+                              }
+                          });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+
+            //Set up error handler to return a random result
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            errorHandlerMock.Setup(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()))
+                            .Returns(new ObjectResult("Some error message")
+                            {
+                                StatusCode = 499
+                            });
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetTrustAcademies(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should be called with result from repository
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(
+                It.Is<RepositoryResultBase>(r =>
+                    r.Error.ErrorMessage == "Bad Request" &&
+                    r.Error.StatusCode == HttpStatusCode.BadRequest)),
+                Times.Once);
+            //Mapper not to be called when repo fails
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
+
+            //Final result should be what the error handler returns
+            Assert.Equal("Some error message", castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void GetTrustAcademies_TrustNotFound()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock trust repository to return a null result (not found)
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = null
+                          });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        _academiesRepository.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetTrustAcademies(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should not be called when repo returns valid result
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+            //Mapper not to be called when repo returns null but valid result
+            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
+
+            //Final result should be a 404 - Not Found with the correct message
+            Assert.Equal("The trust with the id: 'a16e9020-9123-4420-8055-851d1b672fa9' was not found", castedResult.Value);
+            Assert.Equal(404, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void GetTrustAcademies_TrustFound_FailedAcademyRepo()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock trust repository to return a valid and set result
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = new GetTrustsD365Model
+                              {
+                                  Id = trustId
+                              }
+                          });
+
+            //Set up mock academies repo to return a failed result
+            var academiesRepoMock = new Mock<IAcademiesRepository>();
+            academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             {
+                                 Error = new RepositoryResultBase.RepositoryError
+                                 {
+                                     StatusCode = HttpStatusCode.BadRequest,
+                                     ErrorMessage = "Bad Request"
+                                 }
+                             });
+
+            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+
+            //Set up mapper to return a slim result when called with the expected input
+            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(p => p.Id == trustId)))
+                      .Returns(new GetTrustsModel
+                      {
+                          Id = trustId,
+                          Address = "Some address"
+                      });
+
+            //Set up error handler to return a random result
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            errorHandlerMock.Setup(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()))
+                            .Returns(new ObjectResult("Some error message")
+                            {
+                                StatusCode = 499
+                            });
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        academiesRepoMock.Object,
+                                                        mapperMock.Object,
+                                                        _getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetTrustAcademies(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should be called when a repository fails
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Once);
+            //Final result should be what the error handler returns
+            Assert.Equal("Some error message", castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void GetTrustAcademies_TrustFound_NoAcademiesFound()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock trust repository to return a valid and set result
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = new GetTrustsD365Model
+                              {
+                                  Id = trustId
+                              }
+                          });
+
+            //Set up mock academies repo to return a failed result
+            var academiesRepoMock = new Mock<IAcademiesRepository>();
+            academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             {
+                                 Result = null
+                             });
+
+            var getAcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        academiesRepoMock.Object,
+                                                        _getTrustMapper.Object,
+                                                        getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetTrustAcademies(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should be called when a repository fails
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+
+            //GetAcademiesMapper should not be called when no academies are found
+            getAcademiesMapper.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Never);
+            //Final result should be a 200 wrapped around a null list
+            Assert.Null((List<GetAcademiesModel>)castedResult.Value);
+            Assert.Equal(200, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public async void GetTrustAcademies_TrustFound_TwoAcademiesFound()
+        {
+            //Arrange
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+
+            //Set up mock trust repository to return a valid and set result
+            var trustsRepoMock = new Mock<ITrustsRepository>();
+            trustsRepoMock.Setup(m => m.GetTrustById(trustId))
+                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          {
+                              Result = new GetTrustsD365Model
+                              {
+                                  Id = trustId
+                              }
+                          });
+
+            //Set up mock academies repo to return a failed result
+            var academiesRepoMock = new Mock<IAcademiesRepository>();
+            academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             {
+                                 Result = new List<GetAcademiesD365Model>
+                                 {
+                                     new GetAcademiesD365Model { AcademyName = "Academy 001" },
+                                     new GetAcademiesD365Model { AcademyName = "Academy 002" }
+                                 }
+                             });
+
+            var getAcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
+            getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == "Academy 001")))
+                              .Returns(new GetAcademiesModel { AcademyName = "Mapped Academy 001" });
+            getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == "Academy 002")))
+                              .Returns(new GetAcademiesModel { AcademyName = "Mapped Academy 002" });
+
+            var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var trustsController = new TrustsController(trustsRepoMock.Object,
+                                                        academiesRepoMock.Object,
+                                                        _getTrustMapper.Object,
+                                                        getAcademiesMapper.Object,
+                                                        errorHandlerMock.Object);
+
+
+            //Execute
+            var result = await trustsController.GetTrustAcademies(trustId);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Error handler should be called when a repository fails
+            errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
+
+            //GetAcademiesMapper should not be called when no academies are found
+            getAcademiesMapper.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Exactly(2));
+            //Final result should be a 200 wrapped around a null list
+            Assert.Equal(2, ((List<GetAcademiesModel>)castedResult.Value).Count);
+            Assert.Equal("Mapped Academy 001", ((List<GetAcademiesModel>)castedResult.Value)[0].AcademyName);
+            Assert.Equal("Mapped Academy 002", ((List<GetAcademiesModel>)castedResult.Value)[1].AcademyName);
+            Assert.Equal(200, castedResult.StatusCode);
+        }
+
+        #endregion 
     }
 }

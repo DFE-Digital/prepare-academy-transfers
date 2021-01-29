@@ -91,7 +91,7 @@ namespace API.Controllers
             }
 
             var formattedOutput = trustsRepositoryResult.Result
-                                                        .Select(r => _getTrustMapper.Map(r))
+                                                       ?.Select(r => _getTrustMapper.Map(r))
                                                         .ToList();
 
             return Ok(formattedOutput);
@@ -128,7 +128,7 @@ namespace API.Controllers
             }
 
             var formattedOutput = academiesRepoResult.Result
-                                                     .Select(a => _getAcademiesMapper.Map(a))
+                                                    ?.Select(a => _getAcademiesMapper.Map(a))
                                                      .ToList();
 
             return Ok(formattedOutput);
