@@ -77,6 +77,7 @@ namespace API.Tests.ControllersTests
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
+
             //Final result should be a 400 Bad Request
             Assert.Equal("Page size cannot be zero", (string)castedResult.Value);
             Assert.Equal(400, castedResult.StatusCode);
@@ -94,6 +95,7 @@ namespace API.Tests.ControllersTests
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
+
             //Final result should be a 400 Bad Request
             Assert.Equal("Page number cannot be 0", (string)castedResult.Value);
             Assert.Equal(400, castedResult.StatusCode);
@@ -231,6 +233,7 @@ namespace API.Tests.ControllersTests
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
+
             //Final result should be a what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
@@ -261,6 +264,7 @@ namespace API.Tests.ControllersTests
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
+
             //Repository Error Handler result should not be called
             repositoryErrorHandlerMock.Verify(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
             //Final result should be 404 Not Found with the proper message
@@ -274,7 +278,7 @@ namespace API.Tests.ControllersTests
             //Arrange
             var projectId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000");
 
-            //Set up project repository to return an valid set result
+            //Set up project repository to return a valid set result
             var projectRepository = new Mock<IProjectsRepository>();
             projectRepository.Setup(p => p.GetProjectById(projectId))
                              .ReturnsAsync(new RepositoryResult<GetProjectsD365Model>
@@ -372,9 +376,7 @@ namespace API.Tests.ControllersTests
                                  Result = null
                              });
 
-            //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-
 
             var controller = new ProjectsController(projectRepository.Object, _academiesRepository, _trustsRepository, _postProjectsMapper, _getProjectsMapper,
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
@@ -419,7 +421,6 @@ namespace API.Tests.ControllersTests
                                      ErrorMessage = "Bad request error message"
                                  }
                              });
-
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
@@ -492,7 +493,7 @@ namespace API.Tests.ControllersTests
             var projectId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000");
             var projectAcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000001");
 
-            //Set up project repository to return valid set result
+            //Set up project repository to return a valid set result when getting the project by id
             var projectRepository = new Mock<IProjectsRepository>();
             projectRepository.Setup(p => p.GetProjectById(projectId))
                              .ReturnsAsync(new RepositoryResult<GetProjectsD365Model>
@@ -594,8 +595,6 @@ namespace API.Tests.ControllersTests
                                      Result = null
                                  });
 
-
-            //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
 
             var controller = new ProjectsController(projectRepositoryMock.Object, _academiesRepository, _trustsRepository, _postProjectsMapper, _getProjectsMapper,
@@ -631,8 +630,6 @@ namespace API.Tests.ControllersTests
                                      Result = new AcademyTransfersProjectAcademy { ProjectId = mismatchingProjectId }
                                  });
 
-
-            //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
 
             var controller = new ProjectsController(projectRepositoryMock.Object, _academiesRepository, _trustsRepository, _postProjectsMapper, _getProjectsMapper,
@@ -670,7 +667,7 @@ namespace API.Tests.ControllersTests
                                      Result = new AcademyTransfersProjectAcademy { ProjectId = projectId }
                                  });
 
-            //Set up the academies repository to return a failed result when verifying the referenced academy
+            //Set up the academies repository to return bad request when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
                                    .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
@@ -946,8 +943,7 @@ namespace API.Tests.ControllersTests
 
             //Set up mapper to return final result back
             var getProjectAcademyMapper = new Mock<IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>();
-
+                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>()
             getProjectAcademyMapper.Setup(m => m.Map(It.Is<AcademyTransfersProjectAcademy>(a => a.ProjectId == projectId)))
                                    .Returns(new GetProjectsAcademyResponseModel { ProjectAcademyId = projectAcademyId });
 
@@ -965,6 +961,656 @@ namespace API.Tests.ControllersTests
             Assert.Equal(200, castedResult.StatusCode);
         }
 
+        #endregion
+
+        #region InsertTrusts Tests
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedAcademies_RepoFailure()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    } 
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to return a bad request
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Error = new RepositoryResultBase.RepositoryError
+                                       {
+                                           StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                           ErrorMessage = "Bad request error message"
+                                       }
+                                   });
+
+            //Set up repository error handler to handle the bad request result described above
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+                                      .Returns(new ObjectResult("Some error message")
+                                      {
+                                          StatusCode = 499
+                                      });
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, _trustsRepository, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be what the Error Handler returns
+            Assert.Equal("Some error message", (string)castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedTrusts_RepoFailure()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy checks to all return a valid and set result
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model()
+                                   });
+
+            //Set up the trust id checks to return a bad request
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> 
+                            {
+                                Error = new RepositoryResultBase.RepositoryError
+                                {
+                                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                    ErrorMessage = "Bad request error message"
+                                }
+                            });
+
+
+            //Set up repository error handler to handle the bad request result described above
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+                                      .Returns(new ObjectResult("Some error message")
+                                      {
+                                          StatusCode = 499
+                                      });
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, trustsRepository.Object, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be what the Error Handler returns
+            Assert.Equal("Some error message", (string)castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedAcademies_OneAcademyNotFound()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass but one
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")}
+                                   });
+
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+            //This is the one academy that won't be found
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = null 
+                                   });
+
+            //Set up the trust id checks to all pass
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, trustsRepository.Object, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be an Unprocessable Entity returns
+            Assert.Equal("No academy found with the id of: 20000003-0000-0ff1-ce00-000000000002", (string)castedResult.Value);
+            Assert.Equal(422, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedAcademies_NoAcademyFound()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass but one
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+
+            //All academies will fail
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = null
+                                   });
+
+            //Set up the trust id checks to all pass
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, trustsRepository.Object, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be an Unprocessable Entity returns
+            Assert.Equal("No academy found with the id of: 00000003-0000-0ff1-ce00-000000000000. No academy found with the id of: 10000003-0000-0ff1-ce00-000000000001. No academy found with the id of: 20000003-0000-0ff1-ce00-000000000002", (string)castedResult.Value);
+            Assert.Equal(422, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedTrusts_OneTrustNotFound()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
+                                   });
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
+                                   });
+
+            //Set up the trust id checks to all pass but one
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            //This trust check will fail
+            trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = null });
+
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, trustsRepository.Object, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be an Unprocessable Entity returns
+            Assert.Equal("No trust found with the id of: 40000003-0000-0ff1-ce00-000000000004", (string)castedResult.Value);
+            Assert.Equal(422, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_CheckingReferencedTrusts_NoTrustFound()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
+                                   });
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
+                                   });
+
+            //Set up the trust id checks to all fail
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = null });
+
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var controller = new ProjectsController(_projectsRepository, academiesRepositoryMock.Object, trustsRepository.Object, _postProjectsMapper, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be an Unprocessable Entity with the trust messages concatenated
+            Assert.Equal("No trust found with the id of: 30000003-0000-0ff1-ce00-000000000003. No trust found with the id of: 40000003-0000-0ff1-ce00-000000000004", (string)castedResult.Value);
+            Assert.Equal(422, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_AllTrustsAndAcademiesVerified_InsertingProject_RepoFailure()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+
+            //Set up the trust id checks to all pass
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            //Set up mapper to return a slim mock result
+            var postProjectsMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
+            postProjectsMapper.Setup(m => m.Map(It.IsAny<PostProjectsRequestModel>()))
+                              .Returns(new PostAcademyTransfersProjectsD365Model
+                              {
+                                  ProjectInitiatorFullName = "Joe Bloggs"
+                              });
+
+            //Set up project repository to return a bad request when inserting a project
+            var projectsRepository = new Mock<IProjectsRepository>();
+            projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                              .ReturnsAsync(new RepositoryResult<Guid?>
+                              {
+                                  Error = new RepositoryResultBase.RepositoryError
+                                  {
+                                      StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                      ErrorMessage = "Bad request error message"
+                                  }
+                              });
+
+
+            //Set up repository error handler to handle the bad request result described above
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+                                      .Returns(new ObjectResult("Some error message")
+                                      {
+                                          StatusCode = 499
+                                      });
+
+            var controller = new ProjectsController(projectsRepository.Object, academiesRepositoryMock.Object, trustsRepository.Object, postProjectsMapper.Object, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be what the Error Handler returns
+            Assert.Equal("Some error message", (string)castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_AllTrustsAndAcademiesVerified_InsertSuccessful_FailureWhenReloadingFromRepo()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+
+            //Set up the trust id checks to all pass
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            //Set up mapper to return a slim mock result
+            var postProjectsMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
+            postProjectsMapper.Setup(m => m.Map(It.IsAny<PostProjectsRequestModel>()))
+                              .Returns(new PostAcademyTransfersProjectsD365Model
+                              {
+                                  ProjectInitiatorFullName = "Joe Bloggs"
+                              });
+
+
+            //Set up project repository to a valid set result when inserting a project
+            var projectsRepository = new Mock<IProjectsRepository>();
+            projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                              .ReturnsAsync(new RepositoryResult<Guid?>
+                              {
+                                  Result = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")
+                              });
+
+            //Set up project repo to fail when obtaining the full project from the repo
+            projectsRepository.Setup(r => r.GetProjectById(It.IsAny<Guid>()))
+                              .ReturnsAsync(new RepositoryResult<GetProjectsD365Model>
+                              {
+                                  Error = new RepositoryResultBase.RepositoryError
+                                  {
+                                      StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                      ErrorMessage = "Bad request error message"
+                                  }
+                              });
+
+            //Set up repository error handler to handle the bad request result described above
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+                                      .Returns(new ObjectResult("Some error message")
+                                      {
+                                          StatusCode = 499
+                                      });
+
+            var controller = new ProjectsController(projectsRepository.Object, academiesRepositoryMock.Object, trustsRepository.Object, postProjectsMapper.Object, _getProjectsMapper,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be what the Error Handler returns
+            Assert.Equal("Some error message", (string)castedResult.Value);
+            Assert.Equal(499, castedResult.StatusCode);
+        }
+
+        [Fact]
+        public void InsertTrusts_Success()
+        {
+            //Arrange 
+            var request = new PostProjectsRequestModel
+            {
+                ProjectAcademies = new List<PostProjectsAcademiesModel>
+                {
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("10000003-0000-0ff1-ce00-000000000001")},
+                    new PostProjectsAcademiesModel {AcademyId = Guid.Parse("20000003-0000-0ff1-ce00-000000000002"),
+                                                    Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                                    {
+                                                        new PostProjectsAcademiesTrustsModel
+                                                        {
+                                                            TrustId = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")
+                                                        }
+                                                    }
+                    }
+                },
+                ProjectTrusts = new List<PostProjectsTrustsModel>
+                {
+                    new PostProjectsTrustsModel {TrustId = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")}
+                }
+            };
+
+            //Set up academy id checks to all pass
+            var academiesRepositoryMock = new Mock<IAcademiesRepository>();
+            academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   {
+                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                   });
+
+            //Set up the trust id checks to all pass
+            var trustsRepository = new Mock<ITrustsRepository>();
+            trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
+                            .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> { Result = new GetTrustsD365Model { Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003") } });
+
+            //Set up mapper to return a slim mock result
+            var postProjectsMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
+            postProjectsMapper.Setup(m => m.Map(It.IsAny<PostProjectsRequestModel>()))
+                              .Returns(new PostAcademyTransfersProjectsD365Model
+                              {
+                                  ProjectInitiatorFullName = "Joe Bloggs"
+                              });
+
+
+            //Set up project repository to a valid set result when inserting a project
+            var projectsRepository = new Mock<IProjectsRepository>();
+            projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                              .ReturnsAsync(new RepositoryResult<Guid?>
+                              {
+                                  Result = Guid.Parse("40000003-0000-0ff1-ce00-000000000004")
+                              });
+
+            //Set up project repo to fail when obtaining the full project from the repo
+            projectsRepository.Setup(r => r.GetProjectById(It.IsAny<Guid>()))
+                              .ReturnsAsync(new RepositoryResult<GetProjectsD365Model>
+                              {
+                                  Result = new GetProjectsD365Model { ProjectId = Guid.Parse("80000003-0000-0ff1-ce00-000000000008") }
+                              });
+
+            //Set up get projects mapper to return mock slim object
+            var getProjectAcademyMapper = new Mock<IMapper<GetProjectsD365Model, GetProjectsResponseModel>>();
+            getProjectAcademyMapper.Setup(m => m.Map(It.IsAny<GetProjectsD365Model>()))
+                                   .Returns(new GetProjectsResponseModel { ProjectId = Guid.Parse("80000003-0000-0ff1-ce00-000000000008") });
+
+            var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
+
+            var controller = new ProjectsController(projectsRepository.Object, academiesRepositoryMock.Object, trustsRepository.Object, postProjectsMapper.Object, getProjectAcademyMapper.Object,
+               _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
+
+            //Execute
+            var result = controller.InsertProject(request);
+            var castedResult = (ObjectResult)result.Result;
+
+            //Assert
+
+            //Final result should be a 200OK wrapped around what the final mapper returns
+            Assert.Equal(Guid.Parse("80000003-0000-0ff1-ce00-000000000008"), ((GetProjectsResponseModel)castedResult.Value).ProjectId);
+            Assert.Equal(201, castedResult.StatusCode);
+        }
 
         #endregion
 
