@@ -52,7 +52,7 @@
             <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ProjectsController.InsertTrust(API.Models.Upstream.Request.PostProjectsRequestModel)">
+        <member name="M:API.Controllers.ProjectsController.InsertProject(API.Models.Upstream.Request.PostProjectsRequestModel)">
             <summary>
             API endpoint for creating a new Academy Transfers Project
             </summary>

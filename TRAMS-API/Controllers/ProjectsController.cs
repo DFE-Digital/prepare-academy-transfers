@@ -212,9 +212,9 @@ namespace API.Controllers
         [Route("/projects/")]
         [ProducesResponseType(typeof(GetProjectsResponseModel), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
-        public async Task<IActionResult> InsertTrust([FromBody]PostProjectsRequestModel model)
+        public async Task<IActionResult> InsertProject([FromBody]PostProjectsRequestModel model)
         {
-            var projectAcademiesIds = model.ProjectAcademies.Select(a => a.AcademyId).ToList();
+            var projectAcademiesIds = model.ProjectAcademies?.Select(a => a.AcademyId).ToList();
             var unprocessableEntityErrors = new List<string>();
 
             #region Check Referenced Entities
@@ -313,7 +313,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status422UnprocessableEntity)]
         public async Task<IActionResult> UpdateProjectAcademy(Guid projectId, Guid projectAcademyId, [FromBody]PutProjectAcademiesRequestModel model)
         {
-            //Verify that the Id of the ProjectAcademy entity is correct before editing
+            //Verify that the Id of the ProjectAcademy entity is correct before updating the object
             var projectAcademyRepoResult = await _projectsRepository.GetProjectAcademyById(projectAcademyId);
 
             if (!projectAcademyRepoResult.IsValid)
@@ -337,7 +337,7 @@ namespace API.Controllers
 
             if (!referencedAcademyResult.IsValid)
             {
-                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+                return _repositoryErrorHandler.LogAndCreateResponse(referencedAcademyResult);
             }
 
             if (referencedAcademyResult.Result == null)
@@ -352,7 +352,7 @@ namespace API.Controllers
 
             if (!updateProjectAcademyResult.IsValid || !updateProjectAcademyResult.Result.HasValue)
             {
-                return _repositoryErrorHandler.LogAndCreateResponse(projectAcademyRepoResult);
+                return _repositoryErrorHandler.LogAndCreateResponse(updateProjectAcademyResult);
             }
 
             //Once the entity has been modified, obtain the full entity from D365
