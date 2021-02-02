@@ -943,7 +943,7 @@ namespace API.Tests.ControllersTests
 
             //Set up mapper to return final result back
             var getProjectAcademyMapper = new Mock<IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>()
+                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>();
             getProjectAcademyMapper.Setup(m => m.Map(It.Is<AcademyTransfersProjectAcademy>(a => a.ProjectId == projectId)))
                                    .Returns(new GetProjectsAcademyResponseModel { ProjectAcademyId = projectAcademyId });
 
