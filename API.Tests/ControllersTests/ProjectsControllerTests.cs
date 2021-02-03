@@ -17,7 +17,7 @@ namespace API.Tests.ControllersTests
 {
     public class ProjectsControllerTests
     {
-        //These defaults mock are passed to the cosntructor in tests for methods that don't use them
+        //These default mocks are passed to the constructor in tests for methods that don't use them
         private readonly IProjectsRepository _projectsRepository;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly ITrustsRepository _trustsRepository;
@@ -234,7 +234,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be a what the Error Handler returns
+            //Final result should be what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
         }
@@ -354,7 +354,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be a what the Error Handler returns
+            //Final result should be what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
 
@@ -574,7 +574,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be a what the Error Handler returns
+            //Final result should be what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
         }
@@ -608,7 +608,7 @@ namespace API.Tests.ControllersTests
 
             //Repository Error Handler result should not be called
             repositoryErrorHandlerMock.Verify(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
-            //Final result should be a what the 404 Not Found with the correct message
+            //Final result should be a 404 Not Found with the correct message
             Assert.Equal("Project Academy with id '00000003-0000-0ff1-ce00-000000000001' not found", (string)castedResult.Value);
             Assert.Equal(404, castedResult.StatusCode);
         }
@@ -643,7 +643,7 @@ namespace API.Tests.ControllersTests
 
             //Repository Error Handler result should not be called
             repositoryErrorHandlerMock.Verify(r => r.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
-            //Final result should be a what an Unprocessable Entity with the correct message
+            //Final result should be an Unprocessable Entity with the correct message
             Assert.Equal("Project Academy with id '00000003-0000-0ff1-ce00-000000000001' not found within project with id '00000003-0000-0ff1-ce00-000000000000'", (string)castedResult.Value);
             Assert.Equal(422, castedResult.StatusCode);
         }
@@ -697,7 +697,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be a what the Error Handler returns
+            //Final result should be what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
         }
@@ -809,7 +809,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be a what the Error Handler returns
+            //Final result should be what the Error Handler returns
             Assert.Equal("Some error message", (string)castedResult.Value);
             Assert.Equal(499, castedResult.StatusCode);
         }
@@ -865,7 +865,6 @@ namespace API.Tests.ControllersTests
             var putProjectAcademyMapper = new Mock<IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>>();
             putProjectAcademyMapper.Setup(m => m.Map(It.Is<PutProjectAcademiesRequestModel>(p => p.AcademyId == referencedAcademyId)))
                                    .Returns(new PatchProjectAcademiesD365Model { AcademyId = referencedAcademyId.ToString() });
-
 
 
             //Set up repository error handler to handle the bad request result described above
@@ -1158,7 +1157,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be an Unprocessable Entity returns
+            //Final result should be an Unprocessable Entity
             Assert.Equal("No academy found with the id of: 20000003-0000-0ff1-ce00-000000000002", (string)castedResult.Value);
             Assert.Equal(422, castedResult.StatusCode);
         }
@@ -1218,7 +1217,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be an Unprocessable Entity returns
+            //Final result should be an Unprocessable Entity
             Assert.Equal("No academy found with the id of: 00000003-0000-0ff1-ce00-000000000000. No academy found with the id of: 10000003-0000-0ff1-ce00-000000000001. No academy found with the id of: 20000003-0000-0ff1-ce00-000000000002", (string)castedResult.Value);
             Assert.Equal(422, castedResult.StatusCode);
         }
@@ -1287,7 +1286,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Final result should be an Unprocessable Entity returns
+            //Final result should be an Unprocessable Entity
             Assert.Equal("No trust found with the id of: 40000003-0000-0ff1-ce00-000000000004", (string)castedResult.Value);
             Assert.Equal(422, castedResult.StatusCode);
         }

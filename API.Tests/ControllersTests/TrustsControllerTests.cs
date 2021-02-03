@@ -15,7 +15,7 @@ namespace API.Tests.ControllersTests
 {
     public class TrustsControllerTests
     {
-        //These defaults mock are passed to the cosntructor in tests for methods that don't use them
+        //These default mocks are passed to the constructor in tests for methods that don't use them
         private readonly Mock<ITrustsRepository> _trustRepostiory;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
@@ -224,7 +224,7 @@ namespace API.Tests.ControllersTests
 
             //Assert
 
-            //Error handler should be called with result from repository
+            //Error handler should be called with repository result
             errorHandlerMock.Verify(h => h.LogAndCreateResponse(
                 It.Is<RepositoryResultBase>(r =>
                     r.Error.ErrorMessage == "Bad Request" &&
@@ -271,7 +271,7 @@ namespace API.Tests.ControllersTests
             //Mapper not to be called becasue there are no results
             mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Never);
 
-            //Final result should be a 200OK wrapped around a null list
+            //Final result should be a 200 OK wrapped around a null list
             Assert.Null((List<GetTrustsModel>)castedResult.Value);
             Assert.Equal(200, castedResult.StatusCode);
         }
