@@ -5,7 +5,7 @@ using API.Models.Downstream.D365;
 using System;
 using Xunit;
 
-namespace API.Tests
+namespace API.Tests.MapperTests
 {
     public class ModelMappingTests
     {

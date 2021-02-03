@@ -24,7 +24,11 @@
             <summary>
             Search for Academy Transfer Projects.
             </summary>
-            <param name="searchTerm">The search term. The searched fields will be: Project Name, Outgoing Trust Name, Outgoing Trust Companies House Number, Academy Name</param>
+            <param name="searchTerm">The search term. The searched fields will be: 
+            Project Name
+            Outgoing Trust Name, 
+            Outgoing Trust Companies House Number
+            Academy Name</param>
             <param name="status">The project status:
             1. In Progress
             2. Completed</param>
@@ -48,7 +52,7 @@
             <param name="projectAcademyId">The ID of the ProjectAcademy entity - this is the id of the custom entity, not the ID of the academy in TRAMS</param>
             <returns></returns>
         </member>
-        <member name="M:API.Controllers.ProjectsController.InsertTrust(API.Models.Upstream.Request.PostProjectsRequestModel)">
+        <member name="M:API.Controllers.ProjectsController.InsertProject(API.Models.Upstream.Request.PostProjectsRequestModel)">
             <summary>
             API endpoint for creating a new Academy Transfers Project
             </summary>

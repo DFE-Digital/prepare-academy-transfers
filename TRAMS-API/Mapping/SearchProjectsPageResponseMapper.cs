@@ -1,4 +1,5 @@
 ﻿using API.Models.Downstream.D365;
+using API.Models.Upstream.Enums;
 using API.Models.Upstream.Response;
 using System.Linq;
 
