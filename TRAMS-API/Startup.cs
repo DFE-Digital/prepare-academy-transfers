@@ -81,8 +81,11 @@ namespace TRAMS_API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHttpsRedirection();
+            }
 
-            app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseAuthentication();

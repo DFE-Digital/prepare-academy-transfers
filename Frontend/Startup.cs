@@ -2,6 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.HttpHelpers;
+using API.Mapping;
+using API.Mapping.Request;
+using API.Mapping.Response;
+using API.Models.Downstream.D365;
+using API.Models.Upstream.Request;
+using API.Models.Upstream.Response;
+using API.ODataHelpers;
+using API.Repositories;
+using API.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,10 +36,15 @@ namespace Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.Configure<RouteOptions>(options =>
-            {
-                options.LowercaseUrls = true;
-            });
+            services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
+
+            services.AddSingleton(this.CreateHttpClient());
+            services.AddSingleton<IAuthenticatedHttpClient>(r => this.CreateHttpClient());
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
+
+            ConfigureRepositories(services);
+            ConfigureHelpers(services);
+            ConfigureMappers(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +74,70 @@ namespace Frontend
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<ITrustsRepository, TrustsRepository>();
+            services.AddTransient<IAcademiesRepository, AcademiesRepository>();
+            services.AddTransient<IProjectsRepository, ProjectsRepository>();
+        }
+
+        private static void ConfigureMappers(IServiceCollection services)
+        {
+            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>,
+                GetTrustsReponseMapper>();
+
+            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>,
+                GetAcademiesResponseMapper>();
+
+            services.AddTransient<IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>,
+                PutProjectAcademiesRequestMapper>();
+
+            services.AddTransient<IMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>,
+                PostProjectAcademiesRequestMapper>();
+
+            services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>,
+                PostProjectsRequestMapper>();
+
+            services.AddTransient<IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>,
+                GetProjectAcademiesResponseMapper>();
+
+            services.AddTransient<IMapper<GetProjectsD365Model, GetProjectsResponseModel>,
+                GetProjectsResponseMapper>();
+
+            services.AddTransient<IMapper<SearchProjectsD365Model, SearchProjectsModel>,
+                SearchProjectsItemMapper>();
+
+            services.AddTransient<IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
+                SearchProjectsPageResponseMapper>();
+        }
+
+        private static void ConfigureHelpers(IServiceCollection services)
+        {
+            services.AddTransient(typeof(ID365ModelHelper<>), typeof(D365ModelHelper<>));
+            services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
+
+            services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
+
+            services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
+
+            services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
+
+            services.AddTransient<IODataSanitizer, ODataSanitizer>();
+        }
+
+        private AuthenticatedHttpClient CreateHttpClient()
+        {
+            var authority = Configuration["D365:Authority"];
+            var clientId = Configuration["D365:ClientId"];
+            var clientSecret = Configuration["D365:ClientSecret"];
+            var url = Configuration["D365:Url"];
+            var version = Configuration["D365:Version"];
+
+            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
+
+            return client;
         }
     }
 }
