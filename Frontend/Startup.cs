@@ -35,7 +35,7 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddSessionStateTempDataProvider();
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
             services.AddSingleton(this.CreateHttpClient());
@@ -45,6 +45,8 @@ namespace Frontend
             ConfigureRepositories(services);
             ConfigureHelpers(services);
             ConfigureMappers(services);
+            
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +69,8 @@ namespace Frontend
             app.UseRouting();
 
             app.UseAuthorization();
+            
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

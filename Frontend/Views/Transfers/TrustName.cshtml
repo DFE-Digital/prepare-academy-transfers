@@ -1,0 +1,18 @@
+@* @model object *@
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Trustname</h2>
+
+@if ((bool) ViewData["Error.Exists"])
+{
+    <p class="govuk-body">Error: @ViewData["Error.Message"]</p>
+}
+
+<form method="get" asp-action="TrustSearch">
+    <input name="query"/>
+    <button type="submit">Submit</button>
+</form>
