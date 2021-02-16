@@ -1,0 +1,17 @@
+@model Frontend.Views.Transfers.TrustSearch
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Trust search</h2>
+
+<ul class="govuk-list govuk-list--bullet">
+    @foreach (var trust in Model.Trusts)
+    {
+        <li>
+            <a class="govuk-link" href="meow">@trust.TrustName</a>
+        </li>
+    }
+</ul>
