@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using API.Mapping;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
@@ -22,55 +21,6 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
-        class MockSession : ISession
-        {
-            public readonly Dictionary<string, string> SessionStore;
-
-            public MockSession()
-            {
-                SessionStore = new Dictionary<string, string>();
-            }
-
-            public void Clear()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task CommitAsync(CancellationToken cancellationToken = new CancellationToken())
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task LoadAsync(CancellationToken cancellationToken = new CancellationToken())
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Remove(string key)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Set(string key, byte[] value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool TryGetValue(string key, out byte[] value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void SetString(string key, string value)
-            {
-                SessionStore[key] = value;
-            }
-
-            public string Id { get; }
-            public bool IsAvailable { get; }
-            public IEnumerable<string> Keys { get; }
-        }
-
         private readonly Mock<ITrustsRepository> _trustRepository;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
@@ -164,7 +114,7 @@ namespace Frontend.Tests.ControllerTests
             );
 
             _getTrustMapper.Setup(m => m.Map(It.IsAny<GetTrustsD365Model>()))
-                .Returns<GetTrustsD365Model>((input) => new GetTrustsModel {Id = input.Id});
+                .Returns<GetTrustsD365Model>(input => new GetTrustsModel {Id = input.Id});
 
             var result = await _subject.TrustSearch("Trust name");
 
@@ -232,6 +182,69 @@ namespace Frontend.Tests.ControllerTests
                 "OutgoingTrustId",
                 It.Is<byte[]>(input =>
                     Encoding.UTF8.GetString(input) == trustId.ToString()
+                )));
+        }
+
+        #endregion
+
+        #region OutgoingTrustAcademies
+
+        [Fact]
+        public async void GivenTrustGuidInSession_FetchesTheAcadmiesForThatTrust()
+        {
+            const string academyName = "Academy 001";
+            const string academyNameTwo = "Academy 002";
+            var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+            var trustIdByteArray = Encoding.UTF8.GetBytes(trustId.ToString());
+
+            _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
+
+            _academiesRepository.Setup(r => r.GetAcademiesByTrustId(trustId)).ReturnsAsync(
+                new RepositoryResult<List<GetAcademiesD365Model>>
+                {
+                    Result = new List<GetAcademiesD365Model>
+                    {
+                        new GetAcademiesD365Model {AcademyName = academyName},
+                        new GetAcademiesD365Model {AcademyName = academyNameTwo},
+                    }
+                }
+            );
+
+            _getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == academyName)))
+                .Returns(new GetAcademiesModel {AcademyName = "Mapped Academy 001"});
+            _getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == academyNameTwo)))
+                .Returns(new GetAcademiesModel {AcademyName = "Mapped Academy 002"});
+
+            var response = await _subject.OutgoingTrustAcademies();
+            var viewResponse = Assert.IsType<ViewResult>(response);
+            var viewModel = Assert.IsType<OutgoingTrustAcademies>(viewResponse.Model);
+
+            Assert.Equal("Mapped Academy 001", viewModel.Academies[0].AcademyName);
+            Assert.Equal("Mapped Academy 002", viewModel.Academies[1].AcademyName);
+        }
+
+        #endregion
+
+        #region SubmitOutgoingTrustAcademies
+
+        [Fact]
+        public void GivenAcademyGuids_StoresTheThemInTheSessionAndRedirects()
+        {
+            var idOne = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+            var idTwo = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3854af");
+            var idThree = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3854af");
+            var academyIds = new List<Guid> {idOne, idTwo, idThree}.ToArray();
+            var academyIdString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
+
+            var result = _subject.SubmitOutgoingTrustAcademies(academyIds);
+
+            var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("IncomingTrustIdentified", resultRedirect.ActionName);
+            
+            _session.Verify(s => s.Set(
+                "OutgoingAcademyIds",
+                It.Is<byte[]>(input =>
+                    Encoding.UTF8.GetString(input) == academyIdString
                 )));
         }
 

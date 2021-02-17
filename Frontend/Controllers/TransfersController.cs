@@ -78,12 +78,28 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> OutgoingTrustAcademies()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString("OutgoingTrustId"));
-            var result = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
-            var academies = result.Result.Select(a => _getAcademiesMapper.Map(a)).ToList();
+            var sessionGuid = HttpContext.Session.GetString("OutgoingTrustId");
+            var outgoingTrustId = Guid.Parse(sessionGuid);
+            var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var academies = academiesRepoResult.Result
+                ?.Select(a => _getAcademiesMapper.Map(a))
+                .ToList();
 
             var model = new OutgoingTrustAcademies {Academies = academies};
             return View(model);
+        }
+
+        public IActionResult SubmitOutgoingTrustAcademies(Guid[] academyIds)
+        {
+            var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
+            HttpContext.Session.SetString("OutgoingAcademyIds", academyIdsString);
+            
+            return RedirectToAction("IncomingTrustIdentified");
+        }
+
+        public IActionResult IncomingTrustIdentified()
+        {
+            return View();
         }
     }
 }

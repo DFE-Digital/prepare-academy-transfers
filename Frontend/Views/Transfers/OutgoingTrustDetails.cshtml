@@ -36,6 +36,6 @@
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" href="meow" role="button" draggable="false">Select trust</a>
+        <a class="govuk-button" asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Id" role="button" draggable="false">Select trust</a>
     </div>
 </div>
