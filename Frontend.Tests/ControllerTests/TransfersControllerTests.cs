@@ -18,7 +18,6 @@ namespace Frontend.Tests.ControllerTests
     public class TransfersControllerTests
     {
         private readonly Mock<ITrustsRepository> _trustRepository;
-        private readonly Mock<TempDataDictionary> _tempDataDictionary;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
         private readonly TransfersController _subject;
 
@@ -26,12 +25,12 @@ namespace Frontend.Tests.ControllerTests
         {
             _trustRepository = new Mock<ITrustsRepository>();
             _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+
             var tempDataProvider = new Mock<ITempDataProvider>();
             var tempDataDictionaryFactory =
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(new DefaultHttpContext());
 
-            _tempDataDictionary = new Mock<TempDataDictionary>();
             _subject = new TransfersController(
                 _trustRepository.Object,
                 _getTrustMapper.Object) {TempData = tempData};
@@ -40,7 +39,7 @@ namespace Frontend.Tests.ControllerTests
         #region TrustName
 
         [Fact]
-        public async void GivenErrorMessageExists_SetErrorInViewData()
+        public void GivenErrorMessageExists_SetErrorInViewData()
         {
             _subject.TempData["ErrorMessage"] = "This is an error message";
             _subject.TrustName();
@@ -131,6 +130,51 @@ namespace Frontend.Tests.ControllerTests
         {
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal("TrustName", redirectResponse.ActionName);
+        }
+
+        #endregion
+
+        #region OutgoingTrustDetails
+
+        [Fact]
+        public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
+        {
+            var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
+            var mappedTrust = new GetTrustsModel()
+            {
+                Id = trustId,
+                TrustName = "Example trust",
+                CompaniesHouseNumber = "12345678",
+                EstablishmentType = "Multi Academy Trust",
+                TrustReferenceNumber = "TR12345",
+                Address = "One example street\n\rExample City \n\rExample other line"
+            };
+
+            _trustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(new RepositoryResult<GetTrustsD365Model>()
+            {
+                Result = new GetTrustsD365Model()
+                {
+                    Id = trustId,
+                    TrustName = "Example trust",
+                    CompaniesHouseNumber = "12345678",
+                    EstablishmentType = "Multi Academy Trust",
+                    TrustReferenceNumber = "TR12345",
+                    Address = "One example street\n\rExample City \n\rExample other line"
+                }
+            });
+
+            _getTrustMapper.Setup(m => m.Map(It.IsAny<GetTrustsD365Model>()))
+                .Returns<GetTrustsD365Model>(input => mappedTrust);
+
+            var response = await _subject.OutgoingTrustDetails(trustId);
+
+            _trustRepository.Verify(r => r.GetTrustById(trustId), Times.Once);
+            _getTrustMapper.Verify(m => m.Map(It.Is<GetTrustsD365Model>(model => model.Id == trustId)));
+
+            var viewResponse = Assert.IsType<ViewResult>(response);
+            var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
+
+            Assert.Equal(mappedTrust, viewModel.Trust);
         }
 
         #endregion

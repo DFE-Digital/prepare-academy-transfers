@@ -25,16 +25,16 @@ namespace Frontend.Controllers
         public IActionResult TrustName()
         {
             ViewData["Error.Exists"] = false;
-            
+
             if (TempData.Peek("ErrorMessage") == null) return View();
-            
+
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
             return View();
         }
 
         public async Task<IActionResult> TrustSearch(string query)
-       {
+        {
             if (string.IsNullOrEmpty(query))
             {
                 TempData["ErrorMessage"] = "Please enter a search term";
@@ -48,10 +48,18 @@ namespace Frontend.Controllers
                 TempData["ErrorMessage"] = result.Error.ErrorMessage;
                 return RedirectToAction("TrustName");
             }
-            
-            var mappedResults = result.Result.Select(r => _getTrustMapper.Map(r)).ToList();
-            var model = new TrustSearch { Trusts = mappedResults };
 
+            var mappedResults = result.Result.Select(r => _getTrustMapper.Map(r)).ToList();
+            var model = new TrustSearch {Trusts = mappedResults};
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId)
+        {
+            var result = await _trustRepository.GetTrustById(trustId);
+            var mappedResult = _getTrustMapper.Map(result.Result);
+            var model = new OutgoingTrustDetails {Trust = mappedResult};
             return View(model);
         }
     }
