@@ -1,0 +1,36 @@
+@model Frontend.Views.Transfers.OutgoingTrustAcademies
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<h1 class="govuk-heading-xl"></h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <form class="govuk-form" asp-action="SubmitOutgoingTrustAcademies" method="get">
+            <div class="govuk-form-group">
+
+                <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">Add the transferring academies</h1>
+                    </legend>
+                    <div id="add-academies-hint" class="govuk-hint">
+                        Select all the academies that are transferring.
+                    </div>
+                    <div class="govuk-checkboxes">
+                        @foreach (var academy in Model.Academies)
+                        {
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" id="@academy.Id" name="academyIds" type="checkbox" value="@academy.Id">
+                                <label class="govuk-label govuk-checkboxes__label" for="@academy.Id">
+                                    @academy.AcademyName (URN @academy.Urn)
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" type="submit">Save and continue</button>
+        </form>
+    </div>
+</div>

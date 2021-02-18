@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.HttpHelpers;
 using API.Mapping;
 using API.Mapping.Request;
@@ -12,10 +9,8 @@ using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,15 +33,21 @@ namespace Frontend
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
-            services.AddSingleton(this.CreateHttpClient());
-            services.AddSingleton<IAuthenticatedHttpClient>(r => this.CreateHttpClient());
+            services.AddSingleton(CreateHttpClient());
+            services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
 
             ConfigureRepositories(services);
             ConfigureHelpers(services);
             ConfigureMappers(services);
             
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(24);
+                options.Cookie.Name = ".AcademyTransfers.Session";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

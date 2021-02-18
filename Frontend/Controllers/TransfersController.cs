@@ -6,6 +6,7 @@ using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using Frontend.Views.Transfers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers
@@ -13,13 +14,18 @@ namespace Frontend.Controllers
     public class TransfersController : Controller
     {
         private readonly ITrustsRepository _trustRepository;
+        private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
+        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
 
-        public TransfersController(ITrustsRepository trustRepository,
-            IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper)
+        public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
+            IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper,
+            IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper)
         {
             _trustRepository = trustRepository;
+            _academiesRepository = academiesRepository;
             _getTrustMapper = getTrustMapper;
+            _getAcademiesMapper = getAcademiesMapper;
         }
 
         public IActionResult TrustName()
@@ -61,6 +67,39 @@ namespace Frontend.Controllers
             var mappedResult = _getTrustMapper.Map(result.Result);
             var model = new OutgoingTrustDetails {Trust = mappedResult};
             return View(model);
+        }
+
+        public IActionResult ConfirmOutgoingTrust(Guid trustId)
+        {
+            HttpContext.Session.SetString("OutgoingTrustId", trustId.ToString());
+
+            return RedirectToAction("OutgoingTrustAcademies");
+        }
+
+        public async Task<IActionResult> OutgoingTrustAcademies()
+        {
+            var sessionGuid = HttpContext.Session.GetString("OutgoingTrustId");
+            var outgoingTrustId = Guid.Parse(sessionGuid);
+            var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var academies = academiesRepoResult.Result
+                ?.Select(a => _getAcademiesMapper.Map(a))
+                .ToList();
+
+            var model = new OutgoingTrustAcademies {Academies = academies};
+            return View(model);
+        }
+
+        public IActionResult SubmitOutgoingTrustAcademies(Guid[] academyIds)
+        {
+            var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
+            HttpContext.Session.SetString("OutgoingAcademyIds", academyIdsString);
+            
+            return RedirectToAction("IncomingTrustIdentified");
+        }
+
+        public IActionResult IncomingTrustIdentified()
+        {
+            return View();
         }
     }
 }
