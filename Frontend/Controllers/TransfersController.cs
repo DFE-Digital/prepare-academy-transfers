@@ -110,12 +110,51 @@ namespace Frontend.Controllers
 
         public IActionResult IncomingTrust()
         {
+            ViewData["Error.Exists"] = false;
+
+            if (TempData.Peek("ErrorMessage") == null) return View();
+
+            ViewData["Error.Exists"] = true;
+            ViewData["Error.Message"] = TempData["ErrorMessage"];
+
             return View();
         }
 
-        public async Task<IActionResult> SearchIncomingTrust()
+        public async Task<IActionResult> SearchIncomingTrust(string query)
         {
-            return null;
+            if (string.IsNullOrEmpty(query))
+            {
+                TempData["ErrorMessage"] = "Please enter a search term";
+                return RedirectToAction("IncomingTrust");
+            }
+
+            var result = await _trustRepository.SearchTrusts(query);
+
+            if (!result.IsValid)
+            {
+                TempData["ErrorMessage"] = result.Error.ErrorMessage;
+                return RedirectToAction("IncomingTrust");
+            }
+
+            var mappedResults = result.Result.Select(r => _getTrustMapper.Map(r)).ToList();
+            var model = new TrustSearch {Trusts = mappedResults};
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> IncomingTrustDetails(Guid trustId)
+        {
+            var result = await _trustRepository.GetTrustById(trustId);
+            var mappedResult = _getTrustMapper.Map(result.Result);
+            var model = new OutgoingTrustDetails {Trust = mappedResult};
+            return View(model);
+        }
+
+        public IActionResult ConfirmIncomingTrust(Guid trustId)
+        {
+            HttpContext.Session.SetString("IncomingTrustId", trustId.ToString());
+
+            return RedirectToAction("CheckYourAnswers");
         }
 
         public IActionResult CheckYourAnswers()
