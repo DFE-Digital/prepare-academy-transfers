@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
 
 namespace Frontend
 {
@@ -31,6 +32,8 @@ namespace Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddDistributedRedisCache(options => { options.Configuration = "localhost"; });
+
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
             services.AddSingleton(CreateHttpClient());
@@ -40,7 +43,7 @@ namespace Frontend
             ConfigureRepositories(services);
             ConfigureHelpers(services);
             ConfigureMappers(services);
-            
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(24);
@@ -70,7 +73,7 @@ namespace Frontend
             app.UseRouting();
 
             app.UseAuthorization();
-            
+
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
