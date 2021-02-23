@@ -32,7 +32,7 @@ namespace Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
-            services.AddDistributedRedisCache(options => { options.Configuration = "localhost"; });
+            services.AddDistributedRedisCache(options => { options.Configuration = Configuration["REDIS_URL"]; });
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
