@@ -157,9 +157,32 @@ namespace Frontend.Controllers
             return RedirectToAction("CheckYourAnswers");
         }
 
-        public IActionResult CheckYourAnswers()
+        public async Task<IActionResult> CheckYourAnswers()
         {
-            return View();
+            var readOnlySpan = HttpContext.Session.GetString("OutgoingTrustId");
+            var outgoingTrustId = Guid.Parse(readOnlySpan);
+            var incomingTrustId = Guid.Parse(HttpContext.Session.GetString("IncomingTrustId"));
+            var academyIds = Helpers.Session.GetStringListFromSession(HttpContext.Session, "OutgoingAcademyIds")
+                .Select(Guid.Parse);
+
+            var outgoingTrustResponse = await _trustRepository.GetTrustById(outgoingTrustId);
+            var outgoingTrust = _getTrustMapper.Map(outgoingTrustResponse.Result);
+
+            var incomingTrustResponse = await _trustRepository.GetTrustById(incomingTrustId);
+            var incomingTrust = _getTrustMapper.Map(incomingTrustResponse.Result);
+
+            var academiesForTrust = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var selectedAcademies = academiesForTrust.Result.Select(academy => _getAcademiesMapper.Map(academy))
+                .Where(academy => academyIds.Contains(academy.Id)).ToList();
+
+            var model = new CheckYourAnswers()
+            {
+                IncomingTrust = incomingTrust,
+                OutgoingTrust = outgoingTrust,
+                OutgoingAcademies = selectedAcademies
+            };
+
+            return View(model);
         }
     }
 }

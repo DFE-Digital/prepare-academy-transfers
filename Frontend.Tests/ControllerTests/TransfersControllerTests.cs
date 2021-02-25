@@ -129,7 +129,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
             {
                 var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                var mappedTrust = new GetTrustsModel()
+                var mappedTrust = new GetTrustsModel
                 {
                     Id = trustId,
                     TrustName = "Example trust",
@@ -140,9 +140,9 @@ namespace Frontend.Tests.ControllerTests
                 };
 
                 _trustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsD365Model>()
+                    new RepositoryResult<GetTrustsD365Model>
                     {
-                        Result = new GetTrustsD365Model()
+                        Result = new GetTrustsD365Model
                         {
                             Id = trustId,
                             TrustName = "Example trust",
@@ -330,7 +330,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
             {
                 var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                var mappedTrust = new GetTrustsModel()
+                var mappedTrust = new GetTrustsModel
                 {
                     Id = trustId,
                     TrustName = "Example trust",
@@ -341,9 +341,9 @@ namespace Frontend.Tests.ControllerTests
                 };
 
                 _trustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsD365Model>()
+                    new RepositoryResult<GetTrustsD365Model>
                     {
-                        Result = new GetTrustsD365Model()
+                        Result = new GetTrustsD365Model
                         {
                             Id = trustId,
                             TrustName = "Example trust",
@@ -383,6 +383,102 @@ namespace Frontend.Tests.ControllerTests
                         Encoding.UTF8.GetString(input) == trustId.ToString()
                     )));
                 AssertRedirectToAction(response, "CheckYourAnswers");
+            }
+        }
+
+        public class CheckYourAnswersTests : TransfersControllerTests
+        {
+            private readonly GetTrustsD365Model _outgoingTrust = new GetTrustsD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af")};
+
+            private readonly GetTrustsD365Model _incomingTrust = new GetTrustsD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
+
+            private readonly GetAcademiesD365Model _academyOne = new GetAcademiesD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
+
+            private readonly GetAcademiesD365Model _academyTwo = new GetAcademiesD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
+            
+            private readonly GetAcademiesD365Model _academyThree = new GetAcademiesD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385213")};
+
+            public CheckYourAnswersTests()
+            {
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
+                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
+
+                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Id.ToString());
+                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
+
+                var outgoingAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
+                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
+                _trustRepository.Setup(r => r.GetTrustById(_outgoingTrust.Id)).ReturnsAsync(
+                    new RepositoryResult<GetTrustsD365Model>
+                    {
+                        Result = _outgoingTrust
+                    });
+
+                _trustRepository.Setup(r => r.GetTrustById(_incomingTrust.Id)).ReturnsAsync(
+                    new RepositoryResult<GetTrustsD365Model>
+                    {
+                        Result = _incomingTrust
+                    });
+
+                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(_outgoingTrust.Id)).ReturnsAsync(
+                    new RepositoryResult<List<GetAcademiesD365Model>>
+                    {
+                        Result = new List<GetAcademiesD365Model> {_academyOne, _academyTwo, _academyThree}
+                    });
+
+                _getTrustMapper.Setup(m => m.Map(It.IsAny<GetTrustsD365Model>()))
+                    .Returns<GetTrustsD365Model>(input => new GetTrustsModel {Id = input.Id});
+
+                _getAcademiesMapper.Setup(m => m.Map(It.IsAny<GetAcademiesD365Model>()))
+                    .Returns<GetAcademiesD365Model>(input => new GetAcademiesModel {Id = input.Id});
+            }
+
+            [Fact]
+            public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
+            {
+                await _subject.CheckYourAnswers();
+                _trustRepository.Verify(r => r.GetTrustById(_outgoingTrust.Id), Times.Once);
+                _trustRepository.Verify(r => r.GetTrustById(_incomingTrust.Id), Times.Once);
+                _academiesRepository.Verify(r => r.GetAcademiesByTrustId(_outgoingTrust.Id), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenAllInformationInSession_MapsTheResponses()
+            {
+                await _subject.CheckYourAnswers();
+
+                _getTrustMapper.Verify(m => m.Map(It.Is<GetTrustsD365Model>(trust => trust.Id == _outgoingTrust.Id)),
+                    Times.Once);
+                _getTrustMapper.Verify(m => m.Map(It.Is<GetTrustsD365Model>(trust => trust.Id == _incomingTrust.Id)),
+                    Times.Once);
+
+                _getAcademiesMapper.Verify(
+                    m => m.Map(It.Is<GetAcademiesD365Model>(academy => academy.Id == _academyOne.Id)), Times.Once);
+                _getAcademiesMapper.Verify(
+                    m => m.Map(It.Is<GetAcademiesD365Model>(academy => academy.Id == _academyTwo.Id)), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenAllInformationInSession_CreatesTheViewModelCorrectly()
+            {
+                var response = await _subject.CheckYourAnswers();
+
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
+
+                Assert.Equal(_outgoingTrust.Id, viewModel.OutgoingTrust.Id);
+                Assert.Equal(_incomingTrust.Id, viewModel.IncomingTrust.Id);
+
+                var expectedAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
+                var viewAcademyIds = viewModel.OutgoingAcademies.Select(academy => academy.Id);
+
+                Assert.Equal(expectedAcademyIds, viewAcademyIds);
             }
         }
 
