@@ -1,0 +1,20 @@
+@model Frontend.Views.Transfers.TrustSearch 
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h1 class="govuk-heading-xl">Select an incoming trust</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <ul class="govuk-list govuk-list--bullet">
+            @foreach (var trust in Model.Trusts)
+            {
+                <li>
+                    <a class="govuk-link" asp-action="IncomingTrustDetails" asp-route-trustId="@trust.Id">@trust.TrustName</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -5,4 +5,33 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h1 class="govuk-heading-xl"></h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <form class="govuk-form" asp-action="SubmitIncomingTrustIdentified" method="get">
+            <div class="govuk-form-group">
+
+                <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">Has an incoming trust been identified?</h1>
+                    </legend>
+                    <div class="govuk-radios govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="incoming-trust-identified" name="incomingTrustIdentified" type="radio" value="yes">
+                            <label class="govuk-label govuk-radios__label" for="incoming-trust-identified">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="incoming-trust-identified-2" name="incomingTrustIdentified" type="radio" value="no">
+                            <label class="govuk-label govuk-radios__label" for="incoming-trust-identified-2">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" type="submit">Save and continue</button>
+        </form>
+    </div>
+</div>

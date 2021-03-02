@@ -1,0 +1,86 @@
+@model Frontend.Views.Transfers.CheckYourAnswers
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h1 class="govuk-heading-xl">Check trust and academy details</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">Outgoing trust</h2>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Name</dt>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.TrustName</dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="#">Change <span class="govuk-visually-hidden">outgoing trust</span></a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Trust Reference Number</dt>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.TrustReferenceNumber</dd>
+                <dd class="govuk-summary-list__actions"></dd>
+            </div>
+        </dl>
+        <h2 class="govuk-heading-m">Academy details</h2>
+        @foreach (var academy in Model.OutgoingAcademies)
+        {
+            <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Name</dt>
+                    <dd class="govuk-summary-list__value">@academy.AcademyName</dd>
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">Change <span class="govuk-visually-hidden">Academy</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">URN</dt>
+                    <dd class="govuk-summary-list__value">@academy.Urn</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Local Authority</dt>
+                    <dd class="govuk-summary-list__value">@academy.LocalAuthorityName</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">School type</dt>
+                    <dd class="govuk-summary-list__value">@academy.EstablishmentType</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Faith School</dt>
+                    <dd class="govuk-summary-list__value">@academy.ReligiousCharacter</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Ofsted Rating</dt>
+                    <dd class="govuk-summary-list__value">@academy.OfstedRating</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Last inspection</dt>
+                    <dd class="govuk-summary-list__value">@academy.OfstedInspectionDate?.ToString("d MMMM yyyy")</dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">PFI (private finance initiative)</dt>
+                    <dd class="govuk-summary-list__value"></dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                </div>
+            </dl>
+        }
+        <h2 class="govuk-heading-m">Incoming trust</h2>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Name</dt>
+                <dd class="govuk-summary-list__value">@Model.IncomingTrust.TrustName</dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="#">Change <span class="govuk-visually-hidden">incoming trust</span></a>
+                </dd>
+            </div>
+        </dl>
+        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject">Save and continue</a>
+    </div>
+</div>

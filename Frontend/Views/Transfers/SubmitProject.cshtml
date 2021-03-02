@@ -1,0 +1,25 @@
+@model Frontend.Views.Transfers.SubmitProject
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+<p class="govuk-body">
+    Is valid: @Model.IsValid
+</p>
+
+@if (Model.CreatedProjectId != null)
+{
+    <p class="govuk-body">
+        Created project GUID: @Model.CreatedProjectId
+    </p>
+}
+
+@if (Model.ErrorMessage != null)
+{
+    <p class="govuk-body">
+        Error message: @Model.ErrorMessage
+    </p>
+}
