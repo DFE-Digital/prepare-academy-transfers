@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using API.Mapping;
+using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
+using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using Frontend.Controllers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Http;
@@ -23,8 +26,13 @@ namespace Frontend.Tests.ControllerTests
     {
         private readonly Mock<ITrustsRepository> _trustRepository;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
+        private readonly Mock<IProjectsRepository> _projectsRepository;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
         private readonly Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>> _getAcademiesMapper;
+
+        private readonly Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>
+            _postProjectMapper;
+
         private readonly TransfersController _subject;
         private readonly Mock<ISession> _session;
 
@@ -32,8 +40,10 @@ namespace Frontend.Tests.ControllerTests
         {
             _trustRepository = new Mock<ITrustsRepository>();
             _academiesRepository = new Mock<IAcademiesRepository>();
+            _projectsRepository = new Mock<IProjectsRepository>();
             _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
             _getAcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
+            _postProjectMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
             _session = new Mock<ISession>();
 
             var tempDataProvider = new Mock<ITempDataProvider>();
@@ -49,7 +59,9 @@ namespace Frontend.Tests.ControllerTests
                 _trustRepository.Object,
                 _academiesRepository.Object,
                 _getTrustMapper.Object,
-                _getAcademiesMapper.Object
+                _getAcademiesMapper.Object,
+                _projectsRepository.Object,
+                _postProjectMapper.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
@@ -399,7 +411,7 @@ namespace Frontend.Tests.ControllerTests
 
             private readonly GetAcademiesD365Model _academyTwo = new GetAcademiesD365Model
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
-            
+
             private readonly GetAcademiesD365Model _academyThree = new GetAcademiesD365Model
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385213")};
 
@@ -482,6 +494,114 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
+        public class SubmitProjectTests : TransfersControllerTests
+        {
+            private readonly GetTrustsD365Model _outgoingTrust = new GetTrustsD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af")};
+
+            private readonly GetTrustsD365Model _incomingTrust = new GetTrustsD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
+
+            private readonly GetAcademiesD365Model _academyOne = new GetAcademiesD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
+
+            private readonly GetAcademiesD365Model _academyTwo = new GetAcademiesD365Model
+                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
+
+            private readonly RepositoryResult<Guid?> _postProjectResponse = new RepositoryResult<Guid?>
+                {Result = Guid.NewGuid()};
+
+
+            public SubmitProjectTests()
+            {
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
+                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
+
+                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Id.ToString());
+                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
+
+                var outgoingAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
+                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
+
+                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                    .ReturnsAsync(_postProjectResponse);
+            }
+
+            [Fact]
+            public async void GivenSubmittingProject_FetchesProjectInformationFromSession()
+            {
+                await _subject.SubmitProject();
+
+                var foundByteArray = It.IsAny<byte[]>();
+                _session.Verify(s => s.TryGetValue("OutgoingTrustId", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("IncomingTrustId", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("OutgoingAcademyIds", out foundByteArray), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenSubmittingProjectWithAllValues_InsertsMappedProject()
+            {
+                var mappedProject = new PostAcademyTransfersProjectsD365Model
+                {
+                    ProjectInitiatorUid = "Initiator UID",
+                    ProjectStatus = ProjectStatusEnum.InProgress,
+                    ProjectInitiatorFullName = "Initiator name",
+                    Academies = new List<PostAcademyTransfersProjectAcademyD365Model>(),
+                    Trusts = new List<PostAcademyTransfersProjectTrustD365Model>()
+                };
+
+                _postProjectMapper.Setup(m => m.Map(It.IsAny<PostProjectsRequestModel>()))
+                    .Returns(mappedProject);
+
+                await _subject.SubmitProject();
+
+                var expectedProjectRequestModel = new PostProjectsRequestModel
+                {
+                    ProjectAcademies = new List<PostProjectsAcademiesModel>
+                    {
+                        new PostProjectsAcademiesModel
+                        {
+                            AcademyId = _academyOne.Id,
+                            Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                {new PostProjectsAcademiesTrustsModel {TrustId = _outgoingTrust.Id},}
+                        },
+                        new PostProjectsAcademiesModel
+                        {
+                            AcademyId = _academyTwo.Id,
+                            Trusts = new List<PostProjectsAcademiesTrustsModel>
+                                {new PostProjectsAcademiesTrustsModel {TrustId = _outgoingTrust.Id},}
+                        }
+                    },
+                    ProjectTrusts = new List<PostProjectsTrustsModel>
+                    {
+                        new PostProjectsTrustsModel {TrustId = _incomingTrust.Id}
+                    }
+                };
+
+                _postProjectMapper.Verify(m => m.Map(It.Is<PostProjectsRequestModel>(
+                    model => ProjectsAreEqual(expectedProjectRequestModel, model)
+                )));
+                _projectsRepository.Verify(
+                    r => r.InsertProject(It.Is<PostAcademyTransfersProjectsD365Model>(input => input == mappedProject)),
+                    Times.Once);
+            }
+
+            [Fact]
+            public async void GivenProjectIsInserted_RedirectsToProjectFeaturesWithCreatedId()
+            {
+                var createdProjectGuid = Guid.NewGuid();
+                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                    .ReturnsAsync(new RepositoryResult<Guid?> {Result = createdProjectGuid});
+
+                var response = await _subject.SubmitProject();
+
+                var responseRedirect = Assert.IsType<RedirectToActionResult>(response);
+                Assert.Equal("ProjectFeatures", responseRedirect.ActionName);
+                Assert.Equal(createdProjectGuid, responseRedirect.RouteValues["projectId"]);
+            }
+        }
+
         #region HelperMethods
 
         private void AssertTrustsAreMappedCorrectly(Guid trustId, Guid trustTwoId)
@@ -508,6 +628,18 @@ namespace Frontend.Tests.ControllerTests
         {
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal(actionName, redirectResponse.ActionName);
+        }
+
+        private static bool ProjectsAreEqual(PostProjectsRequestModel expected, PostProjectsRequestModel actual)
+        {
+            return
+                expected.ProjectAcademies.Count == actual.ProjectAcademies.Count &&
+                expected.ProjectAcademies[0].AcademyId == actual.ProjectAcademies[0].AcademyId &&
+                expected.ProjectAcademies[0].Trusts[0].TrustId == actual.ProjectAcademies[0].Trusts[0].TrustId &&
+                expected.ProjectAcademies[1].AcademyId == actual.ProjectAcademies[1].AcademyId &&
+                expected.ProjectAcademies[1].Trusts[0].TrustId == actual.ProjectAcademies[1].Trusts[0].TrustId &&
+                expected.ProjectTrusts.Count == actual.ProjectTrusts.Count &&
+                expected.ProjectTrusts[0].TrustId == actual.ProjectTrusts[0].TrustId;
         }
 
         #endregion
