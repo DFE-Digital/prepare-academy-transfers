@@ -1,0 +1,22 @@
+@* @model object *@
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h1 class="govuk-heading-xl">Login page</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!string.IsNullOrEmpty((string) TempData.Peek("Error.Message")))
+        {
+            <p class="govuk-body">Error: @TempData["Error.Message"]</p>
+        }
+        <form method="post" asp-action="SubmitLogin">
+            <input type="hidden" value="@ViewData["ReturnUrl"]" name="returnUrl"/>
+            <input name="username" type="text"/>
+            <input name="password" type="password"/>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
