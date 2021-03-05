@@ -5,18 +5,41 @@
     Layout = "_Layout";
 }
 
-<h1 class="govuk-heading-xl">Login page</h1>
+
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Sign in to your DfE account</h1>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+        <h2 class="govuk-heading-l">Sign in</h2>
         @if (!string.IsNullOrEmpty((string) TempData.Peek("Error.Message")))
         {
             <p class="govuk-body">Error: @TempData["Error.Message"]</p>
         }
         <form method="post" asp-action="SubmitLogin">
             <input type="hidden" value="@ViewData["ReturnUrl"]" name="returnUrl"/>
-            <input name="username" type="text"/>
-            <input name="password" type="password"/>
-            <button type="submit">Submit</button>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="username">
+                    Username
+                </label>
+                <span id="username-hint" class="govuk-hint">
+                    Sign in using your username
+                </span>
+                <input class="govuk-input" id="username" name="username" type="text" aria-describedby="username-hint">
+            </div>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="password">
+                    Password
+                </label>
+                <span id="email-hint" class="govuk-hint">
+                    Sign in using your previously created password
+                </span>
+                <input class="govuk-input" id="password" name="password" type="password" aria-describedby="email-hint">
+            </div>
+            <button type="submit" class="govuk-button govuk-button--primary">Sign in</button>
         </form>
     </div>
 </div>
