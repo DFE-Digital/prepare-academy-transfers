@@ -12,11 +12,13 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using Frontend.Helpers;
 using Frontend.Views.Transfers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers
 {
+    [Authorize]
     public class TransfersController : Controller
     {
         private readonly ITrustsRepository _trustRepository;
