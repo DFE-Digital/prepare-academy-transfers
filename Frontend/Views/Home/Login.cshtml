@@ -15,6 +15,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
         <h2 class="govuk-heading-l">Sign in</h2>
+        @ViewData["Config"]
         @if (!string.IsNullOrEmpty((string) TempData.Peek("Error.Message")))
         {
             <p class="govuk-body">Error: @TempData["Error.Message"]</p>

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 
 namespace Frontend
@@ -33,7 +34,18 @@ namespace Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
-            services.AddDistributedRedisCache(options => { options.Configuration = Configuration["REDIS_URL"]; });
+            var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
+            var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.ConfigurationOptions = new ConfigurationOptions()
+                {
+                    Password = (string) redisCredentials?["password"],
+                    EndPoints = {$"{redisCredentials?["host"]}:{redisCredentials?["port"]}"},
+                    Ssl = (bool) redisCredentials?["tls_enabled"]
+                };
+            });
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
