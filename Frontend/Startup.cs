@@ -11,8 +11,8 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,16 +37,17 @@ namespace Frontend
             services.AddControllersWithViews().AddCookieTempDataProvider();
             var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
             var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
-
-            services.AddDistributedRedisCache(options =>
+            var redisConfigurationOptions = new ConfigurationOptions()
             {
-                options.ConfigurationOptions = new ConfigurationOptions()
-                {
-                    Password = (string) redisCredentials?["password"],
-                    EndPoints = {$"{redisCredentials?["host"]}:{redisCredentials?["port"]}"},
-                    Ssl = (bool) redisCredentials?["tls_enabled"]
-                };
-            });
+                Password = (string) redisCredentials?["password"],
+                EndPoints = {$"{redisCredentials?["host"]}:{redisCredentials?["port"]}"},
+                Ssl = (bool) redisCredentials?["tls_enabled"]
+            };
+            var redisConnection = ConnectionMultiplexer.Connect(redisConfigurationOptions);
+
+            services.AddStackExchangeRedisCache(
+                options => { options.ConfigurationOptions = redisConfigurationOptions; });
+            services.AddDataProtection().PersistKeysToStackExchangeRedis(redisConnection, "DataProtectionKeys");
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
 
