@@ -4,9 +4,6 @@ var path = require('path');
 module.exports = {
     mode: 'production',
     entry: ['./src/js/site.js', './src/css/site.scss'],
-    plugins: [
-        new MiniCssExtractPlugin({filename: 'site.css'})
-    ],
     module: {
         rules: [
             {
@@ -14,12 +11,6 @@ module.exports = {
                 use: [
                     // Creates `style` nodes from JS strings
                     "style-loader",
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            publicPath: ''
-                        }
-                    },
                     // Translates CSS into CommonJS
                     "css-loader",
                     // Compiles Sass to CSS

@@ -3,5 +3,5 @@
 
 // Write your JavaScript code.
 
-require('govuk-frontend');
-GOVUKFrontend.initAll();
+const GOVUKFrontend = require('govuk-frontend')
+GOVUKFrontend.initAll()
