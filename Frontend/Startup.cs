@@ -34,7 +34,7 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddControllersWithViews().AddCookieTempDataProvider();
             var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
             var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
 
@@ -66,6 +66,11 @@ namespace Frontend
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+            });
+
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
             
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
