@@ -62,18 +62,15 @@ namespace Frontend
             {
                 options.IdleTimeout = TimeSpan.FromHours(24);
                 options.Cookie.Name = ".AcademyTransfers.Session";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-            
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/home/login";
                 options.Cookie.Name = ".AcademyTransfers.Login";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
         }
