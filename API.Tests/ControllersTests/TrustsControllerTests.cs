@@ -64,7 +64,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -108,7 +107,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -160,7 +158,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -215,7 +212,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -257,7 +253,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -310,7 +305,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -367,7 +361,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -411,7 +404,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -451,7 +443,7 @@ namespace API.Tests.ControllersTests
             //Set up mock academies repo to return a failed result
             var academiesRepoMock = new Mock<IAcademiesRepository>();
             academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
-                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesModel>>
                              {
                                  Error = new RepositoryResultBase.RepositoryError
                                  {
@@ -481,7 +473,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
                                                         mapperMock.Object,
-                                                        _getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -518,7 +509,7 @@ namespace API.Tests.ControllersTests
             //Set up mock academies repo to return a failed result
             var academiesRepoMock = new Mock<IAcademiesRepository>();
             academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
-                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesModel>>
                              {
                                  Result = null
                              });
@@ -529,7 +520,6 @@ namespace API.Tests.ControllersTests
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
                                                         _getTrustMapper.Object,
-                                                        getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -569,27 +559,20 @@ namespace API.Tests.ControllersTests
             //Set up mock academies repo to return a failed result
             var academiesRepoMock = new Mock<IAcademiesRepository>();
             academiesRepoMock.Setup(m => m.GetAcademiesByTrustId(trustId))
-                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesD365Model>>
+                             .ReturnsAsync(new RepositoryResult<List<GetAcademiesModel>>
                              {
-                                 Result = new List<GetAcademiesD365Model>
+                                 Result = new List<GetAcademiesModel>
                                  {
-                                     new GetAcademiesD365Model { AcademyName = "Academy 001" },
-                                     new GetAcademiesD365Model { AcademyName = "Academy 002" }
+                                     new GetAcademiesModel { AcademyName = "Academy 001" },
+                                     new GetAcademiesModel { AcademyName = "Academy 002" }
                                  }
                              });
-
-            var getAcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
-            getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == "Academy 001")))
-                              .Returns(new GetAcademiesModel { AcademyName = "Mapped Academy 001" });
-            getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == "Academy 002")))
-                              .Returns(new GetAcademiesModel { AcademyName = "Mapped Academy 002" });
 
             var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
                                                         _getTrustMapper.Object,
-                                                        getAcademiesMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -602,12 +585,10 @@ namespace API.Tests.ControllersTests
             //Error handler should be called when a repository fails
             errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
 
-            //GetAcademiesMapper should not be called when no academies are found
-            getAcademiesMapper.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Exactly(2));
             //Final result should be a 200 wrapped around a null list
             Assert.Equal(2, ((List<GetAcademiesModel>)castedResult.Value).Count);
-            Assert.Equal("Mapped Academy 001", ((List<GetAcademiesModel>)castedResult.Value)[0].AcademyName);
-            Assert.Equal("Mapped Academy 002", ((List<GetAcademiesModel>)castedResult.Value)[1].AcademyName);
+            Assert.Equal("Academy 001", ((List<GetAcademiesModel>)castedResult.Value)[0].AcademyName);
+            Assert.Equal("Academy 002", ((List<GetAcademiesModel>)castedResult.Value)[1].AcademyName);
             Assert.Equal(200, castedResult.StatusCode);
         }
 
