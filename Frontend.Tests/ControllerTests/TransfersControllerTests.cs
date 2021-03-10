@@ -28,7 +28,6 @@ namespace Frontend.Tests.ControllerTests
         private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IProjectsRepository> _projectsRepository;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
-        private readonly Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>> _getAcademiesMapper;
 
         private readonly Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>
             _postProjectMapper;
@@ -42,7 +41,6 @@ namespace Frontend.Tests.ControllerTests
             _academiesRepository = new Mock<IAcademiesRepository>();
             _projectsRepository = new Mock<IProjectsRepository>();
             _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
-            _getAcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
             _postProjectMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
             _session = new Mock<ISession>();
 
@@ -59,7 +57,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustRepository.Object,
                 _academiesRepository.Object,
                 _getTrustMapper.Object,
-                _getAcademiesMapper.Object,
                 _projectsRepository.Object,
                 _postProjectMapper.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
@@ -211,28 +208,22 @@ namespace Frontend.Tests.ControllerTests
                 _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
 
                 _academiesRepository.Setup(r => r.GetAcademiesByTrustId(trustId)).ReturnsAsync(
-                    new RepositoryResult<List<GetAcademiesD365Model>>
+                    new RepositoryResult<List<GetAcademiesModel>>
                     {
-                        Result = new List<GetAcademiesD365Model>
+                        Result = new List<GetAcademiesModel>
                         {
-                            new GetAcademiesD365Model {AcademyName = academyName},
-                            new GetAcademiesD365Model {AcademyName = academyNameTwo},
+                            new GetAcademiesModel {AcademyName = academyName},
+                            new GetAcademiesModel {AcademyName = academyNameTwo},
                         }
                     }
                 );
-
-                _getAcademiesMapper.Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == academyName)))
-                    .Returns(new GetAcademiesModel {AcademyName = "Mapped Academy 001"});
-                _getAcademiesMapper
-                    .Setup(m => m.Map(It.Is<GetAcademiesD365Model>(a => a.AcademyName == academyNameTwo)))
-                    .Returns(new GetAcademiesModel {AcademyName = "Mapped Academy 002"});
 
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustAcademies>(viewResponse.Model);
 
-                Assert.Equal("Mapped Academy 001", viewModel.Academies[0].AcademyName);
-                Assert.Equal("Mapped Academy 002", viewModel.Academies[1].AcademyName);
+                Assert.Equal("Academy 001", viewModel.Academies[0].AcademyName);
+                Assert.Equal("Academy 002", viewModel.Academies[1].AcademyName);
             }
         }
 
@@ -406,13 +397,13 @@ namespace Frontend.Tests.ControllerTests
             private readonly GetTrustsD365Model _incomingTrust = new GetTrustsD365Model
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
 
-            private readonly GetAcademiesD365Model _academyOne = new GetAcademiesD365Model
+            private readonly GetAcademiesModel _academyOne = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
 
-            private readonly GetAcademiesD365Model _academyTwo = new GetAcademiesD365Model
+            private readonly GetAcademiesModel _academyTwo = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
 
-            private readonly GetAcademiesD365Model _academyThree = new GetAcademiesD365Model
+            private readonly GetAcademiesModel _academyThree = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385213")};
 
             public CheckYourAnswersTests()
@@ -439,16 +430,13 @@ namespace Frontend.Tests.ControllerTests
                     });
 
                 _academiesRepository.Setup(r => r.GetAcademiesByTrustId(_outgoingTrust.Id)).ReturnsAsync(
-                    new RepositoryResult<List<GetAcademiesD365Model>>
+                    new RepositoryResult<List<GetAcademiesModel>>
                     {
-                        Result = new List<GetAcademiesD365Model> {_academyOne, _academyTwo, _academyThree}
+                        Result = new List<GetAcademiesModel> {_academyOne, _academyTwo, _academyThree}
                     });
 
                 _getTrustMapper.Setup(m => m.Map(It.IsAny<GetTrustsD365Model>()))
                     .Returns<GetTrustsD365Model>(input => new GetTrustsModel {Id = input.Id});
-
-                _getAcademiesMapper.Setup(m => m.Map(It.IsAny<GetAcademiesD365Model>()))
-                    .Returns<GetAcademiesD365Model>(input => new GetAcademiesModel {Id = input.Id});
             }
 
             [Fact]
@@ -469,11 +457,6 @@ namespace Frontend.Tests.ControllerTests
                     Times.Once);
                 _getTrustMapper.Verify(m => m.Map(It.Is<GetTrustsD365Model>(trust => trust.Id == _incomingTrust.Id)),
                     Times.Once);
-
-                _getAcademiesMapper.Verify(
-                    m => m.Map(It.Is<GetAcademiesD365Model>(academy => academy.Id == _academyOne.Id)), Times.Once);
-                _getAcademiesMapper.Verify(
-                    m => m.Map(It.Is<GetAcademiesD365Model>(academy => academy.Id == _academyTwo.Id)), Times.Once);
             }
 
             [Fact]

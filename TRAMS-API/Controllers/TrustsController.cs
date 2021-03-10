@@ -29,19 +29,16 @@ namespace API.Controllers
         private readonly ITrustsRepository _trustRepostiory;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
-        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public TrustsController(ITrustsRepository trustRepostiory,
                                 IAcademiesRepository academiesRepository,
                                 IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
-                                IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
                                 IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _trustRepostiory = trustRepostiory;
             _academiesRepository = academiesRepository;
             _getTrustMapper = mapper;
-            _getAcademiesMapper = getAcademiesMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
@@ -127,11 +124,7 @@ namespace API.Controllers
                 return _repositoryErrorHandler.LogAndCreateResponse(academiesRepoResult);
             }
 
-            var formattedOutput = academiesRepoResult.Result
-                                                    ?.Select(a => _getAcademiesMapper.Map(a))
-                                                     .ToList();
-
-            return Ok(formattedOutput);
+            return Ok(academiesRepoResult.Result);
         }
     }
 }

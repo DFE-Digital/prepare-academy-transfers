@@ -25,19 +25,16 @@ namespace Frontend.Controllers
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IProjectsRepository _projectsRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
-        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
         private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
 
         public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
             IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper,
-            IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
             IProjectsRepository projectsRepository,
             IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper)
         {
             _trustRepository = trustRepository;
             _academiesRepository = academiesRepository;
             _getTrustMapper = getTrustMapper;
-            _getAcademiesMapper = getAcademiesMapper;
             _projectsRepository = projectsRepository;
             _postProjectsMapper = postProjectsMapper;
         }
@@ -95,9 +92,7 @@ namespace Frontend.Controllers
             var sessionGuid = HttpContext.Session.GetString("OutgoingTrustId");
             var outgoingTrustId = Guid.Parse(sessionGuid);
             var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
-            var academies = academiesRepoResult.Result
-                ?.Select(a => _getAcademiesMapper.Map(a))
-                .ToList();
+            var academies = academiesRepoResult.Result;
 
             var model = new OutgoingTrustAcademies {Academies = academies};
             return View(model);
@@ -185,8 +180,7 @@ namespace Frontend.Controllers
             var incomingTrust = _getTrustMapper.Map(incomingTrustResponse.Result);
 
             var academiesForTrust = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
-            var selectedAcademies = academiesForTrust.Result.Select(academy => _getAcademiesMapper.Map(academy))
-                .Where(academy => academyIds.Contains(academy.Id)).ToList();
+            var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
 
             var model = new CheckYourAnswers
             {
@@ -229,7 +223,7 @@ namespace Frontend.Controllers
 
             var mappedProject = _postProjectsMapper.Map(project);
             var result = await _projectsRepository.InsertProject(mappedProject);
-            
+
             HttpContext.Session.Remove("OutgoingTrustId");
             HttpContext.Session.Remove("IncomingTrustId");
             HttpContext.Session.Remove("OutgoingAcademyIds");
@@ -244,7 +238,7 @@ namespace Frontend.Controllers
             {
                 ProjectId = projectId.ToString()
             };
-            
+
             return View(model);
         }
     }

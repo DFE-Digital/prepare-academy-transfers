@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Mapping;
 using API.Models.Upstream.Response;
@@ -12,30 +13,27 @@ namespace API.Repositories
 {
     public class AcademiesRepository : IAcademiesRepository
     {
-        private static readonly string _route = "accounts";
+        private const string Route = "accounts";
 
         private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
         private readonly ILogger<AcademiesRepository> _logger;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademies365Mapper;
-        private readonly IMapper<GetAcademiesModel, GetAcademiesD365Model> _getAcademiesMapper;
 
         public AcademiesRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder,
             ILogger<AcademiesRepository> logger,
-            IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademies365Mapper,
-            IMapper<GetAcademiesModel, GetAcademiesD365Model> getAcademiesMapper)
+            IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademies365Mapper)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _logger = logger;
             _getAcademies365Mapper = getAcademies365Mapper;
-            _getAcademiesMapper = getAcademiesMapper;
         }
 
         public async Task<RepositoryResult<GetAcademiesModel>> GetAcademyById(Guid id)
         {
-            var url = _urlBuilder.BuildRetrieveOneUrl(_route, id);
+            var url = _urlBuilder.BuildRetrieveOneUrl(Route, id);
 
             var response = await _client.GetAsync(url);
             var responseContent = await response.Content?.ReadAsStringAsync();
@@ -50,7 +48,7 @@ namespace API.Repositories
             {
                 var castedResult = JsonConvert.DeserializeObject<GetAcademiesD365Model>(responseContent);
 
-                if (castedResult == null || castedResult.ParentTrustId == null)
+                if (castedResult?.ParentTrustId == null)
                 {
                     return new RepositoryResult<GetAcademiesModel> {Result = null};
                 }
@@ -72,16 +70,16 @@ namespace API.Repositories
             };
         }
 
-        public async Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id)
+        public async Task<RepositoryResult<List<GetAcademiesModel>>> GetAcademiesByTrustId(Guid id)
         {
-            var _parentTrustIdFieldName =
+            var parentTrustIdFieldName =
                 _urlBuilder.GetPropertyAnnotation(nameof(GetAcademiesD365Model.ParentTrustId));
             var filters = new List<string>
             {
-                $"({_parentTrustIdFieldName} eq {id})"
+                $"({parentTrustIdFieldName} eq {id})"
             };
 
-            var url = _urlBuilder.BuildFilterUrl(_route, filters);
+            var url = _urlBuilder.BuildFilterUrl(Route, filters);
 
             var response = await _client.GetAsync(url);
             var responseContent = await response.Content?.ReadAsStringAsync();
@@ -90,14 +88,15 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(responseContent);
+                var mappedResults = castedResults.Items.Select(item => _getAcademies365Mapper.Map(item)).ToList();
 
-                return new RepositoryResult<List<GetAcademiesD365Model>> {Result = castedResults.Items};
+                return new RepositoryResult<List<GetAcademiesModel>> {Result = mappedResults};
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
             _logger.LogError(RepositoryErrorMessages.RepositoryErrorLogFormat, responseStatusCode, responseContent);
 
-            return new RepositoryResult<List<GetAcademiesD365Model>>
+            return new RepositoryResult<List<GetAcademiesModel>>
             {
                 Error = new RepositoryResultBase.RepositoryError
                 {

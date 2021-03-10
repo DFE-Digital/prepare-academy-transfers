@@ -1,16 +1,16 @@
-﻿using API.HttpHelpers;
-using API.Models.Downstream.D365;
-using API.Repositories;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using API.HttpHelpers;
 using API.Mapping;
+using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
+using API.Repositories;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace API.Tests.RepositoriesTests
@@ -21,17 +21,15 @@ namespace API.Tests.RepositoriesTests
         private readonly Mock<IOdataUrlBuilder<GetAcademiesD365Model>> _mockUrlBuilder;
         private readonly AcademiesRepository _subject;
         private readonly Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>> _365AcademiesMapper;
-        private readonly Mock<IMapper<GetAcademiesModel, GetAcademiesD365Model>> _academiesMapper;
 
         public AcademiesRepositoryTests()
         {
             _mockClient = new Mock<IAuthenticatedHttpClient>();
             _mockUrlBuilder = new Mock<IOdataUrlBuilder<GetAcademiesD365Model>>();
             _365AcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
-            _academiesMapper = new Mock<IMapper<GetAcademiesModel, GetAcademiesD365Model>>();
             var mockedLogger = new Mock<ILogger<AcademiesRepository>>();
             _subject = new AcademiesRepository(_mockClient.Object, _mockUrlBuilder.Object, mockedLogger.Object,
-                _365AcademiesMapper.Object, _academiesMapper.Object);
+                _365AcademiesMapper.Object);
         }
 
         #region GetAcademyById Tests
@@ -72,7 +70,7 @@ namespace API.Tests.RepositoriesTests
             //Arrange
             var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
-            var returnedEntities = new GetAcademiesD365Model() {Id = academyId};
+            var returnedEntities = new GetAcademiesD365Model {Id = academyId};
 
             var json = JsonConvert.SerializeObject(returnedEntities);
             HttpResponseMessage httpResponse = new HttpResponseMessage
@@ -82,7 +80,7 @@ namespace API.Tests.RepositoriesTests
             };
 
             _mockClient.Setup(m => m.GetAsync(It.IsAny<string>())).ReturnsAsync(httpResponse);
-            
+
             _mockUrlBuilder.Setup(m => m.BuildRetrieveOneUrl("accounts", It.IsAny<Guid>()))
                 .Returns("/accounts(a16e9020-9123-4420-8055-851d1b672fb1)");
 
@@ -148,7 +146,7 @@ namespace API.Tests.RepositoriesTests
                 ParentTrustId = trustId
             };
 
-            var mappedEntity = new GetAcademiesModel()
+            var mappedEntity = new GetAcademiesModel
             {
                 AcademyName = "Some Academy",
                 Id = academyId,
@@ -229,6 +227,8 @@ namespace API.Tests.RepositoriesTests
         public async void GetAcademiesByTrustId_OkResult_NoItems_ReturnsCorrectResult()
         {
             //Arrange
+            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+
             var returnedEntities = new ResultSet<GetAcademiesD365Model>
             {
                 Items = new List<GetAcademiesD365Model>()
@@ -249,7 +249,6 @@ namespace API.Tests.RepositoriesTests
             _mockUrlBuilder.Setup(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()))
                 .Returns("buildFilterUrl");
 
-            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
             //Execute
             var result = await _subject.GetAcademiesByTrustId(academyId);
@@ -275,8 +274,8 @@ namespace API.Tests.RepositoriesTests
             {
                 Items = new List<GetAcademiesD365Model>
                 {
-                    new GetAcademiesD365Model(),
-                    new GetAcademiesD365Model()
+                    new GetAcademiesD365Model {AcademyName = "Academy 001"},
+                    new GetAcademiesD365Model {AcademyName = "Academy 002"}
                 }
             };
 
@@ -294,10 +293,13 @@ namespace API.Tests.RepositoriesTests
             _mockUrlBuilder.Setup(m => m.BuildFilterUrl("accounts", It.IsAny<List<string>>()))
                 .Returns("buildFilterUrl");
 
-            var academyId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
+            _365AcademiesMapper.Setup(m => m.Map(It.IsAny<GetAcademiesD365Model>())).Returns<GetAcademiesD365Model>(
+                input => new GetAcademiesModel {AcademyName = $"Mapped {input.AcademyName}"});
+
+            var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1");
 
             //Execute
-            var result = await _subject.GetAcademiesByTrustId(academyId);
+            var result = await _subject.GetAcademiesByTrustId(trustId);
 
             //Assert
             var expectedFilters = new List<string>
@@ -306,9 +308,11 @@ namespace API.Tests.RepositoriesTests
             };
             _mockUrlBuilder.Verify(m => m.BuildFilterUrl("accounts", expectedFilters), Times.Once);
             _mockClient.Verify(m => m.GetAsync("buildFilterUrl"), Times.Once);
+            _365AcademiesMapper.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Exactly(2));
 
             Assert.True(result.IsValid);
-            Assert.NotNull(result.Result);
+            Assert.Equal("Mapped Academy 001", result.Result[0].AcademyName);
+            Assert.Equal("Mapped Academy 002", result.Result[1].AcademyName);
             Assert.Equal(2, result.Result.Count);
         }
 

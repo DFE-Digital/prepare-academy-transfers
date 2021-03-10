@@ -1,6 +1,4 @@
-﻿using API.Mapping;
-using API.Models.Downstream.D365;
-using API.Models.Upstream.Response;
+﻿using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,15 +22,12 @@ namespace API.Controllers
     public class AcademiesController : ControllerBase
     {
         private readonly IAcademiesRepository _academiesRepository;
-        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademiesMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public AcademiesController(IAcademiesRepository academiesRepository,
-                                   IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademiesMapper,
                                    IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _academiesRepository = academiesRepository;
-            _getAcademiesMapper = getAcademiesMapper;
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
@@ -58,9 +53,7 @@ namespace API.Controllers
                 return NotFound($"The academy with the id: '{id}' was not found");
             }
 
-            var formattedResult = repoResult.Result;
-
-            return Ok(formattedResult);
+            return Ok(repoResult.Result);
         }
     }
 }

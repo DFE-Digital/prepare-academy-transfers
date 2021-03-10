@@ -1,6 +1,5 @@
 ﻿using API.Controllers;
 using API.Mapping;
-using API.Models.D365;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
 using API.Repositories;
@@ -47,7 +46,6 @@ namespace API.Tests.ControllersTests
                 });
 
             var academiesController = new AcademiesController(academyRepoMock.Object,
-                mapperMock.Object,
                 errorHandler.Object);
 
             //Execute
@@ -88,7 +86,6 @@ namespace API.Tests.ControllersTests
             var errorHandler = new Mock<IRepositoryErrorResultHandler>();
 
             var academiesController = new AcademiesController(academyRepoMock.Object,
-                mapperMock.Object,
                 errorHandler.Object);
 
             //Execute
@@ -126,12 +123,9 @@ namespace API.Tests.ControllersTests
                     }
                 });
 
-            var mapperMock = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
-
             var errorHandler = new Mock<IRepositoryErrorResultHandler>();
 
             var academiesController = new AcademiesController(academyRepoMock.Object,
-                mapperMock.Object,
                 errorHandler.Object);
 
             //Execute

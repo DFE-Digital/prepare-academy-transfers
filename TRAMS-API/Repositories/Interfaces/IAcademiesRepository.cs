@@ -10,6 +10,6 @@ namespace API.Repositories
     {
         public Task<RepositoryResult<GetAcademiesModel>> GetAcademyById(Guid id);
 
-        public Task<RepositoryResult<List<GetAcademiesD365Model>>> GetAcademiesByTrustId(Guid id);
+        public Task<RepositoryResult<List<GetAcademiesModel>>> GetAcademiesByTrustId(Guid id);
     }
 }
