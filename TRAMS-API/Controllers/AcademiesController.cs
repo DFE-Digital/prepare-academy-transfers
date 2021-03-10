@@ -58,7 +58,7 @@ namespace API.Controllers
                 return NotFound($"The academy with the id: '{id}' was not found");
             }
 
-            var formattedResult = _getAcademiesMapper.Map(repoResult.Result);
+            var formattedResult = repoResult.Result;
 
             return Ok(formattedResult);
         }

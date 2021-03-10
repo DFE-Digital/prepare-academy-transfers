@@ -1,6 +1,10 @@
-﻿using API.Controllers;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using API.Controllers;
 using API.Mapping;
 using API.Models.Downstream.D365;
+using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
@@ -8,9 +12,6 @@ using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace API.Tests.ControllersTests
@@ -24,7 +25,7 @@ namespace API.Tests.ControllersTests
         private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
         private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
         private readonly IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
+                                 GetProjectsAcademyResponseModel> _getProjectAcademyMapper;
         private readonly IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> _putProjectAcademiesMapper;
         private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
@@ -40,7 +41,7 @@ namespace API.Tests.ControllersTests
             _postProjectsMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>().Object;
             _getProjectsMapper = new Mock<IMapper<GetProjectsD365Model, GetProjectsResponseModel>>().Object;
             _getProjectAcademyMapper = new Mock<IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>().Object;
+                                 GetProjectsAcademyResponseModel>>().Object;
             _putProjectAcademiesMapper = new Mock<IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>>().Object;
             _searchProjectsMapper = new Mock<IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>>().Object;
             _repositoryErrorHandler = new Mock<IRepositoryErrorResultHandler>().Object;
@@ -59,7 +60,7 @@ namespace API.Tests.ControllersTests
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, _repositoryErrorHandler, _config);
 
             //Execute
-            var result = controller.SearchProjects(string.Empty, Models.Upstream.Enums.ProjectStatusEnum.Completed, null, null, null);
+            var result = controller.SearchProjects(string.Empty, ProjectStatusEnum.Completed, null, null, null);
 
             //Assert that defaults are applied
             projectRepository.Verify(p => p.SearchProject(string.Empty, Models.D365.Enums.ProjectStatusEnum.Completed, true, 10, 1), Times.Once);
@@ -73,7 +74,7 @@ namespace API.Tests.ControllersTests
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, _repositoryErrorHandler, _config);
 
             //Execute
-            var result = controller.SearchProjects(string.Empty, Models.Upstream.Enums.ProjectStatusEnum.Completed, true, 0, 1);
+            var result = controller.SearchProjects(string.Empty, ProjectStatusEnum.Completed, true, 0, 1);
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
@@ -91,7 +92,7 @@ namespace API.Tests.ControllersTests
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, _repositoryErrorHandler, _config);
 
             //Execute
-            var result = controller.SearchProjects(string.Empty, Models.Upstream.Enums.ProjectStatusEnum.Completed, true, 1, 0);
+            var result = controller.SearchProjects(string.Empty, ProjectStatusEnum.Completed, true, 1, 0);
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
@@ -113,14 +114,14 @@ namespace API.Tests.ControllersTests
                            {
                                Error = new RepositoryResultBase.RepositoryError
                                {
-                                   StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                   StatusCode = HttpStatusCode.BadRequest,
                                    ErrorMessage = "Bad request error message"
                                }
                            });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -131,7 +132,7 @@ namespace API.Tests.ControllersTests
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, _searchProjectsMapper, repositoryErrorHandlerMock.Object, _config);
 
             //Execute
-            var result = controller.SearchProjects("searchQuery", Models.Upstream.Enums.ProjectStatusEnum.Completed, true, 10, 1);
+            var result = controller.SearchProjects("searchQuery", ProjectStatusEnum.Completed, true, 10, 1);
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
@@ -182,7 +183,7 @@ namespace API.Tests.ControllersTests
                 _getProjectAcademyMapper, _putProjectAcademiesMapper, mapper.Object, _repositoryErrorHandler, _config);
 
             //Execute
-            var result = controller.SearchProjects("searchQuery", Models.Upstream.Enums.ProjectStatusEnum.Completed, true, 2, 1);
+            var result = controller.SearchProjects("searchQuery", ProjectStatusEnum.Completed, true, 2, 1);
             var castedResult = (ObjectResult)result.Result;
 
             //Assert
@@ -212,14 +213,14 @@ namespace API.Tests.ControllersTests
                              {
                                  Error = new RepositoryResultBase.RepositoryError
                                  {
-                                     StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                     StatusCode = HttpStatusCode.BadRequest,
                                      ErrorMessage = "Bad request error message"
                                  }
                              });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -332,14 +333,14 @@ namespace API.Tests.ControllersTests
                              {
                                  Error = new RepositoryResultBase.RepositoryError
                                  {
-                                     StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                     StatusCode = HttpStatusCode.BadRequest,
                                      ErrorMessage = "Bad request error message"
                                  }
                              });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -417,14 +418,14 @@ namespace API.Tests.ControllersTests
                              {
                                  Error = new RepositoryResultBase.RepositoryError
                                  {
-                                     StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                     StatusCode = HttpStatusCode.BadRequest,
                                      ErrorMessage = "Bad request error message"
                                  }
                              });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -512,7 +513,7 @@ namespace API.Tests.ControllersTests
 
             //Set up ProjectAcademy mapper to return slim result
             var projectAcademyMapper = new Mock<IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>();
+                                 GetProjectsAcademyResponseModel>>();
 
             projectAcademyMapper.Setup(m => m.Map(It.Is<AcademyTransfersProjectAcademy>(a => a.AcademyName == "Project Academy 001")))
                                 .Returns(new GetProjectsAcademyResponseModel { AcademyName = "Mapped Project Academy 001" });
@@ -551,7 +552,7 @@ namespace API.Tests.ControllersTests
                                  {
                                      Error = new RepositoryResultBase.RepositoryError
                                      {
-                                         StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                         StatusCode = HttpStatusCode.BadRequest,
                                          ErrorMessage = "Bad request error message"
                                      }
                                  });
@@ -559,7 +560,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -670,11 +671,11 @@ namespace API.Tests.ControllersTests
             //Set up the academies repository to return bad request when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
                                        Error = new RepositoryResultBase.RepositoryError
                                        {
-                                           StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                           StatusCode = HttpStatusCode.BadRequest,
                                            ErrorMessage = "Bad request error message"
                                        }
                                    });
@@ -682,7 +683,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -724,7 +725,7 @@ namespace API.Tests.ControllersTests
             //Set up the academies repository to return a null result when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
                                        Result = null
                                    });
@@ -771,7 +772,7 @@ namespace API.Tests.ControllersTests
                                  {
                                      Error = new RepositoryResultBase.RepositoryError
                                      {
-                                         StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                         StatusCode = HttpStatusCode.BadRequest,
                                          ErrorMessage = "Bad request error message"
                                      }
                                  });
@@ -779,9 +780,9 @@ namespace API.Tests.ControllersTests
             //Set up the academies repository to return a null result when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = referencedAcademyId }
+                                       Result = new GetAcademiesModel { Id = referencedAcademyId }
                                    });
 
             //Set up the mapper to return a slimmed result
@@ -793,7 +794,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -841,7 +842,7 @@ namespace API.Tests.ControllersTests
                                  {
                                      Error = new RepositoryResultBase.RepositoryError
                                      {
-                                         StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                         StatusCode = HttpStatusCode.BadRequest,
                                          ErrorMessage = "Bad request error message"
                                      }
                                  });
@@ -856,9 +857,9 @@ namespace API.Tests.ControllersTests
             //Set up the academies repository to return a null result when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = referencedAcademyId }
+                                       Result = new GetAcademiesModel { Id = referencedAcademyId }
                                    });
 
             //Set up the mapper to return a slimmed result
@@ -869,7 +870,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -920,9 +921,9 @@ namespace API.Tests.ControllersTests
             //Set up the academies repository to return a valid set result when verifying the referenced academy
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(m => m.GetAcademyById(referencedAcademyId))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = referencedAcademyId }
+                                       Result = new GetAcademiesModel { Id = referencedAcademyId }
                                    });
 
             //Set up the mapper to return a slimmed result
@@ -934,7 +935,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -942,7 +943,7 @@ namespace API.Tests.ControllersTests
 
             //Set up mapper to return final result back
             var getProjectAcademyMapper = new Mock<IMapper<AcademyTransfersProjectAcademy,
-                                 Models.Upstream.Response.GetProjectsAcademyResponseModel>>();
+                                 GetProjectsAcademyResponseModel>>();
             getProjectAcademyMapper.Setup(m => m.Map(It.Is<AcademyTransfersProjectAcademy>(a => a.ProjectId == projectId)))
                                    .Returns(new GetProjectsAcademyResponseModel { ProjectAcademyId = projectAcademyId });
 
@@ -993,18 +994,18 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to return a bad request
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
                                        Error = new RepositoryResultBase.RepositoryError
                                        {
-                                           StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                           StatusCode = HttpStatusCode.BadRequest,
                                            ErrorMessage = "Bad request error message"
                                        }
                                    });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -1053,9 +1054,9 @@ namespace API.Tests.ControllersTests
             //Set up academy checks to all return a valid and set result
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model()
+                                       Result = new GetAcademiesModel()
                                    });
 
             //Set up the trust id checks to return a bad request
@@ -1065,7 +1066,7 @@ namespace API.Tests.ControllersTests
                             {
                                 Error = new RepositoryResultBase.RepositoryError
                                 {
-                                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                    StatusCode = HttpStatusCode.BadRequest,
                                     ErrorMessage = "Bad request error message"
                                 }
                             });
@@ -1073,7 +1074,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -1122,19 +1123,19 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass but one
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")}
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000")}
                                    });
 
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
             //This is the one academy that won't be found
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
                                        Result = null 
                                    });
@@ -1193,7 +1194,7 @@ namespace API.Tests.ControllersTests
 
             //All academies will fail
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
                                        Result = null
                                    });
@@ -1251,19 +1252,19 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
                                    });
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
                                    });
 
             //Set up the trust id checks to all pass but one
@@ -1320,19 +1321,19 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("00000003-0000-0ff1-ce00-000000000000")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("10000003-0000-0ff1-ce00-000000000001")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("10000003-0000-0ff1-ce00-000000000001") }
                                    });
             academiesRepositoryMock.Setup(r => r.GetAcademyById(Guid.Parse("20000003-0000-0ff1-ce00-000000000002")))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("20000003-0000-0ff1-ce00-000000000002") }
                                    });
 
             //Set up the trust id checks to all fail
@@ -1385,9 +1386,9 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
 
             //Set up the trust id checks to all pass
@@ -1410,7 +1411,7 @@ namespace API.Tests.ControllersTests
                               {
                                   Error = new RepositoryResultBase.RepositoryError
                                   {
-                                      StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                      StatusCode = HttpStatusCode.BadRequest,
                                       ErrorMessage = "Bad request error message"
                                   }
                               });
@@ -1418,7 +1419,7 @@ namespace API.Tests.ControllersTests
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -1467,9 +1468,9 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
 
             //Set up the trust id checks to all pass
@@ -1500,14 +1501,14 @@ namespace API.Tests.ControllersTests
                               {
                                   Error = new RepositoryResultBase.RepositoryError
                                   {
-                                      StatusCode = System.Net.HttpStatusCode.BadRequest,
+                                      StatusCode = HttpStatusCode.BadRequest,
                                       ErrorMessage = "Bad request error message"
                                   }
                               });
 
             //Set up repository error handler to handle the bad request result described above
             var repositoryErrorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
-            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == System.Net.HttpStatusCode.BadRequest)))
+            repositoryErrorHandlerMock.Setup(h => h.LogAndCreateResponse(It.Is<RepositoryResultBase>(e => e.Error.StatusCode == HttpStatusCode.BadRequest)))
                                       .Returns(new ObjectResult("Some error message")
                                       {
                                           StatusCode = 499
@@ -1556,9 +1557,9 @@ namespace API.Tests.ControllersTests
             //Set up academy id checks to all pass
             var academiesRepositoryMock = new Mock<IAcademiesRepository>();
             academiesRepositoryMock.Setup(r => r.GetAcademyById(It.IsAny<Guid>()))
-                                   .ReturnsAsync(new RepositoryResult<GetAcademiesD365Model>
+                                   .ReturnsAsync(new RepositoryResult<GetAcademiesModel>
                                    {
-                                       Result = new GetAcademiesD365Model { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
+                                       Result = new GetAcademiesModel { Id = Guid.Parse("00000003-0000-0ff1-ce00-000000000000") }
                                    });
 
             //Set up the trust id checks to all pass
