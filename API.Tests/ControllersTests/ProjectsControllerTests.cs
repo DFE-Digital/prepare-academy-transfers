@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using API.Controllers;
-using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
@@ -922,7 +921,7 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to return a bad request
             _trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                 {
                     Error = new RepositoryResultBase.RepositoryError
                     {
@@ -1001,11 +1000,11 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //Execute
             var result = _subject.InsertProject(request);
@@ -1056,12 +1055,12 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //Execute
             var result = _subject.InsertProject(request);
@@ -1123,12 +1122,12 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass but one
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("30000003-0000-0ff1-ce00-000000000003")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //This trust check will fail
             _trustsRepository.Setup(r => r.GetTrustById(Guid.Parse("40000003-0000-0ff1-ce00-000000000004")))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> {Result = null});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel> {Result = null});
 
             //Execute
             var result = _subject.InsertProject(request);
@@ -1189,7 +1188,7 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all fail
             _trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model> {Result = null});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel> {Result = null});
 
             //Execute
             var result = _subject.InsertProject(request);
@@ -1241,8 +1240,8 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass
             _trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //Set up project repository to return a bad request when inserting a project
             _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
@@ -1313,8 +1312,8 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass
             _trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //Set up project repository to a valid set result when inserting a project
             _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
@@ -1391,8 +1390,8 @@ namespace API.Tests.ControllersTests
 
             //Set up the trust id checks to all pass
             _trustsRepository.Setup(r => r.GetTrustById(It.IsAny<Guid>()))
-                .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
-                    {Result = new GetTrustsD365Model {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
+                .ReturnsAsync(new RepositoryResult<GetTrustsModel>
+                    {Result = new GetTrustsModel {Id = Guid.Parse("30000003-0000-0ff1-ce00-000000000003")}});
 
             //Set up project repository to a valid set result when inserting a project
             _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))

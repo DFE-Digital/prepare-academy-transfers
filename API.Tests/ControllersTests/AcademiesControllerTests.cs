@@ -1,6 +1,4 @@
 ﻿using API.Controllers;
-using API.Mapping;
-using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -34,8 +32,6 @@ namespace API.Tests.ControllersTests
                     }
                 });
 
-            var mapperMock = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
-
             var errorHandler = new Mock<IRepositoryErrorResultHandler>();
 
             //Set up error handler to return a random result
@@ -60,8 +56,6 @@ namespace API.Tests.ControllersTests
                         r.Error.ErrorMessage == "Bad Request" &&
                         r.Error.StatusCode == HttpStatusCode.BadRequest)),
                 Times.Once);
-            //Mapper not to be called when repo fails
-            mapperMock.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Never);
 
             //Final result should be what the error handler returns
             Assert.Equal("Some error message", castedResult.Value);
@@ -82,7 +76,6 @@ namespace API.Tests.ControllersTests
                     Result = null
                 });
 
-            var mapperMock = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
             var errorHandler = new Mock<IRepositoryErrorResultHandler>();
 
             var academiesController = new AcademiesController(academyRepoMock.Object,
@@ -96,9 +89,6 @@ namespace API.Tests.ControllersTests
 
             //Error handler should not be called when repo returns valid result
             errorHandler.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
-            //Mapper not to be called when repo returns null but valid result
-            mapperMock.Verify(m => m.Map(It.IsAny<GetAcademiesD365Model>()), Times.Never);
-
             //Final result should be a 404 - Not Found with the correct message
             Assert.Equal("The academy with the id: 'a16e9020-9123-4420-8055-851d1b672fa9' was not found",
                 castedResult.Value);

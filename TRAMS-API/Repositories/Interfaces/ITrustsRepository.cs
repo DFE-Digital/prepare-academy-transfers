@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.Models.Upstream.Response;
 
 namespace API.Repositories
 {
     public interface ITrustsRepository
     {
-        public Task<RepositoryResult<GetTrustsD365Model>> GetTrustById(Guid id);
+        public Task<RepositoryResult<GetTrustsModel>> GetTrustById(Guid id);
 
-        public Task<RepositoryResult<List<GetTrustsD365Model>>> SearchTrusts(string searchQuery);
+        public Task<RepositoryResult<List<GetTrustsModel>>> SearchTrusts(string searchQuery);
     }
 }
