@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using API.Mapping;
-using API.Models.D365.Enums;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
@@ -29,9 +28,6 @@ namespace Frontend.Tests.ControllerTests
         private readonly Mock<IProjectsRepository> _projectsRepository;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
 
-        private readonly Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>
-            _postProjectMapper;
-
         private readonly TransfersController _subject;
         private readonly Mock<ISession> _session;
 
@@ -41,7 +37,6 @@ namespace Frontend.Tests.ControllerTests
             _academiesRepository = new Mock<IAcademiesRepository>();
             _projectsRepository = new Mock<IProjectsRepository>();
             _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
-            _postProjectMapper = new Mock<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>>();
             _session = new Mock<ISession>();
 
             var tempDataProvider = new Mock<ITempDataProvider>();
@@ -57,8 +52,7 @@ namespace Frontend.Tests.ControllerTests
                 _trustRepository.Object,
                 _academiesRepository.Object,
                 _getTrustMapper.Object,
-                _projectsRepository.Object,
-                _postProjectMapper.Object
+                _projectsRepository.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
@@ -507,7 +501,7 @@ namespace Frontend.Tests.ControllerTests
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
-                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
                     .ReturnsAsync(_postProjectResponse);
             }
 
@@ -525,18 +519,6 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenSubmittingProjectWithAllValues_InsertsMappedProject()
             {
-                var mappedProject = new PostAcademyTransfersProjectsD365Model
-                {
-                    ProjectInitiatorUid = "Initiator UID",
-                    ProjectStatus = ProjectStatusEnum.InProgress,
-                    ProjectInitiatorFullName = "Initiator name",
-                    Academies = new List<PostAcademyTransfersProjectAcademyD365Model>(),
-                    Trusts = new List<PostAcademyTransfersProjectTrustD365Model>()
-                };
-
-                _postProjectMapper.Setup(m => m.Map(It.IsAny<PostProjectsRequestModel>()))
-                    .Returns(mappedProject);
-
                 await _subject.SubmitProject();
 
                 var expectedProjectRequestModel = new PostProjectsRequestModel
@@ -562,11 +544,10 @@ namespace Frontend.Tests.ControllerTests
                     }
                 };
 
-                _postProjectMapper.Verify(m => m.Map(It.Is<PostProjectsRequestModel>(
-                    model => ProjectsAreEqual(expectedProjectRequestModel, model)
-                )));
                 _projectsRepository.Verify(
-                    r => r.InsertProject(It.Is<PostAcademyTransfersProjectsD365Model>(input => input == mappedProject)),
+                    r => r.InsertProject(It.Is<PostProjectsRequestModel>(input =>
+                        input.ProjectAcademies[0].AcademyId ==
+                        expectedProjectRequestModel.ProjectAcademies[0].AcademyId)),
                     Times.Once);
             }
 
@@ -574,7 +555,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenProjectIsInserted_RedirectsToProjectFeaturesWithCreatedId()
             {
                 var createdProjectGuid = Guid.NewGuid();
-                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostAcademyTransfersProjectsD365Model>()))
+                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
                     .ReturnsAsync(new RepositoryResult<Guid?> {Result = createdProjectGuid});
 
                 var response = await _subject.SubmitProject();

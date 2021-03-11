@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Mapping;
-using API.Mapping.Response;
 using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
@@ -25,18 +24,15 @@ namespace Frontend.Controllers
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IProjectsRepository _projectsRepository;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
-        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
 
         public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
             IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper,
-            IProjectsRepository projectsRepository,
-            IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper)
+            IProjectsRepository projectsRepository)
         {
             _trustRepository = trustRepository;
             _academiesRepository = academiesRepository;
             _getTrustMapper = getTrustMapper;
             _projectsRepository = projectsRepository;
-            _postProjectsMapper = postProjectsMapper;
         }
 
         public IActionResult TrustName()
@@ -221,8 +217,7 @@ namespace Frontend.Controllers
                 }
             };
 
-            var mappedProject = _postProjectsMapper.Map(project);
-            var result = await _projectsRepository.InsertProject(mappedProject);
+            var result = await _projectsRepository.InsertProject(project);
 
             HttpContext.Session.Remove("OutgoingTrustId");
             HttpContext.Session.Remove("IncomingTrustId");

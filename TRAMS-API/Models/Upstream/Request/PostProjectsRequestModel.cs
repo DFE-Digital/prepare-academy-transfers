@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ProjectStatusEnum = API.Models.D365.Enums.ProjectStatusEnum;
 
 namespace API.Models.Upstream.Request
 {
@@ -27,7 +28,7 @@ namespace API.Models.Upstream.Request
         /// The Project Status Code. Mandatory.
         /// </summary>
         [Required]
-        public ProjectStatusEnum ProjectStatus { get; set; }
+        public Enums.ProjectStatusEnum ProjectStatus { get; set; }
 
         /// <summary>
         /// An array of outbound academies identified for the project. Optional.
