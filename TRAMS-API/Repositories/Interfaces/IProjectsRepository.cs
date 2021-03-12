@@ -1,24 +1,25 @@
-﻿using API.Models.D365.Enums;
-using API.Models.Downstream.D365;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using API.Models.Upstream.Request;
+using API.Models.Upstream.Response;
+using API.Models.Upstream.Enums;
 
 namespace API.Repositories.Interfaces
 {
     public interface IProjectsRepository
     {
-        public Task<RepositoryResult<SearchProjectsD365PageModel>> SearchProject(string searchQuery,
-                                                                                 ProjectStatusEnum status,
+        public Task<RepositoryResult<SearchProjectsPageModel>> SearchProject(string searchQuery,
+                                                                                 ProjectStatusEnum? status,
                                                                                  bool isAscending = true,
                                                                                  uint pageSize = 10,
                                                                                  uint pageNumber = 1);
 
-        public Task<RepositoryResult<GetProjectsD365Model>> GetProjectById(Guid id);
+        public Task<RepositoryResult<GetProjectsResponseModel>> GetProjectById(Guid id);
 
-        public Task<RepositoryResult<Guid?>> InsertProject(PostAcademyTransfersProjectsD365Model project);
+        public Task<RepositoryResult<Guid?>> InsertProject(PostProjectsRequestModel project);
 
-        public Task<RepositoryResult<AcademyTransfersProjectAcademy>> GetProjectAcademyById(Guid id);
+        public Task<RepositoryResult<GetProjectsAcademyResponseModel>> GetProjectAcademyById(Guid id);
 
-        public Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id, PatchProjectAcademiesD365Model model);
+        public Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id, PutProjectAcademiesRequestModel model);
     }
 }

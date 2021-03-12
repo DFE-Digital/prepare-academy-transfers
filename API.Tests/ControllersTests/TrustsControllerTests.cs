@@ -42,7 +42,7 @@ namespace API.Tests.ControllersTests
             //Set up trusts repo to return a failure
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
                               Error = new RepositoryResultBase.RepositoryError
                               {
@@ -63,7 +63,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -96,7 +95,7 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a null result (not found)
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
                               Result = null
                           });
@@ -106,7 +105,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -135,29 +133,18 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a valid and set result
             var trustsRepoMock = new Mock<ITrustsRepository>(); 
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
-                              Result = new GetTrustsD365Model
+                              Result = new GetTrustsModel
                               {
                                   Id = trustId
                               }
                           });
 
-            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
-
-            //Set up mapper to return a slim result when called with the expected input
-            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(p => p.Id == trustId)))
-                      .Returns(new GetTrustsModel
-                      {
-                          Id = trustId,
-                          Address = "Some address"
-                      });
-
             var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -169,12 +156,8 @@ namespace API.Tests.ControllersTests
 
             //Error handler should not be called when repo returns valid result
             errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
-            //Mapper to be called once with the expected input
-            mapperMock.Verify(m => m.Map(It.Is<GetTrustsD365Model>(p => p.Id == trustId)), Times.Once);
-
             //Final result should be a 200 OK with the result of the mapping operation
             Assert.Equal(trustId, ((GetTrustsModel)castedResult.Value).Id);
-            Assert.Equal("Some address", ((GetTrustsModel)castedResult.Value).Address);
             Assert.Equal(200, castedResult.StatusCode);
         }
 
@@ -190,7 +173,7 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a failed D365 call
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
-                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsModel>>
                            {
                                Error = new RepositoryResultBase.RepositoryError
                                {
@@ -211,7 +194,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -242,7 +224,7 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a failed D365 call
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
-                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsModel>>
                            {
                                Result = null
                            });
@@ -252,7 +234,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -279,32 +260,20 @@ namespace API.Tests.ControllersTests
             //Set up mock repository to return a failed D365 call
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.SearchTrusts(searchTerm))
-                           .ReturnsAsync(new RepositoryResult<List<GetTrustsD365Model>>
+                           .ReturnsAsync(new RepositoryResult<List<GetTrustsModel>>
                            {
-                               Result = new List<GetTrustsD365Model>
+                               Result = new List<GetTrustsModel>
                                {
-                                   new GetTrustsD365Model { TrustName = "Trust 001" },
-                                   new GetTrustsD365Model { TrustName = "Trust 002" },
-                                   new GetTrustsD365Model { TrustName = "Trust 003" }
+                                   new GetTrustsModel { TrustName = "Trust 001" },
+                                   new GetTrustsModel { TrustName = "Trust 002" },
+                                   new GetTrustsModel { TrustName = "Trust 003" }
                                }
                            });
-
-            //Set up mock mapper to return slim models
-            var mapperMock = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
-            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 001")))
-                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 001" });
-
-            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 002")))
-                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 002" });
-
-            mapperMock.Setup(m => m.Map(It.Is<GetTrustsD365Model>(t => t.TrustName == "Trust 003")))
-                      .Returns(new GetTrustsModel { TrustName = "Mapped Trust 003" });
 
             var errorHandlerMock = new Mock<IRepositoryErrorResultHandler>();
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
             //Execute
@@ -315,14 +284,12 @@ namespace API.Tests.ControllersTests
 
             //Error handler should not be called when repo returns valid result
             errorHandlerMock.Verify(h => h.LogAndCreateResponse(It.IsAny<RepositoryResultBase>()), Times.Never);
-            //Mapper to be called three times, once for each result
-            mapperMock.Verify(m => m.Map(It.IsAny<GetTrustsD365Model>()), Times.Exactly(3));
 
             //Final result should be a 200OK wrapped around a a list with three results
             Assert.Equal(3, ((List<GetTrustsModel>)castedResult.Value).Count);
-            Assert.Equal("Mapped Trust 001", ((List<GetTrustsModel>)castedResult.Value)[0].TrustName);
-            Assert.Equal("Mapped Trust 002", ((List<GetTrustsModel>)castedResult.Value)[1].TrustName);
-            Assert.Equal("Mapped Trust 003", ((List<GetTrustsModel>)castedResult.Value)[2].TrustName);
+            Assert.Equal("Trust 001", ((List<GetTrustsModel>)castedResult.Value)[0].TrustName);
+            Assert.Equal("Trust 002", ((List<GetTrustsModel>)castedResult.Value)[1].TrustName);
+            Assert.Equal("Trust 003", ((List<GetTrustsModel>)castedResult.Value)[2].TrustName);
             Assert.Equal(200, castedResult.StatusCode);
         }
 
@@ -339,7 +306,7 @@ namespace API.Tests.ControllersTests
             //Set up trusts repo to return a failure
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
                               Error = new RepositoryResultBase.RepositoryError
                               {
@@ -360,7 +327,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -393,7 +359,7 @@ namespace API.Tests.ControllersTests
             //Set up mock trust repository to return a null result (not found)
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
                               Result = null
                           });
@@ -403,7 +369,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         _academiesRepository.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -432,9 +397,9 @@ namespace API.Tests.ControllersTests
             //Set up mock trust repository to return a valid and set result
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
-                              Result = new GetTrustsD365Model
+                              Result = new GetTrustsModel
                               {
                                   Id = trustId
                               }
@@ -472,7 +437,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
-                                                        mapperMock.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -498,9 +462,9 @@ namespace API.Tests.ControllersTests
             //Set up mock trust repository to return a valid and set result
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
-                              Result = new GetTrustsD365Model
+                              Result = new GetTrustsModel
                               {
                                   Id = trustId
                               }
@@ -519,7 +483,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
-                                                        _getTrustMapper.Object,
                                                         errorHandlerMock.Object);
 
 
@@ -548,9 +511,9 @@ namespace API.Tests.ControllersTests
             //Set up mock trust repository to return a valid and set result
             var trustsRepoMock = new Mock<ITrustsRepository>();
             trustsRepoMock.Setup(m => m.GetTrustById(trustId))
-                          .ReturnsAsync(new RepositoryResult<GetTrustsD365Model>
+                          .ReturnsAsync(new RepositoryResult<GetTrustsModel>
                           {
-                              Result = new GetTrustsD365Model
+                              Result = new GetTrustsModel
                               {
                                   Id = trustId
                               }
@@ -572,7 +535,6 @@ namespace API.Tests.ControllersTests
 
             var trustsController = new TrustsController(trustsRepoMock.Object,
                                                         academiesRepoMock.Object,
-                                                        _getTrustMapper.Object,
                                                         errorHandlerMock.Object);
 
 

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using API.Mapping;
-using API.Models.Downstream.D365;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
@@ -28,17 +25,14 @@ namespace API.Controllers
     {
         private readonly ITrustsRepository _trustRepostiory;
         private readonly IAcademiesRepository _academiesRepository;
-        private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
         private readonly IRepositoryErrorResultHandler _repositoryErrorHandler;
 
         public TrustsController(ITrustsRepository trustRepostiory,
                                 IAcademiesRepository academiesRepository,
-                                IMapper<GetTrustsD365Model, GetTrustsModel> mapper,
                                 IRepositoryErrorResultHandler repositoryErrorHandler)
         {
             _trustRepostiory = trustRepostiory;
             _academiesRepository = academiesRepository;
-            _getTrustMapper = mapper;
             _repositoryErrorHandler = repositoryErrorHandler;
         }
 
@@ -65,9 +59,9 @@ namespace API.Controllers
                 return NotFound($"The trust with the id: '{id}' was not found");
             }
 
-            var formattedResult = _getTrustMapper.Map(trustsRepositoryResult.Result);
+            // var formattedResult = _getTrustMapper.Map(trustsRepositoryResult.Result);
 
-            return Ok(formattedResult);
+            return Ok(trustsRepositoryResult.Result);
         }
 
         /// <summary>
@@ -86,12 +80,8 @@ namespace API.Controllers
             {
                 return _repositoryErrorHandler.LogAndCreateResponse(trustsRepositoryResult);
             }
-
-            var formattedOutput = trustsRepositoryResult.Result
-                                                       ?.Select(r => _getTrustMapper.Map(r))
-                                                        .ToList();
-
-            return Ok(formattedOutput);
+            
+            return Ok(trustsRepositoryResult.Result);
         }
 
         /// <summary>

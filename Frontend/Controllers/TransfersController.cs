@@ -2,12 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Mapping;
-using API.Mapping.Response;
-using API.Models.Downstream.D365;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
-using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Frontend.Helpers;
@@ -24,19 +20,13 @@ namespace Frontend.Controllers
         private readonly ITrustsRepository _trustRepository;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IProjectsRepository _projectsRepository;
-        private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
-        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
 
         public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
-            IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper,
-            IProjectsRepository projectsRepository,
-            IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper)
+            IProjectsRepository projectsRepository)
         {
             _trustRepository = trustRepository;
             _academiesRepository = academiesRepository;
-            _getTrustMapper = getTrustMapper;
             _projectsRepository = projectsRepository;
-            _postProjectsMapper = postProjectsMapper;
         }
 
         public IActionResult TrustName()
@@ -66,8 +56,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("TrustName");
             }
 
-            var mappedResults = result.Result.Select(r => _getTrustMapper.Map(r)).ToList();
-            var model = new TrustSearch {Trusts = mappedResults};
+            var model = new TrustSearch {Trusts = result.Result};
 
             return View(model);
         }
@@ -75,8 +64,7 @@ namespace Frontend.Controllers
         public async Task<IActionResult> OutgoingTrustDetails(Guid trustId)
         {
             var result = await _trustRepository.GetTrustById(trustId);
-            var mappedResult = _getTrustMapper.Map(result.Result);
-            var model = new OutgoingTrustDetails {Trust = mappedResult};
+            var model = new OutgoingTrustDetails {Trust = result.Result};
             return View(model);
         }
 
@@ -145,8 +133,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("IncomingTrust");
             }
 
-            var mappedResults = result.Result.Select(r => _getTrustMapper.Map(r)).ToList();
-            var model = new TrustSearch {Trusts = mappedResults};
+            var model = new TrustSearch {Trusts = result.Result};
 
             return View(model);
         }
@@ -154,8 +141,7 @@ namespace Frontend.Controllers
         public async Task<IActionResult> IncomingTrustDetails(Guid trustId)
         {
             var result = await _trustRepository.GetTrustById(trustId);
-            var mappedResult = _getTrustMapper.Map(result.Result);
-            var model = new OutgoingTrustDetails {Trust = mappedResult};
+            var model = new OutgoingTrustDetails {Trust = result.Result};
             return View(model);
         }
 
@@ -174,18 +160,16 @@ namespace Frontend.Controllers
                 .Select(Guid.Parse);
 
             var outgoingTrustResponse = await _trustRepository.GetTrustById(outgoingTrustId);
-            var outgoingTrust = _getTrustMapper.Map(outgoingTrustResponse.Result);
 
             var incomingTrustResponse = await _trustRepository.GetTrustById(incomingTrustId);
-            var incomingTrust = _getTrustMapper.Map(incomingTrustResponse.Result);
 
             var academiesForTrust = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
 
             var model = new CheckYourAnswers
             {
-                IncomingTrust = incomingTrust,
-                OutgoingTrust = outgoingTrust,
+                IncomingTrust = incomingTrustResponse.Result,
+                OutgoingTrust = outgoingTrustResponse.Result,
                 OutgoingAcademies = selectedAcademies
             };
 
@@ -221,8 +205,7 @@ namespace Frontend.Controllers
                 }
             };
 
-            var mappedProject = _postProjectsMapper.Map(project);
-            var result = await _projectsRepository.InsertProject(mappedProject);
+            var result = await _projectsRepository.InsertProject(project);
 
             HttpContext.Session.Remove("OutgoingTrustId");
             HttpContext.Session.Remove("IncomingTrustId");
