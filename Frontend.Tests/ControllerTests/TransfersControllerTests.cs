@@ -536,7 +536,7 @@ namespace Frontend.Tests.ControllerTests
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal(actionName, redirectResponse.ActionName);
         }
-        
+
         #endregion
     }
 }
