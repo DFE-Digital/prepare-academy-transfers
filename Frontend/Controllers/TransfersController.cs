@@ -29,9 +29,10 @@ namespace Frontend.Controllers
             _projectsRepository = projectsRepository;
         }
 
-        public IActionResult TrustName()
+        public IActionResult TrustName(string query = "")
         {
             ViewData["Error.Exists"] = false;
+            ViewData["Query"] = query;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
@@ -53,7 +54,13 @@ namespace Frontend.Controllers
             if (!result.IsValid)
             {
                 TempData["ErrorMessage"] = result.Error.ErrorMessage;
-                return RedirectToAction("TrustName");
+                return RedirectToAction("TrustName", new {query});
+            }
+
+            if (result.Result.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No results found";
+                return RedirectToAction("TrustName", new {query});
             }
 
             var model = new TrustSearch {Trusts = result.Result};
