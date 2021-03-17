@@ -5,18 +5,25 @@
     Layout = "_Layout";
 }
 
+@{
+    var errorExists = (bool) ViewData["Error.Exists"];
+    var formClasses = errorExists ? "govuk-form-group--error" : "";
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if ((bool) ViewData["Error.Exists"])
-        {
-            <p class="govuk-body">Error: @ViewData["Error.Message"]</p>
-        }
         <form method="get" asp-action="SearchIncomingTrust">
-            <div class="govuk-form-group">
+            <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-required="true">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">Add the incoming trust name</h1>
                     </legend>
+                    @if (errorExists)
+                    {
+                        <span id="query-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error: </span>@ViewData["Error.Message"]
+                        </span>
+                    }
                     <label class="govuk-hint" for="query" id="query-hint">Search by name, trust reference number or companies house number</label>
                     <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint"/>
                 </fieldset>

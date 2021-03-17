@@ -264,6 +264,26 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
+        public class IncomingTrust : TransfersControllerTests
+        {
+            [Fact]
+            public void GivenErrorMessageExists_SetErrorInViewData()
+            {
+                _subject.TempData["ErrorMessage"] = "This is an error message";
+                _subject.IncomingTrust();
+
+                Assert.Equal(true, _subject.ViewData["Error.Exists"]);
+                Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
+            }
+
+            [Fact]
+            public void GivenExistingQuery_SetQueryInViewData()
+            {
+                _subject.IncomingTrust("Meow");
+
+                Assert.Equal("Meow", _subject.ViewData["Query"]);
+            }
+        }
         public class SearchIncomingTrusts : TransfersControllerTests
         {
             [Fact]
@@ -272,6 +292,21 @@ namespace Frontend.Tests.ControllerTests
                 var response = await _subject.SearchIncomingTrust("");
                 AssertRedirectToAction(response, "IncomingTrust");
                 Assert.Equal("Please enter a search term", _subject.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
+            {
+                _trustRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                    new RepositoryResult<List<GetTrustsModel>>()
+                    {
+                        Result = new List<GetTrustsModel>()
+                    });
+
+                var response = await _subject.SearchIncomingTrust("Trust name");
+                var redirectResponse = AssertRedirectToAction(response, "IncomingTrust");
+                Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
+                Assert.Equal("No search results", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]
@@ -289,7 +324,8 @@ namespace Frontend.Tests.ControllerTests
                 );
 
                 var response = await _subject.SearchIncomingTrust("Trust name");
-                AssertRedirectToAction(response, "IncomingTrust");
+                var redirectResponse = AssertRedirectToAction(response, "IncomingTrust");
+                Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
                 Assert.Equal("TRAMS error message", _subject.TempData["ErrorMessage"]);
             }
 

@@ -112,9 +112,10 @@ namespace Frontend.Controllers
             return RedirectToAction(nextAction);
         }
 
-        public IActionResult IncomingTrust()
+        public IActionResult IncomingTrust(string query = "")
         {
             ViewData["Error.Exists"] = false;
+            ViewData["Query"] = query;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
@@ -137,7 +138,13 @@ namespace Frontend.Controllers
             if (!result.IsValid)
             {
                 TempData["ErrorMessage"] = result.Error.ErrorMessage;
-                return RedirectToAction("IncomingTrust");
+                return RedirectToAction("IncomingTrust", new {query});
+            }
+
+            if (result.Result.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No search results";
+                return RedirectToAction("IncomingTrust", new {query});
             }
 
             var model = new TrustSearch {Trusts = result.Result};
