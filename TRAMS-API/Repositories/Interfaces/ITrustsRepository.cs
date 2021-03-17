@@ -1,10 +1,9 @@
-﻿using API.Models.Downstream.D365;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Models.Upstream.Response;
 
-namespace API.Repositories
+namespace API.Repositories.Interfaces
 {
     public interface ITrustsRepository
     {

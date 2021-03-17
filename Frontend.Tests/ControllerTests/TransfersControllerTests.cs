@@ -62,6 +62,14 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal(true, _subject.ViewData["Error.Exists"]);
                 Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
             }
+
+            [Fact]
+            public void GivenExistingQuery_SetQueryInViewData()
+            {
+                _subject.TrustName("Meow");
+
+                Assert.Equal("Meow", _subject.ViewData["Query"]);
+            }
         }
 
         public class TrustSearchTests : TransfersControllerTests
@@ -72,6 +80,18 @@ namespace Frontend.Tests.ControllerTests
                 var response = await _subject.TrustSearch("");
                 AssertRedirectToAction(response, "TrustName");
                 Assert.Equal("Please enter a search term", _subject.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            public async void GivenSearchReturnsNoTrusts_RedirectToTrustNamePageWithAnError()
+            {
+                _trustRepository.Setup(r => r.SearchTrusts("Meow"))
+                    .ReturnsAsync(new RepositoryResult<List<GetTrustsModel>> {Result = new List<GetTrustsModel>()});
+                var response = await _subject.TrustSearch("Meow");
+
+                var redirectResponse = AssertRedirectToAction(response, "TrustName");
+                Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
+                Assert.Equal("No results found", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]
@@ -89,7 +109,8 @@ namespace Frontend.Tests.ControllerTests
                 );
 
                 var response = await _subject.TrustSearch("Trust name");
-                AssertRedirectToAction(response, "TrustName");
+                var redirectResponse = AssertRedirectToAction(response, "TrustName");
+                Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
                 Assert.Equal("TRAMS error message", _subject.TempData["ErrorMessage"]);
             }
 
@@ -531,12 +552,13 @@ namespace Frontend.Tests.ControllerTests
             Assert.Equal(trustTwoId, viewModel.Trusts[1].Id);
         }
 
-        private static void AssertRedirectToAction(IActionResult response, string actionName)
+        private static RedirectToActionResult AssertRedirectToAction(IActionResult response, string actionName)
         {
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal(actionName, redirectResponse.ActionName);
+            return redirectResponse;
         }
-        
+
         #endregion
     }
 }

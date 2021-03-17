@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Mapping;
 using API.Models.Upstream.Response;
+using API.Repositories.Interfaces;
 using static API.Constants.D365Constants;
 
 namespace API.Repositories
