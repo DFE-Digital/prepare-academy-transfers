@@ -1,5 +1,3 @@
-@* @model object *@
-
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
@@ -12,19 +10,36 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @if (errorExists)
+        {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
+                <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#query" data-qa="error__text">
+                                @ViewData["Error.Message"]
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
         <form method="get" asp-action="SearchIncomingTrust">
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-required="true">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">Add the incoming trust name</h1>
                     </legend>
+                    <label class="govuk-hint" for="query" id="query-hint">Search by name, trust reference number or companies house number</label>
                     @if (errorExists)
                     {
                         <span id="query-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error: </span>@ViewData["Error.Message"]
                         </span>
                     }
-                    <label class="govuk-hint" for="query" id="query-hint">Search by name, trust reference number or companies house number</label>
                     <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint"/>
                 </fieldset>
             </div>
