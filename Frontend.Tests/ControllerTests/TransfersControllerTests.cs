@@ -284,6 +284,7 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
         }
+
         public class SearchIncomingTrusts : TransfersControllerTests
         {
             [Fact]
@@ -448,6 +449,18 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = new List<GetAcademiesModel> {_academyOne, _academyTwo, _academyThree}
                     });
+            }
+
+            [Fact]
+            public async void GivenIncomingTrustNotSelected_RendersTheViewCorrectly()
+            {
+                byte[] incomingTrustIdByteArray = null;
+                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
+
+                var response = await _subject.CheckYourAnswers();
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
+                Assert.Null(viewModel.IncomingTrust);
             }
 
             [Fact]
