@@ -17,12 +17,12 @@
                     <div id="add-academies-hint" class="govuk-hint">
                         Select all the academies that are transferring.
                     </div>
-                    <div class="govuk-checkboxes">
+                    <div class="govuk-radios govuk-radios">
                         @foreach (var academy in Model.Academies)
                         {
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="@academy.Id" name="academyIds" type="checkbox" value="@academy.Id">
-                                <label class="govuk-label govuk-checkboxes__label" for="@academy.Id">
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id">
+                                <label class="govuk-label govuk-radios__label" for="@academy.Id">
                                     @academy.AcademyName (URN @academy.Urn)
                                 </label>
                             </div>

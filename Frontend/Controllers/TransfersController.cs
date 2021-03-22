@@ -94,8 +94,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult SubmitOutgoingTrustAcademies(Guid[] academyIds)
+        public IActionResult SubmitOutgoingTrustAcademies(Guid academyId)
         {
+            var academyIds = new[] {academyId};
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString("OutgoingAcademyIds", academyIdsString);
 

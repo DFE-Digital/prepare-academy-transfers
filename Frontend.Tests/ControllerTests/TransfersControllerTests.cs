@@ -224,15 +224,12 @@ namespace Frontend.Tests.ControllerTests
         public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenAcademyGuids_StoresTheThemInTheSessionAndRedirects()
+            public void GivenAcademyGuid_StoresItInTheSessionAndRedirects()
             {
                 var idOne = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
-                var idTwo = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3854af");
-                var idThree = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3854af");
-                var academyIds = new List<Guid> {idOne, idTwo, idThree}.ToArray();
-                var academyIdString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
+                var academyIdString = string.Join(",", new [] {idOne}.Select(id => id.ToString()).ToList());
 
-                var result = _subject.SubmitOutgoingTrustAcademies(academyIds);
+                var result = _subject.SubmitOutgoingTrustAcademies(idOne);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("IncomingTrustIdentified", resultRedirect.ActionName);
