@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Models.Upstream.Enums;
 using API.Models.Upstream.Request;
+using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Frontend.Helpers;
@@ -112,9 +113,10 @@ namespace Frontend.Controllers
             return RedirectToAction(nextAction);
         }
 
-        public IActionResult IncomingTrust()
+        public IActionResult IncomingTrust(string query = "")
         {
             ViewData["Error.Exists"] = false;
+            ViewData["Query"] = query;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
@@ -137,7 +139,13 @@ namespace Frontend.Controllers
             if (!result.IsValid)
             {
                 TempData["ErrorMessage"] = result.Error.ErrorMessage;
-                return RedirectToAction("IncomingTrust");
+                return RedirectToAction("IncomingTrust", new {query});
+            }
+
+            if (result.Result.Count == 0)
+            {
+                TempData["ErrorMessage"] = "No search results";
+                return RedirectToAction("IncomingTrust", new {query});
             }
 
             var model = new TrustSearch {Trusts = result.Result};
@@ -162,20 +170,27 @@ namespace Frontend.Controllers
         public async Task<IActionResult> CheckYourAnswers()
         {
             var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString("OutgoingTrustId"));
-            var incomingTrustId = Guid.Parse(HttpContext.Session.GetString("IncomingTrustId"));
+            GetTrustsModel incomingTrust = null;
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, "OutgoingAcademyIds")
                 .Select(Guid.Parse);
 
             var outgoingTrustResponse = await _trustRepository.GetTrustById(outgoingTrustId);
 
-            var incomingTrustResponse = await _trustRepository.GetTrustById(incomingTrustId);
+            var incomingTrustIdString = HttpContext.Session.GetString("IncomingTrustId");
+
+            if (incomingTrustIdString != null)
+            {
+                var incomingTrustId = Guid.Parse(incomingTrustIdString);
+                var incomingTrustResponse = await _trustRepository.GetTrustById(incomingTrustId);
+                incomingTrust = incomingTrustResponse.Result;
+            }
 
             var academiesForTrust = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
 
             var model = new CheckYourAnswers
             {
-                IncomingTrust = incomingTrustResponse.Result,
+                IncomingTrust = incomingTrust,
                 OutgoingTrust = outgoingTrustResponse.Result,
                 OutgoingAcademies = selectedAcademies
             };
