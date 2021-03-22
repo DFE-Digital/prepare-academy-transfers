@@ -191,11 +191,11 @@ namespace Frontend.Tests.ControllerTests
 
         public class OutgoingTrustAcademiesTests : TransfersControllerTests
         {
-            [Fact]
-            public async void GivenTrustGuidInSession_FetchesTheAcademiesForThatTrust()
+            private const string AcademyName = "Academy 001";
+            private const string AcademyNameTwo = "Academy 002";
+
+            public OutgoingTrustAcademiesTests()
             {
-                const string academyName = "Academy 001";
-                const string academyNameTwo = "Academy 002";
                 var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
                 var trustIdByteArray = Encoding.UTF8.GetBytes(trustId.ToString());
 
@@ -206,18 +206,42 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = new List<GetAcademiesModel>
                         {
-                            new GetAcademiesModel {AcademyName = academyName},
-                            new GetAcademiesModel {AcademyName = academyNameTwo},
+                            new GetAcademiesModel {AcademyName = AcademyName},
+                            new GetAcademiesModel {AcademyName = AcademyNameTwo},
                         }
                     }
                 );
+            }
 
+            [Fact]
+            public async void GivenTrustGuidInSession_FetchesTheAcademiesForThatTrust()
+            {
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustAcademies>(viewResponse.Model);
 
-                Assert.Equal("Academy 001", viewModel.Academies[0].AcademyName);
-                Assert.Equal("Academy 002", viewModel.Academies[1].AcademyName);
+                Assert.Equal(AcademyName, viewModel.Academies[0].AcademyName);
+                Assert.Equal(AcademyNameTwo, viewModel.Academies[1].AcademyName);
+            }
+            
+            [Fact]
+            public async void GivenNoErrorMessage_SetsErrorExistsToFalse()
+            {
+                var response = await _subject.OutgoingTrustAcademies();
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                Assert.Equal(false, viewResponse.ViewData["Error.Exists"]);
+            }
+
+            [Fact]
+            public async void GivenErrorMessage_PutsTheErrorIntoTheViewData()
+            {
+                _subject.TempData["ErrorMessage"] = "Error message";
+                
+                var response = await _subject.OutgoingTrustAcademies();
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                
+                Assert.Equal(true, viewResponse.ViewData["Error.Exists"]);
+                Assert.Equal("Error message", viewResponse.ViewData["Error.Message"]);
             }
         }
 
@@ -227,7 +251,7 @@ namespace Frontend.Tests.ControllerTests
             public void GivenAcademyGuid_StoresItInTheSessionAndRedirects()
             {
                 var idOne = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
-                var academyIdString = string.Join(",", new [] {idOne}.Select(id => id.ToString()).ToList());
+                var academyIdString = string.Join(",", new[] {idOne}.Select(id => id.ToString()).ToList());
 
                 var result = _subject.SubmitOutgoingTrustAcademies(idOne);
 
@@ -239,6 +263,16 @@ namespace Frontend.Tests.ControllerTests
                     It.Is<byte[]>(input =>
                         Encoding.UTF8.GetString(input) == academyIdString
                     )));
+            }
+
+            [Fact]
+            public void GivenNoAcademyGuid_RedirectBackToOutgoingTrustAcademiesWithError()
+            {
+                var result = _subject.SubmitOutgoingTrustAcademies(null);
+
+                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+                Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
+                Assert.Equal("Please select an academy", _subject.TempData["ErrorMessage"]);
             }
         }
 

@@ -89,13 +89,25 @@ namespace Frontend.Controllers
             var outgoingTrustId = Guid.Parse(sessionGuid);
             var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var academies = academiesRepoResult.Result;
-
             var model = new OutgoingTrustAcademies {Academies = academies};
+            
+            ViewData["Error.Exists"] = false;
+            if (TempData.Peek("ErrorMessage") == null) return View(model);
+            
+            ViewData["Error.Exists"] = true;
+            ViewData["Error.Message"] = TempData["ErrorMessage"];
+
             return View(model);
         }
 
-        public IActionResult SubmitOutgoingTrustAcademies(Guid academyId)
+        public IActionResult SubmitOutgoingTrustAcademies(Guid? academyId)
         {
+            if (!academyId.HasValue)
+            {
+                TempData["ErrorMessage"] = "Please select an academy";
+                return RedirectToAction("OutgoingTrustAcademies");
+            }
+
             var academyIds = new[] {academyId};
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString("OutgoingAcademyIds", academyIdsString);
