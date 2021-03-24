@@ -66,7 +66,14 @@
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">PFI (private finance initiative)</dt>
-                    <dd class="govuk-summary-list__value"></dd>
+                    @if (academy.Pfi == null)
+                    {
+                        <dd class="govuk-summary-list__value">Does not apply</dd>
+                    }
+                    else
+                    {
+                        <dd class="govuk-summary-list__value">@academy.Pfi</dd>
+                    }
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
             </dl>
@@ -88,6 +95,7 @@
                 </dd>
             </div>
         </dl>
-        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject">Save and continue</a>
+        <p class="govuk-body-l">Once you select 'start transfer project', you’ll answer a few questions about the features of this transfer project.</p>
+        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject">Start transfer project</a>
     </div>
 </div>
