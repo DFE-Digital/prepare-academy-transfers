@@ -5,12 +5,18 @@
     Layout = "_Layout";
 }
 
-<h1 class="govuk-heading-xl">Trust search</h1>
-<ul class="govuk-list govuk-list--bullet">
-    @foreach (var trust in Model.Trusts)
-    {
-        <li>
-            <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Id">@trust.TrustName</a>
-        </li>
-    }
-</ul>
+<h1 class="govuk-heading-l">Select and outgoing trust</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @foreach (var trust in Model.Trusts)
+        {
+            <h2 class="govuk-heading-s">
+                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Id">
+                    @trust.TrustName (@trust.TrustReferenceNumber)
+                </a>
+            </h2>
+            <p class="govuk-body">Companies House number: @trust.CompaniesHouseNumber</p>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
+        }
+    </div>
+</div>
