@@ -115,7 +115,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenSearchingByString_SetsMappedResponsesOnTheView()
+            public async void GivenSearchingByString_SetsResponsesOnTheView()
             {
                 var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
                 var trustTwoId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672faf");
@@ -136,17 +136,40 @@ namespace Frontend.Tests.ControllerTests
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
                 AssertTrustRepositoryIsCalledCorrectly();
             }
+            
+            [Fact]
+            public async void GivenSearchingByString_SetsQueryOnTheView()
+            {
+                var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+                var trustTwoId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672faf");
+
+                _trustRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                    new RepositoryResult<List<GetTrustsModel>>
+                    {
+                        Result = new List<GetTrustsModel>
+                        {
+                            new GetTrustsModel {Id = trustId},
+                            new GetTrustsModel {Id = trustTwoId}
+                        }
+                    }
+                );
+
+                await _subject.TrustSearch("Trust name");
+                Assert.Equal("Trust name", _subject.ViewData["Query"]);
+            }
         }
 
         public class OutgoingTrustDetailsTests : TransfersControllerTests
         {
-            [Fact]
-            public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
+            private readonly Guid _trustId;
+            private readonly GetTrustsModel _foundTrust;
+
+            public OutgoingTrustDetailsTests()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                var foundTrust = new GetTrustsModel
+                _trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
+                _foundTrust = new GetTrustsModel
                 {
-                    Id = trustId,
+                    Id = _trustId,
                     TrustName = "Example trust",
                     CompaniesHouseNumber = "12345678",
                     EstablishmentType = "Multi Academy Trust",
@@ -154,20 +177,31 @@ namespace Frontend.Tests.ControllerTests
                     Address = "One example street\n\rExample City \n\rExample other line"
                 };
 
-                _trustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
+                _trustRepository.Setup(r => r.GetTrustById(_trustId)).ReturnsAsync(
                     new RepositoryResult<GetTrustsModel>
                     {
-                        Result = foundTrust
+                        Result = _foundTrust
                     });
+            }
 
-                var response = await _subject.OutgoingTrustDetails(trustId);
+            [Fact]
+            public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
+            {
+                var response = await _subject.OutgoingTrustDetails(_trustId);
 
-                _trustRepository.Verify(r => r.GetTrustById(trustId), Times.Once);
+                _trustRepository.Verify(r => r.GetTrustById(_trustId), Times.Once);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
 
-                Assert.Equal(foundTrust, viewModel.Trust);
+                Assert.Equal(_foundTrust, viewModel.Trust);
+            }
+            
+            [Fact]
+            public async void GivenGuidAndQuery_AssignQueryToTheView()
+            {
+                await _subject.OutgoingTrustDetails(_trustId, "Trust name");
+                Assert.Equal("Trust name", _subject.ViewData["Query"]);
             }
         }
 
