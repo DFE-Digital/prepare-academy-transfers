@@ -7,6 +7,11 @@
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
 
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Transfers" asp-action="OutgoingTrustDetails" asp-route-trustId="@ViewData["OutgoingTrustId"]">Back</a>
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         @if (errorExists)
@@ -26,7 +31,7 @@
                 </div>
             </div>
         }
-        
+
         <form class="govuk-form" asp-action="SubmitOutgoingTrustAcademies" method="get">
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">

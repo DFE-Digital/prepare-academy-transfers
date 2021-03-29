@@ -6,6 +6,11 @@
     Layout = "_Layout";
 }
 
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="TrustName" asp-route-query="@ViewData["Query"]">Back</a>
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Outgoing trust details</h1>

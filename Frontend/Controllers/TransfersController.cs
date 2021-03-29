@@ -65,14 +65,16 @@ namespace Frontend.Controllers
             }
 
             var model = new TrustSearch {Trusts = result.Result};
+            ViewData["Query"] = query;
 
             return View(model);
         }
 
-        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId)
+        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId, string query = "")
         {
             var result = await _trustRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
+            ViewData["Query"] = query;
             return View(model);
         }
 
@@ -87,6 +89,8 @@ namespace Frontend.Controllers
         {
             var sessionGuid = HttpContext.Session.GetString("OutgoingTrustId");
             var outgoingTrustId = Guid.Parse(sessionGuid);
+            ViewData["OutgoingTrustId"] = outgoingTrustId.ToString();
+            
             var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var academies = academiesRepoResult.Result;
             var model = new OutgoingTrustAcademies {Academies = academies};
@@ -141,6 +145,7 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> SearchIncomingTrust(string query)
         {
+            ViewData["Query"] = query;
             if (string.IsNullOrEmpty(query))
             {
                 TempData["ErrorMessage"] = "Please enter a search term";
@@ -166,10 +171,11 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> IncomingTrustDetails(Guid trustId)
+        public async Task<IActionResult> IncomingTrustDetails(Guid trustId, string query = "")
         {
             var result = await _trustRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
+            ViewData["Query"] = query;
             return View(model);
         }
 

@@ -5,6 +5,11 @@
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
 
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Home" asp-action="Index">Back</a>
+}
+
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

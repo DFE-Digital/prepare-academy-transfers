@@ -5,6 +5,11 @@
     Layout = "_Layout";
 }
 
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrustDetails" asp-route-trustId="@Model.IncomingTrust.Id">Back</a>
+}
+
 <h1 class="govuk-heading-xl">Check trust and academy details</h1>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

@@ -1,11 +1,13 @@
-@* @model  *@
-
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h1 class="govuk-heading-xl"></h1>
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Transfers" asp-action="OutgoingTrustAcademies">Back</a>
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <form class="govuk-form" asp-action="SubmitIncomingTrustIdentified" method="get">
