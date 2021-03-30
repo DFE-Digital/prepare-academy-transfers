@@ -428,6 +428,14 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
+            
+            [Fact]
+            public void GivenChangeLink_SetChangeLinkinViewData()
+            {
+                _subject.IncomingTrust("Meow", true);
+                
+                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
+            }
         }
 
         public class SearchIncomingTrusts : TransfersControllerTests
@@ -497,6 +505,28 @@ namespace Frontend.Tests.ControllerTests
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
                 AssertTrustRepositoryIsCalledCorrectly();
             }
+            
+            [Fact]
+            public async void GivenChangeLink_SetsChangeLinkOnTheView()
+            {
+                var trustId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9");
+                var trustTwoId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672faf");
+
+                _trustRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                    new RepositoryResult<List<GetTrustsModel>>
+                    {
+                        Result = new List<GetTrustsModel>
+                        {
+                            new GetTrustsModel {Id = trustId},
+                            new GetTrustsModel {Id = trustTwoId}
+                        }
+                    }
+                );
+
+                await _subject.SearchIncomingTrust("Trust name", true);
+
+                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
+            }
         }
 
         public class IncomingTrustDetailsTests : TransfersControllerTests
@@ -529,6 +559,30 @@ namespace Frontend.Tests.ControllerTests
                 var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
 
                 Assert.Equal(foundTrust, viewModel.Trust);
+            }
+            
+            [Fact]
+            public async void GivenChangeLink_SetChangeLinkInView()
+            {
+                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
+                var foundTrust = new GetTrustsModel
+                {
+                    Id = trustId,
+                    TrustName = "Example trust",
+                    CompaniesHouseNumber = "12345678",
+                    EstablishmentType = "Multi Academy Trust",
+                    TrustReferenceNumber = "TR12345",
+                    Address = "One example street\n\rExample City \n\rExample other line"
+                };
+
+                _trustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
+                    new RepositoryResult<GetTrustsModel>
+                    {
+                        Result = foundTrust
+                    });
+
+                await _subject.IncomingTrustDetails(trustId, "", true);
+                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
         }
 

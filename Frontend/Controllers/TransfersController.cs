@@ -148,10 +148,11 @@ namespace Frontend.Controllers
             return RedirectToAction(nextAction);
         }
 
-        public IActionResult IncomingTrust(string query = "")
+        public IActionResult IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
             ViewData["Query"] = query;
+            ViewData["ChangeLink"] = change;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
@@ -161,9 +162,10 @@ namespace Frontend.Controllers
             return View();
         }
 
-        public async Task<IActionResult> SearchIncomingTrust(string query)
+        public async Task<IActionResult> SearchIncomingTrust(string query, bool change = false)
         {
             ViewData["Query"] = query;
+            ViewData["ChangeLink"] = change;
             if (string.IsNullOrEmpty(query))
             {
                 TempData["ErrorMessage"] = "Please enter a search term";
@@ -189,11 +191,12 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> IncomingTrustDetails(Guid trustId, string query = "")
+        public async Task<IActionResult> IncomingTrustDetails(Guid trustId, string query = "", bool change = false)
         {
             var result = await _trustRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
+            ViewData["ChangeLink"] = change;
             return View(model);
         }
 
