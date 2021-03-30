@@ -18,6 +18,9 @@ namespace Frontend.Controllers
     [Authorize]
     public class TransfersController : Controller
     {
+        private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
+        private const string IncomingTrustIdSessionKey = "IncomingTrustId";
+        private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
         private readonly ITrustsRepository _trustRepository;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IProjectsRepository _projectsRepository;
@@ -30,10 +33,11 @@ namespace Frontend.Controllers
             _projectsRepository = projectsRepository;
         }
 
-        public IActionResult TrustName(string query = "")
+        public IActionResult TrustName(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
             ViewData["Query"] = query;
+            ViewData["ChangeLink"] = change;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
@@ -42,8 +46,10 @@ namespace Frontend.Controllers
             return View();
         }
 
-        public async Task<IActionResult> TrustSearch(string query)
+        public async Task<IActionResult> TrustSearch(string query, bool change = false)
         {
+            ViewData["ChangeLink"] = change;
+
             if (string.IsNullOrEmpty(query))
             {
                 TempData["ErrorMessage"] = "Please enter a search term";
@@ -70,34 +76,37 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId, string query = "")
+        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId, string query = "", bool change = false)
         {
             var result = await _trustRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
+            ViewData["ChangeLink"] = change;
             return View(model);
         }
 
         public IActionResult ConfirmOutgoingTrust(Guid trustId)
         {
-            HttpContext.Session.SetString("OutgoingTrustId", trustId.ToString());
+            HttpContext.Session.SetString(OutgoingTrustIdSessionKey, trustId.ToString());
+            HttpContext.Session.Remove(IncomingTrustIdSessionKey);
+            HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
             return RedirectToAction("OutgoingTrustAcademies");
         }
 
         public async Task<IActionResult> OutgoingTrustAcademies()
         {
-            var sessionGuid = HttpContext.Session.GetString("OutgoingTrustId");
+            var sessionGuid = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var outgoingTrustId = Guid.Parse(sessionGuid);
-            ViewData["OutgoingTrustId"] = outgoingTrustId.ToString();
-            
+            ViewData[OutgoingTrustIdSessionKey] = outgoingTrustId.ToString();
+
             var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var academies = academiesRepoResult.Result;
             var model = new OutgoingTrustAcademies {Academies = academies};
-            
+
             ViewData["Error.Exists"] = false;
             if (TempData.Peek("ErrorMessage") == null) return View(model);
-            
+
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
 
@@ -114,7 +123,7 @@ namespace Frontend.Controllers
 
             var academyIds = new[] {academyId};
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
-            HttpContext.Session.SetString("OutgoingAcademyIds", academyIdsString);
+            HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
             return RedirectToAction("IncomingTrustIdentified");
         }
@@ -181,21 +190,21 @@ namespace Frontend.Controllers
 
         public IActionResult ConfirmIncomingTrust(Guid trustId)
         {
-            HttpContext.Session.SetString("IncomingTrustId", trustId.ToString());
+            HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId.ToString());
 
             return RedirectToAction("CheckYourAnswers");
         }
 
         public async Task<IActionResult> CheckYourAnswers()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString("OutgoingTrustId"));
+            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
             GetTrustsModel incomingTrust = null;
-            var academyIds = Session.GetStringListFromSession(HttpContext.Session, "OutgoingAcademyIds")
+            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
                 .Select(Guid.Parse);
 
             var outgoingTrustResponse = await _trustRepository.GetTrustById(outgoingTrustId);
 
-            var incomingTrustIdString = HttpContext.Session.GetString("IncomingTrustId");
+            var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
@@ -219,9 +228,9 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> SubmitProject()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString("OutgoingTrustId"));
-            var incomingTrustId = Guid.Parse(HttpContext.Session.GetString("IncomingTrustId"));
-            var academyIds = Session.GetStringListFromSession(HttpContext.Session, "OutgoingAcademyIds")
+            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
+            var incomingTrustId = Guid.Parse(HttpContext.Session.GetString(IncomingTrustIdSessionKey));
+            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
                 .Select(Guid.Parse);
 
 
@@ -248,9 +257,9 @@ namespace Frontend.Controllers
 
             var result = await _projectsRepository.InsertProject(project);
 
-            HttpContext.Session.Remove("OutgoingTrustId");
-            HttpContext.Session.Remove("IncomingTrustId");
-            HttpContext.Session.Remove("OutgoingAcademyIds");
+            HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
+            HttpContext.Session.Remove(IncomingTrustIdSessionKey);
+            HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
             return RedirectToAction("ProjectFeatures", new {projectId = result.Result});
         }

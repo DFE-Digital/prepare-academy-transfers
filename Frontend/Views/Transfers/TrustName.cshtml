@@ -3,11 +3,19 @@
     Layout = "_Layout";
     var errorExists = (bool) ViewData["Error.Exists"];
     var formClasses = errorExists ? "govuk-form-group--error" : "";
+    var changeLinkClicked = (bool) ViewData["ChangeLink"];
 }
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Home" asp-action="Index">Back</a>
+    @if (changeLinkClicked)
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="CheckYourAnswers">Back</a>
+    }
+    else
+    {
+        <a class="govuk-back-link" asp-controller="Home" asp-action="Index">Back</a>
+    }
 }
 
 
@@ -44,6 +52,7 @@
                         </span>
                     }
                     <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint" value="@ViewData["Query"]"/>
+                    <input hidden name="change" type="text" value="@changeLinkClicked.ToString()" />
                 </fieldset>
             </div>
             <button class="govuk-button" type="submit">Submit</button>
