@@ -94,11 +94,20 @@ namespace Frontend.Controllers
             return RedirectToAction("OutgoingTrustAcademies");
         }
 
-        public async Task<IActionResult> OutgoingTrustAcademies()
+        public async Task<IActionResult> OutgoingTrustAcademies(bool change = false)
         {
             var sessionGuid = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            var sessionAcademyIds = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
             var outgoingTrustId = Guid.Parse(sessionGuid);
-            ViewData[OutgoingTrustIdSessionKey] = outgoingTrustId.ToString();
+            ViewData["OutgoingTrustId"] = outgoingTrustId.ToString();
+            ViewData["ChangeLink"] = change;
+            ViewData["OutgoingAcademyId"] = null;
+
+            if (!string.IsNullOrEmpty(sessionAcademyIds))
+            {
+                var academyId = sessionAcademyIds.Split(",")[0];
+                ViewData["OutgoingAcademyId"] = academyId;
+            }
 
             var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var academies = academiesRepoResult.Result;
@@ -113,7 +122,7 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult SubmitOutgoingTrustAcademies(Guid? academyId)
+        public IActionResult SubmitOutgoingTrustAcademies(Guid? academyId, bool change = false)
         {
             if (!academyId.HasValue)
             {
@@ -125,7 +134,7 @@ namespace Frontend.Controllers
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
-            return RedirectToAction("IncomingTrustIdentified");
+            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrustIdentified");
         }
 
         public IActionResult IncomingTrustIdentified()

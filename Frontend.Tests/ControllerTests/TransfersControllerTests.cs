@@ -324,6 +324,29 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal(true, viewResponse.ViewData["Error.Exists"]);
                 Assert.Equal("Error message", viewResponse.ViewData["Error.Message"]);
             }
+
+            [Fact]
+            public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
+            {
+                var response = await _subject.OutgoingTrustAcademies(true);
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                
+                Assert.Equal(true, viewResponse.ViewData["ChangeLink"]);
+            }
+            
+            [Fact]
+            public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
+            {
+                var outgoingAcademyId = Guid.NewGuid();
+                var outgoingAcademyIds = new List<Guid> {outgoingAcademyId};
+                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
+                
+                var response = await _subject.OutgoingTrustAcademies();
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                
+                Assert.Equal(outgoingAcademyId.ToString(), viewResponse.ViewData["OutgoingAcademyId"]);
+            }
         }
 
         public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
@@ -354,6 +377,16 @@ namespace Frontend.Tests.ControllerTests
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
                 Assert.Equal("Please select an academy", _subject.TempData["ErrorMessage"]);
+            }
+            
+            [Fact]
+            public void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
+            {
+                var idOne = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+                var result = _subject.SubmitOutgoingTrustAcademies(idOne, true);
+
+                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+                Assert.Equal("CheckYourAnswers", resultRedirect.ActionName);
             }
         }
 

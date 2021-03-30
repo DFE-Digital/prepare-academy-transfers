@@ -9,7 +9,14 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Transfers" asp-action="OutgoingTrustDetails" asp-route-trustId="@ViewData["OutgoingTrustId"]">Back</a>
+    @if ((bool) ViewData["ChangeLink"])
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="CheckYourAnswers">Back</a>
+    }
+    else
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="OutgoingTrustDetails" asp-route-trustId="@ViewData["OutgoingTrustId"]">Back</a>
+    }
 }
 
 <div class="govuk-grid-row">
@@ -33,6 +40,7 @@
         }
 
         <form class="govuk-form" asp-action="SubmitOutgoingTrustAcademies" method="get">
+            <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -53,7 +61,14 @@
                         @foreach (var academy in Model.Academies)
                         {
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id">
+                                @if ((string) ViewData["OutgoingAcademyId"] == academy.Id.ToString())
+                                {
+                                    <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id" checked>
+                                }
+                                else
+                                {
+                                    <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id">
+                                }
                                 <label class="govuk-label govuk-radios__label" for="@academy.Id">
                                     @academy.AcademyName (URN @academy.Urn)
                                 </label>
