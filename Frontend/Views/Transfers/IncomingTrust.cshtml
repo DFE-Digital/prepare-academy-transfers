@@ -10,7 +10,14 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrustIdentified">Back</a>
+    @if ((bool) ViewData["ChangeLink"])
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="CheckYourAnswers">Back</a>
+    }
+    else
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrustIdentified">Back</a>
+    }
 }
 
 <div class="govuk-grid-row">
@@ -46,6 +53,7 @@
                         </span>
                     }
                     <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint" value="@ViewData["Query"]"/>
+                    <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
                 </fieldset>
             </div>
             <button class="govuk-button" type="submit">Submit</button>

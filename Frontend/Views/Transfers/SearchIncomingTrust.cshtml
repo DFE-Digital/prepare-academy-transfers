@@ -7,7 +7,14 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrust" asp-route-query="@ViewData["Query"]">Back</a>
+    @if ((bool) ViewData["ChangeLink"])
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrust" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">Back</a>
+    }
+    else
+    {
+        <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrust" asp-route-query="@ViewData["Query"]">Back</a>
+    }
 }
 
 <h1 class="govuk-heading-xl">Select an incoming trust</h1>
@@ -16,7 +23,7 @@
         @foreach (var trust in Model.Trusts)
         {
             <h2 class="govuk-heading-s">
-                <a class="govuk-link" asp-action="IncomingTrustDetails" asp-route-trustId="@trust.Id" asp-route-query="@ViewData["Query"]">
+                <a class="govuk-link" asp-action="IncomingTrustDetails" asp-route-trustId="@trust.Id" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"].ToString()">
                     @trust.TrustName (@trust.TrustReferenceNumber)
                 </a>
             </h2>

@@ -38,7 +38,7 @@
                     <dt class="govuk-summary-list__key">Name</dt>
                     <dd class="govuk-summary-list__value">@academy.AcademyName</dd>
                     <dd class="govuk-summary-list__actions">
-                        <a class="govuk-link" href="#">Change <span class="govuk-visually-hidden">Academy</span></a>
+                        <a class="govuk-link" asp-action="OutgoingTrustAcademies" asp-route-change="true">Change <span class="govuk-visually-hidden">Academy</span></a>
                     </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -98,7 +98,7 @@
                     <dd class="govuk-summary-list__value">@Model.IncomingTrust.TrustName</dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="#">Change <span class="govuk-visually-hidden">incoming trust</span></a>
+                    <a class="govuk-link" asp-action="IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden">incoming trust</span></a>
                 </dd>
             </div>
         </dl>
