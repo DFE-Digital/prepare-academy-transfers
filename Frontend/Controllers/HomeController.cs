@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Frontend.Models;
-using Frontend.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -37,11 +35,6 @@ namespace Frontend.Controllers
             return View();
         }
 
-        public IActionResult DocumentPage()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -58,7 +51,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("Login", new {returnUrl});
             }
 
-            var claims = new List<Claim>
+            var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, "Name")
             };
@@ -79,20 +72,6 @@ namespace Frontend.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        public IActionResult DownloadDocument()
-        {
-            MemoryStream ms;
-
-            using (ms = new MemoryStream())
-            {
-                var generator = new GenerateExampleDocument(ms);
-                generator.Execute();
-            }
-
-            return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "Test.docx");
         }
     }
 }
