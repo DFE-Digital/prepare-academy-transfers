@@ -1,0 +1,136 @@
+@model object
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-xl">
+            @ViewData["OutgoingTrustName"]
+        </h1>
+
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Create HTB template</h2>
+        <p class="govuk-body govuk-!-margin-bottom-5">This information in each section is pre-populated from TRAMS and the school’s application form.</p>
+        <p class="govuk-body govuk-!-margin-bottom-5">You can make changes to the sections which will also populate into the HTB template.</p>
+
+        <ol class="moj-task-list">
+            <li>
+                <h2 class="moj-task-list__section">
+                    Create HTB template
+                </h2>
+                <ul class="moj-task-list__items">
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">Features of a transfer</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">Set dates</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">General information</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">Benefits and other factors</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">Academy performance</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <div style="margin-left: 25px">
+                        <li class="moj-task-list__item" style="border-top: 0">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Pupil numbers</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Latest Ofsted report</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Key stage performance tables</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Latest progress 8 score</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Attainment</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                    </div>
+                </ul>
+            </li>
+
+            <li>
+                <ul class="moj-task-list__items">
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="id">Viability assessment</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                    </li>
+                    <div style="margin-left: 25px">
+                        <li class="moj-task-list__item" style="border-top: 0">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Financial forecast</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Basic need in the local area</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Capability and capacity</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Upload supporting documentation</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Project plan</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a href="#" aria-describedby="id">Trust due dilligence</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="id">Not started</strong>
+                        </li>
+                    </div>
+                </ul>
+            </li>
+
+            <li>
+                <h2 class="moj-task-list__section">
+                    Trust/sponsor template
+                </h2>
+                <ul class="moj-task-list__items">
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            Trust template
+                        </span>
+                        <strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="submit-pay-status">Cannot edit yet</strong>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+</div>
