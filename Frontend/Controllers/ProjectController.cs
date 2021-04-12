@@ -15,11 +15,13 @@ namespace Frontend.Controllers
             _projectsRepository = projectsRepository;
         }
         
-        public async Task<IActionResult> Index([FromRoute] string id)
+        public async Task<IActionResult> Index([FromRoute] Guid id)
         {
-            var project = await _projectsRepository.GetProjectById(Guid.Parse(id));
+            var project = await _projectsRepository.GetProjectById(id);
             
             ViewData["OutgoingTrustName"] = project.Result.ProjectTrusts[0].TrustName;
+            ViewData["ProjectName"] = project.Result.ProjectName;
+            
             return View();
         }
     }

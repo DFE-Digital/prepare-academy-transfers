@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Frontend.Models;
@@ -16,11 +17,13 @@ namespace Frontend.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IProjectsRepository _projectsRepository;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IProjectsRepository projectsRepository)
         {
             _logger = logger;
             _configuration = configuration;
+            _projectsRepository = projectsRepository;
         }
 
         [Authorize]
