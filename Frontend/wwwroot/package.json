@@ -14,6 +14,7 @@
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "@ministryofjustice/frontend": "^0.2.2",
     "govuk-frontend": "^3.11.0"
   }
 }

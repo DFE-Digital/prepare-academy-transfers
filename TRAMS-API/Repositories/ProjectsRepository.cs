@@ -34,6 +34,8 @@ namespace API.Repositories
         private readonly IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>
             _putProjectAcademiesMapper;
 
+        private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
+
         private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
 
         public ProjectsRepository(IAuthenticatedHttpClient client,
@@ -44,6 +46,7 @@ namespace API.Repositories
             IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
             IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel> getProjectAcademyMapper,
             IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesMapper,
+            IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
             IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsMapper)
         {
             _client = client;
@@ -54,6 +57,7 @@ namespace API.Repositories
             _postProjectsMapper = postProjectsMapper;
             _getProjectAcademyMapper = getProjectAcademyMapper;
             _putProjectAcademiesMapper = putProjectAcademiesMapper;
+            _getProjectsMapper = getProjectsMapper;
             _searchProjectsMapper = searchProjectsMapper;
         }
 
@@ -86,7 +90,7 @@ namespace API.Repositories
                     };
                 }
             }
-            
+
             var fetchXml = BuildFetchXMLQuery(sanitizedSearch, projectStatus, isAscending);
             var encodedFetchXml = WebUtility.UrlEncode(fetchXml);
 
@@ -182,7 +186,7 @@ namespace API.Repositories
             {
                 var castedResults = JsonConvert.DeserializeObject<GetProjectsD365Model>(responseContent);
 
-                return new RepositoryResult<GetProjectsResponseModel> {Result = null};
+                return new RepositoryResult<GetProjectsResponseModel> {Result = _getProjectsMapper.Map(castedResults)};
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
