@@ -360,7 +360,7 @@ namespace Frontend.Tests.ControllerTests
                 var result = _subject.SubmitOutgoingTrustAcademies(idOne);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("IncomingTrustIdentified", resultRedirect.ActionName);
+                Assert.Equal("IncomingTrust", resultRedirect.ActionName);
 
                 _session.Verify(s => s.Set(
                     "OutgoingAcademyIds",
