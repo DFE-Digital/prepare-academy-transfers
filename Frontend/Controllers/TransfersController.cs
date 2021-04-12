@@ -134,7 +134,7 @@ namespace Frontend.Controllers
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
-            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrustIdentified");
+            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust");
         }
 
         public IActionResult IncomingTrustIdentified()
