@@ -273,18 +273,7 @@ namespace Frontend.Controllers
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToAction("ProjectFeatures", new {projectId = result.Result});
-        }
-
-        [Route("/transfers/project/{projectId}")]
-        public ActionResult ProjectFeatures([FromRoute] Guid projectId)
-        {
-            var model = new ProjectFeatures()
-            {
-                ProjectId = projectId.ToString()
-            };
-
-            return View(model);
+            return RedirectToAction("Index", "Project", new {id = result.Result});
         }
     }
 }
