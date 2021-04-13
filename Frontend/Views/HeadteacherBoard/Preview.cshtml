@@ -1,0 +1,82 @@
+@model object
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Preview HTB Template</h1>
+        <h2 class="govuk-heading-l">General information - [Outgoing academy]</h2>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    School phase
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    Primary
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Age range
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    4 to 11
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    School type
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    Academy
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    NOR (%full)
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    113 (100%)
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Capacity
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    113
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    PAN
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    17
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    PFI
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    No
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Viability issues?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    No
+                </dd>
+            </div>
+        </dl>
+    </div>
+    <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@ViewData["ProjectId"]">
+        Download HTB Templates
+    </a>
+</div>

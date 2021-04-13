@@ -19,6 +19,7 @@
     <None Include="wwwroot\webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DocumentGeneration\DocumentGeneration.csproj" />
     <ProjectReference Include="..\TRAMS-API\API.csproj" />
   </ItemGroup>
   <ItemGroup>

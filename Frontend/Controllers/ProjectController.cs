@@ -21,6 +21,7 @@ namespace Frontend.Controllers
             
             ViewData["OutgoingTrustName"] = project.Result.ProjectTrusts[0].TrustName;
             ViewData["ProjectName"] = project.Result.ProjectName;
+            ViewData["ProjectId"] = id;
             
             return View();
         }

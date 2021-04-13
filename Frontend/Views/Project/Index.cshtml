@@ -12,7 +12,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-    
+
         <span class="govuk-caption-xl">@ViewData["ProjectName"]</span>
         <h1 class="govuk-heading-xl">
             @ViewData["OutgoingTrustName"]
@@ -139,5 +139,8 @@
                 </ul>
             </li>
         </ol>
+        <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Preview" asp-route-id="@ViewData["ProjectId"]">
+            Preview HTB Template
+        </a>
     </div>
 </div>

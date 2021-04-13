@@ -1,0 +1,30 @@
+@model object
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <div>
+            <h1 class="govuk-heading-xl">Generate headteacher board (HTB) documents</h1>
+        </div>
+        <div class="govuk-inset-text">
+            <p class="govuk-body-m">Save these documents in the school's Sharepoint file</p>
+        </div>
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                <a aria-hidden="true" class="thumbnail" tabindex="-1" href="#"></a><img alt="" src="https://www.gov.uk/assets/whitehall/pub-cover-html-b0465911e56983d98c70f0e25fba24bc206d37e8c83d4addf6421dcf6022c6cd.png">
+            </div>
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@ViewData["ProjectId"]">
+                        HTBTemplate.docx
+                    </a>
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
