@@ -19,6 +19,11 @@ namespace DocumentGeneration
             _body = _document.MainDocumentPart.Document.Body;
         }
 
+        public void AddHeading(string text, DocumentHeadingBuilder.HeadingLevelOptions headingLevel)
+        {
+            DocumentHeadingBuilder.AddHeadingToElement(_body, text, headingLevel);
+        }
+        
         public void AddParagraph(string text)
         {
             var paragraph = new Paragraph();

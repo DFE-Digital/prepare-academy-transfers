@@ -39,6 +39,23 @@ namespace DocumentGeneration.Tests
         }
 
         [Fact]
+        public void GivenHeadingAdded_CreatesADocumentWithTheTextAddedCorrectly()
+        {
+            var documentBody = GenerateDocument(builder =>
+            {
+                builder.AddHeading("Heading 1", DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
+                builder.AddHeading("Heading 2", DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                builder.AddHeading("Heading 3", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+            });
+
+            var textDescendents = documentBody.Descendants<Text>().ToList();
+            Assert.Equal(3, textDescendents.Count);
+            Assert.Equal("Heading 1", textDescendents[0].InnerText);
+            Assert.Equal("Heading 2", textDescendents[1].InnerText);
+            Assert.Equal("Heading 3", textDescendents[2].InnerText);
+        }
+
+        [Fact]
         public void GivenTableAdded_CreatesADocumentWithATable()
         {
             var documentBody = GenerateDocument(builder =>
