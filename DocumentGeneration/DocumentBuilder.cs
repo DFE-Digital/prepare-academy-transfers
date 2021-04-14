@@ -8,14 +8,12 @@ namespace DocumentGeneration
 {
     public class DocumentBuilder
     {
-        private readonly MemoryStream _memoryStream;
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
 
-        public DocumentBuilder(MemoryStream memoryStream)
+        public DocumentBuilder(Stream stream)
         {
-            _memoryStream = memoryStream;
-            _document = WordprocessingDocument.Create(memoryStream, WordprocessingDocumentType.Document);
+            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
@@ -24,11 +22,9 @@ namespace DocumentGeneration
         public void AddParagraph(string text)
         {
             var paragraph = new Paragraph();
-            var run = new Run() {RunProperties = new RunProperties()};
-            var runProperties = run.RunProperties;
-            var runText = new Text(text);
+            var run = new Run {RunProperties = new RunProperties()};
+            DocumentBuilderHelpers.AddTextToElement(run, text);
 
-            run.AppendChild(runText);
             paragraph.AppendChild(run);
             _body.AppendChild(paragraph);
         }

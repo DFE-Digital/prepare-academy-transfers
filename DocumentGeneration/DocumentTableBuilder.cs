@@ -50,7 +50,8 @@ namespace DocumentGeneration
                 var tableCell = new TableCell();
 
                 var paragraph = new Paragraph();
-                var run = new Run(new Text(cellText));
+                var run = new Run();
+                DocumentBuilderHelpers.AddTextToElement(run, cellText);
 
                 paragraph.AppendChild(run);
                 tableCell.AppendChild(paragraph);
