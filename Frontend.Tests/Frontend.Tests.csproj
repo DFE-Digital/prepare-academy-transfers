@@ -18,4 +18,8 @@
       <ProjectReference Include="..\Frontend\Frontend.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ServicesTests" />
+    </ItemGroup>
+
 </Project>

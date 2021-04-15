@@ -6,7 +6,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocumentGeneration
 {
-    public class DocumentBuilder
+    public class DocumentBuilder : IDocumentBuilder
     {
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
