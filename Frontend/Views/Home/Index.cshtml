@@ -1,6 +1,9 @@
-﻿@{
+﻿@using API.Models.Upstream.Response
+@{
     ViewData["Title"] = "Home Page";
+    var projectInformation = (Dictionary<string, SearchProjectsModel>) ViewData["ProjectInformation"];
 }
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-hint">Home</h2>
@@ -9,5 +12,13 @@
         <a asp-controller="Transfers" asp-action="TrustName" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
             Start a new transfer project
         </a>
+        @foreach (var (projectId, project) in projectInformation)
+        {
+            <p class="govuk-body">
+                <a class="govuk-link" asp-controller="Project" asp-action="Index" asp-route-id="@projectId">
+                    @project.ProjectName
+                </a>
+            </p>
+        }
     </div>
 </div>

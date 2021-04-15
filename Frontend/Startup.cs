@@ -9,6 +9,8 @@ using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using DocumentGeneration;
+using Frontend.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -58,6 +60,7 @@ namespace Frontend
             ConfigureRepositories(services);
             ConfigureHelpers(services);
             ConfigureMappers(services);
+            ConfigureServiceClasses(services);
 
             services.AddSession(options =>
             {
@@ -102,9 +105,7 @@ namespace Frontend
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
             });
         }
 
@@ -157,6 +158,11 @@ namespace Frontend
             services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
 
             services.AddTransient<IODataSanitizer, ODataSanitizer>();
+        }
+
+        private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()

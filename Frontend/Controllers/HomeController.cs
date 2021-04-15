@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Models.Upstream.Enums;
+using API.Models.Upstream.Response;
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,7 +21,8 @@ namespace Frontend.Controllers
         private readonly IConfiguration _configuration;
         private readonly IProjectsRepository _projectsRepository;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IProjectsRepository projectsRepository)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration,
+            IProjectsRepository projectsRepository)
         {
             _logger = logger;
             _configuration = configuration;
@@ -27,8 +30,16 @@ namespace Frontend.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var projects = await _projectsRepository.SearchProject("", ProjectStatusEnum.InProgress, false);
+            var projectInformation = new Dictionary<string, SearchProjectsModel>() { };
+
+            projects.Result.Projects.ForEach(project =>
+                projectInformation.Add(project.ProjectId.ToString(), project));
+
+            ViewData["ProjectInformation"] = projectInformation;
+
             return View();
         }
 
