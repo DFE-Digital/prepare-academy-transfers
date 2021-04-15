@@ -1,6 +1,0 @@
-﻿---
-applications:
-- name: academy-transfers-api
-  buildpacks:
-  - dotnet_core_buildpack
-  memory: 256M
