@@ -1,24 +1,34 @@
-﻿@using API.Models.Upstream.Response
+﻿@model Frontend.Views.Home.Index
+
 @{
     ViewData["Title"] = "Home Page";
-    var projectInformation = (Dictionary<string, SearchProjectsModel>) ViewData["ProjectInformation"];
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-hint">Home</h2>
         <h1 class="govuk-heading-xl">Academy transfers projects</h1>
         <p class="govuk-body">Set up new academy transfer project</p>
         <a asp-controller="Transfers" asp-action="TrustName" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
             Start a new transfer project
         </a>
-        @foreach (var (projectId, project) in projectInformation)
+        <h2 class="govuk-heading-l">Pre-HTB (@Model.Projects.Count)</h2>
+        @foreach (var project in Model.Projects)
         {
-            <p class="govuk-body">
-                <a class="govuk-link" asp-controller="Project" asp-action="Index" asp-route-id="@projectId">
-                    @project.ProjectName
-                </a>
-            </p>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h3 class="govuk-heading-m">
+                        <a class="govuk-link govuk-link--no-visited-state" asp-controller="Project" asp-action="Index" asp-route-id="@project.ProjectId">
+                            Outgoing academy name
+                        </a> <span class="govuk-caption-m dfe-inline-block">@project.ProjectName</span>
+                    </h3>
+                    <p class="govuk-body govuk-!-margin-bottom-1">Application to join Incoming Academy</p>
+                    <p class="govuk-body-s">Local authority</p>
+                </div>
+                <div class="govuk-grid-column-one-third dfe-dashboard-project-right">
+                    <span class="govuk-tag govuk-tag--purple">PRE HTB</span>
+                </div>
+            </div>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0"/>
         }
     </div>
 </div>

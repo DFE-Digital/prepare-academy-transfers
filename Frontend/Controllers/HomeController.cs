@@ -1,30 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Models.Upstream.Enums;
-using API.Models.Upstream.Response;
 using API.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Frontend.Models;
+using Frontend.Views.Home;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace Frontend.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IProjectsRepository _projectsRepository;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration,
-            IProjectsRepository projectsRepository)
+        public HomeController(IConfiguration configuration, IProjectsRepository projectsRepository)
         {
-            _logger = logger;
             _configuration = configuration;
             _projectsRepository = projectsRepository;
         }
@@ -33,14 +30,8 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Index()
         {
             var projects = await _projectsRepository.SearchProject("", ProjectStatusEnum.InProgress, false);
-            var projectInformation = new Dictionary<string, SearchProjectsModel>() { };
-
-            projects.Result.Projects.ForEach(project =>
-                projectInformation.Add(project.ProjectId.ToString(), project));
-
-            ViewData["ProjectInformation"] = projectInformation;
-
-            return View();
+            var model = new Index {Projects = projects.Result.Projects};
+            return View(model);
         }
 
         public IActionResult Login(string returnUrl)
@@ -65,7 +56,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("Login", new {returnUrl});
             }
 
-            var claims = new List<Claim>()
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, "Name")
             };
@@ -77,7 +68,7 @@ namespace Frontend.Controllers
 
             if (!string.IsNullOrEmpty(returnUrl))
             {
-                decodedUrl = System.Net.WebUtility.UrlDecode(returnUrl);
+                decodedUrl = WebUtility.UrlDecode(returnUrl);
             }
 
             if (Url.IsLocalUrl(decodedUrl))

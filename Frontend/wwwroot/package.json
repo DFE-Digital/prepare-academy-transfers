@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "build:watch": "webpack --watch"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^7.0.0",
