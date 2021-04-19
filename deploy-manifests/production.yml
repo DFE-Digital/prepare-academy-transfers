@@ -1,0 +1,17 @@
+---
+applications:
+- name: academy-transfers-production
+  services:
+    - academy-transfers-production-redis
+  buildpacks:
+    - dotnet_core_buildpack
+  env:
+    "AAD:Instance": ((aad_instance))
+    "AAD:ResourceId": ((aad_resource_id))
+    "AAD:TenantId": ((aad_tenant_id))
+    "D365:Authority": ((d365_authority))
+    "D365:ClientId": ((d365_client_id))
+    "D365:ClientSecret": ((d365_client_secret))
+    "D365:Url": ((d365_url))
+    username: ((username))
+    password: ((password))
