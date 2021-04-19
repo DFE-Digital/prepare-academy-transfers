@@ -16,6 +16,9 @@ namespace API.Models.Downstream.D365
 
         [JsonProperty("sip_urn")]
         public string Urn { get; set; }
+        
+        [JsonProperty("sip_ukprn")]
+        public string Ukprn { get; set; }
 
         [JsonProperty("address1_composite")]
         public string Address { get; set; }

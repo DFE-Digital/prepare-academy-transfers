@@ -34,7 +34,8 @@ namespace API.Mapping.Response
                 Pfi = input.Predecessor?.Pfi,
                 ReligiousCharacter = input.ReligiousCharacter,
                 ReligiousEthos = input.ReligiousEthos,
-                Urn = input.Urn
+                Urn = input.Urn,
+                Ukprn = input.Ukprn
             };
         }
     }

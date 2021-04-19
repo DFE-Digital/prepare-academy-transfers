@@ -25,6 +25,8 @@ namespace API.Models.Upstream.Response
         /// </summary>
         /// <example>424242</example>
         public string Urn { get; set; }
+        
+        public string Ukprn { get; set; }
 
         /// <summary>
         /// The multi-line address of an academy
