@@ -1,0 +1,41 @@
+name: Deploy to staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_to_dev:
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      # This could be cached in the future to allow for quicker build times
+      - name: Build Frontend
+        run: make build-frontend
+      - name: Install CloudFoundry CLI
+        shell: bash
+        id: install-cf-cli
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf7-cli
+      - name: Deploy Code
+        run: |
+          cf api https://api.london.cloud.service.gov.uk
+          cf auth "${{ secrets.CF_USER }}" "${{ secrets.CF_PASSWORD }}"
+          cf target -o dfe -s academy-transfers
+          cf push -f deploy-manifests/staging.yml \
+          --var aad_instance=${{ secrets.AAD_INSTANCE }} \
+          --var aad_resource_id=${{ secrets.AAD_RESOURCEID }} \
+          --var aad_tenant_id=${{ secrets.AAD_TENANTID }} \
+          --var d365_authority=${{ secrets.D365_AUTHORITY }} \
+          --var d365_client_id=${{ secrets.D365_CLIENTID }} \
+          --var d365_client_secret=${{ secrets.D365_CLIENTSECREt }} \
+          --var d365_url=${{ secrets.D365_URL }} \
+          --var username=${{ secrets.USERNAME }} \
+          --var password=${{ secrets.PASSWORD }} 
