@@ -75,7 +75,7 @@ namespace Frontend.Tests.ControllerTests
             public void GivenChangeLink_SetChangeLinkinViewData()
             {
                 _subject.TrustName("Meow", true);
-                
+
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
         }
@@ -144,7 +144,7 @@ namespace Frontend.Tests.ControllerTests
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
                 AssertTrustRepositoryIsCalledCorrectly();
             }
-            
+
             [Fact]
             public async void GivenSearchingByString_SetsQueryOnTheView()
             {
@@ -165,7 +165,7 @@ namespace Frontend.Tests.ControllerTests
                 await _subject.TrustSearch("Trust name");
                 Assert.Equal("Trust name", _subject.ViewData["Query"]);
             }
-            
+
             [Fact]
             public async void GivenChangeLink_SetChangeLinkinViewData()
             {
@@ -184,7 +184,7 @@ namespace Frontend.Tests.ControllerTests
                 );
 
                 await _subject.TrustSearch("Trust name", true);
-                
+
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
         }
@@ -226,14 +226,14 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal(_foundTrust, viewModel.Trust);
             }
-            
+
             [Fact]
             public async void GivenGuidAndQuery_AssignQueryToTheView()
             {
                 await _subject.OutgoingTrustDetails(_trustId, "Trust name");
                 Assert.Equal("Trust name", _subject.ViewData["Query"]);
             }
-            
+
             [Fact]
             public async void GivenChangeLink_AssignChangeLinkToTheView()
             {
@@ -258,13 +258,13 @@ namespace Frontend.Tests.ControllerTests
 
                 AssertRedirectToAction(response, "OutgoingTrustAcademies");
             }
-            
+
             [Fact]
             public void GivenTrustGuid_ClearExistingInformationInTheSession()
             {
                 var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
                 _subject.ConfirmOutgoingTrust(trustId);
-                
+
                 _session.Verify(s => s.Remove("IncomingTrustId"));
                 _session.Verify(s => s.Remove("OutgoingAcademyIds"));
             }
@@ -304,7 +304,7 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal(AcademyName, viewModel.Academies[0].AcademyName);
                 Assert.Equal(AcademyNameTwo, viewModel.Academies[1].AcademyName);
             }
-            
+
             [Fact]
             public async void GivenNoErrorMessage_SetsErrorExistsToFalse()
             {
@@ -317,10 +317,10 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenErrorMessage_PutsTheErrorIntoTheViewData()
             {
                 _subject.TempData["ErrorMessage"] = "Error message";
-                
+
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                
+
                 Assert.Equal(true, viewResponse.ViewData["Error.Exists"]);
                 Assert.Equal("Error message", viewResponse.ViewData["Error.Message"]);
             }
@@ -330,10 +330,10 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.OutgoingTrustAcademies(true);
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                
+
                 Assert.Equal(true, viewResponse.ViewData["ChangeLink"]);
             }
-            
+
             [Fact]
             public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
             {
@@ -341,10 +341,10 @@ namespace Frontend.Tests.ControllerTests
                 var outgoingAcademyIds = new List<Guid> {outgoingAcademyId};
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
-                
+
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                
+
                 Assert.Equal(outgoingAcademyId.ToString(), viewResponse.ViewData["OutgoingAcademyId"]);
             }
         }
@@ -378,7 +378,7 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
                 Assert.Equal("Please select an academy", _subject.TempData["ErrorMessage"]);
             }
-            
+
             [Fact]
             public void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
             {
@@ -428,12 +428,12 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
-            
+
             [Fact]
             public void GivenChangeLink_SetChangeLinkinViewData()
             {
                 _subject.IncomingTrust("Meow", true);
-                
+
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
         }
@@ -505,7 +505,7 @@ namespace Frontend.Tests.ControllerTests
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
                 AssertTrustRepositoryIsCalledCorrectly();
             }
-            
+
             [Fact]
             public async void GivenChangeLink_SetsChangeLinkOnTheView()
             {
@@ -560,7 +560,7 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal(foundTrust, viewModel.Trust);
             }
-            
+
             [Fact]
             public async void GivenChangeLink_SetChangeLinkInView()
             {
@@ -739,33 +739,14 @@ namespace Frontend.Tests.ControllerTests
             {
                 await _subject.SubmitProject();
 
-                var expectedProjectRequestModel = new PostProjectsRequestModel
-                {
-                    ProjectAcademies = new List<PostProjectsAcademiesModel>
-                    {
-                        new PostProjectsAcademiesModel
-                        {
-                            AcademyId = _academyOne.Id,
-                            Trusts = new List<PostProjectsAcademiesTrustsModel>
-                                {new PostProjectsAcademiesTrustsModel {TrustId = _outgoingTrust.Id},}
-                        },
-                        new PostProjectsAcademiesModel
-                        {
-                            AcademyId = _academyTwo.Id,
-                            Trusts = new List<PostProjectsAcademiesTrustsModel>
-                                {new PostProjectsAcademiesTrustsModel {TrustId = _outgoingTrust.Id},}
-                        }
-                    },
-                    ProjectTrusts = new List<PostProjectsTrustsModel>
-                    {
-                        new PostProjectsTrustsModel {TrustId = _incomingTrust.Id}
-                    }
-                };
-
                 _projectsRepository.Verify(
                     r => r.InsertProject(It.Is<PostProjectsRequestModel>(input =>
-                        input.ProjectAcademies[0].AcademyId ==
-                        expectedProjectRequestModel.ProjectAcademies[0].AcademyId)),
+                        input.ProjectAcademies[0].AcademyId == _academyOne.Id &&
+                        input.ProjectAcademies[0].Trusts[0].TrustId == _outgoingTrust.Id &&
+                        input.ProjectAcademies[1].AcademyId == _academyTwo.Id &&
+                        input.ProjectAcademies[1].Trusts[0].TrustId == _outgoingTrust.Id &&
+                        input.ProjectTrusts[0].TrustId == _incomingTrust.Id &&
+                        input.ProjectTrusts[1].TrustId == _outgoingTrust.Id)),
                     Times.Once);
             }
 
