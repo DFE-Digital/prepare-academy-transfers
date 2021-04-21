@@ -30,10 +30,23 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(Guid id)
         {
             var getProjectResult = await _projectRepository.GetProjectById(id);
-            var outgoingDynamicsAcademy =
+            var outgoingDynamicsAcademyResult =
                 await _dynamicsAcademiesRepository.GetAcademyById(getProjectResult.Result.ProjectAcademies[0]
                     .AcademyId);
-            var outgoingAcademy = await _academiesRepository.GetAcademyByUkprn(outgoingDynamicsAcademy.Result.Ukprn);
+            var outgoingDynamicsAcademy = outgoingDynamicsAcademyResult.Result;
+
+            var outgoingAcademy = await _academiesRepository.GetAcademyByUkprn(outgoingDynamicsAcademy.Ukprn);
+
+            if (outgoingDynamicsAcademy.OfstedInspectionDate.HasValue)
+            {
+                outgoingAcademy.Performance.OfstedJudgementDate =
+                    outgoingDynamicsAcademy.OfstedInspectionDate.Value.ToString("d MMMM yyyy");
+            }
+
+            if (!string.IsNullOrEmpty(outgoingDynamicsAcademy.EstablishmentType))
+            {
+                outgoingAcademy.Performance.SchoolType = outgoingDynamicsAcademy.EstablishmentType;
+            }
 
             var model = new IndexViewModel
             {

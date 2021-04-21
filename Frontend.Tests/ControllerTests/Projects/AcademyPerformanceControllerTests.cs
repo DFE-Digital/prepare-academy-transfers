@@ -34,6 +34,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             private readonly Guid _projectId;
             private readonly GetProjectsResponseModel _foundProject;
             private readonly Academy _foundAcademy;
+            private readonly GetAcademiesModel _foundDynamicsAcademy;
 
             public IndexTests()
             {
@@ -47,14 +48,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {new GetProjectsAcademyResponseModel {AcademyId = academyId}}
                 };
 
-                var foundDynamicsAcademy = new GetAcademiesModel
+                _foundDynamicsAcademy = new GetAcademiesModel
                 {
-                    Ukprn = "FoundUKPRN"
+                    Ukprn = "FoundUKPRN",
+                    EstablishmentType = "Cat school",
+                    OfstedInspectionDate = DateTime.Parse("2021-01-01")
                 };
-                
+
                 _foundAcademy = new Academy
                 {
-                    Ukprn = "ukprn"
+                    Ukprn = "ukprn",
+                    Performance = new AcademyPerformance()
                 };
 
 
@@ -67,9 +71,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                 _dynamicsAcademiesRepository.Setup(r => r.GetAcademyById(academyId)).ReturnsAsync(
                     new RepositoryResult<GetAcademiesModel>
                     {
-                        Result = foundDynamicsAcademy
+                        Result = _foundDynamicsAcademy
                     });
-                
+
                 _academiesRepository.Setup(r => r.GetAcademyByUkprn("FoundUKPRN")).ReturnsAsync(_foundAcademy);
             }
 
@@ -90,7 +94,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 await _subject.Index(_projectId);
                 _academiesRepository.Verify(r => r.GetAcademyByUkprn("FoundUKPRN"), Times.Once);
             }
-            
+
             [Fact]
             public async void GivenAcademy_AssignsTheProjectToTheViewModel()
             {
@@ -100,6 +104,18 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var viewModel = Assert.IsType<IndexViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
+            }
+
+            [Fact]
+            public async void GivenDynamicsAcademyContainsInformation_OverridesInformationFromNewAcademy()
+            {
+                var response = await _subject.Index(_projectId);
+
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<IndexViewModel>(viewResponse.Model);
+                Assert.Equal(viewModel.OutgoingAcademy.Performance.SchoolType, _foundDynamicsAcademy.EstablishmentType);
+                Assert.Equal(viewModel.OutgoingAcademy.Performance.OfstedJudgementDate,
+                    _foundDynamicsAcademy.OfstedInspectionDate?.ToString("d MMMM yyyy"));
             }
         }
     }
