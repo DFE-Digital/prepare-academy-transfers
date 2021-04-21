@@ -63,7 +63,7 @@
                         </li>
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="ofsted-report">Latest Ofsted report</a>
+                                <a aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Latest Ofsted report</a>
                             </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
                         </li>
                         <li class="moj-task-list__item">

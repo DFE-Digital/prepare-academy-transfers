@@ -31,7 +31,7 @@ namespace Data.Mock
                     BehaviourAndSafetyOfPupil = "Placeholder",
                     LeadershipAndManagement = "Placeholder"
                 },
-                
+
                 PupilNumbers = new PupilNumbers
                 {
                     GirlsOnRoll = "Placeholder",
@@ -39,6 +39,18 @@ namespace Data.Mock
                     WithStatementOfSen = "Placeholder",
                     WhoseFirstLanguageIsNotEnglish = "Placeholder",
                     EligibleForFreeSchoolMeals = "Placeholder"
+                },
+
+                LatestOfstedJudgement = new LatestOfstedJudgement
+                {
+                    AchievementOfPupils = "Placeholder",
+                    BehaviourAndSafetyOfPupils = "Placeholder",
+                    EarlyYearsProvision = "Placeholder",
+                    Effectiveness = "Placeholder",
+                    InspectionDate = "Placeholder",
+                    LeadershipAndManagement = "Placeholder",
+                    QualityOfTeaching = "Placeholder",
+                    SchoolName = "Placeholder"
                 }
             };
 
