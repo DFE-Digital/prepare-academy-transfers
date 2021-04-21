@@ -17,13 +17,13 @@ using API.Models.Upstream.Response;
 
 namespace API.Repositories
 {
-    public class ProjectsRepository : IProjectsRepository
+    public class ProjectsDynamicsRepository : IProjectsRepository
     {
         private const string Route = "sip_academytransfersprojects";
 
         private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetProjectsD365Model> _urlBuilder;
-        private readonly ILogger<ProjectsRepository> _logger;
+        private readonly ILogger<ProjectsDynamicsRepository> _logger;
         private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
         private readonly IFetchXmlSanitizer _fetchXmlSanitizer;
         private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
@@ -38,11 +38,11 @@ namespace API.Repositories
 
         private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
 
-        public ProjectsRepository(IAuthenticatedHttpClient client,
+        public ProjectsDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
             IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
             IFetchXmlSanitizer fetchXmlSanitizer,
-            ILogger<ProjectsRepository> logger,
+            ILogger<ProjectsDynamicsRepository> logger,
             IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
             IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel> getProjectAcademyMapper,
             IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesMapper,

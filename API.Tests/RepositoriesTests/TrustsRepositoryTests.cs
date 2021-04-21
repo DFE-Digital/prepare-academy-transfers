@@ -17,7 +17,7 @@ namespace API.Tests.RepositoriesTests
 {
     public class TrustsRepositoryTests
     {
-        private readonly TrustsRepository _subject;
+        private readonly TrustsDynamicsRepository _subject;
         private readonly Mock<IOdataUrlBuilder<GetTrustsD365Model>> _mockUrlBuilder;
         private readonly Mock<IAuthenticatedHttpClient> _mockClient;
         private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
@@ -27,10 +27,10 @@ namespace API.Tests.RepositoriesTests
             _mockClient = new Mock<IAuthenticatedHttpClient>();
             _mockUrlBuilder = new Mock<IOdataUrlBuilder<GetTrustsD365Model>>();
             _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
-            var mockedLogger = new Mock<ILogger<TrustsRepository>>();
+            var mockedLogger = new Mock<ILogger<TrustsDynamicsRepository>>();
             var mockSanitizer = new Mock<IODataSanitizer>();
 
-            _subject = new TrustsRepository(_mockClient.Object, _mockUrlBuilder.Object, mockSanitizer.Object,
+            _subject = new TrustsDynamicsRepository(_mockClient.Object, _mockUrlBuilder.Object, mockSanitizer.Object,
                 mockedLogger.Object, _getTrustMapper.Object);
         }
 

@@ -11,18 +11,18 @@ using API.Models.Upstream.Response;
 
 namespace API.Repositories
 {
-    public class AcademiesRepository : IAcademiesRepository
+    public class AcademiesDynamicsRepository : IAcademiesRepository
     {
         private const string Route = "accounts";
 
         private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
-        private readonly ILogger<AcademiesRepository> _logger;
+        private readonly ILogger<AcademiesDynamicsRepository> _logger;
         private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademies365Mapper;
 
-        public AcademiesRepository(IAuthenticatedHttpClient client,
+        public AcademiesDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder,
-            ILogger<AcademiesRepository> logger,
+            ILogger<AcademiesDynamicsRepository> logger,
             IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademies365Mapper)
         {
             _client = client;

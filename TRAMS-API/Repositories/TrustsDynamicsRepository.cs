@@ -13,20 +13,20 @@ using static API.Constants.D365Constants;
 
 namespace API.Repositories
 {
-    public class TrustsRepository : ITrustsRepository
+    public class TrustsDynamicsRepository : ITrustsRepository
     {
         private const string Route = "accounts";
 
         private readonly IOdataUrlBuilder<GetTrustsD365Model> _urlBuilder;
         private readonly IAuthenticatedHttpClient _client;
         private readonly IODataSanitizer _oDataSanitizer;
-        private readonly ILogger<TrustsRepository> _logger;
+        private readonly ILogger<TrustsDynamicsRepository> _logger;
         private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
 
-        public TrustsRepository(IAuthenticatedHttpClient client,
+        public TrustsDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetTrustsD365Model> urlBuilder,
             IODataSanitizer oDataSanitizer,
-            ILogger<TrustsRepository> logger, IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper)
+            ILogger<TrustsDynamicsRepository> logger, IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper)
         {
             _client = client;
             _urlBuilder = urlBuilder;
