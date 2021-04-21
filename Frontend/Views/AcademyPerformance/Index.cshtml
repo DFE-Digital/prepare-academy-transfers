@@ -1,0 +1,24 @@
+@model Frontend.Models.AcademyPerformance.IndexViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-m">Reference number: @Model.Project.ProjectName</span>
+        <h1 class="govuk-heading-l">Academy Performance</h1>
+        <h2 class="govuk-heading-m">
+            Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.ProjectTrusts[1].TrustName</span>
+        </h2>
+        <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
+        <partial name="_FormFieldSummaryList" model="Model.FieldsToDisplay()"/>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Continue</a>
+    </div>
+</div>

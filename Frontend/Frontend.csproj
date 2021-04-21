@@ -19,11 +19,16 @@
     <None Include="wwwroot\webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Data.Mock\Data.Mock.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DocumentGeneration\DocumentGeneration.csproj" />
     <ProjectReference Include="..\TRAMS-API\API.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.3" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Code" />
   </ItemGroup>
 </Project>

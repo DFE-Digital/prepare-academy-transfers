@@ -9,6 +9,8 @@ using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using Data;
+using Data.Mock;
 using DocumentGeneration;
 using Frontend.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -57,6 +59,7 @@ namespace Frontend
             services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
             services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
 
+            ConfigureDynamicsRepositories(services);
             ConfigureRepositories(services);
             ConfigureHelpers(services);
             ConfigureMappers(services);
@@ -109,11 +112,16 @@ namespace Frontend
             });
         }
 
+        private static void ConfigureDynamicsRepositories(IServiceCollection services)
+        {
+            services.AddTransient<ITrustsRepository, TrustsDynamicsRepository>();
+            services.AddTransient<IAcademiesRepository, AcademiesDynamicsRepository>();
+            services.AddTransient<IProjectsRepository, ProjectsDynamicsRepository>();
+        }
+
         private static void ConfigureRepositories(IServiceCollection services)
         {
-            services.AddTransient<ITrustsRepository, TrustsRepository>();
-            services.AddTransient<IAcademiesRepository, AcademiesRepository>();
-            services.AddTransient<IProjectsRepository, ProjectsRepository>();
+            services.AddTransient<IAcademies, MockAcademyRepository>();
         }
 
         private static void ConfigureMappers(IServiceCollection services)

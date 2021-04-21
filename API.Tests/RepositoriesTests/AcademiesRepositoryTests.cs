@@ -19,7 +19,7 @@ namespace API.Tests.RepositoriesTests
     {
         private readonly Mock<IAuthenticatedHttpClient> _mockClient;
         private readonly Mock<IOdataUrlBuilder<GetAcademiesD365Model>> _mockUrlBuilder;
-        private readonly AcademiesRepository _subject;
+        private readonly AcademiesDynamicsRepository _subject;
         private readonly Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>> _365AcademiesMapper;
 
         public AcademiesRepositoryTests()
@@ -27,8 +27,8 @@ namespace API.Tests.RepositoriesTests
             _mockClient = new Mock<IAuthenticatedHttpClient>();
             _mockUrlBuilder = new Mock<IOdataUrlBuilder<GetAcademiesD365Model>>();
             _365AcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
-            var mockedLogger = new Mock<ILogger<AcademiesRepository>>();
-            _subject = new AcademiesRepository(_mockClient.Object, _mockUrlBuilder.Object, mockedLogger.Object,
+            var mockedLogger = new Mock<ILogger<AcademiesDynamicsRepository>>();
+            _subject = new AcademiesDynamicsRepository(_mockClient.Object, _mockUrlBuilder.Object, mockedLogger.Object,
                 _365AcademiesMapper.Object);
         }
 
