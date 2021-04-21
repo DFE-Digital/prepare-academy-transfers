@@ -7,5 +7,7 @@ namespace Data.Models
         public string Ukprn { get; set; }
         public AcademyPerformance Performance { get; set; }
         public PupilNumbers PupilNumbers { get; set; }
+        
+        public LatestOfstedJudgement LatestOfstedJudgement { get; set; }
     }
 }
