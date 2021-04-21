@@ -30,6 +30,15 @@ namespace Data.Mock
                     QualityOfTeaching = "Placeholder",
                     BehaviourAndSafetyOfPupil = "Placeholder",
                     LeadershipAndManagement = "Placeholder"
+                },
+                
+                PupilNumbers = new PupilNumbers
+                {
+                    GirlsOnRoll = "Placeholder",
+                    BoysOnRoll = "Placeholder",
+                    WithStatementOfSen = "Placeholder",
+                    WhoseFirstLanguageIsNotEnglish = "Placeholder",
+                    EligibleForFreeSchoolMeals = "Placeholder"
                 }
             };
 
