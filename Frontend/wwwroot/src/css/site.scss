@@ -22,3 +22,37 @@ for details on configuring this project to bundle and minify static web assets. 
 .dfe-dashboard-project-right {
   text-align: right;
 }
+
+.dfe-empty-tag {
+  display: inline-block;
+  border: 2px solid;
+  outline-offset: -2px;
+  color: #505a5f;
+  background-color: #ffffff;
+  letter-spacing: 1px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1;
+  padding: 3px 8px;
+  margin-right: 8px;
+}
+
+//When users cannot change values in the summary list and when there is only two items in the summary row, use 50% width to space out the content
+
+.dfe-summary-list__key--width-50,
+.dfe-summary-list__value--width-50 {
+  @include govuk-media-query($from: tablet) {
+    width: 50%;
+  }
+}
+
+.dfe-summary-list__value--width-50:last-child {
+  @include govuk-media-query($from: tablet) {
+    width: 50%;
+  }
+}

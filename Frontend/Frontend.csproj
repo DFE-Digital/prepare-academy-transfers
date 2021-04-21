@@ -19,6 +19,8 @@
     <None Include="wwwroot\webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Data.Mock\Data.Mock.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DocumentGeneration\DocumentGeneration.csproj" />
     <ProjectReference Include="..\TRAMS-API\API.csproj" />
   </ItemGroup>
