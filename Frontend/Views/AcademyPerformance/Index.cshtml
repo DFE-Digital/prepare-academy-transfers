@@ -18,25 +18,6 @@
             Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.ProjectTrusts[1].TrustName</span>
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            @foreach (var field in Model.FieldsToDisplay())
-            {
-                <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
-                        @field.Title
-                    </dt>
-                    <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                        @if (string.IsNullOrEmpty(field.Value))
-                        {
-                            <span class="dfe-empty-tag">Empty</span>
-                        }
-                        else
-                        {
-                            @field.Value
-                        }
-                    </dd>
-                </div>
-            }
-        </dl>
+        @FormFields.DisplayFieldsInSummaryList(Model.FieldsToDisplay())
     </div>
 </div>
