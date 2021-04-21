@@ -48,7 +48,7 @@ namespace Frontend.Controllers.Projects
                 outgoingAcademy.Performance.SchoolType = outgoingDynamicsAcademy.EstablishmentType;
             }
 
-            var model = new IndexViewModel
+            var model = new AcademyPerformanceViewModel
             {
                 Project = getProjectResult.Result,
                 OutgoingAcademy = outgoingAcademy

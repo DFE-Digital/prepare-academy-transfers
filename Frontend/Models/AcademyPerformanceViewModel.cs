@@ -4,7 +4,7 @@ using Data.Models;
 
 namespace Frontend.Models.AcademyPerformance
 {
-    public class IndexViewModel
+    public class AcademyPerformanceViewModel
     {
         public GetProjectsResponseModel Project { get; set; }
         public Academy OutgoingAcademy { get; set; }
