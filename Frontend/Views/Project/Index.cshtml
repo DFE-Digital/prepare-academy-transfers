@@ -50,7 +50,9 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="academy-performance">Academy performance</a>
+                            <a aria-describedby="academy-performance" asp-controller="AcademyPerformance" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">
+                                Academy performance
+                            </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="academy-performance">Reference only</strong>
                     </li>
                     <div class="moj-task-list__indented">
