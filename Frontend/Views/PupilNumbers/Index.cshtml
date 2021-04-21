@@ -1,7 +1,7 @@
-@model Frontend.Models.AcademyPerformance.AcademyPerformanceViewModel
+@model Frontend.Models.PupilNumbersViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Pupil numbers (reference)";
     Layout = "_Layout";
 }
 
@@ -13,7 +13,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-m">Reference number: @Model.Project.ProjectName</span>
-        <h1 class="govuk-heading-l">Academy Performance</h1>
+        <h1 class="govuk-heading-l">Pupil numbers</h1>
         <h2 class="govuk-heading-m">
             Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.ProjectTrusts[1].TrustName</span>
         </h2>
