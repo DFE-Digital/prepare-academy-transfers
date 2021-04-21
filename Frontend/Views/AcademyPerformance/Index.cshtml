@@ -19,5 +19,6 @@
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
         @FormFields.DisplayFieldsInSummaryList(Model.FieldsToDisplay())
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Continue</a>
     </div>
 </div>
