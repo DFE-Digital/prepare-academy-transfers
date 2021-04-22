@@ -9,6 +9,7 @@ using Frontend.Controllers;
 using Frontend.Models;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -18,60 +19,50 @@ namespace Frontend.Tests.ControllerTests
     public class HeadteacherBoardControllerTests
     {
         private readonly HeadteacherBoardController _subject;
-        private readonly Mock<IProjectsRepository> _projectsRepository;
         private readonly Mock<ICreateHtbDocument> _createHtbDocument;
-        private readonly Mock<IAcademiesRepository> _dynamicsAcademiesRepository;
-        private readonly Mock<IAcademies> _academiesRepository;
+        private readonly Mock<IGetInformationForProject> _getInformationForProject;
 
         public HeadteacherBoardControllerTests()
         {
-            _projectsRepository = new Mock<IProjectsRepository>();
             _createHtbDocument = new Mock<ICreateHtbDocument>();
-            _dynamicsAcademiesRepository = new Mock<IAcademiesRepository>();
-            _academiesRepository = new Mock<IAcademies>();
+            _getInformationForProject = new Mock<IGetInformationForProject>();
 
-            _subject = new HeadteacherBoardController(_projectsRepository.Object, _createHtbDocument.Object,
-                _dynamicsAcademiesRepository.Object, _academiesRepository.Object);
+            _subject = new HeadteacherBoardController(_createHtbDocument.Object, _getInformationForProject.Object);
         }
 
         public class PreviewTests : HeadteacherBoardControllerTests
         {
             private readonly Guid _projectId;
-            private readonly Guid _academyId;
+            private readonly GetProjectsResponseModel _foundProject;
+            private readonly Academy _foundAcademy;
 
             public PreviewTests()
             {
                 _projectId = Guid.NewGuid();
-                _academyId = Guid.NewGuid();
+                var academyId = Guid.NewGuid();
 
-                _projectsRepository.Setup(r => r.GetProjectById(_projectId)).ReturnsAsync(
-                    new RepositoryResult<GetProjectsResponseModel>
+                _foundProject = new GetProjectsResponseModel
+                {
+                    ProjectId = _projectId,
+                    ProjectAcademies = new List<GetProjectsAcademyResponseModel>
                     {
-                        Result = new GetProjectsResponseModel
-                        {
-                            ProjectId = _projectId,
-                            ProjectAcademies = new List<GetProjectsAcademyResponseModel>
-                            {
-                                new GetProjectsAcademyResponseModel
-                                    {AcademyId = _academyId, AcademyName = "Cat Academy"}
-                            }
-                        }
-                    });
+                        new GetProjectsAcademyResponseModel
+                            {AcademyId = academyId, AcademyName = "Cat Academy"}
+                    }
+                };
 
-                _dynamicsAcademiesRepository.Setup(r => r.GetAcademyById(_academyId)).ReturnsAsync(
-                    new RepositoryResult<GetAcademiesModel>
-                        {Result = new GetAcademiesModel {Id = _academyId, Ukprn = "FoundUkprn"}}
-                );
+                _foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
 
-                _academiesRepository.Setup(r => r.GetAcademyByUkprn("FoundUkprn")).ReturnsAsync(
-                    new RepositoryResult<Academy> {Result = new Academy {Ukprn = "FoundNonDynamicsUkprn"}});
+                _getInformationForProject.Setup(s => s.Execute(_projectId)).ReturnsAsync(
+                    new GetInformationForProjectResponse {Project = _foundProject, OutgoingAcademy = _foundAcademy});
             }
 
             [Fact]
-            public async void GivenId_GetsTheProjectFromTheProjectRepository()
+            public async void GivenId_GetsProjectInformation()
             {
                 await _subject.Preview(_projectId);
-                _projectsRepository.Verify(r => r.GetProjectById(_projectId), Times.Once);
+
+                _getInformationForProject.Verify(s => s.Execute(_projectId), Times.Once);
             }
 
             [Fact]
@@ -81,7 +72,7 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
 
-                Assert.Equal(_projectId, viewModel.Project.ProjectId);
+                Assert.Equal(_foundProject, viewModel.Project);
             }
 
             [Fact]
@@ -91,7 +82,7 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
 
-                Assert.Equal("FoundNonDynamicsUkprn", viewModel.OutgoingAcademy.Ukprn);
+                Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
             }
         }
 

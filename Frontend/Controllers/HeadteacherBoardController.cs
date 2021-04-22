@@ -1,9 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using Data;
 using Frontend.Models;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
@@ -16,37 +13,26 @@ namespace Frontend.Controllers
     [Route("project/{id}/headteacher-board")]
     public class HeadteacherBoardController : Controller
     {
-        private readonly IProjectsRepository _projectsRepository;
         private readonly ICreateHtbDocument _createHtbDocument;
-        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
-        private readonly IAcademies _academiesRepository;
+        private readonly IGetInformationForProject _getInformationForProject;
 
-        public HeadteacherBoardController(IProjectsRepository projectsRepository, ICreateHtbDocument createHtbDocument,
-            IAcademiesRepository dynamicsAcademiesRepository, IAcademies academiesRepository)
+        public HeadteacherBoardController(ICreateHtbDocument createHtbDocument,
+            IGetInformationForProject getInformationForProject)
         {
-            _projectsRepository = projectsRepository;
             _createHtbDocument = createHtbDocument;
-            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
-            _academiesRepository = academiesRepository;
+            _getInformationForProject = getInformationForProject;
         }
 
         [Route("preview")]
         public async Task<IActionResult> Preview([FromRoute] Guid id)
         {
-            var projectResult = await _projectsRepository.GetProjectById(id);
-            var projectAcademy = projectResult.Result.ProjectAcademies.First();
-            var dynamicsAcademyResult = await _dynamicsAcademiesRepository.GetAcademyById(projectAcademy.AcademyId);
-            var dynamicsAcademy = dynamicsAcademyResult.Result;
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(dynamicsAcademy.Ukprn);
+            var projectInformation = await _getInformationForProject.Execute(id);
 
             var model = new HeadTeacherBoardPreviewViewModel
             {
-                Project = projectResult.Result,
-                OutgoingAcademy = academyResult.Result
+                Project = projectInformation.Project,
+                OutgoingAcademy = projectInformation.OutgoingAcademy
             };
-
-            ViewData["ProjectId"] = id;
-            ViewData["AcademyName"] = projectAcademy.AcademyName;
 
             return View(model);
         }

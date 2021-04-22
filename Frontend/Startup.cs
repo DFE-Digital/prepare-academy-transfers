@@ -172,6 +172,7 @@ namespace Frontend
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
+            serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
         }
 
         private AuthenticatedHttpClient CreateHttpClient()
