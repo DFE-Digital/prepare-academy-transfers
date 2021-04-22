@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
+using Data.Models;
 using DocumentGeneration;
 
 namespace Frontend.Services
@@ -38,26 +39,50 @@ namespace Frontend.Services
             {
                 var generator = new DocumentBuilder(ms);
 
-                generator.AddHeading($"General and performance information - {dynamicsAcademy.AcademyName}",
-                    DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+                generator.AddHeading(projectResult.Result.ProjectName,
+                    DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
 
-                var tableData = new List<List<string>>
-                {
-                    new List<string> {"School phase", "Primary"},
-                    new List<string> {"Age range", "4 to 11"},
-                    new List<string> {"School type", dynamicsAcademy.EstablishmentType},
-                    new List<string> {"NOR (%full)", "113 (100%)"},
-                    new List<string> {"Capacity", "113"},
-                    new List<string> {"PAN", "17"},
-                    new List<string> {"PFI", "No"},
-                    new List<string> {"Viability issues?", "No"}
-                };
-                generator.AddTable(tableData);
+                generator.AddHeading(dynamicsAcademy.AcademyName, DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+
+                AddAcademyPerformanceTable(generator, academyResult);
+                AddPupilNumbersTable(generator, academyResult);
+                AddOfstedJudgementTable(generator, academyResult);
 
                 generator.Build();
             }
 
             return ms.ToArray();
+        }
+
+        private static void AddOfstedJudgementTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
+        {
+            generator.AddHeading("Latest Ofsted judgement", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+
+            var data = academyResult.Result.LatestOfstedJudgement.FieldsToDisplay()
+                .Select(field => new List<string> {field.Title, field.Value}).ToList();
+
+            generator.AddTable(data);
+        }
+
+        private static void AddPupilNumbersTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
+        {
+            generator.AddHeading("Pupil numbers", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+
+            var data = academyResult.Result.PupilNumbers.FieldsToDisplay()
+                .Select(field => new List<string> {field.Title, field.Value}).ToList();
+
+            generator.AddTable(data);
+        }
+
+        private static void AddAcademyPerformanceTable(IDocumentBuilder generator,
+            RepositoryResult<Academy> academyResult)
+        {
+            generator.AddHeading("Academy performance", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+
+            var academyPerformanceData = academyResult.Result.Performance.FieldsToDisplay()
+                .Select(field => new List<string> {field.Title, field.Value}).ToList();
+
+            generator.AddTable(academyPerformanceData);
         }
     }
 }

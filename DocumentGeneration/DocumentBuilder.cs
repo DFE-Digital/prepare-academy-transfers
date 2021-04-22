@@ -17,13 +17,33 @@ namespace DocumentGeneration
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
+            var mainPart = _document.MainDocumentPart;
+            var settingsPart = mainPart.DocumentSettingsPart;
+            
+            if (settingsPart == null)
+            {
+                settingsPart = mainPart.AddNewPart<DocumentSettingsPart>();
+                settingsPart.Settings = new Settings(
+                    new Compatibility(
+                        new CompatibilitySetting
+                        {
+                            Name = new EnumValue<CompatSettingNameValues>
+                                (CompatSettingNameValues.CompatibilityMode),
+                            Val = new StringValue("15"),
+                            Uri = new StringValue
+                                ("http://schemas.microsoft.com/office/word")
+                        }
+                    )
+                );
+                settingsPart.Settings.Save();
+            }
         }
 
         public void AddHeading(string text, DocumentHeadingBuilder.HeadingLevelOptions headingLevel)
         {
             DocumentHeadingBuilder.AddHeadingToElement(_body, text, headingLevel);
         }
-        
+
         public void AddParagraph(string text)
         {
             var paragraph = new Paragraph();
