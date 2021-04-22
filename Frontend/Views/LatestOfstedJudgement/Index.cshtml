@@ -18,7 +18,7 @@
             Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.ProjectTrusts[1].TrustName</span>
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <partial name="_FormFieldSummaryList" model="Model.FieldsToDisplay()"/>
+        <partial name="_FormFieldSummaryList" model="Model.Academy.LatestOfstedJudgement.FieldsToDisplay()"/>
         <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Continue</a>
     </div>
 </div>
