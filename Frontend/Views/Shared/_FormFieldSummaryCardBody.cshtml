@@ -1,19 +1,26 @@
-@model List<Data.FormField>
+@model IEnumerable<Data.FormField>
 
-<div class="app-summary-card__body">
-    <dl class="govuk-summary-list">
-        @foreach (var field in Model)
-        {
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @field.Title
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @field.Value
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                </dd>
-            </div>
-        }
-    </dl>
-</div>
+<section class="app-summary-card govuk-!-margin-bottom-6">
+    <header class="app-summary-card__header">
+        <h3 class="app-summary-card__title">
+            @ViewData["SectionTitle"]
+        </h3>
+    </header>
+    <div class="app-summary-card__body">
+        <dl class="govuk-summary-list">
+            @foreach (var field in Model)
+            {
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @field.Title
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        @field.Value
+                    </dd>
+                    <dd class="govuk-summary-list__actions">
+                    </dd>
+                </div>
+            }
+        </dl>
+    </div>
+</section>

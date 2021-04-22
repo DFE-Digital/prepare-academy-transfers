@@ -14,30 +14,18 @@
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Preview HTB Template</h1>
         <h2 class="govuk-heading-l">@Model.Project.ProjectAcademies[0].AcademyName</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-6">
-            <header class="app-summary-card__header">
-                <h3 class="app-summary-card__title">
-                    Academy Performance
-                </h3>
-            </header>
-            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.Performance.FieldsToDisplay()"/>
-        </section>
-        <section class="app-summary-card govuk-!-margin-bottom-6">
-            <header class="app-summary-card__header">
-                <h3 class="app-summary-card__title">
-                    Pupil numbers
-                </h3>
-            </header>
-            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay()"/>
-        </section>
-        <section class="app-summary-card govuk-!-margin-bottom-6">
-            <header class="app-summary-card__header">
-                <h3 class="app-summary-card__title">
-                    Latest Ofsted judgement
-                </h3>
-            </header>
-            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.LatestOfstedJudgement.FieldsToDisplay()"/>
-        </section>
+        @await Html.PartialAsync(
+            "_FormFieldSummaryCardBody",
+            Model.OutgoingAcademy.Performance.FieldsToDisplay(),
+            new ViewDataDictionary(ViewData) {{"SectionTitle", "Academy performance"}})
+        @await Html.PartialAsync(
+            "_FormFieldSummaryCardBody",
+            Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay(),
+            new ViewDataDictionary(ViewData) {{"SectionTitle", "Pupil numbers"}})
+        @await Html.PartialAsync(
+            "_FormFieldSummaryCardBody",
+            Model.OutgoingAcademy.LatestOfstedJudgement.FieldsToDisplay(),
+            new ViewDataDictionary(ViewData) {{"SectionTitle", "Latest Ofsted judgement"}})
         <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@ViewData["ProjectId"]">
             Download HTB Templates
         </a>
