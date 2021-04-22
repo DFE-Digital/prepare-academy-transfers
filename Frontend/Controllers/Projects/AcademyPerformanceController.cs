@@ -35,7 +35,8 @@ namespace Frontend.Controllers.Projects
                     .AcademyId);
             var outgoingDynamicsAcademy = outgoingDynamicsAcademyResult.Result;
 
-            var outgoingAcademy = await _academiesRepository.GetAcademyByUkprn(outgoingDynamicsAcademy.Ukprn);
+            var outgoingAcademyResult = await _academiesRepository.GetAcademyByUkprn(outgoingDynamicsAcademy.Ukprn);
+            var outgoingAcademy = outgoingAcademyResult.Result;
 
             if (outgoingDynamicsAcademy.OfstedInspectionDate.HasValue)
             {

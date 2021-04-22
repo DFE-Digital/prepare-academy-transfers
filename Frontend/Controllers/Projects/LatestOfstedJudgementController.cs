@@ -35,7 +35,7 @@ namespace Frontend.Controllers.Projects
             var model = new LatestOfstedJudgementViewModel()
             {
                 Project = projectResult.Result,
-                Academy = academyResult
+                Academy = academyResult.Result
             };
 
             return View(model);

@@ -2,6 +2,7 @@
 using API.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Data;
 
 namespace API.Repositories
 {

@@ -5,6 +5,6 @@ namespace Data
 {
     public interface IAcademies
     {
-        public Task<Academy> GetAcademyByUkprn(string ukprn);
+        public Task<RepositoryResult<Academy>> GetAcademyByUkprn(string ukprn);
     }
 }

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using API.Mapping;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
+using Data;
 
 namespace API.Repositories
 {

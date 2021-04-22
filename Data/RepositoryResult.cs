@@ -1,6 +1,6 @@
-﻿using System.Net;
+using System.Net;
 
-namespace API.Repositories
+namespace Data
 {
     public class RepositoryResult<T> : RepositoryResultBase
     {
@@ -9,7 +9,7 @@ namespace API.Repositories
 
     public class RepositoryResultBase
     {
-        public bool IsValid { get => Error == null; }
+        public bool IsValid => Error == null;
 
         public RepositoryError Error { get; set; }
 

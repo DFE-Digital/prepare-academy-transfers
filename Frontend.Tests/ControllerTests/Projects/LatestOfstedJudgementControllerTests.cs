@@ -61,18 +61,13 @@ namespace Frontend.Tests.ControllerTests.Projects
 
 
                 _projectRepository.Setup(r => r.GetProjectById(_projectId)).ReturnsAsync(
-                    new RepositoryResult<GetProjectsResponseModel>
-                    {
-                        Result = _foundProject
-                    });
+                    new RepositoryResult<GetProjectsResponseModel> {Result = _foundProject});
 
                 _dynamicsAcademiesRepository.Setup(r => r.GetAcademyById(academyId)).ReturnsAsync(
-                    new RepositoryResult<GetAcademiesModel>
-                    {
-                        Result = foundDynamicsAcademy
-                    });
+                    new RepositoryResult<GetAcademiesModel> {Result = foundDynamicsAcademy});
 
-                _academiesRepository.Setup(r => r.GetAcademyByUkprn("FoundUKPRN")).ReturnsAsync(_foundAcademy);
+                _academiesRepository.Setup(r => r.GetAcademyByUkprn("FoundUKPRN"))
+                    .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
             }
 
             [Fact]

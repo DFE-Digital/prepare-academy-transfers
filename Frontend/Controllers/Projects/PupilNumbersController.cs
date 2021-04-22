@@ -35,7 +35,7 @@ namespace Frontend.Controllers.Projects
             var model = new PupilNumbersViewModel()
             {
                 Project = projectResult.Result,
-                OutgoingAcademy = academyResult
+                OutgoingAcademy = academyResult.Result
             };
 
             return View(model);

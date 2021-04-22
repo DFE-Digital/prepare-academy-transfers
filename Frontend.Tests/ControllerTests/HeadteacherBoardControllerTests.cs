@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using Data;
 using Frontend.Controllers;
 using Frontend.Services;
 using Microsoft.AspNetCore.Mvc;

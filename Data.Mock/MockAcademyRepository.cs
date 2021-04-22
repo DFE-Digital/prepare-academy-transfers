@@ -5,7 +5,7 @@ namespace Data.Mock
 {
     public class MockAcademyRepository : IAcademies
     {
-        public Task<Academy> GetAcademyByUkprn(string ukprn)
+        public Task<RepositoryResult<Academy>> GetAcademyByUkprn(string ukprn)
         {
             var academy = new Academy
             {
@@ -54,7 +54,12 @@ namespace Data.Mock
                 }
             };
 
-            return Task.FromResult(academy);
+            var result = new RepositoryResult<Academy>()
+            {
+                Result = academy
+            };
+
+            return Task.FromResult(result);
         }
     }
 }

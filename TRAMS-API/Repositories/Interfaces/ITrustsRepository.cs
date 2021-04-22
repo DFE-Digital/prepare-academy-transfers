@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Models.Upstream.Response;
+using Data;
 
 namespace API.Repositories.Interfaces
 {

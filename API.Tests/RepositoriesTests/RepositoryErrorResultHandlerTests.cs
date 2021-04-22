@@ -1,6 +1,7 @@
 ﻿using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Data;
 using Xunit;
 
 namespace API.Tests.RepositoriesTests

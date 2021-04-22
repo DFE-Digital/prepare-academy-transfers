@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Models.Upstream.Enums;
+using Data;
 
 namespace API.Repositories.Interfaces
 {
