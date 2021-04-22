@@ -1,0 +1,215 @@
+.app-summary-card {
+  border: 1px solid #b1b4b6;
+}
+
+.app-summary-card--incomplete {
+  border: 5px solid #1d70b8;
+}
+
+.app-summary-card--incomplete .app-summary-card__header {
+  background-color: #ffffff !important;
+}
+
+.app-summary-card--error {
+  border: 5px solid #d4351c;
+}
+
+.app-summary-card--error .app-summary-card__title {
+  color: #d4351c;
+  font-weight: bold !important;
+}
+
+.app-summary-card .app-summary-card__header {
+  align-items: center;
+  background-color: #f3f2f1;
+  padding: 15px;
+
+
+}
+
+@media (min-width: 48.0625em) {
+  .app-summary-card .app-summary-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+  }
+}
+
+.app-summary-card .app-summary-card__title {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+  margin: 0;
+
+}
+
+@media print {
+  .app-summary-card .app-summary-card__title {
+    font-family: sans-serif;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .app-summary-card .app-summary-card__title {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+  }
+}
+
+@media print {
+  .app-summary-card .app-summary-card__title {
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+
+.app-summary-card .app-summary-card__meta {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.14286;
+  display: block;
+  margin: 0;
+
+}
+
+@media print {
+  .app-summary-card .app-summary-card__meta {
+    font-family: sans-serif;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .app-summary-card .app-summary-card__meta {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+}
+
+@media print {
+  .app-summary-card .app-summary-card__meta {
+    font-size: 14pt;
+    line-height: 1.2;
+  }
+}
+
+.app-summary-card .app-summary-card__actions {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+
+}
+
+@media print {
+  .app-summary-card .app-summary-card__actions {
+    font-family: sans-serif;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .app-summary-card .app-summary-card__actions {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+  }
+}
+
+@media print {
+  .app-summary-card .app-summary-card__actions {
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+
+.app-summary-card .app-summary-card__actions-list {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+}
+
+.app-summary-card .app-summary-card__actions-list-item {
+  display: block;
+  white-space: nowrap;
+}
+
+@media (min-width: 48.0625em) {
+  .app-summary-card .app-summary-card__actions-list-item {
+    display: inline-block;
+    margin-left: 10px;
+    text-align: right;
+  }
+}
+
+.app-summary-card .app-summary-card__actions-list-item:first-child {
+  margin-left: 0;
+}
+
+.app-summary-card .app-summary-card__body {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+  padding: 15px;
+}
+
+@media print {
+  .app-summary-card .app-summary-card__body {
+    font-family: sans-serif;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .app-summary-card .app-summary-card__body {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+  }
+}
+
+@media print {
+  .app-summary-card .app-summary-card__body {
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+
+.app-summary-card .govuk-summary-list {
+  margin: -10px 0;
+}
+
+@media (max-width: 48.0525em) {
+  .app-summary-card .govuk-summary-list {
+    padding-top: 15px;
+  }
+}
+
+.app-summary-card .govuk-summary-list__row:last-child,
+.app-summary-card .govuk-summary-list__row:last-child > * {
+  border-bottom: 0;
+}
+
+@media print {
+  .app-summary-card__header {
+    break-inside: avoid;
+  }
+  .app-summary-card__actions {
+    display: none;
+  }
+}

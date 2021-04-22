@@ -2,6 +2,7 @@
 for details on configuring this project to bundle and minify static web assets. */
 @import "../../node_modules/govuk-frontend/govuk/all.scss";
 @import "../../node_modules/@ministryofjustice/frontend/moj/all.scss";
+@import "summary-card";
 
 .dfe-inline-block {
   display: inline-block;

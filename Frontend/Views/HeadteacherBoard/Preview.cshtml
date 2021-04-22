@@ -1,87 +1,45 @@
-@model object
+@model Frontend.Models.HeadTeacherBoardPreviewViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Preview HTB Template";
     Layout = "_Layout";
 }
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Back</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Preview HTB Template</h1>
-        <h2 class="govuk-heading-l">General information - @ViewData["AcademyName"]</h2>
-        <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    School phase
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    Primary
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Age range
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    4 to 11
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    School type
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    Academy
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    NOR (%full)
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    113 (100%)
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Capacity
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    113
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    PAN
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    17
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    PFI
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    No
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Viability issues?
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    No
-                </dd>
-            </div>
-        </dl>
+        <h2 class="govuk-heading-l">@Model.Project.ProjectAcademies[0].AcademyName</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-6">
+            <header class="app-summary-card__header">
+                <h3 class="app-summary-card__title">
+                    Academy Performance
+                </h3>
+            </header>
+            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.Performance.FieldsToDisplay()"/>
+        </section>
+        <section class="app-summary-card govuk-!-margin-bottom-6">
+            <header class="app-summary-card__header">
+                <h3 class="app-summary-card__title">
+                    Pupil numbers
+                </h3>
+            </header>
+            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay()"/>
+        </section>
+        <section class="app-summary-card govuk-!-margin-bottom-6">
+            <header class="app-summary-card__header">
+                <h3 class="app-summary-card__title">
+                    Latest Ofsted judgement
+                </h3>
+            </header>
+            <partial name="_FormFieldSummaryCardBody" model="@Model.OutgoingAcademy.LatestOfstedJudgement.FieldsToDisplay()"/>
+        </section>
+        <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@ViewData["ProjectId"]">
+            Download HTB Templates
+        </a>
     </div>
-    <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@ViewData["ProjectId"]">
-        Download HTB Templates
-    </a>
 </div>
