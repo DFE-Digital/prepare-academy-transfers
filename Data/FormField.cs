@@ -1,4 +1,4 @@
-namespace Frontend.Models
+namespace Data
 {
     public class FormField
     {

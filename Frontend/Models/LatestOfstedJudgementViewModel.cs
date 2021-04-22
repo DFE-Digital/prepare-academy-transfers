@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using API.Models.Upstream.Response;
+using Data;
 using Data.Models;
 
 namespace Frontend.Models
