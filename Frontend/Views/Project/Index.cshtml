@@ -27,27 +27,34 @@
                 <h2 class="moj-task-list__section">
                     Create HTB template
                 </h2>
-                <ul class="moj-task-list__items">
+                <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="features">Features of a transfer</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="features">Not started</strong>
+                            <a aria-describedby="features">Features of a transfer</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="features">Unavailable</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="dates">Set dates</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="dates">Not started</strong>
+                            <a aria-describedby="dates">Set transfer dates</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="dates">Unavailable</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="general-information">General information</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">Not started</strong>
+                            <a aria-describedby="general-information">General information</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">Unavailable</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="benefits">Benefits and other factors</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Not started</strong>
+                            <a aria-describedby="benefits">Benefits and other factors</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Unavailable</strong>
                     </li>
+                </ul>
+            </li>
+            <li>
+                <h2 class="moj-task-list__section">
+                    Reference only
+                </h2>
+                <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a aria-describedby="academy-performance" asp-controller="AcademyPerformance" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">
@@ -55,83 +62,28 @@
                             </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="academy-performance">Reference only</strong>
                     </li>
-                    <div class="moj-task-list__indented">
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Pupil numbers</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Latest Ofsted report</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="key-stage-performance-tables">Key stage performance tables</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-performance-tables">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="progress-8-scores">Latest progress 8 score</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="progress-8-scores">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="attainment">Attainment</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="attainment">Reference only</strong>
-                        </li>
-                    </div>
-                </ul>
-            </li>
-
-            <li>
-                <ul class="moj-task-list__items">
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="viability-assessment">Viability assessment</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="viability-assessment">Reference only</strong>
+                            <a aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Pupil numbers</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers">Reference only</strong>
                     </li>
-                    <div class="moj-task-list__indented">
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="financial-forecast">Financial forecast</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="financial-forecast">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="basic-need">Basic need in the local area</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="basic-need">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="capability-and-capacity">Capability and capacity</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="capability-and-capacity">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="supporting-documentation">Upload supporting documentation</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="supporting-documentation">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="project-plan">Project plan</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="project-plan">Reference only</strong>
-                        </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a href="#" aria-describedby="trust-due-diligence">Trust due diligence</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="trust-due-diligence">Reference only</strong>
-                        </li>
-                    </div>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@ViewData["ProjectId"]">Latest Ofsted report</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a href="#" aria-describedby="key-stage-performance-tables">Key stage performance tables</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-performance-tables">Reference only</strong>
+                    </li>
                 </ul>
             </li>
-
             <li>
                 <h2 class="moj-task-list__section">
                     Trust/sponsor template
                 </h2>
-                <ul class="moj-task-list__items">
+                <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             Trust template
