@@ -1,9 +1,10 @@
-using System.Runtime.InteropServices;
+using System;
 
 namespace Data.Models
 {
     public class Academy
     {
+        public Guid DynamicsId { get; set; }
         public string Ukprn { get; set; }
         public AcademyPerformance Performance { get; set; }
         public PupilNumbers PupilNumbers { get; set; }

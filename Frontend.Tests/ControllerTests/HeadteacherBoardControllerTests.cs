@@ -8,6 +8,7 @@ using Data.Models;
 using Frontend.Controllers;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;

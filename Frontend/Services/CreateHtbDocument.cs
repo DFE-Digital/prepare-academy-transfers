@@ -8,6 +8,7 @@ using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using DocumentGeneration;
+using Frontend.Services.Interfaces;
 
 namespace Frontend.Services
 {

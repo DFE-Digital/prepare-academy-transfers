@@ -6,6 +6,7 @@ using API.Repositories.Interfaces;
 using Data;
 using Frontend.Models;
 using Frontend.Services;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

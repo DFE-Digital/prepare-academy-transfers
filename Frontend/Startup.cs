@@ -13,6 +13,7 @@ using Data;
 using Data.Mock;
 using DocumentGeneration;
 using Frontend.Services;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;

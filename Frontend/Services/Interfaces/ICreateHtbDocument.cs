@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Frontend.Services
+namespace Frontend.Services.Interfaces
 {
     public interface ICreateHtbDocument
     {
