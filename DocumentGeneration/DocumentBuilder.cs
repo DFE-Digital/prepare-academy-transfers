@@ -17,26 +17,7 @@ namespace DocumentGeneration
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
-            var mainPart = _document.MainDocumentPart;
-            var settingsPart = mainPart.DocumentSettingsPart;
-            
-            if (settingsPart == null)
-            {
-                settingsPart = mainPart.AddNewPart<DocumentSettingsPart>();
-                settingsPart.Settings = new Settings(
-                    new Compatibility(
-                        new CompatibilitySetting
-                        {
-                            Name = new EnumValue<CompatSettingNameValues>
-                                (CompatSettingNameValues.CompatibilityMode),
-                            Val = new StringValue("15"),
-                            Uri = new StringValue
-                                ("http://schemas.microsoft.com/office/word")
-                        }
-                    )
-                );
-                settingsPart.Settings.Save();
-            }
+            SetCompatibilityMode();
         }
 
         public void AddHeading(string text, DocumentHeadingBuilder.HeadingLevelOptions headingLevel)
@@ -65,6 +46,29 @@ namespace DocumentGeneration
         {
             _document.Save();
             _document.Close();
+        }
+
+        private void SetCompatibilityMode()
+        {
+            var mainPart = _document.MainDocumentPart;
+            var settingsPart = mainPart.DocumentSettingsPart;
+
+            if (settingsPart != null) return;
+
+            settingsPart = mainPart.AddNewPart<DocumentSettingsPart>();
+            settingsPart.Settings = new Settings(
+                new Compatibility(
+                    new CompatibilitySetting
+                    {
+                        Name = new EnumValue<CompatSettingNameValues>
+                            (CompatSettingNameValues.CompatibilityMode),
+                        Val = new StringValue("15"),
+                        Uri = new StringValue
+                            ("http://schemas.microsoft.com/office/word")
+                    }
+                )
+            );
+            settingsPart.Settings.Save();
         }
     }
 }

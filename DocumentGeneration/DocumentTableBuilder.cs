@@ -35,6 +35,13 @@ namespace DocumentGeneration
                         {Color = "000000", Val = BorderValues.Single, Size = 8, Space = 0},
                     InsideHorizontalBorder = new InsideHorizontalBorder
                         {Color = "000000", Val = BorderValues.Single, Size = 8, Space = 0},
+                },
+                TableCellMarginDefault = new TableCellMarginDefault
+                {
+                    TopMargin = new TopMargin {Width = "40"},
+                    BottomMargin = new BottomMargin {Width = "40"},
+                    TableCellRightMargin = new TableCellRightMargin {Width = 40},
+                    TableCellLeftMargin = new TableCellLeftMargin {Width = 40}
                 }
             };
 
@@ -57,7 +64,7 @@ namespace DocumentGeneration
                 tableCell.AppendChild(paragraph);
                 tableRow.AppendChild(tableCell);
             });
-            
+
             _table.AppendChild(tableRow);
         }
 
