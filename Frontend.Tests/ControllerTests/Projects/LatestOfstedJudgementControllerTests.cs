@@ -8,6 +8,8 @@ using Data.Models;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.AcademyPerformance;
+using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -17,17 +19,13 @@ namespace Frontend.Tests.ControllerTests.Projects
     public class LatestOfstedJudgementControllerTests
     {
         private readonly LatestOfstedJudgementController _subject;
-        private readonly Mock<IProjectsRepository> _projectRepository;
-        private readonly Mock<IAcademies> _academiesRepository;
-        private readonly Mock<IAcademiesRepository> _dynamicsAcademiesRepository;
+        private readonly Mock<IGetInformationForProject> _getInformationForProject;
 
         protected LatestOfstedJudgementControllerTests()
         {
-            _projectRepository = new Mock<IProjectsRepository>();
-            _academiesRepository = new Mock<IAcademies>();
-            _dynamicsAcademiesRepository = new Mock<IAcademiesRepository>();
-            _subject = new LatestOfstedJudgementController(_projectRepository.Object,
-                _dynamicsAcademiesRepository.Object, _academiesRepository.Object);
+            _getInformationForProject = new Mock<IGetInformationForProject>();
+
+            _subject = new LatestOfstedJudgementController(_getInformationForProject.Object);
         }
 
         public class IndexTests : LatestOfstedJudgementControllerTests
@@ -39,18 +37,12 @@ namespace Frontend.Tests.ControllerTests.Projects
             public IndexTests()
             {
                 _projectId = Guid.NewGuid();
-                var academyId = Guid.NewGuid();
 
                 _foundProject = new GetProjectsResponseModel
                 {
                     ProjectId = _projectId,
                     ProjectAcademies = new List<GetProjectsAcademyResponseModel>
-                        {new GetProjectsAcademyResponseModel {AcademyId = academyId}}
-                };
-
-                var foundDynamicsAcademy = new GetAcademiesModel
-                {
-                    Ukprn = "FoundUKPRN",
+                        {new GetProjectsAcademyResponseModel {AcademyId = Guid.NewGuid()}}
                 };
 
                 _foundAcademy = new Academy
@@ -59,15 +51,20 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Performance = new AcademyPerformance()
                 };
 
+                _getInformationForProject.Setup(s => s.Execute(_projectId)).ReturnsAsync(
+                    new GetInformationForProjectResponse
+                    {
+                        Project = _foundProject,
+                        OutgoingAcademy = _foundAcademy
+                    });
+            }
 
-                _projectRepository.Setup(r => r.GetProjectById(_projectId)).ReturnsAsync(
-                    new RepositoryResult<GetProjectsResponseModel> {Result = _foundProject});
+            [Fact]
+            public async void GivenProjectId_GetsInformationAboutTheProject()
+            {
+                await _subject.Index(_projectId);
 
-                _dynamicsAcademiesRepository.Setup(r => r.GetAcademyById(academyId)).ReturnsAsync(
-                    new RepositoryResult<GetAcademiesModel> {Result = foundDynamicsAcademy});
-
-                _academiesRepository.Setup(r => r.GetAcademyByUkprn("FoundUKPRN"))
-                    .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
+                _getInformationForProject.Verify(s => s.Execute(_projectId), Times.Once);
             }
 
             [Fact]
@@ -79,13 +76,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundProject, viewModel.Project);
-            }
-
-            [Fact]
-            public async void GivenDynamicsAcademy_LooksUpTheAcademyWithTheUkprn()
-            {
-                await _subject.Index(_projectId);
-                _academiesRepository.Verify(r => r.GetAcademyByUkprn("FoundUKPRN"), Times.Once);
             }
 
             [Fact]

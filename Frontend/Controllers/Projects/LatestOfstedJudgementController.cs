@@ -1,41 +1,31 @@
 using System;
 using System.Threading.Tasks;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using Data;
 using Frontend.Models;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers.Projects
 {
     [Authorize]
-    [Route("/project/{id}/latest-ofsted-judgement")]
+    [Route("/project/{id:guid}/latest-ofsted-judgement")]
     public class LatestOfstedJudgementController : Controller
     {
-        private readonly IProjectsRepository _dynamicsProjectsRepository;
-        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
-        private readonly IAcademies _academiesRepository;
+        private readonly IGetInformationForProject _getInformationForProject;
 
-        public LatestOfstedJudgementController(IProjectsRepository dynamicsProjectsRepository,
-            IAcademiesRepository dynamicsAcademiesRepository, IAcademies academiesRepository)
+        public LatestOfstedJudgementController(IGetInformationForProject getInformationForProject)
         {
-            _dynamicsProjectsRepository = dynamicsProjectsRepository;
-            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
-            _academiesRepository = academiesRepository;
+            _getInformationForProject = getInformationForProject;
         }
 
         public async Task<IActionResult> Index(Guid id)
         {
-            var projectResult = await _dynamicsProjectsRepository.GetProjectById(id);
-            var dynamicsAcademiesResult =
-                await _dynamicsAcademiesRepository.GetAcademyById(projectResult.Result.ProjectAcademies[0].AcademyId);
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(dynamicsAcademiesResult.Result.Ukprn);
+            var projectInformation = await _getInformationForProject.Execute(id);
 
-            var model = new LatestOfstedJudgementViewModel()
+            var model = new LatestOfstedJudgementViewModel
             {
-                Project = projectResult.Result,
-                Academy = academyResult.Result
+                Project = projectInformation.Project,
+                Academy = projectInformation.OutgoingAcademy
             };
 
             return View(model);

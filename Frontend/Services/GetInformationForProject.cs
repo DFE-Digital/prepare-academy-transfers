@@ -29,7 +29,7 @@ namespace Frontend.Services
             var dynamicsAcademyResult = await _dynamicsAcademiesRepository.GetAcademyById(projectAcademyId);
             var dynamicsAcademy = dynamicsAcademyResult.Result;
             var academyResult = await _academiesRepository.GetAcademyByUkprn(dynamicsAcademy.Ukprn);
-            
+
             return new GetInformationForProjectResponse
             {
                 Project = projectResult.Result,

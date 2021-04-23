@@ -1,58 +1,31 @@
 using System;
 using System.Threading.Tasks;
-using API.Models.Upstream.Response;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using Data;
-using Data.Models;
 using Frontend.Models.AcademyPerformance;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers.Projects
 {
     [Authorize]
-    [Route("project/{id}/academy-performance")]
+    [Route("project/{id:guid}/academy-performance")]
     public class AcademyPerformanceController : Controller
     {
-        private readonly IProjectsRepository _projectRepository;
-        private readonly IAcademies _academiesRepository;
-        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
+        private readonly IGetInformationForProject _getInformationForProject;
 
-        public AcademyPerformanceController(IProjectsRepository projectRepository, IAcademies academiesRepository,
-            IAcademiesRepository dynamicsAcademiesRepository)
+        public AcademyPerformanceController(IGetInformationForProject getInformationForProject)
         {
-            _projectRepository = projectRepository;
-            _academiesRepository = academiesRepository;
-            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
+            _getInformationForProject = getInformationForProject;
         }
 
         public async Task<IActionResult> Index(Guid id)
         {
-            var getProjectResult = await _projectRepository.GetProjectById(id);
-            var outgoingDynamicsAcademyResult =
-                await _dynamicsAcademiesRepository.GetAcademyById(getProjectResult.Result.ProjectAcademies[0]
-                    .AcademyId);
-            var outgoingDynamicsAcademy = outgoingDynamicsAcademyResult.Result;
-
-            var outgoingAcademyResult = await _academiesRepository.GetAcademyByUkprn(outgoingDynamicsAcademy.Ukprn);
-            var outgoingAcademy = outgoingAcademyResult.Result;
-
-            if (outgoingDynamicsAcademy.OfstedInspectionDate.HasValue)
-            {
-                outgoingAcademy.Performance.OfstedJudgementDate =
-                    outgoingDynamicsAcademy.OfstedInspectionDate.Value.ToString("d MMMM yyyy");
-            }
-
-            if (!string.IsNullOrEmpty(outgoingDynamicsAcademy.EstablishmentType))
-            {
-                outgoingAcademy.Performance.SchoolType = outgoingDynamicsAcademy.EstablishmentType;
-            }
+            var projectInformation = await _getInformationForProject.Execute(id);
 
             var model = new AcademyPerformanceViewModel
             {
-                Project = getProjectResult.Result,
-                OutgoingAcademy = outgoingAcademy
+                Project = projectInformation.Project,
+                OutgoingAcademy = projectInformation.OutgoingAcademy
             };
 
             return View(model);

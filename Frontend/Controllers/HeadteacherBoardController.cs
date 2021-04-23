@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
-using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers
 {
     [Authorize]
-    [Route("project/{id}/headteacher-board")]
+    [Route("project/{id:guid}/headteacher-board")]
     public class HeadteacherBoardController : Controller
     {
         private readonly ICreateHtbDocument _createHtbDocument;
