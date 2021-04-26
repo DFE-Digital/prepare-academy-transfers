@@ -15,7 +15,7 @@ namespace Data.Models
 
     public class TrustSearchAcademies
     {
-        public string Urn { get; set; }
+        public string Ukprn { get; set; }
         public string Name { get; set; }
     }
 }

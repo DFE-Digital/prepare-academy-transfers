@@ -24,7 +24,7 @@ namespace Data.TRAMS
                 Ukprn = r.Urn,
                 TrustName = r.GroupName,
                 CompaniesHouseNumber = r.CompaniesHouseNumber,
-                Academies = r.Academies.Select(a => new TrustSearchAcademies {Name = a.Name, Urn = a.Urn}).ToList()
+                Academies = r.Academies.Select(a => new TrustSearchAcademies {Name = a.Name, Ukprn = a.Urn}).ToList()
             }).ToList();
 
 
