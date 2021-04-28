@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Mock", "Data.Mock\Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS", "Data.TRAMS\Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS.Tests", "Data.TRAMS.Tests\Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +68,14 @@ Global
 		{B438E250-451B-4435-B689-E64D702AED13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B438E250-451B-4435-B689-E64D702AED13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B438E250-451B-4435-B689-E64D702AED13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,11 +9,13 @@ namespace Data.TRAMS
 {
     public class TramsAcademiesRepository : IAcademies
     {
-        private readonly HttpClient _httpClient;
+        private readonly ITramsHttpClient _httpClient;
+        private readonly IMapper<TramsAcademy, Academy> _academyMapper;
 
-        public TramsAcademiesRepository(HttpClient httpClient)
+        public TramsAcademiesRepository(ITramsHttpClient httpClient, IMapper<TramsAcademy, Academy> academyMapper)
         {
             _httpClient = httpClient;
+            _academyMapper = academyMapper;
         }
 
         public async Task<RepositoryResult<Academy>> GetAcademyByUkprn(string ukprn)
@@ -22,20 +24,9 @@ namespace Data.TRAMS
 
             var apiResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TramsAcademy>(apiResponse);
+            var mappedResult = _academyMapper.Map(result);
 
-            return new RepositoryResult<Academy>
-            {
-                Result = new Academy
-                {
-                    Ukprn = result.Ukprn,
-                    Name = result.EstablishmentName,
-                    Performance = new AcademyPerformance
-                    {
-                        AgeRange = $"{result.StatutoryLowAge} to {result.StatutoryHighAge}",
-                        Capacity = result.SchoolCapacity
-                    }
-                }
-            };
+            return new RepositoryResult<Academy> {Result = mappedResult};
         }
     }
 }
