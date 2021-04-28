@@ -9,18 +9,18 @@ namespace API.Tests.MapperTests
 {
     public class SearchProjectsPageResponseMapperTests
     {
-        private readonly Mapping.SearchProjectsPageResponseMapper _mapper;
+        private readonly Mapping.SearchProjectsPageResponseDynamicsMapper _dynamicsMapper;
 
         public SearchProjectsPageResponseMapperTests()
         {
-            var itemMapper = new SearchProjectsItemMapper();
-            _mapper = new Mapping.SearchProjectsPageResponseMapper(itemMapper);
+            var itemMapper = new SearchProjectsItemDynamicsMapper();
+            _dynamicsMapper = new Mapping.SearchProjectsPageResponseDynamicsMapper(itemMapper);
         }
 
         [Fact]
         public void NullInput_Returns_NullValue()
         {
-            var result = _mapper.Map(null);
+            var result = _dynamicsMapper.Map(null);
 
             Assert.Null(result);
         }
@@ -36,7 +36,7 @@ namespace API.Tests.MapperTests
                 TotalPages = input
             };
 
-            var result = _mapper.Map(inputPageModel);
+            var result = _dynamicsMapper.Map(inputPageModel);
 
             Assert.Equal(expected, result.TotalPages);
         }
@@ -52,7 +52,7 @@ namespace API.Tests.MapperTests
                 CurrentPage = input
             };
 
-            var result = _mapper.Map(inputPageModel);
+            var result = _dynamicsMapper.Map(inputPageModel);
 
             Assert.Equal(expected, result.CurrentPage);
         }
@@ -60,12 +60,12 @@ namespace API.Tests.MapperTests
         [Fact]
         public void ItemMapper_CallTest()
         {
-            var itemMapper = new Mock<IMapper<SearchProjectsD365Model, SearchProjectsModel>>();
+            var itemMapper = new Mock<IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel>>();
 
             itemMapper.Setup(m => m.Map(It.IsAny<SearchProjectsD365Model>()))
                       .Verifiable();
 
-            var pageMapper = new SearchProjectsPageResponseMapper(itemMapper.Object);
+            var pageMapper = new SearchProjectsPageResponseDynamicsMapper(itemMapper.Object);
 
             var inputModel = new SearchProjectsD365PageModel
             {

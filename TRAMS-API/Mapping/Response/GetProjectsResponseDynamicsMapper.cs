@@ -6,17 +6,17 @@ using System.Linq;
 
 namespace API.Mapping.Response
 {
-    public class GetProjectsResponseMapper : IMapper<GetProjectsD365Model, GetProjectsResponseModel>
+    public class GetProjectsResponseDynamicsMapper : IDynamicsMapper<GetProjectsD365Model, GetProjectsResponseModel>
     {
-        private readonly IMapper<AcademyTransfersProjectAcademy,
-                                 GetProjectsAcademyResponseModel> _academyMapper;
+        private readonly IDynamicsMapper<AcademyTransfersProjectAcademy,
+                                 GetProjectsAcademyResponseModel> _academyDynamicsMapper;
         private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
-        public GetProjectsResponseMapper(IMapper<AcademyTransfersProjectAcademy,
-                                                 GetProjectsAcademyResponseModel> academyMapper,
+        public GetProjectsResponseDynamicsMapper(IDynamicsMapper<AcademyTransfersProjectAcademy,
+                                                 GetProjectsAcademyResponseModel> academyDynamicsMapper,
                                          IEstablishmentNameFormatter establishmentNameFormatter)
         {
-            _academyMapper = academyMapper;
+            _academyDynamicsMapper = academyDynamicsMapper;
             _establishmentNameFormatter = establishmentNameFormatter;
         }
 
@@ -71,7 +71,7 @@ namespace API.Mapping.Response
         {
             return input.Academies == null || input.Academies.Count == 0
                    ? new List<GetProjectsAcademyResponseModel>()
-                   : input.Academies?.Select(a => _academyMapper.Map(a))
+                   : input.Academies?.Select(a => _academyDynamicsMapper.Map(a))
                                      .ToList();
         }
     }

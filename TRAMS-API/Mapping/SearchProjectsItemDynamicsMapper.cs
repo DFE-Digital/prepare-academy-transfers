@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.Mapping
 {
-    public class SearchProjectsItemMapper : IMapper<SearchProjectsD365Model, SearchProjectsModel>
+    public class SearchProjectsItemDynamicsMapper : IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel>
     {
         public SearchProjectsModel Map(SearchProjectsD365Model input)
         {

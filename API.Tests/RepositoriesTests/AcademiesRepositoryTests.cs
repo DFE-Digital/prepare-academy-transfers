@@ -20,13 +20,13 @@ namespace API.Tests.RepositoriesTests
         private readonly Mock<IAuthenticatedHttpClient> _mockClient;
         private readonly Mock<IOdataUrlBuilder<GetAcademiesD365Model>> _mockUrlBuilder;
         private readonly AcademiesDynamicsRepository _subject;
-        private readonly Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>> _365AcademiesMapper;
+        private readonly Mock<IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel>> _365AcademiesMapper;
 
         public AcademiesRepositoryTests()
         {
             _mockClient = new Mock<IAuthenticatedHttpClient>();
             _mockUrlBuilder = new Mock<IOdataUrlBuilder<GetAcademiesD365Model>>();
-            _365AcademiesMapper = new Mock<IMapper<GetAcademiesD365Model, GetAcademiesModel>>();
+            _365AcademiesMapper = new Mock<IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel>>();
             var mockedLogger = new Mock<ILogger<AcademiesDynamicsRepository>>();
             _subject = new AcademiesDynamicsRepository(_mockClient.Object, _mockUrlBuilder.Object, mockedLogger.Object,
                 _365AcademiesMapper.Object);
