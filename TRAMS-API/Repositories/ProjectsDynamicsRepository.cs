@@ -27,39 +27,39 @@ namespace API.Repositories
         private readonly ILogger<ProjectsDynamicsRepository> _logger;
         private readonly IOdataUrlBuilder<AcademyTransfersProjectAcademy> _projectAcademyUrlBuilder;
         private readonly IFetchXmlSanitizer _fetchXmlSanitizer;
-        private readonly IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsMapper;
+        private readonly IDynamicsMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> _postProjectsDynamicsMapper;
 
-        private readonly IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>
-            _getProjectAcademyMapper;
+        private readonly IDynamicsMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>
+            _getProjectAcademyDynamicsMapper;
 
-        private readonly IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>
-            _putProjectAcademiesMapper;
+        private readonly IDynamicsMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>
+            _putProjectAcademiesDynamicsMapper;
 
-        private readonly IMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsMapper;
+        private readonly IDynamicsMapper<GetProjectsD365Model, GetProjectsResponseModel> _getProjectsDynamicsMapper;
 
-        private readonly IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsMapper;
+        private readonly IDynamicsMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> _searchProjectsDynamicsMapper;
 
         public ProjectsDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetProjectsD365Model> urlBuilder,
             IOdataUrlBuilder<AcademyTransfersProjectAcademy> projectAcademyUrlBuilder,
             IFetchXmlSanitizer fetchXmlSanitizer,
             ILogger<ProjectsDynamicsRepository> logger,
-            IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsMapper,
-            IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel> getProjectAcademyMapper,
-            IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesMapper,
-            IMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsMapper,
-            IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsMapper)
+            IDynamicsMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model> postProjectsDynamicsMapper,
+            IDynamicsMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel> getProjectAcademyDynamicsMapper,
+            IDynamicsMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model> putProjectAcademiesDynamicsMapper,
+            IDynamicsMapper<GetProjectsD365Model, GetProjectsResponseModel> getProjectsDynamicsMapper,
+            IDynamicsMapper<SearchProjectsD365PageModel, SearchProjectsPageModel> searchProjectsDynamicsMapper)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _projectAcademyUrlBuilder = projectAcademyUrlBuilder;
             _fetchXmlSanitizer = fetchXmlSanitizer;
             _logger = logger;
-            _postProjectsMapper = postProjectsMapper;
-            _getProjectAcademyMapper = getProjectAcademyMapper;
-            _putProjectAcademiesMapper = putProjectAcademiesMapper;
-            _getProjectsMapper = getProjectsMapper;
-            _searchProjectsMapper = searchProjectsMapper;
+            _postProjectsDynamicsMapper = postProjectsDynamicsMapper;
+            _getProjectAcademyDynamicsMapper = getProjectAcademyDynamicsMapper;
+            _putProjectAcademiesDynamicsMapper = putProjectAcademiesDynamicsMapper;
+            _getProjectsDynamicsMapper = getProjectsDynamicsMapper;
+            _searchProjectsDynamicsMapper = searchProjectsDynamicsMapper;
         }
 
         public async Task<RepositoryResult<SearchProjectsPageModel>> SearchProject(string search,
@@ -119,7 +119,7 @@ namespace API.Repositories
                     Projects = pageResults
                 };
 
-                var mappedPageResult = _searchProjectsMapper.Map(pageResult);
+                var mappedPageResult = _searchProjectsDynamicsMapper.Map(pageResult);
                 return new RepositoryResult<SearchProjectsPageModel> {Result = mappedPageResult};
             }
 
@@ -152,7 +152,7 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var castedResults = JsonConvert.DeserializeObject<AcademyTransfersProjectAcademy>(responseContent);
-                var mappedResults = _getProjectAcademyMapper.Map(castedResults);
+                var mappedResults = _getProjectAcademyDynamicsMapper.Map(castedResults);
 
                 return new RepositoryResult<GetProjectsAcademyResponseModel> {Result = mappedResults};
             }
@@ -187,7 +187,7 @@ namespace API.Repositories
             {
                 var castedResults = JsonConvert.DeserializeObject<GetProjectsD365Model>(responseContent);
 
-                return new RepositoryResult<GetProjectsResponseModel> {Result = _getProjectsMapper.Map(castedResults)};
+                return new RepositoryResult<GetProjectsResponseModel> {Result = _getProjectsDynamicsMapper.Map(castedResults)};
             }
 
             //At this point, log the error and configure the repository result to inform the caller that the repo failed
@@ -205,7 +205,7 @@ namespace API.Repositories
 
         public async Task<RepositoryResult<Guid?>> InsertProject(PostProjectsRequestModel project)
         {
-            var mappedProject = _postProjectsMapper.Map(project);
+            var mappedProject = _postProjectsDynamicsMapper.Map(project);
             var jsonBody = JsonConvert.SerializeObject(mappedProject);
 
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonBody);
@@ -245,7 +245,7 @@ namespace API.Repositories
         public async Task<RepositoryResult<Guid?>> UpdateProjectAcademy(Guid id, PutProjectAcademiesRequestModel model)
         {
             var url = _projectAcademyUrlBuilder.BuildRetrieveOneUrl("sip_academytransfersprojectacademies", id);
-            var mappedModel = _putProjectAcademiesMapper.Map(model);
+            var mappedModel = _putProjectAcademiesDynamicsMapper.Map(model);
             var jsonContent = JsonConvert.SerializeObject(mappedModel);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 

@@ -10,11 +10,11 @@ namespace API.Tests.MapperTests
 {
     public class PutProjectAcademyMapperTests
     {
-        private readonly PutProjectAcademiesRequestMapper _mapper; 
+        private readonly PutProjectAcademiesRequestDynamicsMapper _dynamicsMapper; 
 
         public PutProjectAcademyMapperTests()
         {
-            _mapper = new PutProjectAcademiesRequestMapper();
+            _dynamicsMapper = new PutProjectAcademiesRequestDynamicsMapper();
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace API.Tests.MapperTests
                 AcademyId = Guid.Parse("81014326-5d51-e911-a82e-000d3a385a17")
             };
                 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.AcademyId);
         }
@@ -38,7 +38,7 @@ namespace API.Tests.MapperTests
                 EsfaInterventionReasons = null
             };
                 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.EsfaInterventionReasons));
         }
@@ -54,7 +54,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500001", result.EsfaInterventionReasons);
         }
@@ -72,7 +72,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500001,596500002,596500003", result.EsfaInterventionReasons);
         }
@@ -86,7 +86,7 @@ namespace API.Tests.MapperTests
                 EsfaInterventionReasonsExplained = null
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.EsfaInterventionReasonsExplained));
         }
@@ -99,7 +99,7 @@ namespace API.Tests.MapperTests
                 EsfaInterventionReasonsExplained = "Some explanation"
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("Some explanation", result.EsfaInterventionReasonsExplained);
         }
@@ -112,7 +112,7 @@ namespace API.Tests.MapperTests
                 RddOrRscInterventionReasons = null
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.RddOrRscInterventionReasons));
         }
@@ -128,7 +128,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500002", result.RddOrRscInterventionReasons);
         }
@@ -146,7 +146,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500002,596500001,596500000", result.RddOrRscInterventionReasons);
         }

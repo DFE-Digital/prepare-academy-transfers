@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace API.Mapping.Response
 {
-    public class GetProjectAcademiesResponseMapper : IMapper<AcademyTransfersProjectAcademy,
+    public class GetProjectAcademiesResponseDynamicsMapper : IDynamicsMapper<AcademyTransfersProjectAcademy,
                                                              GetProjectsAcademyResponseModel>
     {
         private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
-        public GetProjectAcademiesResponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        public GetProjectAcademiesResponseDynamicsMapper(IEstablishmentNameFormatter establishmentNameFormatter)
         {
             _establishmentNameFormatter = establishmentNameFormatter;
         }

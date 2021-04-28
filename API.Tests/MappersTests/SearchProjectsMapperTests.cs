@@ -9,17 +9,17 @@ namespace API.Tests.MapperTests
 {
     public class SearchProjectsMapperTests
     {
-        private readonly SearchProjectsItemMapper _mapper;
+        private readonly SearchProjectsItemDynamicsMapper _dynamicsMapper;
 
         public SearchProjectsMapperTests()
         {
-            _mapper = new SearchProjectsItemMapper();
+            _dynamicsMapper = new SearchProjectsItemDynamicsMapper();
         }
 
         [Fact]
         public void NullInput_Returns_Null()
         {
-            var result = _mapper.Map(null);
+            var result = _dynamicsMapper.Map(null);
 
             Assert.Null(result);
         }
@@ -29,7 +29,7 @@ namespace API.Tests.MapperTests
         {
             var searchProjectsD365Model = new SearchProjectsD365Model();
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal((Guid)default, result.ProjectId);
         }
@@ -42,7 +42,7 @@ namespace API.Tests.MapperTests
                 ProjectId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1")
             };
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1"), result.ProjectId);
         }
@@ -52,7 +52,7 @@ namespace API.Tests.MapperTests
         {
             var searchProjectsD365Model = new SearchProjectsD365Model();
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Null(result.ProjectInitiatorUid);
         }
@@ -68,7 +68,7 @@ namespace API.Tests.MapperTests
                 ProjectInitiatorUid = input
             };
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(expected, result.ProjectInitiatorUid);
         }
@@ -78,7 +78,7 @@ namespace API.Tests.MapperTests
         {
             var searchProjectsD365Model = new SearchProjectsD365Model();
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Null(result.ProjectName);
         }
@@ -95,7 +95,7 @@ namespace API.Tests.MapperTests
                 ProjectName = input
             };
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(expected, result.ProjectName);
         }
@@ -105,7 +105,7 @@ namespace API.Tests.MapperTests
         {
             var searchProjectsD365Model = new SearchProjectsD365Model();
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Null(result.ProjectInitiatorFullName);
         }
@@ -122,7 +122,7 @@ namespace API.Tests.MapperTests
                 ProjectInitiatorFullName = input
             };
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(expected, result.ProjectInitiatorFullName);
         }
@@ -132,7 +132,7 @@ namespace API.Tests.MapperTests
         {
             var searchProjectsD365Model = new SearchProjectsD365Model();
             
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(default, result.ProjectStatus);
         }
@@ -147,7 +147,7 @@ namespace API.Tests.MapperTests
                 ProjectStatus = input
             };
 
-            var result = _mapper.Map(searchProjectsD365Model);
+            var result = _dynamicsMapper.Map(searchProjectsD365Model);
 
             Assert.Equal(expected, result.ProjectStatus);
         }

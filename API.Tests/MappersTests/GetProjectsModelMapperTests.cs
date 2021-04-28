@@ -10,12 +10,12 @@ namespace API.Tests.MapperTests
 {
     public class GetProjectsModelMapperTests
     {
-        private readonly GetProjectsResponseMapper _mapper;
+        private readonly GetProjectsResponseDynamicsMapper _dynamicsMapper;
 
         public GetProjectsModelMapperTests()
         {
             var establishmentNameFormatter = new EstablishmentNameFormatter();
-            _mapper = new GetProjectsResponseMapper(new GetProjectAcademiesResponseMapper(establishmentNameFormatter), establishmentNameFormatter);
+            _dynamicsMapper = new GetProjectsResponseDynamicsMapper(new GetProjectAcademiesResponseDynamicsMapper(establishmentNameFormatter), establishmentNameFormatter);
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace API.Tests.MapperTests
         {
             var model = (GetProjectsD365Model)null;
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Null(result);
         }
@@ -36,7 +36,7 @@ namespace API.Tests.MapperTests
                 ProjectId = Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9")
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9"), result.ProjectId);
         }
@@ -49,7 +49,7 @@ namespace API.Tests.MapperTests
                 ProjectName = "Some name"
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal("Some name", result.ProjectName);
         }
@@ -62,7 +62,7 @@ namespace API.Tests.MapperTests
                 ProjectStatus = Models.D365.Enums.ProjectStatusEnum.Completed
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Models.Upstream.Enums.ProjectStatusEnum.Completed, result.ProjectStatus);
         }
@@ -76,7 +76,7 @@ namespace API.Tests.MapperTests
                 ProjectInitiatorUid = "joe.bloggs@email.com"
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal("Joe Bloggs", result.ProjectInitiatorFullName);
             Assert.Equal("joe.bloggs@email.com", result.ProjectInitiatorUid);
@@ -98,7 +98,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9"), result.ProjectAcademies[0].ProjectAcademyId);
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1"), result.ProjectAcademies[0].AcademyId);
@@ -133,7 +133,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9"), result.ProjectAcademies[0].ProjectAcademyId);
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fb1"), result.ProjectAcademies[0].AcademyId);
@@ -162,7 +162,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies[0].EsfaInterventionReasons);
         }
@@ -181,7 +181,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies[0].EsfaInterventionReasons);
         }
@@ -200,7 +200,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Models.Upstream.Enums.EsfaInterventionReasonEnum.GovernanceConcerns, result.ProjectAcademies[0].EsfaInterventionReasons[0]);
             Assert.Single(result.ProjectAcademies[0].EsfaInterventionReasons);
@@ -220,7 +220,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Models.Upstream.Enums.EsfaInterventionReasonEnum.GovernanceConcerns, result.ProjectAcademies[0].EsfaInterventionReasons[0]);
             Assert.Equal(Models.Upstream.Enums.EsfaInterventionReasonEnum.FinanceConcerns, result.ProjectAcademies[0].EsfaInterventionReasons[1]);
@@ -251,7 +251,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(Models.Upstream.Enums.EsfaInterventionReasonEnum.GovernanceConcerns, result.ProjectAcademies[0].EsfaInterventionReasons[0]);
             Assert.Equal(Models.Upstream.Enums.EsfaInterventionReasonEnum.FinanceConcerns, result.ProjectAcademies[0].EsfaInterventionReasons[1]);
@@ -278,7 +278,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies[0].RddOrRscInterventionReasons);
         }
@@ -297,7 +297,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies[0].RddOrRscInterventionReasons);
         }
@@ -316,7 +316,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
             Assert.Single(result.ProjectAcademies[0].RddOrRscInterventionReasons);
@@ -336,7 +336,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
             Assert.Equal(RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
@@ -367,7 +367,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(RddOrRscInterventionReasonEnum.TerminationWarningNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[0]);
             Assert.Equal(RddOrRscInterventionReasonEnum.RSCMindedToTerminateNotice, result.ProjectAcademies[0].RddOrRscInterventionReasons[1]);
@@ -407,7 +407,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal("RDD Explanation", result.ProjectAcademies[0].RddOrRscInterventionReasonsExplained);
             Assert.Equal("ESFA Explanation", result.ProjectAcademies[0].EsfaInterventionReasonsExplained);
@@ -430,7 +430,7 @@ namespace API.Tests.MapperTests
                 Academies = null
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies);
         }
@@ -443,7 +443,7 @@ namespace API.Tests.MapperTests
                 Academies = new List<AcademyTransfersProjectAcademy>()
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectAcademies);
         }
@@ -456,7 +456,7 @@ namespace API.Tests.MapperTests
                 Trusts = null
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectTrusts);
         }
@@ -469,7 +469,7 @@ namespace API.Tests.MapperTests
                 Trusts = new List<ProjectTrust>()
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Empty(result.ProjectTrusts);
         }
@@ -490,7 +490,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Single(result.ProjectTrusts);
             Assert.Equal(Guid.Parse("a16e9020-9123-4420-8055-851d1b672fa9"), result.ProjectTrusts[0].ProjectTrustId);
@@ -526,7 +526,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(model);
+            var result = _dynamicsMapper.Map(model);
 
             Assert.Equal(3, result.ProjectTrusts.Count);
 

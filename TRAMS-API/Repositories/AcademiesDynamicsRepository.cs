@@ -19,17 +19,17 @@ namespace API.Repositories
         private readonly IAuthenticatedHttpClient _client;
         private readonly IOdataUrlBuilder<GetAcademiesD365Model> _urlBuilder;
         private readonly ILogger<AcademiesDynamicsRepository> _logger;
-        private readonly IMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademies365Mapper;
+        private readonly IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel> _getAcademies365DynamicsMapper;
 
         public AcademiesDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetAcademiesD365Model> urlBuilder,
             ILogger<AcademiesDynamicsRepository> logger,
-            IMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademies365Mapper)
+            IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel> getAcademies365DynamicsMapper)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _logger = logger;
-            _getAcademies365Mapper = getAcademies365Mapper;
+            _getAcademies365DynamicsMapper = getAcademies365DynamicsMapper;
         }
 
         public async Task<RepositoryResult<GetAcademiesModel>> GetAcademyById(Guid id)
@@ -54,7 +54,7 @@ namespace API.Repositories
                     return new RepositoryResult<GetAcademiesModel> {Result = null};
                 }
 
-                var mappedResult = _getAcademies365Mapper.Map(castedResult);
+                var mappedResult = _getAcademies365DynamicsMapper.Map(castedResult);
                 return new RepositoryResult<GetAcademiesModel> {Result = mappedResult};
             }
 
@@ -89,7 +89,7 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var castedResults = JsonConvert.DeserializeObject<ResultSet<GetAcademiesD365Model>>(responseContent);
-                var mappedResults = castedResults.Items.Select(item => _getAcademies365Mapper.Map(item)).ToList();
+                var mappedResults = castedResults.Items.Select(item => _getAcademies365DynamicsMapper.Map(item)).ToList();
 
                 return new RepositoryResult<List<GetAcademiesModel>> {Result = mappedResults};
             }

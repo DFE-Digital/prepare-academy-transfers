@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace API.Mapping.Request
 {
-    public class PostProjectsRequestMapper : IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>
+    public class PostProjectsRequestDynamicsMapper : IDynamicsMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>
     {
-        private readonly IMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model> _projectAcademiesMapper;
+        private readonly IDynamicsMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model> _projectAcademiesDynamicsMapper;
 
-        public PostProjectsRequestMapper(IMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model> projectAcademiesMapper)
+        public PostProjectsRequestDynamicsMapper(IDynamicsMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model> projectAcademiesDynamicsMapper)
         {
-            _projectAcademiesMapper = projectAcademiesMapper;
+            _projectAcademiesDynamicsMapper = projectAcademiesDynamicsMapper;
         }
 
         public PostAcademyTransfersProjectsD365Model Map(PostProjectsRequestModel input)
@@ -21,7 +21,7 @@ namespace API.Mapping.Request
                 return null;
             }
 
-            var academies = input.ProjectAcademies?.Select(p => _projectAcademiesMapper.Map(p)).ToList();
+            var academies = input.ProjectAcademies?.Select(p => _projectAcademiesDynamicsMapper.Map(p)).ToList();
 
 
             var output = new PostAcademyTransfersProjectsD365Model
