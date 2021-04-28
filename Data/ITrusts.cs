@@ -6,6 +6,6 @@ namespace Data
 {
     public interface ITrusts
     {
-        public Task<List<TrustSearchResult>> SearchTrusts();
+        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery);
     }
 }

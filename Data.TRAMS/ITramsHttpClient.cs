@@ -1,9 +1,10 @@
+using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Data.TRAMS.Tests
+namespace Data.TRAMS
 {
     public interface ITramsHttpClient
     {
-        public Task<string>
+        public Task<HttpResponseMessage> GetAsync(string url);
     }
 }
