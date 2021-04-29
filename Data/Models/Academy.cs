@@ -1,4 +1,5 @@
 using System;
+using Data.Models.Academies;
 
 namespace Data.Models
 {
