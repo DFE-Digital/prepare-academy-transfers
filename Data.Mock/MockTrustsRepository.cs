@@ -27,5 +27,10 @@ namespace Data.Mock
 
             return Task.FromResult(result);
         }
+
+        public Task<RepositoryResult<Trust>> GetByUkprn(string ukprn)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

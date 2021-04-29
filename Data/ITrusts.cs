@@ -7,5 +7,7 @@ namespace Data
     public interface ITrusts
     {
         public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery);
+
+        public Task<RepositoryResult<Trust>> GetByUkprn(string ukprn);
     }
 }
