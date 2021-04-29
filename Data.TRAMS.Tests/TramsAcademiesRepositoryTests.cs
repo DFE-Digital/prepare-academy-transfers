@@ -21,51 +21,54 @@ namespace Data.TRAMS.Tests
             _subject = new TramsAcademiesRepository(_client.Object, _mapper.Object);
         }
 
-        [Fact]
-        public async void GivenUkprn_GetsAcademyWithGivenUkprn()
+        public class GetAcademyByUkprnTests : TramsAcademiesRepositoryTests
         {
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+            [Fact]
+            public async void GivenUkprn_GetsAcademyWithGivenUkprn()
             {
-                Content = new StringContent(JsonConvert.SerializeObject(Academies.SingleAcademy()))
-            });
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(Academies.SingleAcademy()))
+                });
 
-            await _subject.GetAcademyByUkprn("12345");
+                await _subject.GetAcademyByUkprn("12345");
 
-            _client.Verify(c => c.GetAsync("academy/12345"), Times.Once);
-        }
+                _client.Verify(c => c.GetAsync("academy/12345"), Times.Once);
+            }
 
-        [Fact]
-        public async void GivenUkprn_MapFoundAcademy()
-        {
-            var academy = Academies.SingleAcademy();
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+            [Fact]
+            public async void GivenUkprn_MapFoundAcademy()
             {
-                Content = new StringContent(JsonConvert.SerializeObject(academy))
-            });
+                var academy = Academies.SingleAcademy();
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(academy))
+                });
 
-            await _subject.GetAcademyByUkprn("12345");
+                await _subject.GetAcademyByUkprn("12345");
 
-            _mapper.Verify(m => m.Map(It.Is<TramsAcademy>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
-                Times.Once);
-        }
+                _mapper.Verify(m => m.Map(It.Is<TramsAcademy>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
+                    Times.Once);
+            }
 
-        [Fact]
-        public async void GivenUkprn_ReturnsMappedAcademy()
-        {
-            var academy = Academies.SingleAcademy();
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+            [Fact]
+            public async void GivenUkprn_ReturnsMappedAcademy()
             {
-                Content = new StringContent(JsonConvert.SerializeObject(academy))
-            });
+                var academy = Academies.SingleAcademy();
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(academy))
+                });
 
-            _mapper.Setup(m => m.Map(It.IsAny<TramsAcademy>())).Returns<TramsAcademy>(input => new Academy
-            {
-                Ukprn = $"Mapped {academy.Ukprn}"
-            });
+                _mapper.Setup(m => m.Map(It.IsAny<TramsAcademy>())).Returns<TramsAcademy>(input => new Academy
+                {
+                    Ukprn = $"Mapped {academy.Ukprn}"
+                });
 
-            var response = await _subject.GetAcademyByUkprn("12345");
+                var response = await _subject.GetAcademyByUkprn("12345");
 
-            Assert.Equal("Mapped 12345", response.Result.Ukprn);
+                Assert.Equal("Mapped 12345", response.Result.Ukprn);
+            }
         }
     }
 }

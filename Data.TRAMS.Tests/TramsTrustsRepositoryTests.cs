@@ -21,61 +21,65 @@ namespace Data.TRAMS.Tests
             _subject = new TramsTrustsRepository(_client.Object, _mapper.Object);
         }
 
-        [Fact]
-        public async void GivenSearchTerm_QueriesTheApiWithTheSearchTerm()
+        public class SearchTrustsTests : TramsTrustsRepositoryTests
         {
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+            [Fact]
+            public async void GivenSearchTerm_QueriesTheApiWithTheSearchTerm()
             {
-                Content = new StringContent(
-                    JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults()))
-            });
-
-            await _subject.SearchTrusts("Cats");
-
-            _client.Verify(c => c.GetAsync("trusts?group_name=Cats&urn=Cats&companies_house_number=Cats"), Times.Once);
-        }
-
-        [Fact]
-        public async void GivenASingleSearchResult_ReturnsTheMappedResult()
-        {
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
-            {
-                Content = new StringContent(
-                    JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults()))
-            });
-
-            _mapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>())).Returns<TramsTrustSearchResult>(result =>
-                new TrustSearchResult
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
-                    Ukprn = $"Mapped {result.Urn}",
-                    TrustName = $"Mapped {result.GroupName}"
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults()))
                 });
 
-            var response = await _subject.SearchTrusts();
+                await _subject.SearchTrusts("Cats");
 
-            Assert.Equal("Mapped 1", response.Result[0].Ukprn);
-        }
+                _client.Verify(c => c.GetAsync("trusts?group_name=Cats&urn=Cats&companies_house_number=Cats"),
+                    Times.Once);
+            }
 
-        [Fact]
-        public async void GivenMultipleSearchResults_ReturnsTheMappedResult()
-        {
-            _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+            [Fact]
+            public async void GivenASingleSearchResult_ReturnsTheMappedResult()
             {
-                Content = new StringContent(
-                    JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults(2)))
-            });
-
-            _mapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>())).Returns<TramsTrustSearchResult>(result =>
-                new TrustSearchResult
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
-                    Ukprn = $"Mapped {result.Urn}",
-                    TrustName = $"Mapped {result.GroupName}"
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults()))
                 });
 
-            var response = await _subject.SearchTrusts();
+                _mapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>())).Returns<TramsTrustSearchResult>(result =>
+                    new TrustSearchResult
+                    {
+                        Ukprn = $"Mapped {result.Urn}",
+                        TrustName = $"Mapped {result.GroupName}"
+                    });
 
-            Assert.Equal("Mapped 1", response.Result[0].Ukprn);
-            Assert.Equal("Mapped 2", response.Result[1].Ukprn);
+                var response = await _subject.SearchTrusts();
+
+                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
+            }
+
+            [Fact]
+            public async void GivenMultipleSearchResults_ReturnsTheMappedResult()
+            {
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(
+                        JsonConvert.SerializeObject(TestFixtures.TrustSearchResults.GetTrustSearchResults(2)))
+                });
+
+                _mapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>())).Returns<TramsTrustSearchResult>(result =>
+                    new TrustSearchResult
+                    {
+                        Ukprn = $"Mapped {result.Urn}",
+                        TrustName = $"Mapped {result.GroupName}"
+                    });
+
+                var response = await _subject.SearchTrusts();
+
+                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
+                Assert.Equal("Mapped 2", response.Result[1].Ukprn);
+            }
         }
     }
 }
