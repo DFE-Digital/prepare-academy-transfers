@@ -1,4 +1,5 @@
 using Data.Models;
+using Data.Models.Academies;
 using Data.TRAMS.Models;
 
 namespace Data.TRAMS.Mappers.Response
