@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data.Models;
 using Data.Models.Academies;
 using Data.TRAMS.Models;
@@ -12,6 +13,8 @@ namespace Data.TRAMS.Mappers.Response
             {
                 Ukprn = input.Ukprn,
                 Name = input.EstablishmentName,
+                Address = new List<string>
+                    {input.Address.Street, input.Address.Town, input.Address.County, input.Address.Postcode},
                 Performance = new AcademyPerformance
                 {
                     AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",

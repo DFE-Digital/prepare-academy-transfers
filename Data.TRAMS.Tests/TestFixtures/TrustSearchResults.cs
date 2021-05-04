@@ -14,9 +14,9 @@ namespace Data.TRAMS.Tests.TestFixtures
             for (var i = 0; i < numberOfResults; i++)
             {
                 searchResults.Add(
-                    new TramsTrustSearchResult()
+                    new TramsTrustSearchResult
                     {
-                        Academies = new List<TrustSearchAcademies>(),
+                        Academies = new List<TramsTrustSearchAcademy>(),
                         CompaniesHouseNumber = counter.ToString(),
                         GroupName = $"Trust {counter}",
                         Urn = counter.ToString()

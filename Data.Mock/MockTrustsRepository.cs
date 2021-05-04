@@ -17,9 +17,9 @@ namespace Data.Mock
                         Ukprn = "0001",
                         TrustName = "Example trust",
                         CompaniesHouseNumber = "00001",
-                        Academies = new List<TrustSearchAcademies>
+                        Academies = new List<TrustSearchAcademy>
                         {
-                            new TrustSearchAcademies {Ukprn = "0002", Name = "Example Academy"}
+                            new TrustSearchAcademy {Ukprn = "0002", Name = "Example Academy"}
                         }
                     }
                 }

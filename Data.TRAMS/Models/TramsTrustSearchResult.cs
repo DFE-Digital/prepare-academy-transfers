@@ -11,10 +11,10 @@ namespace Data.TRAMS.Models
         [JsonProperty("companies_house_number")]
         public string CompaniesHouseNumber { get; set; }
 
-        [JsonProperty("academies")] public List<TrustSearchAcademies> Academies { get; set; }
+        [JsonProperty("academies")] public List<TramsTrustSearchAcademy> Academies { get; set; }
     }
 
-    public class TrustSearchAcademies
+    public class TramsTrustSearchAcademy
     {
         [JsonProperty("urn")] public string Urn { get; set; }
         [JsonProperty("name")] public string Name { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Data.Models.Academies;
 
 namespace Data.Models
@@ -12,5 +13,6 @@ namespace Data.Models
         public PupilNumbers PupilNumbers { get; set; }
 
         public LatestOfstedJudgement LatestOfstedJudgement { get; set; }
+        public List<string> Address { get; set; }
     }
 }

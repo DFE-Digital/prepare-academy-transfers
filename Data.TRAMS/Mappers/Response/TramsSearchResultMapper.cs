@@ -1,3 +1,4 @@
+using System.Linq;
 using Data.Models;
 using Data.TRAMS.Models;
 
@@ -7,7 +8,16 @@ namespace Data.TRAMS.Mappers.Response
     {
         public TrustSearchResult Map(TramsTrustSearchResult input)
         {
-            throw new System.NotImplementedException();
+            return new TrustSearchResult
+            {
+                Ukprn = input.Urn,
+                TrustName = input.GroupName,
+                CompaniesHouseNumber = input.CompaniesHouseNumber,
+                Academies = input.Academies.Select(academy => new TrustSearchAcademy
+                {
+                    Name = academy.Name, Ukprn = academy.Urn
+                }).ToList()
+            };
         }
     }
 }
