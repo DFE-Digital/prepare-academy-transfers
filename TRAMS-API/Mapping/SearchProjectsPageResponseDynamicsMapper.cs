@@ -5,13 +5,13 @@ using System.Linq;
 
 namespace API.Mapping
 {
-    public class SearchProjectsPageResponseMapper : IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>
+    public class SearchProjectsPageResponseDynamicsMapper : IDynamicsMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>
     {
-        private readonly IMapper<SearchProjectsD365Model, SearchProjectsModel> _itemMapper;
+        private readonly IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel> _itemDynamicsMapper;
 
-        public SearchProjectsPageResponseMapper(IMapper<SearchProjectsD365Model, SearchProjectsModel> itemMapper)
+        public SearchProjectsPageResponseDynamicsMapper(IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel> itemDynamicsMapper)
         {
-            _itemMapper = itemMapper;
+            _itemDynamicsMapper = itemDynamicsMapper;
         }
 
         public SearchProjectsPageModel Map(SearchProjectsD365PageModel input)
@@ -21,7 +21,7 @@ namespace API.Mapping
                 return null;
             }
 
-            var items = input.Projects?.Select(p => _itemMapper.Map(p))
+            var items = input.Projects?.Select(p => _itemDynamicsMapper.Map(p))
                                        .ToList();
 
             return new SearchProjectsPageModel

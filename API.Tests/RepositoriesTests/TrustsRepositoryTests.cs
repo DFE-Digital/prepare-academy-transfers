@@ -20,13 +20,13 @@ namespace API.Tests.RepositoriesTests
         private readonly TrustsDynamicsRepository _subject;
         private readonly Mock<IOdataUrlBuilder<GetTrustsD365Model>> _mockUrlBuilder;
         private readonly Mock<IAuthenticatedHttpClient> _mockClient;
-        private readonly Mock<IMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
+        private readonly Mock<IDynamicsMapper<GetTrustsD365Model, GetTrustsModel>> _getTrustMapper;
 
         public TrustsRepositoryTests()
         {
             _mockClient = new Mock<IAuthenticatedHttpClient>();
             _mockUrlBuilder = new Mock<IOdataUrlBuilder<GetTrustsD365Model>>();
-            _getTrustMapper = new Mock<IMapper<GetTrustsD365Model, GetTrustsModel>>();
+            _getTrustMapper = new Mock<IDynamicsMapper<GetTrustsD365Model, GetTrustsModel>>();
             var mockedLogger = new Mock<ILogger<TrustsDynamicsRepository>>();
             var mockSanitizer = new Mock<IODataSanitizer>();
 

@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace API.Mapping.Request
 {
-    public class PutProjectAcademiesRequestMapper : IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>
+    public class PostProjectAcademiesRequestDynamicsMapper : IDynamicsMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>
     {
-        public PatchProjectAcademiesD365Model Map(PutProjectAcademiesRequestModel input)
+        public PostAcademyTransfersProjectAcademyD365Model Map(PostProjectsAcademiesModel input)
         {
-            return new PatchProjectAcademiesD365Model
+            return new PostAcademyTransfersProjectAcademyD365Model
             {
                 AcademyId = $"/accounts({input.AcademyId})",
                 EsfaInterventionReasons = input.EsfaInterventionReasons != null && input.EsfaInterventionReasons.Any()
@@ -21,7 +21,11 @@ namespace API.Mapping.Request
                                               ? input.RddOrRscInterventionReasons.Select(r => ((int)MappingDictionaries.RddOrRscInterventionReasonEnumMap.GetValueOrDefault(r)).ToString())
                                                                                  .ToDelimitedString()
                                               : null,
-                RddOrRscInterventionReasonsExplained = input.RddOrRscInterventionReasonsExplained
+                RddOrRscInterventionReasonsExplained = input.RddOrRscInterventionReasonsExplained,
+                Trusts = input.Trusts != null
+                         ? input.Trusts.Select(t => new PostAcademyTransfersProjectAcademyTrustD365Model { TrustId = $"/accounts({t.TrustId})" })
+                                       .ToList()
+                         : new List<PostAcademyTransfersProjectAcademyTrustD365Model>()
             };
         }
     }

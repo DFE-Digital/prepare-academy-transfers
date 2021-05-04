@@ -3,11 +3,11 @@ using API.Models.Upstream.Response;
 
 namespace API.Mapping.Response
 {
-    public class GetAcademiesResponseMapper : IMapper<GetAcademiesD365Model, GetAcademiesModel>
+    public class GetAcademiesResponseDynamicsMapper : IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel>
     {
         private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
-        public GetAcademiesResponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        public GetAcademiesResponseDynamicsMapper(IEstablishmentNameFormatter establishmentNameFormatter)
         {
             _establishmentNameFormatter = establishmentNameFormatter;
         }

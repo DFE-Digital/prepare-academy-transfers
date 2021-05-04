@@ -3,11 +3,11 @@ using API.Models.Upstream.Response;
 
 namespace API.Mapping.Response
 {
-    public class GetTrustsReponseMapper : IMapper<GetTrustsD365Model, GetTrustsModel>
+    public class GetTrustsReponseDynamicsMapper : IDynamicsMapper<GetTrustsD365Model, GetTrustsModel>
     {
         private readonly IEstablishmentNameFormatter _establishmentNameFormatter;
 
-        public GetTrustsReponseMapper(IEstablishmentNameFormatter establishmentNameFormatter)
+        public GetTrustsReponseDynamicsMapper(IEstablishmentNameFormatter establishmentNameFormatter)
         {
             _establishmentNameFormatter = establishmentNameFormatter;
         }

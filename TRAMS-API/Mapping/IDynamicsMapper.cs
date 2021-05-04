@@ -1,6 +1,6 @@
 ﻿namespace API.Mapping
 {
-    public interface IMapper<T, V>
+    public interface IDynamicsMapper<T, V>
     {
         V Map(T input);
     }

@@ -9,11 +9,11 @@ namespace API.Tests.MapperTests
 {
     public class PostProjectsRequestMapperTests
     {
-        private readonly PostProjectsRequestMapper _mapper;
+        private readonly PostProjectsRequestDynamicsMapper _dynamicsMapper;
 
         public PostProjectsRequestMapperTests()
         {
-            _mapper = new PostProjectsRequestMapper(new PostProjectAcademiesRequestMapper());
+            _dynamicsMapper = new PostProjectsRequestDynamicsMapper(new PostProjectAcademiesRequestDynamicsMapper());
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.Academies[0].AcademyId);
         }
@@ -44,7 +44,7 @@ namespace API.Tests.MapperTests
                 ProjectInitiatorUid = "joebloggs@email.com"
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("Joe Bloggs", result.ProjectInitiatorFullName);
             Assert.Equal("joebloggs@email.com", result.ProjectInitiatorUid);
@@ -58,7 +58,7 @@ namespace API.Tests.MapperTests
                 ProjectStatus = Models.Upstream.Enums.ProjectStatusEnum.Completed
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal(Models.D365.Enums.ProjectStatusEnum.Completed, result.ProjectStatus);
         }
@@ -85,7 +85,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.Academies[0].AcademyId);
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672fe1)", result.Academies[1].AcademyId);
@@ -106,7 +106,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.Academies[0].EsfaInterventionReasons));
         }
@@ -128,7 +128,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500001", result.Academies[0].EsfaInterventionReasons);
         }
@@ -152,7 +152,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500001,596500002,596500003", result.Academies[0].EsfaInterventionReasons);
         }
@@ -187,7 +187,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Null(result.Academies[0].EsfaInterventionReasons);
             Assert.Equal("596500001", result.Academies[1].EsfaInterventionReasons);
@@ -208,7 +208,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.Academies[0].EsfaInterventionReasonsExplained));
         }
@@ -227,7 +227,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("Some explanation", result.Academies[0].EsfaInterventionReasonsExplained);
         }
@@ -254,7 +254,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("Some explanation", result.Academies[0].EsfaInterventionReasonsExplained);
             Assert.True(string.IsNullOrEmpty(result.Academies[1].EsfaInterventionReasonsExplained));
@@ -275,7 +275,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.True(string.IsNullOrEmpty(result.Academies[0].RddOrRscInterventionReasons));
         }
@@ -297,7 +297,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500002", result.Academies[0].RddOrRscInterventionReasons);
         }
@@ -321,7 +321,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500002,596500001,596500000", result.Academies[0].RddOrRscInterventionReasons);
         }
@@ -356,7 +356,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("596500002,596500001,596500000", result.Academies[0].RddOrRscInterventionReasons);
             Assert.Equal("596500002", result.Academies[1].RddOrRscInterventionReasons);
@@ -374,7 +374,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Empty(result.Academies[0].Trusts);
         }
@@ -399,7 +399,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.Academies[0].Trusts[0].TrustId);
         }
@@ -432,7 +432,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.Academies[0].Trusts[0].TrustId);
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672fe1)", result.Academies[0].Trusts[1].TrustId);
@@ -477,7 +477,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(81014326-5d51-e911-a82e-000d3a385a17)", result.Academies[0].Trusts[0].TrustId);
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672fe1)", result.Academies[1].Trusts[0].TrustId);
@@ -493,7 +493,7 @@ namespace API.Tests.MapperTests
                 ProjectTrusts = null
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Empty(result.Trusts);
         }
@@ -512,7 +512,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672fe1)", result.Trusts[0].TrustId);
         }
@@ -539,7 +539,7 @@ namespace API.Tests.MapperTests
                 }
             };
 
-            var result = _mapper.Map(request);
+            var result = _dynamicsMapper.Map(request);
 
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672fe1)", result.Trusts[0].TrustId);
             Assert.Equal("/accounts(a16e9020-9123-4420-8055-851d1b672ff2)", result.Trusts[1].TrustId);

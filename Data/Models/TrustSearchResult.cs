@@ -10,10 +10,10 @@ namespace Data.Models
 
         public string CompaniesHouseNumber { get; set; }
 
-        public List<TrustSearchAcademies> Academies { get; set; }
+        public List<TrustSearchAcademy> Academies { get; set; }
     }
 
-    public class TrustSearchAcademies
+    public class TrustSearchAcademy
     {
         public string Ukprn { get; set; }
         public string Name { get; set; }

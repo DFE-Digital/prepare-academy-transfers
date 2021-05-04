@@ -22,18 +22,18 @@ namespace API.Repositories
         private readonly IAuthenticatedHttpClient _client;
         private readonly IODataSanitizer _oDataSanitizer;
         private readonly ILogger<TrustsDynamicsRepository> _logger;
-        private readonly IMapper<GetTrustsD365Model, GetTrustsModel> _getTrustMapper;
+        private readonly IDynamicsMapper<GetTrustsD365Model, GetTrustsModel> _getTrustDynamicsMapper;
 
         public TrustsDynamicsRepository(IAuthenticatedHttpClient client,
             IOdataUrlBuilder<GetTrustsD365Model> urlBuilder,
             IODataSanitizer oDataSanitizer,
-            ILogger<TrustsDynamicsRepository> logger, IMapper<GetTrustsD365Model, GetTrustsModel> getTrustMapper)
+            ILogger<TrustsDynamicsRepository> logger, IDynamicsMapper<GetTrustsD365Model, GetTrustsModel> getTrustDynamicsMapper)
         {
             _client = client;
             _urlBuilder = urlBuilder;
             _oDataSanitizer = oDataSanitizer;
             _logger = logger;
-            _getTrustMapper = getTrustMapper;
+            _getTrustDynamicsMapper = getTrustDynamicsMapper;
         }
 
         public async Task<RepositoryResult<GetTrustsModel>> GetTrustById(Guid id)
@@ -67,7 +67,7 @@ namespace API.Repositories
                     return new RepositoryResult<GetTrustsModel> {Result = null};
                 }
 
-                var mappedResult = _getTrustMapper.Map(castedResult);
+                var mappedResult = _getTrustDynamicsMapper.Map(castedResult);
                 return new RepositoryResult<GetTrustsModel> {Result = mappedResult};
             }
 
@@ -98,7 +98,7 @@ namespace API.Repositories
             if (response.IsSuccessStatusCode)
             {
                 var castedResults = JsonConvert.DeserializeObject<ResultSet<GetTrustsD365Model>>(responseContent);
-                var mappedResults = castedResults.Items.Select(r => _getTrustMapper.Map(r)).ToList();
+                var mappedResults = castedResults.Items.Select(r => _getTrustDynamicsMapper.Map(r)).ToList();
 
                 return new RepositoryResult<List<GetTrustsModel>> {Result = mappedResults};
             }

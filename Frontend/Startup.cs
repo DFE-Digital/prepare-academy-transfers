@@ -11,7 +11,10 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
 using Data.Mock;
-using DocumentGeneration;
+using Data.Models;
+using Data.TRAMS;
+using Data.TRAMS.Mappers.Response;
+using Data.TRAMS.Models;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -58,10 +61,10 @@ namespace Frontend
 
             services.AddSingleton(CreateHttpClient());
             services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>, GetTrustsReponseMapper>();
+
 
             ConfigureDynamicsRepositories(services);
-            ConfigureRepositories(services);
+            ConfigureRepositories(services, Configuration);
             ConfigureHelpers(services);
             ConfigureMappers(services);
             ConfigureServiceClasses(services);
@@ -120,39 +123,56 @@ namespace Frontend
             services.AddTransient<IProjectsRepository, ProjectsDynamicsRepository>();
         }
 
-        private static void ConfigureRepositories(IServiceCollection services)
+        private static void ConfigureRepositories(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IAcademies, MockAcademyRepository>();
+            var tramsApiBase = configuration["TRAMS_API_BASE"];
+            var tramsApiKey = configuration["TRAMS_API_KEY"];
+            if (string.IsNullOrEmpty(tramsApiBase) || string.IsNullOrEmpty(tramsApiKey))
+            {
+                services.AddTransient<IAcademies, MockAcademyRepository>();
+                services.AddTransient<ITrusts, MockTrustsRepository>();
+            }
+            else
+            {
+                services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
+                services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiBase));
+                services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
+                services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
+                services.AddTransient<IMapper<TramsAcademy, Academy>, TramsAcademyMapper>();
+                services.AddTransient<ITrusts, TramsTrustsRepository>();
+                services.AddTransient<IAcademies, TramsAcademiesRepository>();
+            }
         }
 
         private static void ConfigureMappers(IServiceCollection services)
         {
-            services.AddTransient<IMapper<GetTrustsD365Model, GetTrustsModel>,
-                GetTrustsReponseMapper>();
+            services.AddTransient<IDynamicsMapper<GetTrustsD365Model, GetTrustsModel>,
+                GetTrustsReponseDynamicsMapper>();
 
-            services.AddTransient<IMapper<GetAcademiesD365Model, GetAcademiesModel>,
-                GetAcademiesResponseMapper>();
+            services.AddTransient<IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel>,
+                GetAcademiesResponseDynamicsMapper>();
 
-            services.AddTransient<IMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>,
-                PutProjectAcademiesRequestMapper>();
+            services.AddTransient<IDynamicsMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>,
+                PutProjectAcademiesRequestDynamicsMapper>();
 
-            services.AddTransient<IMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>,
-                PostProjectAcademiesRequestMapper>();
+            services
+                .AddTransient<IDynamicsMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>,
+                    PostProjectAcademiesRequestDynamicsMapper>();
 
-            services.AddTransient<IMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>,
-                PostProjectsRequestMapper>();
+            services.AddTransient<IDynamicsMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>,
+                PostProjectsRequestDynamicsMapper>();
 
-            services.AddTransient<IMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>,
-                GetProjectAcademiesResponseMapper>();
+            services.AddTransient<IDynamicsMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>,
+                GetProjectAcademiesResponseDynamicsMapper>();
 
-            services.AddTransient<IMapper<GetProjectsD365Model, GetProjectsResponseModel>,
-                GetProjectsResponseMapper>();
+            services.AddTransient<IDynamicsMapper<GetProjectsD365Model, GetProjectsResponseModel>,
+                GetProjectsResponseDynamicsMapper>();
 
-            services.AddTransient<IMapper<SearchProjectsD365Model, SearchProjectsModel>,
-                SearchProjectsItemMapper>();
+            services.AddTransient<IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel>,
+                SearchProjectsItemDynamicsMapper>();
 
-            services.AddTransient<IMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
-                SearchProjectsPageResponseMapper>();
+            services.AddTransient<IDynamicsMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
+                SearchProjectsPageResponseDynamicsMapper>();
         }
 
         private static void ConfigureHelpers(IServiceCollection services)
