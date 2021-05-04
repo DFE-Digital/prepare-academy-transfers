@@ -11,7 +11,10 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
 using Data.Mock;
+using Data.Models;
 using Data.TRAMS;
+using Data.TRAMS.Mappers.Response;
+using Data.TRAMS.Models;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -123,17 +126,21 @@ namespace Frontend
         private static void ConfigureRepositories(IServiceCollection services, IConfiguration configuration)
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
-            if (string.IsNullOrEmpty(tramsApiBase))
+            var tramsApiKey = configuration["TRAMS_API_KEY"];
+            if (string.IsNullOrEmpty(tramsApiBase) || string.IsNullOrEmpty(tramsApiKey))
             {
                 services.AddTransient<IAcademies, MockAcademyRepository>();
                 services.AddTransient<ITrusts, MockTrustsRepository>();
             }
             else
             {
-                services.AddHttpClient("trams",
-                    client => { client.BaseAddress = new Uri(tramsApiBase); });
-                services.AddHttpClient<ITrusts, TramsTrustsRepository>("trams");
-                services.AddHttpClient<IAcademies, TramsAcademiesRepository>("trams");
+                services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
+                services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiBase));
+                services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
+                services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
+                services.AddTransient<IMapper<TramsAcademy, Academy>, TramsAcademyMapper>();
+                services.AddTransient<ITrusts, TramsTrustsRepository>();
+                services.AddTransient<IAcademies, TramsAcademiesRepository>();
             }
         }
 
