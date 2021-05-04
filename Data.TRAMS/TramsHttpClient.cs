@@ -6,9 +6,10 @@ namespace Data.TRAMS
 {
     public class TramsHttpClient : HttpClient, ITramsHttpClient
     {
-        public TramsHttpClient(string url)
+        public TramsHttpClient(string url, string apiKey)
         {
             BaseAddress = new Uri(url);
+            DefaultRequestHeaders.Add("ApiKey", apiKey);
         }
 
         public new async Task<HttpResponseMessage> GetAsync(string url)
