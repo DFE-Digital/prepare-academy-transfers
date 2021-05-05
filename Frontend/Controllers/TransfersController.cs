@@ -8,6 +8,9 @@ using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using Data;
+using Data.Models;
+using Data.Models.Projects;
 using Frontend.Helpers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
@@ -24,10 +27,10 @@ namespace Frontend.Controllers
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
         private readonly ITrustsRepository _trustRepository;
         private readonly IAcademiesRepository _academiesRepository;
-        private readonly IProjectsRepository _projectsRepository;
+        private readonly IProjects _projectsRepository;
 
         public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
-            IProjectsRepository projectsRepository)
+            IProjects projectsRepository)
         {
             _trustRepository = trustRepository;
             _academiesRepository = academiesRepository;
@@ -244,38 +247,25 @@ namespace Frontend.Controllers
             var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
             var incomingTrustId = Guid.Parse(HttpContext.Session.GetString(IncomingTrustIdSessionKey));
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
-                .Select(Guid.Parse);
+                .Select(Guid.Parse).ToList();
 
-
-            var academies = academyIds.Select(id => new PostProjectsAcademiesModel
+            var project = new Project
             {
-                AcademyId = id,
-                Trusts = new List<PostProjectsAcademiesTrustsModel>
+                OutgoingTrustUkprn = outgoingTrustId.ToString(),
+                TransferringAcademies = academyIds.Select(id => new TransferringAcademies()
                 {
-                    new PostProjectsAcademiesTrustsModel {TrustId = outgoingTrustId}
-                }
-            }).ToList();
-
-            var project = new PostProjectsRequestModel
-            {
-                ProjectInitiatorFullName = "academy",
-                ProjectInitiatorUid = Guid.NewGuid().ToString(),
-                ProjectAcademies = academies,
-                ProjectStatus = ProjectStatusEnum.InProgress,
-                ProjectTrusts = new List<PostProjectsTrustsModel>
-                {
-                    new PostProjectsTrustsModel {TrustId = incomingTrustId},
-                    new PostProjectsTrustsModel {TrustId = outgoingTrustId}
-                }
+                    OutgoingAcademyUkprn = id.ToString(),
+                    IncomingTrustUkprn = incomingTrustId.ToString()
+                }).ToList()
             };
 
-            var result = await _projectsRepository.InsertProject(project);
+            var result = await _projectsRepository.Create(project);
 
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToAction("Index", "Project", new {id = result.Result});
+            return RedirectToAction("Index", "Project", new {id = result.Result.Urn});
         }
     }
 }
