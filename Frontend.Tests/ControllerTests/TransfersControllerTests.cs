@@ -8,6 +8,7 @@ using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
+using Data.Models;
 using Frontend.Controllers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +25,7 @@ namespace Frontend.Tests.ControllerTests
     {
         private readonly Mock<ITrustsRepository> _trustRepository;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
-        private readonly Mock<IProjectsRepository> _projectsRepository;
+        private readonly Mock<IProjects> _projectsRepository;
 
         private readonly TransfersController _subject;
         private readonly Mock<ISession> _session;
@@ -33,7 +34,7 @@ namespace Frontend.Tests.ControllerTests
         {
             _trustRepository = new Mock<ITrustsRepository>();
             _academiesRepository = new Mock<IAcademiesRepository>();
-            _projectsRepository = new Mock<IProjectsRepository>();
+            _projectsRepository = new Mock<IProjects>();
             _session = new Mock<ISession>();
 
             var tempDataProvider = new Mock<ITempDataProvider>();
@@ -453,7 +454,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
             {
                 _trustRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
-                    new RepositoryResult<List<GetTrustsModel>>()
+                    new RepositoryResult<List<GetTrustsModel>>
                     {
                         Result = new List<GetTrustsModel>()
                     });
@@ -704,10 +705,6 @@ namespace Frontend.Tests.ControllerTests
             private readonly GetAcademiesModel _academyTwo = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
 
-            private readonly RepositoryResult<Guid?> _postProjectResponse = new RepositoryResult<Guid?>
-                {Result = Guid.NewGuid()};
-
-
             public SubmitProjectTests()
             {
                 var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
@@ -720,8 +717,13 @@ namespace Frontend.Tests.ControllerTests
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
-                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
-                    .ReturnsAsync(_postProjectResponse);
+                var createdProject = new Project
+                {
+                    Urn = "Created URN"
+                };
+
+                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>()))
+                    .ReturnsAsync(new RepositoryResult<Project> {Result = createdProject});
             }
 
             [Fact]
@@ -741,29 +743,31 @@ namespace Frontend.Tests.ControllerTests
                 await _subject.SubmitProject();
 
                 _projectsRepository.Verify(
-                    r => r.InsertProject(It.Is<PostProjectsRequestModel>(input =>
-                        input.ProjectAcademies[0].AcademyId == _academyOne.Id &&
-                        input.ProjectAcademies[0].Trusts[0].TrustId == _outgoingTrust.Id &&
-                        input.ProjectAcademies[1].AcademyId == _academyTwo.Id &&
-                        input.ProjectAcademies[1].Trusts[0].TrustId == _outgoingTrust.Id &&
-                        input.ProjectTrusts[0].TrustId == _incomingTrust.Id &&
-                        input.ProjectTrusts[1].TrustId == _outgoingTrust.Id)),
+                    r => r.Create(It.Is<Project>(input =>
+                        input.TransferringAcademies[0].OutgoingAcademyUkprn == _academyOne.Id.ToString() &&
+                        input.TransferringAcademies[0].IncomingTrustUkprn == _incomingTrust.Id.ToString() &&
+                        input.TransferringAcademies[1].OutgoingAcademyUkprn == _academyTwo.Id.ToString() &&
+                        input.TransferringAcademies[1].IncomingTrustUkprn == _incomingTrust.Id.ToString() &&
+                        input.OutgoingTrustUkprn == _outgoingTrust.Id.ToString())),
                     Times.Once);
             }
 
             [Fact]
             public async void GivenProjectIsInserted_RedirectsToProjectFeaturesWithCreatedId()
             {
-                var createdProjectGuid = Guid.NewGuid();
-                _projectsRepository.Setup(r => r.InsertProject(It.IsAny<PostProjectsRequestModel>()))
-                    .ReturnsAsync(new RepositoryResult<Guid?> {Result = createdProjectGuid});
+                var createdProjectUrn = "12345";
+                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>())).ReturnsAsync(
+                    new RepositoryResult<Project>
+                    {
+                        Result = new Project {Urn = "12345"}
+                    });
 
                 var response = await _subject.SubmitProject();
 
                 var responseRedirect = Assert.IsType<RedirectToActionResult>(response);
                 Assert.Equal("Index", responseRedirect.ActionName);
                 Assert.Equal("Project", responseRedirect.ControllerName);
-                Assert.Equal(createdProjectGuid, responseRedirect.RouteValues["id"]);
+                Assert.Equal(createdProjectUrn, responseRedirect.RouteValues["id"]);
             }
         }
 

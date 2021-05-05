@@ -9,6 +9,7 @@ using API.Models.Upstream.Response;
 using API.ODataHelpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using API.Wrappers;
 using Data;
 using Data.Mock;
 using Data.Models;
@@ -63,8 +64,15 @@ namespace Frontend
             services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
 
 
-            ConfigureDynamicsRepositories(services);
-            ConfigureRepositories(services, Configuration);
+            if (string.IsNullOrEmpty(Configuration["USE_TRAMS_REPOSITORIES"]))
+            {
+                ConfigureDynamicsRepositories(services);
+            }
+            else
+            {
+                ConfigureTramsRepositories(services, Configuration);
+            }
+
             ConfigureHelpers(services);
             ConfigureMappers(services);
             ConfigureServiceClasses(services);
@@ -118,12 +126,15 @@ namespace Frontend
 
         private static void ConfigureDynamicsRepositories(IServiceCollection services)
         {
+            services.AddTransient<IProjects, DynamicsProjectWrapper>();
+            services.AddTransient<IAcademies, MockAcademyRepository>();
+            services.AddTransient<ITrusts, MockTrustsRepository>();
             services.AddTransient<ITrustsRepository, TrustsDynamicsRepository>();
             services.AddTransient<IAcademiesRepository, AcademiesDynamicsRepository>();
             services.AddTransient<IProjectsRepository, ProjectsDynamicsRepository>();
         }
 
-        private static void ConfigureRepositories(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
