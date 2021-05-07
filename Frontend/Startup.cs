@@ -127,8 +127,8 @@ namespace Frontend
         private static void ConfigureDynamicsRepositories(IServiceCollection services)
         {
             services.AddTransient<IProjects, DynamicsProjectWrapper>();
+            services.AddTransient<ITrusts, DynamicsTrustsWrapper>();
             services.AddTransient<IAcademies, MockAcademyRepository>();
-            services.AddTransient<ITrusts, MockTrustsRepository>();
             services.AddTransient<ITrustsRepository, TrustsDynamicsRepository>();
             services.AddTransient<IAcademiesRepository, AcademiesDynamicsRepository>();
             services.AddTransient<IProjectsRepository, ProjectsDynamicsRepository>();

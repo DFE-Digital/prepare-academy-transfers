@@ -25,16 +25,18 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
-        private readonly ITrustsRepository _trustRepository;
+        private readonly ITrustsRepository _dynamicsTrustsRepository;
         private readonly IAcademiesRepository _academiesRepository;
         private readonly IProjects _projectsRepository;
+        private readonly ITrusts _trustsRepository;
 
-        public TransfersController(ITrustsRepository trustRepository, IAcademiesRepository academiesRepository,
-            IProjects projectsRepository)
+        public TransfersController(ITrustsRepository dynamicsTrustsRepository, IAcademiesRepository academiesRepository,
+            IProjects projectsRepository, ITrusts trustsRepository)
         {
-            _trustRepository = trustRepository;
+            _dynamicsTrustsRepository = dynamicsTrustsRepository;
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
+            _trustsRepository = trustsRepository;
         }
 
         public IActionResult TrustName(string query = "", bool change = false)
@@ -60,7 +62,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("TrustName");
             }
 
-            var result = await _trustRepository.SearchTrusts(query);
+            var result = await _trustsRepository.SearchTrusts(query);
 
             if (!result.IsValid)
             {
@@ -82,7 +84,7 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> OutgoingTrustDetails(Guid trustId, string query = "", bool change = false)
         {
-            var result = await _trustRepository.GetTrustById(trustId);
+            var result = await _dynamicsTrustsRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -176,7 +178,7 @@ namespace Frontend.Controllers
                 return RedirectToAction("IncomingTrust");
             }
 
-            var result = await _trustRepository.SearchTrusts(query);
+            var result = await _trustsRepository.SearchTrusts(query);
 
             if (!result.IsValid)
             {
@@ -197,7 +199,7 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> IncomingTrustDetails(Guid trustId, string query = "", bool change = false)
         {
-            var result = await _trustRepository.GetTrustById(trustId);
+            var result = await _dynamicsTrustsRepository.GetTrustById(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -218,14 +220,14 @@ namespace Frontend.Controllers
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
                 .Select(Guid.Parse);
 
-            var outgoingTrustResponse = await _trustRepository.GetTrustById(outgoingTrustId);
+            var outgoingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(outgoingTrustId);
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
                 var incomingTrustId = Guid.Parse(incomingTrustIdString);
-                var incomingTrustResponse = await _trustRepository.GetTrustById(incomingTrustId);
+                var incomingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(incomingTrustId);
                 incomingTrust = incomingTrustResponse.Result;
             }
 
