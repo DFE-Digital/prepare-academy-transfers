@@ -16,8 +16,8 @@
         @foreach (var trust in Model.Trusts)
         {
             <h2 class="govuk-heading-s">
-                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Id" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">
-                    @trust.TrustName (@trust.TrustReferenceNumber)
+                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Ukprn" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">
+                    @trust.TrustName
                 </a>
             </h2>
             <p class="govuk-body">Companies House number: @trust.CompaniesHouseNumber</p>
