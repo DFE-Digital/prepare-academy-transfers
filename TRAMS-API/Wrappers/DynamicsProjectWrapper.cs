@@ -39,7 +39,9 @@ namespace API.Wrappers
             return new Project
             {
                 Urn = project.ProjectId.ToString(),
+                Name = project.ProjectName,
                 Features = new TransferFeatures(),
+                OutgoingTrustName = project.ProjectTrusts[1].TrustName,
                 OutgoingTrustUkprn = project.ProjectTrusts[1].TrustId.ToString(),
                 TransferringAcademies = new List<TransferringAcademies>
                 {

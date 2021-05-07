@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using API.Repositories.Interfaces;
+using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,19 +10,19 @@ namespace Frontend.Controllers
     [Route("project/{id}")]
     public class ProjectController : Controller
     {
-        private readonly IProjectsRepository _projectsRepository;
+        private readonly IProjects _projectRepository;
 
-        public ProjectController(IProjectsRepository projectsRepository)
+        public ProjectController(IProjects projectRepository)
         {
-            _projectsRepository = projectsRepository;
+            _projectRepository = projectRepository;
         }
         
         public async Task<IActionResult> Index([FromRoute] Guid id)
         {
-            var project = await _projectsRepository.GetProjectById(id);
+            var project = await _projectRepository.GetByUrn(id.ToString());
             
-            ViewData["OutgoingTrustName"] = project.Result.ProjectTrusts[0].TrustName;
-            ViewData["ProjectName"] = project.Result.ProjectName;
+            ViewData["OutgoingTrustName"] = project.Result.OutgoingTrustName;
+            ViewData["ProjectName"] = project.Result.Name;
             ViewData["ProjectId"] = id;
             
             return View();
