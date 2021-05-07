@@ -4,6 +4,7 @@ using API.Models.Upstream.Response;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
+using Data.Models;
 using Frontend.Controllers;
 using Moq;
 using Xunit;
@@ -13,11 +14,11 @@ namespace Frontend.Tests.ControllerTests
     public class ProjectControllerTests
     {
         private readonly ProjectController _subject;
-        private readonly Mock<IProjectsRepository> _projectsRepository;
+        private readonly Mock<IProjects> _projectsRepository;
 
         public ProjectControllerTests()
         {
-            _projectsRepository = new Mock<IProjectsRepository>();
+            _projectsRepository = new Mock<IProjects>();
             _subject = new ProjectController(_projectsRepository.Object);
         }
 
@@ -28,19 +29,13 @@ namespace Frontend.Tests.ControllerTests
             {
                 var projectId = Guid.NewGuid();
 
-                _projectsRepository.Setup(r => r.GetProjectById(projectId)).ReturnsAsync(
-                    new RepositoryResult<GetProjectsResponseModel>
+                _projectsRepository.Setup(r => r.GetByUrn(projectId.ToString())).ReturnsAsync(
+                    new RepositoryResult<Project>
                     {
-                        Result = new GetProjectsResponseModel
+                        Result = new Project
                         {
-                            ProjectName = "Some name",
-                            ProjectTrusts = new List<GetProjectsTrustResponseModel>
-                            {
-                                new GetProjectsTrustResponseModel
-                                {
-                                    TrustName = "Meow Meowington's Trust"
-                                }
-                            }
+                            Name = "Some name",
+                            OutgoingTrustName = "Meow Meowington's Trust"
                         }
                     });
 
