@@ -7,7 +7,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrustDetails" asp-route-trustId="@Model.IncomingTrust.Id">Back</a>
+    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrustDetails" asp-route-trustId="@Model.IncomingTrust.Ukprn">Back</a>
 }
 
 <h1 class="govuk-heading-xl">Check trust and academy details</h1>
@@ -17,7 +17,7 @@
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Name</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.TrustName</dd>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Name</dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="TrustName", asp-route-change="true">
                         Change <span class="govuk-visually-hidden">outgoing trust</span>
@@ -26,7 +26,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Trust Reference Number</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.TrustReferenceNumber</dd>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.GiasGroupId</dd>
                 <dd class="govuk-summary-list__actions"></dd>
             </div>
         </dl>
@@ -95,7 +95,7 @@
                 }
                 else
                 {
-                    <dd class="govuk-summary-list__value">@Model.IncomingTrust.TrustName</dd>
+                    <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name</dd>
                 }
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden">incoming trust</span></a>

@@ -596,11 +596,11 @@ namespace Frontend.Tests.ControllerTests
 
         public class CheckYourAnswersTests : TransfersControllerTests
         {
-            private readonly GetTrustsModel _outgoingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af")};
+            private readonly Trust _outgoingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af"};
 
-            private readonly GetTrustsModel _incomingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
+            private readonly Trust _incomingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210"};
 
             private readonly GetAcademiesModel _academyOne = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
@@ -613,28 +613,29 @@ namespace Frontend.Tests.ControllerTests
 
             public CheckYourAnswersTests()
             {
-                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
 
-                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Id.ToString());
+                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
 
                 var outgoingAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(_outgoingTrust.Id)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
+
+                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
                         Result = _outgoingTrust
                     });
 
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(_incomingTrust.Id)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
+                _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
                         Result = _incomingTrust
                     });
 
-                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(_outgoingTrust.Id)).ReturnsAsync(
+                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(Guid.Parse(_outgoingTrust.Ukprn))).ReturnsAsync(
                     new RepositoryResult<List<GetAcademiesModel>>
                     {
                         Result = new List<GetAcademiesModel> {_academyOne, _academyTwo, _academyThree}
@@ -657,9 +658,9 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
             {
                 await _subject.CheckYourAnswers();
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(_outgoingTrust.Id), Times.Once);
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(_incomingTrust.Id), Times.Once);
-                _academiesRepository.Verify(r => r.GetAcademiesByTrustId(_outgoingTrust.Id), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_outgoingTrust.Ukprn), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_incomingTrust.Ukprn), Times.Once);
+                _academiesRepository.Verify(r => r.GetAcademiesByTrustId(Guid.Parse(_outgoingTrust.Ukprn)), Times.Once);
             }
 
             [Fact]
@@ -670,8 +671,8 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
 
-                Assert.Equal(_outgoingTrust.Id, viewModel.OutgoingTrust.Id);
-                Assert.Equal(_incomingTrust.Id, viewModel.IncomingTrust.Id);
+                Assert.Equal(_outgoingTrust.Ukprn, viewModel.OutgoingTrust.Ukprn);
+                Assert.Equal(_incomingTrust.Ukprn, viewModel.IncomingTrust.Ukprn);
 
                 var expectedAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
                 var viewAcademyIds = viewModel.OutgoingAcademies.Select(academy => academy.Id);

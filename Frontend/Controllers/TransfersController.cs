@@ -212,23 +212,23 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> CheckYourAnswers()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
-            GetTrustsModel incomingTrust = null;
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            Trust incomingTrust = null;
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
                 .Select(Guid.Parse);
 
-            var outgoingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(outgoingTrustId);
+            var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
-                var incomingTrustId = Guid.Parse(incomingTrustIdString);
-                var incomingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(incomingTrustId);
+                var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
                 incomingTrust = incomingTrustResponse.Result;
             }
 
-            var academiesForTrust = await _dynamicsAcademiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var academiesForTrust =
+                await _dynamicsAcademiesRepository.GetAcademiesByTrustId(Guid.Parse(outgoingTrustId));
             var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
 
             var model = new CheckYourAnswers
