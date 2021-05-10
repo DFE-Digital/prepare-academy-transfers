@@ -21,7 +21,6 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
-        private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ITrusts> _trustsRepository;
 
@@ -30,7 +29,6 @@ namespace Frontend.Tests.ControllerTests
 
         public TransfersControllerTests()
         {
-            _academiesRepository = new Mock<IAcademiesRepository>();
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
             _session = new Mock<ISession>();
@@ -44,8 +42,7 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(_academiesRepository.Object,
-                _projectsRepository.Object,
+            _subject = new TransfersController(_projectsRepository.Object,
                 _trustsRepository.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
