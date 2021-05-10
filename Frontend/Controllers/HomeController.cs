@@ -3,8 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using API.Models.Upstream.Enums;
-using API.Repositories.Interfaces;
+using Data;
 using Frontend.Models;
 using Frontend.Views.Home;
 using Microsoft.AspNetCore.Authentication;
@@ -18,9 +17,9 @@ namespace Frontend.Controllers
     public class HomeController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly IProjectsRepository _projectsRepository;
+        private readonly IProjects _projectsRepository;
 
-        public HomeController(IConfiguration configuration, IProjectsRepository projectsRepository)
+        public HomeController(IConfiguration configuration, IProjects projectsRepository)
         {
             _configuration = configuration;
             _projectsRepository = projectsRepository;
@@ -29,8 +28,8 @@ namespace Frontend.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var projects = await _projectsRepository.SearchProject("", ProjectStatusEnum.InProgress, false);
-            var model = new Index {Projects = projects.Result.Projects};
+            var projects = await _projectsRepository.GetProjects();
+            var model = new Index {Projects = projects.Result};
             return View(model);
         }
 

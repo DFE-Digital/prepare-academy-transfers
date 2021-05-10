@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using API.Models.Upstream.Response;
+using Data.Models;
 
 namespace Frontend.Views.Home
 {
     public class Index
     {
-        public List<SearchProjectsModel> Projects;
+        public List<ProjectSearchResult> Projects;
     }
 }
