@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Models.Upstream.Response;
 using API.Repositories;
 using Data;
 using Data.Models;
@@ -95,10 +94,9 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> OutgoingTrustAcademies(bool change = false)
         {
-            var sessionGuid = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var sessionAcademyIds = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
-            var outgoingTrustId = Guid.Parse(sessionGuid);
-            ViewData["OutgoingTrustId"] = outgoingTrustId.ToString();
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            ViewData["OutgoingTrustId"] = outgoingTrustId;
             ViewData["ChangeLink"] = change;
             ViewData["OutgoingAcademyId"] = null;
 
@@ -108,9 +106,8 @@ namespace Frontend.Controllers
                 ViewData["OutgoingAcademyId"] = academyId;
             }
 
-            var academiesRepoResult = await _dynamicsAcademiesRepository.GetAcademiesByTrustId(outgoingTrustId);
-            var academies = academiesRepoResult.Result;
-            var model = new OutgoingTrustAcademies {Academies = academies};
+            var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
+            var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
 
             ViewData["Error.Exists"] = false;
             if (TempData.Peek("ErrorMessage") == null) return View(model);

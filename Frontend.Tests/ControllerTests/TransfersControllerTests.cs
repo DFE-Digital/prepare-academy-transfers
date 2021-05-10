@@ -274,21 +274,23 @@ namespace Frontend.Tests.ControllerTests
 
             public OutgoingTrustAcademiesTests()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
-                var trustIdByteArray = Encoding.UTF8.GetBytes(trustId.ToString());
+                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
+                var trustIdByteArray = Encoding.UTF8.GetBytes(trustId);
 
                 _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
 
-                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(trustId)).ReturnsAsync(
-                    new RepositoryResult<List<GetAcademiesModel>>
+                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
-                        Result = new List<GetAcademiesModel>
+                        Result = new Trust
                         {
-                            new GetAcademiesModel {AcademyName = AcademyName},
-                            new GetAcademiesModel {AcademyName = AcademyNameTwo},
+                            Academies = new List<Academy>
+                            {
+                                new Academy {Name = AcademyName},
+                                new Academy {Name = AcademyNameTwo}
+                            }
                         }
-                    }
-                );
+                    });
             }
 
             [Fact]
@@ -298,8 +300,8 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustAcademies>(viewResponse.Model);
 
-                Assert.Equal(AcademyName, viewModel.Academies[0].AcademyName);
-                Assert.Equal(AcademyNameTwo, viewModel.Academies[1].AcademyName);
+                Assert.Equal(AcademyName, viewModel.Academies[0].Name);
+                Assert.Equal(AcademyNameTwo, viewModel.Academies[1].Name);
             }
 
             [Fact]
@@ -531,13 +533,13 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
             {
                 var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-                var foundTrust = new Trust()
+                var foundTrust = new Trust
                 {
                     Ukprn = trustId,
                     Name = "Trust name"
                 };
 
-                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>()
+                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>
                 {
                     Result = foundTrust
                 });
@@ -556,13 +558,13 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenChangeLink_SetChangeLinkInView()
             {
                 var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-                var foundTrust = new Trust()
+                var foundTrust = new Trust
                 {
                     Ukprn = trustId,
                     Name = "Trust name"
                 };
 
-                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>()
+                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>
                 {
                     Result = foundTrust
                 });
