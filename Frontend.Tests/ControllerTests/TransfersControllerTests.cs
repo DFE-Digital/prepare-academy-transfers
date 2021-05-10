@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -23,7 +21,6 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
-        private readonly Mock<ITrustsRepository> _dynamicsTrustRepository;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ITrusts> _trustsRepository;
@@ -33,7 +30,6 @@ namespace Frontend.Tests.ControllerTests
 
         public TransfersControllerTests()
         {
-            _dynamicsTrustRepository = new Mock<ITrustsRepository>();
             _academiesRepository = new Mock<IAcademiesRepository>();
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
@@ -48,9 +44,7 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(
-                _dynamicsTrustRepository.Object,
-                _academiesRepository.Object,
+            _subject = new TransfersController(_academiesRepository.Object,
                 _projectsRepository.Object,
                 _trustsRepository.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
@@ -99,7 +93,8 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenSearchReturnsNoTrusts_RedirectToTrustNamePageWithAnError()
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("Meow"))
-                    .ReturnsAsync(new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>()});
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>()});
                 var response = await _subject.TrustSearch("Meow");
 
                 var redirectResponse = AssertRedirectToAction(response, "TrustName");
@@ -196,27 +191,24 @@ namespace Frontend.Tests.ControllerTests
 
         public class OutgoingTrustDetailsTests : TransfersControllerTests
         {
-            private readonly Guid _trustId;
-            private readonly GetTrustsModel _foundTrust;
+            private readonly string _trustId;
+            private readonly Trust _foundTrust;
 
             public OutgoingTrustDetailsTests()
             {
-                _trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                _foundTrust = new GetTrustsModel
+                _trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
+                _foundTrust = new Trust
                 {
-                    Id = _trustId,
-                    TrustName = "Example trust",
-                    CompaniesHouseNumber = "12345678",
-                    EstablishmentType = "Multi Academy Trust",
-                    TrustReferenceNumber = "TR12345",
-                    Address = "One example street\n\rExample City \n\rExample other line"
+                    Ukprn = _trustId,
+                    Name = "Example trust"
                 };
 
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(_trustId)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
+                _trustsRepository.Setup(r => r.GetByUkprn(_trustId)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
                         Result = _foundTrust
-                    });
+                    }
+                );
             }
 
             [Fact]
@@ -224,7 +216,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.OutgoingTrustDetails(_trustId);
 
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(_trustId), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_trustId), Times.Once);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
@@ -493,15 +485,16 @@ namespace Frontend.Tests.ControllerTests
             {
                 var trustId = "1234";
                 var trustTwoId = "4321";
-                
-                _trustsRepository.Setup(r => r.SearchTrusts(It.IsAny<string>())).ReturnsAsync(new RepositoryResult<List<TrustSearchResult>>()
-                {
-                    Result = new List<TrustSearchResult>()
+
+                _trustsRepository.Setup(r => r.SearchTrusts(It.IsAny<string>())).ReturnsAsync(
+                    new RepositoryResult<List<TrustSearchResult>>
                     {
-                        new TrustSearchResult { Ukprn = trustId },
-                        new TrustSearchResult { Ukprn = trustTwoId }
-                    }
-                });
+                        Result = new List<TrustSearchResult>
+                        {
+                            new TrustSearchResult {Ukprn = trustId},
+                            new TrustSearchResult {Ukprn = trustTwoId}
+                        }
+                    });
 
                 var result = await _subject.SearchIncomingTrust("Trust name");
 
@@ -537,26 +530,21 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                var foundTrust = new GetTrustsModel
+                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
+                var foundTrust = new Trust()
                 {
-                    Id = trustId,
-                    TrustName = "Example trust",
-                    CompaniesHouseNumber = "12345678",
-                    EstablishmentType = "Multi Academy Trust",
-                    TrustReferenceNumber = "TR12345",
-                    Address = "One example street\n\rExample City \n\rExample other line"
+                    Ukprn = trustId,
+                    Name = "Trust name"
                 };
 
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
-                    {
-                        Result = foundTrust
-                    });
+                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>()
+                {
+                    Result = foundTrust
+                });
 
                 var response = await _subject.IncomingTrustDetails(trustId);
 
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(trustId), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(trustId), Times.Once);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
@@ -567,22 +555,17 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenChangeLink_SetChangeLinkInView()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3855a3");
-                var foundTrust = new GetTrustsModel
+                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
+                var foundTrust = new Trust()
                 {
-                    Id = trustId,
-                    TrustName = "Example trust",
-                    CompaniesHouseNumber = "12345678",
-                    EstablishmentType = "Multi Academy Trust",
-                    TrustReferenceNumber = "TR12345",
-                    Address = "One example street\n\rExample City \n\rExample other line"
+                    Ukprn = trustId,
+                    Name = "Trust name"
                 };
 
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(trustId)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
-                    {
-                        Result = foundTrust
-                    });
+                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>()
+                {
+                    Result = foundTrust
+                });
 
                 await _subject.IncomingTrustDetails(trustId, "", true);
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
@@ -608,11 +591,11 @@ namespace Frontend.Tests.ControllerTests
 
         public class CheckYourAnswersTests : TransfersControllerTests
         {
-            private readonly GetTrustsModel _outgoingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af")};
+            private readonly Trust _outgoingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af"};
 
-            private readonly GetTrustsModel _incomingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
+            private readonly Trust _incomingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210"};
 
             private readonly GetAcademiesModel _academyOne = new GetAcademiesModel
                 {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
@@ -625,28 +608,29 @@ namespace Frontend.Tests.ControllerTests
 
             public CheckYourAnswersTests()
             {
-                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
 
-                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Id.ToString());
+                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
 
                 var outgoingAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(_outgoingTrust.Id)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
+
+                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
                         Result = _outgoingTrust
                     });
 
-                _dynamicsTrustRepository.Setup(r => r.GetTrustById(_incomingTrust.Id)).ReturnsAsync(
-                    new RepositoryResult<GetTrustsModel>
+                _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
+                    new RepositoryResult<Trust>
                     {
                         Result = _incomingTrust
                     });
 
-                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(_outgoingTrust.Id)).ReturnsAsync(
+                _academiesRepository.Setup(r => r.GetAcademiesByTrustId(Guid.Parse(_outgoingTrust.Ukprn))).ReturnsAsync(
                     new RepositoryResult<List<GetAcademiesModel>>
                     {
                         Result = new List<GetAcademiesModel> {_academyOne, _academyTwo, _academyThree}
@@ -669,9 +653,9 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
             {
                 await _subject.CheckYourAnswers();
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(_outgoingTrust.Id), Times.Once);
-                _dynamicsTrustRepository.Verify(r => r.GetTrustById(_incomingTrust.Id), Times.Once);
-                _academiesRepository.Verify(r => r.GetAcademiesByTrustId(_outgoingTrust.Id), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_outgoingTrust.Ukprn), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_incomingTrust.Ukprn), Times.Once);
+                _academiesRepository.Verify(r => r.GetAcademiesByTrustId(Guid.Parse(_outgoingTrust.Ukprn)), Times.Once);
             }
 
             [Fact]
@@ -682,8 +666,8 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
 
-                Assert.Equal(_outgoingTrust.Id, viewModel.OutgoingTrust.Id);
-                Assert.Equal(_incomingTrust.Id, viewModel.IncomingTrust.Id);
+                Assert.Equal(_outgoingTrust.Ukprn, viewModel.OutgoingTrust.Ukprn);
+                Assert.Equal(_incomingTrust.Ukprn, viewModel.IncomingTrust.Ukprn);
 
                 var expectedAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
                 var viewAcademyIds = viewModel.OutgoingAcademies.Select(academy => academy.Id);

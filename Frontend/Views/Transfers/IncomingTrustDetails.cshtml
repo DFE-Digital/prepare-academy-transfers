@@ -1,4 +1,3 @@
-@using System.Text.RegularExpressions
 @model Frontend.Views.Transfers.OutgoingTrustDetails
 
 @{
@@ -24,7 +23,7 @@
         <dl class="govuk-summary-list govuk-summary-list--no-border">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Name</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.TrustName</dd>
+                <dd class="govuk-summary-list__value">@Model.Trust.Name</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Companies House number</dt>
@@ -36,18 +35,18 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Trust reference number</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.TrustReferenceNumber</dd>
+                <dd class="govuk-summary-list__value">@Model.Trust.GiasGroupId</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Address</dt>
                 <dd class="govuk-summary-list__value">
-                    @foreach (var line in Regex.Split(@Model.Trust.Address, "\\r\\n|,"))
+                    @foreach (var line in Model.Trust.Address)
                     {
                         <p class="govuk-body">@line.Trim()</p>
                     }
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" asp-action="ConfirmIncomingTrust" asp-route-trustId="@Model.Trust.Id" role="button" draggable="false">Select trust</a>
+        <a class="govuk-button" asp-action="ConfirmIncomingTrust" asp-route-trustId="@Model.Trust.Ukprn" role="button" draggable="false">Select trust</a>
     </div>
 </div>

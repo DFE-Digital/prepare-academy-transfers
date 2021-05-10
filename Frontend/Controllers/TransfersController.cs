@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Models.Downstream.D365;
-using API.Models.Upstream.Enums;
-using API.Models.Upstream.Request;
 using API.Models.Upstream.Response;
 using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
@@ -25,16 +20,14 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
-        private readonly ITrustsRepository _dynamicsTrustsRepository;
-        private readonly IAcademiesRepository _academiesRepository;
+        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
 
-        public TransfersController(ITrustsRepository dynamicsTrustsRepository, IAcademiesRepository academiesRepository,
+        public TransfersController(IAcademiesRepository dynamicsAcademiesRepository,
             IProjects projectsRepository, ITrusts trustsRepository)
         {
-            _dynamicsTrustsRepository = dynamicsTrustsRepository;
-            _academiesRepository = academiesRepository;
+            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
         }
@@ -82,9 +75,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> OutgoingTrustDetails(Guid trustId, string query = "", bool change = false)
+        public async Task<IActionResult> OutgoingTrustDetails(string trustId, string query = "", bool change = false)
         {
-            var result = await _dynamicsTrustsRepository.GetTrustById(trustId);
+            var result = await _trustsRepository.GetByUkprn(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -115,7 +108,7 @@ namespace Frontend.Controllers
                 ViewData["OutgoingAcademyId"] = academyId;
             }
 
-            var academiesRepoResult = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var academiesRepoResult = await _dynamicsAcademiesRepository.GetAcademiesByTrustId(outgoingTrustId);
             var academies = academiesRepoResult.Result;
             var model = new OutgoingTrustAcademies {Academies = academies};
 
@@ -197,9 +190,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> IncomingTrustDetails(Guid trustId, string query = "", bool change = false)
+        public async Task<IActionResult> IncomingTrustDetails(string trustId, string query = "", bool change = false)
         {
-            var result = await _dynamicsTrustsRepository.GetTrustById(trustId);
+            var result = await _trustsRepository.GetByUkprn(trustId);
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -215,23 +208,23 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> CheckYourAnswers()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
-            GetTrustsModel incomingTrust = null;
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            Trust incomingTrust = null;
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
                 .Select(Guid.Parse);
 
-            var outgoingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(outgoingTrustId);
+            var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
-                var incomingTrustId = Guid.Parse(incomingTrustIdString);
-                var incomingTrustResponse = await _dynamicsTrustsRepository.GetTrustById(incomingTrustId);
+                var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
                 incomingTrust = incomingTrustResponse.Result;
             }
 
-            var academiesForTrust = await _academiesRepository.GetAcademiesByTrustId(outgoingTrustId);
+            var academiesForTrust =
+                await _dynamicsAcademiesRepository.GetAcademiesByTrustId(Guid.Parse(outgoingTrustId));
             var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
 
             var model = new CheckYourAnswers

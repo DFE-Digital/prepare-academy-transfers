@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using API.Models.Upstream.Response;
+using Data.Models;
 
 namespace Frontend.Views.Transfers
 {
     public class CheckYourAnswers
     {
-        public GetTrustsModel OutgoingTrust;
+        public Trust OutgoingTrust;
         public List<GetAcademiesModel> OutgoingAcademies;
-        public GetTrustsModel IncomingTrust;
+        public Trust IncomingTrust;
     }
 }
