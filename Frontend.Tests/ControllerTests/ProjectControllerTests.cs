@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using API.Models.Upstream.Response;
-using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using Frontend.Controllers;

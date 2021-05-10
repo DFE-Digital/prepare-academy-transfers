@@ -1,6 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using Frontend.Models.AcademyPerformance;
+using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers.Projects
 {
     [Authorize]
-    [Route("project/{id:guid}/academy-performance")]
+    [Route("project/{id}/academy-performance")]
     public class AcademyPerformanceController : Controller
     {
         private readonly IGetInformationForProject _getInformationForProject;
@@ -18,7 +17,7 @@ namespace Frontend.Controllers.Projects
             _getInformationForProject = getInformationForProject;
         }
 
-        public async Task<IActionResult> Index(Guid id)
+        public async Task<IActionResult> Index(string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 

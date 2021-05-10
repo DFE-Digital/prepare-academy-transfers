@@ -7,13 +7,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h1 class="govuk-heading-xl">Preview HTB Template</h1>
-        <h2 class="govuk-heading-l">@Model.Project.ProjectAcademies[0].AcademyName</h2>
+        @* <h2 class="govuk-heading-l">@Model.Project.TransferringAcademies[0].AcademyName</h2> *@
         @await Html.PartialAsync(
             "_FormFieldSummaryCardBody",
             Model.OutgoingAcademy.Performance.FieldsToDisplay(),
@@ -26,7 +26,7 @@
             "_FormFieldSummaryCardBody",
             Model.OutgoingAcademy.LatestOfstedJudgement.FieldsToDisplay(),
             new ViewDataDictionary(ViewData) {{"SectionTitle", "Latest Ofsted judgement"}})
-        <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@Model.Project.ProjectId">
+        <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@Model.Project.Urn">
             Download HTB Templates
         </a>
     </div>

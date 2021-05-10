@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers
 {
     [Authorize]
-    [Route("project/{id:guid}/headteacher-board")]
+    [Route("project/{id}/headteacher-board")]
     public class HeadteacherBoardController : Controller
     {
         private readonly ICreateHtbDocument _createHtbDocument;
@@ -23,7 +23,7 @@ namespace Frontend.Controllers
         }
 
         [Route("preview")]
-        public async Task<IActionResult> Preview([FromRoute] Guid id)
+        public async Task<IActionResult> Preview([FromRoute] string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 

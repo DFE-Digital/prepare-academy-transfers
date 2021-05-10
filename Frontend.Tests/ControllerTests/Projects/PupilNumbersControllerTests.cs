@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using API.Models.Upstream.Response;
 using Data.Models;
 using Data.Models.Academies;
+using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
@@ -27,20 +26,20 @@ namespace Frontend.Tests.ControllerTests.Projects
 
         public class IndexTests : PupilNumbersControllerTests
         {
-            private readonly Guid _projectId;
-            private readonly GetProjectsResponseModel _foundProject;
+            private readonly string _projectUrn;
+            private readonly Project _foundProject;
             private readonly Academy _foundAcademy;
 
             public IndexTests()
             {
-                _projectId = Guid.NewGuid();
-                var academyId = Guid.NewGuid();
+                _projectUrn = "ProjectId";
+                const string outgoingAcademyUkprn = "1234567";
 
-                _foundProject = new GetProjectsResponseModel
+                _foundProject = new Project
                 {
-                    ProjectId = _projectId,
-                    ProjectAcademies = new List<GetProjectsAcademyResponseModel>
-                        {new GetProjectsAcademyResponseModel {AcademyId = academyId}}
+                    Urn = _projectUrn,
+                    TransferringAcademies = new List<TransferringAcademies>
+                        {new TransferringAcademies {OutgoingAcademyUkprn = outgoingAcademyUkprn}}
                 };
 
                 _foundAcademy = new Academy
@@ -49,7 +48,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Performance = new AcademyPerformance()
                 };
 
-                _getInformationForProject.Setup(s => s.Execute(_projectId)).ReturnsAsync(
+                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
                     new GetInformationForProjectResponse()
                     {
                         Project = _foundProject,
@@ -60,15 +59,15 @@ namespace Frontend.Tests.ControllerTests.Projects
             [Fact]
             public async void GivenProjectId_GetsInformationAboutProject()
             {
-                await _subject.Index(_projectId);
+                await _subject.Index(_projectUrn);
 
-                _getInformationForProject.Verify(s => s.Execute(_projectId), Times.Once);
+                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
             }
 
             [Fact]
             public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
             {
-                var response = await _subject.Index(_projectId);
+                var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
@@ -79,7 +78,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             [Fact]
             public async void GivenAcademy_AssignsTheProjectToTheViewModel()
             {
-                var response = await _subject.Index(_projectId);
+                var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
