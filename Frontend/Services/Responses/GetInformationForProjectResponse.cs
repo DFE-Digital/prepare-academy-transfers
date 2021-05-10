@@ -1,4 +1,3 @@
-using API.Models.Upstream.Response;
 using Data.Models;
 
 namespace Frontend.Services.Responses
