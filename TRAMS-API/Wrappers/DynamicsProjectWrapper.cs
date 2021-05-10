@@ -21,6 +21,21 @@ namespace API.Wrappers
             _projectsRepository = projectsRepository;
         }
 
+        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
+        {
+            var projects = await _projectsRepository.SearchProject("", ProjectStatusEnum.InProgress, false);
+            var result = projects.Result.Projects.Select(project => new ProjectSearchResult()
+            {
+                Urn = project.ProjectId.ToString(),
+                Number = project.ProjectName
+            }).ToList();
+
+            return new RepositoryResult<List<ProjectSearchResult>>()
+            {
+                Result = result
+            };
+        }
+
         public async Task<RepositoryResult<Project>> GetByUrn(string urn)
         {
             var guid = Guid.Parse(urn);

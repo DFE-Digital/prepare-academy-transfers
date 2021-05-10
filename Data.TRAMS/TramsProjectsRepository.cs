@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Models;
@@ -19,6 +20,11 @@ namespace Data.TRAMS
             _httpClient = httpClient;
             _externalToInternalProjectMapper = externalToInternalProjectMapper;
             _internalToExternalProjectMapper = internalToExternalProjectMapper;
+        }
+
+        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
+        {
+            throw new System.NotImplementedException();
         }
 
         public async Task<RepositoryResult<Project>> GetByUrn(string urn)
