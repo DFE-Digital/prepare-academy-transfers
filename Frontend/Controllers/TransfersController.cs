@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
@@ -79,9 +78,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult ConfirmOutgoingTrust(Guid trustId)
+        public IActionResult ConfirmOutgoingTrust(string trustId)
         {
-            HttpContext.Session.SetString(OutgoingTrustIdSessionKey, trustId.ToString());
+            HttpContext.Session.SetString(OutgoingTrustIdSessionKey, trustId);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
@@ -192,9 +191,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult ConfirmIncomingTrust(Guid trustId)
+        public IActionResult ConfirmIncomingTrust(string trustId)
         {
-            HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId.ToString());
+            HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
 
             return RedirectToAction("CheckYourAnswers");
         }
@@ -230,18 +229,18 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> SubmitProject()
         {
-            var outgoingTrustId = Guid.Parse(HttpContext.Session.GetString(OutgoingTrustIdSessionKey));
-            var incomingTrustId = Guid.Parse(HttpContext.Session.GetString(IncomingTrustIdSessionKey));
-            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
-                .Select(Guid.Parse).ToList();
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            var incomingTrustId = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
+            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
+                
 
             var project = new Project
             {
-                OutgoingTrustUkprn = outgoingTrustId.ToString(),
-                TransferringAcademies = academyIds.Select(id => new TransferringAcademies()
+                OutgoingTrustUkprn = outgoingTrustId,
+                TransferringAcademies = academyIds.Select(id => new TransferringAcademies
                 {
                     OutgoingAcademyUkprn = id.ToString(),
-                    IncomingTrustUkprn = incomingTrustId.ToString()
+                    IncomingTrustUkprn = incomingTrustId
                 }).ToList()
             };
 

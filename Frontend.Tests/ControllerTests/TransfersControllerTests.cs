@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using API.Models.Upstream.Response;
-using API.Repositories;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -209,7 +206,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
+            public async void GivenId_LookupTrustFromAPIAndAssignToView()
             {
                 var response = await _subject.OutgoingTrustDetails(_trustId);
 
@@ -222,7 +219,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenGuidAndQuery_AssignQueryToTheView()
+            public async void GivenIdAndQuery_AssignQueryToTheView()
             {
                 await _subject.OutgoingTrustDetails(_trustId, "Trust name");
                 Assert.Equal("Trust name", _subject.ViewData["Query"]);
@@ -239,24 +236,24 @@ namespace Frontend.Tests.ControllerTests
         public class ConfirmOutgoingTrustTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenTrustGuid_StoresTheTrustInTheSessionAndRedirects()
+            public void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+                const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
                 var response = _subject.ConfirmOutgoingTrust(trustId);
 
                 _session.Verify(s => s.Set(
                     "OutgoingTrustId",
                     It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == trustId.ToString()
+                        Encoding.UTF8.GetString(input) == trustId
                     )));
 
                 AssertRedirectToAction(response, "OutgoingTrustAcademies");
             }
 
             [Fact]
-            public void GivenTrustGuid_ClearExistingInformationInTheSession()
+            public void GivenTrustId_ClearExistingInformationInTheSession()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
                 _subject.ConfirmOutgoingTrust(trustId);
 
                 _session.Verify(s => s.Remove("IncomingTrustId"));
@@ -291,7 +288,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenTrustGuidInSession_FetchesTheAcademiesForThatTrust()
+            public async void GivenTrustIdInSession_FetchesTheAcademiesForThatTrust()
             {
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
@@ -333,22 +330,22 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
             {
-                var outgoingAcademyId = Guid.NewGuid();
-                var outgoingAcademyIds = new List<Guid> {outgoingAcademyId};
+                const string outgoingAcademyId = "AcademyId";
+                var outgoingAcademyIds = new List<string> {outgoingAcademyId};
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
                 var response = await _subject.OutgoingTrustAcademies();
                 var viewResponse = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal(outgoingAcademyId.ToString(), viewResponse.ViewData["OutgoingAcademyId"]);
+                Assert.Equal(outgoingAcademyId, viewResponse.ViewData["OutgoingAcademyId"]);
             }
         }
 
         public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenAcademyGuid_StoresItInTheSessionAndRedirects()
+            public void GivenAcademyId_StoresItInTheSessionAndRedirects()
             {
                 var idOne = "9a7be920-eaa0-e911-a83f-000d3a3852af";
 
@@ -365,7 +362,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public void GivenNoAcademyGuid_RedirectBackToOutgoingTrustAcademiesWithError()
+            public void GivenNoAcademyId_RedirectBackToOutgoingTrustAcademiesWithError()
             {
                 var result = _subject.SubmitOutgoingTrustAcademies(null);
 
@@ -526,7 +523,7 @@ namespace Frontend.Tests.ControllerTests
         public class IncomingTrustDetailsTests : TransfersControllerTests
         {
             [Fact]
-            public async void GivenGuid_LookupTrustFromAPIAndAssignToView()
+            public async void GivenId_LookupTrustFromAPIAndAssignToView()
             {
                 var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
                 var foundTrust = new Trust
@@ -573,15 +570,15 @@ namespace Frontend.Tests.ControllerTests
         public class ConfirmIncomingTrustTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenTrustGuid_StoresTheTrustInTheSessionAndRedirects()
+            public void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
             {
-                var trustId = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af");
+                const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
                 var response = _subject.ConfirmIncomingTrust(trustId);
 
                 _session.Verify(s => s.Set(
                     "IncomingTrustId",
                     It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == trustId.ToString()
+                        Encoding.UTF8.GetString(input) == trustId
                     )));
                 AssertRedirectToAction(response, "CheckYourAnswers");
             }
@@ -607,7 +604,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 _outgoingTrust = new Trust
                 {
-                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af", Academies = new List<Academy>()
+                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af", Academies = new List<Academy>
                     {
                         _academyOne, _academyTwo, _academyThree
                     }
@@ -676,27 +673,27 @@ namespace Frontend.Tests.ControllerTests
 
         public class SubmitProjectTests : TransfersControllerTests
         {
-            private readonly GetTrustsModel _outgoingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a3852af")};
+            private readonly Trust _outgoingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af"};
 
-            private readonly GetTrustsModel _incomingTrust = new GetTrustsModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385210")};
+            private readonly Trust _incomingTrust = new Trust
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210"};
 
-            private readonly GetAcademiesModel _academyOne = new GetAcademiesModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385211")};
+            private readonly Academy _academyOne = new Academy
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385211"};
 
-            private readonly GetAcademiesModel _academyTwo = new GetAcademiesModel
-                {Id = Guid.Parse("9a7be920-eaa0-e911-a83f-000d3a385212")};
+            private readonly Academy _academyTwo = new Academy
+                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385212"};
 
             public SubmitProjectTests()
             {
-                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Id.ToString());
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
 
-                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Id.ToString());
+                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Ukprn);
                 _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
 
-                var outgoingAcademyIds = new List<Guid> {_academyOne.Id, _academyTwo.Id};
+                var outgoingAcademyIds = new List<string> {_academyOne.Ukprn, _academyTwo.Ukprn};
                 var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
                 _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
@@ -727,11 +724,11 @@ namespace Frontend.Tests.ControllerTests
 
                 _projectsRepository.Verify(
                     r => r.Create(It.Is<Project>(input =>
-                        input.TransferringAcademies[0].OutgoingAcademyUkprn == _academyOne.Id.ToString() &&
-                        input.TransferringAcademies[0].IncomingTrustUkprn == _incomingTrust.Id.ToString() &&
-                        input.TransferringAcademies[1].OutgoingAcademyUkprn == _academyTwo.Id.ToString() &&
-                        input.TransferringAcademies[1].IncomingTrustUkprn == _incomingTrust.Id.ToString() &&
-                        input.OutgoingTrustUkprn == _outgoingTrust.Id.ToString())),
+                        input.TransferringAcademies[0].OutgoingAcademyUkprn == _academyOne.Ukprn &&
+                        input.TransferringAcademies[0].IncomingTrustUkprn == _incomingTrust.Ukprn &&
+                        input.TransferringAcademies[1].OutgoingAcademyUkprn == _academyTwo.Ukprn &&
+                        input.TransferringAcademies[1].IncomingTrustUkprn == _incomingTrust.Ukprn &&
+                        input.OutgoingTrustUkprn == _outgoingTrust.Ukprn)),
                     Times.Once);
             }
 
