@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using DocumentGeneration;
@@ -14,25 +11,22 @@ namespace Frontend.Services
 {
     public class CreateHtbDocument : ICreateHtbDocument
     {
-        private readonly IProjectsRepository _dynamicsProjectsRepository;
-        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
+        private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
 
-        public CreateHtbDocument(IProjectsRepository dynamicsProjectsRepository,
-            IAcademiesRepository dynamicsAcademiesRepository, IAcademies academiesRepository)
+        public CreateHtbDocument(IProjects projectsRepository, IAcademies academiesRepository)
         {
-            _dynamicsProjectsRepository = dynamicsProjectsRepository;
-            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
+            _projectsRepository = projectsRepository;
             _academiesRepository = academiesRepository;
         }
 
-        public async Task<byte[]> Execute(Guid projectId)
+        public async Task<byte[]> Execute(string projectUrn)
         {
-            var projectResult = await _dynamicsProjectsRepository.GetProjectById(projectId);
-            var projectAcademy = projectResult.Result.ProjectAcademies.First().AcademyId;
-            var dynamicsAcademyResult = await _dynamicsAcademiesRepository.GetAcademyById(projectAcademy);
-            var dynamicsAcademy = dynamicsAcademyResult.Result;
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(dynamicsAcademy.Ukprn);
+            var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+            var projectAcademy = projectResult.Result.TransferringAcademies.First();
+            var academyResult = await _academiesRepository.GetAcademyByUkprn(projectAcademy.OutgoingAcademyUkprn);
+            var project = projectResult.Result;
+            var academy = academyResult.Result;
 
             MemoryStream ms;
 
@@ -40,10 +34,8 @@ namespace Frontend.Services
             {
                 var generator = new DocumentBuilder(ms);
 
-                generator.AddHeading(projectResult.Result.ProjectName,
-                    DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
-
-                generator.AddHeading(dynamicsAcademy.AcademyName, DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                generator.AddHeading(project.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
+                generator.AddHeading(academy.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
 
                 AddAcademyPerformanceTable(generator, academyResult);
                 AddPupilNumbersTable(generator, academyResult);
