@@ -47,7 +47,7 @@ namespace Data.Mock
                     AchievementOfPupils = "Placeholder",
                     BehaviourAndSafetyOfPupils = "Placeholder",
                     EarlyYearsProvision = "Placeholder",
-                    Effectiveness = "Placeholder",
+                    OverallEffectiveness = "Placeholder",
                     InspectionDate = "Placeholder",
                     LeadershipAndManagement = "Placeholder",
                     QualityOfTeaching = "Placeholder",

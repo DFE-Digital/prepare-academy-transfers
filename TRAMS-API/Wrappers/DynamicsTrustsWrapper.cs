@@ -7,6 +7,7 @@ using API.Repositories;
 using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
+using Data.Models.Academies;
 
 namespace API.Wrappers
 {
@@ -58,7 +59,16 @@ namespace API.Wrappers
                 {
                     Name = academy.AcademyName,
                     Ukprn = academy.Id.ToString(),
-                    Urn = academy.Urn
+                    Urn = academy.Urn,
+                    LocalAuthorityName = academy.LocalAuthorityName,
+                    EstablishmentType = academy.EstablishmentType,
+                    ReligiousCharacter = academy.ReligiousCharacter,
+                    Pfi = academy.Pfi,
+                    LatestOfstedJudgement = new LatestOfstedJudgement()
+                    {
+                        OverallEffectiveness = academy.OfstedRating,
+                        InspectionDate = academy.OfstedInspectionDate?.ToString("d MMMM yyyy")
+                    }
                 }).ToList()
             };
 

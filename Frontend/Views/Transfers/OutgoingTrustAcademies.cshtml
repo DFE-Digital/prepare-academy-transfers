@@ -63,11 +63,11 @@
                             <div class="govuk-radios__item">
                                 @if ((string) ViewData["OutgoingAcademyUkprn"] == academy.Ukprn)
                                 {
-                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyUkprn" type="radio" value="@academy.Ukprn" checked>
+                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn" checked>
                                 }
                                 else
                                 {
-                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyUkprn" type="radio" value="@academy.Ukprn">
+                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn">
                                 }
                                 <label class="govuk-label govuk-radios__label" for="@academy.Ukprn">
                                     @academy.Name (URN @academy.Urn)

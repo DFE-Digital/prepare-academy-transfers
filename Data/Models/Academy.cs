@@ -9,6 +9,10 @@ namespace Data.Models
         public string Ukprn { get; set; }
         public string Urn { get; set; }
         public string Name { get; set; }
+        public string LocalAuthorityName { get; set; }
+        public string EstablishmentType { get; set; }
+        public string ReligiousCharacter { get; set; }
+        public string Pfi { get; set; }
         public AcademyPerformance Performance { get; set; }
         public PupilNumbers PupilNumbers { get; set; }
 

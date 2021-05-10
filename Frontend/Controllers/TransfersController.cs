@@ -118,9 +118,9 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult SubmitOutgoingTrustAcademies(Guid? academyId, bool change = false)
+        public IActionResult SubmitOutgoingTrustAcademies(string academyId, bool change = false)
         {
-            if (!academyId.HasValue)
+            if (string.IsNullOrEmpty(academyId))
             {
                 TempData["ErrorMessage"] = "Please select an academy";
                 return RedirectToAction("OutgoingTrustAcademies");
@@ -207,8 +207,7 @@ namespace Frontend.Controllers
         {
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             Trust incomingTrust = null;
-            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey)
-                .Select(Guid.Parse);
+            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
 
             var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
@@ -220,9 +219,8 @@ namespace Frontend.Controllers
                 incomingTrust = incomingTrustResponse.Result;
             }
 
-            var academiesForTrust =
-                await _dynamicsAcademiesRepository.GetAcademiesByTrustId(Guid.Parse(outgoingTrustId));
-            var selectedAcademies = academiesForTrust.Result.Where(academy => academyIds.Contains(academy.Id)).ToList();
+            var selectedAcademies = outgoingTrustResponse.Result.Academies
+                .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
 
             var model = new CheckYourAnswers
             {
