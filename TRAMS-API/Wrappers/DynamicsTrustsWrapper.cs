@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using API.Repositories.Interfaces;
 using Data;
@@ -34,9 +36,24 @@ namespace API.Wrappers
             };
         }
 
-        public Task<RepositoryResult<Trust>> GetByUkprn(string ukprn)
+        public async Task<RepositoryResult<Trust>> GetByUkprn(string ukprn)
         {
-            throw new System.NotImplementedException();
+            var dynamicsResult = await _dynamicsTrustsRepository.GetTrustById(Guid.Parse(ukprn));
+            var result = dynamicsResult.Result;
+            var mappedResult = new Trust
+            {
+                Name = result.TrustName,
+                Ukprn = ukprn,
+                EstablishmentType = result.EstablishmentType,
+                CompaniesHouseNumber = result.CompaniesHouseNumber,
+                GiasGroupId = result.TrustReferenceNumber,
+                Address = Regex.Split(result.Address, "\\r\\n|,").ToList()
+            };
+
+            return new RepositoryResult<Trust>
+            {
+                Result = mappedResult
+            };
         }
     }
 }
