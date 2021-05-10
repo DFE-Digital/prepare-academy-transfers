@@ -7,18 +7,18 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-        <span class="govuk-caption-m">Reference number: @Model.Project.ProjectName</span>
+        <span class="govuk-caption-m">Reference number: @Model.Project.Name</span>
         <h1 class="govuk-heading-l">Latest Ofsted judgement</h1>
         <h2 class="govuk-heading-m">
-            Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.ProjectTrusts[1].TrustName</span>
+            Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.OutgoingTrustName</span>
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
         <partial name="_FormFieldSummaryList" model="Model.Academy.LatestOfstedJudgement.FieldsToDisplay()"/>
-        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.ProjectId">Continue</a>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Continue</a>
     </div>
 </div>

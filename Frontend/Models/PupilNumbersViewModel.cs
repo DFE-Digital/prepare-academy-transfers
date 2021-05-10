@@ -7,7 +7,7 @@ namespace Frontend.Models
 {
     public class PupilNumbersViewModel
     {
-        public GetProjectsResponseModel Project { get; set; }
+        public Project Project { get; set; }
         public Academy OutgoingAcademy { get; set; }
 
     }

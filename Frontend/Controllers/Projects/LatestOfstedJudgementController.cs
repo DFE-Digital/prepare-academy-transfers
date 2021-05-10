@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers.Projects
 {
     [Authorize]
-    [Route("/project/{id:guid}/latest-ofsted-judgement")]
+    [Route("/project/{id}/latest-ofsted-judgement")]
     public class LatestOfstedJudgementController : Controller
     {
         private readonly IGetInformationForProject _getInformationForProject;
@@ -18,7 +18,7 @@ namespace Frontend.Controllers.Projects
             _getInformationForProject = getInformationForProject;
         }
 
-        public async Task<IActionResult> Index(Guid id)
+        public async Task<IActionResult> Index(string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 

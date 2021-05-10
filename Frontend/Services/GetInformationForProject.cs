@@ -1,7 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -10,25 +8,21 @@ namespace Frontend.Services
 {
     public class GetInformationForProject : IGetInformationForProject
     {
-        private readonly IProjectsRepository _projectsRepository;
-        private readonly IAcademiesRepository _dynamicsAcademiesRepository;
+        private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
 
-        public GetInformationForProject(IProjectsRepository projectsRepository,
-            IAcademiesRepository dynamicsAcademiesRepository, IAcademies academiesRepository)
+        public GetInformationForProject(IAcademies academiesRepository,
+            IProjects projectsRepository)
         {
-            _projectsRepository = projectsRepository;
-            _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
             _academiesRepository = academiesRepository;
+            _projectsRepository = projectsRepository;
         }
 
-        public async Task<GetInformationForProjectResponse> Execute(Guid projectId)
+        public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
         {
-            var projectResult = await _projectsRepository.GetProjectById(projectId);
-            var projectAcademyId = projectResult.Result.ProjectAcademies[0].AcademyId;
-            var dynamicsAcademyResult = await _dynamicsAcademiesRepository.GetAcademyById(projectAcademyId);
-            var dynamicsAcademy = dynamicsAcademyResult.Result;
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(dynamicsAcademy.Ukprn);
+            var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+            var outgoingAcademyUkprn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUkprn;
+            var academyResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyUkprn);
 
             return new GetInformationForProjectResponse
             {

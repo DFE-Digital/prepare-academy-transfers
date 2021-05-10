@@ -1,11 +1,10 @@
-using API.Models.Upstream.Response;
 using Data.Models;
 
 namespace Frontend.Models
 {
     public class HeadTeacherBoardPreviewViewModel
     {
-        public GetProjectsResponseModel Project;
+        public Project Project;
         public Academy OutgoingAcademy;
     }
 }

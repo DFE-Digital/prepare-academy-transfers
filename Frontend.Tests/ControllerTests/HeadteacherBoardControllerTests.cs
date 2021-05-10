@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using API.Models.Upstream.Response;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using Data;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Controllers;
 using Frontend.Models;
-using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -32,43 +28,43 @@ namespace Frontend.Tests.ControllerTests
 
         public class PreviewTests : HeadteacherBoardControllerTests
         {
-            private readonly Guid _projectId;
-            private readonly GetProjectsResponseModel _foundProject;
+            private readonly string _projectUrn;
+            private readonly Project _foundProject;
             private readonly Academy _foundAcademy;
 
             public PreviewTests()
             {
-                _projectId = Guid.NewGuid();
-                var academyId = Guid.NewGuid();
+                _projectUrn = "ProjectId";
+                var academyUkprn = "12345";
 
-                _foundProject = new GetProjectsResponseModel
+                _foundProject = new Project
                 {
-                    ProjectId = _projectId,
-                    ProjectAcademies = new List<GetProjectsAcademyResponseModel>
+                    Urn = _projectUrn,
+                    TransferringAcademies = new List<TransferringAcademies>
                     {
-                        new GetProjectsAcademyResponseModel
-                            {AcademyId = academyId, AcademyName = "Cat Academy"}
+                        new TransferringAcademies
+                            {OutgoingAcademyUkprn = academyUkprn}
                     }
                 };
 
                 _foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
 
-                _getInformationForProject.Setup(s => s.Execute(_projectId)).ReturnsAsync(
+                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
                     new GetInformationForProjectResponse {Project = _foundProject, OutgoingAcademy = _foundAcademy});
             }
 
             [Fact]
             public async void GivenId_GetsProjectInformation()
             {
-                await _subject.Preview(_projectId);
+                await _subject.Preview(_projectUrn);
 
-                _getInformationForProject.Verify(s => s.Execute(_projectId), Times.Once);
+                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
             }
 
             [Fact]
             public async void GivenId_PutsTheProjectInTheViewModel()
             {
-                var response = await _subject.Preview(_projectId);
+                var response = await _subject.Preview(_projectUrn);
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
 
@@ -78,7 +74,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenId_PutsTheOutgoingAcademyInTheViewModel()
             {
-                var response = await _subject.Preview(_projectId);
+                var response = await _subject.Preview(_projectUrn);
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
 

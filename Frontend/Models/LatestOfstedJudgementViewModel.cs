@@ -7,7 +7,7 @@ namespace Frontend.Models
 {
     public class LatestOfstedJudgementViewModel
     {
-        public GetProjectsResponseModel Project { get; set; }
+        public Project Project { get; set; }
         public Academy Academy { get; set; }
     }
 }

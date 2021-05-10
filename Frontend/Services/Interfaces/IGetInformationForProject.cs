@@ -6,6 +6,6 @@ namespace Frontend.Services.Interfaces
 {
     public interface IGetInformationForProject
     {
-        public Task<GetInformationForProjectResponse> Execute(Guid projectId);
+        public Task<GetInformationForProjectResponse> Execute(string projectUrn);
     }
 }

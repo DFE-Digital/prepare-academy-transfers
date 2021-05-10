@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
-using API.Models.Upstream.Response;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using Data;
 using Data.Models;
 using Data.Models.Academies;
+using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
-using Frontend.Models.AcademyPerformance;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -31,19 +26,19 @@ namespace Frontend.Tests.ControllerTests.Projects
 
         public class IndexTests : LatestOfstedJudgementControllerTests
         {
-            private readonly Guid _projectId;
-            private readonly GetProjectsResponseModel _foundProject;
+            private readonly string _projectUrn;
+            private readonly Project _foundProject;
             private readonly Academy _foundAcademy;
 
             public IndexTests()
             {
-                _projectId = Guid.NewGuid();
+                _projectUrn = "ProjectUrn";
 
-                _foundProject = new GetProjectsResponseModel
+                _foundProject = new Project
                 {
-                    ProjectId = _projectId,
-                    ProjectAcademies = new List<GetProjectsAcademyResponseModel>
-                        {new GetProjectsAcademyResponseModel {AcademyId = Guid.NewGuid()}}
+                    Urn = _projectUrn,
+                    TransferringAcademies = new List<TransferringAcademies>
+                        {new TransferringAcademies() {OutgoingAcademyUkprn = "1234567"}}
                 };
 
                 _foundAcademy = new Academy
@@ -52,7 +47,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Performance = new AcademyPerformance()
                 };
 
-                _getInformationForProject.Setup(s => s.Execute(_projectId)).ReturnsAsync(
+                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
                     new GetInformationForProjectResponse
                     {
                         Project = _foundProject,
@@ -63,15 +58,15 @@ namespace Frontend.Tests.ControllerTests.Projects
             [Fact]
             public async void GivenProjectId_GetsInformationAboutTheProject()
             {
-                await _subject.Index(_projectId);
+                await _subject.Index(_projectUrn);
 
-                _getInformationForProject.Verify(s => s.Execute(_projectId), Times.Once);
+                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
             }
 
             [Fact]
             public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
             {
-                var response = await _subject.Index(_projectId);
+                var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
@@ -82,7 +77,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             [Fact]
             public async void GivenAcademy_AssignsTheProjectToTheViewModel()
             {
-                var response = await _subject.Index(_projectId);
+                var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
