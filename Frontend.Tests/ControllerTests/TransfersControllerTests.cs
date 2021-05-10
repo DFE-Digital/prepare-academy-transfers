@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using API.Models.Upstream.Response;
 using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -22,7 +21,6 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
-        private readonly Mock<ITrustsRepository> _dynamicsTrustRepository;
         private readonly Mock<IAcademiesRepository> _academiesRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ITrusts> _trustsRepository;
@@ -32,7 +30,6 @@ namespace Frontend.Tests.ControllerTests
 
         public TransfersControllerTests()
         {
-            _dynamicsTrustRepository = new Mock<ITrustsRepository>();
             _academiesRepository = new Mock<IAcademiesRepository>();
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
@@ -47,9 +44,7 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(
-                _dynamicsTrustRepository.Object,
-                _academiesRepository.Object,
+            _subject = new TransfersController(_academiesRepository.Object,
                 _projectsRepository.Object,
                 _trustsRepository.Object
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};

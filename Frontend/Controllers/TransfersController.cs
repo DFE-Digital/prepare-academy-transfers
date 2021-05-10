@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Models.Upstream.Response;
 using API.Repositories;
-using API.Repositories.Interfaces;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
@@ -21,16 +20,13 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
-        private readonly ITrustsRepository _dynamicsTrustsRepository;
         private readonly IAcademiesRepository _dynamicsAcademiesRepository;
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
 
-        public TransfersController(ITrustsRepository dynamicsTrustsRepository,
-            IAcademiesRepository dynamicsAcademiesRepository,
+        public TransfersController(IAcademiesRepository dynamicsAcademiesRepository,
             IProjects projectsRepository, ITrusts trustsRepository)
         {
-            _dynamicsTrustsRepository = dynamicsTrustsRepository;
             _dynamicsAcademiesRepository = dynamicsAcademiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
