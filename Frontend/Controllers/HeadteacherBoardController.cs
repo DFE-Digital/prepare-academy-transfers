@@ -43,7 +43,7 @@ namespace Frontend.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GenerateDocument([FromRoute] Guid id)
+        public async Task<IActionResult> GenerateDocument([FromRoute] string id)
         {
             var documentArray = await _createHtbDocument.Execute(id);
 

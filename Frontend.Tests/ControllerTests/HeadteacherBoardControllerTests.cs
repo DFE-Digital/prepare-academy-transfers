@@ -87,19 +87,19 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenId_GeneratesAnHtbDocumentForTheProject()
             {
-                var projectId = Guid.NewGuid();
-                await _subject.GenerateDocument(projectId);
+                const string projectUrn = "projectUrn";
+                await _subject.GenerateDocument(projectUrn);
 
-                _createHtbDocument.Verify(s => s.Execute(projectId), Times.Once);
+                _createHtbDocument.Verify(s => s.Execute(projectUrn), Times.Once);
             }
 
             [Fact]
             public async void GivenId_ReturnsAFileWithTheGeneratedDocument()
             {
-                var projectId = Guid.NewGuid();
+                const string projectUrn = "projectUrn";
                 var fileContents = new byte[] {1, 2, 3, 4};
-                _createHtbDocument.Setup(s => s.Execute(projectId)).ReturnsAsync(fileContents);
-                var response = await _subject.GenerateDocument(projectId);
+                _createHtbDocument.Setup(s => s.Execute(projectUrn)).ReturnsAsync(fileContents);
+                var response = await _subject.GenerateDocument(projectUrn);
                 var fileResponse = Assert.IsType<FileContentResult>(response);
 
                 Assert.Equal(fileContents, fileResponse.FileContents);
