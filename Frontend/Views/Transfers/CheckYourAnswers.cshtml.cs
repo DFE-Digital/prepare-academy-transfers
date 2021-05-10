@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using API.Models.Upstream.Response;
 using Data.Models;
 
 namespace Frontend.Views.Transfers
@@ -7,7 +6,7 @@ namespace Frontend.Views.Transfers
     public class CheckYourAnswers
     {
         public Trust OutgoingTrust;
-        public List<GetAcademiesModel> OutgoingAcademies;
+        public List<Academy> OutgoingAcademies;
         public Trust IncomingTrust;
     }
 }

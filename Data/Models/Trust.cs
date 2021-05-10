@@ -10,5 +10,7 @@ namespace Data.Models
         public string EstablishmentType { get; set; }
         public string GiasGroupId { get; set; }
         public List<string> Address { get; set; }
+        
+        public List<Academy> Academies { get; set; }
     }
 }

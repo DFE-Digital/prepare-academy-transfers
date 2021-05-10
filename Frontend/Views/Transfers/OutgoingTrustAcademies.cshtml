@@ -30,7 +30,7 @@
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         <li>
-                            <a href="#@Model.Academies[0].Id" data-qa="error__text">
+                            <a href="#@Model.Academies[0].Name" data-qa="error__text">
                                 @ViewData["Error.Message"]
                             </a>
                         </li>
@@ -61,16 +61,16 @@
                         @foreach (var academy in Model.Academies)
                         {
                             <div class="govuk-radios__item">
-                                @if ((string) ViewData["OutgoingAcademyId"] == academy.Id.ToString())
+                                @if ((string) ViewData["OutgoingAcademyUkprn"] == academy.Ukprn)
                                 {
-                                    <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id" checked>
+                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn" checked>
                                 }
                                 else
                                 {
-                                    <input class="govuk-radios__input" id="@academy.Id" name="academyId" type="radio" value="@academy.Id">
+                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn">
                                 }
-                                <label class="govuk-label govuk-radios__label" for="@academy.Id">
-                                    @academy.AcademyName (URN @academy.Urn)
+                                <label class="govuk-label govuk-radios__label" for="@academy.Ukprn">
+                                    @academy.Name (URN @academy.Urn)
                                 </label>
                             </div>
                         }

@@ -6,7 +6,7 @@ namespace Data.Models.Academies
     {
         public string SchoolName { get; set; }
         public string InspectionDate { get; set; }
-        public string Effectiveness { get; set; }
+        public string OverallEffectiveness { get; set; }
         public string AchievementOfPupils { get; set; }
         public string QualityOfTeaching { get; set; }
         public string BehaviourAndSafetyOfPupils { get; set; }
@@ -19,7 +19,7 @@ namespace Data.Models.Academies
             {
                 new FormField {Title = "School name", Value = SchoolName},
                 new FormField {Title = "Ofsted inspection date", Value = InspectionDate},
-                new FormField {Title = "Overall effectiveness", Value = Effectiveness},
+                new FormField {Title = "Overall effectiveness", Value = OverallEffectiveness},
                 new FormField {Title = "Achievement of pupils", Value = AchievementOfPupils},
                 new FormField {Title = "Quality of teaching", Value = QualityOfTeaching},
                 new FormField {Title = "Behaviour and safety of pupils", Value = BehaviourAndSafetyOfPupils},
