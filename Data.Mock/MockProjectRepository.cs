@@ -2,16 +2,23 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.Models.Projects;
+using Microsoft.Extensions.Logging;
 
 namespace Data.Mock
 {
     public class MockProjectRepository : IProjects
     {
+        private readonly ILogger<MockProjectRepository> _logger;
         private const string PopulatedProjectUrn = "0001";
         private const string PopulatedProjectNumber = "AT-0001";
         private const string EmptyProjectUrn = "0002";
         private const string EmptyProjectNumber = "AT-0002";
         private const string OutgoingTrustName = "Example trust";
+
+        public MockProjectRepository(ILogger<MockProjectRepository> logger)
+        {
+            _logger = logger;
+        }
 
         public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
         {
@@ -41,6 +48,8 @@ namespace Data.Mock
 
         public Task<RepositoryResult<Project>> Update(Project project)
         {
+            _logger.LogInformation("Project {ProjectUrn} updated", project.Urn);
+
             return Task.FromResult(project.Urn == PopulatedProjectUrn
                 ? new RepositoryResult<Project> {Result = PopulatedProject()}
                 : new RepositoryResult<Project> {Result = EmptyProject()});
@@ -92,6 +101,7 @@ namespace Data.Mock
                 },
                 Features = new TransferFeatures
                 {
+                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
                     ReasonForTransfer = new ReasonForTransfer
                     {
                         IsSubjectToRddOrEsfaIntervention = true,

@@ -1,7 +1,102 @@
+using System;
+using System.Threading.Tasks;
+using Data;
+using Data.Models;
+using Data.Models.Projects;
+using Frontend.Controllers.Projects;
+using Frontend.Models;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Xunit;
+
 namespace Frontend.Tests.ControllerTests.Projects
 {
     public class FeaturesControllerTests
     {
-        
+        private readonly FeaturesController _subject;
+        private readonly Mock<IProjects> _projectRepository;
+        private readonly Project _foundProject;
+
+        public FeaturesControllerTests()
+        {
+            _projectRepository = new Mock<IProjects>();
+            _subject = new FeaturesController(_projectRepository.Object);
+            _foundProject = new Project
+            {
+                Urn = "0001",
+                Features = new TransferFeatures()
+            };
+
+            _projectRepository.Setup(r => r.GetByUrn("0001")).ReturnsAsync(new RepositoryResult<Project>()
+            {
+                Result = _foundProject
+            });
+        }
+
+        public class IndexTests : FeaturesControllerTests
+        {
+            [Fact]
+            public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
+            {
+                var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
+                await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+            }
+        }
+
+        public class InitiatedTests : FeaturesControllerTests
+        {
+            public class GetTests : InitiatedTests
+            {
+                [Fact]
+                public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
+                {
+                    var request = new Func<Task<IActionResult>>(async () => await _subject.Initiated("0001"));
+                    await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+                }
+            }
+
+            public class PostTests : InitiatedTests
+            {
+                [Fact]
+                public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
+                {
+                    var request =
+                        new Func<Task<IActionResult>>(async () =>
+                            await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe));
+                    await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+                }
+
+                [Theory]
+                [InlineData(TransferFeatures.ProjectInitiators.Dfe)]
+                [InlineData(TransferFeatures.ProjectInitiators.OutgoingTrust)]
+                public async void GivenUrnAndWhoInitiated_AssignsTheCorrectEnumAndUpdatesTheProject(
+                    TransferFeatures.ProjectInitiators whoInitiated)
+                {
+                    await _subject.InitiatedPost("0001", whoInitiated);
+                    _projectRepository.Verify(
+                        r => r.Update(
+                            It.Is<Project>(project => project.Features.WhoInitiatedTheTransfer == whoInitiated))
+                    );
+                }
+            }
+        }
+
+        #region Helpers
+
+        private async Task<TViewModel> AssertProjectIsGottenFromRepositoryAndAssignedToView<TViewModel>(
+            Func<Task<IActionResult>> request)
+            where TViewModel : ProjectViewModel
+        {
+            var result = await request();
+            _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
+
+            Assert.Equal(_foundProject, viewModel.Project);
+
+            return viewModel;
+        }
+
+        #endregion
     }
 }

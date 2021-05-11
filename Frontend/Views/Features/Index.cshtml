@@ -1,3 +1,5 @@
+@using Data.Models.Projects
+@using Frontend.Helpers
 @model FeaturesViewModel
 
 @{
@@ -37,13 +39,14 @@
                     Who initiated this academy transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (string.IsNullOrEmpty(Model.Project.Features.WhoInitiatedTheTransfer))
+                    @if (Model.Project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
                     {
                         <span class="empty">Empty</span>
                     }
                     else
                     {
-                        @Model.Project.Features.WhoInitiatedTheTransfer
+                        var displayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(Model.Project.Features.WhoInitiatedTheTransfer);
+                        @displayName
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">

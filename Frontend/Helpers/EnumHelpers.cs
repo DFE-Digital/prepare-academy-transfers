@@ -20,6 +20,22 @@ namespace Frontend.Helpers
             return enumValues;
         }
 
+        public static IList<T> GetDisplayableValues(Enum value)
+        {
+            var enumValues = new List<T>();
+
+            foreach (FieldInfo fi in value.GetType().GetFields(BindingFlags.Static | BindingFlags.Public))
+            {
+                var foo = (T) Enum.Parse(value.GetType(), fi.Name, false);
+                if (!string.IsNullOrEmpty(GetDisplayValue(foo)))
+                {
+                    enumValues.Add(foo);
+                }
+            }
+
+            return enumValues;
+        }
+
         public static T Parse(string value)
         {
             return (T) Enum.Parse(typeof(T), value, true);
@@ -57,10 +73,12 @@ namespace Frontend.Helpers
             var descriptionAttributes = fieldInfo.GetCustomAttributes(
                 typeof(DisplayAttribute), false) as DisplayAttribute[];
 
-            if (descriptionAttributes?[0].ResourceType != null)
+            if (descriptionAttributes == null) return string.Empty;
+            if (descriptionAttributes.Length == 0) return string.Empty;
+
+            if (descriptionAttributes[0].ResourceType != null)
                 return lookupResource(descriptionAttributes[0].ResourceType, descriptionAttributes[0].Name);
 
-            if (descriptionAttributes == null) return string.Empty;
             return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
         }
     }

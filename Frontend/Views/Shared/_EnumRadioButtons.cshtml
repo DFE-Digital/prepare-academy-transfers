@@ -1,0 +1,13 @@
+@model SortedDictionary<string, string>
+
+<div class="govuk-radios">
+    @foreach (var (value, displayValue) in Model)
+    {
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="@value" name="whoInitiated" type="radio" value="@value">
+            <label class="govuk-label govuk-radios__label" for="@value">
+                @displayValue
+            </label>
+        </div>
+    }
+</div>
