@@ -3,8 +3,9 @@ namespace Data.Models.Projects
     public class TransferFeatures
     {
         public string WhoInitiatedTheTransfer { get; set; }
-        public bool IsSubjectToRddOrEsfaIntervention { get; set; }
-        public string InterventionDetails { get; set; }
-        public string ReasonForTransfer { get; set; }
+        public ReasonForTransfer ReasonForTransfer { get; set; }
+        public string TypeOfTransfer { get; set; }
+
+        public bool HasTransferReasonBeenSet => ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null;
     }
 }
