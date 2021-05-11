@@ -1,4 +1,3 @@
-using System;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -23,9 +22,9 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenAProjectID_PutsTheProjectNameAndTrustNameInTheViewData()
             {
-                var projectId = Guid.NewGuid();
+                const string projectId = "1234";
 
-                _projectsRepository.Setup(r => r.GetByUrn(projectId.ToString())).ReturnsAsync(
+                _projectsRepository.Setup(r => r.GetByUrn(projectId)).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Result = new Project

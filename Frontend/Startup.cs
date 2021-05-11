@@ -142,6 +142,7 @@ namespace Frontend
             {
                 services.AddTransient<IAcademies, MockAcademyRepository>();
                 services.AddTransient<ITrusts, MockTrustsRepository>();
+                services.AddTransient<IProjects, MockProjectRepository>();
             }
             else
             {
