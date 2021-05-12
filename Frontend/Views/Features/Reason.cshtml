@@ -1,8 +1,13 @@
 @model Frontend.Models.FeaturesViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Reason for transfer";
     Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
 }
 
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
@@ -21,14 +26,14 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         Has this transfer started because RDD, RSC or ESFA have intervened with the academy or trust?
                     </legend>
-                    
+
                     @if (Model.FormErrors.HasErrorForField("isSubjectToIntervention"))
                     {
                         <span id="who-initiated-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("isSubjectToIntervention").ErrorMessage
                         </span>
                     }
-                    
+
                     @await Html.PartialAsync("_InlineRadioButtons", Model.ReasonRadioButtons())
                 </fieldset>
             </div>

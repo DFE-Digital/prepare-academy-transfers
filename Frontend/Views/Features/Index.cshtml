@@ -3,7 +3,7 @@
 @model FeaturesViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Features of the transfer";
     Layout = "_Layout";
 }
 
@@ -50,7 +50,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="#">
+                    <a class="govuk-link" asp-action="Initiated" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">who initiated the transfer</span>
                     </a>
                 </dd>
@@ -78,7 +78,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="#">
+                    <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">reason for transfer</span>
                     </a>
                 </dd>
