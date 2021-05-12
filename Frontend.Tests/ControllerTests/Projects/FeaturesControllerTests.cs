@@ -58,12 +58,19 @@ namespace Frontend.Tests.ControllerTests.Projects
             public class PostTests : InitiatedTests
             {
                 [Fact]
-                public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
+                public async void GivenUrnAndInitiator_GetsProjectFromRepository()
                 {
-                    var request =
-                        new Func<Task<IActionResult>>(async () =>
-                            await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe));
-                    await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+                    await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+                    _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
+                {
+                    var request = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+
+                    var redirectResponse = Assert.IsType<RedirectToActionResult>(request);
+                    Assert.Equal("Index", redirectResponse.ActionName);
                 }
 
                 [Theory]

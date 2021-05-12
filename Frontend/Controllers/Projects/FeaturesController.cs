@@ -50,7 +50,7 @@ namespace Frontend.Controllers.Projects
 
             await _projectsRepository.Update(model.Project);
 
-            return View(model);
+            return RedirectToAction("Index", new {urn});
         }
 
         private async Task<FeaturesViewModel> GetModel(string urn)
