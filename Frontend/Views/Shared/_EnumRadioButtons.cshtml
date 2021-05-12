@@ -1,12 +1,12 @@
-@model SortedDictionary<string, string>
+@model List<RadioButtonViewModel>
 
 <div class="govuk-radios">
-    @foreach (var (value, displayValue) in Model)
+    @foreach (var radioButton in Model)
     {
         <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="@value" name="whoInitiated" type="radio" value="@value">
-            <label class="govuk-label govuk-radios__label" for="@value">
-                @displayValue
+            <input class="govuk-radios__input" id="@radioButton.Value" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
+            <label class="govuk-label govuk-radios__label" for="@radioButton.Value">
+                @radioButton.DisplayName
             </label>
         </div>
     }

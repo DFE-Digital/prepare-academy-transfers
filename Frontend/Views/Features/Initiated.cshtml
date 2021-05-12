@@ -4,6 +4,7 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
     var formClasses = Model.HasError ? "govuk-form-group--error" : "";
+    var radioButtons = FeaturesViewModel.InitiatedCheckboxes(Model.Project.Features.WhoInitiatedTheTransfer);
 }
 
 @if (Model.HasError)
@@ -17,7 +18,7 @@
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         <li>
-                            <a href="#@Model.InitiatedCheckboxes().First().Key" data-qa="error__text">
+                            <a href="#@radioButtons.First().Value" data-qa="error__text">
                                 @Model.Error
                             </a>
                         </li>
@@ -49,7 +50,8 @@
                             <span class="govuk-visually-hidden">Error:</span> @Model.Error
                         </span>
                     }
-                    @await Html.PartialAsync("_EnumRadioButtons", Model.InitiatedCheckboxes())
+
+                    @await Html.PartialAsync("_EnumRadioButtons", radioButtons)
                 </fieldset>
             </div>
             <button class="govuk-button" data-module="govuk-button">

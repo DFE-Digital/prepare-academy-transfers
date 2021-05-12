@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Data.Models.Projects;
 using Frontend.Helpers;
 
@@ -16,17 +17,18 @@ namespace Frontend.Models
 
         public string Error { get; set; }
 
-        public SortedDictionary<string, string> InitiatedCheckboxes()
+        public static List<RadioButtonViewModel> InitiatedCheckboxes(TransferFeatures.ProjectInitiators selected)
         {
             var values =
                 EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayableValues(TransferFeatures.ProjectInitiators
                     .Empty);
-            var result = new SortedDictionary<string, string>();
 
-            foreach (var value in values)
+            var result = values.Select(value => new RadioButtonViewModel
             {
-                result.Add(value.ToString(), EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(value));
-            }
+                Value = value.ToString(), Name = "whoInitiated",
+                DisplayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(value),
+                Checked = selected == value
+            }).ToList();
 
             return result;
         }
