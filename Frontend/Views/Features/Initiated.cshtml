@@ -3,12 +3,35 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    var formClasses = Model.HasError ? "govuk-form-group--error" : "";
+}
+
+@if (Model.HasError)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
+                <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#@Model.InitiatedCheckboxes().First().Key" data-qa="error__text">
+                                @Model.Error
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Initiated" method="post" novalidate="">
-            <div class="govuk-form-group">
+            <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend">
                         <h1 class="govuk-fieldset__heading">
@@ -20,6 +43,12 @@
                             Who initiated the academy transfer?
                         </h1>
                     </legend>
+                    @if (Model.HasError)
+                    {
+                        <span id="who-initiated-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.Error
+                        </span>
+                    }
                     @await Html.PartialAsync("_EnumRadioButtons", Model.InitiatedCheckboxes())
                 </fieldset>
             </div>

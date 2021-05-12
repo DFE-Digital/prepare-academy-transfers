@@ -40,6 +40,12 @@ namespace Frontend.Controllers.Projects
         {
             var model = await GetModel(urn);
 
+            if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
+            {
+                model.Error = "Please select who initiated the project";
+                return View(model);
+            }
+
             model.Project.Features.WhoInitiatedTheTransfer = whoInitiated;
 
             await _projectsRepository.Update(model.Project);

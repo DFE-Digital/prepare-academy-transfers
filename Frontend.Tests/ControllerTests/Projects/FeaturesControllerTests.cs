@@ -78,22 +78,36 @@ namespace Frontend.Tests.ControllerTests.Projects
                             It.Is<Project>(project => project.Features.WhoInitiatedTheTransfer == whoInitiated))
                     );
                 }
+
+                [Fact]
+                public async void GivenEmptyInitiator_AddAnErrorMessageToThePageAndDoNotUpdateTheModel()
+                {
+                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Empty);
+                    var viewModel = GetViewModel<FeaturesViewModel>(response);
+                    _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
+                    Assert.True(viewModel.HasError);
+                    Assert.Equal("Please select who initiated the project", viewModel.Error);
+                }
             }
         }
 
         #region Helpers
 
-        private async Task<TViewModel> AssertProjectIsGottenFromRepositoryAndAssignedToView<TViewModel>(
+        private async Task AssertProjectIsGottenFromRepositoryAndAssignedToView<TViewModel>(
             Func<Task<IActionResult>> request)
             where TViewModel : ProjectViewModel
         {
             var result = await request();
             _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
+            var viewModel = GetViewModel<TViewModel>(result);
 
             Assert.Equal(_foundProject, viewModel.Project);
+        }
 
+        private static TViewModel GetViewModel<TViewModel>(IActionResult result) where TViewModel : ProjectViewModel
+        {
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
             return viewModel;
         }
 
