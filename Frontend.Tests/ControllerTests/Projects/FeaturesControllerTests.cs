@@ -24,7 +24,10 @@ namespace Frontend.Tests.ControllerTests.Projects
             _foundProject = new Project
             {
                 Urn = "0001",
-                Features = new TransferFeatures()
+                Features = new TransferFeatures
+                {
+                    ReasonForTransfer = new ReasonForTransfer()
+                }
             };
 
             _projectRepository.Setup(r => r.GetByUrn("0001")).ReturnsAsync(new RepositoryResult<Project>()
@@ -39,7 +42,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
             {
                 var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
-                await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+                await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
             }
         }
 
@@ -51,7 +54,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Initiated("0001"));
-                    await AssertProjectIsGottenFromRepositoryAndAssignedToView<FeaturesViewModel>(request);
+                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
                 }
             }
 
@@ -90,31 +93,92 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenEmptyInitiator_AddAnErrorMessageToThePageAndDoNotUpdateTheModel()
                 {
                     var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Empty);
-                    var viewModel = GetViewModel<FeaturesViewModel>(response);
+                    var viewModel = GetViewModel(response);
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
-                    Assert.True(viewModel.HasError);
-                    Assert.Equal("Please select who initiated the project", viewModel.Error);
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    var error = viewModel.FormErrors.Errors[0];
+                    Assert.Equal("Please select who initiated the project", error.ErrorMessage);
+                }
+            }
+        }
+
+        public class ReasonTests : FeaturesControllerTests
+        {
+            public class GetTests : ReasonTests
+            {
+                [Fact]
+                public async void GivenUrn_GetsProjectAndAssignsToTheView()
+                {
+                    var request = new Func<Task<IActionResult>>(async () => await _subject.Reason("0001"));
+                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                }
+            }
+
+            public class PostTests : ReasonTests
+            {
+                [Fact]
+                public async void GivenSubjectToInterventionAndReason_UpdatesTheProject()
+                {
+                    await _subject.ReasonPost("0001", true, "More detail");
+                    _projectRepository.Verify(r => r.Update(It.Is<Project>(project =>
+                        project.Urn == "0001" &&
+                        project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true &&
+                        project.Features.ReasonForTransfer.InterventionDetails == "More detail")), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenSubjectToInterventionAndReason_RedirectsToSummaryPage()
+                {
+                    var result = await _subject.ReasonPost("0001", true, "More detail");
+                    var redirect = Assert.IsType<RedirectToActionResult>(result);
+                    Assert.Equal("Index", redirect.ActionName);
+                }
+
+                [Fact]
+                public async void GivenNotSubjectToInterventionAndNoReason_UpdatesTheProject()
+                {
+                    await _subject.ReasonPost("0001", false, null);
+                    _projectRepository.Verify(r => r.Update(It.Is<Project>(project =>
+                        project.Urn == "0001" &&
+                        project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == false &&
+                        project.Features.ReasonForTransfer.InterventionDetails == null)), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenNothingSubmitted_DoesNotUpdateTheProject()
+                {
+                    await _subject.ReasonPost("0001", null, null);
+                    _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
+                }
+
+                [Fact]
+                public async void GivenNothingSubmitted_SetsAnErrorWithMessageOnTheViewModel()
+                {
+                    var result = await _subject.ReasonPost("0001", null, null);
+                    var viewModel = GetViewModel(result);
+
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    var error = viewModel.FormErrors.Errors[0];
+                    Assert.Equal("Select whether or not the transfer is subject to intervention", error.ErrorMessage);
                 }
             }
         }
 
         #region Helpers
 
-        private async Task AssertProjectIsGottenFromRepositoryAndAssignedToView<TViewModel>(
-            Func<Task<IActionResult>> request)
-            where TViewModel : ProjectViewModel
+        private async Task AssertProjectIsGottenFromRepositoryAndAssignedToView(Func<Task<IActionResult>> request)
         {
             var result = await request();
             _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-            var viewModel = GetViewModel<TViewModel>(result);
+            var viewModel = GetViewModel(result);
 
             Assert.Equal(_foundProject, viewModel.Project);
         }
 
-        private static TViewModel GetViewModel<TViewModel>(IActionResult result) where TViewModel : ProjectViewModel
+        private static FeaturesViewModel GetViewModel(IActionResult result)
         {
             var viewResult = Assert.IsType<ViewResult>(result);
-            var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
+            var viewModel = Assert.IsType<FeaturesViewModel>(viewResult.Model);
             return viewModel;
         }
 

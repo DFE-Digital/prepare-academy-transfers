@@ -1,38 +1,57 @@
-@model FeaturesViewModel    
+@model Frontend.Models.FeaturesViewModel
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
-    var radioButtons = FeaturesViewModel.InitiatedRadioButtons(Model.Project.Features.WhoInitiatedTheTransfer);
 }
 
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="Initiated" method="post" novalidate="">
-            <div class="govuk-form-group @formClasses">
+        <span class="govuk-caption-m">
+            Reference number: @Model.Project.Name
+        </span>
+        <h1 class="govuk-heading-l">
+            Reason for transfer
+        </h1>
+        <form asp-action="Reason" method="post" novalidate="">
+            <div class="govuk-form-group @Model.FormErrors.FormClassesForField("isSubjectToIntervention")">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend">
-                        <h1 class="govuk-fieldset__heading">
-                            <span class="govuk-caption-m">
-                                Reference number: @Model.Project.Name
-                            </span>
-                        </h1>
-                        <h1 class="govuk-heading-l">
-                            Who initiated the academy transfer?
-                        </h1>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        Has this transfer started because RDD, RSC or ESFA have intervened with the academy or trust?
                     </legend>
-                    @if (Model.FormErrors.HasErrorForField("whoInitiated"))
+                    
+                    @if (Model.FormErrors.HasErrorForField("isSubjectToIntervention"))
                     {
                         <span id="who-initiated-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("whoInitiated").ErrorMessage
+                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("isSubjectToIntervention").ErrorMessage
                         </span>
                     }
-
-                    @await Html.PartialAsync("_RadioButtons", radioButtons)
+                    
+                    @await Html.PartialAsync("_InlineRadioButtons", Model.ReasonRadioButtons())
                 </fieldset>
+            </div>
+            <details class="govuk-details govuk-!-margin-bottom-9" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        Help with intervention transfers (PLACEHOLDER TEXT)
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    PLACEHOLDER TEXT
+                </div>
+            </details>
+            <div class="govuk-form-group">
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--m" for="moreDetail">
+                        Can you provide more detail?
+                    </label>
+                </h1>
+                <div id="more-detail-hint" class="govuk-hint">
+                    Give more information about the intention and reasons for RDD, RSC or ESFA intervention if neccessary.
+                </div>
+                <textarea class="govuk-textarea" id="moreDetail" name="moreDetail" rows="6" aria-describedby="more-detail-hint"></textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button">
                 Save and continue

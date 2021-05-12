@@ -42,12 +42,42 @@ namespace Frontend.Controllers.Projects
 
             if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
             {
-                model.Error = "Please select who initiated the project";
+                model.FormErrors.AddError(TransferFeatures.ProjectInitiators.Dfe.ToString(), "whoInitiated",
+                    "Please select who initiated the project");
                 return View(model);
             }
 
             model.Project.Features.WhoInitiatedTheTransfer = whoInitiated;
 
+            await _projectsRepository.Update(model.Project);
+
+            return RedirectToAction("Index", new {urn});
+        }
+
+        [Route("reason")]
+        [AcceptVerbs(WebRequestMethods.Http.Get)]
+        public async Task<IActionResult> Reason(string urn)
+        {
+            var model = await GetModel(urn);
+            return View(model);
+        }
+
+        [Route("reason")]
+        [ActionName("Reason")]
+        [AcceptVerbs(WebRequestMethods.Http.Post)]
+        public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail)
+        {
+            var model = await GetModel(urn);
+
+            if (!isSubjectToIntervention.HasValue)
+            {
+                model.FormErrors.AddError("True", "isSubjectToIntervention",
+                    "Select whether or not the transfer is subject to intervention");
+                return View(model);
+            }
+
+            model.Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = isSubjectToIntervention;
+            model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail;
             await _projectsRepository.Update(model.Project);
 
             return RedirectToAction("Index", new {urn});
