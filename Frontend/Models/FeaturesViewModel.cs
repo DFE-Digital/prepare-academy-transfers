@@ -47,5 +47,21 @@ namespace Frontend.Models
 
             return result;
         }
+
+        public List<RadioButtonViewModel> TypeOfTransferRadioButtons()
+        {
+            var values =
+                EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayableValues(TransferFeatures.TransferTypes
+                    .Empty);
+
+            var result = values.Select(value => new RadioButtonViewModel
+            {
+                Value = value.ToString(), Name = "typeOfTransfer",
+                DisplayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(value),
+                Checked = Project.Features.TypeOfTransfer == value
+            }).ToList();
+
+            return result;
+        }
     }
 }

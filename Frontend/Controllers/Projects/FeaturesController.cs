@@ -83,6 +83,41 @@ namespace Frontend.Controllers.Projects
             return RedirectToAction("Index", new {urn});
         }
 
+        [Route("type")]
+        [AcceptVerbs(WebRequestMethods.Http.Get)]
+        public async Task<IActionResult> Type(string urn)
+        {
+            var model = await GetModel(urn);
+            return View(model);
+        }
+
+        [Route("type")]
+        [ActionName("Type")]
+        [AcceptVerbs(WebRequestMethods.Http.Post)]
+        public async Task<IActionResult> TypePost(string urn, TransferFeatures.TransferTypes typeOfTransfer,
+            string otherType)
+        {
+            var model = await GetModel(urn);
+            model.Project.Features.TypeOfTransfer = typeOfTransfer;
+            model.Project.Features.OtherTypeOfTransfer = otherType;
+
+            if (typeOfTransfer == TransferFeatures.TransferTypes.Empty)
+            {
+                model.FormErrors.AddError(TransferFeatures.TransferTypes.SatClosure.ToString(), "typeOfTransfer",
+                    "Please select the type of transfer");
+                return View(model);
+            }
+
+            if (typeOfTransfer == TransferFeatures.TransferTypes.Other && string.IsNullOrEmpty(otherType))
+            {
+                model.FormErrors.AddError("otherType", "otherType", "Please enter the type of transfer");
+                return View(model);
+            }
+
+            await _projectsRepository.Update(model.Project);
+            return RedirectToAction("Index", new {urn});
+        }
+
         private async Task<FeaturesViewModel> GetModel(string urn)
         {
             var project = await _projectsRepository.GetByUrn(urn);

@@ -88,13 +88,14 @@
                     Type of transfer
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (string.IsNullOrEmpty(Model.Project.Features.TypeOfTransfer))
+                    @if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                     {
                         <span class="empty">Empty</span>
                     }
                     else
                     {
-                        @Model.Project.Features.TypeOfTransfer
+                        var displayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(Model.Project.Features.TypeOfTransfer);
+                        @displayName
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">

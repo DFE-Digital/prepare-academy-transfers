@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
+using DocumentFormat.OpenXml.Presentation;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -160,6 +161,74 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(viewModel.FormErrors.HasErrors);
                     var error = viewModel.FormErrors.Errors[0];
                     Assert.Equal("Select whether or not the transfer is subject to intervention", error.ErrorMessage);
+                }
+            }
+        }
+
+        public class TypeTests : FeaturesControllerTests
+        {
+            public class GetTests : TypeTests
+            {
+                [Fact]
+                public async void GivenUrn_GetsProjectAndAssignsToTheView()
+                {
+                    var request = new Func<Task<IActionResult>>(async () => await _subject.Type("0001"));
+                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                }
+            }
+
+            public class PostTests : TypeTests
+            {
+                [Theory]
+                [InlineData(TransferFeatures.TransferTypes.MatClosure)]
+                [InlineData(TransferFeatures.TransferTypes.TrustsMerging)]
+                public async void GivenNonOtherType_UpdatesTheProject(TransferFeatures.TransferTypes transferType)
+                {
+                    await _subject.TypePost("0001", transferType, "");
+
+                    _projectRepository.Verify(
+                        r => r.Update(It.Is<Project>(project => project.Features.TypeOfTransfer == transferType)),
+                        Times.Once);
+                }
+
+                [Fact]
+                public async void GivenOtherTypeAndText_UpdatesTheProject()
+                {
+                    await _subject.TypePost("0001", TransferFeatures.TransferTypes.Other, "Other");
+
+                    _projectRepository.Verify(
+                        r => r.Update(It.Is<Project>(project =>
+                            project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other &&
+                            project.Features.OtherTypeOfTransfer == "Other")),
+                        Times.Once);
+                }
+
+                [Fact]
+                public async void GivenNoTransferType_SetErrorOnTheView()
+                {
+                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Empty, null);
+                    var viewModel = GetViewModel(response);
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    Assert.Equal("Please select the type of transfer",
+                        viewModel.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage);
+                }
+                
+                [Fact]
+                public async void GivenOtherTransferTypeButNoText_SetErrorOnTheView()
+                {
+                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Other, null);
+                    var viewModel = GetViewModel(response);
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    Assert.Equal("Please enter the type of transfer",
+                        viewModel.FormErrors.ErrorForField("otherType").ErrorMessage);
+                }
+
+                [Fact]
+                public async void GivenTypeOfTransfer_RedirectsToIndex()
+                {
+                    var result = await _subject.TypePost("0001", TransferFeatures.TransferTypes.SatClosure, null);
+                    var redirect = Assert.IsType<RedirectToActionResult>(result);
+                    Assert.Equal("Index", redirect.ActionName);
                 }
             }
         }

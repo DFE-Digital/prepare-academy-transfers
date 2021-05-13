@@ -17,7 +17,6 @@
     <link rel="apple-touch-icon" sizes="152x152" href="~/assets/images/govuk-apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" href="~/assets/images/govuk-apple-touch-icon.png">
 
-    <script src="~/dist/index.bundle.js"></script>
     <link rel="stylesheet" href="~/dist/site.css"/>
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
@@ -49,7 +48,7 @@
 </header>
 
 <div class="govuk-width-container ">
-    @await RenderSectionAsync("BeforeMain", required: false)
+    @await RenderSectionAsync("BeforeMain", false)
     <main class="govuk-main-wrapper " id="main-content" role="main">
         @RenderBody()
     </main>
@@ -74,6 +73,7 @@
         </div>
     </div>
 </footer>
-</body>
 
+<script src="~/dist/index.bundle.js"></script>
+</body>
 </html>

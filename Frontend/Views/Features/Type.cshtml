@@ -1,0 +1,123 @@
+@using Data.Models.Projects
+@model FeaturesViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    var typeOfTransferFormClasses = Model.FormErrors.FormClassesForField("typeOfTransfer");
+    var otherTypeFormClasses = Model.FormErrors.FormClassesForField("otherType");
+    var otherSelected = Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other;
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+}
+
+@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="Type" method="post" novalidate="">
+            <div class="govuk-form-group @typeOfTransferFormClasses @otherTypeFormClasses">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-m">
+                                Reference number: @Model.Project.Name
+                            </span>
+                        </h1>
+                        <h1 class="govuk-heading-l">
+                            What type of transfer is it?
+                        </h1>
+                    </legend>
+
+                    @if (Model.FormErrors.HasErrorForField("typeOfTransfer"))
+                    {
+                        <span id="who-initiated-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage
+                        </span>
+                    }
+
+                    <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                        @foreach (var radioButton in Model.TypeOfTransferRadioButtons())
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="@radioButton.Value" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
+                                <label class="govuk-label govuk-radios__label" for="@radioButton.Value">
+                                    @radioButton.DisplayName
+                                </label>
+                            </div>
+                        }
+                        <div class="govuk-radios__divider">or</div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="other" name="typeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
+                            <label class="govuk-label govuk-radios__label" for="other">
+                                Any other type of transfer
+                            </label>
+                        </div>
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-other">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label" for="otherType">
+                                    Enter the type of transfer
+                                </label>
+
+                                @if (Model.FormErrors.HasErrorForField("otherType"))
+                                {
+                                    <span id="who-initiated-error" class="govuk-error-message">
+                                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("otherType").ErrorMessage
+                                    </span>
+                                }
+
+                                <input class="govuk-input govuk-!-width-two-thirds" id="otherType" name="otherType" type="text" value="@Model.Project.Features.OtherTypeOfTransfer">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Save and continue
+            </button>
+        </form>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Useful information
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            View full application
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            School information on TRAMS
+                        </a>
+                    </li>
+                    <hr class="govuk-grid-one-third govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </ul>
+            </nav>
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Guidance
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Guidance for setting an HTB date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Full Guidance
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>
