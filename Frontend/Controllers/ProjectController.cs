@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Data;
 using Microsoft.AspNetCore.Authorization;
@@ -17,9 +16,9 @@ namespace Frontend.Controllers
             _projectRepository = projectRepository;
         }
         
-        public async Task<IActionResult> Index([FromRoute] Guid id)
+        public async Task<IActionResult> Index([FromRoute] string id)
         {
-            var project = await _projectRepository.GetByUrn(id.ToString());
+            var project = await _projectRepository.GetByUrn(id);
             
             ViewData["OutgoingTrustName"] = project.Result.OutgoingTrustName;
             ViewData["ProjectName"] = project.Result.Name;

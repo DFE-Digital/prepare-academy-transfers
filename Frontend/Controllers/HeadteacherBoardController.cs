@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
@@ -37,7 +36,7 @@ namespace Frontend.Controllers
         }
 
         [Route("download")]
-        public IActionResult Download([FromRoute] Guid id)
+        public IActionResult Download([FromRoute] string id)
         {
             ViewData["ProjectId"] = id;
             return View();

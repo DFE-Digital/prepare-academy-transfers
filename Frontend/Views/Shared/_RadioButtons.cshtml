@@ -1,0 +1,13 @@
+@model List<RadioButtonViewModel>
+
+<div class="govuk-radios">
+    @foreach (var radioButton in Model)
+    {
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="@radioButton.Value" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
+            <label class="govuk-label govuk-radios__label" for="@radioButton.Value">
+                @radioButton.DisplayName
+            </label>
+        </div>
+    }
+</div>

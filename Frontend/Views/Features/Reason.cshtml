@@ -1,0 +1,106 @@
+@model Frontend.Models.FeaturesViewModel
+
+@{
+    ViewBag.Title = "Reason for transfer";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+}
+
+@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-m">
+            Reference number: @Model.Project.Name
+        </span>
+        <h1 class="govuk-heading-l">
+            Reason for transfer
+        </h1>
+        <form asp-action="Reason" method="post" novalidate="">
+            <div class="govuk-form-group @Model.FormErrors.FormClassesForField("isSubjectToIntervention")">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        Has this transfer started because RDD, RSC or ESFA have intervened with the academy or trust?
+                    </legend>
+
+                    @if (Model.FormErrors.HasErrorForField("isSubjectToIntervention"))
+                    {
+                        <span id="who-initiated-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("isSubjectToIntervention").ErrorMessage
+                        </span>
+                    }
+
+                    @await Html.PartialAsync("_InlineRadioButtons", Model.ReasonRadioButtons())
+                </fieldset>
+            </div>
+            <details class="govuk-details govuk-!-margin-bottom-9" data-module="govuk-details">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        Help with intervention transfers (PLACEHOLDER TEXT)
+                    </span>
+                </summary>
+                <div class="govuk-details__text">
+                    PLACEHOLDER TEXT
+                </div>
+            </details>
+            <div class="govuk-form-group">
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--m" for="moreDetail">
+                        Can you provide more detail?
+                    </label>
+                </h1>
+                <div id="more-detail-hint" class="govuk-hint">
+                    Give more information about the intention and reasons for RDD, RSC or ESFA intervention if neccessary.
+                </div>
+                <textarea class="govuk-textarea" id="moreDetail" name="moreDetail" rows="6" aria-describedby="more-detail-hint">@Model.Project.Features.ReasonForTransfer.InterventionDetails</textarea>
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Save and continue
+            </button>
+        </form>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Useful information
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            View full application
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            School information on TRAMS
+                        </a>
+                    </li>
+                    <hr class="govuk-grid-one-third govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </ul>
+            </nav>
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Guidance
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Guidance for setting an HTB date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Full Guidance
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>
