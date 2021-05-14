@@ -41,7 +41,7 @@
                 <dd class="govuk-summary-list__value">
                     @if (Model.Project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
                     {
-                        <span class="empty">Empty</span>
+                        <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
@@ -62,7 +62,7 @@
                 <dd class="govuk-summary-list__value">
                     @if (!Model.HasTransferReasonBeenSet)
                     {
-                        <span class="empty">Empty</span>
+                        <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
@@ -90,7 +90,11 @@
                 <dd class="govuk-summary-list__value">
                     @if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                     {
-                        <span class="empty">Empty</span>
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
+                    {
+                        <p class="govuk-body">Other: @Model.Project.Features.OtherTypeOfTransfer</p>
                     }
                     else
                     {
@@ -99,7 +103,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="#">
+                    <a class="govuk-link" asp-action="Type" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">type of transfer</span>
                     </a>
                 </dd>
