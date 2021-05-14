@@ -11,5 +11,13 @@ namespace Frontend.Tests.Helpers
             var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
             return viewModel;
         }
+
+        public static RedirectToActionResult AssertResultRedirectsToAction(IActionResult result, string actionName)
+        {
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(actionName, redirectResult.ActionName);
+
+            return redirectResult;
+        }
     }
 }

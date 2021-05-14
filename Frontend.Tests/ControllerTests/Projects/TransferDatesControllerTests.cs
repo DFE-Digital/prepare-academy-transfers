@@ -40,5 +40,42 @@ namespace Frontend.Tests.ControllerTests.Projects
                 Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
             }
         }
+
+        public class FirstDiscussedTests : TransferDatesControllerTests
+        {
+            public class GetTests : FirstDiscussedTests
+            {
+                [Fact]
+                public async void GivenUrn_AssignsModelToTheView()
+                {
+                    var result = await _subject.FirstDiscussed("0001");
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(result);
+
+                    Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+            }
+
+            public class PostTests : FirstDiscussedTests
+            {
+                [Theory]
+                [InlineData("01", "01", "2020", "01/01/2020")]
+                [InlineData("20", "02", "2021", "20/02/2021")]
+                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate(string day, string month,
+                    string year, string expectedDate)
+                {
+                    await _subject.FirstDiscussedPost("0001", day, month, year);
+
+                    _projectsRepository.Verify(r =>
+                        r.Update(It.Is<Project>(project => project.TransferDates.FirstDiscussed == expectedDate)));
+                }
+
+                [Fact]
+                public async void GivenUrnAndFullDate_RedirectsToTheSummaryPage()
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020");
+                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                }
+            }
+        }
     }
 }

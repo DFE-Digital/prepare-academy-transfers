@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Frontend.Helpers
@@ -14,6 +13,11 @@ namespace Frontend.Helpers
 
         public static List<string> DateStringToDayMonthYear(string dateString)
         {
+            if (string.IsNullOrEmpty(dateString))
+            {
+                return new List<string>() {"", "", ""};
+            }
+
             return dateString.Split("/").ToList();
         }
 
