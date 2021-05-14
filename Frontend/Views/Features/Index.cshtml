@@ -110,13 +110,6 @@
             </div>
         </dl>
 
-        <form action="#" method="post" novalidate="">
-            <input type="hidden" name="answers-checked" value="true">
-            <div class="govuk-button-group">
-                <button class="govuk-button" data-module="govuk-button">
-                    Save and continue
-                </button>
-            </div>
-        </form>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Save and continue</a>
     </div>
 </div>

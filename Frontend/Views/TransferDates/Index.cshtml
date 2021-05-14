@@ -1,0 +1,113 @@
+@using Frontend.Helpers
+@model Frontend.Models.TransferDatesViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    var transferDates = Model.Project.TransferDates;
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-m">
+            Reference number: @Model.Project.Name
+        </span>
+        <h1 class="govuk-heading-l">
+            Set transfer dates
+        </h1>
+        <h2 class="govuk-heading-m">
+            Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.OutgoingTrustName</span>
+        </h2>
+        <p class="govuk-body">
+            This information is pre-populated from TRAMS and the school's application form.
+        </p>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Date when the transfer was first discussed
+                </dt>
+                @if (string.IsNullOrEmpty(transferDates.FirstDiscussed))
+                {
+                    <dd class="govuk-summary-list__value">
+                        <span class="dfe-empty-tag">Empty</span>
+                    </dd>
+                }
+                else
+                {
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            var display = DatesHelper.DateStringToGovUkDate(transferDates.FirstDiscussed);
+                            @display
+                        }
+                    </dd>
+                }
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="#">
+                        Change<span class="govuk-visually-hidden">date first discussed</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Target date for transfer
+                </dt>
+                @if (string.IsNullOrEmpty(transferDates.Target))
+                {
+                    <dd class="govuk-summary-list__value">
+                        <span class="dfe-empty-tag">Empty</span>
+                    </dd>
+                }
+                else
+                {
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Target);
+                            @display
+                        }
+                    </dd>
+                }
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="#">
+                        Change<span class="govuk-visually-hidden">target date for transfer</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Set HTB date
+                </dt>
+                @if (string.IsNullOrEmpty(transferDates.Htb))
+                {
+                    <dd class="govuk-summary-list__value">
+                        <span class="dfe-empty-tag">Empty</span>
+                    </dd>
+                }
+                else
+                {
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
+                            @display
+                        }
+                    </dd>
+                }
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="#">
+                        Change<span class="govuk-visually-hidden">HTB date</span>
+                    </a>
+                </dd>
+            </div>
+        </dl>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Save and continue</a>
+    </div>
+</div>
