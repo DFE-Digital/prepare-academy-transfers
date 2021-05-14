@@ -81,10 +81,6 @@ namespace Data.Mock
                         OutgoingAcademyUkprn = "3333333",
                         IncomingTrustUkprn = "2222222"
                     }
-                },
-                Features = new TransferFeatures
-                {
-                    ReasonForTransfer = new ReasonForTransfer()
                 }
             };
         }
@@ -114,6 +110,12 @@ namespace Data.Mock
                         IsSubjectToRddOrEsfaIntervention = true,
                         InterventionDetails = "Intervention details",
                     }
+                },
+                TransferDates = new TransferDates
+                {
+                    FirstDiscussed = "01/03/2021",
+                    Target = "01/09/2021",
+                    Htb = "01/06/2021"
                 }
             };
         }
