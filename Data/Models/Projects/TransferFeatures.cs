@@ -4,6 +4,11 @@ namespace Data.Models.Projects
 {
     public class TransferFeatures
     {
+        public TransferFeatures()
+        {
+            ReasonForTransfer = new ReasonForTransfer();
+        }
+
         public enum ProjectInitiators
         {
             Empty = 0,
