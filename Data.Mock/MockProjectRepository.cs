@@ -12,9 +12,9 @@ namespace Data.Mock
         private readonly ILogger<MockProjectRepository> _logger;
         private readonly List<Project> _projects;
         private const string PopulatedProjectUrn = "0001";
-        private const string PopulatedProjectNumber = "AT-0001";
+        private const string PopulatedProjectNumber = "AT-0001-POPULATED";
         private const string EmptyProjectUrn = "0002";
-        private const string EmptyProjectNumber = "AT-0002";
+        private const string EmptyProjectNumber = "AT-0002-EMPTY";
         private const string OutgoingTrustName = "Example trust";
 
         public MockProjectRepository(ILogger<MockProjectRepository> logger)
