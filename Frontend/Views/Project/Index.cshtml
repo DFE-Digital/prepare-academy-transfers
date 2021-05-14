@@ -35,8 +35,8 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="dates">Set transfer dates</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="dates">Unavailable</strong>
+                            <a aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Set transfer dates</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="dates">Not started</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
