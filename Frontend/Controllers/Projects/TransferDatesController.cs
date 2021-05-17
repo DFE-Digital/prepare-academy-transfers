@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Helpers;
@@ -36,7 +38,21 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> FirstDiscussedPost(string urn, string day, string month, string year)
         {
             var model = await GetModel(urn);
-            model.Project.TransferDates.FirstDiscussed = DatesHelper.DayMonthYearToDateString(day, month, year);
+            var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
+            model.Project.TransferDates.FirstDiscussed = dateString;
+
+            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
+            {
+                model.FormErrors.AddError("day", "day", "Please enter the date the transfer was first discussed");
+                return View(model);
+            }
+
+            if (!DatesHelper.IsValidDate(dateString))
+            {
+                model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                return View(model);
+            }
+
             await _projectsRepository.Update(model.Project);
             return RedirectToAction("Index", new {urn});
         }

@@ -75,6 +75,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020");
                     ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
                 }
+
+                [Theory]
+                [InlineData(null, "1", "2020")]
+                [InlineData("1", null, "2020")]
+                [InlineData("1", "1", null)]
+                public async void GivenPartsOfDateMissing_SetErrorOnTheModel(string day, string month, string year)
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", day, month, year);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("Please enter the date the transfer was first discussed",
+                        responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+
+                [Theory]
+                [InlineData("0", "1", "2020")]
+                [InlineData("32", "1", "2020")]
+                [InlineData("1", "0", "2020")]
+                [InlineData("1", "13", "2020")]
+                [InlineData("1", "13", "0")]
+                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year)
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", day, month, year);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
             }
         }
     }

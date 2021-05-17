@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Frontend.Helpers
 {
-    public class DatesHelper
+    public static class DatesHelper
     {
         public static string DayMonthYearToDateString(string day, string month, string year)
         {
@@ -26,6 +27,11 @@ namespace Frontend.Helpers
             var splitDate = dateString.Split("/");
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
+        }
+
+        public static bool IsValidDate(string dateString)
+        {
+            return DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
         }
     }
 }
