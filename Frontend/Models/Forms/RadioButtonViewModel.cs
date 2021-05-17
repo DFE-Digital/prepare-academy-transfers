@@ -1,4 +1,4 @@
-namespace Frontend.Models
+namespace Frontend.Models.Forms
 {
     public class RadioButtonViewModel
     {

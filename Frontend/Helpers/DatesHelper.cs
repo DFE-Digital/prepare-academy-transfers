@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Frontend.Helpers
 {
-    public class DatesHelper
+    public static class DatesHelper
     {
         public static string DayMonthYearToDateString(string day, string month, string year)
         {
@@ -14,6 +14,11 @@ namespace Frontend.Helpers
 
         public static List<string> DateStringToDayMonthYear(string dateString)
         {
+            if (string.IsNullOrEmpty(dateString))
+            {
+                return new List<string>() {"", "", ""};
+            }
+
             return dateString.Split("/").ToList();
         }
 
@@ -22,6 +27,11 @@ namespace Frontend.Helpers
             var splitDate = dateString.Split("/");
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
+        }
+
+        public static bool IsValidDate(string dateString)
+        {
+            return DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
         }
     }
 }
