@@ -73,7 +73,7 @@ namespace Frontend.Tests.ModelTests
         }
         
         [Fact]
-        public void GivenStartingHtbDateIsNotFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate()
+        public void GivenStartingHtbDateIsNotFirstWorkingDayInMonth_GenerateHtbDatesExcludingThatDate()
         {
             var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
             var model = new TransferDatesViewModel {Project = project};

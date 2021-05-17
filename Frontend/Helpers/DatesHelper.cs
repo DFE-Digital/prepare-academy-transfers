@@ -91,7 +91,7 @@ namespace Frontend.Helpers
 
         private static bool DateIsFirstWorkingDayOfTheMonth(DateTime date)
         {
-            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday || date.Day == 1;
+            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday && date.Day <= 3 || date.Day == 1;
         }
     }
 }
