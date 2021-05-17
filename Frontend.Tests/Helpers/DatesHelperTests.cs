@@ -31,7 +31,8 @@ namespace Frontend.Tests.Helpers
         }
 
         [Theory]
-        [InlineData("02/02/2020", "02/03/2020")]
+        [InlineData("01/02/2020", "03/02/2020")]
+        [InlineData("04/02/2020", "02/03/2020")]
         [InlineData("17/05/2021", "01/06/2021")]
         public void GivenStartingHtbDateIsNotFirstWorkingDayInMonth_GenerateHtbDatesExcludingThatDate(string startDate,
             string expectedFirstDate)

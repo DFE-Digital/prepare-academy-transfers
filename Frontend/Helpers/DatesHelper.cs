@@ -55,13 +55,7 @@ namespace Frontend.Helpers
 
             while (dates.Count < 12)
             {
-                date = date.AddMonths(1);
-                date = new DateTime(date.Year, date.Month, 1);
-
-                if (DateIsAWeekend(date))
-                {
-                    date = GetNextMondayForDate(date);
-                }
+                date = GetNextFirstWorkingDate(date);
 
                 dates.Add(date);
             }
@@ -91,7 +85,25 @@ namespace Frontend.Helpers
 
         private static bool DateIsFirstWorkingDayOfTheMonth(DateTime date)
         {
-            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday && date.Day <= 3 || date.Day == 1;
+            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday && date.Day <= 3;
+        }
+
+        private static DateTime GetNextFirstWorkingDate(DateTime date)
+        {
+            if (DateIsAWeekend(date))
+            {
+                return GetNextMondayForDate(date);
+            }
+
+            date = date.AddMonths(1);
+            date = new DateTime(date.Year, date.Month, 1);
+
+            if (DateIsAWeekend(date))
+            {
+                date = GetNextMondayForDate(date);
+            }
+
+            return date;
         }
     }
 }
