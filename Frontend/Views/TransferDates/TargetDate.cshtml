@@ -1,7 +1,7 @@
 @model TransferDatesViewModel
 
 @{
-    ViewBag.Title = "Add the date the transfer was first discussed with the outgoing trust";
+    ViewBag.Title = "Add the target date for the transfer";
     Layout = "_Layout";
     var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
 }
@@ -15,17 +15,17 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn" method="post" novalidate="">
+        <form asp-action="TargetDate" asp-route-urn="@Model.Project.Urn" method="post" novalidate="">
             <div class="govuk-form-group @formClasses">
-                <fieldset class="govuk-fieldset" role="group" aria-describedby="transfer-first-discussed-date-hint">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="target-date-for-transfer-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-m">
-                                Reference number: @Model.Project.Name
+                                Reference number: AS_6759840
                             </span>
                         </h1>
                         <h1 class="govuk-heading-l">
-                            Add the date the transfer was first discussed with the outgoing trust
+                            Add the target date for the transfer
                         </h1>
                     </legend>
                     <div id="target-date-for-transfer-hint" class="govuk-hint">
@@ -45,7 +45,7 @@
                                 <label class="govuk-label govuk-date-input__label" for="day">
                                     Day
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="day" name="day" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TransferFirstDiscussed.Day">
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="day" name="day" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TargetDate.Day">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
@@ -53,7 +53,7 @@
                                 <label class="govuk-label govuk-date-input__label" for="month">
                                     Month
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="month" name="month" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TransferFirstDiscussed.Month">
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="month" name="month" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TargetDate.Month">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
@@ -61,7 +61,7 @@
                                 <label class="govuk-label govuk-date-input__label" for="year">
                                     Year
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="year" name="year" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TransferFirstDiscussed.Year">
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="year" name="year" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TargetDate.Year">
                             </div>
                         </div>
                     </div>

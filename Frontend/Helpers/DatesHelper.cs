@@ -9,6 +9,10 @@ namespace Frontend.Helpers
     {
         public static string DayMonthYearToDateString(string day, string month, string year)
         {
+            day = string.IsNullOrEmpty(day) ? "" : day.PadLeft(2, '0');
+            month = string.IsNullOrEmpty(month) ? "" : month.PadLeft(2, '0');
+            year = string.IsNullOrEmpty(year) ? "" : year.PadLeft(4, '0');
+            
             return $"{day}/{month}/{year}";
         }
 

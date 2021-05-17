@@ -57,6 +57,37 @@ namespace Frontend.Controllers.Projects
             return RedirectToAction("Index", new {urn});
         }
 
+        [HttpGet("target-date")]
+        public async Task<IActionResult> TargetDate(string urn)
+        {
+            var model = await GetModel(urn);
+            return View(model);
+        }
+
+        [HttpPost("target-date")]
+        [ActionName("TargetDate")]
+        public async Task<IActionResult> TargetDatePost(string urn, string day, string month, string year)
+        {
+            var model = await GetModel(urn);
+            var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
+            model.Project.TransferDates.Target = dateString;
+
+            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
+            {
+                model.FormErrors.AddError("day", "day", "Please enter the target date for the transfer");
+                return View(model);
+            }
+
+            if (!DatesHelper.IsValidDate(dateString))
+            {
+                model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                return View(model);
+            }
+
+            await _projectsRepository.Update(model.Project);
+            return RedirectToAction("Index", new {urn});
+        }
+
         private async Task<TransferDatesViewModel> GetModel(string urn)
         {
             var project = await _projectsRepository.GetByUrn(urn);
