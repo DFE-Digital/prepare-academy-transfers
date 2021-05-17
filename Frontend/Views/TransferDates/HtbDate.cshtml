@@ -1,0 +1,90 @@
+@using Frontend.Helpers
+@model TransferDatesViewModel
+
+@{
+    ViewBag.Title = "Set HTB date";
+    Layout = "_Layout";
+    var htbDate = Model.Project.TransferDates.Htb;
+    var htbStartDate = string.IsNullOrEmpty(htbDate) ? DatesHelper.DateTimeToDateString(DateTime.Today) : htbDate;
+    var formClasses = Model.FormErrors.FormClassesForField("htbDate");
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+}
+
+@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="HtbDate" method="post" novalidate="">
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-m">
+                                Reference number: @Model.Project.Name
+                            </span>
+                        </h1>
+                        <h1 class="govuk-heading-l">
+                            Set HTB date
+                        </h1>
+                    </legend>
+
+                    @if (Model.FormErrors.HasErrorForField("htbDate"))
+                    {
+                        <span id="htb-date-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("htbDate").ErrorMessage
+                        </span>
+                    }
+
+                    @await Html.PartialAsync("_RadioButtons", Model.PotentialHtbDates(htbStartDate))
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Save and continue
+            </button>
+        </form>
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Useful information
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            View full application
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            School information on TRAMS
+                        </a>
+                    </li>
+                    <hr class="govuk-grid-one-third govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </ul>
+            </nav>
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Guidance
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Guidance for setting an HTB date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Full Guidance
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>

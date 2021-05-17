@@ -16,6 +16,7 @@ using Data.Models;
 using Data.TRAMS;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
+using Frontend.Helpers;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -63,6 +64,7 @@ namespace Frontend
 
             services.AddSingleton(CreateHttpClient());
             services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             if (string.IsNullOrEmpty(Configuration["USE_TRAMS_REPOSITORIES"]))
             {
