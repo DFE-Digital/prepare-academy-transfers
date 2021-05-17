@@ -77,7 +77,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="TargetDate">
+                    <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">target date for transfer</span>
                     </a>
                 </dd>
@@ -102,7 +102,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="HtbDate">
+                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">HTB date</span>
                     </a>
                 </dd>
