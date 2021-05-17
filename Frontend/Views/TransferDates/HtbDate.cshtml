@@ -9,6 +9,11 @@
     var formClasses = Model.FormErrors.FormClassesForField("htbDate");
 }
 
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+}
+
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
 
 <div class="govuk-grid-row">
