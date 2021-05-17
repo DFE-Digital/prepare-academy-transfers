@@ -48,16 +48,37 @@ namespace Frontend.Tests.ModelTests
 
             var expectedDateDisplay = new List<string>
             {
-                "3 February 2020", "2 March 2020", "1 April 2020",
-                "1 May 2020", "1 June 2020", "1 July 2020",
-                "3 August 2020", "1 September 2020", "1 October 2020",
-                "2 November 2020", "1 December 2020", "1 January 2021"
+                "Monday 3 February 2020", "Monday 2 March 2020", "Wednesday 1 April 2020",
+                "Friday 1 May 2020", "Monday 1 June 2020", "Wednesday 1 July 2020",
+                "Monday 3 August 2020", "Tuesday 1 September 2020", "Thursday 1 October 2020",
+                "Monday 2 November 2020", "Tuesday 1 December 2020", "Friday 1 January 2021"
             };
 
-            var htbDates = TransferDatesViewModel.PotentialHtbDates("01/01/2020");
+            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var model = new TransferDatesViewModel {Project = project};
+            var htbDates = model.PotentialHtbDates("02/01/2020");
 
             Assert.Equal(expectedDateValues, htbDates.Select(htbDate => htbDate.Value).ToList());
             Assert.Equal(expectedDateDisplay, htbDates.Select(htbDate => htbDate.DisplayName).ToList());
+            Assert.Equal("03/08/2020", htbDates.Find(date => date.Checked)?.Value);
+        }
+
+        [Fact]
+        public void GivenStartingHtbDateIsFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate()
+        {
+            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var model = new TransferDatesViewModel {Project = project};
+            var htbDates = model.PotentialHtbDates("03/02/2020");
+            Assert.Equal("03/02/2020", htbDates[0].Value);
+        }
+        
+        [Fact]
+        public void GivenStartingHtbDateIsNotFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate()
+        {
+            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var model = new TransferDatesViewModel {Project = project};
+            var htbDates = model.PotentialHtbDates("07/02/2020");
+            Assert.Equal("02/03/2020", htbDates[0].Value);
         }
     }
 }

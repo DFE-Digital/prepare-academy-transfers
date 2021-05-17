@@ -22,34 +22,18 @@ namespace Frontend.Models
         private static DateInputViewModel DateInputForField(string transferDatesFirstDiscussed)
         {
             var splitDate = DatesHelper.DateStringToDayMonthYear(transferDatesFirstDiscussed);
-            return new DateInputViewModel() {Day = splitDate[0], Month = splitDate[1], Year = splitDate[2]};
+            return new DateInputViewModel {Day = splitDate[0], Month = splitDate[1], Year = splitDate[2]};
         }
 
-        public static List<RadioButtonViewModel> PotentialHtbDates(string startDateString)
+        public List<RadioButtonViewModel> PotentialHtbDates(string startDateString)
         {
-            DateTime.TryParseExact(startDateString, "dd/MM/yyyy", null, DateTimeStyles.None, out var date);
-            var htbDates = new List<DateTime>();
-            for (var i = 1; i <= 12; i++)
-            {
-                date = date.AddMonths(1);
-                date = new DateTime(date.Year, date.Month, 1);
-                if (date.DayOfWeek == DayOfWeek.Saturday)
-                {
-                    date = date.AddDays(2);
-                }
-
-                if (date.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    date = date.AddDays(1);
-                }
-
-                htbDates.Add(date);
-            }
+            var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDateString);
 
             return htbDates.Select(htbDate => new RadioButtonViewModel
             {
-                Name = "htbDate", Value = htbDate.ToString("dd/MM/yyyy"),
-                DisplayName = htbDate.ToString("d MMMM yyyy")
+                Name = "htbDate", Value = DatesHelper.DateTimeToDateString(htbDate),
+                DisplayName = htbDate.ToString("dddd d MMMM yyyy"),
+                Checked = Project.TransferDates.Htb == DatesHelper.DateTimeToDateString(htbDate)
             }).ToList();
         }
     }

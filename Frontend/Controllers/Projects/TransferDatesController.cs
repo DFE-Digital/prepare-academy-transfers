@@ -12,10 +12,12 @@ namespace Frontend.Controllers.Projects
     public class TransferDatesController : Controller
     {
         private readonly IProjects _projectsRepository;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public TransferDatesController(IProjects projectsRepository)
+        public TransferDatesController(IProjects projectsRepository, IDateTimeProvider dateTimeProvider)
         {
             _projectsRepository = projectsRepository;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<IActionResult> Index(string urn)
@@ -79,6 +81,33 @@ namespace Frontend.Controllers.Projects
             if (!DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                return View(model);
+            }
+
+            await _projectsRepository.Update(model.Project);
+            return RedirectToAction("Index", new {urn});
+        }
+
+        [HttpGet("htb-date")]
+        public async Task<IActionResult> HtbDate(string urn)
+        {
+            var model = await GetModel(urn);
+            return View(model);
+        }
+
+        [HttpPost("htb-date")]
+        [ActionName("HtbDate")]
+        public async Task<IActionResult> HtbDatePost(string urn, string htbDate)
+        {
+            var model = await GetModel(urn);
+            model.Project.TransferDates.Htb = htbDate;
+
+            if (string.IsNullOrEmpty(htbDate))
+            {
+                var startDateString = DatesHelper.DateTimeToDateString(_dateTimeProvider.Today());
+                var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDateString);
+                var errorId = DatesHelper.DateTimeToDateString(htbDates[0]);
+                model.FormErrors.AddError(errorId, "htbDate", "Please select an HTB date");
                 return View(model);
             }
 

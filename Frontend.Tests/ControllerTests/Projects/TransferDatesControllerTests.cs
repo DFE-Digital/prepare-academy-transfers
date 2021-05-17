@@ -1,6 +1,8 @@
+using System;
 using Data;
 using Data.Models;
 using Frontend.Controllers.Projects;
+using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
 using Moq;
@@ -12,6 +14,7 @@ namespace Frontend.Tests.ControllerTests.Projects
     {
         private readonly TransferDatesController _subject;
         private readonly Mock<IProjects> _projectsRepository;
+        private readonly Mock<IDateTimeProvider> _dateTimeProvider;
         private readonly Project _foundProject;
 
         public TransferDatesControllerTests()
@@ -22,11 +25,13 @@ namespace Frontend.Tests.ControllerTests.Projects
             };
 
             _projectsRepository = new Mock<IProjects>();
+            _dateTimeProvider = new Mock<IDateTimeProvider>();
 
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Project>() {Result = _foundProject});
+                .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
+            _dateTimeProvider.Setup(r => r.Today()).Returns(new DateTime(2020, 1, 1));
 
-            _subject = new TransferDatesController(_projectsRepository.Object);
+            _subject = new TransferDatesController(_projectsRepository.Object, _dateTimeProvider.Object);
         }
 
         public class IndexTests : TransferDatesControllerTests
@@ -53,7 +58,6 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
                 }
-                
             }
 
             public class PostTests : FirstDiscussedTests
@@ -172,6 +176,53 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+            }
+        }
+
+        public class HtbDateTests : TransferDatesControllerTests
+        {
+            public class GetTests : HtbDateTests
+            {
+                [Fact]
+                public async void GivenUrn_AssignsModelToTheView()
+                {
+                    var result = await _subject.HtbDate("0001");
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(result);
+
+                    Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+            }
+
+            public class PostTests : HtbDateTests
+            {
+                [Theory]
+                [InlineData("01/01/2020")]
+                [InlineData("03/02/2020")]
+                public async void GivenUrnAndDate_UpdatesTheProjectWithTheCorrectDate(string htbDate)
+                {
+                    await _subject.HtbDatePost("0001", htbDate);
+
+                    _projectsRepository.Verify(r =>
+                        r.Update(It.Is<Project>(project => project.TransferDates.Htb == htbDate)));
+                }
+
+                [Fact]
+                public async void GivenUrnAndDate_RedirectsToTheSummaryPage()
+                {
+                    var response = await _subject.HtbDatePost("0001", "03/02/2020");
+                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                }
+
+                [Fact]
+                public async void GivenNoHtbDate_CreatesAnErrorOnTheModelAndSetsErrorIdToFirstHtbDate()
+                {
+                    var response = await _subject.HtbDatePost("0001", "");
+                    var model = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(model.FormErrors.HasErrors);
+                    Assert.Equal("Please select an HTB date", model.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("01/01/2020", model.FormErrors.Errors[0].ErrorElementId);
                 }
             }
         }
