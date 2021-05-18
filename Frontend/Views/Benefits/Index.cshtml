@@ -1,8 +1,15 @@
+@using Frontend.Helpers
+@using Data.Models
 @model BenefitsViewModel
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
@@ -30,11 +37,37 @@
                 <dt class="govuk-summary-list__key">
                     What are the benefits the transfer intended to bring?
                 </dt>
-                <dd class="govuk-summary-list__value">
-                    <span class="empty">Empty</span>
-                </dd>
+                @if (Model.Project.TransferBenefits.IntendedBenefits.Count == 0)
+                {
+                    <dd class="govuk-summary-list__value">
+                        <span class="empty">Empty</span>
+                    </dd>
+                }
+                else
+                {
+                    <dd class="govuk-summary-list__value">
+                        @foreach (var benefit in Model.Project.TransferBenefits.IntendedBenefits)
+                        {
+                            if (benefit == TransferBenefits.IntendedBenefit.Other)
+                            {
+                                <p class="govuk-body">
+                                    Other: @Model.Project.TransferBenefits.OtherIntendedBenefit
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="govuk-body">
+                                    @{
+                                        var display = EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue(benefit);
+                                        @display
+                                    }
+                                </p>
+                            }
+                        }
+                    </dd>
+                }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="./benefits-and-other-factors/question-a">
+                    <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model.Project.Urn">
                         Change<span class="govuk-visually-hidden">outgoing trust</span>
                     </a>
                 </dd>
@@ -47,19 +80,12 @@
                     <span class="empty">Empty</span>
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="./benefits-and-other-factors/question-b">
+                    <a class="govuk-link" href="#">
                         Change<span class="govuk-visually-hidden">reason for transfer</span>
                     </a>
                 </dd>
             </div>
         </dl>
-        <form action="./st-wilfreds-ps" method="post" novalidate="">
-            <input type="hidden" name="answers-checked" value="true">
-            <div class="govuk-button-group">
-                <button class="govuk-button" data-module="govuk-button">
-                    Save and continue
-                </button>
-            </div>
-        </form>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Save and continue</a>
     </div>
 </div>
