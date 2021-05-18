@@ -1,0 +1,65 @@
+@model BenefitsViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-m">
+            Reference number: @Model.Project.Name
+        </span>
+        <h1 class="govuk-heading-l">
+            Benefits and other factors
+        </h1>
+        <h2 class="govuk-heading-m">
+            Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.OutgoingTrustName</span>
+        </h2>
+        <p class="govuk-body">
+            This information is pre-populated from TRAMS and the school's application form.
+        </p>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    What are the benefits the transfer intended to bring?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <span class="empty">Empty</span>
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="./benefits-and-other-factors/question-a">
+                        Change<span class="govuk-visually-hidden">outgoing trust</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Are there any other factors to consider during this transfer?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <span class="empty">Empty</span>
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" href="./benefits-and-other-factors/question-b">
+                        Change<span class="govuk-visually-hidden">reason for transfer</span>
+                    </a>
+                </dd>
+            </div>
+        </dl>
+        <form action="./st-wilfreds-ps" method="post" novalidate="">
+            <input type="hidden" name="answers-checked" value="true">
+            <div class="govuk-button-group">
+                <button class="govuk-button" data-module="govuk-button">
+                    Save and continue
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
