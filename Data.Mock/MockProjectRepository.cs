@@ -116,6 +116,19 @@ namespace Data.Mock
                     FirstDiscussed = "01/03/2021",
                     Target = "01/09/2021",
                     Htb = "01/06/2021"
+                },
+                TransferBenefits = new TransferBenefits
+                {
+                    IntendedBenefits = new List<TransferBenefits.IntendedBenefit>
+                    {
+                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+                        TransferBenefits.IntendedBenefit.StrengtheningGovernance,
+                        TransferBenefits.IntendedBenefit.ImprovingOfstedRating
+                    },
+                    OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
+                    {
+                        {TransferBenefits.OtherFactor.HighProfile, "Some extra detail about this high profile transfer"}
+                    }
                 }
             };
         }
