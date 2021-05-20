@@ -81,5 +81,10 @@ namespace Frontend.Helpers
 
             return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
         }
+
+        public static bool HasDisplayValue(T value)
+        {
+            return !string.IsNullOrEmpty(GetDisplayValue(value));
+        }
     }
 }

@@ -1,3 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Data.Models;
+using Frontend.Helpers;
 using Frontend.Models.Forms;
 
 namespace Frontend.Models
@@ -9,6 +14,30 @@ namespace Frontend.Models
         public BenefitsViewModel()
         {
             FormErrors = new FormErrorsViewModel();
+        }
+
+        public List<string> IntendedBenefitsSummary()
+        {
+            var summary = Project.TransferBenefits.IntendedBenefits
+                .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
+                .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
+                .ToList();
+
+            if (Project.TransferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
+            {
+                summary.Add($"Other: {Project.TransferBenefits.OtherIntendedBenefit}");
+            }
+
+            return summary;
+        }
+
+        public List<string[]> OtherFactorsSummary()
+        {
+            return Project.TransferBenefits.OtherFactors.Select(otherFactor => new[]
+            {
+                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
+                otherFactor.Value
+            }).ToList();
         }
     }
 }

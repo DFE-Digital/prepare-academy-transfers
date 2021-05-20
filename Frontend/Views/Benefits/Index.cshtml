@@ -40,35 +40,23 @@
                 @if (Model.Project.TransferBenefits.IntendedBenefits.Count == 0)
                 {
                     <dd class="govuk-summary-list__value">
-                        <span class="empty">Empty</span>
+                        <span class="dfe-empty-tag">Empty</span>
                     </dd>
                 }
                 else
                 {
                     <dd class="govuk-summary-list__value">
-                        @foreach (var benefit in Model.Project.TransferBenefits.IntendedBenefits)
+                        @foreach (var benefit in Model.IntendedBenefitsSummary())
                         {
-                            if (benefit == TransferBenefits.IntendedBenefit.Other)
-                            {
-                                <p class="govuk-body">
-                                    Other: @Model.Project.TransferBenefits.OtherIntendedBenefit
-                                </p>
-                            }
-                            else
-                            {
-                                <p class="govuk-body">
-                                    @{
-                                        var display = EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue(benefit);
-                                        @display
-                                    }
-                                </p>
-                            }
+                            <p class="govuk-body">
+                                @benefit
+                            </p>
                         }
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model.Project.Urn">
-                        Change<span class="govuk-visually-hidden">outgoing trust</span>
+                        Change<span class="govuk-visually-hidden">intended benefits</span>
                     </a>
                 </dd>
             </div>
@@ -77,11 +65,27 @@
                     Are there any other factors to consider during this transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    <span class="empty">Empty</span>
+                    @if (Model.Project.TransferBenefits.OtherFactors.Keys.Count == 0)
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        foreach (var otherFactor in Model.OtherFactorsSummary())
+                        {
+                            <p class="govuk-body">
+                                @otherFactor[0]
+                                @if (!string.IsNullOrEmpty(otherFactor[1]))
+                                {
+                                    <span>: @otherFactor[1]</span>
+                                }
+                            </p>
+                        }
+                    }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" href="#">
-                        Change<span class="govuk-visually-hidden">reason for transfer</span>
+                    <a class="govuk-link" asp-action="OtherFactors" asp-route-urn="@Model.Project.Urn">
+                        Change<span class="govuk-visually-hidden">other factors to consider</span>
                     </a>
                 </dd>
             </div>

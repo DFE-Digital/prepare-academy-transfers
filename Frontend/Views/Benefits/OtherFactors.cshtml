@@ -5,7 +5,31 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var otherFactors = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayableValues(TransferBenefits.OtherFactor.Empty).Select((item, index) => (item, index));
+    var otherFactors = Model.Project.TransferBenefits.OtherFactors;
+
+    var highProfileChecked = otherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile);
+    var highProfile = new[]
+    {
+        TransferBenefits.OtherFactor.HighProfile.ToString(),
+        EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(TransferBenefits.OtherFactor.HighProfile),
+        highProfileChecked ? otherFactors[TransferBenefits.OtherFactor.HighProfile] : ""
+    };
+
+    var complexIssuesChecked = otherFactors.ContainsKey(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues);
+    var complexIssues = new[]
+    {
+        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues.ToString(),
+        EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues),
+        complexIssuesChecked ? otherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] : ""
+    };
+
+    var financeConcernsChecked = otherFactors.ContainsKey(TransferBenefits.OtherFactor.FinanceAndDebtConcerns);
+    var finance = new[]
+    {
+        TransferBenefits.OtherFactor.FinanceAndDebtConcerns.ToString(),
+        EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(TransferBenefits.OtherFactor.FinanceAndDebtConcerns),
+        financeConcernsChecked ? otherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] : ""
+    };
 }
 
 <div class="govuk-grid-row">
@@ -27,27 +51,48 @@
                         Select all that apply.
                     </div>
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                        @foreach (var (factor, index) in otherFactors)
-                        {
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="otherFactors[@index].Key" name="otherFactors" type="checkbox" value="@factor.ToString()" aria-controls="conditional-@factor.ToString()" aria-expanded="false">
-                                <label class="govuk-label govuk-checkboxes__label" for="otherFactors[@index].Key">
-                                    @{
-                                        var display = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(factor);
-                                        @display
-                                    }
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="@highProfile[0]" name="otherFactors" type="checkbox" value="@highProfile[0]" aria-controls="conditional-@highProfile[0]" aria-expanded="false" checked="@highProfileChecked">
+                            <label class="govuk-label govuk-checkboxes__label" for="@highProfile[0]">
+                                @highProfile[1]
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@highProfile[0]">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label" for="highProfileDescription">
+                                    Specify this concern further
                                 </label>
+                                <input class="govuk-input govuk-!-width-two-thirds" id="highProfileDescription" name="highProfileDescription" type="text" spellcheck="false" value="@highProfile[2]">
                             </div>
-                            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@factor.ToString()">
-                                <div class="govuk-form-group">
-                                    <label class="govuk-label" for="otherFactors[@index].Value">
-                                        Specify this concern further
-                                    </label>
-                                    <input name="otherFactorDescriptions[@index].Key" value="@factor.ToString()">
-                                    <input class="govuk-input govuk-!-width-two-thirds" id="otherFactors[@index].Value" name="otherFactorDescriptions[@index].Value" type="text" spellcheck="false">
-                                </div>
+                        </div>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="@complexIssues[0]" name="otherFactors" type="checkbox" value="@complexIssues[0]" aria-controls="conditional-@complexIssues[0]" aria-expanded="false" checked="@complexIssuesChecked">
+                            <label class="govuk-label govuk-checkboxes__label" for="@complexIssues[0]">
+                                @complexIssues[1]
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@complexIssues[0]">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label" for="complexIssuesDescription">
+                                    Specify this concern further
+                                </label>
+                                <input class="govuk-input govuk-!-width-two-thirds" id="complexIssuesDescription" name="complexIssuesDescription" type="text" spellcheck="false" value="@complexIssues[2]">
                             </div>
-                        }
+                        </div>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="@finance[0]" name="otherFactors" type="checkbox" value="@finance[0]" aria-controls="conditional-@finance[0]" aria-expanded="false" checked="@financeConcernsChecked">
+                            <label class="govuk-label govuk-checkboxes__label" for="@finance[0]">
+                                @finance[1]
+                            </label>
+                        </div>
+                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@finance[0]">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label" for="financeAndDebtDescription">
+                                    Specify this concern further
+                                </label>
+                                <input class="govuk-input govuk-!-width-two-thirds" id="financeAndDebtDescription" name="financeAndDebtDescription" type="text" spellcheck="false" value="@finance[2]">
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
             </div>
