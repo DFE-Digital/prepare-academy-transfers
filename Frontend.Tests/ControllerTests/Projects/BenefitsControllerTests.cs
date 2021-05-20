@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
@@ -139,6 +140,137 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
+                }
+            }
+        }
+
+        public class OtherFactorsTests : BenefitsControllerTests
+        {
+            public class GetTests : OtherFactorsTests
+            {
+                [Fact]
+                public async void GivenUrn_AssignsModelToTheView()
+                {
+                    var result = await _subject.OtherFactors("0001");
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+
+                    Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+            }
+
+            public class PostTests : OtherFactorsTests
+            {
+                [Fact]
+                public async void GivenUrnAndAllOtherFactors_UpdateTheProject()
+                {
+                    var otherFactorDescriptions = new List<TransferBenefits.OtherFactor>
+                    {
+                        TransferBenefits.OtherFactor.HighProfile,
+                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
+                    };
+
+                    Func<Project, bool> assertOtherFactorsEqual = project =>
+                    {
+                        var projectOtherFactors = project.TransferBenefits.OtherFactors;
+                        var highProfile = projectOtherFactors[TransferBenefits.OtherFactor.HighProfile];
+                        var complexIssues =
+                            projectOtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues];
+                        var finance = projectOtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns];
+
+                        return highProfile == "High profile" &&
+                               complexIssues == "Complex issues" &&
+                               finance == "Finance concerns";
+                    };
+
+                    await _subject.OtherFactorsPost("0001", otherFactorDescriptions,
+                        "High profile", "Complex issues", "Finance concerns");
+
+                    _projectsRepository.Verify(r =>
+                        r.Update(It.Is<Project>(project => assertOtherFactorsEqual(project)))
+                    );
+                }
+
+                [Fact]
+                public async void GivenUrnAndOtherFactors_RedirectsToTheSummaryPage()
+                {
+                    var otherFactorDescriptions = new List<TransferBenefits.OtherFactor>
+                    {
+                        TransferBenefits.OtherFactor.HighProfile,
+                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
+                    };
+
+
+                    var response = await _subject.OtherFactorsPost("0001", otherFactorDescriptions,
+                        "High profile", "Complex issues", "Finance concerns");
+                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                }
+
+                [Fact]
+                public async void GivenUrnAndHighProfile_UpdatesTheProjectCorrectly()
+                {
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                        {TransferBenefits.OtherFactor.HighProfile};
+
+                    await _subject.OtherFactorsPost("0001", otherFactors, "High profile", "", "");
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
+                                   project.TransferBenefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] ==
+                                   "High profile"
+                    )));
+                }
+
+                [Fact]
+                public async void GivenUrnAndComplexLandIssues_UpdatesTheProjectCorrectly()
+                {
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                        {TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues};
+
+                    await _subject.OtherFactorsPost("0001", otherFactors, "", "Complex issues", "");
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
+                                   project.TransferBenefits.OtherFactors[
+                                       TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] ==
+                                   "Complex issues"
+                    )));
+                }
+
+                [Fact]
+                public async void GivenUrnAndFinanceAndDebtConcerns_UpdatesTheProjectCorrectly()
+                {
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                        {TransferBenefits.OtherFactor.FinanceAndDebtConcerns};
+
+                    await _subject.OtherFactorsPost("0001", otherFactors, "", "", "Finance concerns");
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
+                                   project.TransferBenefits.OtherFactors[
+                                       TransferBenefits.OtherFactor.FinanceAndDebtConcerns] ==
+                                   "Finance concerns"
+                    )));
+                }
+
+                [Fact]
+                public async void GivenUrnAndOtherFactorsWithNoDescription_UpdatesTheProjectCorrectly()
+                {
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                    {
+                        TransferBenefits.OtherFactor.HighProfile,
+                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
+                    };
+
+                    await _subject.OtherFactorsPost("0001", otherFactors, "", "", "");
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.TransferBenefits.OtherFactors.Keys.Count == 3 &&
+                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                       .HighProfile) &&
+                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                       .ComplexLandAndBuildingIssues) &&
+                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                       .FinanceAndDebtConcerns)
+                    )));
                 }
             }
         }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
-using DocumentFormat.OpenXml.Bibliography;
 using Frontend.Helpers;
 using Frontend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -75,6 +74,42 @@ namespace Frontend.Controllers.Projects
 
             await _projectsRepository.Update(model.Project);
 
+            return RedirectToAction("Index", new {urn});
+        }
+
+        [HttpGet("other-factors")]
+        public async Task<IActionResult> OtherFactors(string urn)
+        {
+            var model = await GetModel(urn);
+            return View(model);
+        }
+
+        [ActionName("OtherFactors")]
+        [HttpPost("other-factors")]
+        public async Task<IActionResult> OtherFactorsPost(string urn, List<TransferBenefits.OtherFactor> otherFactors,
+            string highProfileDescription, string complexIssuesDescription, string financeAndDebtDescription)
+        {
+            var model = await GetModel(urn);
+
+            var projectFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
+
+            if (otherFactors.Contains(TransferBenefits.OtherFactor.HighProfile))
+            {
+                projectFactors.Add(TransferBenefits.OtherFactor.HighProfile, highProfileDescription);
+            }
+
+            if (otherFactors.Contains(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues))
+            {
+                projectFactors.Add(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, complexIssuesDescription);
+            }
+
+            if (otherFactors.Contains(TransferBenefits.OtherFactor.FinanceAndDebtConcerns))
+            {
+                projectFactors.Add(TransferBenefits.OtherFactor.FinanceAndDebtConcerns, financeAndDebtDescription);
+            }
+
+            model.Project.TransferBenefits.OtherFactors = projectFactors;
+            await _projectsRepository.Update(model.Project);
             return RedirectToAction("Index", new {urn});
         }
     }
