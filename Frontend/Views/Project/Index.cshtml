@@ -1,7 +1,7 @@
 @model object
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = ViewData["ProjectName"];
     Layout = "_Layout";
 }
 
@@ -40,13 +40,8 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="general-information">General information</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">Unavailable</strong>
-                    </li>
-                    <li class="moj-task-list__item">
-                        <span class="moj-task-list__task-name">
-                            <a aria-describedby="benefits">Benefits and other factors</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Unavailable</strong>
+                            <a aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Benefits and other factors</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Not started</strong>
                     </li>
                 </ul>
             </li>
