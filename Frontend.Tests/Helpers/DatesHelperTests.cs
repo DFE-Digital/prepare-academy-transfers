@@ -23,11 +23,13 @@ namespace Frontend.Tests.Helpers
             Assert.Equal(expectedDateValues, htbDates.Select(htbDate => htbDate.ToString("dd/MM/yyyy")).ToList());
         }
 
-        [Fact]
-        public void GivenStartingHtbDateIsFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate()
+        [Theory]
+        [InlineData("03/02/2020")]
+        [InlineData("01/01/2020")]
+        public void GivenStartingHtbDateIsFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate(string startDate)
         {
-            var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear("03/02/2020");
-            Assert.Equal("03/02/2020", htbDates[0].ToString("dd/MM/yyyy"));
+            var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDate);
+            Assert.Equal(startDate, htbDates[0].ToString("dd/MM/yyyy"));
         }
 
         [Theory]

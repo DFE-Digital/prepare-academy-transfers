@@ -85,7 +85,8 @@ namespace Frontend.Helpers
 
         private static bool DateIsFirstWorkingDayOfTheMonth(DateTime date)
         {
-            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday && date.Day <= 3;
+            return !DateIsAWeekend(date) && date.DayOfWeek == DayOfWeek.Monday && date.Day <= 3 ||
+                   !DateIsAWeekend(date) && date.Day == 1;
         }
 
         private static DateTime GetNextFirstWorkingDate(DateTime date)
