@@ -33,7 +33,14 @@
                     Rationale for project
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    <span class="dfe-empty-tag">Empty</span>
+                    @if (string.IsNullOrEmpty(Model.Project.Rationale.Project))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.Rationale.Project</span>
+                    }
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="Project" asp-route-urn="@Model.Project.Urn">
@@ -46,7 +53,14 @@
                     Rationale for the trust or sponsor
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    <span class="dfe-empty-tag">Empty</span>
+                    @if (string.IsNullOrEmpty(Model.Project.Rationale.Trust))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.Rationale.Trust</span>
+                    }
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="TrustOrSponsor" asp-route-urn="@Model.Project.Urn">
