@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
@@ -73,7 +74,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     _projectsRepository.Verify(r =>
                         r.Update(It.Is<Project>(
-                            project => project.TransferBenefits.IntendedBenefits.All(intendedBenefits.Contains))));
+                            project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains))));
                 }
 
                 [Fact]
@@ -89,8 +90,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "Other benefit");
                     _projectsRepository.Verify(r =>
                         r.Update(It.Is<Project>(
-                            project => project.TransferBenefits.IntendedBenefits.All(intendedBenefits.Contains) &&
-                                       project.TransferBenefits.OtherIntendedBenefit == "Other benefit")
+                            project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains) &&
+                                       project.Benefits.OtherIntendedBenefit == "Other benefit")
                         )
                     );
                 }
@@ -172,7 +173,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Func<Project, bool> assertOtherFactorsEqual = project =>
                     {
-                        var projectOtherFactors = project.TransferBenefits.OtherFactors;
+                        var projectOtherFactors = project.Benefits.OtherFactors;
                         var highProfile = projectOtherFactors[TransferBenefits.OtherFactor.HighProfile];
                         var complexIssues =
                             projectOtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues];
@@ -215,8 +216,8 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     await _subject.OtherFactorsPost("0001", otherFactors, "High profile", "", "");
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
-                                   project.TransferBenefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] ==
+                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
+                                   project.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] ==
                                    "High profile"
                     )));
                 }
@@ -229,8 +230,8 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     await _subject.OtherFactorsPost("0001", otherFactors, "", "Complex issues", "");
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
-                                   project.TransferBenefits.OtherFactors[
+                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
+                                   project.Benefits.OtherFactors[
                                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] ==
                                    "Complex issues"
                     )));
@@ -244,8 +245,8 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     await _subject.OtherFactorsPost("0001", otherFactors, "", "", "Finance concerns");
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.TransferBenefits.OtherFactors.Keys.Count == 1 &&
-                                   project.TransferBenefits.OtherFactors[
+                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
+                                   project.Benefits.OtherFactors[
                                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns] ==
                                    "Finance concerns"
                     )));
@@ -263,12 +264,12 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     await _subject.OtherFactorsPost("0001", otherFactors, "", "", "");
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.TransferBenefits.OtherFactors.Keys.Count == 3 &&
-                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                        project => project.Benefits.OtherFactors.Keys.Count == 3 &&
+                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
                                        .HighProfile) &&
-                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
                                        .ComplexLandAndBuildingIssues) &&
-                                   project.TransferBenefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
                                        .FinanceAndDebtConcerns)
                     )));
                 }

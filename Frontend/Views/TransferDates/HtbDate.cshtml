@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Set HTB date";
     Layout = "_Layout";
-    var htbDate = Model.Project.TransferDates.Htb;
+    var htbDate = Model.Project.Dates.Htb;
     var htbStartDate = string.IsNullOrEmpty(htbDate) ? DatesHelper.DateTimeToDateString(DateTime.Today) : htbDate;
     var formClasses = Model.FormErrors.FormClassesForField("htbDate");
 }

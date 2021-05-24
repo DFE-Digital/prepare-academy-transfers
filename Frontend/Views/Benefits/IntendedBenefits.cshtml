@@ -1,5 +1,6 @@
 @using Frontend.Helpers
 @using Data.Models
+@using Data.Models.Projects
 @model BenefitsViewModel
 
 @{
@@ -41,7 +42,7 @@
                         @foreach (var intendedBenefit in EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit.Empty))
                         {
                             <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="@intendedBenefit.ToString()" name="intendedBenefits" type="checkbox" value="@intendedBenefit.ToString()" checked="@Model.Project.TransferBenefits.IntendedBenefits.Contains(intendedBenefit)">
+                                <input class="govuk-checkboxes__input" id="@intendedBenefit.ToString()" name="intendedBenefits" type="checkbox" value="@intendedBenefit.ToString()" checked="@Model.Project.Benefits.IntendedBenefits.Contains(intendedBenefit)">
                                 <label class="govuk-label govuk-checkboxes__label" for="@intendedBenefit.ToString()">
                                     @{
                                         var displayValue = EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue(intendedBenefit);
@@ -56,7 +57,7 @@
                         }
 
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="intendedBenefits" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.Project.TransferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
+                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="intendedBenefits" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
                             <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit">
                                 Add an other benefit
                             </label>

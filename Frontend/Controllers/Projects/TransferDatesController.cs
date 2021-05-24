@@ -39,7 +39,7 @@ namespace Frontend.Controllers.Projects
         {
             var model = await GetModel(urn);
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-            model.Project.TransferDates.FirstDiscussed = dateString;
+            model.Project.Dates.FirstDiscussed = dateString;
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
@@ -70,7 +70,7 @@ namespace Frontend.Controllers.Projects
         {
             var model = await GetModel(urn);
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-            model.Project.TransferDates.Target = dateString;
+            model.Project.Dates.Target = dateString;
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
@@ -100,7 +100,7 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> HtbDatePost(string urn, string htbDate)
         {
             var model = await GetModel(urn);
-            model.Project.TransferDates.Htb = htbDate;
+            model.Project.Dates.Htb = htbDate;
 
             if (string.IsNullOrEmpty(htbDate))
             {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Models;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace Frontend.Tests.ModelTests
         public void GivenFirstDiscussedDate_ReturnsTheCorrectDateViewModel(string inputDate, string expectedDay,
             string expectedMonth, string expectedYear)
         {
-            var project = new Project {TransferDates = new TransferDates {FirstDiscussed = inputDate}};
+            var project = new Project {Dates = new TransferDates {FirstDiscussed = inputDate}};
             var model = new TransferDatesViewModel {Project = project};
             Assert.Equal(expectedDay, model.TransferFirstDiscussed.Day);
             Assert.Equal(expectedMonth, model.TransferFirstDiscussed.Month);
@@ -29,7 +30,7 @@ namespace Frontend.Tests.ModelTests
         public void GivenTargetTransferDate_ReturnsTheCorrectDateViewModel(string inputDate, string expectedDay,
             string expectedMonth, string expectedYear)
         {
-            var project = new Project {TransferDates = new TransferDates {Target = inputDate}};
+            var project = new Project {Dates = new TransferDates {Target = inputDate}};
             var model = new TransferDatesViewModel {Project = project};
             Assert.Equal(expectedDay, model.TargetDate.Day);
             Assert.Equal(expectedMonth, model.TargetDate.Month);
@@ -54,7 +55,7 @@ namespace Frontend.Tests.ModelTests
                 "Monday 2 November 2020", "Tuesday 1 December 2020", "Friday 1 January 2021"
             };
 
-            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var project = new Project {Dates = new TransferDates {Htb = "03/08/2020"}};
             var model = new TransferDatesViewModel {Project = project};
             var htbDates = model.PotentialHtbDates("02/01/2020");
 
@@ -66,7 +67,7 @@ namespace Frontend.Tests.ModelTests
         [Fact]
         public void GivenStartingHtbDateIsFirstWorkingDayInMonth_GenerateHtbDatesIncludingThatDate()
         {
-            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var project = new Project {Dates = new TransferDates {Htb = "03/08/2020"}};
             var model = new TransferDatesViewModel {Project = project};
             var htbDates = model.PotentialHtbDates("03/02/2020");
             Assert.Equal("03/02/2020", htbDates[0].Value);
@@ -75,7 +76,7 @@ namespace Frontend.Tests.ModelTests
         [Fact]
         public void GivenStartingHtbDateIsNotFirstWorkingDayInMonth_GenerateHtbDatesExcludingThatDate()
         {
-            var project = new Project {TransferDates = new TransferDates {Htb = "03/08/2020"}};
+            var project = new Project {Dates = new TransferDates {Htb = "03/08/2020"}};
             var model = new TransferDatesViewModel {Project = project};
             var htbDates = model.PotentialHtbDates("07/02/2020");
             Assert.Equal("02/03/2020", htbDates[0].Value);

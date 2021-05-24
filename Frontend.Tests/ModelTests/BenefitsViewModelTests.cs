@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
+using Data.Models.Projects;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Frontend.Helpers;
 using Frontend.Models;
@@ -36,7 +37,7 @@ namespace Frontend.Tests.ModelTests
                     TransferBenefits.IntendedBenefit.ImprovingOfstedRating
                 };
 
-                _model.Project.TransferBenefits.IntendedBenefits = intendedBenefits;
+                _model.Project.Benefits.IntendedBenefits = intendedBenefits;
 
                 var expectedDisplayValues =
                     intendedBenefits.Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue).ToList();
@@ -58,8 +59,8 @@ namespace Frontend.Tests.ModelTests
                     TransferBenefits.IntendedBenefit.Other
                 };
 
-                _model.Project.TransferBenefits.IntendedBenefits = intendedBenefits;
-                _model.Project.TransferBenefits.OtherIntendedBenefit = "Can create cat sanctuary";
+                _model.Project.Benefits.IntendedBenefits = intendedBenefits;
+                _model.Project.Benefits.OtherIntendedBenefit = "Can create cat sanctuary";
 
                 var expectedDisplayValues =
                     intendedBenefits
@@ -95,7 +96,7 @@ namespace Frontend.Tests.ModelTests
                     {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, ""}
                 };
 
-                _model.Project.TransferBenefits.OtherFactors = otherFactors;
+                _model.Project.Benefits.OtherFactors = otherFactors;
 
                 var expectedSummary = otherFactors.Keys
                     .Select(EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue)

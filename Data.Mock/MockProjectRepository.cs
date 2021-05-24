@@ -120,13 +120,13 @@ namespace Data.Mock
                         InterventionDetails = "Intervention details",
                     }
                 },
-                TransferDates = new TransferDates
+                Dates = new TransferDates
                 {
                     FirstDiscussed = "01/03/2021",
                     Target = "01/09/2021",
                     Htb = "01/06/2021"
                 },
-                TransferBenefits = new TransferBenefits
+                Benefits = new TransferBenefits
                 {
                     IntendedBenefits = new List<TransferBenefits.IntendedBenefit>
                     {
@@ -138,6 +138,11 @@ namespace Data.Mock
                     {
                         {TransferBenefits.OtherFactor.HighProfile, "Some extra detail about this high profile transfer"}
                     }
+                },
+                Rationale = new TransferRationale
+                {
+                    Project = "This is the rationale for the project",
+                    Trust = "This is the rationale for the trust or sponsor"
                 }
             };
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Helpers;
 using Frontend.Models.Forms;
 
@@ -18,14 +19,14 @@ namespace Frontend.Models
 
         public List<string> IntendedBenefitsSummary()
         {
-            var summary = Project.TransferBenefits.IntendedBenefits
+            var summary = Project.Benefits.IntendedBenefits
                 .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
                 .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
                 .ToList();
 
-            if (Project.TransferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
+            if (Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
             {
-                summary.Add($"Other: {Project.TransferBenefits.OtherIntendedBenefit}");
+                summary.Add($"Other: {Project.Benefits.OtherIntendedBenefit}");
             }
 
             return summary;
@@ -33,7 +34,7 @@ namespace Frontend.Models
 
         public List<string[]> OtherFactorsSummary()
         {
-            return Project.TransferBenefits.OtherFactors.Select(otherFactor => new[]
+            return Project.Benefits.OtherFactors.Select(otherFactor => new[]
             {
                 EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
                 otherFactor.Value
