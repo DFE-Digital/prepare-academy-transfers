@@ -1,0 +1,81 @@
+@model RationaleViewModel
+
+@{
+    ViewBag.Title = "Write the rationale for the project";
+    Layout = "_Layout";
+    var formClasses = Model.FormErrors.FormClassesForField("rationale");
+}
+
+@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form asp-action="Project" method="post" novalidate="">
+            <div class="govuk-form-group @formClasses">
+                <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
+                    <span class="govuk-caption-m">
+                        Reference number: @Model.Project.Name
+                    </span>
+                    <h1 class="govuk-heading-l">
+                        Write the rationale for the project
+                    </h1>
+                </label>
+                <div id="rationale-hint" class="govuk-hint">
+                    Edit the school's rationale to add your own analysis
+                </div>
+
+                @if (Model.FormErrors.HasErrorForField("rationale"))
+                {
+                    <span id="rationale-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("rationale").ErrorMessage
+                    </span>
+                }
+
+                <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint">@Model.Project.Rationale.Project</textarea>
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Save and continue
+            </button>
+        </form>
+    </div>
+    <!--related navigation-->
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Useful information
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            View full application
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            School information on TRAMS
+                        </a>
+                    </li>
+                    <hr class="govuk-grid-one-third govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </ul>
+            </nav>
+            <h2 class="govuk-heading-s" id="subsection-title">
+                Guidance
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Guidance for setting an HTB date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Full Guidance
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>

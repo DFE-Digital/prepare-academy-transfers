@@ -43,6 +43,11 @@
                             <a aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Benefits and other factors</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Not started</strong>
                     </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a aria-describedby="rationale" asp-controller="Rationale" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Rationale</a>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="rationale">Not started</strong>
+                    </li>
                 </ul>
             </li>
             <li>
