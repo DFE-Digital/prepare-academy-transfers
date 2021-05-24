@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Data.Models;
 using Data.Models.Projects;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Data.Mock
 {
@@ -36,7 +38,8 @@ namespace Data.Mock
 
         public Task<RepositoryResult<Project>> GetByUrn(string urn)
         {
-            return Task.FromResult(new RepositoryResult<Project> {Result = _projects.Find(p => p.Urn == urn)});
+            return Task.FromResult(new RepositoryResult<Project>
+                {Result = CloneProject(_projects.Find(p => p.Urn == urn))});
         }
 
         public Task<RepositoryResult<Project>> Update(Project project)
@@ -64,6 +67,12 @@ namespace Data.Mock
                 project.TransferringAcademies[0].OutgoingAcademyUkprn;
             _projects.Add(newProject);
             return Task.FromResult(new RepositoryResult<Project> {Result = newProject});
+        }
+
+        private static Project CloneProject(Project toClone)
+        {
+            var projectString = JsonConvert.SerializeObject(toClone);
+            return JsonConvert.DeserializeObject<Project>(projectString);
         }
 
         private static Project EmptyProject()
