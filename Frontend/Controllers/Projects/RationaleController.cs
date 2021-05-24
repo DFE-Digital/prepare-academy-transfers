@@ -31,12 +31,46 @@ namespace Frontend.Controllers.Projects
             var model = await GetModel(urn);
             return View(model);
         }
-        
+
+        [ActionName("Project")]
+        [HttpPost("rationale")]
+        public async Task<IActionResult> ProjectPost(string urn, string rationale)
+        {
+            var model = await GetModel(urn);
+            model.Project.Rationale.Project = rationale;
+            
+            if (string.IsNullOrEmpty(rationale))
+            {
+                model.FormErrors.AddError("rationale", "rationale", "Please enter a rationale");
+                return View(model);
+            }
+
+            await _projectsRepository.Update(model.Project);
+            return RedirectToAction("Index", new {urn});
+        }
+
         [HttpGet("trust-or-sponsor")]
         public async Task<IActionResult> TrustOrSponsor(string urn)
         {
             var model = await GetModel(urn);
             return View(model);
+        }
+
+        [ActionName("TrustOrSponsor")]
+        [HttpPost("trust-or-sponsor")]
+        public async Task<IActionResult> TrustOrSponsorPost(string urn, string rationale)
+        {
+            var model = await GetModel(urn);
+            model.Project.Rationale.Trust = rationale;
+            
+            if (string.IsNullOrEmpty(rationale))
+            {
+                model.FormErrors.AddError("rationale", "rationale", "Please enter a rationale");
+                return View(model);
+            }
+
+            await _projectsRepository.Update(model.Project);
+            return RedirectToAction("Index", new {urn});
         }
 
         private async Task<RationaleViewModel> GetModel(string urn)
