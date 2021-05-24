@@ -35,7 +35,7 @@
                 <dt class="govuk-summary-list__key">
                     What are the benefits the transfer intended to bring?
                 </dt>
-                @if (Model.Project.TransferBenefits.IntendedBenefits.Count == 0)
+                @if (Model.Project.Benefits.IntendedBenefits.Count == 0)
                 {
                     <dd class="govuk-summary-list__value">
                         <span class="dfe-empty-tag">Empty</span>
@@ -63,7 +63,7 @@
                     Are there any other factors to consider during this transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.Project.TransferBenefits.OtherFactors.Keys.Count == 0)
+                    @if (Model.Project.Benefits.OtherFactors.Keys.Count == 0)
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }

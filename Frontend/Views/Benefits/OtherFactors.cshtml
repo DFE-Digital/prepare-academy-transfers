@@ -1,11 +1,12 @@
 @using Data.Models
+@using Data.Models.Projects
 @using Frontend.Helpers
 @model BenefitsViewModel
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var otherFactors = Model.Project.TransferBenefits.OtherFactors;
+    var otherFactors = Model.Project.Benefits.OtherFactors;
 
     var highProfileChecked = otherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile);
     var highProfile = new[]

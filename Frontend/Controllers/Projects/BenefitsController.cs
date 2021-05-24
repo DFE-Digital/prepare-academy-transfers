@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Helpers;
 using Frontend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -51,11 +52,11 @@ namespace Frontend.Controllers.Projects
             TransferBenefits.IntendedBenefit[] intendedBenefits, string otherBenefit)
         {
             var model = await GetModel(urn);
-            model.Project.TransferBenefits.IntendedBenefits =
+            model.Project.Benefits.IntendedBenefits =
                 new List<TransferBenefits.IntendedBenefit>(intendedBenefits);
-            model.Project.TransferBenefits.OtherIntendedBenefit = otherBenefit;
+            model.Project.Benefits.OtherIntendedBenefit = otherBenefit;
 
-            if (model.Project.TransferBenefits.IntendedBenefits.Count == 0)
+            if (model.Project.Benefits.IntendedBenefits.Count == 0)
             {
                 var firstBenefit =
                     EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit
@@ -65,7 +66,7 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            if (model.Project.TransferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) &&
+            if (model.Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) &&
                 string.IsNullOrEmpty(otherBenefit))
             {
                 model.FormErrors.AddError("otherBenefit", "otherBenefit", "Please enter the other benefit");
@@ -108,7 +109,7 @@ namespace Frontend.Controllers.Projects
                 projectFactors.Add(TransferBenefits.OtherFactor.FinanceAndDebtConcerns, financeAndDebtDescription);
             }
 
-            model.Project.TransferBenefits.OtherFactors = projectFactors;
+            model.Project.Benefits.OtherFactors = projectFactors;
             await _projectsRepository.Update(model.Project);
             return RedirectToAction("Index", new {urn});
         }

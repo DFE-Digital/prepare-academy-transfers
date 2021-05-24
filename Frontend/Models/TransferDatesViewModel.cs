@@ -16,8 +16,8 @@ namespace Frontend.Models
             FormErrors = new FormErrorsViewModel();
         }
 
-        public DateInputViewModel TransferFirstDiscussed => DateInputForField(Project.TransferDates.FirstDiscussed);
-        public DateInputViewModel TargetDate => DateInputForField(Project.TransferDates.Target);
+        public DateInputViewModel TransferFirstDiscussed => DateInputForField(Project.Dates.FirstDiscussed);
+        public DateInputViewModel TargetDate => DateInputForField(Project.Dates.Target);
 
         private static DateInputViewModel DateInputForField(string transferDatesFirstDiscussed)
         {
@@ -33,7 +33,7 @@ namespace Frontend.Models
             {
                 Name = "htbDate", Value = DatesHelper.DateTimeToDateString(htbDate),
                 DisplayName = htbDate.ToString("dddd d MMMM yyyy"),
-                Checked = Project.TransferDates.Htb == DatesHelper.DateTimeToDateString(htbDate)
+                Checked = Project.Dates.Htb == DatesHelper.DateTimeToDateString(htbDate)
             }).ToList();
         }
     }

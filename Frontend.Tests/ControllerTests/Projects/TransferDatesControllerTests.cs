@@ -72,7 +72,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.FirstDiscussedPost("0001", day, month, year);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.TransferDates.FirstDiscussed == expectedDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.FirstDiscussed == expectedDate)));
                 }
 
                 [Fact]
@@ -139,7 +139,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.TargetDatePost("0001", day, month, year);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.TransferDates.Target == expectedDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.Target == expectedDate)));
                 }
 
                 [Fact]
@@ -204,7 +204,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.HtbDatePost("0001", htbDate);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.TransferDates.Htb == htbDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.Htb == htbDate)));
                 }
 
                 [Fact]
