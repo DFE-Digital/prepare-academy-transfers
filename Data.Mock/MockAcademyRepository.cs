@@ -26,7 +26,6 @@ namespace Data.Mock
                     DistanceToSponsorHq = "Placeholder",
                     MpAndParty = "Placeholder",
                     OfstedJudgementDate = "Placeholder",
-                    CurrentFramework = "Placeholder",
                     AchievementOfPupil = "Placeholder",
                     QualityOfTeaching = "Placeholder",
                     BehaviourAndSafetyOfPupil = "Placeholder",
