@@ -40,22 +40,24 @@
         }
         <form method="get" asp-action="TrustSearch">
             <div class="govuk-form-group @formClasses">
-                <fieldset class="govuk-fieldset" aria-required="true">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">Add the outgoing trust name</h1>
-                    </legend>
-                    <label class="govuk-hint" for="query" id="query-hint">Search by name, trust reference number or companies house number</label>
-                    @if (errorExists)
-                    {
-                        <span id="query-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error: </span>@ViewData["Error.Message"]
-                        </span>
-                    }
-                    <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint" value="@ViewData["Query"]"/>
-                    <input hidden name="change" type="text" value="@changeLinkClicked.ToString()" />
-                </fieldset>
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--xl" for="query">
+                        Add the outgoing trust name
+                    </label>
+                </h1>
+                <div id="query-hint" class="govuk-hint">
+                    Search by name, UKPRN or companies house number
+                </div>
+                @if (errorExists)
+                {
+                    <span id="query-error" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error: </span>@ViewData["Error.Message"]
+                    </span>
+                }
+                <input class="govuk-input" name="query" id="query" type="text" aria-describedby="query-hint" value="@ViewData["Query"]"/>
+                <input hidden name="change" type="text" value="@changeLinkClicked.ToString()"/>
             </div>
-            <button class="govuk-button" type="submit">Submit</button>
+            <button class="govuk-button" type="submit">Search</button>
         </form>
     </div>
 </div>
