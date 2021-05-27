@@ -1,4 +1,3 @@
-@using Data.Models
 @using Data.Models.Projects
 @using Frontend.Helpers
 @model BenefitsViewModel
@@ -31,6 +30,11 @@
         EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(TransferBenefits.OtherFactor.FinanceAndDebtConcerns),
         financeConcernsChecked ? otherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] : ""
     };
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
 }
 
 <div class="govuk-grid-row">
