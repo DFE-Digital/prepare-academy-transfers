@@ -1,8 +1,6 @@
-using Newtonsoft.Json;
-
 namespace Data.TRAMS.Models
 {
-    public class Address
+    public class GroupContactAddress
     {
         public string AdditionalLine { get; set; }
         public string County { get; set; }

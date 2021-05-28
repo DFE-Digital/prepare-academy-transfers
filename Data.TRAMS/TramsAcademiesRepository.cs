@@ -18,7 +18,7 @@ namespace Data.TRAMS
 
         public async Task<RepositoryResult<Academy>> GetAcademyByUkprn(string ukprn)
         {
-            using var response = await _httpClient.GetAsync($"academy/{ukprn}");
+            using var response = await _httpClient.GetAsync($"establishment/{ukprn}");
 
             var apiResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TramsAcademy>(apiResponse);

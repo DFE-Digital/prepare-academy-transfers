@@ -82,13 +82,13 @@ namespace Data.Mock
                 Urn = EmptyProjectUrn,
                 Name = EmptyProjectNumber,
                 OutgoingTrustName = OutgoingTrustName,
-                OutgoingTrustUkprn = "1111111",
+                OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies
                     {
-                        OutgoingAcademyUkprn = "3333333",
-                        IncomingTrustUkprn = "2222222"
+                        OutgoingAcademyUkprn = "10040290",
+                        IncomingTrustUkprn = "10059766"
                     }
                 }
             };
@@ -101,13 +101,13 @@ namespace Data.Mock
                 Urn = PopulatedProjectUrn,
                 Name = PopulatedProjectNumber,
                 OutgoingTrustName = OutgoingTrustName,
-                OutgoingTrustUkprn = "1111111",
+                OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies
                     {
-                        OutgoingAcademyUkprn = "3333333",
-                        IncomingTrustUkprn = "2222222"
+                        OutgoingAcademyUkprn = "10040290",
+                        IncomingTrustUkprn = "10059766"
                     }
                 },
                 Features = new TransferFeatures
