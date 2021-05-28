@@ -1,6 +1,8 @@
 using Data;
 using Data.Models;
 using Frontend.Controllers;
+using Frontend.Models;
+using Frontend.Tests.Helpers;
 using Moq;
 using Xunit;
 
@@ -34,10 +36,11 @@ namespace Frontend.Tests.ControllerTests
                         }
                     });
 
-                await _subject.Index(projectId);
+                var actionResult = await _subject.Index(projectId);
+                var viewModel = ControllerTestHelpers.GetViewModelFromResult<ProjectTaskListViewModel>(actionResult);
 
-                Assert.Equal("Some name", _subject.ViewData["ProjectName"]);
-                Assert.Equal("Meow Meowington's Trust", _subject.ViewData["OutgoingTrustName"]);
+                Assert.Equal("Some name", viewModel.Project.Name);
+                Assert.Equal("Meow Meowington's Trust", viewModel.Project.OutgoingTrustName);
             }
         }
     }
