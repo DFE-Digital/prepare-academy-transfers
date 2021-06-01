@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Data;
+using Frontend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +20,15 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Index([FromRoute] string id)
         {
             var project = await _projectRepository.GetByUrn(id);
-            
-            ViewData["OutgoingTrustName"] = project.Result.OutgoingTrustName;
-            ViewData["ProjectName"] = project.Result.Name;
+
+            var viewModel = new ProjectTaskListViewModel
+            {
+                Project = project.Result
+            };
+
             ViewData["ProjectId"] = id;
             
-            return View();
+            return View(viewModel);
         }
     }
 }

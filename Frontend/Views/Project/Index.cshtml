@@ -1,4 +1,4 @@
-@model object
+@model ProjectTaskListViewModel
 
 @{
     ViewBag.Title = ViewData["ProjectName"];
@@ -13,9 +13,9 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
 
-        <span class="govuk-caption-xl">@ViewData["ProjectName"]</span>
+        <span class="govuk-caption-xl">@Model.Project.Name</span>
         <h1 class="govuk-heading-xl">
-            @ViewData["OutgoingTrustName"]
+            @Model.Project.OutgoingTrustName
         </h1>
 
         <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Create HTB template</h2>
@@ -31,22 +31,22 @@
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a aria-describedby="features" asp-controller="Features" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Features of a transfer</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="features">Not started</strong>
+                        </span><projectstatus id="features" status="@Model.FeatureTransferStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Set transfer dates</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="dates">Not started</strong>
+                        </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Benefits and other factors</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="benefits">Not started</strong>
+                        </span><projectstatus id="benefits", status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a aria-describedby="rationale" asp-controller="Rationale" asp-action="Index" asp-route-urn="@ViewData["ProjectId"]">Rationale</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="rationale">Not started</strong>
+                        </span><projectstatus id="rationale" , status="@Model.RationaleStatus"></projectstatus>
                     </li>
                 </ul>
             </li>
