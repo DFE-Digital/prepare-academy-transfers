@@ -14,10 +14,10 @@ namespace Frontend.Helpers.TagHelpers
             switch (Status)
             {
                 case ProjectStatuses.NotStarted:
-                    tagColourClass = "govuk-tag--red";
+                    tagColourClass = "govuk-tag--grey";
                     break;
-                case ProjectStatuses.Completed:
-                    tagColourClass = "govuk-tag--green";
+                case ProjectStatuses.InProgress:
+                    tagColourClass = "govuk-tag--blue";
                     break;
             }
             

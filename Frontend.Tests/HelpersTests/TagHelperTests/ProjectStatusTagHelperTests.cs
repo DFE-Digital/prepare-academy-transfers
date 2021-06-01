@@ -12,9 +12,9 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
     public class ProjectStatusTagHelperTests
     {
         [Theory]
-        [InlineData(ProjectStatuses.NotStarted, "NOT STARTED", "govuk-tag--red")]
-        [InlineData(ProjectStatuses.InProgress, "IN PROGRESS", null)]
-        [InlineData(ProjectStatuses.Completed, "COMPLETED", "govuk-tag--green")]
+        [InlineData(ProjectStatuses.NotStarted, "NOT STARTED", "govuk-tag--grey")]
+        [InlineData(ProjectStatuses.InProgress, "IN PROGRESS", "govuk-tag--blue")]
+        [InlineData(ProjectStatuses.Completed, "COMPLETED", null)]
         [InlineData(ProjectStatuses.Empty, "", null)]
         public void GivenNotStartedStatus_ReturnsRedNotStartedTag(ProjectStatuses projectStatus, string expectedStatusText, string expectedCssClass)
         {
