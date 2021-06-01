@@ -5,6 +5,14 @@ namespace Data.Models
 {
     public class Academy
     {
+        public Academy()
+        {
+            Performance = new AcademyPerformance();
+            PupilNumbers = new PupilNumbers();
+            LatestOfstedJudgement = new LatestOfstedJudgement();
+            Address = new List<string>();
+        }
+        
         public string Ukprn { get; set; }
         public string Urn { get; set; }
         public string Name { get; set; }

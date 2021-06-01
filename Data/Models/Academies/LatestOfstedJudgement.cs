@@ -12,6 +12,7 @@ namespace Data.Models.Academies
         public string BehaviourAndSafetyOfPupils { get; set; }
         public string LeadershipAndManagement { get; set; }
         public string EarlyYearsProvision { get; set; }
+        public string SixthFormProvision { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -24,7 +25,8 @@ namespace Data.Models.Academies
                 new FormField {Title = "Quality of teaching", Value = QualityOfTeaching},
                 new FormField {Title = "Behaviour and safety of pupils", Value = BehaviourAndSafetyOfPupils},
                 new FormField {Title = "Leadership & Management", Value = LeadershipAndManagement},
-                new FormField {Title = "Early years provision", Value = EarlyYearsProvision}
+                new FormField {Title = "Early years provision", Value = EarlyYearsProvision},
+                new FormField {Title = "Sixth form provision", Value = SixthFormProvision}
             };
         }
     }
