@@ -403,28 +403,55 @@ namespace Frontend.Tests.ControllerTests
 
         public class IncomingTrust : TransfersControllerTests
         {
+            private readonly Trust _outgoingTrust;
+
+            public IncomingTrust()
+            {
+                _outgoingTrust = new Trust
+                {
+                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
+                    Name = "test name"
+                };
+
+                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
+                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
+
+                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(new RepositoryResult<Trust>
+                {
+                    Result = _outgoingTrust
+                });
+            }
+
             [Fact]
-            public void GivenErrorMessageExists_SetErrorInViewData()
+            public async void GivenTrustIdInSession_ReturnsTrustNameInViewData()
+            {
+                await _subject.IncomingTrust();
+
+                Assert.Equal(_outgoingTrust.Name, _subject.ViewData["OutgoingTrustName"]);
+            }
+
+            [Fact]
+            public async void GivenErrorMessageExists_SetErrorInViewData()
             {
                 _subject.TempData["ErrorMessage"] = "This is an error message";
-                _subject.IncomingTrust();
+                await _subject.IncomingTrust();
 
                 Assert.Equal(true, _subject.ViewData["Error.Exists"]);
                 Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
             }
 
             [Fact]
-            public void GivenExistingQuery_SetQueryInViewData()
+            public async void GivenExistingQuery_SetQueryInViewData()
             {
-                _subject.IncomingTrust("Meow");
+                await _subject.IncomingTrust("Meow");
 
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
 
             [Fact]
-            public void GivenChangeLink_SetChangeLinkinViewData()
+            public async void GivenChangeLink_SetChangeLinkinViewData()
             {
-                _subject.IncomingTrust("Meow", true);
+                await _subject.IncomingTrust("Meow", true);
 
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }

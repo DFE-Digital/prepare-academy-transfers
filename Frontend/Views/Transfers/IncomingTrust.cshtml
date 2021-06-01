@@ -42,10 +42,10 @@
         <form method="get" asp-action="SearchIncomingTrust">
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-required="true">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">Add the incoming trust name</h1>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">Add the incoming trust name for @ViewData["OutgoingTrustName"]</h1>
                     </legend>
-                    <label class="govuk-hint" for="query" id="query-hint">Search by name, trust reference number or companies house number</label>
+                    <label class="govuk-hint" for="query" id="query-hint">Search by name, UKPRN or companies house number</label>
                     @if (errorExists)
                     {
                         <span id="query-error" class="govuk-error-message">
@@ -56,7 +56,7 @@
                     <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
                 </fieldset>
             </div>
-            <button class="govuk-button" type="submit">Submit</button>
+            <button class="govuk-button" type="submit">Search</button>
         </form>
     </div>
 </div>
