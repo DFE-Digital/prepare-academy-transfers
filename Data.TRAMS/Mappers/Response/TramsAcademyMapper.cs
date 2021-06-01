@@ -19,6 +19,11 @@ namespace Data.TRAMS.Mappers.Response
                 LocalAuthorityName = input.LocalAuthorityName,
                 Name = input.EstablishmentName,
                 Performance = Performance(input),
+                PupilNumbers = new PupilNumbers
+                {
+                    BoysOnRoll = input.Census.NumberOfBoys,
+                    GirlsOnRoll = input.Census.NumberOfGirls
+                },
                 Ukprn = input.Ukprn
             };
         }
@@ -60,7 +65,8 @@ namespace Data.TRAMS.Mappers.Response
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
                 BehaviourAndSafetyOfPupil = ParseOfstedRating(input.MisEstablishment.BehaviourAndAttitudes),
                 Capacity = input.SchoolCapacity,
-                LeadershipAndManagement = ParseOfstedRating(input.MisEstablishment.EffectivenessOfLeadershipAndManagement),
+                LeadershipAndManagement =
+                    ParseOfstedRating(input.MisEstablishment.EffectivenessOfLeadershipAndManagement),
                 NumberOnRoll = input.Census.NumberOfPupils,
                 OfstedJudgementDate = input.OfstedLastInspection,
                 OfstedRating = input.OfstedRating,

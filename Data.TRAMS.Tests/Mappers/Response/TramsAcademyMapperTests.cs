@@ -31,6 +31,8 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 },
                 Census = new Census
                 {
+                    NumberOfBoys = "450",
+                    NumberOfGirls = "455",
                     NumberOfPupils = "905"
                 },
                 EstablishmentName = "Fake Academy",
@@ -66,6 +68,8 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(academyToMap.MisEstablishment.ReligiousEthos, result.FaithSchool);
             AssertAcademyPerformanceCorrect(result, academyToMap);
             AssertLatestOfstedJudgementCorrect(result);
+            Assert.Equal(academyToMap.Census.NumberOfBoys, result.PupilNumbers.BoysOnRoll);
+            Assert.Equal(academyToMap.Census.NumberOfGirls, result.PupilNumbers.GirlsOnRoll);
         }
 
         private static void AssertLatestOfstedJudgementCorrect(Academy result)
