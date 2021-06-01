@@ -139,11 +139,17 @@ namespace Frontend.Controllers
             return RedirectToAction(nextAction);
         }
 
-        public IActionResult IncomingTrust(string query = "", bool change = false)
+        public async Task<IActionResult> IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
+
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+
+            var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
+
+            ViewData["OutgoingTrustName"] = trustRepoResult.Result.Name;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
