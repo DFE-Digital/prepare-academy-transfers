@@ -149,12 +149,13 @@ namespace Frontend
             else
             {
                 services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
-                services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiBase));
+                services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
                 services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
                 services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
                 services.AddTransient<IMapper<TramsAcademy, Academy>, TramsAcademyMapper>();
                 services.AddTransient<ITrusts, TramsTrustsRepository>();
                 services.AddTransient<IAcademies, TramsAcademiesRepository>();
+                services.AddSingleton<IProjects, MockProjectRepository>();
             }
         }
 

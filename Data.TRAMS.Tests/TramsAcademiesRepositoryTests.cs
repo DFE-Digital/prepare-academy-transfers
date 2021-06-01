@@ -33,7 +33,7 @@ namespace Data.TRAMS.Tests
 
                 await _subject.GetAcademyByUkprn("12345");
 
-                _client.Verify(c => c.GetAsync("academy/12345"), Times.Once);
+                _client.Verify(c => c.GetAsync("establishment/12345"), Times.Once);
             }
 
             [Fact]
