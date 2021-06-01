@@ -11,11 +11,11 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Outgoing trust details</h1>
         <dl class="govuk-summary-list govuk-summary-list--no-border">
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Name</dt>
+                <dt class="govuk-summary-list__key">School name</dt>
                 <dd class="govuk-summary-list__value">@Model.Trust.Name</dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -27,8 +27,8 @@
                 <dd class="govuk-summary-list__value">@Model.Trust.EstablishmentType</dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Trust reference number</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.GiasGroupId</dd>
+                <dt class="govuk-summary-list__key">UKPRN</dt>
+                <dd class="govuk-summary-list__value">@Model.Trust.Ukprn</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Address</dt>
@@ -40,6 +40,6 @@
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Ukprn" role="button" draggable="false">Select trust</a>
+        <a class="govuk-button" asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Ukprn" role="button" draggable="false">Continue</a>
     </div>
 </div>

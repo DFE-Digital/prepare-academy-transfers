@@ -10,18 +10,41 @@
     <a class="govuk-back-link" asp-controller="Transfers" asp-action="TrustName" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">Back</a>
 }
 
-<h1 class="govuk-heading-l">Select an outgoing trust</h1>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @foreach (var trust in Model.Trusts)
-        {
-            <h2 class="govuk-heading-s">
-                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Ukprn" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">
-                    @trust.TrustName
-                </a>
-            </h2>
-            <p class="govuk-body">Companies House number: @trust.CompaniesHouseNumber</p>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
-        }
+        <form asp-action="OutgoingTrustDetails" method="get" novalidate="">
+            <input type="text" name="query" value="@ViewData["Query"]" hidden/>
+            <input type="text" name="change" value="@ViewData["ChangeLink"].ToString()" hidden/>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            Select the outgoing trust
+                        </h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        @foreach (var trust in Model.Trusts)
+                        {
+                            <h2 class="govuk-heading-s">
+                                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Ukprn" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">
+                                </a>
+                            </h2>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="@trust.Ukprn" name="trustId" type="radio" value="@trust.Ukprn" aria-describedby="@trust.Ukprn-hint">
+                                <label class="govuk-label govuk-radios__label" for="@trust.Ukprn">
+                                    @trust.TrustName (@trust.Ukprn)
+                                </label>
+                                <div id="@trust.Ukprn-hint" class="govuk-hint govuk-radios__hint">
+                                    Companies house number: @trust.CompaniesHouseNumber
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Continue
+            </button>
+        </form>
     </div>
 </div>

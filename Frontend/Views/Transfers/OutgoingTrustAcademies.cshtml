@@ -20,7 +20,7 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
         @if (errorExists)
         {
             <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
@@ -43,11 +43,13 @@
             <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">Add the transferring academies</h1>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            Select the transferring academies
+                        </h1>
                     </legend>
                     <div id="add-academies-hint" class="govuk-hint">
-                        Select all the academies that are transferring.
+                        Select a single academy.
                     </div>
 
                     @if (errorExists)
@@ -70,14 +72,14 @@
                                     <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn">
                                 }
                                 <label class="govuk-label govuk-radios__label" for="@academy.Ukprn">
-                                    @academy.Name (URN @academy.Urn)
+                                    @academy.Name
                                 </label>
                             </div>
                         }
                     </div>
                 </fieldset>
             </div>
-            <button class="govuk-button" type="submit">Save and continue</button>
+            <button class="govuk-button" type="submit">Continue</button>
         </form>
     </div>
 </div>

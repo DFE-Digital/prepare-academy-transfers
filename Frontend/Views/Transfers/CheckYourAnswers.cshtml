@@ -19,14 +19,14 @@
                 <dt class="govuk-summary-list__key">Name</dt>
                 <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Name</dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="TrustName", asp-route-change="true">
+                    <a class="govuk-link" asp-action="TrustName" asp-route-change="true">
                         Change <span class="govuk-visually-hidden">outgoing trust</span>
                     </a>
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Trust Reference Number</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.GiasGroupId</dd>
+                <dt class="govuk-summary-list__key">UKPRN</dt>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Ukprn</dd>
                 <dd class="govuk-summary-list__actions"></dd>
             </div>
         </dl>
@@ -102,7 +102,6 @@
                 </dd>
             </div>
         </dl>
-        <p class="govuk-body-l">Once you select 'start transfer project', you’ll answer a few questions about the features of this transfer project.</p>
-        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject">Start transfer project</a>
+        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject">Continue</a>
     </div>
 </div>
