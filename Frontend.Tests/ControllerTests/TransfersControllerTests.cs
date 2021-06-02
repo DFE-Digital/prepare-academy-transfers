@@ -18,6 +18,7 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
+        private readonly Mock<IAcademies> _academiesRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ITrusts> _trustsRepository;
 
@@ -26,6 +27,7 @@ namespace Frontend.Tests.ControllerTests
 
         public TransfersControllerTests()
         {
+            _academiesRepository = new Mock<IAcademies>();
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
             _session = new Mock<ISession>();
@@ -39,8 +41,8 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(_projectsRepository.Object,
-                _trustsRepository.Object
+            _subject = new TransfersController(_academiesRepository.Object, _projectsRepository.Object,
+                _trustsRepository.Object 
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
@@ -403,31 +405,31 @@ namespace Frontend.Tests.ControllerTests
 
         public class IncomingTrust : TransfersControllerTests
         {
-            private readonly Trust _outgoingTrust;
+            private readonly Academy _outgoingAcademy;
 
             public IncomingTrust()
             {
-                _outgoingTrust = new Trust
+                _outgoingAcademy = new Academy
                 {
                     Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
                     Name = "test name"
                 };
 
-                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
-                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
+                var outgoingAcademyIdByteArray = Encoding.UTF8.GetBytes(_outgoingAcademy.Ukprn);
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdByteArray)).Returns(true);
 
-                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(new RepositoryResult<Trust>
+                _academiesRepository.Setup(r => r.GetAcademyByUkprn(_outgoingAcademy.Ukprn)).ReturnsAsync(new RepositoryResult<Academy>
                 {
-                    Result = _outgoingTrust
+                    Result = _outgoingAcademy
                 });
             }
 
             [Fact]
-            public async void GivenTrustIdInSession_ReturnsTrustNameInViewData()
+            public async void GivenOutgoingAcademyIdInSession_ReturnsAcademyNameInViewData()
             {
                 await _subject.IncomingTrust();
 
-                Assert.Equal(_outgoingTrust.Name, _subject.ViewData["OutgoingTrustName"]);
+                Assert.Equal(_outgoingAcademy.Name, _subject.ViewData["OutgoingAcademyName"]);
             }
 
             [Fact]

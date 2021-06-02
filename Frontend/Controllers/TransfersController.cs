@@ -17,11 +17,13 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
+        private readonly IAcademies _academiesRepository;
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
 
-        public TransfersController(IProjects projectsRepository, ITrusts trustsRepository)
+        public TransfersController(IAcademies academiesRepository, IProjects projectsRepository, ITrusts trustsRepository)
         {
+            _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
         }
@@ -145,11 +147,10 @@ namespace Frontend.Controllers
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
 
-            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            var outgoingAcademyId = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
+            var outgoingAcademyRepoResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyId);
 
-            var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
-
-            ViewData["OutgoingTrustName"] = trustRepoResult.Result.Name;
+            ViewData["OutgoingAcademyName"] = outgoingAcademyRepoResult.Result.Name;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 
