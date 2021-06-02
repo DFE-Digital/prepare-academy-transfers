@@ -62,7 +62,7 @@ namespace API.Wrappers
                     Urn = academy.Urn,
                     LocalAuthorityName = academy.LocalAuthorityName,
                     EstablishmentType = academy.EstablishmentType,
-                    ReligiousCharacter = academy.ReligiousCharacter,
+                    FaithSchool = academy.ReligiousCharacter,
                     Pfi = academy.Pfi,
                     LatestOfstedJudgement = new LatestOfstedJudgement()
                     {

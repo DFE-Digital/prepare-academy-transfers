@@ -9,7 +9,8 @@ namespace Frontend.Tests.HelpersTests
         public enum TestEnum
         {
             [Display(Name = "First enum")] First,
-            [Display(Name = "Second enum")] Second
+            [Display(Name = "Second enum")] Second,
+            Third = 3
         }
 
         [Fact]
@@ -23,6 +24,7 @@ namespace Frontend.Tests.HelpersTests
         [Theory]
         [InlineData("First", TestEnum.First)]
         [InlineData("Second", TestEnum.Second)]
+        [InlineData("3", TestEnum.Third)]
         public void EnumParsesCorrectly(string toParse, TestEnum expected)
         {
             Assert.Equal(expected, EnumHelpers<TestEnum>.Parse(toParse));

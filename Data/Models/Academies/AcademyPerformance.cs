@@ -7,7 +7,8 @@ namespace Data.Models.Academies
         public string SchoolPhase { get; set; }
         public string AgeRange { get; set; }
         public string Capacity { get; set; }
-        public string Nor { get; set; }
+        public string NumberOnRoll { get; set; }
+        public string PercentageFull { get; set; }
         public string Pan { get; set; }
         public string Pfi { get; set; }
         public string ViabilityIssue { get; set; }
@@ -17,6 +18,7 @@ namespace Data.Models.Academies
         public string DistanceToSponsorHq { get; set; }
         public string MpAndParty { get; set; }
         public string OfstedJudgementDate { get; set; }
+        public string OfstedRating { get; set; }
         public string CurrentFramework { get; set; }
         public string AchievementOfPupil { get; set; }
         public string QualityOfTeaching { get; set; }
@@ -30,7 +32,7 @@ namespace Data.Models.Academies
                 new FormField {Title = "School phase", Value = SchoolPhase},
                 new FormField {Title = "Age range", Value = AgeRange},
                 new FormField {Title = "Capacity", Value = Capacity},
-                new FormField {Title = "NOR (% full)", Value = Nor},
+                new FormField {Title = "NOR (% full)", Value = $"{NumberOnRoll} ({PercentageFull}%)"},
                 new FormField {Title = "PAN", Value = Pan},
                 new FormField {Title = "PFI", Value = Pfi},
                 new FormField {Title = "Viability issue", Value = ViabilityIssue},
@@ -39,7 +41,7 @@ namespace Data.Models.Academies
                 new FormField {Title = "Dioceses % G or O", Value = DiocesesPercent},
                 new FormField {Title = "Distance to sponsor HQ", Value = DistanceToSponsorHq},
                 new FormField {Title = "MP (Party)", Value = MpAndParty},
-                new FormField {Title = "Ofsted judgement date", Value = OfstedJudgementDate},
+                new FormField {Title = "Ofsted judgement date", Value = $"{OfstedRating} ({OfstedJudgementDate})"},
                 new FormField {Title = "Current framework", Value = CurrentFramework},
                 new FormField {Title = "Achievement of pupil", Value = AchievementOfPupil},
                 new FormField {Title = "Quality of teaching", Value = QualityOfTeaching},

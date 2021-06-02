@@ -16,7 +16,7 @@ namespace Data.Mock
                     SchoolPhase = "Placeholder",
                     AgeRange = "Placeholder",
                     Capacity = "Placeholder",
-                    Nor = "Placeholder",
+                    NumberOnRoll = "Placeholder",
                     Pan = "Placeholder",
                     Pfi = "Placeholder",
                     ViabilityIssue = "Placeholder",
