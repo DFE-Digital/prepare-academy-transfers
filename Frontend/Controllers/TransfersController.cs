@@ -17,11 +17,13 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
+        private readonly IAcademies _academiesRepository;
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
 
-        public TransfersController(IProjects projectsRepository, ITrusts trustsRepository)
+        public TransfersController(IAcademies academiesRepository, IProjects projectsRepository, ITrusts trustsRepository)
         {
+            _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
         }
@@ -139,11 +141,16 @@ namespace Frontend.Controllers
             return RedirectToAction(nextAction);
         }
 
-        public IActionResult IncomingTrust(string query = "", bool change = false)
+        public async Task<IActionResult> IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
+
+            var outgoingAcademyId = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
+            var outgoingAcademyRepoResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyId);
+
+            ViewData["OutgoingAcademyName"] = outgoingAcademyRepoResult.Result.Name;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 

@@ -11,6 +11,7 @@ namespace Data.Mock
             var academy = new Academy
             {
                 Ukprn = ukprn,
+                Name = "Placeholder",
                 Performance = new AcademyPerformance
                 {
                     SchoolPhase = "Placeholder",

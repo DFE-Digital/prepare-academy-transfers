@@ -18,6 +18,7 @@ namespace Frontend.Tests.ControllerTests
 {
     public class TransfersControllerTests
     {
+        private readonly Mock<IAcademies> _academiesRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ITrusts> _trustsRepository;
 
@@ -26,6 +27,7 @@ namespace Frontend.Tests.ControllerTests
 
         public TransfersControllerTests()
         {
+            _academiesRepository = new Mock<IAcademies>();
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
             _session = new Mock<ISession>();
@@ -39,8 +41,8 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(_projectsRepository.Object,
-                _trustsRepository.Object
+            _subject = new TransfersController(_academiesRepository.Object, _projectsRepository.Object,
+                _trustsRepository.Object 
             ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
@@ -403,28 +405,55 @@ namespace Frontend.Tests.ControllerTests
 
         public class IncomingTrust : TransfersControllerTests
         {
+            private readonly Academy _outgoingAcademy;
+
+            public IncomingTrust()
+            {
+                _outgoingAcademy = new Academy
+                {
+                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
+                    Name = "test name"
+                };
+
+                var outgoingAcademyIdByteArray = Encoding.UTF8.GetBytes(_outgoingAcademy.Ukprn);
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdByteArray)).Returns(true);
+
+                _academiesRepository.Setup(r => r.GetAcademyByUkprn(_outgoingAcademy.Ukprn)).ReturnsAsync(new RepositoryResult<Academy>
+                {
+                    Result = _outgoingAcademy
+                });
+            }
+
             [Fact]
-            public void GivenErrorMessageExists_SetErrorInViewData()
+            public async void GivenOutgoingAcademyIdInSession_ReturnsAcademyNameInViewData()
+            {
+                await _subject.IncomingTrust();
+
+                Assert.Equal(_outgoingAcademy.Name, _subject.ViewData["OutgoingAcademyName"]);
+            }
+
+            [Fact]
+            public async void GivenErrorMessageExists_SetErrorInViewData()
             {
                 _subject.TempData["ErrorMessage"] = "This is an error message";
-                _subject.IncomingTrust();
+                await _subject.IncomingTrust();
 
                 Assert.Equal(true, _subject.ViewData["Error.Exists"]);
                 Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
             }
 
             [Fact]
-            public void GivenExistingQuery_SetQueryInViewData()
+            public async void GivenExistingQuery_SetQueryInViewData()
             {
-                _subject.IncomingTrust("Meow");
+                await _subject.IncomingTrust("Meow");
 
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
 
             [Fact]
-            public void GivenChangeLink_SetChangeLinkinViewData()
+            public async void GivenChangeLink_SetChangeLinkinViewData()
             {
-                _subject.IncomingTrust("Meow", true);
+                await _subject.IncomingTrust("Meow", true);
 
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
