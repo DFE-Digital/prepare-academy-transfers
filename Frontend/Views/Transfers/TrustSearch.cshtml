@@ -25,10 +25,6 @@
                     <div class="govuk-radios">
                         @foreach (var trust in Model.Trusts)
                         {
-                            <h2 class="govuk-heading-s">
-                                <a class="govuk-link" asp-action="OutgoingTrustDetails" asp-route-trustId="@trust.Ukprn" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"]">
-                                </a>
-                            </h2>
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="@trust.Ukprn" name="trustId" type="radio" value="@trust.Ukprn" aria-describedby="@trust.Ukprn-hint">
                                 <label class="govuk-label govuk-radios__label" for="@trust.Ukprn">
