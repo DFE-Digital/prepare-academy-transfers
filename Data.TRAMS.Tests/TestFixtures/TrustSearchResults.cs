@@ -16,7 +16,7 @@ namespace Data.TRAMS.Tests.TestFixtures
                 searchResults.Add(
                     new TramsTrustSearchResult
                     {
-                        Academies = new List<TramsTrustSearchAcademy>(),
+                        Establishments = new List<TramsTrustSearchEstablishment>(),
                         CompaniesHouseNumber = counter.ToString(),
                         GroupName = $"Trust {counter}",
                         Urn = counter.ToString()

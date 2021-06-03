@@ -1,8 +1,9 @@
 namespace Data.TRAMS.Models
 {
-    public class TramsTrustSearchAcademy
+    public class TramsTrustSearchEstablishment
     {
         public string Name { get; set; }
+        public string Ukprn { get; set; }
         public string Urn { get; set; }
     }
 }

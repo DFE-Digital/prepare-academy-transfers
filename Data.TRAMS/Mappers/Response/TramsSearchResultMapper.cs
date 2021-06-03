@@ -13,9 +13,9 @@ namespace Data.TRAMS.Mappers.Response
                 Ukprn = input.Urn,
                 TrustName = input.GroupName,
                 CompaniesHouseNumber = input.CompaniesHouseNumber,
-                Academies = input.Academies.Select(academy => new TrustSearchAcademy
+                Academies = input.Establishments.Select(establishment => new TrustSearchAcademy
                 {
-                    Name = academy.Name, Ukprn = academy.Urn
+                    Name = establishment.Name, Ukprn = establishment.Ukprn, Urn = establishment.Urn
                 }).ToList()
             };
         }

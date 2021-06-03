@@ -152,9 +152,9 @@ namespace Frontend
                 services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
                 services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
                 services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
-                services.AddTransient<IMapper<TramsAcademy, Academy>, TramsAcademyMapper>();
+                services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
                 services.AddTransient<ITrusts, TramsTrustsRepository>();
-                services.AddTransient<IAcademies, TramsAcademiesRepository>();
+                services.AddTransient<IAcademies, TramsEstablishmentRepository>();
                 services.AddSingleton<IProjects, MockProjectRepository>();
             }
         }
