@@ -197,32 +197,51 @@ namespace Frontend.Tests.ControllerTests.Projects
             public class PostTests : HtbDateTests
             {
                 [Theory]
-                [InlineData("01/01/2020")]
-                [InlineData("03/02/2020")]
-                public async void GivenUrnAndDate_UpdatesTheProjectWithTheCorrectDate(string htbDate)
+                [InlineData("01", "01", "2020", "01/01/2020")]
+                [InlineData("20", "02", "2021", "20/02/2021")]
+                [InlineData("2", "2", "2021", "02/02/2021")]
+                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate(string day, string month,
+                    string year, string expectedDate)
                 {
-                    await _subject.HtbDatePost("0001", htbDate);
+                    await _subject.HtbDatePost("0001", day, month, year);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Dates.Htb == htbDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.Htb == expectedDate)));
                 }
 
                 [Fact]
-                public async void GivenUrnAndDate_RedirectsToTheSummaryPage()
+                public async void GivenUrnAndFullDate_RedirectsToTheSummaryPage()
                 {
-                    var response = await _subject.HtbDatePost("0001", "03/02/2020");
+                    var response = await _subject.HtbDatePost("0001", "01", "01", "2020");
                     ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
                 }
 
-                [Fact]
-                public async void GivenNoHtbDate_CreatesAnErrorOnTheModelAndSetsErrorIdToFirstHtbDate()
+                [Theory]
+                [InlineData(null, "1", "2020")]
+                [InlineData("1", null, "2020")]
+                [InlineData("1", "1", null)]
+                public async void GivenPartsOfDateMissing_SetErrorOnTheModel(string day, string month, string year)
                 {
-                    var response = await _subject.HtbDatePost("0001", "");
-                    var model = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+                    var response = await _subject.HtbDatePost("0001", day, month, year);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
-                    Assert.True(model.FormErrors.HasErrors);
-                    Assert.Equal("Please select an HTB date", model.FormErrors.Errors[0].ErrorMessage);
-                    Assert.Equal("01/01/2020", model.FormErrors.Errors[0].ErrorElementId);
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("Please enter the HTB date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+
+                [Theory]
+                [InlineData("0", "1", "2020")]
+                [InlineData("32", "1", "2020")]
+                [InlineData("1", "0", "2020")]
+                [InlineData("1", "13", "2020")]
+                [InlineData("1", "13", "0")]
+                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year)
+                {
+                    var response = await _subject.HtbDatePost("0001", day, month, year);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
             }
         }
