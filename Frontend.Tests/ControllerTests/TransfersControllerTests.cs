@@ -384,25 +384,6 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
-        public class SubmitIncomingTrustIdentifiedTests : TransfersControllerTests
-        {
-            [Fact]
-            public void GivenYes_RedirectToIncomingTrustPage()
-            {
-                var response = _subject.SubmitIncomingTrustIdentified("yes");
-                var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("IncomingTrust", redirectResponse.ActionName);
-            }
-
-            [Fact]
-            public void GivenNo_RedirectToCheckYourAnswers()
-            {
-                var response = _subject.SubmitIncomingTrustIdentified("no");
-                var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("CheckYourAnswers", redirectResponse.ActionName);
-            }
-        }
-
         public class IncomingTrust : TransfersControllerTests
         {
             private readonly Academy _outgoingAcademy;

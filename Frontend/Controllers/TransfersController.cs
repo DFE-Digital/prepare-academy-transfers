@@ -130,17 +130,6 @@ namespace Frontend.Controllers
             return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust");
         }
 
-        public IActionResult IncomingTrustIdentified()
-        {
-            return View();
-        }
-
-        public IActionResult SubmitIncomingTrustIdentified(string incomingTrustIdentified)
-        {
-            var nextAction = incomingTrustIdentified == "yes" ? "IncomingTrust" : "CheckYourAnswers";
-            return RedirectToAction(nextAction);
-        }
-
         public async Task<IActionResult> IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
