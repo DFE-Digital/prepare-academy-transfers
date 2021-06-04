@@ -97,17 +97,21 @@ namespace Frontend.Controllers.Projects
 
         [HttpPost("htb-date")]
         [ActionName("HtbDate")]
-        public async Task<IActionResult> HtbDatePost(string urn, string htbDate)
+        public async Task<IActionResult> HtbDatePost(string urn, string day, string month, string year)
         {
             var model = await GetModel(urn);
-            model.Project.Dates.Htb = htbDate;
+            var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
+            model.Project.Dates.Htb = dateString;
 
-            if (string.IsNullOrEmpty(htbDate))
+            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                var startDateString = DatesHelper.DateTimeToDateString(_dateTimeProvider.Today());
-                var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDateString);
-                var errorId = DatesHelper.DateTimeToDateString(htbDates[0]);
-                model.FormErrors.AddError(errorId, "htbDate", "Please select an HTB date");
+                model.FormErrors.AddError("day", "day", "Please enter the HTB date");
+                return View(model);
+            }
+
+            if (!DatesHelper.IsValidDate(dateString))
+            {
+                model.FormErrors.AddError("day", "day", "Please enter a valid date");
                 return View(model);
             }
 

@@ -18,23 +18,12 @@ namespace Frontend.Models
 
         public DateInputViewModel TransferFirstDiscussed => DateInputForField(Project.Dates.FirstDiscussed);
         public DateInputViewModel TargetDate => DateInputForField(Project.Dates.Target);
+        public DateInputViewModel HtbDate => DateInputForField(Project.Dates.Htb);
 
         private static DateInputViewModel DateInputForField(string transferDatesFirstDiscussed)
         {
             var splitDate = DatesHelper.DateStringToDayMonthYear(transferDatesFirstDiscussed);
             return new DateInputViewModel {Day = splitDate[0], Month = splitDate[1], Year = splitDate[2]};
-        }
-
-        public List<RadioButtonViewModel> PotentialHtbDates(string startDateString)
-        {
-            var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDateString);
-
-            return htbDates.Select(htbDate => new RadioButtonViewModel
-            {
-                Name = "htbDate", Value = DatesHelper.DateTimeToDateString(htbDate),
-                DisplayName = htbDate.ToString("dddd d MMMM yyyy"),
-                Checked = Project.Dates.Htb == DatesHelper.DateTimeToDateString(htbDate)
-            }).ToList();
         }
     }
 }
