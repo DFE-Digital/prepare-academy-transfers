@@ -11,14 +11,14 @@ namespace Data.TRAMS.Tests
     public class TramsAcademiesRepositoryTests
     {
         private readonly Mock<ITramsHttpClient> _client;
-        private readonly Mock<IMapper<TramsAcademy, Academy>> _mapper;
-        private readonly TramsAcademiesRepository _subject;
+        private readonly Mock<IMapper<TramsEstablishment, Academy>> _mapper;
+        private readonly TramsEstablishmentRepository _subject;
 
         public TramsAcademiesRepositoryTests()
         {
             _client = new Mock<ITramsHttpClient>();
-            _mapper = new Mock<IMapper<TramsAcademy, Academy>>();
-            _subject = new TramsAcademiesRepository(_client.Object, _mapper.Object);
+            _mapper = new Mock<IMapper<TramsEstablishment, Academy>>();
+            _subject = new TramsEstablishmentRepository(_client.Object, _mapper.Object);
         }
 
         public class GetAcademyByUkprnTests : TramsAcademiesRepositoryTests
@@ -28,7 +28,7 @@ namespace Data.TRAMS.Tests
             {
                 _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(Academies.SingleAcademy()))
+                    Content = new StringContent(JsonConvert.SerializeObject(Establishments.SingleEstablishment()))
                 });
 
                 await _subject.GetAcademyByUkprn("12345");
@@ -39,7 +39,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenUkprn_MapFoundAcademy()
             {
-                var academy = Academies.SingleAcademy();
+                var academy = Establishments.SingleEstablishment();
                 _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(academy))
@@ -47,20 +47,20 @@ namespace Data.TRAMS.Tests
 
                 await _subject.GetAcademyByUkprn("12345");
 
-                _mapper.Verify(m => m.Map(It.Is<TramsAcademy>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
+                _mapper.Verify(m => m.Map(It.Is<TramsEstablishment>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
                     Times.Once);
             }
 
             [Fact]
             public async void GivenUkprn_ReturnsMappedAcademy()
             {
-                var academy = Academies.SingleAcademy();
+                var academy = Establishments.SingleEstablishment();
                 _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(academy))
                 });
 
-                _mapper.Setup(m => m.Map(It.IsAny<TramsAcademy>())).Returns<TramsAcademy>(input => new Academy
+                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input => new Academy
                 {
                     Ukprn = $"Mapped {academy.Ukprn}"
                 });

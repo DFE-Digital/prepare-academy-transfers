@@ -1,6 +1,6 @@
 namespace Data.TRAMS.Models
 {
-    public class TramsAcademy
+    public class TramsEstablishment
     {
         public Address Address { get; set; }
         public NameAndCode AdministrativeWard { get; set; }

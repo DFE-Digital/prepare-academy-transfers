@@ -7,14 +7,15 @@ using Data.TRAMS.Models;
 
 namespace Data.TRAMS.Mappers.Response
 {
-    public class TramsAcademyMapper : IMapper<TramsAcademy, Academy>
+    public class TramsEstablishmentMapper : IMapper<TramsEstablishment, Academy>
     {
-        public Academy Map(TramsAcademy input)
+        public Academy Map(TramsEstablishment input)
         {
             return new Academy
             {
                 Address = Address(input),
                 EstablishmentType = input.EstablishmentType.Name,
+                FaithSchool = input.MisEstablishment.ReligiousEthos,
                 LatestOfstedJudgement = LatestOfstedJudgement(input),
                 LocalAuthorityName = input.LocalAuthorityName,
                 Name = input.EstablishmentName,
@@ -24,11 +25,12 @@ namespace Data.TRAMS.Mappers.Response
                     BoysOnRoll = input.Census.NumberOfBoys,
                     GirlsOnRoll = input.Census.NumberOfGirls
                 },
-                Ukprn = input.Ukprn
+                Ukprn = input.Ukprn,
+                Urn = input.Urn
             };
         }
 
-        private static LatestOfstedJudgement LatestOfstedJudgement(TramsAcademy input)
+        private static LatestOfstedJudgement LatestOfstedJudgement(TramsEstablishment input)
         {
             return new LatestOfstedJudgement
             {
@@ -57,7 +59,7 @@ namespace Data.TRAMS.Mappers.Response
             };
         }
 
-        private static AcademyPerformance Performance(TramsAcademy input)
+        private static AcademyPerformance Performance(TramsEstablishment input)
         {
             return new AcademyPerformance
             {
@@ -77,13 +79,13 @@ namespace Data.TRAMS.Mappers.Response
             };
         }
 
-        private static List<string> Address(TramsAcademy input)
+        private static List<string> Address(TramsEstablishment input)
         {
             return new List<string>
                 {input.Address.Street, input.Address.Town, input.Address.County, input.Address.Postcode};
         }
 
-        private static string PercentageFull(TramsAcademy input)
+        private static string PercentageFull(TramsEstablishment input)
         {
             return Math.Round(
                     decimal.Parse(input.Census.NumberOfPupils) / decimal.Parse(input.SchoolCapacity) * 100,

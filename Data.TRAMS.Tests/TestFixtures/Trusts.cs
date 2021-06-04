@@ -9,7 +9,7 @@ namespace Data.TRAMS.Tests.TestFixtures
         {
             return new TramsTrust
             {
-                Academies = new List<TramsAcademy>(),
+                Establishments = new List<TramsEstablishment>(),
                 GiasData = new TramsTrustGiasData
                 {
                     Ukprn = "00001",

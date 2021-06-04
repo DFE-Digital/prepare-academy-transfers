@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 
 namespace Data.TRAMS
 {
-    public class TramsAcademiesRepository : IAcademies
+    public class TramsEstablishmentRepository : IAcademies
     {
         private readonly ITramsHttpClient _httpClient;
-        private readonly IMapper<TramsAcademy, Academy> _academyMapper;
+        private readonly IMapper<TramsEstablishment, Academy> _academyMapper;
 
-        public TramsAcademiesRepository(ITramsHttpClient httpClient, IMapper<TramsAcademy, Academy> academyMapper)
+        public TramsEstablishmentRepository(ITramsHttpClient httpClient, IMapper<TramsEstablishment, Academy> academyMapper)
         {
             _httpClient = httpClient;
             _academyMapper = academyMapper;
@@ -21,7 +21,7 @@ namespace Data.TRAMS
             using var response = await _httpClient.GetAsync($"establishment/{ukprn}");
 
             var apiResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<TramsAcademy>(apiResponse);
+            var result = JsonConvert.DeserializeObject<TramsEstablishment>(apiResponse);
             var mappedResult = _academyMapper.Map(result);
 
             return new RepositoryResult<Academy> {Result = mappedResult};

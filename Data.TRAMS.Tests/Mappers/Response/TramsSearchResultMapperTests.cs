@@ -12,15 +12,15 @@ namespace Data.TRAMS.Tests.Mappers.Response
         {
             var subject = new TramsSearchResultMapper();
 
-            var resultToMap = new TramsTrustSearchResult()
+            var resultToMap = new TramsTrustSearchResult
             {
                 Urn = "1234",
                 GroupName = "Group name",
                 CompaniesHouseNumber = "12345",
-                Academies = new List<TramsTrustSearchAcademy>()
+                Establishments = new List<TramsTrustSearchEstablishment>
                 {
-                    new TramsTrustSearchAcademy() {Name = "Academy 1 name", Urn = "0001"},
-                    new TramsTrustSearchAcademy() {Name = "Academy 2 name", Urn = "0002"}
+                    new TramsTrustSearchEstablishment {Name = "Academy 1 name", Urn = "0001", Ukprn = "1001"},
+                    new TramsTrustSearchEstablishment {Name = "Academy 2 name", Urn = "0002", Ukprn = "2001"}
                 }
             };
 
@@ -30,14 +30,16 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(resultToMap.GroupName, result.TrustName);
             Assert.Equal(resultToMap.CompaniesHouseNumber, result.CompaniesHouseNumber);
 
-            AssertAcademyMappedCorrectly(resultToMap.Academies[0], result.Academies[0]);
-            AssertAcademyMappedCorrectly(resultToMap.Academies[1], result.Academies[1]);
+            AssertAcademyMappedCorrectly(resultToMap.Establishments[0], result.Academies[0]);
+            AssertAcademyMappedCorrectly(resultToMap.Establishments[1], result.Academies[1]);
         }
 
-        private static void AssertAcademyMappedCorrectly(TramsTrustSearchAcademy academyToMap, Data.Models.TrustSearchAcademy mappedAcademy)
+        private static void AssertAcademyMappedCorrectly(TramsTrustSearchEstablishment establishmentToMap,
+            Data.Models.TrustSearchAcademy mappedAcademy)
         {
-            Assert.Equal(academyToMap.Name, mappedAcademy.Name);
-            Assert.Equal(academyToMap.Urn, mappedAcademy.Ukprn);
+            Assert.Equal(establishmentToMap.Name, mappedAcademy.Name);
+            Assert.Equal(establishmentToMap.Urn, mappedAcademy.Urn);
+            Assert.Equal(establishmentToMap.Ukprn, mappedAcademy.Ukprn);
         }
     }
 }
