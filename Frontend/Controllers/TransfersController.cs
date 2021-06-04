@@ -189,15 +189,6 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> IncomingTrustDetails(string trustId, string query = "", bool change = false)
-        {
-            var result = await _trustsRepository.GetByUkprn(trustId);
-            var model = new OutgoingTrustDetails {Trust = result.Result};
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
-            return View(model);
-        }
-
         public IActionResult ConfirmIncomingTrust(string trustId)
         {
             HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
