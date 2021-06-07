@@ -12,13 +12,15 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-        <span class="govuk-caption-m">Reference number: @Model.Project.Name</span>
+        <span class="govuk-caption-m">
+            URN @Model.Project.Urn
+        </span>
         <h1 class="govuk-heading-l">Pupil numbers</h1>
         <h2 class="govuk-heading-m">
             Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.OutgoingTrustName</span>
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
         <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay()"/>
-        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Continue</a>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Confirm and continue</a>
     </div>
 </div>

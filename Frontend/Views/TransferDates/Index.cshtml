@@ -15,7 +15,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-m">
-            Reference number: @Model.Project.Name
+            URN @Model.Project.Urn
         </span>
         <h1 class="govuk-heading-l">
             Set transfer dates
@@ -108,6 +108,6 @@
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Save and continue</a>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Confirm and continue</a>
     </div>
 </div>
