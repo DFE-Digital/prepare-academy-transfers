@@ -36,49 +36,49 @@
                 <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="features" asp-controller="Features" asp-action="Index" asp-route-urn="@Model.Project.Urn">Features of a transfer</a>
+                            <a class="govuk-link" aria-describedby="features" asp-controller="Features" asp-action="Index" asp-route-urn="@Model.Project.Urn">Features of a transfer</a>
                         </span><projectstatus id="features" status="@Model.FeatureTransferStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@Model.Project.Urn">Set transfer dates</a>
+                            <a class="govuk-link" aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@Model.Project.Urn">Set transfer dates</a>
                         </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@Model.Project.Urn">Benefits and other factors</a>
+                            <a class="govuk-link" aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@Model.Project.Urn">Benefits and other factors</a>
                         </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="rationale" asp-controller="Rationale" asp-action="Index" asp-route-urn="@Model.Project.Urn">Rationale</a>
+                            <a class="govuk-link" aria-describedby="rationale" asp-controller="Rationale" asp-action="Index" asp-route-urn="@Model.Project.Urn">Rationale</a>
                         </span><projectstatus id="rationale" , status="@Model.RationaleStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="general-information" href="#">Rationale</a>
+                            <a class="govuk-link" aria-describedby="general-information" href="#">Rationale</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">TO DO</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="academy-performance" asp-controller="AcademyPerformance" asp-action="Index" asp-route-id="@Model.Project.Urn">
+                            <a class="govuk-link" aria-describedby="academy-performance" asp-controller="AcademyPerformance" asp-action="Index" asp-route-id="@Model.Project.Urn">
                                 Academy performance
                             </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="academy-performance">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Project.Urn">Pupil numbers</a>
+                            <a class="govuk-link" aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Project.Urn">Pupil numbers</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@Model.Project.Urn">Latest Ofsted report</a>
+                            <a class="govuk-link" aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@Model.Project.Urn">Latest Ofsted report</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a href="#" aria-describedby="key-stage-performance-tables">Key stage performance tables</a>
+                            <a class="govuk-link" href="#" aria-describedby="key-stage-performance-tables">Key stage performance tables</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-performance-tables">Reference only</strong>
                     </li>
                 </ul>
