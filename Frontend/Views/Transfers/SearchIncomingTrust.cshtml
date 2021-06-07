@@ -12,9 +12,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form class="govuk-form" asp-action="IncomingTrustDetails" method="get">
-            <input type="text" name="query" value="@ViewData["Query"]" hidden />
-            <input type="text" name="change" value="@ViewData["ChangeLink"].ToString()" hidden />
+        <form class="govuk-form" asp-action="ConfirmIncomingTrust" method="get">
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">

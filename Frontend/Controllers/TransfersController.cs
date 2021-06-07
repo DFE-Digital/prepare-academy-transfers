@@ -130,17 +130,6 @@ namespace Frontend.Controllers
             return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust");
         }
 
-        public IActionResult IncomingTrustIdentified()
-        {
-            return View();
-        }
-
-        public IActionResult SubmitIncomingTrustIdentified(string incomingTrustIdentified)
-        {
-            var nextAction = incomingTrustIdentified == "yes" ? "IncomingTrust" : "CheckYourAnswers";
-            return RedirectToAction(nextAction);
-        }
-
         public async Task<IActionResult> IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
@@ -186,15 +175,6 @@ namespace Frontend.Controllers
 
             var model = new TrustSearch {Trusts = result.Result};
 
-            return View(model);
-        }
-
-        public async Task<IActionResult> IncomingTrustDetails(string trustId, string query = "", bool change = false)
-        {
-            var result = await _trustsRepository.GetByUkprn(trustId);
-            var model = new OutgoingTrustDetails {Trust = result.Result};
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
             return View(model);
         }
 

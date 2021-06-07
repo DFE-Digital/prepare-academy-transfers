@@ -384,25 +384,6 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
-        public class SubmitIncomingTrustIdentifiedTests : TransfersControllerTests
-        {
-            [Fact]
-            private void GivenYes_RedirectToIncomingTrustPage()
-            {
-                var response = _subject.SubmitIncomingTrustIdentified("yes");
-                var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("IncomingTrust", redirectResponse.ActionName);
-            }
-
-            [Fact]
-            private void GivenNo_RedirectToCheckYourAnswers()
-            {
-                var response = _subject.SubmitIncomingTrustIdentified("no");
-                var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("CheckYourAnswers", redirectResponse.ActionName);
-            }
-        }
-
         public class IncomingTrust : TransfersControllerTests
         {
             private readonly Academy _outgoingAcademy;
@@ -545,53 +526,6 @@ namespace Frontend.Tests.ControllerTests
 
                 await _subject.SearchIncomingTrust("Trust name", true);
 
-                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
-            }
-        }
-
-        public class IncomingTrustDetailsTests : TransfersControllerTests
-        {
-            [Fact]
-            public async void GivenId_LookupTrustFromAPIAndAssignToView()
-            {
-                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-                var foundTrust = new Trust
-                {
-                    Ukprn = trustId,
-                    Name = "Trust name"
-                };
-
-                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>
-                {
-                    Result = foundTrust
-                });
-
-                var response = await _subject.IncomingTrustDetails(trustId);
-
-                _trustsRepository.Verify(r => r.GetByUkprn(trustId), Times.Once);
-
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
-
-                Assert.Equal(foundTrust, viewModel.Trust);
-            }
-
-            [Fact]
-            public async void GivenChangeLink_SetChangeLinkInView()
-            {
-                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-                var foundTrust = new Trust
-                {
-                    Ukprn = trustId,
-                    Name = "Trust name"
-                };
-
-                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(new RepositoryResult<Trust>
-                {
-                    Result = foundTrust
-                });
-
-                await _subject.IncomingTrustDetails(trustId, "", true);
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
         }
