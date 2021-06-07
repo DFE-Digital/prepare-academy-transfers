@@ -87,9 +87,20 @@
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
-        <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Preview" asp-route-id="@Model.Project.Urn">
-            Preview HTB Template
-        </a>
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">
+            Preview or generate HTB template
+        </h2>
+        <p class="govuk-body govuk-!-margin-bottom-6">
+            Preview your HTB template before you generate it into a Word document, or you can generate the document without previewing it.
+        </p>
+        <div class="govuk-button-group">
+            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Preview" asp-route-id="@Model.Project.Urn">
+                Preview HTB template
+            </a>
+            <a role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn">
+                Generate HTB document
+            </a>
+        </div>
     </div>
 </div>
