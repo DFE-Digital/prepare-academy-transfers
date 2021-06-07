@@ -89,9 +89,9 @@ namespace Data.Mock
                 {
                     new TransferringAcademies
                     {
-                        OutgoingAcademyUkprn = "10040290",
-                        OutgoingAcademyUrn = "139318",
-                        OutgoingAcademyName = "Conyers School",
+                        OutgoingAcademyUkprn = "10084105",
+                        OutgoingAcademyUrn = "147435",
+                        OutgoingAcademyName = "Bewley Primary School",
                         IncomingTrustUkprn = "10059766",
                         IncomingTrustName = "Wise Owl Trust"
                     }
