@@ -17,7 +17,6 @@ namespace Data.Mock
         private const string PopulatedProjectNumber = "AT-0001-POPULATED";
         private const string EmptyProjectUrn = "0002";
         private const string EmptyProjectNumber = "AT-0002-EMPTY";
-        private const string OutgoingTrustName = "Example trust";
 
         public MockProjectRepository(ILogger<MockProjectRepository> logger)
         {
@@ -30,7 +29,10 @@ namespace Data.Mock
             var result = new RepositoryResult<List<ProjectSearchResult>>
             {
                 Result = _projects.Select(project => new ProjectSearchResult
-                    {Urn = project.Urn, Number = project.Name, OutgoingTrustName = project.OutgoingTrustName}).ToList()
+                {
+                    Urn = project.Urn, Number = project.Name, OutgoingTrustName = project.OutgoingTrustName,
+                    TransferringAcademies = project.TransferringAcademies
+                }).ToList()
             };
 
             return Task.FromResult(result);
@@ -81,15 +83,17 @@ namespace Data.Mock
             {
                 Urn = EmptyProjectUrn,
                 Name = EmptyProjectNumber,
-                OutgoingTrustName = OutgoingTrustName,
+                OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyUrn = "139318",
                         OutgoingAcademyName = "Conyers School",
-                        IncomingTrustUkprn = "10059766"
+                        IncomingTrustUkprn = "10059766",
+                        IncomingTrustName = "Wise Owl Trust"
                     }
                 }
             };
@@ -101,15 +105,17 @@ namespace Data.Mock
             {
                 Urn = PopulatedProjectUrn,
                 Name = PopulatedProjectNumber,
-                OutgoingTrustName = OutgoingTrustName,
+                OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyUrn = "139318",
                         OutgoingAcademyName = "Conyers School",
-                        IncomingTrustUkprn = "10059766"
+                        IncomingTrustUkprn = "10059766",
+                        IncomingTrustName = "Wise Owl Trust"
                     }
                 },
                 Features = new TransferFeatures

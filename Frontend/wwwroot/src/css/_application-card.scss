@@ -1,0 +1,28 @@
+.dfe-application-card {
+  margin-bottom: govuk-spacing(3);
+  padding-bottom: govuk-spacing(3);
+  border-bottom: 1px solid govuk-colour('mid-grey');
+  display: flex;
+  // Ensure columns evenly distributed, with no gap at the start or end
+  justify-content: space-between;
+  width: 100%;
+  gap: 1.25rem;
+}
+
+.dfe-application-card:first-of-type {
+  border-top: 1px solid govuk-colour('mid-grey');
+  padding-top: govuk-spacing(3);
+}
+
+.dfe-application-card .dfe-application-card--project-info {
+  width: 60%;
+}
+
+.dfe-application-card .dfe-application-card--statuses {
+  width: 40%;
+  text-align: right;
+
+  .govuk-tag {
+    margin-bottom: govuk-spacing(2);
+  }
+}
