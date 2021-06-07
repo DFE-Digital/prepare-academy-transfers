@@ -1,4 +1,4 @@
-@model object
+@model ProjectViewModel
 
 @{
     ViewBag.Title = "Generate HTB documents";
@@ -7,29 +7,38 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="Preview" asp-route-id="@ViewData["ProjectId"]">Back</a>
+    <a class="govuk-back-link" asp-action="Preview" asp-route-id="@Model.Project.Urn">Back</a>
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <div>
-            <h1 class="govuk-heading-xl">Generate headteacher board (HTB) documents</h1>
-        </div>
+    <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-9">
+        <span class="govuk-caption-l">@Model.Project.OutgoingAcademyName</span>
+        <h1 class="govuk-heading-xl">
+            Download headteacher board (HTB) documents
+        </h1>
         <div class="govuk-inset-text">
-            <p class="govuk-body-m">Save these documents in the school's Sharepoint file</p>
+            Save these documents in the school's Sharepoint file.
         </div>
-
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-quarter">
-                <a aria-hidden="true" class="thumbnail" tabindex="-1" href="#"></a><img alt="" src="https://www.gov.uk/assets/whitehall/pub-cover-html-b0465911e56983d98c70f0e25fba24bc206d37e8c83d4addf6421dcf6022c6cd.png">
+        <section class="dfe-c-attachment">
+            <div class="dfe-c-attachment__thumbnail">
+                <a class="govuk-link" target="_self" tabindex="-1" aria-hidden="true" href="#">
+                    <svg class="dfe-c-attachment__thumbnail-image" version="1.1" viewBox="0 0 99 140" width="99" height="140" aria-hidden="true">
+                        <path d="M12 12h75v27H12zM12 59h9v9h-9zM12 77h9v9h-9zM12 95h9v9h-9zM12 113h9v9h-9zM30 59h57v9H30zM30 77h39v9H30zM30 95h57v9H30zM30 113h48v9H30z" stroke-width="0"></path>
+                    </svg>
+                </a>
             </div>
-            <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
-                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@ViewData["ProjectId"]">
-                        HTBTemplate.docx
+            <div class="dfe-c-attachment__details">
+                <h2 class="dfe-c-attachment__title">
+                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Project.Urn">
+                        @Model.Project.OutgoingAcademyName - HTB template
                     </a>
                 </h2>
+                <p class="dfe-c-attachment__metadata">
+                    <span class="dfe-c-attachment__attribute">
+                        MS Word Document
+                    </span>
+                </p>
             </div>
-        </div>
+        </section>
     </div>
 </div>

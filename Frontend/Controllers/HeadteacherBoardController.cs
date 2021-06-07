@@ -36,10 +36,16 @@ namespace Frontend.Controllers
         }
 
         [Route("download")]
-        public IActionResult Download([FromRoute] string id)
+        public async Task<IActionResult> Download([FromRoute] string id)
         {
-            ViewData["ProjectId"] = id;
-            return View();
+            var projectInformation = await _getInformationForProject.Execute(id);
+
+            var model = new ProjectViewModel()
+            {
+                Project = projectInformation.Project
+            };
+
+            return View(model);
         }
 
         public async Task<IActionResult> GenerateDocument([FromRoute] string id)

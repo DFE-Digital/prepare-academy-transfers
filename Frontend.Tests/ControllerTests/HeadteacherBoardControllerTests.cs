@@ -82,6 +82,50 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
+        public class DownloadTests : HeadteacherBoardControllerTests
+        {
+            private readonly string _projectUrn;
+            private readonly Project _foundProject;
+
+            public DownloadTests()
+            {
+                _projectUrn = "ProjectId";
+
+                _foundProject = new Project
+                {
+                    Urn = _projectUrn,
+                    TransferringAcademies = new List<TransferringAcademies>
+                    {
+                        new TransferringAcademies
+                            {OutgoingAcademyUkprn = "12345"}
+                    }
+                };
+
+                var foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
+
+                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
+                    new GetInformationForProjectResponse {Project = _foundProject, OutgoingAcademy = foundAcademy});
+            }
+
+            [Fact]
+            public async void GivenId_GetsProjectInformation()
+            {
+                await _subject.Download(_projectUrn);
+
+                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenId_PutsTheProjectInTheViewModel()
+            {
+                var response = await _subject.Preview(_projectUrn);
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
+
+                Assert.Equal(_foundProject, viewModel.Project);
+            }
+        }
+
         public class GenerateDocumentTests : HeadteacherBoardControllerTests
         {
             [Fact]
