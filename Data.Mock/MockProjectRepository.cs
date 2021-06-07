@@ -17,7 +17,6 @@ namespace Data.Mock
         private const string PopulatedProjectNumber = "AT-0001-POPULATED";
         private const string EmptyProjectUrn = "0002";
         private const string EmptyProjectNumber = "AT-0002-EMPTY";
-        private const string OutgoingTrustName = "Example trust";
 
         public MockProjectRepository(ILogger<MockProjectRepository> logger)
         {
@@ -84,7 +83,7 @@ namespace Data.Mock
             {
                 Urn = EmptyProjectUrn,
                 Name = EmptyProjectNumber,
-                OutgoingTrustName = OutgoingTrustName,
+                OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
@@ -106,7 +105,7 @@ namespace Data.Mock
             {
                 Urn = PopulatedProjectUrn,
                 Name = PopulatedProjectNumber,
-                OutgoingTrustName = OutgoingTrustName,
+                OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
