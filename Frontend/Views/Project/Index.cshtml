@@ -12,16 +12,22 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-
         <span class="govuk-caption-xl">URN @Model.Project.OutgoingAcademyUrn</span>
         <h1 class="govuk-heading-xl">
-            @Model.Project.OutgoingTrustName
+            @Model.Project.OutgoingAcademyName
         </h1>
+        <h2 class="govuk-heading-l">
+            Task list
+        </h2>
+        <p class="govuk-body">
+            The task list will help you prepare for the headteacher board (HTB) meeting. You can complete the tasks in any order.
+        </p>
+        <hr class="govuk-section-break govuk-section-break--m">
+    </div>
+</div>
 
-        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Create HTB template</h2>
-        <p class="govuk-body govuk-!-margin-bottom-5">This information in each section is pre-populated from TRAMS and the school’s application form.</p>
-        <p class="govuk-body govuk-!-margin-bottom-5">You can make changes to the sections which will also populate into the HTB template.</p>
-
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
         <ol class="moj-task-list">
             <li>
                 <h2 class="moj-task-list__section">
@@ -78,6 +84,10 @@
                 </ul>
             </li>
         </ol>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
         <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Preview" asp-route-id="@Model.Project.Urn">
             Preview HTB Template
         </a>
