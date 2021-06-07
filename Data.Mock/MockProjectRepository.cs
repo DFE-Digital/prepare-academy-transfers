@@ -88,6 +88,7 @@ namespace Data.Mock
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyName = "Conyers School",
                         IncomingTrustUkprn = "10059766"
                     }
                 }
@@ -107,6 +108,7 @@ namespace Data.Mock
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyName = "Conyers School",
                         IncomingTrustUkprn = "10059766"
                     }
                 },
