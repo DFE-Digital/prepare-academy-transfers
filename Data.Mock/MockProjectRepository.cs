@@ -30,7 +30,10 @@ namespace Data.Mock
             var result = new RepositoryResult<List<ProjectSearchResult>>
             {
                 Result = _projects.Select(project => new ProjectSearchResult
-                    {Urn = project.Urn, Number = project.Name, OutgoingTrustName = project.OutgoingTrustName}).ToList()
+                {
+                    Urn = project.Urn, Number = project.Name, OutgoingTrustName = project.OutgoingTrustName,
+                    TransferringAcademies = project.TransferringAcademies
+                }).ToList()
             };
 
             return Task.FromResult(result);
@@ -88,8 +91,10 @@ namespace Data.Mock
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyUrn = "139318",
                         OutgoingAcademyName = "Conyers School",
-                        IncomingTrustUkprn = "10059766"
+                        IncomingTrustUkprn = "10059766",
+                        IncomingTrustName = "Wise Owl Trust"
                     }
                 }
             };
@@ -108,8 +113,10 @@ namespace Data.Mock
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = "10040290",
+                        OutgoingAcademyUrn = "139318",
                         OutgoingAcademyName = "Conyers School",
-                        IncomingTrustUkprn = "10059766"
+                        IncomingTrustUkprn = "10059766",
+                        IncomingTrustName = "Wise Owl Trust"
                     }
                 },
                 Features = new TransferFeatures

@@ -4,31 +4,52 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            Academy transfer projects
+        </h1>
+        <p class="govuk-body-l">
+            Use this service to start a new academy transfer project or update an existing project.
+        </p>
+        <a asp-controller="Transfers" asp-action="TrustName" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+            Start a new transfer project
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+            </svg>
+        </a>
+    </div>
+</div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-xl">Academy transfers projects</h1>
-        <p class="govuk-body">Set up new academy transfer project</p>
-        <a asp-controller="Transfers" asp-action="TrustName" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-            Start a new transfer project
-        </a>
-        <h2 class="govuk-heading-l">Pre-HTB (@Model.Projects.Count)</h2>
+        <h2 class="govuk-heading-l">
+            Pre HTB
+        </h2>
         @foreach (var project in Model.Projects)
         {
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
+            <div class="dfe-application-card">
+                <div class="dfe-application-card--project-info">
                     <h3 class="govuk-heading-m">
-                        <a class="govuk-link govuk-link--no-visited-state" asp-controller="Project" asp-action="Index" asp-route-id="@project.Urn">
-                            Outgoing academy name
-                        </a> <span class="govuk-caption-m dfe-inline-block">URN @project.Urn</span>
+                        <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-controller="Project" asp-action="Index" asp-route-id="@project.Urn">
+                            @project.OutgoingAcademyName
+                        </a>
+                        <span class="govuk-caption-m govuk-!-display-inline">
+                            URN @project.OutgoingAcademyUrn
+                        </span>
                     </h3>
-                    <p class="govuk-body govuk-!-margin-bottom-1">Application to join Incoming Academy</p>
-                    <p class="govuk-body-s">Local authority</p>
+                    <p class="govuk-body govuk-!-margin-bottom-1">
+                        Application to transfer to @project.IncomingTrustName
+                    </p>
+                    <p class="govuk-body">
+                        Local authority: TODO
+                    </p>
                 </div>
-                <div class="govuk-grid-column-one-third dfe-dashboard-project-right">
-                    <span class="govuk-tag govuk-tag--purple">PRE HTB</span>
+                <div class="dfe-application-card--statuses">
+                    <span class="govuk-tag govuk-tag--purple">
+                        Pre htb
+                    </span>
                 </div>
             </div>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0"/>
         }
     </div>
 </div>
