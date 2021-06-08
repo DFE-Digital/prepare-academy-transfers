@@ -42,7 +42,7 @@ namespace Data.TRAMS.Tests
 
             public GetByUrnTests()
             {
-                _foundProject = Projects.GetSingleProject();
+                _foundProject = TramsProjects.GetSingleProject();
                 _httpClient.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundProject))
