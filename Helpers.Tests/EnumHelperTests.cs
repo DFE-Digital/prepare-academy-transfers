@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Frontend.Helpers;
 using Xunit;
 
-namespace Frontend.Tests.HelpersTests
+namespace Helpers.Tests
 {
     public class EnumHelperTests
     {

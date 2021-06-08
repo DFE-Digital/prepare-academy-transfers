@@ -1,6 +1,6 @@
 using System;
 
-namespace Frontend.Helpers
+namespace Helpers
 {
     public class DateTimeProvider : IDateTimeProvider
     {

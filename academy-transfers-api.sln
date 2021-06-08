@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS", "Data.TRAMS\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS.Tests", "Data.TRAMS.Tests\Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +80,14 @@ Global
 		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98D82005-DF8A-43F5-960A-8FDD77EE693E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9735BC9F-06B2-467B-8341-3CF568942C64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9735BC9F-06B2-467B-8341-3CF568942C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9735BC9F-06B2-467B-8341-3CF568942C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9735BC9F-06B2-467B-8341-3CF568942C64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
