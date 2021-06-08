@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Models;
@@ -14,15 +15,17 @@ namespace Data.TRAMS.Tests
         private readonly TramsProjectsRepository _subject;
         private readonly Mock<ITramsHttpClient> _httpClient;
         private readonly Mock<IMapper<TramsProject, Project>> _externalToInternalMapper;
+        private readonly Mock<IMapper<TramsProjectSummary, ProjectSearchResult>> _summaryToInternalMapper;
         private readonly Mock<IMapper<Project, TramsProject>> _internalToExternalMapper;
 
         public TramsProjectsRepositoryTests()
         {
             _httpClient = new Mock<ITramsHttpClient>();
             _externalToInternalMapper = new Mock<IMapper<TramsProject, Project>>();
+            _summaryToInternalMapper = new Mock<IMapper<TramsProjectSummary, ProjectSearchResult>>();
             _internalToExternalMapper = new Mock<IMapper<Project, TramsProject>>();
             _subject = new TramsProjectsRepository(_httpClient.Object, _externalToInternalMapper.Object,
-                _internalToExternalMapper.Object);
+                _internalToExternalMapper.Object, _summaryToInternalMapper.Object);
         }
 
         public class GetByUrnTests : TramsProjectsRepositoryTests
@@ -78,18 +81,18 @@ namespace Data.TRAMS.Tests
             public UpdateProjectTests()
             {
                 _projectToUpdate = new Project {Urn = "12345", Status = "New"};
-                _mappedProject = new TramsProject() {ProjectUrn = "12345"};
-                _updatedProject = new TramsProject() {ProjectUrn = "12345 - Updated"};
+                _mappedProject = new TramsProject {ProjectUrn = "12345"};
+                _updatedProject = new TramsProject {ProjectUrn = "12345 - Updated"};
 
                 _internalToExternalMapper.Setup(m => m.Map(_projectToUpdate)).Returns(_mappedProject);
-                
+
                 _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
-                    new HttpResponseMessage()
+                    new HttpResponseMessage
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(_updatedProject))
                     });
-                
-                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>((input) =>
+
+                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>(input =>
                     new Project
                     {
                         Urn = $"Mapped {input.ProjectUrn}"
@@ -143,16 +146,16 @@ namespace Data.TRAMS.Tests
             public CreateProjectTests()
             {
                 _projectToCreate = new Project {Status = "New"};
-                _mappedProject = new TramsProject() {Status = "Mapped new"};
-                _createdProject = new TramsProject() {ProjectUrn = "12345", Status = "Mapped new"};
+                _mappedProject = new TramsProject {Status = "Mapped new"};
+                _createdProject = new TramsProject {ProjectUrn = "12345", Status = "Mapped new"};
 
                 _internalToExternalMapper.Setup(m => m.Map(_projectToCreate)).Returns(_mappedProject);
                 _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
-                    new HttpResponseMessage()
+                    new HttpResponseMessage
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(_createdProject))
                     });
-                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>((input) =>
+                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>(input =>
                     new Project
                     {
                         Urn = $"Mapped {input.ProjectUrn}"
@@ -194,6 +197,65 @@ namespace Data.TRAMS.Tests
                 var response = await _subject.Create(_projectToCreate);
 
                 Assert.Equal($"Mapped {_createdProject.ProjectUrn}", response.Result.Urn);
+            }
+        }
+
+        public class GetProjectsTests : TramsProjectsRepositoryTests
+        {
+            [Fact]
+            public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
+            {
+                var foundSummaries = new List<TramsProjectSummary> {new TramsProjectSummary {ProjectUrn = "123"}};
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
+                });
+
+                await _subject.GetProjects();
+
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenMultipleProjectSummariesReturned_MapsCorrectly()
+            {
+                var foundSummaries = new List<TramsProjectSummary>
+                    {new TramsProjectSummary {ProjectUrn = "123"}, new TramsProjectSummary {ProjectUrn = "456"}};
+
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
+                });
+
+                await _subject.GetProjects();
+
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "456")), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
+            {
+                var foundSummaries = new List<TramsProjectSummary>
+                    {new TramsProjectSummary {ProjectUrn = "123"}, new TramsProjectSummary {ProjectUrn = "456"}};
+
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
+                });
+
+                _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
+                    .Returns<TramsProjectSummary>(
+                        input => new ProjectSearchResult {Urn = $"Mapped {input.ProjectUrn}"}
+                    );
+
+                var result = await _subject.GetProjects();
+
+                Assert.Equal("Mapped 123", result.Result[0].Urn);
+                Assert.Equal("Mapped 456", result.Result[1].Urn);
             }
         }
 

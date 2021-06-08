@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Models;
@@ -11,20 +12,32 @@ namespace Data.TRAMS
     {
         private readonly ITramsHttpClient _httpClient;
         private readonly IMapper<TramsProject, Project> _externalToInternalProjectMapper;
+        private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
         private readonly IMapper<Project, TramsProject> _internalToExternalProjectMapper;
 
         public TramsProjectsRepository(ITramsHttpClient httpClient,
             IMapper<TramsProject, Project> externalToInternalProjectMapper,
-            IMapper<Project, TramsProject> internalToExternalProjectMapper)
+            IMapper<Project, TramsProject> internalToExternalProjectMapper,
+            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper)
         {
             _httpClient = httpClient;
             _externalToInternalProjectMapper = externalToInternalProjectMapper;
             _internalToExternalProjectMapper = internalToExternalProjectMapper;
+            _summaryToInternalProjectMapper = summaryToInternalProjectMapper;
         }
 
-        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
+        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
         {
-            throw new System.NotImplementedException();
+            var response = await _httpClient.GetAsync("academyTransferProject");
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse)
+                .Select(summary => _summaryToInternalProjectMapper.Map(summary))
+                .ToList();
+            
+            return new RepositoryResult<List<ProjectSearchResult>>
+            {
+                Result = summaries
+            };
         }
 
         public async Task<RepositoryResult<Project>> GetByUrn(string urn)
