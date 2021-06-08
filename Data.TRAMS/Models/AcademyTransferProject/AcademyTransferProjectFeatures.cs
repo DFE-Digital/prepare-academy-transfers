@@ -1,4 +1,4 @@
-namespace Data.TRAMS.Models
+namespace Data.TRAMS.Models.AcademyTransferProject
 {
     public class AcademyTransferProjectFeatures
     {
