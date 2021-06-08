@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.TRAMS.Models;
+using Data.TRAMS.Models.AcademyTransferProject;
 using Data.TRAMS.Tests.TestFixtures;
 using Moq;
 using Newtonsoft.Json;
@@ -17,6 +18,8 @@ namespace Data.TRAMS.Tests
         private readonly Mock<IMapper<TramsProject, Project>> _externalToInternalMapper;
         private readonly Mock<IMapper<TramsProjectSummary, ProjectSearchResult>> _summaryToInternalMapper;
         private readonly Mock<IMapper<Project, TramsProject>> _internalToExternalMapper;
+        private readonly Mock<IAcademies> _academies;
+        private readonly Mock<ITrusts> _trusts;
 
         public TramsProjectsRepositoryTests()
         {
@@ -24,8 +27,13 @@ namespace Data.TRAMS.Tests
             _externalToInternalMapper = new Mock<IMapper<TramsProject, Project>>();
             _summaryToInternalMapper = new Mock<IMapper<TramsProjectSummary, ProjectSearchResult>>();
             _internalToExternalMapper = new Mock<IMapper<Project, TramsProject>>();
-            _subject = new TramsProjectsRepository(_httpClient.Object, _externalToInternalMapper.Object,
-                _internalToExternalMapper.Object, _summaryToInternalMapper.Object);
+            _academies = new Mock<IAcademies>();
+            _trusts = new Mock<ITrusts>();
+            _subject = new TramsProjectsRepository(
+                _httpClient.Object, _externalToInternalMapper.Object,
+                _internalToExternalMapper.Object, _summaryToInternalMapper.Object,
+                _academies.Object, _trusts.Object
+            );
         }
 
         public class GetByUrnTests : TramsProjectsRepositoryTests
@@ -257,6 +265,68 @@ namespace Data.TRAMS.Tests
                 Assert.Equal("Mapped 123", result.Result[0].Urn);
                 Assert.Equal("Mapped 456", result.Result[1].Urn);
             }
+
+            #region ApiInterim
+
+            [Fact]
+            public async void GivenProjectSummary_FillInExtraInformationFromMultipleRequestsAndMap()
+            {
+                var foundSummaries = new List<TramsProjectSummary>
+                {
+                    new TramsProjectSummary
+                    {
+                        ProjectUrn = "123",
+                        TransferringAcademies = new List<TransferringAcademy>
+                        {
+                            new TransferringAcademy
+                            {
+                                IncomingTrustUkprn = "456",
+                                OutgoingAcademyUkprn = "789"
+                            }
+                        }
+                    }
+                };
+
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
+                });
+
+                var foundTrust = new Trust
+                {
+                    Name = "Trust name",
+                    GiasGroupId = "Group ID"
+                };
+
+                _trusts.Setup(r => r.GetByUkprn("456")).ReturnsAsync(new RepositoryResult<Trust> {Result = foundTrust});
+
+                var foundAcademy = new Academy
+                {
+                    Name = "Trust name",
+                    Urn = "Urn"
+                };
+
+                _academies.Setup(r => r.GetAcademyByUkprn("789"))
+                    .ReturnsAsync(new RepositoryResult<Academy> {Result = foundAcademy});
+
+                var result = await _subject.GetProjects();
+
+                _trusts.Verify(r => r.GetByUkprn("456"), Times.Once);
+                _academies.Verify(r => r.GetAcademyByUkprn("789"), Times.Once);
+                _summaryToInternalMapper.Verify(
+                    m => m.Map(It.Is<TramsProjectSummary>(
+                            toMap =>
+                                toMap.OutgoingTrust.Ukprn == foundSummaries[0].OutgoingTrustUkprn &&
+                                toMap.TransferringAcademies[0].IncomingTrust.GroupName == foundTrust.Name &&
+                                toMap.TransferringAcademies[0].IncomingTrust.GroupId == foundTrust.GiasGroupId &&
+                                toMap.TransferringAcademies[0].OutgoingAcademy.Name == foundAcademy.Name &&
+                                toMap.TransferringAcademies[0].OutgoingAcademy.Urn == foundAcademy.Urn
+                        )
+                    )
+                );
+            }
+
+            #endregion
         }
 
         private static async Task<bool> AssertStringContentMatches(string expectedContent, StringContent actualContent)
