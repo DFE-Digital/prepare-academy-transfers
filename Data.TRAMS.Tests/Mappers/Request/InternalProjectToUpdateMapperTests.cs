@@ -31,7 +31,12 @@ namespace Data.TRAMS.Tests.Mappers.Request
                         {TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "Land"}
                     }
                 },
-                Dates = new TransferDates(),
+                Dates = new TransferDates
+                {
+                    FirstDiscussed = "01/01/2020",
+                    Htb = "02/01/2020",
+                    Target = "03/01/2020"
+                },
                 Features = new TransferFeatures(),
                 Name = "Project name",
                 Rationale = new TransferRationale(),
@@ -55,6 +60,10 @@ namespace Data.TRAMS.Tests.Mappers.Request
 
             AssertTransferringAcademiesCorrect(toMap, result);
             AssertBenefitsAreCorrect(result);
+            
+            Assert.Equal(toMap.Dates.FirstDiscussed, result.Dates.TransferFirstDiscussed);
+            Assert.Equal(toMap.Dates.Htb, result.Dates.HtbDate);
+            Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
         }
 
         private static void AssertBenefitsAreCorrect(TramsProjectUpdate result)

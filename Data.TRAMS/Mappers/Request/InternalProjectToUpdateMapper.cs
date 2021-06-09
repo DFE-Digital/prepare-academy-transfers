@@ -18,49 +18,70 @@ namespace Data.TRAMS.Mappers.Request
                 State = input.State,
                 Status = input.Status,
                 ProjectUrn = input.Urn,
-                TransferringAcademies = input.TransferringAcademies.Select(transferringAcademy =>
-                    new TransferringAcademyUpdate
-                    {
-                        IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
-                        OutgoingAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn
-                    }).ToList(),
-                Benefits = new AcademyTransferProjectBenefits()
+                TransferringAcademies = TransferringAcademies(input),
+                Benefits = Benefits(input),
+                Dates = Dates(input)
+            };
+        }
+
+        private static AcademyTransferProjectDates Dates(Project input)
+        {
+            return new AcademyTransferProjectDates
+            {
+                HtbDate = input.Dates.Htb,
+                TransferFirstDiscussed = input.Dates.FirstDiscussed,
+                TargetDateForTransfer = input.Dates.Target
+            };
+        }
+
+        private static List<TransferringAcademyUpdate> TransferringAcademies(Project input)
+        {
+            return input.TransferringAcademies.Select(transferringAcademy =>
+                new TransferringAcademyUpdate
                 {
-                    IntendedTransferBenefits = new IntendedTransferBenefits
+                    IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
+                    OutgoingAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn
+                }).ToList();
+        }
+
+        private static AcademyTransferProjectBenefits Benefits(Project input)
+        {
+            return new AcademyTransferProjectBenefits
+            {
+                IntendedTransferBenefits = new IntendedTransferBenefits
+                {
+                    SelectedBenefits = input.Benefits.IntendedBenefits
+                        .Select(benefit => benefit.ToString())
+                        .ToList(),
+                    OtherBenefitValue = input.Benefits.OtherIntendedBenefit
+                },
+                OtherFactorsToConsider = new OtherFactorsToConsider
+                {
+                    HighProfile = new OtherFactor
                     {
-                        SelectedBenefits = input.Benefits.IntendedBenefits
-                            .Select(benefit => benefit.ToString())
-                            .ToList(),
-                        OtherBenefitValue = input.Benefits.OtherIntendedBenefit
+                        ShouldBeConsidered =
+                            input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile),
+                        FurtherSpecification =
+                            input.Benefits.OtherFactors.GetValueOrDefault(TransferBenefits.OtherFactor.HighProfile,
+                                "")
                     },
-                    OtherFactorsToConsider = new OtherFactorsToConsider
+                    FinanceAndDebt = new OtherFactor
                     {
-                        HighProfile = new OtherFactor
-                        {
-                            ShouldBeConsidered =
-                                input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile),
-                            FurtherSpecification =
-                                input.Benefits.OtherFactors.GetValueOrDefault(TransferBenefits.OtherFactor.HighProfile,
-                                    "")
-                        },
-                        FinanceAndDebt = new OtherFactor
-                        {
-                            ShouldBeConsidered =
-                                input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
-                                    .FinanceAndDebtConcerns),
-                            FurtherSpecification =
-                                input.Benefits.OtherFactors.GetValueOrDefault(
-                                    TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "")
-                        },
-                        ComplexLandAndBuilding = new OtherFactor
-                        {
-                            ShouldBeConsidered =
-                                input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
-                                    .ComplexLandAndBuildingIssues),
-                            FurtherSpecification =
-                                input.Benefits.OtherFactors.GetValueOrDefault(
-                                    TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "")
-                        }
+                        ShouldBeConsidered =
+                            input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                .FinanceAndDebtConcerns),
+                        FurtherSpecification =
+                            input.Benefits.OtherFactors.GetValueOrDefault(
+                                TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "")
+                    },
+                    ComplexLandAndBuilding = new OtherFactor
+                    {
+                        ShouldBeConsidered =
+                            input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                                .ComplexLandAndBuildingIssues),
+                        FurtherSpecification =
+                            input.Benefits.OtherFactors.GetValueOrDefault(
+                                TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "")
                     }
                 }
             };
