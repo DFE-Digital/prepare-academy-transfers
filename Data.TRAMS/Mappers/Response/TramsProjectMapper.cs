@@ -81,18 +81,21 @@ namespace Data.TRAMS.Mappers.Response
         {
             var otherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
             var inputFactors = input.Benefits.OtherFactorsToConsider;
-            if (inputFactors.HighProfile.ShouldBeConsidered)
+            if (inputFactors.HighProfile.ShouldBeConsidered != null &&
+                (bool) inputFactors.HighProfile.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.HighProfile] = inputFactors.HighProfile.FurtherSpecification;
             }
 
-            if (inputFactors.FinanceAndDebt.ShouldBeConsidered)
+            if (inputFactors.FinanceAndDebt.ShouldBeConsidered != null &&
+                (bool) inputFactors.FinanceAndDebt.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] =
                     inputFactors.FinanceAndDebt.FurtherSpecification;
             }
 
-            if (inputFactors.ComplexLandAndBuilding.ShouldBeConsidered)
+            if (inputFactors.ComplexLandAndBuilding.ShouldBeConsidered != null &&
+                (bool) inputFactors.ComplexLandAndBuilding.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] =
                     inputFactors.ComplexLandAndBuilding.FurtherSpecification;

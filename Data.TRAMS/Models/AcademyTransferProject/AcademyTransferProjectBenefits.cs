@@ -17,7 +17,7 @@ namespace Data.TRAMS.Models.AcademyTransferProject
 
     public class OtherFactor
     {
-        public bool ShouldBeConsidered { get; set; }
+        public bool? ShouldBeConsidered { get; set; }
         public string FurtherSpecification { get; set; }
     }
 
