@@ -5,6 +5,15 @@ namespace Data.TRAMS.Models
 {
     public class TramsProject
     {
+        public TramsProject()
+        {
+            Benefits = new AcademyTransferProjectBenefits();
+            Dates = new AcademyTransferProjectDates();
+            Features = new AcademyTransferProjectFeatures();
+            Rationale = new AcademyTransferProjectRationale();
+            TransferringAcademies = new List<TransferringAcademy>();
+            OutgoingTrust = new TrustSummary();
+        }
         public AcademyTransferProjectBenefits Benefits { get; set; }
         public AcademyTransferProjectDates Dates { get; set; }
         public AcademyTransferProjectFeatures Features { get; set; }

@@ -17,23 +17,41 @@ namespace Data.TRAMS.Tests
         private readonly Mock<ITramsHttpClient> _httpClient;
         private readonly Mock<IMapper<TramsProject, Project>> _externalToInternalMapper;
         private readonly Mock<IMapper<TramsProjectSummary, ProjectSearchResult>> _summaryToInternalMapper;
-        private readonly Mock<IMapper<Project, TramsProject>> _internalToExternalMapper;
+        private readonly Mock<IMapper<Project, TramsProjectUpdate>> _internalToUpdateMapper;
         private readonly Mock<IAcademies> _academies;
         private readonly Mock<ITrusts> _trusts;
+        private readonly Trust _foundTrust;
+        private readonly Academy _foundAcademy;
 
         public TramsProjectsRepositoryTests()
         {
             _httpClient = new Mock<ITramsHttpClient>();
             _externalToInternalMapper = new Mock<IMapper<TramsProject, Project>>();
             _summaryToInternalMapper = new Mock<IMapper<TramsProjectSummary, ProjectSearchResult>>();
-            _internalToExternalMapper = new Mock<IMapper<Project, TramsProject>>();
+            _internalToUpdateMapper = new Mock<IMapper<Project, TramsProjectUpdate>>();
             _academies = new Mock<IAcademies>();
             _trusts = new Mock<ITrusts>();
             _subject = new TramsProjectsRepository(
-                _httpClient.Object, _externalToInternalMapper.Object,
-                _internalToExternalMapper.Object, _summaryToInternalMapper.Object,
-                _academies.Object, _trusts.Object
+                _httpClient.Object, _externalToInternalMapper.Object, _summaryToInternalMapper.Object,
+                _academies.Object, _trusts.Object, _internalToUpdateMapper.Object
             );
+            _foundTrust = new Trust
+            {
+                Name = "Trust name",
+                GiasGroupId = "Group ID"
+            };
+
+            _trusts.Setup(r => r.GetByUkprn(It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryResult<Trust> {Result = _foundTrust});
+
+            _foundAcademy = new Academy
+            {
+                Name = "Trust name",
+                Urn = "Urn"
+            };
+
+            _academies.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>()))
+                .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
         }
 
         public class GetByUrnTests : TramsProjectsRepositoryTests
@@ -83,16 +101,16 @@ namespace Data.TRAMS.Tests
         public class UpdateProjectTests : TramsProjectsRepositoryTests
         {
             private readonly Project _projectToUpdate;
-            private readonly TramsProject _mappedProject;
+            private readonly TramsProjectUpdate _mappedProject;
             private readonly TramsProject _updatedProject;
 
             public UpdateProjectTests()
             {
                 _projectToUpdate = new Project {Urn = "12345", Status = "New"};
-                _mappedProject = new TramsProject {ProjectUrn = "12345"};
+                _mappedProject = new TramsProjectUpdate {ProjectUrn = "12345"};
                 _updatedProject = new TramsProject {ProjectUrn = "12345 - Updated"};
 
-                _internalToExternalMapper.Setup(m => m.Map(_projectToUpdate)).Returns(_mappedProject);
+                _internalToUpdateMapper.Setup(m => m.Map(_projectToUpdate)).Returns(_mappedProject);
 
                 _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
@@ -108,11 +126,11 @@ namespace Data.TRAMS.Tests
             }
 
             [Fact]
-            public async void GivenProject_MapsToExternalProject()
+            public async void GivenProject_MapsToProjectUpdate()
             {
                 await _subject.Update(_projectToUpdate);
 
-                _internalToExternalMapper.Verify(m => m.Map(_projectToUpdate), Times.Once);
+                _internalToUpdateMapper.Verify(m => m.Map(_projectToUpdate), Times.Once);
             }
 
             [Fact]
@@ -148,16 +166,16 @@ namespace Data.TRAMS.Tests
         public class CreateProjectTests : TramsProjectsRepositoryTests
         {
             private readonly Project _projectToCreate;
-            private readonly TramsProject _mappedProject;
+            private readonly TramsProjectUpdate _mappedProject;
             private readonly TramsProject _createdProject;
 
             public CreateProjectTests()
             {
                 _projectToCreate = new Project {Status = "New"};
-                _mappedProject = new TramsProject {Status = "Mapped new"};
+                _mappedProject = new TramsProjectUpdate {Status = "Mapped new"};
                 _createdProject = new TramsProject {ProjectUrn = "12345", Status = "Mapped new"};
 
-                _internalToExternalMapper.Setup(m => m.Map(_projectToCreate)).Returns(_mappedProject);
+                _internalToUpdateMapper.Setup(m => m.Map(_projectToCreate)).Returns(_mappedProject);
                 _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
                     {
@@ -175,7 +193,7 @@ namespace Data.TRAMS.Tests
             {
                 await _subject.Create(_projectToCreate);
 
-                _internalToExternalMapper.Verify(m => m.Map(_projectToCreate), Times.Once);
+                _internalToUpdateMapper.Verify(m => m.Map(_projectToCreate), Times.Once);
             }
 
             [Fact]
@@ -210,8 +228,6 @@ namespace Data.TRAMS.Tests
 
         public class GetProjectsTests : TramsProjectsRepositoryTests
         {
-            private readonly Trust _foundTrust;
-            private readonly Academy _foundAcademy;
             private readonly List<TramsProjectSummary> _foundSummaries;
 
             public GetProjectsTests()
@@ -231,24 +247,6 @@ namespace Data.TRAMS.Tests
                         }
                     }
                 };
-
-                _foundTrust = new Trust
-                {
-                    Name = "Trust name",
-                    GiasGroupId = "Group ID"
-                };
-
-                _trusts.Setup(r => r.GetByUkprn("456"))
-                    .ReturnsAsync(new RepositoryResult<Trust> {Result = _foundTrust});
-
-                _foundAcademy = new Academy
-                {
-                    Name = "Trust name",
-                    Urn = "Urn"
-                };
-
-                _academies.Setup(r => r.GetAcademyByUkprn("789"))
-                    .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
             }
 
             [Fact]
