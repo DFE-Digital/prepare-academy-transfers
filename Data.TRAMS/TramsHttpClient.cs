@@ -10,6 +10,7 @@ namespace Data.TRAMS
         {
             BaseAddress = new Uri(url);
             DefaultRequestHeaders.Add("ApiKey", apiKey);
+            DefaultRequestHeaders.Add("Content-Type", "application/json");
         }
 
         public new async Task<HttpResponseMessage> GetAsync(string url)
