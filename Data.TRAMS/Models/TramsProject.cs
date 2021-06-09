@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Data.TRAMS.Models.AcademyTransferProject;
 
 namespace Data.TRAMS.Models
@@ -13,7 +14,7 @@ namespace Data.TRAMS.Models
         public AcademyTransferProjectRationale Rationale { get; set; }
         public string State { get; set; }
         public string Status { get; set; }
-        public TransferringAcademy TransferringAcademies { get; set; }
+        public List<TransferringAcademy> TransferringAcademies { get; set; }
         public TrustSummary OutgoingTrust { get; set; }
     }
 }
