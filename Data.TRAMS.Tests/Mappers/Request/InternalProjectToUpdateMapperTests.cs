@@ -69,7 +69,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.Urn, result.ProjectUrn);
 
             AssertTransferringAcademiesCorrect(toMap, result);
-            AssertBenefitsAreCorrect(result);
+            AssertBenefitsAreCorrect(toMap, result);
             AssertDatesAreCorrect(toMap, result);
             AssertFeaturesAreCorrect(toMap, result);
         }
@@ -92,10 +92,10 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
         }
 
-        private static void AssertBenefitsAreCorrect(TramsProjectUpdate result)
+        private static void AssertBenefitsAreCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal("ImprovingOfstedRating", result.Benefits.IntendedTransferBenefits.SelectedBenefits[0]);
-            Assert.Equal("Other", result.Benefits.IntendedTransferBenefits.SelectedBenefits[1]);
+            Assert.Equal(toMap.Benefits.IntendedBenefits[0].ToString(), result.Benefits.IntendedTransferBenefits.SelectedBenefits[0]);
+            Assert.Equal(toMap.Benefits.IntendedBenefits[1].ToString(), result.Benefits.IntendedTransferBenefits.SelectedBenefits[1]);
             Assert.Equal("Other intended benefit", result.Benefits.IntendedTransferBenefits.OtherBenefitValue);
             Assert.True(result.Benefits.OtherFactorsToConsider.HighProfile.ShouldBeConsidered);
             Assert.Equal("High profile", result.Benefits.OtherFactorsToConsider.HighProfile.FurtherSpecification);
