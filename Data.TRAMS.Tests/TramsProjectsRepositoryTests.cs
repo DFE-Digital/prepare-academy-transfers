@@ -210,68 +210,13 @@ namespace Data.TRAMS.Tests
 
         public class GetProjectsTests : TramsProjectsRepositoryTests
         {
-            [Fact]
-            public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
+            private readonly Trust _foundTrust;
+            private readonly Academy _foundAcademy;
+            private readonly List<TramsProjectSummary> _foundSummaries;
+
+            public GetProjectsTests()
             {
-                var foundSummaries = new List<TramsProjectSummary> {new TramsProjectSummary {ProjectUrn = "123"}};
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
-                });
-
-                await _subject.GetProjects();
-
-                _summaryToInternalMapper.Verify(m =>
-                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenMultipleProjectSummariesReturned_MapsCorrectly()
-            {
-                var foundSummaries = new List<TramsProjectSummary>
-                    {new TramsProjectSummary {ProjectUrn = "123"}, new TramsProjectSummary {ProjectUrn = "456"}};
-
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
-                });
-
-                await _subject.GetProjects();
-
-                _summaryToInternalMapper.Verify(m =>
-                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
-                _summaryToInternalMapper.Verify(m =>
-                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "456")), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
-            {
-                var foundSummaries = new List<TramsProjectSummary>
-                    {new TramsProjectSummary {ProjectUrn = "123"}, new TramsProjectSummary {ProjectUrn = "456"}};
-
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
-                });
-
-                _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
-                    .Returns<TramsProjectSummary>(
-                        input => new ProjectSearchResult {Urn = $"Mapped {input.ProjectUrn}"}
-                    );
-
-                var result = await _subject.GetProjects();
-
-                Assert.Equal("Mapped 123", result.Result[0].Urn);
-                Assert.Equal("Mapped 456", result.Result[1].Urn);
-            }
-
-            #region ApiInterim
-
-            [Fact]
-            public async void GivenProjectSummary_FillInExtraInformationFromMultipleRequestsAndMap()
-            {
-                var foundSummaries = new List<TramsProjectSummary>
+                _foundSummaries = new List<TramsProjectSummary>
                 {
                     new TramsProjectSummary
                     {
@@ -287,40 +232,111 @@ namespace Data.TRAMS.Tests
                     }
                 };
 
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(foundSummaries))
-                });
-
-                var foundTrust = new Trust
+                _foundTrust = new Trust
                 {
                     Name = "Trust name",
                     GiasGroupId = "Group ID"
                 };
 
-                _trusts.Setup(r => r.GetByUkprn("456")).ReturnsAsync(new RepositoryResult<Trust> {Result = foundTrust});
+                _trusts.Setup(r => r.GetByUkprn("456"))
+                    .ReturnsAsync(new RepositoryResult<Trust> {Result = _foundTrust});
 
-                var foundAcademy = new Academy
+                _foundAcademy = new Academy
                 {
                     Name = "Trust name",
                     Urn = "Urn"
                 };
 
                 _academies.Setup(r => r.GetAcademyByUkprn("789"))
-                    .ReturnsAsync(new RepositoryResult<Academy> {Result = foundAcademy});
+                    .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
+            }
+
+            [Fact]
+            public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
+            {
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                });
+
+                await _subject.GetProjects();
+
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenMultipleProjectSummariesReturned_MapsCorrectly()
+            {
+                _foundSummaries.Add(
+                    new TramsProjectSummary
+                    {
+                        ProjectUrn = "321",
+                        TransferringAcademies = new List<TransferringAcademy>
+                        {
+                            new TransferringAcademy
+                            {
+                                IncomingTrustUkprn = "456",
+                                OutgoingAcademyUkprn = "789"
+                            }
+                        }
+                    }
+                );
+
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                });
+
+                await _subject.GetProjects();
+
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
+                _summaryToInternalMapper.Verify(m =>
+                    m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "321")), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
+            {
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                });
+
+                _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
+                    .Returns<TramsProjectSummary>(
+                        input => new ProjectSearchResult {Urn = $"Mapped {input.ProjectUrn}"}
+                    );
 
                 var result = await _subject.GetProjects();
+
+                Assert.Equal("Mapped 123", result.Result[0].Urn);
+            }
+
+            #region ApiInterim
+
+            [Fact]
+            public async void GivenProjectSummary_FillInExtraInformationFromMultipleRequestsAndMap()
+            {
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                });
+
+
+                await _subject.GetProjects();
 
                 _trusts.Verify(r => r.GetByUkprn("456"), Times.Once);
                 _academies.Verify(r => r.GetAcademyByUkprn("789"), Times.Once);
                 _summaryToInternalMapper.Verify(
                     m => m.Map(It.Is<TramsProjectSummary>(
                             toMap =>
-                                toMap.OutgoingTrust.Ukprn == foundSummaries[0].OutgoingTrustUkprn &&
-                                toMap.TransferringAcademies[0].IncomingTrust.GroupName == foundTrust.Name &&
-                                toMap.TransferringAcademies[0].IncomingTrust.GroupId == foundTrust.GiasGroupId &&
-                                toMap.TransferringAcademies[0].OutgoingAcademy.Name == foundAcademy.Name &&
-                                toMap.TransferringAcademies[0].OutgoingAcademy.Urn == foundAcademy.Urn
+                                toMap.OutgoingTrust.Ukprn == _foundSummaries[0].OutgoingTrustUkprn &&
+                                toMap.TransferringAcademies[0].IncomingTrust.GroupName == _foundTrust.Name &&
+                                toMap.TransferringAcademies[0].IncomingTrust.GroupId == _foundTrust.GiasGroupId &&
+                                toMap.TransferringAcademies[0].OutgoingAcademy.Name == _foundAcademy.Name &&
+                                toMap.TransferringAcademies[0].OutgoingAcademy.Urn == _foundAcademy.Urn
                         )
                     )
                 );
