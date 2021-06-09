@@ -20,7 +20,16 @@ namespace Data.TRAMS.Mappers.Request
                 ProjectUrn = input.Urn,
                 TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
-                Dates = Dates(input)
+                Dates = Dates(input),
+                Features = new AcademyTransferProjectFeatures
+                {
+                    TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
+                    OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
+                    RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
+                                            (bool) input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                    WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
+                    RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails
+                }
             };
         }
 

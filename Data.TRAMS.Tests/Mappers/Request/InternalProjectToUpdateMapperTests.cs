@@ -37,7 +37,17 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     Htb = "02/01/2020",
                     Target = "03/01/2020"
                 },
-                Features = new TransferFeatures(),
+                Features = new TransferFeatures
+                {
+                    ReasonForTransfer = new ReasonForTransfer
+                    {
+                        IsSubjectToRddOrEsfaIntervention = true,
+                        InterventionDetails = "Intervention details"
+                    },
+                    TypeOfTransfer = TransferFeatures.TransferTypes.Other,
+                    OtherTypeOfTransfer = "Other type of transfer",
+                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe
+                },
                 Name = "Project name",
                 Rationale = new TransferRationale(),
                 State = "State",
@@ -60,7 +70,23 @@ namespace Data.TRAMS.Tests.Mappers.Request
 
             AssertTransferringAcademiesCorrect(toMap, result);
             AssertBenefitsAreCorrect(result);
-            
+            AssertDatesAreCorrect(toMap, result);
+            AssertFeaturesAreCorrect(toMap, result);
+        }
+
+        private static void AssertFeaturesAreCorrect(Project toMap, TramsProjectUpdate result)
+        {
+            Assert.Equal(toMap.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                result.Features.RddOrEsfaIntervention);
+            Assert.Equal(toMap.Features.ReasonForTransfer.InterventionDetails,
+                result.Features.RddOrEsfaInterventionDetail);
+            Assert.Equal(toMap.Features.TypeOfTransfer.ToString(), result.Features.TypeOfTransfer);
+            Assert.Equal(toMap.Features.OtherTypeOfTransfer, result.Features.OtherTransferTypeDescription);
+            Assert.Equal(toMap.Features.WhoInitiatedTheTransfer.ToString(), result.Features.WhoInitiatedTheTransfer);
+        }
+
+        private static void AssertDatesAreCorrect(Project toMap, TramsProjectUpdate result)
+        {
             Assert.Equal(toMap.Dates.FirstDiscussed, result.Dates.TransferFirstDiscussed);
             Assert.Equal(toMap.Dates.Htb, result.Dates.HtbDate);
             Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
