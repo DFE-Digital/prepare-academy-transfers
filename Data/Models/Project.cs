@@ -26,6 +26,9 @@ namespace Data.Models
         public TransferDates Dates { get; set; }
         public TransferBenefits Benefits { get; set; }
         public TransferRationale Rationale { get; set; }
+        public string AcademyPerformanceAdditionalInformation { get; set; }
+        public string PupilNumbersAdditionalInformation { get; set; }
+        public string LatestOfstedAdditionalInformation { get; set; }
         public string OutgoingAcademyName => TransferringAcademies[0].OutgoingAcademyName;
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
     }
