@@ -3,7 +3,6 @@ using Data.Models;
 using Data.Models.Projects;
 using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Models;
-using Data.TRAMS.Tests.TestFixtures;
 using Xunit;
 
 namespace Data.TRAMS.Tests.Mappers.Request
@@ -49,7 +48,11 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe
                 },
                 Name = "Project name",
-                Rationale = new TransferRationale(),
+                Rationale = new TransferRationale
+                {
+                    Project = "Project rationale",
+                    Trust = "Trust rationale"
+                },
                 State = "State",
                 Status = "Status",
                 Urn = "12345",
@@ -72,6 +75,13 @@ namespace Data.TRAMS.Tests.Mappers.Request
             AssertBenefitsAreCorrect(toMap, result);
             AssertDatesAreCorrect(toMap, result);
             AssertFeaturesAreCorrect(toMap, result);
+            AssertRationaleIsCorrect(toMap, result);
+        }
+
+        private static void AssertRationaleIsCorrect(Project toMap, TramsProjectUpdate result)
+        {
+            Assert.Equal(toMap.Rationale.Project, result.Rationale.ProjectRationale);
+            Assert.Equal(toMap.Rationale.Trust, result.Rationale.TrustSponsorRationale);
         }
 
         private static void AssertFeaturesAreCorrect(Project toMap, TramsProjectUpdate result)

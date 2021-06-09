@@ -21,15 +21,30 @@ namespace Data.TRAMS.Mappers.Request
                 TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
                 Dates = Dates(input),
-                Features = new AcademyTransferProjectFeatures
-                {
-                    TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
-                    OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
-                    RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
-                                            (bool) input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
-                    WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
-                    RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails
-                }
+                Features = Features(input),
+                Rationale = Rationale(input)
+            };
+        }
+
+        private static AcademyTransferProjectRationale Rationale(Project input)
+        {
+            return new AcademyTransferProjectRationale
+            {
+                ProjectRationale = input.Rationale.Project,
+                TrustSponsorRationale = input.Rationale.Trust
+            };
+        }
+
+        private static AcademyTransferProjectFeatures Features(Project input)
+        {
+            return new AcademyTransferProjectFeatures
+            {
+                TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
+                OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
+                RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
+                                        (bool) input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
+                RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails
             };
         }
 
