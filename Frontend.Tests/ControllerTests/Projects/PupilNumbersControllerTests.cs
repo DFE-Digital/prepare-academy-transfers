@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Data;
 using Data.Models;
 using Data.Models.Academies;
 using Data.Models.Projects;
@@ -16,12 +17,14 @@ namespace Frontend.Tests.ControllerTests.Projects
     {
         private readonly PupilNumbersController _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
+        private readonly Mock<IProjects> _projectsRepository;
 
         protected PupilNumbersControllerTests()
         {
             _getInformationForProject = new Mock<IGetInformationForProject>();
+            _projectsRepository = new Mock<IProjects>();
 
-            _subject = new PupilNumbersController(_getInformationForProject.Object);
+            _subject = new PupilNumbersController(_getInformationForProject.Object, _projectsRepository.Object);
         }
 
         public class IndexTests : PupilNumbersControllerTests
@@ -39,7 +42,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     Urn = _projectUrn,
                     TransferringAcademies = new List<TransferringAcademies>
-                        {new TransferringAcademies {OutgoingAcademyUkprn = outgoingAcademyUkprn}}
+                        {new TransferringAcademies {OutgoingAcademyUkprn = outgoingAcademyUkprn}},
+                    PupilNumbersAdditionalInformation = "some info"
                 };
 
                 _foundAcademy = new Academy
@@ -54,6 +58,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Project = _foundProject,
                         OutgoingAcademy = _foundAcademy
                     });
+
+                _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
+                   new RepositoryResult<Project>
+                   {
+                       Result = _foundProject
+                   });
             }
 
             [Fact]
@@ -84,6 +94,43 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
+            }
+
+            [Fact]
+            public async void GivenAdditionalInformation_UpdatesTheProjectModel()
+            {
+                var additionalInformation = "some additional info";
+
+                var response = await _subject.Index(_projectUrn, additionalInformation);
+
+                var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
+                Assert.Equal("PupilNumbers", redirectToActionResponse.ControllerName);
+                Assert.Equal("Index", redirectToActionResponse.ActionName);
+                Assert.Equal(additionalInformation, _foundProject.PupilNumbersAdditionalInformation);
+            }
+
+            [Fact]
+            public async void GivenAdditionalInformation_UpdatesTheViewModel()
+            {
+                var response = await _subject.Index(_projectUrn);
+
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+
+                Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
+                Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
+                Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
+            }
+
+            [Fact]
+            public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
+            {
+                var additionalInfo = "test info";
+
+                await _subject.Index(_projectUrn, additionalInfo);
+                _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                    project => project.PupilNumbersAdditionalInformation == additionalInfo
+                )));
             }
         }
     }

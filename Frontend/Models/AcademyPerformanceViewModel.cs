@@ -1,4 +1,5 @@
 using Data.Models;
+using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
@@ -6,6 +7,6 @@ namespace Frontend.Models
     {
         public Project Project { get; set; }
         public Academy OutgoingAcademy { get; set; }
-
+        public AdditionalInformationViewModel AdditionalInformationModel { get; set; }
     }
 }

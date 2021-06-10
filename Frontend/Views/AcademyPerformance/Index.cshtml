@@ -20,7 +20,20 @@
             Outgoing trust: <span class="govuk-!-font-weight-regular govuk-!-font-size-24">@Model.Project.OutgoingTrustName</span>
         </h2>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.Performance.FieldsToDisplay()"/>
-        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Confirm and continue</a>
+        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.Performance.FieldsToDisplay()" />
+    </div>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel" />
+</div>
+@if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
+{
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+            <button class="govuk-button" data-module="govuk-button">
+                Confirm and continue
+            </button>
+        </form>
     </div>
 </div>
+}
+
