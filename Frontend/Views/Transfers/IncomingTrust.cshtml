@@ -45,7 +45,16 @@
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">Add the incoming trust name for @ViewData["OutgoingAcademyName"]</h1>
                     </legend>
-                    <label class="govuk-hint" for="query" id="query-hint">Search by name, UKPRN or companies house number</label>
+
+                    @* <div id="query-hint" class="govuk-hint"> *@
+                    @*     Search by name, UKPRN or companies house number *@
+                    @* </div> *@
+
+                    <div id="query-hint" class="govuk-hint">
+                        Search by Trust UKPRN<br/>
+                        If you're unsure of the UKPRN of the trust, you can find it on <a class="govuk-link" href="https://www.get-information-schools.service.gov.uk/">Get Information about Schools</a>
+                    </div>
+
                     @if (errorExists)
                     {
                         <span id="query-error" class="govuk-error-message">
