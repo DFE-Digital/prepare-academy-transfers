@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using Data.Models;
 using Data.TRAMS.Models;
@@ -23,7 +25,66 @@ namespace Data.TRAMS.Tests
             _subject = new TramsTrustsRepository(_client.Object, _trustSearchResultsMapper.Object, _trustMapper.Object);
         }
 
+        #region API Interim
+
         public class SearchTrustsTests : TramsTrustsRepositoryTests
+        {
+            [Fact]
+            public async void GivenMatchingSearchTerm_ReturnsTrustSearchResult()
+            {
+                _client.Setup(c => c.GetAsync("trust/1234")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(new TramsTrust()))
+                });
+
+                var foundTrust = new Trust()
+                {
+                    Ukprn = "1234",
+                    Name = "TrustName",
+                    CompaniesHouseNumber = "4321",
+                    Academies = new List<Academy>
+                    {
+                        new Academy {Name = "Academy 1", Ukprn = "1", Urn = "2"},
+                        new Academy {Name = "Academy 2", Ukprn = "3", Urn = "4"}
+                    }
+                };
+
+                _trustMapper.Setup(m => m.Map(It.IsAny<TramsTrust>())).Returns(foundTrust);
+
+                var result = await _subject.SearchTrusts("1234");
+                var trustSearchResults = result.Result;
+                var trustResult = trustSearchResults[0];
+
+                Assert.Single(trustSearchResults);
+                Assert.Equal(foundTrust.Ukprn, trustResult.Ukprn);
+                Assert.Equal(foundTrust.Name, trustResult.TrustName);
+                Assert.Equal(foundTrust.CompaniesHouseNumber, trustResult.CompaniesHouseNumber);
+                Assert.Equal(foundTrust.Academies[0].Name, trustResult.Academies[0].Name);
+                Assert.Equal(foundTrust.Academies[0].Urn, trustResult.Academies[0].Urn);
+                Assert.Equal(foundTrust.Academies[0].Ukprn, trustResult.Academies[0].Ukprn);
+                Assert.Equal(foundTrust.Academies[1].Name, trustResult.Academies[1].Name);
+                Assert.Equal(foundTrust.Academies[1].Urn, trustResult.Academies[1].Urn);
+                Assert.Equal(foundTrust.Academies[1].Ukprn, trustResult.Academies[1].Ukprn);
+            }
+
+            [Fact]
+            public async void GivenNoMatch_ReturnEmptyTrustResults()
+            {
+                _client.Setup(c => c.GetAsync("trust/1234")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(""),
+                    StatusCode = HttpStatusCode.NotFound
+                });
+
+                var result = await _subject.SearchTrusts("1234");
+                var trustSearchResults = result.Result;
+                Assert.Empty(trustSearchResults);
+            }
+        }
+
+        #endregion
+
+        public class SearchTrustsOriginalTests : TramsTrustsRepositoryTests
         {
             [Fact]
             public async void GivenSearchTerm_QueriesTheApiWithTheSearchTerm()
@@ -34,7 +95,7 @@ namespace Data.TRAMS.Tests
                         JsonConvert.SerializeObject(TrustSearchResults.GetTrustSearchResults()))
                 });
 
-                await _subject.SearchTrusts("Cats");
+                await _subject.SearchTrustsOriginal("Cats");
 
                 _client.Verify(c => c.GetAsync("trusts?group_name=Cats&urn=Cats&companies_house_number=Cats"),
                     Times.Once);
@@ -57,7 +118,7 @@ namespace Data.TRAMS.Tests
                             TrustName = $"Mapped {result.GroupName}"
                         });
 
-                var response = await _subject.SearchTrusts();
+                var response = await _subject.SearchTrustsOriginal();
 
                 Assert.Equal("Mapped 1", response.Result[0].Ukprn);
             }
@@ -79,7 +140,7 @@ namespace Data.TRAMS.Tests
                             TrustName = $"Mapped {result.GroupName}"
                         });
 
-                var response = await _subject.SearchTrusts();
+                var response = await _subject.SearchTrustsOriginal();
 
                 Assert.Equal("Mapped 1", response.Result[0].Ukprn);
                 Assert.Equal("Mapped 2", response.Result[1].Ukprn);
@@ -97,7 +158,7 @@ namespace Data.TRAMS.Tests
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundTrust))
                 });
-                
+
                 _trustMapper.Setup(m => m.Map(It.IsAny<TramsTrust>())).Returns<TramsTrust>((input) => new Trust()
                 {
                     Name = $"Mapped {input.GiasData.GroupName}",
