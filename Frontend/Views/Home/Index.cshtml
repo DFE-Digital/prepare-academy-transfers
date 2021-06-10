@@ -1,13 +1,13 @@
 ﻿@model Frontend.Views.Home.Index
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Transfer an academy to another trust";
 }
 
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">
-            Academy transfer projects
+            Transfer an academy to another trust
         </h1>
         <p class="govuk-body-l">
             Use this service to start a new academy transfer project or update an existing project.
@@ -23,8 +23,11 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-l">
-            Pre HTB
+            Projects
         </h2>
+        <h3 class="govuk-heading-m">
+            Pre-HTB
+        </h3>
         @foreach (var project in Model.Projects)
         {
             <div class="dfe-application-card">
@@ -33,21 +36,16 @@
                         <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-controller="Project" asp-action="Index" asp-route-id="@project.Urn">
                             @project.OutgoingAcademyName
                         </a>
-                        <span class="govuk-caption-m govuk-!-display-inline">
+                        <span class="govuk-caption-l govuk-!-display-inline">
                             URN @project.OutgoingAcademyUrn
                         </span>
                     </h3>
                     <p class="govuk-body govuk-!-margin-bottom-1">
-                        Application to transfer to @project.IncomingTrustName
+                        Application to transfer to: @project.IncomingTrustName
                     </p>
                     <p class="govuk-body">
                         Local authority: TODO
                     </p>
-                </div>
-                <div class="dfe-application-card--statuses">
-                    <span class="govuk-tag govuk-tag--purple">
-                        Pre htb
-                    </span>
                 </div>
             </div>
         }
