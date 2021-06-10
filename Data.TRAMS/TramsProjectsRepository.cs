@@ -89,7 +89,7 @@ namespace Data.TRAMS
                 {
                     var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                    transferring.IncomingTrust = new TrustSummary();
+                    transferring.IncomingTrust = new TrustSummary() {Ukprn = transferring.IncomingTrustUkprn};
                     transferring.OutgoingAcademy = new AcademySummary
                     {
                         Name = outgoingAcademy.Result.Name,
@@ -128,7 +128,7 @@ namespace Data.TRAMS
                 {
                     var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                    transferring.IncomingTrust = new TrustSummary();
+                    transferring.IncomingTrust = new TrustSummary() {Ukprn = transferring.IncomingTrustUkprn};
                     transferring.OutgoingAcademy = new AcademySummary
                     {
                         Name = outgoingAcademy.Result.Name,
@@ -164,7 +164,7 @@ namespace Data.TRAMS
                 {
                     var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                    transferring.IncomingTrust = new TrustSummary();
+                    transferring.IncomingTrust = new TrustSummary {Ukprn = transferring.IncomingTrustUkprn};
                     transferring.OutgoingAcademy = new AcademySummary
                     {
                         Name = outgoingAcademy.Result.Name,

@@ -40,8 +40,7 @@ namespace Data.TRAMS.Mappers.Request
             {
                 TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
                 OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
-                RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
-                                        (bool) input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
                 WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
                 RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails
             };
