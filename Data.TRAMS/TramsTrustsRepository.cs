@@ -42,12 +42,21 @@ namespace Data.TRAMS
         {
             var url = $"trust/{ukprn}";
             using var response = await _httpClient.GetAsync(url);
-            var apiResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<TramsTrust>(apiResponse);
+            Trust trust;
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TramsTrust>(apiResponse);
+                trust = _trustMapper.Map(result);
+            }
+            else
+            {
+                trust = new Trust();
+            }
 
             return new RepositoryResult<Trust>
             {
-                Result = _trustMapper.Map(result)
+                Result = trust
             };
         }
     }

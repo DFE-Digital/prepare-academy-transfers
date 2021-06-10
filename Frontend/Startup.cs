@@ -14,11 +14,13 @@ using Data;
 using Data.Mock;
 using Data.Models;
 using Data.TRAMS;
+using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
 using Frontend.Helpers;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
+using Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -153,9 +155,12 @@ namespace Frontend
                 services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
                 services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
                 services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
+                services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
+                services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+                services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
                 services.AddTransient<ITrusts, TramsTrustsRepository>();
                 services.AddTransient<IAcademies, TramsEstablishmentRepository>();
-                services.AddSingleton<IProjects, MockProjectRepository>();
+                services.AddSingleton<IProjects, TramsProjectsRepository>();
             }
         }
 

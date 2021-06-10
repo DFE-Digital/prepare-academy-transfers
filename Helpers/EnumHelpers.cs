@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Frontend.Helpers
+namespace Helpers
 {
     public static class EnumHelpers<T>
     {
@@ -38,6 +38,11 @@ namespace Frontend.Helpers
 
         public static T Parse(string value)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return default;
+            }
+
             return (T) Enum.Parse(typeof(T), value, true);
         }
 
@@ -48,7 +53,10 @@ namespace Frontend.Helpers
 
         public static IList<string> GetDisplayValues(Enum value)
         {
-            return GetNames(value).Select(obj => GetDisplayValue(Parse(obj))).ToList();
+            return GetNames(value)
+                .Where(obj => HasDisplayValue(Parse(obj)))
+                .Select(obj => GetDisplayValue(Parse(obj)))
+                .ToList();
         }
 
         private static string lookupResource(Type resourceManagerProvider, string resourceKey)

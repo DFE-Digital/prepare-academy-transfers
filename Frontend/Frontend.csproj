@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Data.TRAMS\Data.TRAMS.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DocumentGeneration\DocumentGeneration.csproj" />
+    <ProjectReference Include="..\Helpers\Helpers.csproj" />
     <ProjectReference Include="..\TRAMS-API\API.csproj" />
   </ItemGroup>
   <ItemGroup>

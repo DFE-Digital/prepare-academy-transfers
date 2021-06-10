@@ -10,7 +10,8 @@ namespace Data.TRAMS
         private readonly ITramsHttpClient _httpClient;
         private readonly IMapper<TramsEstablishment, Academy> _academyMapper;
 
-        public TramsEstablishmentRepository(ITramsHttpClient httpClient, IMapper<TramsEstablishment, Academy> academyMapper)
+        public TramsEstablishmentRepository(ITramsHttpClient httpClient,
+            IMapper<TramsEstablishment, Academy> academyMapper)
         {
             _httpClient = httpClient;
             _academyMapper = academyMapper;
@@ -20,9 +21,17 @@ namespace Data.TRAMS
         {
             using var response = await _httpClient.GetAsync($"establishment/{ukprn}");
 
-            var apiResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<TramsEstablishment>(apiResponse);
-            var mappedResult = _academyMapper.Map(result);
+            Academy mappedResult;
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TramsEstablishment>(apiResponse);
+                mappedResult = _academyMapper.Map(result);
+            }
+            else
+            {
+                mappedResult = new Academy();
+            }
 
             return new RepositoryResult<Academy> {Result = mappedResult};
         }

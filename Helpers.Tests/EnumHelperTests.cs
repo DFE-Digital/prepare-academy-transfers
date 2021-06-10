@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using Frontend.Helpers;
 using Xunit;
 
-namespace Frontend.Tests.HelpersTests
+namespace Helpers.Tests
 {
     public class EnumHelperTests
     {
         public enum TestEnum
         {
+            Empty = 0,
             [Display(Name = "First enum")] First,
             [Display(Name = "Second enum")] Second,
             Third = 3
@@ -17,11 +17,12 @@ namespace Frontend.Tests.HelpersTests
         public void GetValuesReturnsEnumValues()
         {
             var result = EnumHelpers<TestEnum>.GetValues(TestEnum.First);
-            Assert.Equal(TestEnum.First, result[0]);
-            Assert.Equal(TestEnum.Second, result[1]);
+            Assert.Equal(TestEnum.First, result[1]);
+            Assert.Equal(TestEnum.Second, result[2]);
         }
 
         [Theory]
+        [InlineData(null, TestEnum.Empty)]
         [InlineData("First", TestEnum.First)]
         [InlineData("Second", TestEnum.Second)]
         [InlineData("3", TestEnum.Third)]
@@ -35,8 +36,8 @@ namespace Frontend.Tests.HelpersTests
         {
             var result = EnumHelpers<TestEnum>.GetNames(TestEnum.First);
 
-            Assert.Equal("First", result[0]);
-            Assert.Equal("Second", result[1]);
+            Assert.Equal("First", result[1]);
+            Assert.Equal("Second", result[2]);
         }
 
         [Fact]

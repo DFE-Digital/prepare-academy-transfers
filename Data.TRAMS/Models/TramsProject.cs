@@ -1,12 +1,29 @@
+using System.Collections.Generic;
+using Data.TRAMS.Models.AcademyTransferProject;
+
 namespace Data.TRAMS.Models
 {
     public class TramsProject
     {
+        public TramsProject()
+        {
+            Benefits = new AcademyTransferProjectBenefits();
+            Dates = new AcademyTransferProjectDates();
+            Features = new AcademyTransferProjectFeatures();
+            Rationale = new AcademyTransferProjectRationale();
+            TransferringAcademies = new List<TransferringAcademy>();
+            OutgoingTrust = new TrustSummary();
+        }
+        public AcademyTransferProjectBenefits Benefits { get; set; }
+        public AcademyTransferProjectDates Dates { get; set; }
         public AcademyTransferProjectFeatures Features { get; set; }
-        public string OutgoingTrustUrn { get; set; }
+        public string OutgoingTrustUkprn { get; set; }
+        public string ProjectNumber { get; set; }
         public string ProjectUrn { get; set; }
+        public AcademyTransferProjectRationale Rationale { get; set; }
         public string State { get; set; }
         public string Status { get; set; }
-        public TransferringAcademy TransferringAcademies { get; set; }
+        public List<TransferringAcademy> TransferringAcademies { get; set; }
+        public TrustSummary OutgoingTrust { get; set; }
     }
 }
