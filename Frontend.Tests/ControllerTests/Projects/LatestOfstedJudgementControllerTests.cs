@@ -42,7 +42,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     Urn = _projectUrn,
                     TransferringAcademies = new List<TransferringAcademies>
-                        {new TransferringAcademies() {OutgoingAcademyUkprn = "1234567"}}
+                        {new TransferringAcademies() {OutgoingAcademyUkprn = "1234567"}},
+                    LatestOfstedAdditionalInformation = "some info"
                 };
 
                 _foundAcademy = new Academy
@@ -106,6 +107,30 @@ namespace Frontend.Tests.ControllerTests.Projects
                 Assert.Equal("LatestOfstedJudgement", redirectToActionResponse.ControllerName);
                 Assert.Equal("Index", redirectToActionResponse.ActionName);
                 Assert.Equal(additionalInformation, _foundProject.LatestOfstedAdditionalInformation);
+            }
+
+            [Fact]
+            public async void GivenAdditionalInformation_UpdatesTheViewModel()
+            {
+                var response = await _subject.Index(_projectUrn);
+
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+
+                Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
+                Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
+                Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
+            }
+
+            [Fact]
+            public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
+            {
+                var additionalInfo = "test info";
+
+                await _subject.Index(_projectUrn, additionalInfo);
+                _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                    project => project.LatestOfstedAdditionalInformation == additionalInfo
+                )));
             }
         }
     }
