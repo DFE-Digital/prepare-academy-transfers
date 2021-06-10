@@ -152,7 +152,8 @@ namespace Data.TRAMS
         public async Task<RepositoryResult<Project>> Create(Project project)
         {
             var externalProject = _internalToUpdateMapper.Map(project);
-            var content = new StringContent(JsonConvert.SerializeObject(externalProject));
+            var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
+                "application/json");
             var response = await _httpClient.PostAsync("academyTransferProject", content);
             var apiResponse = await response.Content.ReadAsStringAsync();
             var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
