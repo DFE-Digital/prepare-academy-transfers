@@ -26,6 +26,12 @@ namespace Frontend.Controllers.Projects
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 
+            if (!projectInformation.IsValid)
+            {
+                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
+            }
+            
+
             var model = new AcademyPerformanceViewModel
             {
                 Project = projectInformation.Project,
