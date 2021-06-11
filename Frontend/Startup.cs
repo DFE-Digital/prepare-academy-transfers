@@ -1,15 +1,4 @@
 using System;
-using API.HttpHelpers;
-using API.Mapping;
-using API.Mapping.Request;
-using API.Mapping.Response;
-using API.Models.Downstream.D365;
-using API.Models.Upstream.Request;
-using API.Models.Upstream.Response;
-using API.ODataHelpers;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using API.Wrappers;
 using Data;
 using Data.Mock;
 using Data.Models;
@@ -17,7 +6,6 @@ using Data.TRAMS;
 using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
-using Frontend.Helpers;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Helpers;
@@ -29,7 +17,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 
@@ -63,22 +50,10 @@ namespace Frontend
             services.AddDataProtection().PersistKeysToStackExchangeRedis(redisConnection, "DataProtectionKeys");
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
-
-            services.AddSingleton(CreateHttpClient());
-            services.AddSingleton<IAuthenticatedHttpClient>(r => CreateHttpClient());
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-            if (string.IsNullOrEmpty(Configuration["USE_TRAMS_REPOSITORIES"]))
-            {
-                ConfigureDynamicsRepositories(services);
-            }
-            else
-            {
-                ConfigureTramsRepositories(services, Configuration);
-            }
+            ConfigureTramsRepositories(services, Configuration);
 
-            ConfigureHelpers(services);
-            ConfigureMappers(services);
             ConfigureServiceClasses(services);
 
             services.AddSession(options =>
@@ -128,16 +103,6 @@ namespace Frontend
             });
         }
 
-        private static void ConfigureDynamicsRepositories(IServiceCollection services)
-        {
-            services.AddSingleton<IProjects, MockProjectRepository>();
-            services.AddTransient<ITrusts, DynamicsTrustsWrapper>();
-            services.AddTransient<IAcademies, MockAcademyRepository>();
-            services.AddTransient<ITrustsRepository, TrustsDynamicsRepository>();
-            services.AddTransient<IAcademiesRepository, AcademiesDynamicsRepository>();
-            services.AddTransient<IProjectsRepository, ProjectsDynamicsRepository>();
-        }
-
         private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
@@ -164,68 +129,10 @@ namespace Frontend
             }
         }
 
-        private static void ConfigureMappers(IServiceCollection services)
-        {
-            services.AddTransient<IDynamicsMapper<GetTrustsD365Model, GetTrustsModel>,
-                GetTrustsReponseDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<GetAcademiesD365Model, GetAcademiesModel>,
-                GetAcademiesResponseDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<PutProjectAcademiesRequestModel, PatchProjectAcademiesD365Model>,
-                PutProjectAcademiesRequestDynamicsMapper>();
-
-            services
-                .AddTransient<IDynamicsMapper<PostProjectsAcademiesModel, PostAcademyTransfersProjectAcademyD365Model>,
-                    PostProjectAcademiesRequestDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<PostProjectsRequestModel, PostAcademyTransfersProjectsD365Model>,
-                PostProjectsRequestDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<AcademyTransfersProjectAcademy, GetProjectsAcademyResponseModel>,
-                GetProjectAcademiesResponseDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<GetProjectsD365Model, GetProjectsResponseModel>,
-                GetProjectsResponseDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<SearchProjectsD365Model, SearchProjectsModel>,
-                SearchProjectsItemDynamicsMapper>();
-
-            services.AddTransient<IDynamicsMapper<SearchProjectsD365PageModel, SearchProjectsPageModel>,
-                SearchProjectsPageResponseDynamicsMapper>();
-        }
-
-        private static void ConfigureHelpers(IServiceCollection services)
-        {
-            services.AddTransient(typeof(ID365ModelHelper<>), typeof(D365ModelHelper<>));
-            services.AddTransient(typeof(IOdataUrlBuilder<>), typeof(ODataUrlBuilder<>));
-
-            services.AddTransient<IRepositoryErrorResultHandler, RepositoryErrorResultHandler>();
-
-            services.AddTransient<IFetchXmlSanitizer, FetchXmlSanitizer>();
-
-            services.AddTransient<IEstablishmentNameFormatter, EstablishmentNameFormatter>();
-
-            services.AddTransient<IODataSanitizer, ODataSanitizer>();
-        }
-
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
             serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
-        }
-
-        private AuthenticatedHttpClient CreateHttpClient()
-        {
-            var authority = Configuration["D365:Authority"];
-            var clientId = Configuration["D365:ClientId"];
-            var clientSecret = Configuration["D365:ClientSecret"];
-            var url = Configuration["D365:Url"];
-            var version = Configuration["D365:Version"];
-
-            var client = new AuthenticatedHttpClient(clientId, clientSecret, authority, version, url);
-
-            return client;
         }
     }
 }
