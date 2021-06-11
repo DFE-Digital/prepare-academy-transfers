@@ -10,7 +10,7 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new TrustSearchResult
             {
-                Ukprn = input.Urn,
+                Ukprn = input.Ukprn,
                 TrustName = input.GroupName,
                 CompaniesHouseNumber = input.CompaniesHouseNumber,
                 Academies = input.Establishments.Select(establishment => new TrustSearchAcademy

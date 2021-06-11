@@ -14,7 +14,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
 
             var resultToMap = new TramsTrustSearchResult
             {
-                Urn = "1234",
+                Ukprn = "1234",
                 GroupName = "Group name",
                 CompaniesHouseNumber = "12345",
                 Establishments = new List<TramsTrustSearchEstablishment>
@@ -26,7 +26,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
 
             var result = subject.Map(resultToMap);
 
-            Assert.Equal(resultToMap.Urn, result.Ukprn);
+            Assert.Equal(resultToMap.Ukprn, result.Ukprn);
             Assert.Equal(resultToMap.GroupName, result.TrustName);
             Assert.Equal(resultToMap.CompaniesHouseNumber, result.CompaniesHouseNumber);
 

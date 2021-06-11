@@ -19,7 +19,7 @@ namespace Data.TRAMS.Tests.TestFixtures
                         Establishments = new List<TramsTrustSearchEstablishment>(),
                         CompaniesHouseNumber = counter.ToString(),
                         GroupName = $"Trust {counter}",
-                        Urn = counter.ToString()
+                        Ukprn = counter.ToString()
                     }
                 );
                 counter++;
