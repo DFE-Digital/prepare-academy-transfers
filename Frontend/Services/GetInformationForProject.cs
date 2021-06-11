@@ -1,3 +1,4 @@
+using System.Net;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Services.Interfaces;
@@ -23,10 +24,34 @@ namespace Frontend.Services
             var outgoingAcademyUkprn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUkprn;
             var academyResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyUkprn);
 
+            if (academyResult.IsValid)
+            {
+                return new GetInformationForProjectResponse
+                {
+                    Project = projectResult.Result,
+                    OutgoingAcademy = academyResult.Result
+                };
+            }
+
+            if (academyResult.Error.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new GetInformationForProjectResponse
+                {
+                    ResponseError = new ServiceResponseError
+                    {
+                        ErrorCode = ErrorCode.NotFound,
+                        ErrorMessage = "Outgoing academy not found"
+                    }
+                };
+            }
+
             return new GetInformationForProjectResponse
             {
-                Project = projectResult.Result,
-                OutgoingAcademy = academyResult.Result
+                ResponseError = new ServiceResponseError
+                {
+                    ErrorCode = ErrorCode.ApiError,
+                    ErrorMessage = "API has encountered an error"
+                }
             };
         }
     }

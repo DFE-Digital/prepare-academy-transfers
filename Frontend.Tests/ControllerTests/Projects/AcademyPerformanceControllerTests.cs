@@ -7,6 +7,7 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
+using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -60,10 +61,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                     });
 
                 _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
-                   new RepositoryResult<Project>
-                   {
-                       Result = _foundProject
-                   });
+                    new RepositoryResult<Project>
+                    {
+                        Result = _foundProject
+                    });
             }
 
             [Fact]
@@ -131,6 +132,27 @@ namespace Frontend.Tests.ControllerTests.Projects
                 _projectsRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.AcademyPerformanceAdditionalInformation == additionalInfo
                 )));
+            }
+
+            [Fact]
+            public async void GivenGetInformationReturnsError_DisplayErrorPage()
+            {
+                _getInformationForProject.Setup(s => s.Execute(It.IsAny<string>())).ReturnsAsync(
+                    new GetInformationForProjectResponse
+                    {
+                        ResponseError = new ServiceResponseError
+                        {
+                            ErrorCode = ErrorCode.NotFound,
+                            ErrorMessage = "Project information not found"
+                        }
+                    });
+
+                var response = await _subject.Index(_projectUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Project information not found", viewModel);
             }
         }
     }

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Net;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
+using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using Frontend.Services;
+using Frontend.Services.Responses;
 using Moq;
 using Xunit;
 
@@ -82,6 +85,47 @@ namespace Frontend.Tests.ServicesTests
 
             Assert.Equal(result.Project, _foundProject);
             Assert.Equal(result.OutgoingAcademy, _foundAcademy);
+            Assert.True(result.IsValid);
+        }
+
+        [Fact]
+        public async void GivenAcademyRepositoryReturnsNotFound_ReturnsCorrectError()
+        {
+            _academiesRepository.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>())).ReturnsAsync(
+                new RepositoryResult<Academy>
+                {
+                    Error = new RepositoryResultBase.RepositoryError
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        ErrorMessage = "Example error message"
+                    }
+                });
+
+            var result = await _subject.Execute(_projectUrn);
+
+            Assert.False(result.IsValid);
+            Assert.Equal(ErrorCode.NotFound, result.ResponseError.ErrorCode);
+            Assert.Equal("Outgoing academy not found", result.ResponseError.ErrorMessage);
+        }
+        
+        [Fact]
+        public async void GivenAcademyRepositoryReturnsServiceError_ReturnsCorrectError()
+        {
+            _academiesRepository.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>())).ReturnsAsync(
+                new RepositoryResult<Academy>
+                {
+                    Error = new RepositoryResultBase.RepositoryError
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        ErrorMessage = "Example error message"
+                    }
+                });
+
+            var result = await _subject.Execute(_projectUrn);
+
+            Assert.False(result.IsValid);
+            Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
+            Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
         }
     }
 }

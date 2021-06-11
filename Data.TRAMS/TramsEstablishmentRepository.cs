@@ -1,3 +1,4 @@
+using System.Net;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.TRAMS.Models;
@@ -30,7 +31,18 @@ namespace Data.TRAMS
             }
             else
             {
-                mappedResult = new Academy();
+                var errorMessage = response.StatusCode == HttpStatusCode.NotFound
+                    ? "Academy not found"
+                    : "API encountered an error";
+                
+                return new RepositoryResult<Academy>
+                {
+                    Error = new RepositoryResultBase.RepositoryError
+                    {
+                        StatusCode = response.StatusCode,
+                        ErrorMessage = errorMessage
+                    }
+                };
             }
 
             return new RepositoryResult<Academy> {Result = mappedResult};
