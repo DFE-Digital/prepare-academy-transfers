@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http;
 using Data.Models;
 using Data.TRAMS.Models;
@@ -47,7 +48,8 @@ namespace Data.TRAMS.Tests
 
                 await _subject.GetAcademyByUkprn("12345");
 
-                _mapper.Verify(m => m.Map(It.Is<TramsEstablishment>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
+                _mapper.Verify(
+                    m => m.Map(It.Is<TramsEstablishment>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
                     Times.Once);
             }
 
@@ -60,14 +62,45 @@ namespace Data.TRAMS.Tests
                     Content = new StringContent(JsonConvert.SerializeObject(academy))
                 });
 
-                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input => new Academy
-                {
-                    Ukprn = $"Mapped {academy.Ukprn}"
-                });
+                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input =>
+                    new Academy
+                    {
+                        Ukprn = $"Mapped {academy.Ukprn}"
+                    });
 
                 var response = await _subject.GetAcademyByUkprn("12345");
 
                 Assert.Equal("Mapped 12345", response.Result.Ukprn);
+            }
+
+            [Fact]
+            public async void Given404_ReturnsErrorFromRepository()
+            {
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.NotFound
+                });
+
+                var response = await _subject.GetAcademyByUkprn("12345");
+
+                Assert.False(response.IsValid);
+                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
+                Assert.Equal("Academy not found", response.Error.ErrorMessage);
+            }
+
+            [Fact]
+            public async void Given500_ReturnsErrorFromRepository()
+            {
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError
+                });
+
+                var response = await _subject.GetAcademyByUkprn("12345");
+
+                Assert.False(response.IsValid);
+                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
+                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
             }
         }
     }
