@@ -8,6 +8,6 @@ namespace Data.TRAMS.Models
         public List<TramsTrustSearchEstablishment> Establishments { get; set; }
         public string CompaniesHouseNumber { get; set; }
         public string GroupName { get; set; }
-        public string Urn { get; set; }
+        public string Ukprn { get; set; }
     }
 }
