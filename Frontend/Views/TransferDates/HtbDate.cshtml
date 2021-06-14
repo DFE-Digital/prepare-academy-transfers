@@ -22,16 +22,17 @@
         <form asp-action="HtbDate" method="post" novalidate="">
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-htb-date-hint">
                         <h1 class="govuk-fieldset__heading">
-                            <span class="govuk-caption-m">
+                            <span class="govuk-caption-l">
                                 @Model.Project.OutgoingAcademyName
                             </span>
-                        </h1>
-                        <h1 class="govuk-heading-l">
                             Set HTB date
                         </h1>
                     </legend>
+                    <div id="set-htb-date-hint" class="govuk-hint">
+                        For example, 12 11 2021. You can change this date later.
+                    </div>
 
                     @if (Model.FormErrors.HasErrorForField("htbDate"))
                     {
