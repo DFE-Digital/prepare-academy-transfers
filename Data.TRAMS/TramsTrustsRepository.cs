@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.TRAMS.Models;
@@ -27,6 +29,11 @@ namespace Data.TRAMS
             var url = $"trusts?groupName={searchQuery}&ukprn={searchQuery}&companiesHouseNumber={searchQuery}";
             using var response = await _httpClient.GetAsync(url);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                return CreateErrorResult<List<TrustSearchResult>>(response);
+            }
+
             var apiResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<TramsTrustSearchResult>>(apiResponse);
 
@@ -42,6 +49,12 @@ namespace Data.TRAMS
         {
             var url = $"trust/{ukprn}";
             using var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return CreateErrorResult<Trust>(response);
+            }
+
             Trust trust;
             if (response.IsSuccessStatusCode)
             {
@@ -57,6 +70,22 @@ namespace Data.TRAMS
             return new RepositoryResult<Trust>
             {
                 Result = trust
+            };
+        }
+
+        private RepositoryResult<T> CreateErrorResult<T>(HttpResponseMessage response)
+        {
+            var errorMessage = response.StatusCode == HttpStatusCode.NotFound
+                ? "Project not found"
+                : "API encountered an error";
+
+            return new RepositoryResult<T>
+            {
+                Error = new RepositoryResultBase.RepositoryError
+                {
+                    StatusCode = response.StatusCode,
+                    ErrorMessage = errorMessage
+                }
             };
         }
     }
