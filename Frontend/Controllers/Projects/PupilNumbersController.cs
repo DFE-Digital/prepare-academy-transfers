@@ -25,6 +25,10 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
+            if (!projectInformation.IsValid)
+            {
+                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
+            }
 
             var model = new PupilNumbersViewModel
             {
@@ -46,9 +50,17 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(string id, string additionalInformation)
         {
             var model = await _projectsRepository.GetByUrn(id);
+            if (!model.IsValid)
+            {
+                return View("ErrorPage", model.Error.ErrorMessage);
+            }
 
             model.Result.PupilNumbersAdditionalInformation = additionalInformation;
-            await _projectsRepository.Update(model.Result);
+            var result = await _projectsRepository.Update(model.Result);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", model.Error.ErrorMessage);
+            }
 
             return RedirectToAction(nameof(this.Index),
                 "PupilNumbers",

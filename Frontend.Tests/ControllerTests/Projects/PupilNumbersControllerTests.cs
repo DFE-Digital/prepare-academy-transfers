@@ -29,6 +29,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
         public class IndexTests : PupilNumbersControllerTests
         {
+            private const string _projectErrorUrn = "errorUrn";
             private readonly string _projectUrn;
             private readonly Project _foundProject;
             private readonly Academy _foundAcademy;
@@ -59,78 +60,145 @@ namespace Frontend.Tests.ControllerTests.Projects
                         OutgoingAcademy = _foundAcademy
                     });
 
+                _getInformationForProject.Setup(s => s.Execute(_projectErrorUrn)).ReturnsAsync(
+                    new GetInformationForProjectResponse()
+                    {
+                        ResponseError = new ServiceResponseError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
+
                 _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
                    new RepositoryResult<Project>
                    {
                        Result = _foundProject
                    });
+
+                _projectsRepository.Setup(s => s.GetByUrn(_projectErrorUrn)).ReturnsAsync(
+                   new RepositoryResult<Project>
+                   {
+                       Error = new RepositoryResultBase.RepositoryError
+                       {
+                           ErrorMessage = "Error"
+                       }
+                   });
+
+                _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                    .ReturnsAsync(new RepositoryResult<Project>());
             }
 
-            [Fact]
-            public async void GivenProjectId_GetsInformationAboutProject()
+            public class GetTests : IndexTests
             {
-                await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenProjectId_GetsInformationAboutProject()
+                {
+                    await _subject.Index(_projectUrn);
 
-                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
+                    _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
+
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+
+                    Assert.Equal(_foundProject, viewModel.Project);
+                }
+
+                [Fact]
+                public async void GivenAcademy_AssignsTheProjectToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
+
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+
+                    Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
+
+                }
+
+                [Fact]
+                public async void GivenAdditionalInformation_UpdatesTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
+
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+
+                    Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
+                    Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
+                    Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Index(_projectErrorUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
             }
 
-            [Fact]
-            public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+            public class PostTests : IndexTests
             {
-                var response = await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenAdditionalInformationIsPosted_CorrectlyRedirects()
+                {
+                    var additionalInformation = "some additional info";
 
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+                    var response = await _subject.Index(_projectUrn, additionalInformation);
 
-                Assert.Equal(_foundProject, viewModel.Project);
-            }
+                    var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
+                    Assert.Equal("PupilNumbers", redirectToActionResponse.ControllerName);
+                    Assert.Equal("Index", redirectToActionResponse.ActionName);
+                    Assert.Equal(additionalInformation, _foundProject.PupilNumbersAdditionalInformation);
+                }
 
-            [Fact]
-            public async void GivenAcademy_AssignsTheProjectToTheViewModel()
-            {
-                var response = await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
+                {
+                    var additionalInfo = "test info";
 
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
+                    await _subject.Index(_projectUrn, additionalInfo);
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.PupilNumbersAdditionalInformation == additionalInfo
+                    )));
+                }
 
-                Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
-            }
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                        var response = await _subject.Index(_projectErrorUrn, "test info");
+                    var viewResult = Assert.IsType<ViewResult>(response);
 
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheProjectModel()
-            {
-                var additionalInformation = "some additional info";
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
 
-                var response = await _subject.Index(_projectUrn, additionalInformation);
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
+                   new RepositoryResult<Project>
+                   {
+                       Error = new RepositoryResultBase.RepositoryError
+                       {
+                           ErrorMessage = "Error"
+                       }
+                   });
 
-                var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("PupilNumbers", redirectToActionResponse.ControllerName);
-                Assert.Equal("Index", redirectToActionResponse.ActionName);
-                Assert.Equal(additionalInformation, _foundProject.PupilNumbersAdditionalInformation);
-            }
+                    var response = await _subject.Index(_projectErrorUrn, "test info");
+                    var viewResult = Assert.IsType<ViewResult>(response);
 
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheViewModel()
-            {
-                var response = await _subject.Index(_projectUrn);
-
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
-
-                Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
-                Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
-                Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
-            }
-
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
-            {
-                var additionalInfo = "test info";
-
-                await _subject.Index(_projectUrn, additionalInfo);
-                _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.PupilNumbersAdditionalInformation == additionalInfo
-                )));
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
             }
         }
     }
