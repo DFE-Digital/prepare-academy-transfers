@@ -64,73 +64,144 @@ namespace Frontend.Tests.ControllerTests.Projects
                    {
                        Result = _foundProject
                    });
+
+                _getInformationForProject.Setup(s => s.Execute("errorUrn")).ReturnsAsync(
+                    new GetInformationForProjectResponse
+                    {
+                        ResponseError = new ServiceResponseError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
+
+                _projectsRepository.Setup(r => r.GetByUrn("errorUrn"))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                    .ReturnsAsync(new RepositoryResult<Project>());
             }
 
-            [Fact]
-            public async void GivenProjectId_GetsInformationAboutTheProject()
+            public class GetTests : IndexTests
             {
-                await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenProjectId_GetsInformationAboutTheProject()
+                {
+                    await _subject.Index(_projectUrn);
 
-                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
+                    _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
+
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+
+                    Assert.Equal(_foundProject, viewModel.Project);
+                }
+
+                [Fact]
+                public async void GivenAcademy_AssignsTheProjectToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
+
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+
+                    Assert.Equal(_foundAcademy, viewModel.Academy);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Index("errorUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
             }
 
-            [Fact]
-            public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+            public class PostTests : IndexTests
             {
-                var response = await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenAdditionalInformation_UpdatesTheProjectModel()
+                {
+                    var additionalInformation = "some additional info";
 
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+                    var response = await _subject.Index(_projectUrn, additionalInformation);
 
-                Assert.Equal(_foundProject, viewModel.Project);
-            }
+                    var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
+                    Assert.Equal("LatestOfstedJudgement", redirectToActionResponse.ControllerName);
+                    Assert.Equal("Index", redirectToActionResponse.ActionName);
+                    Assert.Equal(additionalInformation, _foundProject.LatestOfstedAdditionalInformation);
+                }
 
-            [Fact]
-            public async void GivenAcademy_AssignsTheProjectToTheViewModel()
-            {
-                var response = await _subject.Index(_projectUrn);
+                [Fact]
+                public async void GivenAdditionalInformation_UpdatesTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn);
 
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+                    var viewResponse = Assert.IsType<ViewResult>(response);
+                    var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
 
-                Assert.Equal(_foundAcademy, viewModel.Academy);
-            }
+                    Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
+                    Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
+                    Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
+                }
 
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheProjectModel()
-            {
-                var additionalInformation = "some additional info";
+                [Fact]
+                public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
+                {
+                    var additionalInfo = "test info";
 
-                var response = await _subject.Index(_projectUrn, additionalInformation);
+                    await _subject.Index(_projectUrn, additionalInfo);
+                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
+                        project => project.LatestOfstedAdditionalInformation == additionalInfo
+                    )));
+                }
 
-                var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("LatestOfstedJudgement", redirectToActionResponse.ControllerName);
-                Assert.Equal("Index", redirectToActionResponse.ActionName);
-                Assert.Equal(additionalInformation, _foundProject.LatestOfstedAdditionalInformation);
-            }
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Index("errorUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
 
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheViewModel()
-            {
-                var response = await _subject.Index(_projectUrn);
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
 
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
 
-                Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
-                Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
-                Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
-            }
+                    var controller = new LatestOfstedJudgementController(_getInformationForProject.Object, _projectsRepository.Object);
 
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
-            {
-                var additionalInfo = "test info";
 
-                await _subject.Index(_projectUrn, additionalInfo);
-                _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.LatestOfstedAdditionalInformation == additionalInfo
-                )));
+                    var response = await _subject.Index(_projectUrn, "test");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewResult.Model);
+                }
             }
         }
     }
