@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using Data.Models;
 using Data.TRAMS.Models;
+using Data.TRAMS.Tests.Helpers;
 using Data.TRAMS.Tests.TestFixtures;
 using Moq;
 using Newtonsoft.Json;
@@ -67,11 +68,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleSearchResults_ReturnsTheMappedResult()
             {
-                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(
-                        JsonConvert.SerializeObject(TrustSearchResults.GetTrustSearchResults(2)))
-                });
+                HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
 
                 _trustSearchResultsMapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>()))
                     .Returns<TramsTrustSearchResult>(result =>
@@ -85,6 +82,18 @@ namespace Data.TRAMS.Tests
 
                 Assert.Equal("Mapped 1", response.Result[0].Ukprn);
                 Assert.Equal("Mapped 2", response.Result[1].Ukprn);
+            }
+
+            [Fact]
+            public async void GivenNonSuccessCode_ReturnsApiError()
+            {
+                HttpClientTestHelpers.SetupGet<TramsTrustSearchResult>(_client, null,
+                    HttpStatusCode.InternalServerError);
+
+                var response = await _subject.SearchTrusts("Cats");
+
+                Assert.False(response.IsValid);
+                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
             }
         }
 
@@ -130,6 +139,28 @@ namespace Data.TRAMS.Tests
                 var response = await _subject.GetByUkprn("12345");
 
                 Assert.Equal($"Mapped {_foundTrust.GiasData.Ukprn}", response.Result.Ukprn);
+            }
+
+            [Fact]
+            public async void Given404_ReturnsNotFound()
+            {
+                HttpClientTestHelpers.SetupGet<TramsTrust>(_client, null, HttpStatusCode.NotFound);
+
+                var response = await _subject.GetByUkprn("Cats");
+
+                Assert.False(response.IsValid);
+                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
+            }
+
+            [Fact]
+            public async void Given500_ReturnsServerError()
+            {
+                HttpClientTestHelpers.SetupGet<TramsTrust>(_client, null, HttpStatusCode.InternalServerError);
+
+                var response = await _subject.GetByUkprn("Cats");
+
+                Assert.False(response.IsValid);
+                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
             }
         }
     }

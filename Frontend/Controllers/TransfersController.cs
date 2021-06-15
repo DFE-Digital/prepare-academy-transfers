@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Frontend.Helpers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,8 @@ namespace Frontend.Controllers
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
 
-        public TransfersController(IAcademies academiesRepository, IProjects projectsRepository, ITrusts trustsRepository)
+        public TransfersController(IAcademies academiesRepository, IProjects projectsRepository,
+            ITrusts trustsRepository)
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
@@ -55,8 +57,7 @@ namespace Frontend.Controllers
 
             if (!result.IsValid)
             {
-                TempData["ErrorMessage"] = result.Error.ErrorMessage;
-                return RedirectToAction("TrustName", new {query});
+                return View("ErrorPage", result.Error.ErrorMessage);
             }
 
             if (result.Result.Count == 0)
@@ -74,6 +75,12 @@ namespace Frontend.Controllers
         public async Task<IActionResult> OutgoingTrustDetails(string trustId, string query = "", bool change = false)
         {
             var result = await _trustsRepository.GetByUkprn(trustId);
+
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
+
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -104,6 +111,12 @@ namespace Frontend.Controllers
             }
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
+
+            if (!trustRepoResult.IsValid)
+            {
+                return View("ErrorPage", trustRepoResult.Error.ErrorMessage);
+            }
+
             var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
 
             ViewData["Error.Exists"] = false;
@@ -163,8 +176,7 @@ namespace Frontend.Controllers
 
             if (!result.IsValid)
             {
-                TempData["ErrorMessage"] = result.Error.ErrorMessage;
-                return RedirectToAction("IncomingTrust", new {query});
+                return View("ErrorPage", result.Error.ErrorMessage);
             }
 
             if (result.Result.Count == 0)
@@ -193,11 +205,22 @@ namespace Frontend.Controllers
 
             var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
+            if (!outgoingTrustResponse.IsValid)
+            {
+                return View("ErrorPage", outgoingTrustResponse.Error.ErrorMessage);
+            }
+
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
+                
+                if (!incomingTrustResponse.IsValid)
+                {
+                    return View("ErrorPage", incomingTrustResponse.Error.ErrorMessage);
+                }
+
                 incomingTrust = incomingTrustResponse.Result;
             }
 
@@ -219,7 +242,7 @@ namespace Frontend.Controllers
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var incomingTrustId = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
-                
+
 
             var project = new Project
             {
