@@ -173,11 +173,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                    var response = await _subject.Index("errorUrn");
+                    var response = await _subject.Index("errorUrn", "test");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
+                    Assert.Equal("Project not found", viewResult.Model);
                 }
 
                 [Fact]
