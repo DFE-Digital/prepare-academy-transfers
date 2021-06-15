@@ -21,7 +21,16 @@ namespace Frontend.Controllers.Projects
 
         public async Task<IActionResult> Index(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -29,7 +38,16 @@ namespace Frontend.Controllers.Projects
         [Route("initiated")]
         public async Task<IActionResult> Initiated(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -38,7 +56,16 @@ namespace Frontend.Controllers.Projects
         [AcceptVerbs(WebRequestMethods.Http.Post)]
         public async Task<IActionResult> InitiatedPost(string urn, TransferFeatures.ProjectInitiators whoInitiated)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
 
             if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
             {
@@ -49,7 +76,11 @@ namespace Frontend.Controllers.Projects
 
             model.Project.Features.WhoInitiatedTheTransfer = whoInitiated;
 
-            await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
 
             return RedirectToAction("Index", new {urn});
         }
@@ -58,7 +89,16 @@ namespace Frontend.Controllers.Projects
         [AcceptVerbs(WebRequestMethods.Http.Get)]
         public async Task<IActionResult> Reason(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -67,7 +107,16 @@ namespace Frontend.Controllers.Projects
         [AcceptVerbs(WebRequestMethods.Http.Post)]
         public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
 
             if (!isSubjectToIntervention.HasValue)
             {
@@ -78,7 +127,12 @@ namespace Frontend.Controllers.Projects
 
             model.Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = isSubjectToIntervention;
             model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail;
-            await _projectsRepository.Update(model.Project);
+
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
 
             return RedirectToAction("Index", new {urn});
         }
@@ -87,7 +141,16 @@ namespace Frontend.Controllers.Projects
         [AcceptVerbs(WebRequestMethods.Http.Get)]
         public async Task<IActionResult> Type(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -97,7 +160,17 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> TypePost(string urn, TransferFeatures.TransferTypes typeOfTransfer,
             string otherType)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new FeaturesViewModel
+            {
+                Project = project.Result
+            };
+
             model.Project.Features.TypeOfTransfer = typeOfTransfer;
             model.Project.Features.OtherTypeOfTransfer = otherType;
 
@@ -114,19 +187,13 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
-            return RedirectToAction("Index", new {urn});
-        }
-
-        private async Task<FeaturesViewModel> GetModel(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-
-            var model = new FeaturesViewModel
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
             {
-                Project = project.Result
-            };
-            return model;
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
+
+            return RedirectToAction("Index", new { urn });
         }
     }
 }
