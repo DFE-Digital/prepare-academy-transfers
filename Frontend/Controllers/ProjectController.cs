@@ -20,6 +20,10 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Index([FromRoute] string id)
         {
             var project = await _projectRepository.GetByUrn(id);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
 
             var viewModel = new ProjectTaskListViewModel
             {
