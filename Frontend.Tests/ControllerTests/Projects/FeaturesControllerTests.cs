@@ -6,6 +6,7 @@ using Data.Models.Projects;
 using DocumentFormat.OpenXml.Presentation;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
@@ -35,6 +36,19 @@ namespace Frontend.Tests.ControllerTests.Projects
             {
                 Result = _foundProject
             });
+
+            _projectRepository.Setup(r => r.GetByUrn("errorUrn"))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+            _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                .ReturnsAsync(new RepositoryResult<Project>());
         }
 
         public class IndexTests : FeaturesControllerTests
@@ -44,6 +58,17 @@ namespace Frontend.Tests.ControllerTests.Projects
             {
                 var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
                 await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+            }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                var response = await _subject.Index("errorUrn");
+                var viewResult = Assert.IsType<ViewResult>(response);
+                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Project not found", viewModel);
             }
         }
 
@@ -56,6 +81,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Initiated("0001"));
                     await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Initiated("errorUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
 
@@ -100,6 +136,40 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var error = viewModel.FormErrors.Errors[0];
                     Assert.Equal("Please select who initiated the project", error.ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.InitiatedPost("errorUrn", TransferFeatures.ProjectInitiators.Dfe);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new FeaturesController(_projectRepository.Object);
+
+                    var response = await controller.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
             }
         }
 
@@ -112,6 +182,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Reason("0001"));
                     await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Reason("errorUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
 
@@ -162,6 +243,40 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var error = viewModel.FormErrors.Errors[0];
                     Assert.Equal("Select whether or not the transfer is subject to intervention", error.ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.ReasonPost("errorUrn", false, "test");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new FeaturesController(_projectRepository.Object);
+
+                    var response = await controller.ReasonPost("0001", false, "test");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
             }
         }
 
@@ -174,6 +289,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Type("0001"));
                     await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Type("errorUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
 
@@ -230,6 +356,41 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var redirect = Assert.IsType<RedirectToActionResult>(result);
                     Assert.Equal("Index", redirect.ActionName);
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.TypePost("errorUrn", TransferFeatures.TransferTypes.SatClosure, null);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new FeaturesController(_projectRepository.Object);
+
+                    var response = await controller.TypePost("0001", TransferFeatures.TransferTypes.SatClosure, null);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
             }
         }
 
