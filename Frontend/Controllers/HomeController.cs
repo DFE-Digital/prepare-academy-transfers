@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Frontend.Controllers
 {
@@ -18,17 +19,21 @@ namespace Frontend.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IProjects _projectsRepository;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IConfiguration configuration, IProjects projectsRepository)
+        public HomeController(IConfiguration configuration, IProjects projectsRepository,
+            ILogger<HomeController> logger)
         {
             _configuration = configuration;
             _projectsRepository = projectsRepository;
+            _logger = logger;
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
             var projects = await _projectsRepository.GetProjects();
+            _logger.LogInformation("Home page loaded");
             var model = new Index {Projects = projects.Result};
             return View(model);
         }
