@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
-using Data.Models;
 using Data.Models.Projects;
-using Frontend.Helpers;
 using Frontend.Models;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -24,26 +22,34 @@ namespace Frontend.Controllers.Projects
 
         public async Task<IActionResult> Index(string urn)
         {
-            var model = await GetModel(urn);
-            return View(model);
-        }
-
-        private async Task<BenefitsViewModel> GetModel(string urn)
-        {
             var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
 
             var model = new BenefitsViewModel
             {
-                Project = project.Result
+                Project = project.Result,
             };
 
-            return model;
+            return View(model);
         }
 
         [HttpGet("intended-benefits")]
         public async Task<IActionResult> IntendedBenefits(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new BenefitsViewModel
+            {
+                Project = project.Result,
+            };
+
             return View(model);
         }
 
@@ -52,7 +58,17 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> IntendedBenefitsPost(string urn,
             TransferBenefits.IntendedBenefit[] intendedBenefits, string otherBenefit)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new BenefitsViewModel
+            {
+                Project = project.Result,
+            };
+
             model.Project.Benefits.IntendedBenefits =
                 new List<TransferBenefits.IntendedBenefit>(intendedBenefits);
             model.Project.Benefits.OtherIntendedBenefit = otherBenefit;
@@ -74,7 +90,11 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
+            var updateResult = await _projectsRepository.Update(model.Project);
+            if (!updateResult.IsValid)
+            {
+                return View("ErrorPage", updateResult.Error.ErrorMessage);
+            }
 
             return RedirectToAction("Index", new {urn});
         }
@@ -82,7 +102,17 @@ namespace Frontend.Controllers.Projects
         [HttpGet("other-factors")]
         public async Task<IActionResult> OtherFactors(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new BenefitsViewModel
+            {
+                Project = project.Result,
+            };
+
             return View(model);
         }
 
@@ -91,7 +121,17 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> OtherFactorsPost(string urn, List<TransferBenefits.OtherFactor> otherFactors,
             string highProfileDescription, string complexIssuesDescription, string financeAndDebtDescription)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new BenefitsViewModel
+            {
+                Project = project.Result,
+            };
 
             var projectFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
 
@@ -111,8 +151,14 @@ namespace Frontend.Controllers.Projects
             }
 
             model.Project.Benefits.OtherFactors = projectFactors;
-            await _projectsRepository.Update(model.Project);
-            return RedirectToAction("Index", new {urn});
+
+            var updateResult = await _projectsRepository.Update(model.Project);
+            if (!updateResult.IsValid)
+            {
+                return View("ErrorPage", updateResult.Error.ErrorMessage);
+            }
+
+            return RedirectToAction("Index", new { urn });
         }
     }
 }

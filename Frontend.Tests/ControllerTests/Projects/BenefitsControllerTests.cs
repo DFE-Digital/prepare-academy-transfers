@@ -7,6 +7,7 @@ using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -30,6 +31,9 @@ namespace Frontend.Tests.ControllerTests.Projects
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
 
+            _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                .ReturnsAsync(new RepositoryResult<Project>());
+
             _subject = new BenefitsController(_projectsRepository.Object);
         }
 
@@ -42,6 +46,29 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
 
                 Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+            }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                    .ReturnsAsync(new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            StatusCode = System.Net.HttpStatusCode.NotFound,
+                            ErrorMessage = "Project not found"
+                        }
+                    });
+
+                var controller = new BenefitsController(_projectsRepository.Object);
+
+                var response = await controller.Index("projectUrn");
+                var viewResult = Assert.IsType<ViewResult>(response);
+                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Project not found", viewModel);
             }
         }
 
@@ -56,6 +83,29 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var response = await controller.IntendedBenefits("projectUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
 
@@ -142,6 +192,62 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var intendedBenefits = new[]
+                    {
+                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
+                    };
+
+                    var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var intendedBenefits = new[]
+                    {
+                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
+                    };
+
+                    var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
             }
         }
 
@@ -156,6 +262,29 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var response = await controller.OtherFactors("projectUrn");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
 
@@ -272,6 +401,58 @@ namespace Frontend.Tests.ControllerTests.Projects
                                    project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
                                        .FinanceAndDebtConcerns)
                     )));
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                        {TransferBenefits.OtherFactor.HighProfile};
+
+                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, "", "", "");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                StatusCode = System.Net.HttpStatusCode.NotFound,
+                                ErrorMessage = "Project not found"
+                            }
+                        });
+
+                    var controller = new BenefitsController(_projectsRepository.Object);
+
+                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                        {TransferBenefits.OtherFactor.HighProfile};
+
+                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, "", "", "");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
             }
         }
