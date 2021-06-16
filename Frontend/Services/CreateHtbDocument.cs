@@ -6,6 +6,7 @@ using Data;
 using Data.Models;
 using DocumentGeneration;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 
 namespace Frontend.Services
 {
@@ -20,11 +21,21 @@ namespace Frontend.Services
             _academiesRepository = academiesRepository;
         }
 
-        public async Task<byte[]> Execute(string projectUrn)
+        public async Task<CreateHtbDocumentResponse> Execute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+            if (!projectResult.IsValid)
+            {
+                return CreateErrorResponse(projectResult.Error);
+            }
+
             var projectAcademy = projectResult.Result.TransferringAcademies.First();
             var academyResult = await _academiesRepository.GetAcademyByUkprn(projectAcademy.OutgoingAcademyUkprn);
+            if (!academyResult.IsValid)
+            {
+                return CreateErrorResponse(academyResult.Error);
+            }
+
             var project = projectResult.Result;
             var academy = academyResult.Result;
 
@@ -44,7 +55,11 @@ namespace Frontend.Services
                 generator.Build();
             }
 
-            return ms.ToArray();
+            var successResponse = new CreateHtbDocumentResponse
+            {
+                Document = ms.ToArray()
+            };
+            return successResponse;
         }
 
         private static void AddOfstedJudgementTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
@@ -76,6 +91,30 @@ namespace Frontend.Services
                 .Select(field => new List<string> {field.Title, field.Value}).ToList();
 
             generator.AddTable(academyPerformanceData);
+        }
+
+        private static CreateHtbDocumentResponse CreateErrorResponse(RepositoryResultBase.RepositoryError repositoryError)
+        {
+            if (repositoryError.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new CreateHtbDocumentResponse
+                {
+                    ResponseError = new ServiceResponseError
+                    {
+                        ErrorCode = ErrorCode.NotFound,
+                        ErrorMessage = "Not found"
+                    }
+                };
+            }
+
+            return new CreateHtbDocumentResponse
+            {
+                ResponseError = new ServiceResponseError
+                {
+                    ErrorCode = ErrorCode.ApiError,
+                    ErrorMessage = "API has encountered an error"
+                }
+            };
         }
     }
 }

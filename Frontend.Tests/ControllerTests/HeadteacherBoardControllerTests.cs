@@ -14,9 +14,13 @@ namespace Frontend.Tests.ControllerTests
 {
     public class HeadteacherBoardControllerTests
     {
+        private const string _errorUrn = "errorUrn";
         private readonly HeadteacherBoardController _subject;
         private readonly Mock<ICreateHtbDocument> _createHtbDocument;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
+        private readonly string _projectUrn;
+        private readonly Project _foundProject;
+        private readonly Academy _foundAcademy;
 
         public HeadteacherBoardControllerTests()
         {
@@ -24,35 +28,39 @@ namespace Frontend.Tests.ControllerTests
             _getInformationForProject = new Mock<IGetInformationForProject>();
 
             _subject = new HeadteacherBoardController(_createHtbDocument.Object, _getInformationForProject.Object);
-        }
 
-        public class PreviewTests : HeadteacherBoardControllerTests
-        {
-            private readonly string _projectUrn;
-            private readonly Project _foundProject;
-            private readonly Academy _foundAcademy;
+            _projectUrn = "ProjectId";
+            var academyUkprn = "12345";
 
-            public PreviewTests()
+            _foundProject = new Project
             {
-                _projectUrn = "ProjectId";
-                var academyUkprn = "12345";
-
-                _foundProject = new Project
-                {
-                    Urn = _projectUrn,
-                    TransferringAcademies = new List<TransferringAcademies>
+                Urn = _projectUrn,
+                TransferringAcademies = new List<TransferringAcademies>
                     {
                         new TransferringAcademies
                             {OutgoingAcademyUkprn = academyUkprn}
                     }
-                };
+            };
 
-                _foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
+            _foundAcademy = new Academy { Ukprn = "FoundNonDynamicsUkprn" };
 
-                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
-                    new GetInformationForProjectResponse {Project = _foundProject, OutgoingAcademy = _foundAcademy});
-            }
+            _createHtbDocument.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
+                    new CreateHtbDocumentResponse { Document = new byte[] { 0, 1 } });
+            _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
+                new GetInformationForProjectResponse { Project = _foundProject, OutgoingAcademy = _foundAcademy });
+            _getInformationForProject.Setup(s => s.Execute(_errorUrn)).ReturnsAsync(
+                new GetInformationForProjectResponse
+                {
+                    ResponseError = new ServiceResponseError
+                    {
+                        ErrorCode = ErrorCode.NotFound,
+                        ErrorMessage = "Error"
+                    }
+                });
+        }
 
+        public class PreviewTests : HeadteacherBoardControllerTests
+        {
             [Fact]
             public async void GivenId_GetsProjectInformation()
             {
@@ -80,33 +88,20 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
             }
+
+            [Fact]
+            public async void GivenGetInformationReturnsError_DisplayErrorPage()
+            {
+                var response = await _subject.Preview(_errorUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
         }
 
         public class DownloadTests : HeadteacherBoardControllerTests
         {
-            private readonly string _projectUrn;
-            private readonly Project _foundProject;
-
-            public DownloadTests()
-            {
-                _projectUrn = "ProjectId";
-
-                _foundProject = new Project
-                {
-                    Urn = _projectUrn,
-                    TransferringAcademies = new List<TransferringAcademies>
-                    {
-                        new TransferringAcademies
-                            {OutgoingAcademyUkprn = "12345"}
-                    }
-                };
-
-                var foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
-
-                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
-                    new GetInformationForProjectResponse {Project = _foundProject, OutgoingAcademy = foundAcademy});
-            }
-
             [Fact]
             public async void GivenId_GetsProjectInformation()
             {
@@ -124,6 +119,16 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal(_foundProject, viewModel.Project);
             }
+
+            [Fact]
+            public async void GivenGetInformationReturnsError_DisplayErrorPage()
+            {
+                var response = await _subject.Download(_errorUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
         }
 
         public class GenerateDocumentTests : HeadteacherBoardControllerTests
@@ -131,10 +136,9 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenId_GeneratesAnHtbDocumentForTheProject()
             {
-                const string projectUrn = "projectUrn";
-                await _subject.GenerateDocument(projectUrn);
+                await _subject.GenerateDocument(_projectUrn);
 
-                _createHtbDocument.Verify(s => s.Execute(projectUrn), Times.Once);
+                _createHtbDocument.Verify(s => s.Execute(_projectUrn), Times.Once);
             }
 
             [Fact]
@@ -142,11 +146,36 @@ namespace Frontend.Tests.ControllerTests
             {
                 const string projectUrn = "projectUrn";
                 var fileContents = new byte[] {1, 2, 3, 4};
-                _createHtbDocument.Setup(s => s.Execute(projectUrn)).ReturnsAsync(fileContents);
+                var createDocumentResponse = new CreateHtbDocumentResponse
+                {
+                    Document = fileContents
+                };
+                _createHtbDocument.Setup(s => s.Execute(projectUrn)).ReturnsAsync(createDocumentResponse);
                 var response = await _subject.GenerateDocument(projectUrn);
                 var fileResponse = Assert.IsType<FileContentResult>(response);
 
                 Assert.Equal(fileContents, fileResponse.FileContents);
+            }
+
+            [Fact]
+            public async void GivenExecuteReturnsError_GeneratesErrorResponse()
+            {
+                var errorUrn = "errorUrn";
+                var createDocumentErrorResponse = new CreateHtbDocumentResponse
+                {
+                    ResponseError = new ServiceResponseError
+                    {
+                        ErrorCode = ErrorCode.ApiError,
+                        ErrorMessage = "Error"
+                    }
+                };
+
+                _createHtbDocument.Setup(s => s.Execute(errorUrn)).ReturnsAsync(createDocumentErrorResponse);
+                var response = await _subject.GenerateDocument(_errorUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
             }
         }
     }
