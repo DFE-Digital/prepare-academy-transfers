@@ -28,9 +28,8 @@ To get the Frontend project running you will require:
 
 The frontend repo requires the following user secrets to be able to connect to TRAMS:
 
-- `D365:Authority`
-- `D365:ClientId`
-- `D365:ClientSecret`
+- `TRAMS_API_KEY` - The API key for the TRAMS API
+- `TRAMS_API_BASE` - The base URL for the TRAMS API (with trailing slash)
 
 ### Redis
 

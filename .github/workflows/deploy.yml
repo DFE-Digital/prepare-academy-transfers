@@ -34,10 +34,6 @@ jobs:
           --var aad_instance=${{ secrets.AAD_INSTANCE }} \
           --var aad_resource_id=${{ secrets.AAD_RESOURCEID }} \
           --var aad_tenant_id=${{ secrets.AAD_TENANTID }} \
-          --var d365_authority=${{ secrets.D365_AUTHORITY }} \
-          --var d365_client_id=${{ secrets.D365_CLIENTID }} \
-          --var d365_client_secret=${{ secrets.D365_CLIENTSECREt }} \
-          --var d365_url=${{ secrets.D365_URL }} \
           --var username=${{ secrets.USERNAME }} \
           --var password=${{ secrets.PASSWORD }} 
           

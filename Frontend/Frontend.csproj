@@ -24,7 +24,6 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DocumentGeneration\DocumentGeneration.csproj" />
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
-    <ProjectReference Include="..\TRAMS-API\API.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.3" />
