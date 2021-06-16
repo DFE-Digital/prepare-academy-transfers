@@ -21,14 +21,34 @@ namespace Frontend.Controllers.Projects
 
         public async Task<IActionResult> Index(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if(!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new RationaleViewModel
+            {
+                Project = project.Result
+            };
+
             return View(model);
         }
 
         [HttpGet("rationale")]
         public async Task<IActionResult> Project(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new RationaleViewModel
+            {
+                Project = project.Result
+            };
+
             return View(model);
         }
 
@@ -36,7 +56,17 @@ namespace Frontend.Controllers.Projects
         [HttpPost("rationale")]
         public async Task<IActionResult> ProjectPost(string urn, string rationale)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new RationaleViewModel
+            {
+                Project = project.Result
+            };
+
             model.Project.Rationale.Project = rationale;
             
             if (string.IsNullOrEmpty(rationale))
@@ -45,14 +75,28 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
             return RedirectToAction("Index", new {urn});
         }
 
         [HttpGet("trust-or-sponsor")]
         public async Task<IActionResult> TrustOrSponsor(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new RationaleViewModel
+            {
+                Project = project.Result
+            };
+
             return View(model);
         }
 
@@ -60,7 +104,17 @@ namespace Frontend.Controllers.Projects
         [HttpPost("trust-or-sponsor")]
         public async Task<IActionResult> TrustOrSponsorPost(string urn, string rationale)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new RationaleViewModel
+            {
+                Project = project.Result
+            };
+
             model.Project.Rationale.Trust = rationale;
             
             if (string.IsNullOrEmpty(rationale))
@@ -69,20 +123,12 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
-            return RedirectToAction("Index", new {urn});
-        }
-
-        private async Task<RationaleViewModel> GetModel(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-
-            var model = new RationaleViewModel
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
             {
-                Project = project.Result
-            };
-
-            return model;
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
+            return RedirectToAction("Index", new {urn});
         }
     }
 }

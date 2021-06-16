@@ -174,7 +174,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                        var response = await _subject.Index(_projectErrorUrn, "test info");
+                    var response = await _subject.Index(_projectErrorUrn, "test info");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -184,7 +184,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
-                    _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
+                   _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
                    new RepositoryResult<Project>
                    {
                        Error = new RepositoryResultBase.RepositoryError

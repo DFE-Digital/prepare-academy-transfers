@@ -3,6 +3,7 @@ using Data.Models;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -10,6 +11,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 {
     public class RationaleControllerTests
     {
+        private const string _errorWithGetByUrn = "errorUrn";
         private readonly RationaleController _subject;
         private readonly Mock<IProjects> _projectRepository;
 
@@ -17,7 +19,19 @@ namespace Frontend.Tests.ControllerTests.Projects
         {
             _projectRepository = new Mock<IProjects>();
             _projectRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Project> {Result = new Project()});
+                .ReturnsAsync(new RepositoryResult<Project> { Result = new Project() });
+            _projectRepository.Setup(s => s.GetByUrn(_errorWithGetByUrn))
+                .ReturnsAsync(
+                  new RepositoryResult<Project>
+                  {
+                      Error = new RepositoryResultBase.RepositoryError
+                      {
+                          ErrorMessage = "Error"
+                      }
+                  });
+
+            _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                .ReturnsAsync(new RepositoryResult<Project>());
 
             _subject = new RationaleController(_projectRepository.Object);
         }
@@ -31,6 +45,16 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                 _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
             }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                var response = await _subject.Index(_errorWithGetByUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
         }
 
         public class ProjectTests : RationaleControllerTests
@@ -43,6 +67,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.Project("0001");
 
                     _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.Project(_errorWithGetByUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
                 }
             }
 
@@ -75,6 +109,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(model.FormErrors.HasErrors);
                     Assert.True(model.FormErrors.HasErrorForField("rationale"));
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.ProjectPost(_errorWithGetByUrn, "rationale");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                {
+                    _projectRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                       new RepositoryResult<Project>
+                       {
+                           Error = new RepositoryResultBase.RepositoryError
+                           {
+                               ErrorMessage = "Update error"
+                           }
+                       });
+
+                    var response = await _subject.ProjectPost("errorWithUpdate", "rationale");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Update error", viewResult.Model);
+                }
             }
         }
 
@@ -88,6 +151,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.TrustOrSponsor("0001");
 
                     _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.TrustOrSponsor(_errorWithGetByUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
                 }
             }
 
@@ -119,6 +192,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var model = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(result);
                     Assert.True(model.FormErrors.HasErrors);
                     Assert.True(model.FormErrors.HasErrorForField("rationale"));
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.TrustOrSponsorPost(_errorWithGetByUrn, "rationale");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                {
+                    _projectRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                       new RepositoryResult<Project>
+                       {
+                           Error = new RepositoryResultBase.RepositoryError
+                           {
+                               ErrorMessage = "Update error"
+                           }
+                       });
+
+                    var response = await _subject.TrustOrSponsorPost("errorWithUpdate", "rationale");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Update error", viewResult.Model);
                 }
             }
         }
