@@ -193,9 +193,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                             }
                         });
 
-                    var controller = new LatestOfstedJudgementController(_getInformationForProject.Object, _projectsRepository.Object);
-
-
                     var response = await _subject.Index(_projectUrn, "test");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
