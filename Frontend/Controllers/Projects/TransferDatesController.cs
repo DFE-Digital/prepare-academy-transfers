@@ -23,14 +23,32 @@ namespace Frontend.Controllers.Projects
 
         public async Task<IActionResult> Index(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
         [HttpGet("first-discussed")]
         public async Task<IActionResult> FirstDiscussed(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -38,7 +56,16 @@ namespace Frontend.Controllers.Projects
         [ActionName("FirstDiscussed")]
         public async Task<IActionResult> FirstDiscussedPost(string urn, string day, string month, string year)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.FirstDiscussed = dateString;
 
@@ -54,14 +81,27 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
             return RedirectToAction("Index", new {urn});
         }
 
         [HttpGet("target-date")]
         public async Task<IActionResult> TargetDate(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -69,7 +109,16 @@ namespace Frontend.Controllers.Projects
         [ActionName("TargetDate")]
         public async Task<IActionResult> TargetDatePost(string urn, string day, string month, string year)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.Target = dateString;
 
@@ -85,14 +134,27 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
             return RedirectToAction("Index", new {urn});
         }
 
         [HttpGet("htb-date")]
         public async Task<IActionResult> HtbDate(string urn)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             return View(model);
         }
 
@@ -100,7 +162,16 @@ namespace Frontend.Controllers.Projects
         [ActionName("HtbDate")]
         public async Task<IActionResult> HtbDatePost(string urn, string day, string month, string year)
         {
-            var model = await GetModel(urn);
+            var project = await _projectsRepository.GetByUrn(urn);
+            if (!project.IsValid)
+            {
+                return View("ErrorPage", project.Error.ErrorMessage);
+            }
+
+            var model = new TransferDatesViewModel
+            {
+                Project = project.Result
+            };
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.Htb = dateString;
 
@@ -116,20 +187,12 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            await _projectsRepository.Update(model.Project);
-            return RedirectToAction("Index", new {urn});
-        }
-
-        private async Task<TransferDatesViewModel> GetModel(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-
-            var model = new TransferDatesViewModel
+            var result = await _projectsRepository.Update(model.Project);
+            if (!result.IsValid)
             {
-                Project = project.Result
-            };
-
-            return model;
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
+            return RedirectToAction("Index", new {urn});
         }
     }
 }
