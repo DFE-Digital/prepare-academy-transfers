@@ -6,6 +6,7 @@ using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
 using Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
@@ -13,6 +14,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 {
     public class TransferDatesControllerTests
     {
+        private const string _errorWithGetByUrn = "errorUrn";
         private readonly TransferDatesController _subject;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<IDateTimeProvider> _dateTimeProvider;
@@ -30,6 +32,18 @@ namespace Frontend.Tests.ControllerTests.Projects
 
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
+            _projectsRepository.Setup(s => s.GetByUrn(_errorWithGetByUrn))
+                .ReturnsAsync(
+                  new RepositoryResult<Project>
+                  {
+                      Error = new RepositoryResultBase.RepositoryError
+                      {
+                          ErrorMessage = "Error"
+                      }
+                  });
+
+            _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+                .ReturnsAsync(new RepositoryResult<Project>());
             _dateTimeProvider.Setup(r => r.Today()).Returns(new DateTime(2020, 1, 1));
 
             _subject = new TransferDatesController(_projectsRepository.Object, _dateTimeProvider.Object);
@@ -45,6 +59,16 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                 Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
             }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                var response = await _subject.Index(_errorWithGetByUrn);
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
         }
 
         public class FirstDiscussedTests : TransferDatesControllerTests
@@ -58,6 +82,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.FirstDiscussed(_errorWithGetByUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
                 }
             }
 
@@ -111,6 +145,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.FirstDiscussedPost(_errorWithGetByUrn, "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                       new RepositoryResult<Project>
+                       {
+                           Error = new RepositoryResultBase.RepositoryError
+                           {
+                               ErrorMessage = "Update error"
+                           }
+                       });
+
+                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Update error", viewResult.Model);
+                }
             }
         }
 
@@ -125,6 +188,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.TargetDate(_errorWithGetByUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
                 }
             }
 
@@ -178,6 +251,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.TargetDatePost(_errorWithGetByUrn, "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                       new RepositoryResult<Project>
+                       {
+                           Error = new RepositoryResultBase.RepositoryError
+                           {
+                               ErrorMessage = "Update error"
+                           }
+                       });
+
+                    var response = await _subject.TargetDatePost("0001", "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Update error", viewResult.Model);
+                }
             }
         }
 
@@ -192,6 +294,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.HtbDate(_errorWithGetByUrn);
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
                 }
             }
 
@@ -243,6 +355,35 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+
+                [Fact]
+                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+                {
+                    var response = await _subject.HtbDatePost(_errorWithGetByUrn, "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                {
+                    _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                       new RepositoryResult<Project>
+                       {
+                           Error = new RepositoryResultBase.RepositoryError
+                           {
+                               ErrorMessage = "Update error"
+                           }
+                       });
+
+                    var response = await _subject.HtbDatePost("0001", "01", "01", "2020");
+                    var viewResult = Assert.IsType<ViewResult>(response);
+
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Update error", viewResult.Model);
                 }
             }
         }
