@@ -1,8 +1,9 @@
 using System.Linq;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentGeneration.Helpers;
 using Xunit;
 
-namespace DocumentGeneration.Tests
+namespace DocumentGeneration.Tests.Old
 {
     public class DocumentBuilderHelpersTests
     {

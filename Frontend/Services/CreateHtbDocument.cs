@@ -43,10 +43,10 @@ namespace Frontend.Services
 
             await using (ms = new MemoryStream())
             {
-                var generator = new DocumentBuilder(ms);
+                var generator = new XDocumentBuilder(ms);
 
-                generator.AddHeading(project.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
-                generator.AddHeading(academy.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                generator.AddHeading(project.Name, XDocumentHeadingBuilder.HeadingLevelOptions.Heading1);
+                generator.AddHeading(academy.Name, XDocumentHeadingBuilder.HeadingLevelOptions.Heading2);
 
                 AddAcademyPerformanceTable(generator, academyResult);
                 AddPupilNumbersTable(generator, academyResult);
@@ -62,9 +62,9 @@ namespace Frontend.Services
             return successResponse;
         }
 
-        private static void AddOfstedJudgementTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
+        private static void AddOfstedJudgementTable(IXDocumentBuilder generator, RepositoryResult<Academy> academyResult)
         {
-            generator.AddHeading("Latest Ofsted judgement", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+            generator.AddHeading("Latest Ofsted judgement", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
 
             var data = academyResult.Result.LatestOfstedJudgement.FieldsToDisplay()
                 .Select(field => new List<string> {field.Title, field.Value}).ToList();
@@ -72,9 +72,9 @@ namespace Frontend.Services
             generator.AddTable(data);
         }
 
-        private static void AddPupilNumbersTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
+        private static void AddPupilNumbersTable(IXDocumentBuilder generator, RepositoryResult<Academy> academyResult)
         {
-            generator.AddHeading("Pupil numbers", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+            generator.AddHeading("Pupil numbers", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
 
             var data = academyResult.Result.PupilNumbers.FieldsToDisplay()
                 .Select(field => new List<string> {field.Title, field.Value}).ToList();
@@ -82,10 +82,10 @@ namespace Frontend.Services
             generator.AddTable(data);
         }
 
-        private static void AddAcademyPerformanceTable(IDocumentBuilder generator,
+        private static void AddAcademyPerformanceTable(IXDocumentBuilder generator,
             RepositoryResult<Academy> academyResult)
         {
-            generator.AddHeading("Academy performance", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+            generator.AddHeading("Academy performance", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
 
             var academyPerformanceData = academyResult.Result.Performance.FieldsToDisplay()
                 .Select(field => new List<string> {field.Title, field.Value}).ToList();

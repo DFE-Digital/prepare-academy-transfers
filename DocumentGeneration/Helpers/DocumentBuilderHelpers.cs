@@ -3,7 +3,7 @@ using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace DocumentGeneration
+namespace DocumentGeneration.Helpers
 {
     public static class DocumentBuilderHelpers
     {

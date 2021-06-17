@@ -3,15 +3,16 @@ using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentGeneration.Helpers;
 
 namespace DocumentGeneration
 {
-    public class DocumentBuilder : IDocumentBuilder
+    public class XDocumentBuilder : IXDocumentBuilder
     {
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
 
-        public DocumentBuilder(Stream stream)
+        public XDocumentBuilder(Stream stream)
         {
             _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
@@ -20,9 +21,9 @@ namespace DocumentGeneration
             SetCompatibilityMode();
         }
 
-        public void AddHeading(string text, DocumentHeadingBuilder.HeadingLevelOptions headingLevel)
+        public void AddHeading(string text, XDocumentHeadingBuilder.HeadingLevelOptions headingLevel)
         {
-            DocumentHeadingBuilder.AddHeadingToElement(_body, text, headingLevel);
+            XDocumentHeadingBuilder.AddHeadingToElement(_body, text, headingLevel);
         }
 
         public void AddParagraph(string text)
@@ -37,7 +38,7 @@ namespace DocumentGeneration
 
         public void AddTable(List<List<string>> tableData)
         {
-            var tableBuilder = new DocumentTableBuilder(_body);
+            var tableBuilder = new XDocumentTableBuilder(_body);
             tableData.ForEach(row => tableBuilder.AddTableRow(row));
             tableBuilder.Build();
         }

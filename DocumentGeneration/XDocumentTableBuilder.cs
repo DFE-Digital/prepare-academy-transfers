@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentGeneration.Helpers;
 
 namespace DocumentGeneration
 {
-    public class DocumentTableBuilder
+    public class XDocumentTableBuilder
     {
         private readonly OpenXmlElement _parentElement;
         private readonly Table _table;
 
-        public DocumentTableBuilder(OpenXmlElement parentElement)
+        public XDocumentTableBuilder(OpenXmlElement parentElement)
         {
             _parentElement = parentElement;
             _table = new Table();

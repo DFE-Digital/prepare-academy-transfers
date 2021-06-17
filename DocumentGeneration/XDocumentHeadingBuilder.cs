@@ -4,7 +4,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocumentGeneration
 {
-    public static class DocumentHeadingBuilder
+    public static class XDocumentHeadingBuilder
     {
         public enum HeadingLevelOptions
         {

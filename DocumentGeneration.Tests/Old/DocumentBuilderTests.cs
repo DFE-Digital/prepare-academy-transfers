@@ -6,7 +6,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Xunit;
 
-namespace DocumentGeneration.Tests
+namespace DocumentGeneration.Tests.Old
 {
     public class DocumentBuilderTests
     {
@@ -43,9 +43,9 @@ namespace DocumentGeneration.Tests
         {
             var documentBody = GenerateDocument(builder =>
             {
-                builder.AddHeading("Heading 1", DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
-                builder.AddHeading("Heading 2", DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
-                builder.AddHeading("Heading 3", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+                builder.AddHeading("Heading 1", XDocumentHeadingBuilder.HeadingLevelOptions.Heading1);
+                builder.AddHeading("Heading 2", XDocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                builder.AddHeading("Heading 3", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
             });
 
             var textDescendents = documentBody.Descendants<Text>().ToList();
@@ -87,14 +87,14 @@ namespace DocumentGeneration.Tests
 
         #region Helpers
 
-        private static Body GenerateDocument(Action<DocumentBuilder> documentFunction)
+        private static Body GenerateDocument(Action<XDocumentBuilder> documentFunction)
         {
             MemoryStream memoryStream;
             Body documentBody;
 
             using (memoryStream = new MemoryStream())
             {
-                var builder = new DocumentBuilder(memoryStream);
+                var builder = new XDocumentBuilder(memoryStream);
 
                 documentFunction(builder);
 

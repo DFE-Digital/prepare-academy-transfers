@@ -2,7 +2,7 @@ using System.Linq;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Xunit;
 
-namespace DocumentGeneration.Tests
+namespace DocumentGeneration.Tests.Old
 {
     public class DocumentHeadingBuilderTests
     {
@@ -10,8 +10,8 @@ namespace DocumentGeneration.Tests
         public void GivenHeadingOne_CreatesARunWithTheExpectedRunProperties()
         {
             var body = new Body();
-            DocumentHeadingBuilder.AddHeadingToElement(body, "Heading 1",
-                DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
+            XDocumentHeadingBuilder.AddHeadingToElement(body, "Heading 1",
+                XDocumentHeadingBuilder.HeadingLevelOptions.Heading1);
 
             var createdRuns = body.Descendants<Run>().ToList();
             Assert.Equal("60", createdRuns[0].RunProperties.FontSize.Val);
@@ -22,8 +22,8 @@ namespace DocumentGeneration.Tests
         public void GivenHeadingTwo_CreatesARunWithTheExpectedRunProperties()
         {
             var body = new Body();
-            DocumentHeadingBuilder.AddHeadingToElement(body, "Heading 2",
-                DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+            XDocumentHeadingBuilder.AddHeadingToElement(body, "Heading 2",
+                XDocumentHeadingBuilder.HeadingLevelOptions.Heading2);
 
             var createdRuns = body.Descendants<Run>().ToList();
             Assert.Equal("40", createdRuns[0].RunProperties.FontSize.Val);
@@ -34,8 +34,8 @@ namespace DocumentGeneration.Tests
         public void GivenHeadingThree_CreatesARunWithTheExpectedRunProperties()
         {
             var body = new Body();
-            DocumentHeadingBuilder.AddHeadingToElement(body, "Heading 3",
-                DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
+            XDocumentHeadingBuilder.AddHeadingToElement(body, "Heading 3",
+                XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
 
             var createdRuns = body.Descendants<Run>().ToList();
             Assert.Equal("30", createdRuns[0].RunProperties.FontSize.Val);

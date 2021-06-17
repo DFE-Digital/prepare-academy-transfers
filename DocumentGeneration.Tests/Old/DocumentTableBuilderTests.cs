@@ -3,7 +3,7 @@ using System.Linq;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Xunit;
 
-namespace DocumentGeneration.Tests
+namespace DocumentGeneration.Tests.Old
 {
     public class DocumentTableBuilderTests
     {
@@ -11,7 +11,7 @@ namespace DocumentGeneration.Tests
         public void GivenSingleTableCell_AppendsATableWithASingleCell()
         {
             var body = new Body();
-            var builder = new DocumentTableBuilder(body);
+            var builder = new XDocumentTableBuilder(body);
             builder.AddTableRow(new List<string> {"Meow"});
             builder.Build();
 
@@ -26,7 +26,7 @@ namespace DocumentGeneration.Tests
         public void GivenMultipleCellsInOneRow_AppendsATableWithAMultiCellRow()
         {
             var body = new Body();
-            var builder = new DocumentTableBuilder(body);
+            var builder = new XDocumentTableBuilder(body);
             var cellData = new List<string> {"Meow", "Woof", "Quack", "Moo"};
 
             builder.AddTableRow(cellData);
@@ -43,7 +43,7 @@ namespace DocumentGeneration.Tests
         public void GivenMultipleRows_AppendsASingleTableWithAMultipleRows()
         {
             var body = new Body();
-            var builder = new DocumentTableBuilder(body);
+            var builder = new XDocumentTableBuilder(body);
             var rowOneData = new List<string> {"Meow", "Woof", "Quack", "Moo"};
             var rowTwoData = new List<string> {"Cluck", "Howl", "Purr", "Tweet"};
 
