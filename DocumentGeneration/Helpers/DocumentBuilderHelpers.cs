@@ -18,7 +18,12 @@ namespace DocumentGeneration.Helpers
                 var splitText = text.Split(new[] {"\r\n", "\n", "\r"}, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in splitText)
                 {
-                    element.AppendChild(new Text(line));
+                    var textElement = new Text(line)
+                    {
+                        Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
+                    };
+                    
+                    element.AppendChild(textElement);
                     if (line != splitText.Last())
                     {
                         element.AppendChild(new Break());

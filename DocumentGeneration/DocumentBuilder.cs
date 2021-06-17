@@ -1,0 +1,69 @@
+using System;
+using System.IO;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentGeneration.Builders;
+using DocumentGeneration.Interfaces;
+
+namespace DocumentGeneration
+{
+    public class DocumentBuilder : IDocumentBuilder
+    {
+        private readonly WordprocessingDocument _document;
+        private readonly Body _body;
+
+        public DocumentBuilder(Stream stream)
+        {
+            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
+            _document.AddMainDocumentPart();
+            _document.MainDocumentPart.Document = new Document(new Body());
+            _body = _document.MainDocumentPart.Document.Body;
+            SetCompatibilityMode();
+        }
+
+        public void AddParagraph(Action<IParagraphBuilder> action)
+        {
+            var paragraph = new Paragraph();
+            var builder = new ParagraphBuilder(paragraph);
+
+            action(builder);
+
+            _body.AppendChild(paragraph);
+        }
+
+        public void AddTable(Action<ITableBuilder> action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Build()
+        {
+            _document.Save();
+            _document.Close();
+        }
+
+        private void SetCompatibilityMode()
+        {
+            var mainPart = _document.MainDocumentPart;
+            var settingsPart = mainPart.DocumentSettingsPart;
+
+            if (settingsPart != null) return;
+
+            settingsPart = mainPart.AddNewPart<DocumentSettingsPart>();
+            settingsPart.Settings = new Settings(
+                new Compatibility(
+                    new CompatibilitySetting
+                    {
+                        Name = new EnumValue<CompatSettingNameValues>
+                            (CompatSettingNameValues.CompatibilityMode),
+                        Val = new StringValue("15"),
+                        Uri = new StringValue
+                            ("http://schemas.microsoft.com/office/word")
+                    }
+                )
+            );
+            settingsPart.Settings.Save();
+        }
+    }
+}
