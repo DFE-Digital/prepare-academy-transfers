@@ -34,7 +34,12 @@ namespace DocumentGeneration
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            throw new NotImplementedException();
+            var table = new Table();
+            var builder = new TableBuilder(table);
+
+            action(builder);
+
+            _body.AppendChild(table);
         }
 
         public void Build()

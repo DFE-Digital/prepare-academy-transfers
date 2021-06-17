@@ -13,23 +13,51 @@ namespace DocumentGeneration.Tests
 {
     public class DocumentBuilderTests
     {
+        private static Body GenerateDocumentBody(Action<IDocumentBuilder> action)
+        {
+            Body documentBody;
+            using (var ms = new MemoryStream())
+            {
+                var builder = new DocumentBuilder(ms);
+                action(builder);
+                builder.Build();
+
+                using (var doc = WordprocessingDocument.Open(ms, false))
+                {
+                    documentBody = doc.MainDocumentPart.Document.Body;
+                }
+            }
+
+            return documentBody;
+        }
+
         public class ParagraphTests : DocumentBuilderTests
         {
             [Fact]
             public void GivenAddingParagraphWithString_GeneratesParagraphWithText()
             {
-                var documentBody = GenerateDocumentBody(pBuilder => { pBuilder.AddText("Meow"); });
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText("Meow");
+                    });
+                });
+
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
-                Assert.Single((IEnumerable) paragraphs);
+                Assert.Single((IEnumerable)paragraphs);
                 Assert.Equal("Meow", paragraphs[0].InnerText);
             }
 
             [Fact]
             public void GivenAddingParagraphWithTextObject_GeneratesParagraphWithText()
             {
-                var documentBody = GenerateDocumentBody(pBuilder =>
+                var documentBody = GenerateDocumentBody(builder =>
                 {
-                    pBuilder.AddText(new TextElement {Value = "Woof"});
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement { Value = "Woof" });
+                    });
                 });
 
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
@@ -41,9 +69,12 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingParagraphWithBoldTextObject_GeneratesParagraphWithText()
             {
-                var documentBody = GenerateDocumentBody(pBuilder =>
+                var documentBody = GenerateDocumentBody(builder =>
                 {
-                    pBuilder.AddText(new TextElement {Value = "Woof", Bold = true});
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement { Value = "Woof", Bold = true });
+                    });
                 });
 
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
@@ -55,15 +86,20 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingParagraphWithMultipleTextObjects_GeneratesParagraphWithText()
             {
-                var documentBody = GenerateDocumentBody(pBuilder =>
+
+                var text = new[]
                 {
-                    var text = new[]
-                    {
                         new TextElement {Value = "Meow"},
                         new TextElement {Value = "Woof", Bold = true},
                         new TextElement {Value = "Quack"}
                     };
-                    pBuilder.AddText(text);
+
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(text);
+                    });
                 });
 
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
@@ -76,15 +112,19 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingTextObjectsWithWhitespace_GeneratesParagraphWithPreservedWhitespace()
             {
-                var documentBody = GenerateDocumentBody(pBuilder =>
-                {
-                    var text = new[]
+                var text = new[]
                     {
                         new TextElement {Value = "Meow"},
                         new TextElement {Value = " Woof ", Bold = true},
                         new TextElement {Value = "Quack"}
                     };
-                    pBuilder.AddText(text);
+
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(text);
+                    });
                 });
 
                 var texts = documentBody.Descendants<Text>().ToList();
@@ -97,7 +137,13 @@ namespace DocumentGeneration.Tests
             [InlineData("Meow\rWoof")]
             public void GivenTextWithNewLine_CreatesTextSeparatedByNewLines(string text)
             {
-                var documentBody = GenerateDocumentBody(pBuilder => { pBuilder.AddText(text); });
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                        {
+                            pBuilder.AddText(text);
+                        });
+                });
 
                 var paragraph = documentBody.Descendants<Paragraph>().ToList()[0];
                 var texts = paragraph.Descendants<Text>().ToList();
@@ -105,23 +151,98 @@ namespace DocumentGeneration.Tests
                 Assert.Single(paragraph.Descendants<Break>());
             }
         }
-
-        private static Body GenerateDocumentBody(Action<IParagraphBuilder> action)
+        public class TableTests : DocumentBuilderTests
         {
-            Body documentBody;
-            using (var ms = new MemoryStream())
-            {
-                var builder = new DocumentBuilder(ms);
-                builder.AddParagraph(action);
-                builder.Build();
 
-                using (var doc = WordprocessingDocument.Open(ms, false))
+            [Fact]
+            public void GivenAddingATableWithSingleStringCell_GeneratesTable()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
                 {
-                    documentBody = doc.MainDocumentPart.Document.Body;
-                }
+                    builder.AddTable(tBuilder =>
+                    {
+                        tBuilder.AddRow(rBuilder => { rBuilder.AddCell("test"); });
+                    });
+                });
+
+                var table = documentBody.Descendants<Table>().ToList();
+                Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableRow>());
+                Assert.Single(documentBody.Descendants<TableCell>());
+                Assert.Equal("test", table[0].InnerText);
             }
 
-            return documentBody;
+            [Fact]
+            public void GivenAddingATableWithSingleTextCell_GeneratesTable()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddTable(tBuilder =>
+                    {
+                        tBuilder.AddRow(rBuilder => { rBuilder.AddCell(new TextElement { Value="test" }); });
+                    });
+                });
+
+                var table = documentBody.Descendants<Table>().ToList();
+                Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableRow>());
+                Assert.Single(documentBody.Descendants<TableCell>());
+                Assert.Equal("test", table[0].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingATableWithMultipleStringCells_GeneratesTable()
+            {
+                var tests = new string[] { "test1", "test2" };
+
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddTable(tBuilder =>
+                    {
+                        tBuilder.AddRow(rBuilder => { 
+                            rBuilder.AddCells(tests);
+                        });
+                    });
+                });
+
+                var table = documentBody.Descendants<Table>().ToList();
+                Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableRow>());
+                Assert.Equal(2, documentBody.Descendants<TableCell>().Count());
+
+                var tableCells = documentBody.Descendants<TableCell>().ToList();
+
+                Assert.Equal("test1", tableCells[0].InnerText);
+                Assert.Equal("test2", tableCells[1].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingATableWithMultipleTextCells_GeneratesTable()
+            {
+                var textElements = new TextElement[]
+                {
+                    new TextElement { Value="test1" },
+                    new TextElement { Value="test2" }
+                };
+
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddTable(tBuilder =>
+                    {
+                        tBuilder.AddRow(rBuilder => { rBuilder.AddCells(textElements); });
+                    });
+                });
+
+                var table = documentBody.Descendants<Table>().ToList();
+                Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableRow>());
+                Assert.Equal(2, documentBody.Descendants<TableCell>().Count());
+
+                var tableCells = documentBody.Descendants<TableCell>().ToList();
+
+                Assert.Equal("test1", tableCells[0].InnerText);
+                Assert.Equal("test2", tableCells[1].InnerText);
+            }
         }
     }
 }
