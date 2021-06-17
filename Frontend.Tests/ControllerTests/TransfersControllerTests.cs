@@ -785,6 +785,25 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal("Project", responseRedirect.ControllerName);
                 Assert.Equal(createdProjectUrn, responseRedirect.RouteValues["id"]);
             }
+
+            [Fact]
+            public async void GivenCreateProjectReturnsError_DisplayErrorPage()
+            {
+                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>())).ReturnsAsync(
+                    new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
+
+                var response = await _subject.SubmitProject();
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
         }
 
         #region HelperMethods

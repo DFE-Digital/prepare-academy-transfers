@@ -33,6 +33,11 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Index()
         {
             var projects = await _projectsRepository.GetProjects();
+            if (!projects.IsValid)
+            {
+                return View("ErrorPage", projects.Error.ErrorMessage);
+            }
+
             _logger.LogInformation("Home page loaded");
             var model = new Index {Projects = projects.Result};
             return View(model);

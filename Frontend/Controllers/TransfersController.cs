@@ -255,6 +255,10 @@ namespace Frontend.Controllers
             };
 
             var result = await _projectsRepository.Create(project);
+            if (!result.IsValid)
+            {
+                return View("ErrorPage", result.Error.ErrorMessage);
+            }
 
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);

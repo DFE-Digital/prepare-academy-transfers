@@ -25,6 +25,10 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Preview([FromRoute] string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
+            if (!projectInformation.IsValid)
+            {
+                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
+            }
 
             var model = new HeadTeacherBoardPreviewViewModel
             {
@@ -39,6 +43,10 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Download([FromRoute] string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
+            if (!projectInformation.IsValid)
+            {
+                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
+            }
 
             var model = new ProjectViewModel()
             {
@@ -50,9 +58,13 @@ namespace Frontend.Controllers
 
         public async Task<IActionResult> GenerateDocument([FromRoute] string id)
         {
-            var documentArray = await _createHtbDocument.Execute(id);
+            var document = await _createHtbDocument.Execute(id);
+            if (!document.IsValid)
+            {
+                return View("ErrorPage", document.ResponseError.ErrorMessage);
+            }
 
-            return File(documentArray.ToArray(),
+            return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 "Test.docx");
         }
