@@ -22,16 +22,7 @@ namespace DocumentGeneration.Builders
 
         public void AddText(string text)
         {
-            var paragraph = new Paragraph();
-            var builder = new ParagraphBuilder(paragraph);
-
-            var textElement = new TextElement
-            {
-                Value = text,
-                FontSize = HeadingLevelToFontSize()
-            };
-            builder.AddText(textElement);
-            _parent.AppendChild(paragraph);
+            AddText(new TextElement {Value = text});
         }
 
         public void AddText(TextElement text)
@@ -39,6 +30,7 @@ namespace DocumentGeneration.Builders
             var paragraph = new Paragraph();
             var builder = new ParagraphBuilder(paragraph);
             text.FontSize = HeadingLevelToFontSize();
+            text.Colour = "104f75";
             builder.AddText(text);
             _parent.AppendChild(paragraph);
         }

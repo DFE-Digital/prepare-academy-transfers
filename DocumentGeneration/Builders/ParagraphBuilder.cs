@@ -8,21 +8,29 @@ namespace DocumentGeneration.Builders
 {
     public class ParagraphBuilder : IParagraphBuilder
     {
-        private readonly OpenXmlElement _parent;
+        private readonly Paragraph _parent;
 
-        public ParagraphBuilder(OpenXmlElement parent)
+        public ParagraphBuilder(Paragraph parent)
         {
             _parent = parent;
-        }
-
-        public void AddText(string text)
-        {
-            AddText(new TextElement {Value = text});
+            parent.ParagraphProperties ??= new ParagraphProperties();
+            parent.ParagraphProperties.SpacingBetweenLines = new SpacingBetweenLines
+            {
+                AfterAutoSpacing = OnOffValue.FromBoolean(true),
+                BeforeAutoSpacing = OnOffValue.FromBoolean(true)
+            };
         }
 
         public void AddText(TextElement text)
         {
             var run = new Run() {RunProperties = new RunProperties()};
+            run.RunProperties.RunFonts = new RunFonts()
+            {
+                Ascii = "Arial",
+                HighAnsi = "Arial",
+                ComplexScript = "Arial"
+            };
+
             DocumentBuilderHelpers.AddTextToElement(run, text.Value);
 
             if (text.Bold)
@@ -35,7 +43,17 @@ namespace DocumentGeneration.Builders
                 run.RunProperties.FontSize = new FontSize {Val = text.FontSize};
             }
 
+            if (!string.IsNullOrEmpty(text.Colour))
+            {
+                run.RunProperties.Color = new Color {Val = text.Colour};
+            }
+
             _parent.AppendChild(run);
+        }
+
+        public void AddText(string text)
+        {
+            AddText(new TextElement {Value = text});
         }
 
         public void AddText(TextElement[] text)
