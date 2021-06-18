@@ -19,15 +19,20 @@ namespace DocumentGeneration.Builders
         {
             AddText(new TextElement {Value = text});
         }
-        
+
         public void AddText(TextElement text)
         {
-            var run = new Run();
+            var run = new Run() {RunProperties = new RunProperties()};
             DocumentBuilderHelpers.AddTextToElement(run, text.Value);
 
             if (text.Bold)
             {
-                run.RunProperties = new RunProperties {Bold = new Bold()};
+                run.RunProperties.Bold = new Bold();
+            }
+
+            if (!string.IsNullOrEmpty(text.FontSize))
+            {
+                run.RunProperties.FontSize = new FontSize {Val = text.FontSize};
             }
 
             _parent.AppendChild(run);

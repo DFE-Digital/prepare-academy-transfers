@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Builders;
@@ -40,6 +41,12 @@ namespace DocumentGeneration
             action(builder);
 
             _body.AppendChild(table);
+        }
+
+        public void AddHeading(Action<IHeadingBuilder> action)
+        {
+            var builder = new HeadingBuilder(_body);
+            action(builder);
         }
 
         public void Build()

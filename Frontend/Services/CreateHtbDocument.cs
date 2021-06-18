@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using DocumentGeneration;
+using DocumentGeneration.Elements;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -43,16 +44,16 @@ namespace Frontend.Services
 
             await using (ms = new MemoryStream())
             {
-                var generator = new XDocumentBuilder(ms);
+                var builder = new DocumentBuilder(ms);
 
-                generator.AddHeading(project.Name, XDocumentHeadingBuilder.HeadingLevelOptions.Heading1);
-                generator.AddHeading(academy.Name, XDocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText(projectUrn);
+                });
+                builder.AddParagraph(pBuilder => pBuilder.AddText(academy.Name));
 
-                AddAcademyPerformanceTable(generator, academyResult);
-                AddPupilNumbersTable(generator, academyResult);
-                AddOfstedJudgementTable(generator, academyResult);
-
-                generator.Build();
+                builder.Build();
             }
 
             var successResponse = new CreateHtbDocumentResponse
@@ -62,7 +63,8 @@ namespace Frontend.Services
             return successResponse;
         }
 
-        private static void AddOfstedJudgementTable(IXDocumentBuilder generator, RepositoryResult<Academy> academyResult)
+        private static void AddOfstedJudgementTable(IXDocumentBuilder generator,
+            RepositoryResult<Academy> academyResult)
         {
             generator.AddHeading("Latest Ofsted judgement", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
 
@@ -93,7 +95,8 @@ namespace Frontend.Services
             generator.AddTable(academyPerformanceData);
         }
 
-        private static CreateHtbDocumentResponse CreateErrorResponse(RepositoryResultBase.RepositoryError repositoryError)
+        private static CreateHtbDocumentResponse CreateErrorResponse(
+            RepositoryResultBase.RepositoryError repositoryError)
         {
             if (repositoryError.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
