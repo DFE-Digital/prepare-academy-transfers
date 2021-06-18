@@ -51,6 +51,7 @@ namespace DocumentGeneration
 
         public void Build()
         {
+            AppendSectionProperties();
             _document.Save();
             _document.Close();
         }
@@ -76,6 +77,21 @@ namespace DocumentGeneration
                 )
             );
             settingsPart.Settings.Save();
+        }
+
+        private void AppendSectionProperties()
+        {
+            var props = new SectionProperties();
+            var pageMargin = new PageMargin
+            {
+                Top = 850,
+                Bottom = 994,
+                Left = 1080,
+                Right = 1080
+            };
+
+            props.AppendChild(pageMargin);
+            _body.AppendChild(props);
         }
     }
 }
