@@ -16,25 +16,23 @@ namespace DocumentGeneration.Builders
 
         public void AddCell(string text)
         {
-            var tableCell = new TableCell();
-            var paragraphBuilder = new ParagraphBuilder(tableCell);
-            paragraphBuilder.AddText(text);
-
-            _parent.AppendChild(tableCell);
+            AddCell(new TextElement {Value = text});
         }
 
         public void AddCell(TextElement textElement)
         {
             var tableCell = new TableCell();
-            var paragraphBuilder = new ParagraphBuilder(tableCell);
+            var paragraph = new Paragraph();
+            var paragraphBuilder = new ParagraphBuilder(paragraph);
             paragraphBuilder.AddText(textElement);
 
+            tableCell.AppendChild(paragraph);
             _parent.AppendChild(tableCell);
         }
 
         public void AddCells(string[] text)
         {
-            foreach(var t in text)
+            foreach (var t in text)
             {
                 AddCell(t);
             }

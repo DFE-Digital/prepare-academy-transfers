@@ -47,10 +47,10 @@ namespace DocumentGeneration.Builders
         {
             return _headingLevel switch
             {
-                HeadingLevel.One => "60",
-                HeadingLevel.Two => "40",
-                HeadingLevel.Three => "30",
-                _ => "30"
+                HeadingLevel.One => "36",
+                HeadingLevel.Two => "32",
+                HeadingLevel.Three => "28",
+                _ => "28"
             };
         }
     }

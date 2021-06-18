@@ -237,9 +237,9 @@ namespace DocumentGeneration.Tests
             }
 
             [Theory]
-            [InlineData(HeadingLevel.One, "60")]
-            [InlineData(HeadingLevel.Two, "40")]
-            [InlineData(HeadingLevel.Three, "30")]
+            [InlineData(HeadingLevel.One, "36")]
+            [InlineData(HeadingLevel.Two, "32")]
+            [InlineData(HeadingLevel.Three, "28")]
             public void GivenHeadingWithStringAndSize_AddsTextWithCorrectFontSize(HeadingLevel level,
                 string expectedSize)
             {
@@ -271,9 +271,9 @@ namespace DocumentGeneration.Tests
             }
 
             [Theory]
-            [InlineData(HeadingLevel.One, "60")]
-            [InlineData(HeadingLevel.Two, "40")]
-            [InlineData(HeadingLevel.Three, "30")]
+            [InlineData(HeadingLevel.One, "36")]
+            [InlineData(HeadingLevel.Two, "32")]
+            [InlineData(HeadingLevel.Three, "28")]
             public void GivenHeadingWithTextElementAndSize_AddsTextWithCorrectFontSize(HeadingLevel level,
                 string expectedSize)
             {
