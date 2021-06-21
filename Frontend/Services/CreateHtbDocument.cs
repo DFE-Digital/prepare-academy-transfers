@@ -57,7 +57,14 @@ namespace Frontend.Services
                 {
                     fBuilder.AddTable(tBuilder =>
                     {
-                        tBuilder.AddRow(rBuilder => { rBuilder.AddCells(new[] {"Meow", "Woof", "Quack"}); });
+                        tBuilder.SetBorderStyle(TableBorderStyle.None);
+                        tBuilder.AddRow(rBuilder =>
+                        {
+                            rBuilder.AddCells(new[]
+                            {
+                                "Author: Meow Meowington", "Cleared by: Woofs Barkington", "Version: 01/01/2021"
+                            });
+                        });
                     });
                 });
 
