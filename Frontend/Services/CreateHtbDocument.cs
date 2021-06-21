@@ -52,7 +52,15 @@ namespace Frontend.Services
                         pBuilder.AddText(new TextElement {Bold = true, Value = "OFFICIAL"});
                     });
                 });
-                
+
+                builder.AddFooter(fBuilder =>
+                {
+                    fBuilder.AddTable(tBuilder =>
+                    {
+                        tBuilder.AddRow(rBuilder => { rBuilder.AddCells(new[] {"Meow", "Woof", "Quack"}); });
+                    });
+                });
+
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);

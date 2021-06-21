@@ -4,13 +4,13 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class HeaderBuilder : IHeaderBuilder
+    public class FooterBuilder : IFooterBuilder
     {
-        private readonly Header _header;
+        private readonly Footer _footer;
 
-        public HeaderBuilder(Header header)
+        public FooterBuilder(Footer footer)
         {
-            _header = header;
+            _footer = footer;
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
@@ -18,7 +18,7 @@ namespace DocumentGeneration.Builders
             var paragraph = new Paragraph();
             var builder = new ParagraphBuilder(paragraph);
             action(builder);
-            _header.AppendChild(paragraph);
+            _footer.AppendChild(paragraph);
         }
 
         public void AddTable(Action<ITableBuilder> action)
@@ -26,7 +26,7 @@ namespace DocumentGeneration.Builders
             var table = new Table();
             var builder = new TableBuilder(table);
             action(builder);
-            _header.AppendChild(table);
+            _footer.AppendChild(table);
         }
     }
 }

@@ -198,7 +198,7 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingATableWithMultipleStringCells_GeneratesTable()
             {
-                var tests = new string[] {"test1", "test2"};
+                var tests = new[] {"test1", "test2"};
 
                 var documentBody = GenerateDocumentBody(builder =>
                 {
@@ -220,7 +220,7 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingATableWithMultipleTextCells_GeneratesTable()
             {
-                var textElements = new TextElement[]
+                var textElements = new[]
                 {
                     new TextElement {Value = "test1"},
                     new TextElement {Value = "test2"}
@@ -323,19 +323,78 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenHeaderHasText_GeneratesHeaderForDocument()
             {
-                using (var ms = new MemoryStream())
-                {
-                    var builder = new DocumentBuilder(ms);
-                    builder.AddHeader(hBuilder => { hBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
-                    builder.Build();
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddHeader(hBuilder => { hBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                builder.Build();
 
-                    using (var doc = WordprocessingDocument.Open(ms, false))
-                    {
-                        var headers = doc.MainDocumentPart.HeaderParts.ToList();
-                        Assert.Single(headers);
-                        Assert.Equal("Meow", headers[0].Header.InnerText);
-                    }
-                }
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var headers = doc.MainDocumentPart.HeaderParts.ToList();
+
+                Assert.Single(headers);
+                var header = headers[0].Header;
+                Assert.Single(header.Descendants<Paragraph>());
+                Assert.Equal("Meow", header.InnerText);
+            }
+
+            [Fact]
+            public void GivenHeaderHasTable_GeneratesHeaderForDocument()
+            {
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddHeader(hBuilder =>
+                {
+                    hBuilder.AddTable(tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                });
+                builder.Build();
+
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var headers = doc.MainDocumentPart.HeaderParts.ToList();
+                Assert.Single(headers);
+                var header = headers[0].Header;
+                Assert.Single(header.Descendants<Table>());
+                Assert.Single(header.Descendants<Paragraph>());
+                Assert.Equal("Meow", header.InnerText);
+            }
+        }
+        
+        public class FooterTests : DocumentBuilderTests
+        {
+            [Fact]
+            public void GivenFooterHasText_GeneratesFooterForDocument()
+            {
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddFooter(fBuilder => { fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                builder.Build();
+
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var footers = doc.MainDocumentPart.FooterParts.ToList();
+
+                Assert.Single(footers);
+                var footer = footers[0].Footer;
+                Assert.Single(footer.Descendants<Paragraph>());
+                Assert.Equal("Meow", footer.InnerText);
+            }
+
+            [Fact]
+            public void GivenFooterHasTable_GeneratesFooterForDocument()
+            {
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddFooter(fBuilder =>
+                {
+                    fBuilder.AddTable(tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                });
+                builder.Build();
+
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var footers = doc.MainDocumentPart.FooterParts.ToList();
+                Assert.Single(footers);
+                var footer = footers[0].Footer;
+                Assert.Single(footer.Descendants<Table>());
+                Assert.Single(footer.Descendants<Paragraph>());
+                Assert.Equal("Meow", footer.InnerText);
             }
         }
     }

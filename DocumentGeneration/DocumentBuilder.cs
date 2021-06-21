@@ -56,11 +56,21 @@ namespace DocumentGeneration
         public void AddHeader(Action<IHeaderBuilder> action)
         {
             var headerPart = _document.MainDocumentPart.HeaderParts.First();
-            
+
             var header = new Header();
             var builder = new HeaderBuilder(header);
             action(builder);
             header.Save(headerPart);
+        }
+
+        public void AddFooter(Action<IFooterBuilder> action)
+        {
+            var footerPart = _document.MainDocumentPart.FooterParts.First();
+
+            var footer = new Footer();
+            var builder = new FooterBuilder(footer);
+            action(builder);
+            footer.Save(footerPart);
         }
 
         public void Build()
@@ -96,10 +106,10 @@ namespace DocumentGeneration
         {
             var props = new SectionProperties();
             AddHeaderToProperties(props);
+            AddFooterToProperties(props);
             AddPageMargin(props);
             _body.AppendChild(props);
         }
-
 
         private void AddHeaderToProperties(SectionProperties props)
         {
@@ -110,6 +120,17 @@ namespace DocumentGeneration
             var headerReference = new HeaderReference
                 {Id = headerPartId, Type = new EnumValue<HeaderFooterValues>(HeaderFooterValues.Default)};
             props.AppendChild(headerReference);
+        }
+
+        private void AddFooterToProperties(SectionProperties props)
+        {
+            var mainDocumentPart = _document.MainDocumentPart;
+            var footerPart = mainDocumentPart.AddNewPart<FooterPart>();
+            var footerPartId = mainDocumentPart.GetIdOfPart(footerPart);
+
+            var footerReference = new FooterReference
+                {Id = footerPartId, Type = new EnumValue<HeaderFooterValues>(HeaderFooterValues.Default)};
+            props.AppendChild(footerReference);
         }
 
         private static void AddPageMargin(SectionProperties props)
