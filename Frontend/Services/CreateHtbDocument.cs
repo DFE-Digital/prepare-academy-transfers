@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Data.Models;
 using DocumentGeneration;
+using DocumentGeneration.Elements;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -43,16 +42,156 @@ namespace Frontend.Services
 
             await using (ms = new MemoryStream())
             {
-                var generator = new DocumentBuilder(ms);
+                var builder = new DocumentBuilder(ms);
 
-                generator.AddHeading(project.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading1);
-                generator.AddHeading(academy.Name, DocumentHeadingBuilder.HeadingLevelOptions.Heading2);
+                builder.AddHeader(hBuilder =>
+                {
+                    hBuilder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.Justify(ParagraphJustification.Center);
+                        pBuilder.AddText(new TextElement {Bold = true, Value = "OFFICIAL"});
+                    });
+                });
 
-                AddAcademyPerformanceTable(generator, academyResult);
-                AddPupilNumbersTable(generator, academyResult);
-                AddOfstedJudgementTable(generator, academyResult);
+                builder.AddFooter(fBuilder =>
+                {
+                    fBuilder.AddTable(tBuilder =>
+                    {
+                        tBuilder.SetBorderStyle(TableBorderStyle.None);
+                        tBuilder.AddRow(rBuilder =>
+                        {
+                            rBuilder.AddCells(new[]
+                            {
+                                "Author: Meow Meowington", "Cleared by: Woofs Barkington", "Version: 01/01/2021"
+                            });
+                        });
+                    });
+                });
 
-                generator.Build();
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText("Headteacher board (HTB) template for:");
+                });
+
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText($"{academy.Name} - URN {academy.Urn}");
+                });
+
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText($"Outgoing trust - SomeID");
+                });
+
+                builder.AddTable(tBuilder =>
+                {
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Recommendation", Bold = true},
+                            new TextElement {Value = "Project recommendation"}
+                        });
+                    });
+
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Is an academy order (AO) required?", Bold = true},
+                            new TextElement {Value = "N/A"}
+                        });
+                    });
+
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Academy type and route", Bold = true},
+                            new TextElement {Value = academy.EstablishmentType}
+                        });
+                    });
+                });
+
+                builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+
+                builder.AddTable(tBuilder =>
+                {
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Date of HTB", Bold = true},
+                            new TextElement {Value = "Date"}
+                        });
+                    });
+
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Proposed academy opening date", Bold = true},
+                            new TextElement {Value = "N/A"}
+                        });
+                    });
+
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "Previous HTB date", Bold = true},
+                            new TextElement {Value = "adwad"}
+                        });
+                    });
+                });
+
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText("KS2 Perf tables");
+                });
+
+                builder.AddTable(tBuilder =>
+                {
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCells(new[]
+                        {
+                            new TextElement {Value = "", Bold = true},
+                            new TextElement
+                            {
+                                Value = "Percentage meeting expecting standard in reading, writing and maths",
+                                Bold = true
+                            },
+                            new TextElement
+                            {
+                                Value = "Percentage achieving a higher standard in reading, writing and maths",
+                                Bold = true
+                            },
+                            new TextElement {Value = "Reading progress scores", Bold = true},
+                            new TextElement {Value = "Writing progress scores", Bold = true},
+                            new TextElement {Value = "Maths progress scores", Bold = true}
+                        });
+                    });
+
+                    tBuilder.AddRow(rBuilder =>
+                    {
+                        rBuilder.AddCell(new TextElement {Value = academy.Name, Bold = true});
+                        rBuilder.AddCells(new[]
+                        {
+                            "47\n(disadvantaged 20)",
+                            "31\n(disadvantaged 14)",
+                            "Suppressed",
+                            "Suppressed",
+                            "Suppressed"
+                        });
+                    });
+                });
+
+                builder.Build();
             }
 
             var successResponse = new CreateHtbDocumentResponse
@@ -62,38 +201,8 @@ namespace Frontend.Services
             return successResponse;
         }
 
-        private static void AddOfstedJudgementTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Latest Ofsted judgement", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var data = academyResult.Result.LatestOfstedJudgement.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(data);
-        }
-
-        private static void AddPupilNumbersTable(IDocumentBuilder generator, RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Pupil numbers", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var data = academyResult.Result.PupilNumbers.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(data);
-        }
-
-        private static void AddAcademyPerformanceTable(IDocumentBuilder generator,
-            RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Academy performance", DocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var academyPerformanceData = academyResult.Result.Performance.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(academyPerformanceData);
-        }
-
-        private static CreateHtbDocumentResponse CreateErrorResponse(RepositoryResultBase.RepositoryError repositoryError)
+        private static CreateHtbDocumentResponse CreateErrorResponse(
+            RepositoryResultBase.RepositoryError repositoryError)
         {
             if (repositoryError.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
