@@ -12,24 +12,92 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-        <span class="govuk-caption-m">
+        <span class="govuk-caption-l">
             URN @Model.Project.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">Latest Ofsted judgement</h1>
-        <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <partial name="_FormFieldSummaryList" model="Model.Academy.LatestOfstedJudgement.FieldsToDisplay()" />
+        <p class="govuk-body">This information is pre-populated from TRAMS.</p>
+        <hr class="govuk-section-break govuk-section-break--l">
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel" />
 </div>
-@if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
-{
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
-            <button class="govuk-button" data-module="govuk-button">
-                Confirm and continue
-            </button>
-        </form>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.SchoolName)
+                </dt>
+                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.SchoolName))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        @Model.Academy.LatestOfstedJudgement.SchoolName
+                    }
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.InspectionDate)
+                </dt>
+                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.InspectionDate))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        @Model.Academy.LatestOfstedJudgement.InspectionDate
+                    }
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.OverallEffectiveness)
+                </dt>
+                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.OverallEffectiveness))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        @Model.Academy.LatestOfstedJudgement.OverallEffectiveness
+                    }
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.OfstedReport)
+                </dt>
+                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.OfstedReport))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <a href="@Model.Academy.LatestOfstedJudgement.OfstedReport" target="_blank">Latest Ofsted report</a>
+                    }
+                </dd>
+            </div>
+        </dl>
+    </div>
+    <div class="govuk-grid-row">
+        <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
+        @if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
+        {
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+                        <button class="govuk-button" data-module="govuk-button">
+                            Confirm and continue
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
     </div>
 </div>
-}
