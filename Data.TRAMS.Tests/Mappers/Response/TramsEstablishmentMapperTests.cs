@@ -48,7 +48,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     QualityOfEducation = "4",
                     ReligiousEthos = "Does not apply",
                     SixthFormProvision = "1",
-                    WebLink = "fakelink.com"
+                    WebLink = "http://example.com"
                 },
                 SchoolCapacity = "1000",
                 StatutoryLowAge = "4",
@@ -82,7 +82,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal("Fake Academy", latestOfstedJudgement.SchoolName);
             Assert.Equal("Outstanding", latestOfstedJudgement.OverallEffectiveness);
             Assert.Equal("01-01-2020", latestOfstedJudgement.InspectionDate);
-            Assert.Equal("fakelink.com", latestOfstedJudgement.OfstedReport);
+            Assert.Equal("http://example.com", latestOfstedJudgement.OfstedReport);
         }
 
         private static void AssertAcademyPerformanceCorrect(Academy result, TramsEstablishment establishmentToMap)

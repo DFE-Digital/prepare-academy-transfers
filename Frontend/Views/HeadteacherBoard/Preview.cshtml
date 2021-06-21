@@ -22,10 +22,6 @@
             "_FormFieldSummaryCardBody",
             Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay(),
             new ViewDataDictionary(ViewData) {{"SectionTitle", "Pupil numbers"}})
-        @await Html.PartialAsync(
-            "_FormFieldSummaryCardBody",
-            Model.OutgoingAcademy.LatestOfstedJudgement.FieldsToDisplay(),
-            new ViewDataDictionary(ViewData) {{"SectionTitle", "Latest Ofsted judgement"}})
         <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-action="Download" asp-route-id="@Model.Project.Urn">
             Download HTB Templates
         </a>
