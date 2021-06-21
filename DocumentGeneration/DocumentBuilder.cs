@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Packaging;
@@ -11,16 +12,19 @@ namespace DocumentGeneration
 {
     public class DocumentBuilder : IDocumentBuilder
     {
+        private readonly Stream _stream;
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
 
         public DocumentBuilder(Stream stream)
         {
-            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
+            _stream = stream;
+            _document = WordprocessingDocument.Create(_stream, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
             SetCompatibilityMode();
+            AppendSectionProperties();
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
@@ -49,9 +53,18 @@ namespace DocumentGeneration
             action(builder);
         }
 
+        public void AddHeader(Action<IHeaderBuilder> action)
+        {
+            var headerPart = _document.MainDocumentPart.HeaderParts.First();
+            
+            var header = new Header();
+            var builder = new HeaderBuilder(header);
+            action(builder);
+            header.Save(headerPart);
+        }
+
         public void Build()
         {
-            AppendSectionProperties();
             _document.Save();
             _document.Close();
         }
@@ -82,6 +95,25 @@ namespace DocumentGeneration
         private void AppendSectionProperties()
         {
             var props = new SectionProperties();
+            AddHeaderToProperties(props);
+            AddPageMargin(props);
+            _body.AppendChild(props);
+        }
+
+
+        private void AddHeaderToProperties(SectionProperties props)
+        {
+            var mainDocumentPart = _document.MainDocumentPart;
+            var headerPart = mainDocumentPart.AddNewPart<HeaderPart>();
+            var headerPartId = mainDocumentPart.GetIdOfPart(headerPart);
+
+            var headerReference = new HeaderReference
+                {Id = headerPartId, Type = new EnumValue<HeaderFooterValues>(HeaderFooterValues.Default)};
+            props.AppendChild(headerReference);
+        }
+
+        private static void AddPageMargin(SectionProperties props)
+        {
             var pageMargin = new PageMargin
             {
                 Top = 850,
@@ -89,9 +121,7 @@ namespace DocumentGeneration
                 Left = 1080,
                 Right = 1080
             };
-
             props.AppendChild(pageMargin);
-            _body.AppendChild(props);
         }
     }
 }

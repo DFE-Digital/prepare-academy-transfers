@@ -317,5 +317,26 @@ namespace DocumentGeneration.Tests
                 Assert.Equal(expectedSize, run[0].RunProperties.FontSize.Val);
             }
         }
+
+        public class HeaderTests : DocumentBuilderTests
+        {
+            [Fact]
+            public void GivenHeaderHasText_GeneratesHeaderForDocument()
+            {
+                using (var ms = new MemoryStream())
+                {
+                    var builder = new DocumentBuilder(ms);
+                    builder.AddHeader(hBuilder => { hBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                    builder.Build();
+
+                    using (var doc = WordprocessingDocument.Open(ms, false))
+                    {
+                        var headers = doc.MainDocumentPart.HeaderParts.ToList();
+                        Assert.Single(headers);
+                        Assert.Equal("Meow", headers[0].Header.InnerText);
+                    }
+                }
+            }
+        }
     }
 }
