@@ -63,5 +63,18 @@ namespace DocumentGeneration.Builders
                 AddText(t);
             }
         }
+
+        public void Justify(ParagraphJustification paragraphJustification)
+        {
+            var justification = new Justification();
+            justification.Val = paragraphJustification switch
+            {
+                ParagraphJustification.Left => new EnumValue<JustificationValues>(JustificationValues.Left),
+                ParagraphJustification.Center => new EnumValue<JustificationValues>(JustificationValues.Center),
+                ParagraphJustification.Right => new EnumValue<JustificationValues>(JustificationValues.Right),
+                _ => justification.Val
+            };
+            _parent.ParagraphProperties.Justification = justification;
+        }
     }
 }

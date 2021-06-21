@@ -134,6 +134,28 @@ namespace DocumentGeneration.Tests
                 Assert.Equal(2, texts.Count);
                 Assert.Single(paragraph.Descendants<Break>());
             }
+
+            [Theory]
+            [InlineData(ParagraphJustification.Left, JustificationValues.Left)]
+            [InlineData(ParagraphJustification.Center, JustificationValues.Center)]
+            [InlineData(ParagraphJustification.Right, JustificationValues.Right)]
+            public void GivenParagraphJustification_JustifiesParagraphCorrectly(
+                ParagraphJustification paragraphJustification,
+                JustificationValues expectedJustification)
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText("Meow");
+                        pBuilder.Justify(paragraphJustification);
+                    });
+                });
+
+                var paragraph = documentBody.Descendants<Paragraph>().First();
+                var paragraphProperties = paragraph.ParagraphProperties;
+                Assert.Equal(expectedJustification, paragraphProperties.Justification.Val.Value);
+            }
         }
 
         public class TableTests : DocumentBuilderTests
