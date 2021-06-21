@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Data.Models;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using Frontend.Services.Interfaces;
@@ -46,6 +44,15 @@ namespace Frontend.Services
             {
                 var builder = new DocumentBuilder(ms);
 
+                builder.AddHeader(hBuilder =>
+                {
+                    hBuilder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.Justify(ParagraphJustification.Center);
+                        pBuilder.AddText(new TextElement {Bold = true, Value = "OFFICIAL"});
+                    });
+                });
+                
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
@@ -177,38 +184,6 @@ namespace Frontend.Services
                 Document = ms.ToArray()
             };
             return successResponse;
-        }
-
-        private static void AddOfstedJudgementTable(IXDocumentBuilder generator,
-            RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Latest Ofsted judgement", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var data = academyResult.Result.LatestOfstedJudgement.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(data);
-        }
-
-        private static void AddPupilNumbersTable(IXDocumentBuilder generator, RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Pupil numbers", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var data = academyResult.Result.PupilNumbers.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(data);
-        }
-
-        private static void AddAcademyPerformanceTable(IXDocumentBuilder generator,
-            RepositoryResult<Academy> academyResult)
-        {
-            generator.AddHeading("Academy performance", XDocumentHeadingBuilder.HeadingLevelOptions.Heading3);
-
-            var academyPerformanceData = academyResult.Result.Performance.FieldsToDisplay()
-                .Select(field => new List<string> {field.Title, field.Value}).ToList();
-
-            generator.AddTable(academyPerformanceData);
         }
 
         private static CreateHtbDocumentResponse CreateErrorResponse(
