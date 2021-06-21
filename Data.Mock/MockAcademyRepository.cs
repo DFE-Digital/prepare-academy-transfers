@@ -45,14 +45,11 @@ namespace Data.Mock
 
                 LatestOfstedJudgement = new LatestOfstedJudgement
                 {
-                    AchievementOfPupils = "Placeholder",
-                    BehaviourAndSafetyOfPupils = "Placeholder",
-                    EarlyYearsProvision = "Placeholder",
+                    
                     OverallEffectiveness = "Placeholder",
                     InspectionDate = "Placeholder",
-                    LeadershipAndManagement = "Placeholder",
-                    QualityOfTeaching = "Placeholder",
-                    SchoolName = "Placeholder"
+                    SchoolName = "Placeholder",
+                    OfstedReport = "Placeholder"
                 }
             };
 

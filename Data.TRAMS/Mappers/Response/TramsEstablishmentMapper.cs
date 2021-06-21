@@ -34,16 +34,10 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new LatestOfstedJudgement
             {
-                AchievementOfPupils = ParseOfstedRating(input.MisEstablishment.PersonalDevelopment),
-                BehaviourAndSafetyOfPupils = ParseOfstedRating(input.MisEstablishment.BehaviourAndAttitudes),
-                EarlyYearsProvision = ParseOfstedRating(input.MisEstablishment.EarlyYearsProvision),
                 InspectionDate = input.OfstedLastInspection,
-                LeadershipAndManagement =
-                    ParseOfstedRating(input.MisEstablishment.EffectivenessOfLeadershipAndManagement),
                 OverallEffectiveness = ParseOfstedRating(input.MisEstablishment.OverallEffectiveness),
-                QualityOfTeaching = ParseOfstedRating(input.MisEstablishment.QualityOfEducation),
                 SchoolName = input.EstablishmentName,
-                SixthFormProvision = ParseOfstedRating(input.MisEstablishment.SixthFormProvision)
+                OfstedReport = input.MisEstablishment.WebLink
             };
         }
 

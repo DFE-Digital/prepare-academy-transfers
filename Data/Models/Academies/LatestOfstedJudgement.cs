@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Data.Models.Academies
 {
@@ -7,12 +8,9 @@ namespace Data.Models.Academies
         public string SchoolName { get; set; }
         public string InspectionDate { get; set; }
         public string OverallEffectiveness { get; set; }
-        public string AchievementOfPupils { get; set; }
-        public string QualityOfTeaching { get; set; }
-        public string BehaviourAndSafetyOfPupils { get; set; }
-        public string LeadershipAndManagement { get; set; }
-        public string EarlyYearsProvision { get; set; }
-        public string SixthFormProvision { get; set; }
+        
+        [DisplayName("Ofsted Report")]
+        public string OfstedReport { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -20,13 +18,7 @@ namespace Data.Models.Academies
             {
                 new FormField {Title = "School name", Value = SchoolName},
                 new FormField {Title = "Ofsted inspection date", Value = InspectionDate},
-                new FormField {Title = "Overall effectiveness", Value = OverallEffectiveness},
-                new FormField {Title = "Achievement of pupils", Value = AchievementOfPupils},
-                new FormField {Title = "Quality of teaching", Value = QualityOfTeaching},
-                new FormField {Title = "Behaviour and safety of pupils", Value = BehaviourAndSafetyOfPupils},
-                new FormField {Title = "Leadership & Management", Value = LeadershipAndManagement},
-                new FormField {Title = "Early years provision", Value = EarlyYearsProvision},
-                new FormField {Title = "Sixth form provision", Value = SixthFormProvision}
+                new FormField {Title = "Overall effectiveness", Value = OverallEffectiveness}
             };
         }
     }
