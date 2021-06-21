@@ -148,6 +148,7 @@ namespace DocumentGeneration.Tests
 
                 var table = documentBody.Descendants<Table>().ToList();
                 Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableProperties>());
                 Assert.Single(documentBody.Descendants<TableRow>());
                 Assert.Single(documentBody.Descendants<TableCell>());
                 Assert.Equal("test", table[0].InnerText);
@@ -166,6 +167,7 @@ namespace DocumentGeneration.Tests
 
                 var table = documentBody.Descendants<Table>().ToList();
                 Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableProperties>());
                 Assert.Single(documentBody.Descendants<TableRow>());
                 Assert.Single(documentBody.Descendants<TableCell>());
                 Assert.Equal("test", table[0].InnerText);
@@ -183,6 +185,7 @@ namespace DocumentGeneration.Tests
 
                 var table = documentBody.Descendants<Table>().ToList();
                 Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableProperties>());
                 Assert.Single(documentBody.Descendants<TableRow>());
                 Assert.Equal(2, documentBody.Descendants<TableCell>().Count());
 
@@ -211,6 +214,7 @@ namespace DocumentGeneration.Tests
 
                 var table = documentBody.Descendants<Table>().ToList();
                 Assert.Single(table);
+                Assert.Single(documentBody.Descendants<TableProperties>());
                 Assert.Single(documentBody.Descendants<TableRow>());
                 Assert.Equal(2, documentBody.Descendants<TableCell>().Count());
 
