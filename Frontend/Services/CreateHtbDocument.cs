@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Data.Models;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using Frontend.Services.Interfaces;
@@ -86,68 +87,16 @@ namespace Frontend.Services
                     hBuilder.AddText($"Outgoing trust - SomeID");
                 });
 
-                builder.AddTable(tBuilder =>
+                IntroductorySection(builder, academy, project);
+
+                builder.AddHeading(hBuilder =>
                 {
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Recommendation", Bold = true},
-                            new TextElement {Value = "Project recommendation"}
-                        });
-                    });
-
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Is an academy order (AO) required?", Bold = true},
-                            new TextElement {Value = "N/A"}
-                        });
-                    });
-
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Academy type and route", Bold = true},
-                            new TextElement {Value = academy.EstablishmentType}
-                        });
-                    });
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText("General information");
                 });
 
                 builder.AddParagraph(pBuilder => pBuilder.AddText(""));
-
-                builder.AddTable(tBuilder =>
-                {
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Date of HTB", Bold = true},
-                            new TextElement {Value = "Date"}
-                        });
-                    });
-
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Proposed academy opening date", Bold = true},
-                            new TextElement {Value = "N/A"}
-                        });
-                    });
-
-                    tBuilder.AddRow(rBuilder =>
-                    {
-                        rBuilder.AddCells(new[]
-                        {
-                            new TextElement {Value = "Previous HTB date", Bold = true},
-                            new TextElement {Value = "adwad"}
-                        });
-                    });
-                });
-
+                
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
@@ -199,6 +148,70 @@ namespace Frontend.Services
                 Document = ms.ToArray()
             };
             return successResponse;
+        }
+
+        private static void IntroductorySection(DocumentBuilder builder, Academy academy, Project project)
+        {
+            builder.AddTable(new[]
+            {
+                new[]
+                {
+                    new TextElement {Value = "Recommendation", Bold = true},
+                    new TextElement {Value = "Project recommendation"}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Academy type and route", Bold = true},
+                    new TextElement {Value = academy.EstablishmentType}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Academy type and route", Bold = true},
+                    new TextElement {Value = academy.EstablishmentType}
+                }
+            });
+
+            builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+
+            builder.AddTable(new[]
+            {
+                new[]
+                {
+                    new TextElement {Value = "Date of HTB", Bold = true},
+                    new TextElement {Value = "Date"}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Proposed academy opening date", Bold = true},
+                    new TextElement {Value = "N/A"}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Previous HTB date", Bold = true},
+                    new TextElement {Value = "adwad"}
+                }
+            });
+
+            builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+
+            builder.AddTable(new[]
+            {
+                new[]
+                {
+                    new TextElement {Value = "Local authority", Bold = true},
+                    new TextElement {Value = "LA"}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Sponsor name", Bold = true},
+                    new TextElement {Value = project.TransferringAcademies[0].IncomingTrustName}
+                },
+                new[]
+                {
+                    new TextElement {Value = "Sponsor reference number", Bold = true},
+                    new TextElement {Value = "SomeNumber"}
+                }
+            });
         }
 
         private static CreateHtbDocumentResponse CreateErrorResponse(
