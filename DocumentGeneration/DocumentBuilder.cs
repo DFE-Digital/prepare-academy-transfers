@@ -1,25 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Builders;
+using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration
 {
     public class DocumentBuilder : IDocumentBuilder
     {
-        private readonly Stream _stream;
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
 
         public DocumentBuilder(Stream stream)
         {
-            _stream = stream;
-            _document = WordprocessingDocument.Create(_stream, WordprocessingDocumentType.Document);
+            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
@@ -43,6 +42,18 @@ namespace DocumentGeneration
             var builder = new TableBuilder(table);
 
             action(builder);
+
+            _body.AppendChild(table);
+        }
+
+        public void AddTable(IEnumerable<TextElement[]> rows)
+        {
+            var table = new Table();
+            var builder = new TableBuilder(table);
+            foreach (var row in rows)
+            {
+                builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
+            }
 
             _body.AppendChild(table);
         }

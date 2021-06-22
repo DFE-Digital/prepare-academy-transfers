@@ -245,6 +245,28 @@ namespace DocumentGeneration.Tests
                 Assert.Equal("test1", tableCells[0].InnerText);
                 Assert.Equal("test2", tableCells[1].InnerText);
             }
+
+            [Fact]
+            public void GivenAddingATableByRows_GeneratesTheCorrectTable()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    var textElements = new[]
+                    {
+                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                    };
+                    builder.AddTable(textElements);
+                });
+
+                var tableRows = documentBody.Descendants<TableRow>().ToList();
+                var tableCells = documentBody.Descendants<TableCell>().ToList();
+
+                Assert.Equal(2, tableRows.Count);
+                Assert.Equal(4, tableCells.Count);
+                Assert.Equal("OneTwo", tableRows[0].InnerText);
+                Assert.Equal("ThreeFour", tableRows[1].InnerText);
+            }
         }
 
         public class HeadingTests : DocumentBuilderTests
@@ -356,8 +378,37 @@ namespace DocumentGeneration.Tests
                 Assert.Single(header.Descendants<Paragraph>());
                 Assert.Equal("Meow", header.InnerText);
             }
+
+            [Fact]
+            public void GivenAddingATableByRows_GeneratesTheCorrectTable()
+            {
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddHeader(hBuilder =>
+                {
+                    var textElements = new[]
+                    {
+                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                    };
+                    hBuilder.AddTable(textElements);
+                });
+                builder.Build();
+
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var headers = doc.MainDocumentPart.HeaderParts.ToList();
+                var header = headers[0].Header;
+
+                var tableRows = header.Descendants<TableRow>().ToList();
+                var tableCells = header.Descendants<TableCell>().ToList();
+
+                Assert.Equal(2, tableRows.Count);
+                Assert.Equal(4, tableCells.Count);
+                Assert.Equal("OneTwo", tableRows[0].InnerText);
+                Assert.Equal("ThreeFour", tableRows[1].InnerText);
+            }
         }
-        
+
         public class FooterTests : DocumentBuilderTests
         {
             [Fact]
@@ -395,6 +446,35 @@ namespace DocumentGeneration.Tests
                 Assert.Single(footer.Descendants<Table>());
                 Assert.Single(footer.Descendants<Paragraph>());
                 Assert.Equal("Meow", footer.InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingATableByRows_GeneratesTheCorrectTable()
+            {
+                using var ms = new MemoryStream();
+                var builder = new DocumentBuilder(ms);
+                builder.AddFooter(fBuilder =>
+                {
+                    var textElements = new[]
+                    {
+                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                    };
+                    fBuilder.AddTable(textElements);
+                });
+                builder.Build();
+
+                using var doc = WordprocessingDocument.Open(ms, false);
+                var footers = doc.MainDocumentPart.FooterParts.ToList();
+                var footer = footers[0].Footer;
+
+                var tableRows = footer.Descendants<TableRow>().ToList();
+                var tableCells = footer.Descendants<TableCell>().ToList();
+
+                Assert.Equal(2, tableRows.Count);
+                Assert.Equal(4, tableCells.Count);
+                Assert.Equal("OneTwo", tableRows[0].InnerText);
+                Assert.Equal("ThreeFour", tableRows[1].InnerText);
             }
         }
     }
