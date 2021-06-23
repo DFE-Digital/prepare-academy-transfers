@@ -189,6 +189,7 @@ namespace Frontend.Services
             });
 
             builder.AddParagraph(pBuilder => pBuilder.AddText(project.Rationale.Project));
+            builder.AddNumberedList(new[] {"One", "Two", "Three", "Four"});
 
             builder.AddHeading(hBuilder =>
             {

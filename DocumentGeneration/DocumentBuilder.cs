@@ -23,7 +23,20 @@ namespace DocumentGeneration
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
             SetCompatibilityMode();
+            AddNumberingDefinitions();
             AppendSectionProperties();
+        }
+
+        private void AddNumberingDefinitions()
+        {
+            var part = _document.MainDocumentPart.AddNewPart<NumberingDefinitionsPart>();
+            part.Numbering = new Numbering();
+        }
+
+        public void AddNumberedList(string[] items)
+        {
+            var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
+            builder.AddItems(items);
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
