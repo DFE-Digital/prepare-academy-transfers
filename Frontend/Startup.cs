@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,9 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddControllersWithViews(options => options.Filters.Add(
+                new AutoValidateAntiforgeryTokenAttribute()))
+                .AddSessionStateTempDataProvider();
             var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
             var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
             var redisConfigurationOptions = new ConfigurationOptions()
