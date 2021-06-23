@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration _configuration
+<!DOCTYPE html>
 <html lang="en" class="govuk-template ">
 
 <head>
@@ -42,6 +44,16 @@
 </header>
 
 <div class="govuk-width-container ">
+    <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+            <strong class="govuk-tag govuk-phase-banner__content__tag">
+                beta
+            </strong>
+            <span class="govuk-phase-banner__text">
+                This is a new service – your <a class="govuk-link" href="mailto:@_configuration["BetaFeedbackEmailAddress"]">feedback</a> will help us to improve it.
+            </span>
+        </p>
+    </div>
     @await RenderSectionAsync("BeforeMain", false)
     <main class="govuk-main-wrapper " id="main-content" role="main">
         @RenderBody()
