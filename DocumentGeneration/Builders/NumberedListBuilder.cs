@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml;
@@ -19,6 +20,24 @@ namespace DocumentGeneration.Builders
             _parent = parent;
             _numberingDefinitionsPart = numberingDefinitionsPart;
             _numId = AddNumberingDefinitions();
+        }
+
+        public void AddItem(Action<IParagraphBuilder> action)
+        {
+            var paragraph = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    NumberingProperties = new NumberingProperties(new List<OpenXmlElement>
+                    {
+                        new NumberingLevelReference {Val = 0},
+                        new NumberingId {Val = _numId}
+                    })
+                }
+            };
+            var paragraphBuilder = new ParagraphBuilder(paragraph);
+            action(paragraphBuilder);
+            _parent.AppendChild(paragraph);
         }
 
         public void AddItem(string item)
