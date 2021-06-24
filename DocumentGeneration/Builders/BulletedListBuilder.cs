@@ -8,13 +8,13 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class NumberedListBuilder : IListBuilder
+    public class BulletedListBuilder : IListBuilder
     {
         private readonly OpenXmlElement _parent;
         private readonly NumberingDefinitionsPart _numberingDefinitionsPart;
         private readonly int _numId;
 
-        public NumberedListBuilder(OpenXmlElement parent, NumberingDefinitionsPart numberingDefinitionsPart)
+        public BulletedListBuilder(OpenXmlElement parent, NumberingDefinitionsPart numberingDefinitionsPart)
         {
             _parent = parent;
             _numberingDefinitionsPart = numberingDefinitionsPart;
@@ -25,7 +25,6 @@ namespace DocumentGeneration.Builders
         {
             AddItem(new TextElement(item));
         }
-
 
         public void AddItem(TextElement item)
         {
@@ -75,12 +74,19 @@ namespace DocumentGeneration.Builders
                         {
                             new StartNumberingValue {Val = 1},
                             new NumberingFormat
-                                {Val = new EnumValue<NumberFormatValues>(NumberFormatValues.Decimal)},
-                            new LevelText {Val = "%1."},
+                                {Val = new EnumValue<NumberFormatValues>(NumberFormatValues.Bullet)},
+                            new LevelText {Val = ""},
                             new LevelJustification
                                 {Val = new EnumValue<LevelJustificationValues>(LevelJustificationValues.Left)},
                             new ParagraphProperties(
                                 new Indentation {Left = "720", Hanging = "360"}
+                            ),
+                            new RunProperties(
+                                new RunFonts
+                                {
+                                    Ascii = "Symbol", HighAnsi = "Symbol", ComplexScript = "Symbol",
+                                    Hint = new EnumValue<FontTypeHintValues>(FontTypeHintValues.Default)
+                                }
                             )
                         }
                     ) {LevelIndex = 0}

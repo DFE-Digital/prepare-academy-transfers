@@ -33,10 +33,16 @@ namespace DocumentGeneration
             part.Numbering = new Numbering();
         }
 
-        public void AddNumberedList(string[] items)
+        public void AddNumberedList(Action<IListBuilder> action)
         {
             var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-            builder.AddItems(items);
+            action(builder);
+        }
+        
+        public void AddBulletedList(Action<IListBuilder> action)
+        {
+            var builder = new BulletedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
+            action(builder);
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)

@@ -189,7 +189,24 @@ namespace Frontend.Services
             });
 
             builder.AddParagraph(pBuilder => pBuilder.AddText(project.Rationale.Project));
-            builder.AddNumberedList(new[] {"One", "Two", "Three", "Four"});
+
+            builder.AddNumberedList(lBuilder =>
+            {
+                lBuilder.AddItem(new TextElement {Bold = true, Value = "One"});
+                lBuilder.AddItem(new TextElement {Value = "Two"});
+                lBuilder.AddItem(new TextElement {Bold = true, Value = "Three"});
+                lBuilder.AddItem(new[]
+                    {new TextElement("Meow"), new TextElement(" Woof ") {Bold = true}, new TextElement("Quack")});
+            });
+            
+            builder.AddBulletedList(lBuilder =>
+            {
+                lBuilder.AddItem(new TextElement {Bold = true, Value = "One"});
+                lBuilder.AddItem(new TextElement {Value = "Two"});
+                lBuilder.AddItem(new TextElement {Bold = true, Value = "Three"});
+                lBuilder.AddItem(new[]
+                    {new TextElement("Meow"), new TextElement(" Woof ") {Bold = true}, new TextElement("Quack")});
+            });
 
             builder.AddHeading(hBuilder =>
             {
