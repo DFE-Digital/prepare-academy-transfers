@@ -105,6 +105,40 @@ namespace DocumentGeneration.Tests
             }
 
             [Fact]
+            public void GivenAddingParagraphWithItalicTextObject_GeneratesParagraphWithText()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement {Value = "Woof", Italic = true});
+                    });
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single(paragraphs);
+                Assert.Single(paragraphs[0].Descendants<Italic>());
+                Assert.Equal("Woof", paragraphs[0].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingParagraphWithUnderlineTextObject_GeneratesParagraphWithText()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement {Value = "Woof", Underline = true});
+                    });
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single(paragraphs);
+                Assert.Single(paragraphs[0].Descendants<Underline>());
+                Assert.Equal("Woof", paragraphs[0].InnerText);
+            }
+
+            [Fact]
             public void GivenAddingParagraphWithMultipleTextObjects_GeneratesParagraphWithText()
             {
                 var text = new[]
@@ -612,7 +646,7 @@ namespace DocumentGeneration.Tests
                 Assert.Equal("OneTwo", paragraphs[0].InnerText);
             }
         }
-        
+
         public class NumberedListTests : DocumentBuilderTests
         {
             [Fact]

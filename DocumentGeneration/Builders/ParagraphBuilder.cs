@@ -38,6 +38,17 @@ namespace DocumentGeneration.Builders
                 run.RunProperties.Bold = new Bold();
             }
 
+            if (text.Italic)
+            {
+                run.RunProperties.Italic = new Italic();
+            }
+
+            if (text.Underline)
+            {
+                run.RunProperties.Underline = new Underline
+                    {Val = new EnumValue<UnderlineValues>(UnderlineValues.Single), Color = "000000"};
+            }
+
             if (!string.IsNullOrEmpty(text.FontSize))
             {
                 run.RunProperties.FontSize = new FontSize {Val = text.FontSize};

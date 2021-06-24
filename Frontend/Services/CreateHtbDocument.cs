@@ -196,9 +196,13 @@ namespace Frontend.Services
                 lBuilder.AddItem(new TextElement {Value = "Two"});
                 lBuilder.AddItem(new TextElement {Bold = true, Value = "Three"});
                 lBuilder.AddItem(new[]
-                    {new TextElement("Meow"), new TextElement(" Woof ") {Bold = true}, new TextElement("Quack")});
+                {
+                    new TextElement("Meow") {Bold = true},
+                    new TextElement(" Woof ") {Bold = true, Italic = true},
+                    new TextElement("Quack") {Bold = true, Italic = true, Underline = true}
+                });
             });
-            
+
             builder.AddBulletedList(lBuilder =>
             {
                 lBuilder.AddItem(new TextElement {Bold = true, Value = "One"});
