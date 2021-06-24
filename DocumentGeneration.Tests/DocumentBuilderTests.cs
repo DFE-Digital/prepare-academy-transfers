@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml;
@@ -29,6 +30,32 @@ namespace DocumentGeneration.Tests
             }
 
             return documentBody;
+        }
+
+        private static GenerateDocumentResponse GenerateDocument(Action<IDocumentBuilder> action)
+        {
+            var ms = new MemoryStream();
+            var builder = new DocumentBuilder(ms);
+            action(builder);
+            builder.Build();
+
+            using var doc = WordprocessingDocument.Open(ms, false);
+
+            return new GenerateDocumentResponse
+            {
+                Numbering = doc.MainDocumentPart.NumberingDefinitionsPart.Numbering,
+                Headers = doc.MainDocumentPart.HeaderParts.Select(p => p.Header).ToList(),
+                FooterParts = doc.MainDocumentPart.FooterParts.Select(p => p.Footer).ToList(),
+                Body = doc.MainDocumentPart.Document.Body
+            };
+        }
+
+        private class GenerateDocumentResponse
+        {
+            public Body Body { get; set; }
+            public Numbering Numbering { get; set; }
+            public List<Header> Headers { get; set; }
+            public List<Footer> FooterParts { get; set; }
         }
 
         public class ParagraphTests : DocumentBuilderTests
@@ -74,6 +101,40 @@ namespace DocumentGeneration.Tests
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
                 Assert.Single(paragraphs);
                 Assert.Single(paragraphs[0].Descendants<Bold>());
+                Assert.Equal("Woof", paragraphs[0].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingParagraphWithItalicTextObject_GeneratesParagraphWithText()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement {Value = "Woof", Italic = true});
+                    });
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single(paragraphs);
+                Assert.Single(paragraphs[0].Descendants<Italic>());
+                Assert.Equal("Woof", paragraphs[0].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingParagraphWithUnderlineTextObject_GeneratesParagraphWithText()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddParagraph(pBuilder =>
+                    {
+                        pBuilder.AddText(new TextElement {Value = "Woof", Underline = true});
+                    });
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single(paragraphs);
+                Assert.Single(paragraphs[0].Descendants<Underline>());
                 Assert.Equal("Woof", paragraphs[0].InnerText);
             }
 
@@ -345,16 +406,13 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenHeaderHasText_GeneratesHeaderForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddHeader(hBuilder => { hBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
-                builder.Build();
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddHeader(hBuilder => { hBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                });
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var headers = doc.MainDocumentPart.HeaderParts.ToList();
-
-                Assert.Single(headers);
-                var header = headers[0].Header;
+                Assert.Single(response.Headers);
+                var header = response.Headers[0];
                 Assert.Single(header.Descendants<Paragraph>());
                 Assert.Equal("Meow", header.InnerText);
             }
@@ -362,18 +420,17 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenHeaderHasTable_GeneratesHeaderForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddHeader(hBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    hBuilder.AddTable(tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    builder.AddHeader(hBuilder =>
+                    {
+                        hBuilder.AddTable(
+                            tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    });
                 });
-                builder.Build();
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var headers = doc.MainDocumentPart.HeaderParts.ToList();
-                Assert.Single(headers);
-                var header = headers[0].Header;
+                Assert.Single(response.Headers);
+                var header = response.Headers[0];
                 Assert.Single(header.Descendants<Table>());
                 Assert.Single(header.Descendants<Paragraph>());
                 Assert.Equal("Meow", header.InnerText);
@@ -382,22 +439,20 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingATableByRows_GeneratesTheCorrectTable()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddHeader(hBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    var textElements = new[]
+                    builder.AddHeader(hBuilder =>
                     {
-                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
-                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
-                    };
-                    hBuilder.AddTable(textElements);
+                        var textElements = new[]
+                        {
+                            new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                            new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                        };
+                        hBuilder.AddTable(textElements);
+                    });
                 });
-                builder.Build();
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var headers = doc.MainDocumentPart.HeaderParts.ToList();
-                var header = headers[0].Header;
+                var header = response.Headers[0];
 
                 var tableRows = header.Descendants<TableRow>().ToList();
                 var tableCells = header.Descendants<TableCell>().ToList();
@@ -475,6 +530,234 @@ namespace DocumentGeneration.Tests
                 Assert.Equal(4, tableCells.Count);
                 Assert.Equal("OneTwo", tableRows[0].InnerText);
                 Assert.Equal("ThreeFour", tableRows[1].InnerText);
+            }
+        }
+
+        public class BulletedListTests : DocumentBuilderTests
+        {
+            [Fact]
+            public void GivenAddingOneBulletedList_CreatesASingleNumberingDefinitionAndAssignsThem()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder => { lBuilder.AddItem("One"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Descendants<NumberingFormat>().ToList();
+                var abstractNumDefinitions = numbering.Descendants<AbstractNum>().ToList();
+                var numberingInstances = numbering.Descendants<NumberingInstance>().ToList();
+                var paragraph = response.Body.Descendants<Paragraph>().First();
+
+                Assert.Single(abstractNumDefinitions);
+                Assert.Equal(NumberFormatValues.Bullet, numberingFormats[0].Val.Value);
+                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Single(numberingInstances);
+                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(0, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingTwoBulletedLists_CreatesTwoNumberingDefinitions()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder => { lBuilder.AddItem("One"); });
+                    builder.AddBulletedList(lBuilder => { lBuilder.AddItem("Two"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Descendants<NumberingFormat>().ToList();
+                var abstractNumDefinitions = numbering.Descendants<AbstractNum>().ToList();
+                var numberingInstances = numbering.Descendants<NumberingInstance>().ToList();
+
+                Assert.Equal(NumberFormatValues.Bullet, numberingFormats[0].Val.Value);
+                Assert.Equal(NumberFormatValues.Bullet, numberingFormats[1].Val.Value);
+                Assert.Equal(2, abstractNumDefinitions.Count);
+                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[1].AbstractNumberId.Value);
+                Assert.Equal(2, numberingInstances.Count);
+                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(1, (int) numberingInstances[1].AbstractNumId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingBulletedListWithStringItem_CreatesCorrectBulletedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder =>
+                    {
+                        lBuilder.AddItem("One");
+                        lBuilder.AddItem("Two");
+                        lBuilder.AddItem("Three");
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Equal(3, paragraphs.Count);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("One", paragraphs[0].InnerText);
+                Assert.Equal("Two", paragraphs[1].InnerText);
+                Assert.Equal("Three", paragraphs[2].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingBulletedListWithTextElementItem_CreatesCorrectBulletedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder =>
+                    {
+                        lBuilder.AddItem(new TextElement("One"));
+                        lBuilder.AddItem(new TextElement("Two"));
+                        lBuilder.AddItem(new TextElement("Three"));
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Equal(3, paragraphs.Count);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("One", paragraphs[0].InnerText);
+                Assert.Equal("Two", paragraphs[1].InnerText);
+                Assert.Equal("Three", paragraphs[2].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingBulletedListWithTextElementListItem_CreatesCorrectBulletedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder =>
+                    {
+                        lBuilder.AddItem(new[] {new TextElement("One"), new TextElement("Two")});
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Single(paragraphs);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("OneTwo", paragraphs[0].InnerText);
+            }
+        }
+
+        public class NumberedListTests : DocumentBuilderTests
+        {
+            [Fact]
+            public void GivenAddingOneNumberedList_CreatesASingleNumberingDefinitionAndAssignsThem()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder => { lBuilder.AddItem("One"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Descendants<NumberingFormat>().ToList();
+                var abstractNumDefinitions = numbering.Descendants<AbstractNum>().ToList();
+                var numberingInstances = numbering.Descendants<NumberingInstance>().ToList();
+                var paragraph = response.Body.Descendants<Paragraph>().First();
+
+                Assert.Single(abstractNumDefinitions);
+                Assert.Equal(NumberFormatValues.Decimal, numberingFormats[0].Val.Value);
+                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Single(numberingInstances);
+                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(0, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingTwoNumberedLists_CreatesTwoNumberingDefinitions()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder => { lBuilder.AddItem("One"); });
+                    builder.AddNumberedList(lBuilder => { lBuilder.AddItem("Two"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Descendants<NumberingFormat>().ToList();
+                var abstractNumDefinitions = numbering.Descendants<AbstractNum>().ToList();
+                var numberingInstances = numbering.Descendants<NumberingInstance>().ToList();
+
+                Assert.Equal(NumberFormatValues.Decimal, numberingFormats[0].Val.Value);
+                Assert.Equal(NumberFormatValues.Decimal, numberingFormats[1].Val.Value);
+                Assert.Equal(2, abstractNumDefinitions.Count);
+                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[1].AbstractNumberId.Value);
+                Assert.Equal(2, numberingInstances.Count);
+                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(1, (int) numberingInstances[1].AbstractNumId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingNumberedListWithStringItem_CreatesCorrectNumberedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder =>
+                    {
+                        lBuilder.AddItem("One");
+                        lBuilder.AddItem("Two");
+                        lBuilder.AddItem("Three");
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Equal(3, paragraphs.Count);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("One", paragraphs[0].InnerText);
+                Assert.Equal("Two", paragraphs[1].InnerText);
+                Assert.Equal("Three", paragraphs[2].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingNumberedListWithTextElementItem_CreatesCorrectNumberedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder =>
+                    {
+                        lBuilder.AddItem(new TextElement("One"));
+                        lBuilder.AddItem(new TextElement("Two"));
+                        lBuilder.AddItem(new TextElement("Three"));
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Equal(3, paragraphs.Count);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("One", paragraphs[0].InnerText);
+                Assert.Equal("Two", paragraphs[1].InnerText);
+                Assert.Equal("Three", paragraphs[2].InnerText);
+            }
+
+            [Fact]
+            public void GivenAddingNumberedListWithTextElementListItem_CreatesCorrectNumberedList()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder =>
+                    {
+                        lBuilder.AddItem(new[] {new TextElement("One"), new TextElement("Two")});
+                    });
+                });
+
+                var paragraphs = response.Body.Descendants<Paragraph>().ToList();
+
+                Assert.Single(paragraphs);
+                Assert.True(paragraphs.All(p =>
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                Assert.Equal("OneTwo", paragraphs[0].InnerText);
             }
         }
     }
