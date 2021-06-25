@@ -56,12 +56,23 @@ namespace DocumentGeneration.Helpers
                 return res.Append(elementsToGroup.Prepend("<p>").ToList()).ToList();
             }
 
+            if (!Regex.IsMatch(elementsToGroup[0], TopLevelElementOpenPattern))
+            {
+                var nextElements = elementsToGroup
+                    .TakeWhile(element => !Regex.IsMatch(element, TopLevelElementOpenPattern))
+                    .Prepend("<p>").ToList();
+                res.Add(nextElements);
+                
+                elementsToGroup = elementsToGroup
+                    .SkipWhile(element => !Regex.IsMatch(element, TopLevelElementOpenPattern))
+                    .ToList();
+            }
 
             while (elementsToGroup.Count > 0)
             {
                 List<string> nextElement;
                 (nextElement, elementsToGroup) = ParseNextTopLevelElement(elementsToGroup);
-                res = res.Append(nextElement).ToList();
+                res.Add(nextElement);
             }
 
             return res;

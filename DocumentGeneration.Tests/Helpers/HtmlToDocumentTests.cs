@@ -214,6 +214,16 @@ namespace DocumentGeneration.Tests.Helpers
             Assert.True(textElements[3].Underline);
             Assert.True(textElements[3].Italic);
         }
+
+        [Fact]
+        public void GivenStartOfHtmlDoesntContainTopLevelElement_RendersItInAParagraph()
+        {
+            const string html = "Meow<b>Woof<u>Quack<i>Moo</i></u></b><p>Second paragraph</p>";
+            HtmlToDocument.Convert(_builder, html);
+            
+            Assert.Equal(2, _builder.AddedParagraphs.Count);
+            Assert.Equal("MeowWoofQuackMoo", GetParagraphText(_builder.AddedParagraphs[0]));
+        }
     }
 
     public class ParagraphBuilderFake : IParagraphBuilder
@@ -344,6 +354,11 @@ namespace DocumentGeneration.Tests.Helpers
         }
 
         public void AddHeader(Action<IHeaderBuilder> action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddFooter(Action<IFooterBuilder> action)
         {
             throw new NotImplementedException();
         }
