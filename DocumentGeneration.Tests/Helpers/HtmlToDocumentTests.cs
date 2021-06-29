@@ -236,6 +236,47 @@ namespace DocumentGeneration.Tests.Helpers
             Assert.Equal(2, _builder.AddedParagraphs.Count);
             Assert.Equal("MeowWoofQuackMoo", GetParagraphText(_builder.AddedParagraphs[0]));
         }
+
+        [Fact]
+        public void GivenTextNotContainedWithinParagraphMidText_RendersItInAParagraph()
+        {
+            const string html = "<p>Opening paragraph</p>Meow<b>Woof<u>Quack<i>Moo</i></u></b><p>Second paragraph</p>";
+            HtmlToDocument.Convert(_builder, html);
+
+            Assert.Equal(3, _builder.AddedParagraphs.Count);
+            Assert.Equal("MeowWoofQuackMoo", GetParagraphText(_builder.AddedParagraphs[1]));
+        }
+
+        [Fact]
+        public void GivenDivsAsParagraphs_RenderAsParagraphs()
+        {
+            const string html = "<div>Meow</div><div>Woof</div>";
+            HtmlToDocument.Convert(_builder, html);
+
+            Assert.Equal(2, _builder.AddedParagraphs.Count);
+            Assert.Equal("Meow", GetParagraphText(_builder.AddedParagraphs[0]));
+            Assert.Equal("Woof", GetParagraphText(_builder.AddedParagraphs[1]));
+        }
+
+        [Fact]
+        public void GivenDivsWithNestedElements_RenderNestedElements()
+        {
+            const string html = "<div>meow</div><div><ul><li>woof</li></ul></div>";
+            HtmlToDocument.Convert(_builder, html);
+            Assert.Single(_builder.AddedParagraphs);
+            Assert.Single(_builder.AddedLists);
+            Assert.Single(_builder.AddedLists[0].AddedItems);
+            Assert.Equal("woof", _builder.AddedLists[0].AddedItems[0][0].Value);
+        }
+        
+        [Fact]
+        public void GivenSpanWithAttributesAroundText_RenderParagraphWithoutThem()
+        {
+            const string html = "<div><span style='color:#ff69b4'>meow</span></div>";
+            HtmlToDocument.Convert(_builder, html);
+            Assert.Single(_builder.AddedParagraphs);
+            Assert.Equal("meow", GetParagraphText(_builder.AddedParagraphs[0]));
+        }
     }
 
     public class ParagraphBuilderFake : IParagraphBuilder

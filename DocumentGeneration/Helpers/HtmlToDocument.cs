@@ -9,8 +9,8 @@ namespace DocumentGeneration.Helpers
 {
     public static class HtmlToDocument
     {
-        private const string ElementPattern = @"(<\/?(?:ol|ul|b|i|u|p|li|br)>)";
-        private const string TopLevelElementOpenPattern = @"<(?:ol|ul|p)>";
+        private const string ElementPattern = @"(</?.*?>)";
+        private const string TopLevelElementOpenPattern = @"<(?:ol|ul|p|div)>";
 
         public static void Convert(IDocumentBuilder builder, string html)
         {
@@ -19,7 +19,8 @@ namespace DocumentGeneration.Helpers
                 return;
             }
 
-            var res = SplitHtmlIntoTopLevelElements(html);
+            var elements = SplitHtmlIntoElements(html);
+            var res = SplitHtmlIntoTopLevelElements(elements);
             BuildDocumentFromTopLevelElements(builder, res);
         }
 
@@ -35,6 +36,11 @@ namespace DocumentGeneration.Helpers
                             BuildParagraphFromElements(pBuilder, elementList.Skip(1).ToList());
                         });
                         break;
+                    case "<div>":
+                        var elements = elementList.Skip(1).ToList();
+                        var topLevelElements = SplitHtmlIntoTopLevelElements(elements);
+                        BuildDocumentFromTopLevelElements(builder, topLevelElements);
+                        break;
                     case "<ul>":
                         builder.AddBulletedList(lBuilder =>
                         {
@@ -47,13 +53,15 @@ namespace DocumentGeneration.Helpers
                             BuildListFromElements(lBuilder, elementList.Skip(1).ToList());
                         });
                         break;
+                    default:
+                        builder.AddParagraph(pBuilder => { BuildParagraphFromElements(pBuilder, elementList); });
+                        break;
                 }
             }
         }
 
-        private static List<List<string>> SplitHtmlIntoTopLevelElements(string html)
+        private static List<List<string>> SplitHtmlIntoTopLevelElements(List<string> elementsToGroup)
         {
-            var elementsToGroup = SplitHtmlIntoElements(html);
             var res = new List<List<string>>();
 
             if (!elementsToGroup.Any(element => Regex.IsMatch(element, TopLevelElementOpenPattern)))
@@ -134,7 +142,11 @@ namespace DocumentGeneration.Helpers
                         pBuilder.AddNewLine();
                         break;
                     default:
-                        AddTextElementToParagraph(pBuilder, element, tagsEnabled);
+                        if (!Regex.IsMatch(element, ElementPattern))
+                        {
+                            AddTextElementToParagraph(pBuilder, element, tagsEnabled);
+                        }
+
                         break;
                 }
             }
@@ -162,7 +174,15 @@ namespace DocumentGeneration.Helpers
             var remaining = elements.Skip(1).ToList();
             if (!Regex.IsMatch(next, TopLevelElementOpenPattern))
             {
-                return (new List<string> {next}, remaining);
+                var nextElements = remaining
+                    .TakeWhile(word => !Regex.IsMatch(word, TopLevelElementOpenPattern))
+                    .Prepend(next)
+                    .ToList();
+                var leftover = remaining
+                    .SkipWhile(word => !Regex.IsMatch(word, TopLevelElementOpenPattern))
+                    .ToList();
+
+                return (nextElements, leftover);
             }
 
             var closingTag = next.Insert(1, "/");
