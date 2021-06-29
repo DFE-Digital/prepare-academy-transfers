@@ -14,6 +14,11 @@ namespace DocumentGeneration.Helpers
 
         public static void Convert(IDocumentBuilder builder, string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return;
+            }
+
             var res = SplitHtmlIntoTopLevelElements(html);
             BuildDocumentFromTopLevelElements(builder, res);
         }
@@ -62,7 +67,7 @@ namespace DocumentGeneration.Helpers
                     .TakeWhile(element => !Regex.IsMatch(element, TopLevelElementOpenPattern))
                     .Prepend("<p>").ToList();
                 res.Add(nextElements);
-                
+
                 elementsToGroup = elementsToGroup
                     .SkipWhile(element => !Regex.IsMatch(element, TopLevelElementOpenPattern))
                     .ToList();

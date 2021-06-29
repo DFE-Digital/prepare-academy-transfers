@@ -23,8 +23,20 @@ namespace DocumentGeneration.Tests.Helpers
         }
 
         [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void GivenEmptyOrNull_BuildsNothing(string text)
+        {
+            HtmlToDocument.Convert(_builder, text);
+
+            Assert.Empty(_builder.AddedParagraphs);
+            Assert.Empty(_builder.AddedLists);
+        }
+
+        [Theory]
         [InlineData("Meow woof quack")]
         [InlineData("Moo quack cluck")]
+        [InlineData("     ")]
         public void GivenParagraph_GeneratesParagraph(string text)
         {
             var html = $"<p>{text}</p>";
@@ -220,7 +232,7 @@ namespace DocumentGeneration.Tests.Helpers
         {
             const string html = "Meow<b>Woof<u>Quack<i>Moo</i></u></b><p>Second paragraph</p>";
             HtmlToDocument.Convert(_builder, html);
-            
+
             Assert.Equal(2, _builder.AddedParagraphs.Count);
             Assert.Equal("MeowWoofQuackMoo", GetParagraphText(_builder.AddedParagraphs[0]));
         }
