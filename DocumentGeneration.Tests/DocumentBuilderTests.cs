@@ -551,10 +551,10 @@ namespace DocumentGeneration.Tests
 
                 Assert.Single(abstractNumDefinitions);
                 Assert.Equal(NumberFormatValues.Bullet, numberingFormats[0].Val.Value);
-                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[0].AbstractNumberId.Value);
                 Assert.Single(numberingInstances);
-                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
-                Assert.Equal(0, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
+                Assert.Equal(1, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(1, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
             }
 
             [Fact]
@@ -574,11 +574,31 @@ namespace DocumentGeneration.Tests
                 Assert.Equal(NumberFormatValues.Bullet, numberingFormats[0].Val.Value);
                 Assert.Equal(NumberFormatValues.Bullet, numberingFormats[1].Val.Value);
                 Assert.Equal(2, abstractNumDefinitions.Count);
-                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
-                Assert.Equal(1, abstractNumDefinitions[1].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(2, abstractNumDefinitions[1].AbstractNumberId.Value);
                 Assert.Equal(2, numberingInstances.Count);
-                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
-                Assert.Equal(1, (int) numberingInstances[1].AbstractNumId.Val);
+                Assert.Equal(1, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(2, (int) numberingInstances[1].AbstractNumId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingTwoBulletedLists_CreatesTwoNumberingDefinitionsInTheCorrectOrder()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddBulletedList(lBuilder => { lBuilder.AddItem("One"); });
+                    builder.AddBulletedList(lBuilder => { lBuilder.AddItem("Two"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Elements().ToList();
+                Assert.IsType<AbstractNum>(numberingFormats[0]);
+                Assert.IsType<AbstractNum>(numberingFormats[1]);
+
+                var abstractNumOne = Assert.IsType<NumberingInstance>(numberingFormats[2]);
+                Assert.Equal(1, (int) abstractNumOne.AbstractNumId.Val);
+                var abstractNumTwo = Assert.IsType<NumberingInstance>(numberingFormats[3]);
+                Assert.Equal(2, (int) abstractNumTwo.AbstractNumId.Val);
             }
 
             [Fact]
@@ -598,7 +618,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Equal(3, paragraphs.Count);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("One", paragraphs[0].InnerText);
                 Assert.Equal("Two", paragraphs[1].InnerText);
                 Assert.Equal("Three", paragraphs[2].InnerText);
@@ -621,7 +641,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Equal(3, paragraphs.Count);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("One", paragraphs[0].InnerText);
                 Assert.Equal("Two", paragraphs[1].InnerText);
                 Assert.Equal("Three", paragraphs[2].InnerText);
@@ -642,7 +662,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Single(paragraphs);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("OneTwo", paragraphs[0].InnerText);
             }
         }
@@ -665,10 +685,10 @@ namespace DocumentGeneration.Tests
 
                 Assert.Single(abstractNumDefinitions);
                 Assert.Equal(NumberFormatValues.Decimal, numberingFormats[0].Val.Value);
-                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[0].AbstractNumberId.Value);
                 Assert.Single(numberingInstances);
-                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
-                Assert.Equal(0, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
+                Assert.Equal(1, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(1, (int) paragraph.ParagraphProperties.NumberingProperties.NumberingId.Val);
             }
 
             [Fact]
@@ -688,11 +708,31 @@ namespace DocumentGeneration.Tests
                 Assert.Equal(NumberFormatValues.Decimal, numberingFormats[0].Val.Value);
                 Assert.Equal(NumberFormatValues.Decimal, numberingFormats[1].Val.Value);
                 Assert.Equal(2, abstractNumDefinitions.Count);
-                Assert.Equal(0, abstractNumDefinitions[0].AbstractNumberId.Value);
-                Assert.Equal(1, abstractNumDefinitions[1].AbstractNumberId.Value);
+                Assert.Equal(1, abstractNumDefinitions[0].AbstractNumberId.Value);
+                Assert.Equal(2, abstractNumDefinitions[1].AbstractNumberId.Value);
                 Assert.Equal(2, numberingInstances.Count);
-                Assert.Equal(0, (int) numberingInstances[0].AbstractNumId.Val);
-                Assert.Equal(1, (int) numberingInstances[1].AbstractNumId.Val);
+                Assert.Equal(1, (int) numberingInstances[0].AbstractNumId.Val);
+                Assert.Equal(2, (int) numberingInstances[1].AbstractNumId.Val);
+            }
+
+            [Fact]
+            public void GivenAddingTwoNumberedLists_CreatesTwoNumberingDefinitionsInTheCorrectOrder()
+            {
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddNumberedList(lBuilder => { lBuilder.AddItem("One"); });
+                    builder.AddNumberedList(lBuilder => { lBuilder.AddItem("Two"); });
+                });
+
+                var numbering = response.Numbering;
+                var numberingFormats = numbering.Elements().ToList();
+                Assert.IsType<AbstractNum>(numberingFormats[0]);
+                Assert.IsType<AbstractNum>(numberingFormats[1]);
+
+                var abstractNumOne = Assert.IsType<NumberingInstance>(numberingFormats[2]);
+                Assert.Equal(1, (int) abstractNumOne.AbstractNumId.Val);
+                var abstractNumTwo = Assert.IsType<NumberingInstance>(numberingFormats[3]);
+                Assert.Equal(2, (int) abstractNumTwo.AbstractNumId.Val);
             }
 
             [Fact]
@@ -712,7 +752,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Equal(3, paragraphs.Count);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("One", paragraphs[0].InnerText);
                 Assert.Equal("Two", paragraphs[1].InnerText);
                 Assert.Equal("Three", paragraphs[2].InnerText);
@@ -735,7 +775,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Equal(3, paragraphs.Count);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("One", paragraphs[0].InnerText);
                 Assert.Equal("Two", paragraphs[1].InnerText);
                 Assert.Equal("Three", paragraphs[2].InnerText);
@@ -756,7 +796,7 @@ namespace DocumentGeneration.Tests
 
                 Assert.Single(paragraphs);
                 Assert.True(paragraphs.All(p =>
-                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 0));
+                    p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("OneTwo", paragraphs[0].InnerText);
             }
         }

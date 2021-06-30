@@ -75,6 +75,11 @@ namespace DocumentGeneration.Builders
             }
         }
 
+        public void AddNewLine()
+        {
+            _parent.AppendChild(new Run(new Break()));
+        }
+
         public void Justify(ParagraphJustification paragraphJustification)
         {
             var justification = new Justification();

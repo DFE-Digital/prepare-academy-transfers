@@ -1,3 +1,4 @@
+using System;
 using DocumentGeneration.Elements;
 
 namespace DocumentGeneration.Interfaces
@@ -7,5 +8,6 @@ namespace DocumentGeneration.Interfaces
         public void AddItem(TextElement item);
         public void AddItem(string item);
         public void AddItem(TextElement[] elements);
+        public void AddItem(Action<IParagraphBuilder> action);
     }
 }
