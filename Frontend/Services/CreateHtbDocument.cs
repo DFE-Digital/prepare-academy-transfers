@@ -5,10 +5,8 @@ using Data;
 using Data.Models;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
-using DocumentGeneration.Helpers;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Frontend.Services
 {
@@ -190,13 +188,6 @@ namespace Frontend.Services
                 hBuilder.AddText("Rationale for the project");
             });
 
-            builder.AddParagraph(pBuilder =>
-            {
-                pBuilder.AddText("Meow");
-                pBuilder.AddNewLine();
-                pBuilder.AddText("Meow");
-            });
-
             builder.AddParagraph(pBuilder => pBuilder.AddText(project.Rationale.Project));
 
             builder.AddNumberedList(lBuilder =>
@@ -208,7 +199,6 @@ namespace Frontend.Services
                 {
                     new TextElement("Meow") {Bold = true},
                     new TextElement(" Woof ") {Bold = true, Italic = true},
-                    new TextElement("\n") {Bold = true, Italic = true},
                     new TextElement("Quack") {Bold = true, Italic = true, Underline = true}
                 });
             });
@@ -228,10 +218,6 @@ namespace Frontend.Services
                 hBuilder.AddText("Rationale for the trust or sponsor");
             });
 
-
-            var html =
-                "<ul><li><u><i>dad</i>w<i>ad<b>wa</b></i></u></li></ul><p><b>d</b>wdad<i>w</i>adaw</p><ol><li>ad<i>wa</i>wdaw<br></li></ol><p><br></p>";
-            HtmlToDocument.Convert(builder, html);
             builder.AddParagraph(pBuilder => pBuilder.AddText(project.Rationale.Trust));
         }
 
