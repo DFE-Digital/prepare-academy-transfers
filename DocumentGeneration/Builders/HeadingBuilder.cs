@@ -32,7 +32,7 @@ namespace DocumentGeneration.Builders
             text.FontSize = HeadingLevelToFontSize();
             text.Colour = "104f75";
             builder.AddText(text);
-            _parent.AppendChild(paragraph);
+            _parent.AppendChild(builder.Build());
         }
 
         private string HeadingLevelToFontSize()

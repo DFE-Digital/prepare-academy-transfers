@@ -40,7 +40,7 @@ namespace DocumentGeneration
             var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
             action(builder);
         }
-        
+
         public void AddBulletedList(Action<IListBuilder> action)
         {
             var builder = new BulletedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
@@ -49,12 +49,9 @@ namespace DocumentGeneration
 
         public void AddParagraph(Action<IParagraphBuilder> action)
         {
-            var paragraph = new Paragraph();
-            var builder = new ParagraphBuilder(paragraph);
-
+            var builder = new ParagraphBuilder();
             action(builder);
-
-            _body.AppendChild(paragraph);
+            _body.AppendChild(builder.Build());
         }
 
         public void AddTable(Action<ITableBuilder> action)

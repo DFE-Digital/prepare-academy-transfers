@@ -17,10 +17,9 @@ namespace DocumentGeneration.Builders
 
         public void AddParagraph(Action<IParagraphBuilder> action)
         {
-            var paragraph = new Paragraph();
-            var builder = new ParagraphBuilder(paragraph);
+            var builder = new ParagraphBuilder();
             action(builder);
-            _header.AppendChild(paragraph);
+            _header.AppendChild(builder.Build());
         }
 
         public void AddTable(Action<ITableBuilder> action)

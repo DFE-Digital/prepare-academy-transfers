@@ -22,11 +22,9 @@ namespace DocumentGeneration.Builders
         public void AddCell(TextElement textElement)
         {
             var tableCell = new TableCell();
-            var paragraph = new Paragraph();
-            var paragraphBuilder = new ParagraphBuilder(paragraph);
+            var paragraphBuilder = new ParagraphBuilder();
             paragraphBuilder.AddText(textElement);
-
-            tableCell.AppendChild(paragraph);
+            tableCell.AppendChild(paragraphBuilder.Build());
             _parent.AppendChild(tableCell);
         }
 

@@ -30,7 +30,7 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             action(paragraphBuilder);
-            Parent.AppendChild(paragraph);
+            Parent.AppendChild(paragraphBuilder.Build());
         }
 
         public void AddItem(string item)
@@ -54,7 +54,7 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             paragraphBuilder.AddText(item);
-            Parent.AppendChild(paragraph);
+            Parent.AppendChild(paragraphBuilder.Build());
         }
 
         public void AddItem(TextElement[] elements)
@@ -72,7 +72,7 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             paragraphBuilder.AddText(elements);
-            Parent.AppendChild(paragraph);
+            Parent.AppendChild(paragraphBuilder.Build());
         }
         
         protected void AddNumberingDefinitions(AbstractNum abstractNum, NumberingInstance numberingInstance)
