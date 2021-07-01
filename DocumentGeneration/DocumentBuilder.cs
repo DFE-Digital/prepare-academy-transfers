@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -15,7 +16,14 @@ namespace DocumentGeneration
     {
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
-        private MemoryStream _ms;
+        private readonly MemoryStream _ms;
+
+        public static DocumentBuilder CreateFromTemplate<TDocument>(MemoryStream stream, TDocument document)
+        {
+            var builder = new DocumentBuilder(stream);
+            builder.PopulateTemplateWithDocument(document);
+            return builder;
+        }
 
         public DocumentBuilder()
         {
@@ -27,6 +35,13 @@ namespace DocumentGeneration
             SetCompatibilityMode();
             AddNumberingDefinitions();
             AppendSectionProperties();
+        }
+
+        private DocumentBuilder(MemoryStream ms)
+        {
+            _ms = ms;
+            _document = WordprocessingDocument.Open(ms, true);
+            _body = _document.MainDocumentPart.Document.Body;
         }
 
         private void AddNumberingDefinitions()
@@ -51,6 +66,13 @@ namespace DocumentGeneration
         {
             var builder = new ParagraphBuilder();
             action(builder);
+            _body.AppendChild(builder.Build());
+        }
+
+        public void AddParagraph(string text)
+        {
+            var builder = new ParagraphBuilder();
+            builder.AddText(text);
             _body.AppendChild(builder.Build());
         }
 
@@ -173,6 +195,48 @@ namespace DocumentGeneration
                 Right = 1080
             };
             props.AppendChild(pageMargin);
+        }
+
+        private void PopulateTemplateWithDocument<TDocument>(TDocument document)
+        {
+            var texts = GetAllText();
+            var properties = GetProperties<TDocument>();
+
+            foreach (var text in texts)
+            {
+                var property = properties.FirstOrDefault(p =>
+                    text.InnerText.Contains($"{p.GetCustomAttribute<DocumentTextAttribute>()?.Placeholder}",
+                        StringComparison.OrdinalIgnoreCase));
+
+                if (property == null) continue;
+
+                var attribute = property.GetCustomAttribute<DocumentTextAttribute>();
+
+                if (attribute == null) continue;
+
+                text.Text = text.Text.Replace(
+                    attribute.Placeholder,
+                    property.GetValue(document)?.ToString(),
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            IEnumerable<Text> GetAllText()
+            {
+                var footerParts = _document.MainDocumentPart.FooterParts
+                    .Where(fp => fp.Footer != null)
+                    .SelectMany(fp => fp.Footer?.Descendants<Text>());
+                return _document.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Concat(footerParts)
+                    .ToHashSet();
+            }
+        }
+
+        private PropertyInfo[] GetProperties<TDocument>()
+        {
+            return typeof(TDocument).GetProperties()
+                .Where(p => p.GetCustomAttribute<DocumentTextAttribute>() != null)
+                .ToArray();
         }
     }
 }
