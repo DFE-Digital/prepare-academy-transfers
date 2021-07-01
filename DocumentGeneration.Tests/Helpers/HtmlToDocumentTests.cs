@@ -416,7 +416,7 @@ namespace DocumentGeneration.Tests.Helpers
             throw new NotImplementedException();
         }
 
-        public void Build()
+        public byte[] Build()
         {
             throw new NotImplementedException();
         }

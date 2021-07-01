@@ -15,10 +15,12 @@ namespace DocumentGeneration
     {
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
+        private MemoryStream _ms;
 
-        public DocumentBuilder(Stream stream)
+        public DocumentBuilder()
         {
-            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
+            _ms = new MemoryStream();
+            _document = WordprocessingDocument.Create(_ms, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
@@ -103,10 +105,11 @@ namespace DocumentGeneration
             footer.Save(footerPart);
         }
 
-        public void Build()
+        public byte[] Build()
         {
             _document.Save();
             _document.Close();
+            return _ms.ToArray();
         }
 
         private void SetCompatibilityMode()

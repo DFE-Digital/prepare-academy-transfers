@@ -10,6 +10,6 @@ namespace DocumentGeneration.Interfaces
         public void AddBulletedList(Action<IListBuilder> action);
         public void AddHeader(Action<IHeaderBuilder> action);
         public void AddFooter(Action<IFooterBuilder> action);
-        public void Build();
+        public byte[] Build();
     }
 }

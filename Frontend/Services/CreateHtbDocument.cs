@@ -39,25 +39,18 @@ namespace Frontend.Services
             var project = projectResult.Result;
             var academy = academyResult.Result;
 
-            MemoryStream ms;
+            var builder = new DocumentBuilder();
 
-            await using (ms = new MemoryStream())
-            {
-                var builder = new DocumentBuilder(ms);
-
-                HeaderAndFooter(builder);
-                Title(builder, academy);
-                IntroductorySection(builder, academy, project);
-                GeneralInformation(builder, academy);
-                Rationale(builder, project);
-                KeyStagePerformanceInformation(builder, academy);
-
-                builder.Build();
-            }
+            HeaderAndFooter(builder);
+            Title(builder, academy);
+            IntroductorySection(builder, academy, project);
+            GeneralInformation(builder, academy);
+            Rationale(builder, project);
+            KeyStagePerformanceInformation(builder, academy);
 
             var successResponse = new CreateHtbDocumentResponse
             {
-                Document = ms.ToArray()
+                Document = builder.Build()
             };
             return successResponse;
         }

@@ -16,36 +16,29 @@ namespace DocumentGeneration.Tests
     {
         private static Body GenerateDocumentBody(Action<IDocumentBuilder> action)
         {
-            Body documentBody;
-            using (var ms = new MemoryStream())
-            {
-                var builder = new DocumentBuilder(ms);
-                action(builder);
-                builder.Build();
+            var builder = new DocumentBuilder();
+            action(builder);
+            var res = builder.Build();
 
-                using (var doc = WordprocessingDocument.Open(ms, false))
-                {
-                    documentBody = doc.MainDocumentPart.Document.Body;
-                }
-            }
+            using var ms = new MemoryStream(res);
+            using var doc = WordprocessingDocument.Open(ms, false);
+            var documentBody = doc.MainDocumentPart.Document.Body;
 
             return documentBody;
         }
 
         private static GenerateDocumentResponse GenerateDocument(Action<IDocumentBuilder> action)
         {
-            var ms = new MemoryStream();
-            var builder = new DocumentBuilder(ms);
+            var builder = new DocumentBuilder();
             action(builder);
-            builder.Build();
-
+            var res = builder.Build();
+            using var ms = new MemoryStream(res);
             using var doc = WordprocessingDocument.Open(ms, false);
-
             return new GenerateDocumentResponse
             {
                 Numbering = doc.MainDocumentPart.NumberingDefinitionsPart.Numbering,
                 Headers = doc.MainDocumentPart.HeaderParts.Select(p => p.Header).ToList(),
-                FooterParts = doc.MainDocumentPart.FooterParts.Select(p => p.Footer).ToList(),
+                Footers = doc.MainDocumentPart.FooterParts.Select(p => p.Footer).ToList(),
                 Body = doc.MainDocumentPart.Document.Body
             };
         }
@@ -55,7 +48,7 @@ namespace DocumentGeneration.Tests
             public Body Body { get; set; }
             public Numbering Numbering { get; set; }
             public List<Header> Headers { get; set; }
-            public List<Footer> FooterParts { get; set; }
+            public List<Footer> Footers { get; set; }
         }
 
         public class ParagraphTests : DocumentBuilderTests
@@ -469,60 +462,53 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenFooterHasText_GeneratesFooterForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder => { fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
-                builder.Build();
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddFooter(fBuilder => { fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                });
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
+                var footers = response.Footers;
 
                 Assert.Single(footers);
-                var footer = footers[0].Footer;
-                Assert.Single(footer.Descendants<Paragraph>());
-                Assert.Equal("Meow", footer.InnerText);
+                Assert.Single(footers[0].Descendants<Paragraph>());
+                Assert.Equal("Meow", footers[0].InnerText);
             }
 
             [Fact]
             public void GivenFooterHasTable_GeneratesFooterForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    fBuilder.AddTable(tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    builder.AddFooter(fBuilder =>
+                    {
+                        fBuilder.AddTable(
+                            tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    });
                 });
-                builder.Build();
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
-                Assert.Single(footers);
-                var footer = footers[0].Footer;
-                Assert.Single(footer.Descendants<Table>());
-                Assert.Single(footer.Descendants<Paragraph>());
-                Assert.Equal("Meow", footer.InnerText);
+                var footers = response.Footers;
+                Assert.Single(footers[0].Descendants<Table>());
+                Assert.Single(footers[0].Descendants<Paragraph>());
+                Assert.Equal("Meow", footers[0].InnerText);
             }
 
             [Fact]
             public void GivenAddingATableByRows_GeneratesTheCorrectTable()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    var textElements = new[]
+                    builder.AddFooter(fBuilder =>
                     {
-                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
-                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
-                    };
-                    fBuilder.AddTable(textElements);
+                        var textElements = new[]
+                        {
+                            new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                            new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                        };
+                        fBuilder.AddTable(textElements);
+                    });
                 });
-                builder.Build();
-
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
-                var footer = footers[0].Footer;
-
+                
+                var footer = response.Footers[0];
                 var tableRows = footer.Descendants<TableRow>().ToList();
                 var tableCells = footer.Descendants<TableCell>().ToList();
 
