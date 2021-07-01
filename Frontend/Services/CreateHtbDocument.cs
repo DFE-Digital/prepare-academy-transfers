@@ -1,10 +1,13 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
+using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -21,7 +24,68 @@ namespace Frontend.Services
             _academiesRepository = academiesRepository;
         }
 
+        private MemoryStream CreateMemoryStream(string template)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.Contains(template, StringComparison.OrdinalIgnoreCase));
+            using var templateStream = assembly.GetManifestResourceStream(resourceName);
+            var ms = new MemoryStream();
+            templateStream.CopyTo(ms);
+            return ms;
+        }
+
         public async Task<CreateHtbDocumentResponse> Execute(string projectUrn)
+        {
+            var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+            if (!projectResult.IsValid)
+            {
+                return CreateErrorResponse(projectResult.Error);
+            }
+
+            var projectAcademy = projectResult.Result.TransferringAcademies.First();
+            var academyResult = await _academiesRepository.GetAcademyByUkprn(projectAcademy.OutgoingAcademyUkprn);
+            if (!academyResult.IsValid)
+            {
+                return CreateErrorResponse(academyResult.Error);
+            }
+
+            var project = projectResult.Result;
+            var academy = academyResult.Result;
+            
+            var htbDocument = new HtbDocument
+            {
+                SchoolName = academy.Name,
+                SchoolUrn =  academy.Urn,
+                TrustName = project.OutgoingTrustName,
+                TrustReferenceNumber = project.OutgoingTrustUkprn,
+                SchoolType = academy.EstablishmentType,
+                SchoolPhase = academy.Performance.SchoolPhase,
+                AgeRange = academy.Performance.AgeRange,
+                SchoolCapacity = academy.Performance.Capacity,
+                PublishedAdmissionNumber = academy.Performance.Pan,
+                NumberOnRoll = academy.Performance.NumberOnRoll,
+                PercentageSchoolFull = academy.Performance.PercentageFull,
+                PercentageFreeSchoolMeals = academy.PupilNumbers.EligibleForFreeSchoolMeals,
+                OfstedLastInspection = academy.LatestOfstedJudgement.InspectionDate,
+                OverallEffectiveness = academy.Performance.OfstedRating,
+                RationaleForProject = project.Rationale.Project,
+                RationaleForTrust = project.Rationale.Trust,
+                Author = "Author name",
+                ClearedBy = "Cleared by",
+                Version = "Version"
+            };
+
+            var ms = CreateMemoryStream("htb-template");
+            var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);
+
+            return new CreateHtbDocumentResponse
+            {
+                Document = builder.Build()
+            };
+        }
+
+        public async Task<CreateHtbDocumentResponse> XExecute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
             if (!projectResult.IsValid)

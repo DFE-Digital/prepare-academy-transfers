@@ -33,4 +33,8 @@
   <ItemGroup>
     <Folder Include="Models\Projects" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\htb-template.docx" />
+    <EmbeddedResource Include="Resources\htb-template.docx" />
+  </ItemGroup>
 </Project>
