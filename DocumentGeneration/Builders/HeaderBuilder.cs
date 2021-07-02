@@ -6,13 +6,13 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class HeaderBuilder : IHeaderBuilder
+    public class HeaderBuilder : IHeaderBuilder, IElementBuilder<Header>
     {
         private readonly Header _header;
 
-        public HeaderBuilder(Header header)
+        public HeaderBuilder()
         {
-            _header = header;
+            _header = new Header();
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
@@ -38,6 +38,11 @@ namespace DocumentGeneration.Builders
             }
 
             _header.AppendChild(builder.Build());
+        }
+
+        public Header Build()
+        {
+            return _header;
         }
     }
 }

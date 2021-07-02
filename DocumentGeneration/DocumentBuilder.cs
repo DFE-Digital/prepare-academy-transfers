@@ -106,20 +106,18 @@ namespace DocumentGeneration
         {
             var headerPart = _document.MainDocumentPart.HeaderParts.First();
 
-            var header = new Header();
-            var builder = new HeaderBuilder(header);
+            var builder = new HeaderBuilder();
             action(builder);
-            header.Save(headerPart);
+            builder.Build().Save(headerPart);
         }
 
         public void AddFooter(Action<IFooterBuilder> action)
         {
             var footerPart = _document.MainDocumentPart.FooterParts.First();
 
-            var footer = new Footer();
-            var builder = new FooterBuilder(footer);
+            var builder = new FooterBuilder();
             action(builder);
-            footer.Save(footerPart);
+            builder.Build().Save(footerPart);
         }
 
         public byte[] Build()

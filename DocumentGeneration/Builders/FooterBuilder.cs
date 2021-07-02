@@ -6,13 +6,13 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class FooterBuilder : IFooterBuilder
+    public class FooterBuilder : IFooterBuilder, IElementBuilder<Footer>
     {
         private readonly Footer _footer;
 
-        public FooterBuilder(Footer footer)
+        public FooterBuilder()
         {
-            _footer = footer;
+            _footer = new Footer();
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
@@ -38,6 +38,11 @@ namespace DocumentGeneration.Builders
             }
 
             _footer.AppendChild(builder.Build());
+        }
+
+        public Footer Build()
+        {
+            return _footer;
         }
     }
 }
