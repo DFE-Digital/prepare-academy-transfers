@@ -56,6 +56,13 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
+                            <a class="govuk-link" aria-describedby="academyandtrustinformation" asp-controller="AcademyAndTrustInformation" asp-action="Index" asp-route-urn="@Model.Project.Urn">
+                                Academy and trust information and project dates
+                            </a>
+                        </span><projectstatus id="academyandtrustinformation" , status="@Model.AcademyAndTrustInformationStatus()"></projectstatus>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="academy-performance" asp-controller="AcademyPerformance" asp-action="Index" asp-route-id="@Model.Project.Urn">
                                 Academy performance
                             </a>

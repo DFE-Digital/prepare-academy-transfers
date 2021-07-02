@@ -21,7 +21,17 @@ namespace Data.TRAMS.Mappers.Request
                 Benefits = Benefits(input),
                 Dates = Dates(input),
                 Features = Features(input),
-                Rationale = Rationale(input)
+                Rationale = Rationale(input),
+                GeneralInformation = GeneralInformation(input)
+            };
+        }
+
+        private AcademyTransferProjectAcademyAndTrustInformation GeneralInformation(Project input)
+        {
+            return new AcademyTransferProjectAcademyAndTrustInformation
+            {
+                Author = input.AcademyAndTrustInformation.Author,
+                Recommendation = input.AcademyAndTrustInformation.Recommendation.ToString()
             };
         }
 

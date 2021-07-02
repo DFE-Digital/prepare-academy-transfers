@@ -57,6 +57,11 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     ProjectRationale = "Project rationale",
                     TrustSponsorRationale = "Trust rationale"
                 },
+                GeneralInformation = new AcademyTransferProjectAcademyAndTrustInformation
+                {
+                    Author = "Author",
+                    Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve.ToString()
+                },
                 State = "State",
                 Status = "Status",
                 OutgoingTrust = new TrustSummary
@@ -98,7 +103,16 @@ namespace Data.TRAMS.Tests.Mappers.Response
             AssertDatesCorrect(toMap, result);
             AssertFeaturesCorrect(toMap, result);
             AssertRationaleCorrect(toMap, result);
+            AssertGeneralInformationCorrect(toMap, result);
             AssertTransferringAcademiesCorrect(toMap, result);
+        }
+
+        private void AssertGeneralInformationCorrect(TramsProject toMap, Project result)
+        {
+            Assert.Equal(toMap.GeneralInformation.Author, result.AcademyAndTrustInformation.Author);
+            var expectedRecommendation =
+                EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.Parse(toMap.GeneralInformation.Recommendation);
+            Assert.Equal(expectedRecommendation, result.AcademyAndTrustInformation.Recommendation);
         }
 
         private static void AssertTransferringAcademiesCorrect(TramsProject toMap, Project result)

@@ -7,12 +7,20 @@ namespace Frontend.Models
     public class ProjectTaskListViewModel : ProjectViewModel
     {
         public ProjectStatuses FeatureTransferStatus => GetFeatureTransferStatus();
-
         public ProjectStatuses TransferDatesStatus => GetTransferDatesStatus();
-
         public ProjectStatuses BenefitsAndOtherFactorsStatus => GetBenefitsAndOtherFactorsStatus();
-
         public ProjectStatuses RationaleStatus => GetRationaleStatus();
+        public ProjectStatuses AcademyAndTrustInformationStatus() => GetAcademyAndTrustInformationStatus();
+
+        private ProjectStatuses GetAcademyAndTrustInformationStatus()
+        {
+            var academyAndTrustInformation = Project.AcademyAndTrustInformation;
+            return (string.IsNullOrEmpty(academyAndTrustInformation.Author) && 
+                    (academyAndTrustInformation.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.NotStarted
+                : (!string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
+                   (academyAndTrustInformation.Recommendation != TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.Completed
+                : ProjectStatuses.InProgress;
+        }
 
         private ProjectStatuses GetFeatureTransferStatus()
         {
@@ -61,11 +69,11 @@ namespace Frontend.Models
         {
             if (string.IsNullOrEmpty(Project.Rationale.Project) &&
                 string.IsNullOrEmpty(Project.Rationale.Trust))
-            return ProjectStatuses.NotStarted;
+                return ProjectStatuses.NotStarted;
 
             if (!string.IsNullOrEmpty(Project.Rationale.Project) &&
                 !string.IsNullOrEmpty(Project.Rationale.Trust))
-            return ProjectStatuses.Completed;
+                return ProjectStatuses.Completed;
 
             return ProjectStatuses.InProgress;
         }
