@@ -24,22 +24,20 @@ namespace DocumentGeneration.Builders
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
+            var builder = new TableBuilder();
             action(builder);
-            _header.AppendChild(table);
+            _header.AppendChild(builder.Build());
         }
 
         public void AddTable(IEnumerable<TextElement[]> rows)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
+            var builder = new TableBuilder();
             foreach (var row in rows)
             {
                 builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
             }
 
-            _header.AppendChild(table);
+            _header.AppendChild(builder.Build());
         }
     }
 }

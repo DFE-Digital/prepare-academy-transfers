@@ -50,74 +50,6 @@ namespace DocumentGeneration
             part.Numbering = new Numbering();
         }
 
-        private class ElementBuilder
-        {
-            private readonly Document _document;
-            private readonly Body _body;
-            private OpenXmlElement _precedingElement;
-
-            public ElementBuilder(Document document, OpenXmlElement precedingElement)
-            {
-                _document = document;
-                _body = _document.MainDocumentPart.Document.Body;
-                _precedingElement = precedingElement;
-            }
-
-            public void AddNumberedList(Action<IListBuilder> action)
-            {
-                var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-                action(builder);
-            }
-
-            public void AddBulletedList(Action<IListBuilder> action)
-            {
-                var builder = new BulletedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-                action(builder);
-            }
-
-            public void AddParagraph(Action<IParagraphBuilder> action)
-            {
-                var builder = new ParagraphBuilder();
-                action(builder);
-                _body.AppendChild(builder.Build());
-            }
-
-            public void AddParagraph(string text)
-            {
-                var builder = new ParagraphBuilder();
-                builder.AddText(text);
-                _body.AppendChild(builder.Build());
-            }
-
-            public void AddTable(Action<ITableBuilder> action)
-            {
-                var table = new Table();
-                var builder = new TableBuilder(table);
-
-                action(builder);
-
-                _body.AppendChild(table);
-            }
-
-            public void AddTable(IEnumerable<TextElement[]> rows)
-            {
-                var table = new Table();
-                var builder = new TableBuilder(table);
-                foreach (var row in rows)
-                {
-                    builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
-                }
-
-                _body.AppendChild(table);
-            }
-
-            public void AddHeading(Action<IHeadingBuilder> action)
-            {
-                var builder = new HeadingBuilder(_body);
-                action(builder);
-            }
-        }
-
         public void AddNumberedList(Action<IListBuilder> action)
         {
             var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
@@ -148,24 +80,20 @@ namespace DocumentGeneration
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
-
+            var builder = new TableBuilder();
             action(builder);
-
-            _body.AppendChild(table);
+            _body.AppendChild(builder.Build());
         }
 
         public void AddTable(IEnumerable<TextElement[]> rows)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
+            var builder = new TableBuilder();
             foreach (var row in rows)
             {
                 builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
             }
 
-            _body.AppendChild(table);
+            _body.AppendChild(builder.Build());
         }
 
         public void AddHeading(Action<IHeadingBuilder> action)
