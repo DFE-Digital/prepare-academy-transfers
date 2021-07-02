@@ -1,0 +1,163 @@
+@using Data.Models.Projects
+@using Helpers
+@model AcademyAndTrustInformationViewModel
+
+@{
+    ViewBag.Title = "Academy and trust information and project dates";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            URN @Model.Project.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-l">
+            Academy and trust information and project dates
+        </h1>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Recommendation
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @if (Model.Project.AcademyAndTrustInformation.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        var displayName = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(Model.Project.AcademyAndTrustInformation.Recommendation);
+                        @displayName
+                    }
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Project.Urn">
+                        Change<span class="govuk-visually-hidden">recommendation</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Author
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.Project.AcademyAndTrustInformation.Author))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.AcademyAndTrustInformation.Author</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Project.Urn">
+                        Change<span class="govuk-visually-hidden">author</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    HTB date
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.Project.Dates.Htb))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.Dates.Htb</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Project name
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.Project.Name))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.Name</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Sponsor name
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.Project.Name))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.IncomingTrustName</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Academy type and route
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.TransferringAcademy?.Performance?.SchoolType))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.TransferringAcademy?.Performance?.SchoolType</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Proposed academy transfer
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    <span class="dfe-text-area-display">Placeholder</span>
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Date the transfer was discussed with outgoing trust
+                </dt>
+                <dd class="govuk-summary-list__value ">
+                    @if (string.IsNullOrEmpty(Model.Project.Dates.FirstDiscussed))
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        <span class="dfe-text-area-display">@Model.Project.Dates.FirstDiscussed</span>
+                    }
+                </dd>
+                <dd class="govuk-summary-list__value "/>
+            </div>
+        </dl>
+        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Confirm and continue</a>
+    </div>
+</div>

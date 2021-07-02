@@ -145,7 +145,8 @@ namespace Frontend.Tests.ModelTests
             [InlineData("", "", "test")]
             [InlineData("", "test", "")]
             [InlineData("", "test", "test")]
-            public void GivenTransferDatesArePartiallyCompleted_ReturnInProgress(string firstDiscussed, string targetDate, string htbDate)
+            public void GivenTransferDatesArePartiallyCompleted_ReturnInProgress(string firstDiscussed,
+                string targetDate, string htbDate)
             {
                 // Arrange
                 var project = new Project
@@ -199,8 +200,8 @@ namespace Frontend.Tests.ModelTests
                 {
                     Benefits = new TransferBenefits
                     {
-                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit> (),
-                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string> () 
+                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit>(),
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>()
                     }
                 };
                 var model = new ProjectTaskListViewModel { Project = project };
@@ -221,7 +222,7 @@ namespace Frontend.Tests.ModelTests
                     Benefits = new TransferBenefits
                     {
                         IntendedBenefits = new List<TransferBenefits.IntendedBenefit> { TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport },
-                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string> ()
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>()
                     }
                 };
                 var model = new ProjectTaskListViewModel { Project = project };
@@ -241,7 +242,7 @@ namespace Frontend.Tests.ModelTests
                 {
                     Benefits = new TransferBenefits
                     {
-                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit> (),
+                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit>(),
                         OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string> { { TransferBenefits.OtherFactor.HighProfile, "test" } }
                     }
                 };
@@ -364,6 +365,32 @@ namespace Frontend.Tests.ModelTests
 
                 // Assert
                 Assert.Equal(ProjectStatuses.Completed, result);
+            }
+        }
+
+        public class AcademyAndTrustInformationTests
+        {
+            [Theory]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, null, ProjectStatuses.NotStarted)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Approve, "test author", ProjectStatuses.Completed)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, "test author", ProjectStatuses.InProgress)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, null, ProjectStatuses.InProgress)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, "", ProjectStatuses.InProgress)]
+            public void GivenRelevantData_ReturnCorrectStatus(
+                TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author, ProjectStatuses expectedStatus)
+            {
+                var project = new Project
+                {
+                    AcademyAndTrustInformation = new TransferAcademyAndTrustInformation
+                    {
+                        Recommendation = recommendation,
+                        Author = author
+                    }
+                };
+                var model = new ProjectTaskListViewModel {Project = project};
+                var result = model.AcademyAndTrustInformationStatus();
+                
+                Assert.Equal(expectedStatus, result);
             }
         }
     }

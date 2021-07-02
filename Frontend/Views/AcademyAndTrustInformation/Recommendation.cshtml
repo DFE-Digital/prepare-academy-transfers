@@ -1,0 +1,81 @@
+@model AcademyAndTrustInformationViewModel
+
+@{
+    ViewBag.Title = "Recommendation";
+    Layout = "_Layout";
+    var radioButtons = AcademyAndTrustInformationViewModel.RecommendedRadioButtons(Model.Project.AcademyAndTrustInformation.Recommendation);
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">
+            URN @Model.Project.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-l">
+            Recommendation
+        </h1>
+        <form asp-action="Recommendation" method="post" novalidate="">
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        What is the recommendation for this project?
+                    </legend>
+                    @await Html.PartialAsync("_RadioButtons", radioButtons)
+                </fieldset>
+            </div>
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-label--m" for="author">
+                    Enter the full name of the author of this headteacher board (HTB) template
+                </label>
+                <input class="govuk-input govuk-!-width-two-thirds" id="author" name="author" type="text" value="@Model.Project.AcademyAndTrustInformation.Author">
+            </div>
+            <button class="govuk-button" data-module="govuk-button">
+                Save and continue
+            </button>
+        </form>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-s" id="subsection-title-1">
+                Useful information
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title-1">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            View full application
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            School information on TRAMS
+                        </a>
+                    </li>
+                    <hr class="govuk-grid-one-third govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                </ul>
+            </nav>
+            <h2 class="govuk-heading-s" id="subsection-title-2">
+                Guidance
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title-2">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Guidance for setting an HTB date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="#">
+                            Full Guidance
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>
