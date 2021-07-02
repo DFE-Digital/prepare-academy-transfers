@@ -1,18 +1,18 @@
-using DocumentFormat.OpenXml;
+using System.Collections.Generic;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class HeadingBuilder : IHeadingBuilder
+    public class HeadingBuilder : IHeadingBuilder, IElementBuilder<List<Paragraph>>
     {
-        private readonly OpenXmlElement _parent;
         private HeadingLevel _headingLevel;
+        private readonly List<Paragraph> _elements;
 
-        public HeadingBuilder(OpenXmlElement parent)
+        public HeadingBuilder()
         {
-            _parent = parent;
+            _elements = new List<Paragraph>();
         }
 
         public void SetHeadingLevel(HeadingLevel level)
@@ -32,7 +32,7 @@ namespace DocumentGeneration.Builders
             text.FontSize = HeadingLevelToFontSize();
             text.Colour = "104f75";
             builder.AddText(text);
-            _parent.AppendChild(builder.Build());
+            _elements.Add(builder.Build());
         }
 
         private string HeadingLevelToFontSize()
@@ -44,6 +44,11 @@ namespace DocumentGeneration.Builders
                 HeadingLevel.Three => "28",
                 _ => "28"
             };
+        }
+
+        public List<Paragraph> Build()
+        {
+            return _elements;
         }
     }
 }

@@ -11,7 +11,6 @@ namespace DocumentGeneration.Builders
 {
     public abstract class ListBuilder : IListBuilder, IElementBuilder<List<Paragraph>>
     {
-        protected OpenXmlElement Parent;
         protected NumberingDefinitionsPart NumberingDefinitionsPart;
         protected int NumId;
         private readonly List<Paragraph> _items;

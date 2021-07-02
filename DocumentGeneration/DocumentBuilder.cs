@@ -50,56 +50,57 @@ namespace DocumentGeneration
             part.Numbering = new Numbering();
         }
 
+        public void ReplacePlaceholderWithContent(string placeholderText, Action<DocumentBodyBuilder> action)
+        {
+            var placeholderElement = _body
+                .Descendants<Paragraph>()
+                .First(element => element.InnerText == $"[{placeholderText}]");
+
+            var builder = new DocumentBodyBuilder(_document, placeholderElement);
+            action(builder);
+            placeholderElement.Remove();
+        }
+
         public void AddNumberedList(Action<IListBuilder> action)
         {
-            var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-            action(builder);
-            _body.Append(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddNumberedList(action);
         }
 
         public void AddBulletedList(Action<IListBuilder> action)
         {
-            var builder = new BulletedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-            action(builder);
-            _body.Append(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddBulletedList(action);
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
         {
-            var builder = new ParagraphBuilder();
-            action(builder);
-            _body.AppendChild(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddParagraph(action);
         }
 
         public void AddParagraph(string text)
         {
-            var builder = new ParagraphBuilder();
-            builder.AddText(text);
-            _body.AppendChild(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddParagraph(text);
         }
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            var builder = new TableBuilder();
-            action(builder);
-            _body.AppendChild(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTable(action);
         }
 
         public void AddTable(IEnumerable<TextElement[]> rows)
         {
-            var builder = new TableBuilder();
-            foreach (var row in rows)
-            {
-                builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
-            }
-
-            _body.AppendChild(builder.Build());
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTable(rows);
         }
 
         public void AddHeading(Action<IHeadingBuilder> action)
         {
-            var builder = new HeadingBuilder(_body);
-            action(builder);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddHeading(action);
         }
 
         public void AddHeader(Action<IHeaderBuilder> action)

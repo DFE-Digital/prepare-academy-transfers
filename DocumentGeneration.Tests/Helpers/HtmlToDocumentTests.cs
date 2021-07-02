@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DocumentGeneration.Builders;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Helpers;
 using DocumentGeneration.Interfaces;
@@ -383,6 +384,11 @@ namespace DocumentGeneration.Tests.Helpers
             AddedParagraphs.Add(builder.AddedItems);
         }
 
+        public void AddParagraph(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddHeading(Action<IHeadingBuilder> action)
         {
             throw new NotImplementedException();
@@ -404,6 +410,11 @@ namespace DocumentGeneration.Tests.Helpers
             action(builder);
             listFake.AddedItems = builder.AddedItems;
             AddedLists.Add(listFake);
+        }
+
+        public void ReplacePlaceholderWithContent(string placeholderText, Action<DocumentBodyBuilder> action)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddHeader(Action<IHeaderBuilder> action)

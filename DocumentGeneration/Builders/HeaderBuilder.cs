@@ -22,6 +22,13 @@ namespace DocumentGeneration.Builders
             _header.AppendChild(builder.Build());
         }
 
+        public void AddParagraph(string text)
+        {
+            var builder = new ParagraphBuilder();
+            builder.AddText(text);
+            _header.AppendChild(builder.Build());
+        }
+
         public void AddTable(Action<ITableBuilder> action)
         {
             var builder = new TableBuilder();

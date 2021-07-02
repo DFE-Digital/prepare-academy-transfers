@@ -210,6 +210,15 @@ namespace DocumentGeneration.Tests
                 var paragraphProperties = paragraph.ParagraphProperties;
                 Assert.Equal(expectedJustification, paragraphProperties.Justification.Val.Value);
             }
+
+            [Fact]
+            public void GivenAddingParagraphAsText_AddsParagraphCorrectly()
+            {
+                var documentBody = GenerateDocumentBody(builder => { builder.AddParagraph("Meow"); });
+
+                var paragraph = documentBody.Descendants<Paragraph>().First();
+                Assert.Equal("Meow", paragraph.InnerText);
+            }
         }
 
         public class TableTests : DocumentBuilderTests
@@ -886,6 +895,51 @@ namespace DocumentGeneration.Tests
                 Assert.Equal("Meow", documentFooterText[0]);
                 Assert.Equal("Non replaced text", documentFooterText[1]);
                 Assert.Equal("Woof", documentFooterText[2]);
+            }
+        }
+
+        public class ReplacePlaceholderContentTests : DocumentBuilderTests
+        {
+            private class DocumentClass
+            {
+            }
+
+            [Fact]
+            public void GivenDocumentWithPlaceholderContent_AllowsYouToReplaceContent()
+            {
+                var documentBuilder = new DocumentBuilder();
+                documentBuilder.AddParagraph("Non replaced text");
+                documentBuilder.AddParagraph("[PlaceholderOne]");
+                documentBuilder.AddParagraph("Non replaced text");
+                documentBuilder.AddParagraph("[PlaceholderTwo]");
+                var template = documentBuilder.Build();
+
+                var memoryStream = new MemoryStream();
+                memoryStream.Write(template);
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(memoryStream, new object());
+
+                builderFromTemplate.ReplacePlaceholderWithContent("PlaceholderOne", builder =>
+                {
+                    builder.AddParagraph("Meow");
+                    builder.AddParagraph("Woof");
+                    builder.AddParagraph("Quack");
+                });
+
+                builderFromTemplate.ReplacePlaceholderWithContent("PlaceholderTwo",
+                    builder => { builder.AddParagraph("Moo"); });
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var createdParagraphs = createdDocument.MainDocumentPart.Document.Body
+                    .Descendants<Paragraph>()
+                    .ToList();
+
+                Assert.Equal("Non replaced text", createdParagraphs[0].InnerText);
+                Assert.Equal("Meow", createdParagraphs[1].InnerText);
+                Assert.Equal("Woof", createdParagraphs[2].InnerText);
+                Assert.Equal("Quack", createdParagraphs[3].InnerText);
+                Assert.Equal("Non replaced text", createdParagraphs[4].InnerText);
+                Assert.Equal("Moo", createdParagraphs[5].InnerText);
             }
         }
     }
