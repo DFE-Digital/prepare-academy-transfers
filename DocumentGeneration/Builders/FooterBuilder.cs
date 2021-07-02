@@ -6,41 +6,50 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class FooterBuilder : IFooterBuilder
+    public class FooterBuilder : IFooterBuilder, IElementBuilder<Footer>
     {
         private readonly Footer _footer;
 
-        public FooterBuilder(Footer footer)
+        public FooterBuilder()
         {
-            _footer = footer;
+            _footer = new Footer();
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
         {
-            var paragraph = new Paragraph();
-            var builder = new ParagraphBuilder(paragraph);
+            var builder = new ParagraphBuilder();
             action(builder);
-            _footer.AppendChild(paragraph);
+            _footer.AppendChild(builder.Build());
+        }
+
+        public void AddParagraph(string text)
+        {
+            var builder = new ParagraphBuilder();
+            builder.AddText(text);
+            _footer.AppendChild(builder.Build());
         }
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
+            var builder = new TableBuilder();
             action(builder);
-            _footer.AppendChild(table);
+            _footer.AppendChild(builder.Build());
         }
 
         public void AddTable(IEnumerable<TextElement[]> rows)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
+            var builder = new TableBuilder();
             foreach (var row in rows)
             {
                 builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
             }
 
-            _footer.AppendChild(table);
+            _footer.AppendChild(builder.Build());
+        }
+
+        public Footer Build()
+        {
+            return _footer;
         }
     }
 }

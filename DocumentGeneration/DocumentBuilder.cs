@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -15,10 +16,19 @@ namespace DocumentGeneration
     {
         private readonly WordprocessingDocument _document;
         private readonly Body _body;
+        private readonly MemoryStream _ms;
 
-        public DocumentBuilder(Stream stream)
+        public static DocumentBuilder CreateFromTemplate<TDocument>(MemoryStream stream, TDocument document)
         {
-            _document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document);
+            var builder = new DocumentBuilder(stream);
+            builder.PopulateTemplateWithDocument(document);
+            return builder;
+        }
+
+        public DocumentBuilder()
+        {
+            _ms = new MemoryStream();
+            _document = WordprocessingDocument.Create(_ms, WordprocessingDocumentType.Document);
             _document.AddMainDocumentPart();
             _document.MainDocumentPart.Document = new Document(new Body());
             _body = _document.MainDocumentPart.Document.Body;
@@ -27,86 +37,95 @@ namespace DocumentGeneration
             AppendSectionProperties();
         }
 
+        private DocumentBuilder(MemoryStream ms)
+        {
+            _ms = ms;
+            _document = WordprocessingDocument.Open(ms, true);
+            _body = _document.MainDocumentPart.Document.Body;
+        }
+
         private void AddNumberingDefinitions()
         {
             var part = _document.MainDocumentPart.AddNewPart<NumberingDefinitionsPart>();
             part.Numbering = new Numbering();
         }
 
+        public void ReplacePlaceholderWithContent(string placeholderText, Action<DocumentBodyBuilder> action)
+        {
+            var placeholderElement = _body
+                .Descendants<Paragraph>()
+                .First(element => element.InnerText == $"[{placeholderText}]");
+
+            var builder = new DocumentBodyBuilder(_document, placeholderElement);
+            action(builder);
+            placeholderElement.Remove();
+        }
+
         public void AddNumberedList(Action<IListBuilder> action)
         {
-            var builder = new NumberedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-            action(builder);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddNumberedList(action);
         }
-        
+
         public void AddBulletedList(Action<IListBuilder> action)
         {
-            var builder = new BulletedListBuilder(_body, _document.MainDocumentPart.NumberingDefinitionsPart);
-            action(builder);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddBulletedList(action);
         }
 
         public void AddParagraph(Action<IParagraphBuilder> action)
         {
-            var paragraph = new Paragraph();
-            var builder = new ParagraphBuilder(paragraph);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddParagraph(action);
+        }
 
-            action(builder);
-
-            _body.AppendChild(paragraph);
+        public void AddParagraph(string text)
+        {
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddParagraph(text);
         }
 
         public void AddTable(Action<ITableBuilder> action)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
-
-            action(builder);
-
-            _body.AppendChild(table);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTable(action);
         }
 
         public void AddTable(IEnumerable<TextElement[]> rows)
         {
-            var table = new Table();
-            var builder = new TableBuilder(table);
-            foreach (var row in rows)
-            {
-                builder.AddRow(rBuilder => { rBuilder.AddCells(row); });
-            }
-
-            _body.AppendChild(table);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTable(rows);
         }
 
         public void AddHeading(Action<IHeadingBuilder> action)
         {
-            var builder = new HeadingBuilder(_body);
-            action(builder);
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddHeading(action);
         }
 
         public void AddHeader(Action<IHeaderBuilder> action)
         {
             var headerPart = _document.MainDocumentPart.HeaderParts.First();
 
-            var header = new Header();
-            var builder = new HeaderBuilder(header);
+            var builder = new HeaderBuilder();
             action(builder);
-            header.Save(headerPart);
+            builder.Build().Save(headerPart);
         }
 
         public void AddFooter(Action<IFooterBuilder> action)
         {
             var footerPart = _document.MainDocumentPart.FooterParts.First();
 
-            var footer = new Footer();
-            var builder = new FooterBuilder(footer);
+            var builder = new FooterBuilder();
             action(builder);
-            footer.Save(footerPart);
+            builder.Build().Save(footerPart);
         }
 
-        public void Build()
+        public byte[] Build()
         {
             _document.Save();
             _document.Close();
+            return _ms.ToArray();
         }
 
         private void SetCompatibilityMode()
@@ -173,6 +192,48 @@ namespace DocumentGeneration
                 Right = 1080
             };
             props.AppendChild(pageMargin);
+        }
+
+        private void PopulateTemplateWithDocument<TDocument>(TDocument document)
+        {
+            var texts = GetAllText();
+            var properties = GetProperties<TDocument>();
+
+            foreach (var text in texts)
+            {
+                var property = properties.FirstOrDefault(p =>
+                    text.InnerText.Contains($"{p.GetCustomAttribute<DocumentTextAttribute>()?.Placeholder}",
+                        StringComparison.OrdinalIgnoreCase));
+
+                if (property == null) continue;
+
+                var attribute = property.GetCustomAttribute<DocumentTextAttribute>();
+
+                if (attribute == null) continue;
+
+                text.Text = text.Text.Replace(
+                    attribute.Placeholder,
+                    property.GetValue(document)?.ToString(),
+                    StringComparison.OrdinalIgnoreCase
+                );
+            }
+
+            IEnumerable<Text> GetAllText()
+            {
+                var footerParts = _document.MainDocumentPart.FooterParts
+                    .Where(fp => fp.Footer != null)
+                    .SelectMany(fp => fp.Footer?.Descendants<Text>());
+                return _document.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Concat(footerParts)
+                    .ToHashSet();
+            }
+        }
+
+        private PropertyInfo[] GetProperties<TDocument>()
+        {
+            return typeof(TDocument).GetProperties()
+                .Where(p => p.GetCustomAttribute<DocumentTextAttribute>() != null)
+                .ToArray();
         }
     }
 }

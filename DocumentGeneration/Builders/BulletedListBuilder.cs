@@ -8,9 +8,8 @@ namespace DocumentGeneration.Builders
 {
     public class BulletedListBuilder : ListBuilder
     {
-        public BulletedListBuilder(OpenXmlElement parent, NumberingDefinitionsPart numberingDefinitionsPart)
+        public BulletedListBuilder(NumberingDefinitionsPart numberingDefinitionsPart)
         {
-            Parent = parent;
             NumberingDefinitionsPart = numberingDefinitionsPart;
             NumId = AddNumberingDefinitions();
         }

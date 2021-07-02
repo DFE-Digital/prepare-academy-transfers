@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Elements;
@@ -6,9 +7,27 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class ParagraphBuilder : IParagraphBuilder
+    public class ParagraphBuilder : IParagraphBuilder, IElementBuilder<Paragraph>
     {
         private readonly Paragraph _parent;
+        private readonly List<Run> _runs;
+
+        public ParagraphBuilder()
+        {
+            _parent = new Paragraph
+            {
+                ParagraphProperties = new ParagraphProperties
+                {
+                    SpacingBetweenLines = new SpacingBetweenLines
+                    {
+                        AfterAutoSpacing = OnOffValue.FromBoolean(true),
+                        BeforeAutoSpacing = OnOffValue.FromBoolean(true)
+                    }
+                }
+            };
+            _runs = new List<Run>();
+
+        }
 
         public ParagraphBuilder(Paragraph parent)
         {
@@ -19,6 +38,7 @@ namespace DocumentGeneration.Builders
                 AfterAutoSpacing = OnOffValue.FromBoolean(true),
                 BeforeAutoSpacing = OnOffValue.FromBoolean(true)
             };
+            _runs = new List<Run>();
         }
 
         public void AddText(TextElement text)
@@ -59,7 +79,7 @@ namespace DocumentGeneration.Builders
                 run.RunProperties.Color = new Color {Val = text.Colour};
             }
 
-            _parent.AppendChild(run);
+            _runs.Add(run);
         }
 
         public void AddText(string text)
@@ -77,7 +97,8 @@ namespace DocumentGeneration.Builders
 
         public void AddNewLine()
         {
-            _parent.AppendChild(new Run(new Break()));
+            var run = new Run(new Break());
+            _runs.Add(run);
         }
 
         public void Justify(ParagraphJustification paragraphJustification)
@@ -91,6 +112,12 @@ namespace DocumentGeneration.Builders
                 _ => justification.Val
             };
             _parent.ParagraphProperties.Justification = justification;
+        }
+
+        public Paragraph Build()
+        {
+            _parent.Append(_runs);
+            return _parent;
         }
     }
 }

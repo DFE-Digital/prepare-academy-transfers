@@ -8,9 +8,8 @@ namespace DocumentGeneration.Builders
 {
     public class NumberedListBuilder : ListBuilder
     {
-        public NumberedListBuilder(OpenXmlElement parent, NumberingDefinitionsPart numberingDefinitionsPart)
+        public NumberedListBuilder(NumberingDefinitionsPart numberingDefinitionsPart)
         {
-            Parent = parent;
             NumberingDefinitionsPart = numberingDefinitionsPart;
             NumId = AddNumberingDefinitions();
         }

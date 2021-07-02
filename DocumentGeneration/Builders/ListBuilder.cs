@@ -9,11 +9,16 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public abstract class ListBuilder : IListBuilder
+    public abstract class ListBuilder : IListBuilder, IElementBuilder<List<Paragraph>>
     {
-        protected OpenXmlElement Parent;
         protected NumberingDefinitionsPart NumberingDefinitionsPart;
         protected int NumId;
+        private readonly List<Paragraph> _items;
+
+        protected ListBuilder()
+        {
+            _items = new List<Paragraph>();
+        }
 
         public void AddItem(Action<IParagraphBuilder> action)
         {
@@ -30,7 +35,7 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             action(paragraphBuilder);
-            Parent.AppendChild(paragraph);
+            _items.Add(paragraphBuilder.Build());
         }
 
         public void AddItem(string item)
@@ -54,7 +59,7 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             paragraphBuilder.AddText(item);
-            Parent.AppendChild(paragraph);
+            _items.Add(paragraphBuilder.Build());
         }
 
         public void AddItem(TextElement[] elements)
@@ -72,9 +77,9 @@ namespace DocumentGeneration.Builders
             };
             var paragraphBuilder = new ParagraphBuilder(paragraph);
             paragraphBuilder.AddText(elements);
-            Parent.AppendChild(paragraph);
+            _items.Add(paragraphBuilder.Build());
         }
-        
+
         protected void AddNumberingDefinitions(AbstractNum abstractNum, NumberingInstance numberingInstance)
         {
             var numberingDefinitionCount = NumberingDefinitionsPart.Numbering.Descendants<AbstractNum>().Count();
@@ -92,6 +97,11 @@ namespace DocumentGeneration.Builders
                 NumberingDefinitionsPart.Numbering.AppendChild(abstractNum);
                 NumberingDefinitionsPart.Numbering.AppendChild(numberingInstance);
             }
+        }
+
+        public List<Paragraph> Build()
+        {
+            return _items;
         }
     }
 }

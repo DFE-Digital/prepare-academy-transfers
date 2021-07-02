@@ -1,10 +1,13 @@
+using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
+using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -19,6 +22,17 @@ namespace Frontend.Services
         {
             _projectsRepository = projectsRepository;
             _academiesRepository = academiesRepository;
+        }
+
+        private MemoryStream CreateMemoryStream(string template)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.Contains(template, StringComparison.OrdinalIgnoreCase));
+            using var templateStream = assembly.GetManifestResourceStream(resourceName);
+            var ms = new MemoryStream();
+            templateStream.CopyTo(ms);
+            return ms;
         }
 
         public async Task<CreateHtbDocumentResponse> Execute(string projectUrn)
@@ -38,26 +52,69 @@ namespace Frontend.Services
 
             var project = projectResult.Result;
             var academy = academyResult.Result;
-
-            MemoryStream ms;
-
-            await using (ms = new MemoryStream())
+            
+            var htbDocument = new HtbDocument
             {
-                var builder = new DocumentBuilder(ms);
+                SchoolName = academy.Name,
+                SchoolUrn =  academy.Urn,
+                TrustName = project.OutgoingTrustName,
+                TrustReferenceNumber = project.OutgoingTrustUkprn,
+                SchoolType = academy.EstablishmentType,
+                SchoolPhase = academy.Performance.SchoolPhase,
+                AgeRange = academy.Performance.AgeRange,
+                SchoolCapacity = academy.Performance.Capacity,
+                PublishedAdmissionNumber = academy.Performance.Pan,
+                NumberOnRoll = academy.Performance.NumberOnRoll,
+                PercentageSchoolFull = academy.Performance.PercentageFull,
+                PercentageFreeSchoolMeals = academy.PupilNumbers.EligibleForFreeSchoolMeals,
+                OfstedLastInspection = academy.LatestOfstedJudgement.InspectionDate,
+                OverallEffectiveness = academy.Performance.OfstedRating,
+                RationaleForProject = project.Rationale.Project,
+                RationaleForTrust = project.Rationale.Trust,
+                Author = "Author name",
+                ClearedBy = "Cleared by",
+                Version = "Version"
+            };
 
-                HeaderAndFooter(builder);
-                Title(builder, academy);
-                IntroductorySection(builder, academy, project);
-                GeneralInformation(builder, academy);
-                Rationale(builder, project);
-                KeyStagePerformanceInformation(builder, academy);
+            var ms = CreateMemoryStream("htb-template");
+            var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);
 
-                builder.Build();
+            return new CreateHtbDocumentResponse
+            {
+                Document = builder.Build()
+            };
+        }
+
+        public async Task<CreateHtbDocumentResponse> XExecute(string projectUrn)
+        {
+            var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+            if (!projectResult.IsValid)
+            {
+                return CreateErrorResponse(projectResult.Error);
             }
+
+            var projectAcademy = projectResult.Result.TransferringAcademies.First();
+            var academyResult = await _academiesRepository.GetAcademyByUkprn(projectAcademy.OutgoingAcademyUkprn);
+            if (!academyResult.IsValid)
+            {
+                return CreateErrorResponse(academyResult.Error);
+            }
+
+            var project = projectResult.Result;
+            var academy = academyResult.Result;
+
+            var builder = new DocumentBuilder();
+
+            HeaderAndFooter(builder);
+            Title(builder, academy);
+            IntroductorySection(builder, academy, project);
+            GeneralInformation(builder, academy);
+            Rationale(builder, project);
+            KeyStagePerformanceInformation(builder, academy);
 
             var successResponse = new CreateHtbDocumentResponse
             {
-                Document = ms.ToArray()
+                Document = builder.Build()
             };
             return successResponse;
         }

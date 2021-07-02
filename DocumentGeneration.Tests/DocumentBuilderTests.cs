@@ -16,36 +16,29 @@ namespace DocumentGeneration.Tests
     {
         private static Body GenerateDocumentBody(Action<IDocumentBuilder> action)
         {
-            Body documentBody;
-            using (var ms = new MemoryStream())
-            {
-                var builder = new DocumentBuilder(ms);
-                action(builder);
-                builder.Build();
+            var builder = new DocumentBuilder();
+            action(builder);
+            var res = builder.Build();
 
-                using (var doc = WordprocessingDocument.Open(ms, false))
-                {
-                    documentBody = doc.MainDocumentPart.Document.Body;
-                }
-            }
+            using var ms = new MemoryStream(res);
+            using var doc = WordprocessingDocument.Open(ms, false);
+            var documentBody = doc.MainDocumentPart.Document.Body;
 
             return documentBody;
         }
 
         private static GenerateDocumentResponse GenerateDocument(Action<IDocumentBuilder> action)
         {
-            var ms = new MemoryStream();
-            var builder = new DocumentBuilder(ms);
+            var builder = new DocumentBuilder();
             action(builder);
-            builder.Build();
-
+            var res = builder.Build();
+            using var ms = new MemoryStream(res);
             using var doc = WordprocessingDocument.Open(ms, false);
-
             return new GenerateDocumentResponse
             {
                 Numbering = doc.MainDocumentPart.NumberingDefinitionsPart.Numbering,
                 Headers = doc.MainDocumentPart.HeaderParts.Select(p => p.Header).ToList(),
-                FooterParts = doc.MainDocumentPart.FooterParts.Select(p => p.Footer).ToList(),
+                Footers = doc.MainDocumentPart.FooterParts.Select(p => p.Footer).ToList(),
                 Body = doc.MainDocumentPart.Document.Body
             };
         }
@@ -55,7 +48,7 @@ namespace DocumentGeneration.Tests
             public Body Body { get; set; }
             public Numbering Numbering { get; set; }
             public List<Header> Headers { get; set; }
-            public List<Footer> FooterParts { get; set; }
+            public List<Footer> Footers { get; set; }
         }
 
         public class ParagraphTests : DocumentBuilderTests
@@ -216,6 +209,15 @@ namespace DocumentGeneration.Tests
                 var paragraph = documentBody.Descendants<Paragraph>().First();
                 var paragraphProperties = paragraph.ParagraphProperties;
                 Assert.Equal(expectedJustification, paragraphProperties.Justification.Val.Value);
+            }
+
+            [Fact]
+            public void GivenAddingParagraphAsText_AddsParagraphCorrectly()
+            {
+                var documentBody = GenerateDocumentBody(builder => { builder.AddParagraph("Meow"); });
+
+                var paragraph = documentBody.Descendants<Paragraph>().First();
+                Assert.Equal("Meow", paragraph.InnerText);
             }
         }
 
@@ -469,60 +471,53 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenFooterHasText_GeneratesFooterForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder => { fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
-                builder.Build();
+                var response = GenerateDocument(builder =>
+                {
+                    builder.AddFooter(fBuilder => { fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Meow")); });
+                });
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
+                var footers = response.Footers;
 
                 Assert.Single(footers);
-                var footer = footers[0].Footer;
-                Assert.Single(footer.Descendants<Paragraph>());
-                Assert.Equal("Meow", footer.InnerText);
+                Assert.Single(footers[0].Descendants<Paragraph>());
+                Assert.Equal("Meow", footers[0].InnerText);
             }
 
             [Fact]
             public void GivenFooterHasTable_GeneratesFooterForDocument()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    fBuilder.AddTable(tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    builder.AddFooter(fBuilder =>
+                    {
+                        fBuilder.AddTable(
+                            tBuilder => tBuilder.AddRow(rBuilder => { rBuilder.AddCell("Meow"); }));
+                    });
                 });
-                builder.Build();
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
-                Assert.Single(footers);
-                var footer = footers[0].Footer;
-                Assert.Single(footer.Descendants<Table>());
-                Assert.Single(footer.Descendants<Paragraph>());
-                Assert.Equal("Meow", footer.InnerText);
+                var footers = response.Footers;
+                Assert.Single(footers[0].Descendants<Table>());
+                Assert.Single(footers[0].Descendants<Paragraph>());
+                Assert.Equal("Meow", footers[0].InnerText);
             }
 
             [Fact]
             public void GivenAddingATableByRows_GeneratesTheCorrectTable()
             {
-                using var ms = new MemoryStream();
-                var builder = new DocumentBuilder(ms);
-                builder.AddFooter(fBuilder =>
+                var response = GenerateDocument(builder =>
                 {
-                    var textElements = new[]
+                    builder.AddFooter(fBuilder =>
                     {
-                        new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
-                        new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
-                    };
-                    fBuilder.AddTable(textElements);
+                        var textElements = new[]
+                        {
+                            new[] {new TextElement {Value = "One"}, new TextElement {Value = "Two"}},
+                            new[] {new TextElement {Value = "Three"}, new TextElement {Value = "Four"}}
+                        };
+                        fBuilder.AddTable(textElements);
+                    });
                 });
-                builder.Build();
 
-                using var doc = WordprocessingDocument.Open(ms, false);
-                var footers = doc.MainDocumentPart.FooterParts.ToList();
-                var footer = footers[0].Footer;
-
+                var footer = response.Footers[0];
                 var tableRows = footer.Descendants<TableRow>().ToList();
                 var tableCells = footer.Descendants<TableCell>().ToList();
 
@@ -798,6 +793,153 @@ namespace DocumentGeneration.Tests
                 Assert.True(paragraphs.All(p =>
                     p.ParagraphProperties.Descendants<NumberingProperties>().First().NumberingId.Val == 1));
                 Assert.Equal("OneTwo", paragraphs[0].InnerText);
+            }
+        }
+
+        public class DocumentFromTemplateTests : DocumentBuilderTests
+        {
+            private class ExampleDocument
+            {
+                [DocumentText("PlaceholderOne")] public string PlaceholderOne { get; set; }
+
+                [DocumentText("PlaceholderTwo")] public string PlaceholderTwo { get; set; }
+            }
+
+            private static byte[] Template()
+            {
+                var documentBuilder = new DocumentBuilder();
+                documentBuilder.AddParagraph("[PlaceholderOne]");
+                documentBuilder.AddParagraph("Non replaced text");
+                documentBuilder.AddParagraph("[PlaceholderTwo]");
+                var template = documentBuilder.Build();
+                return template;
+            }
+
+            [Fact]
+            public void GivenTemplateDocumentWithPlaceholderTestAndNoPlaceholderValue_RemovePlaceholderText()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument { };
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("", documentText[2]);
+            }
+
+            [Fact]
+            public void
+                GivenTemplateDocumentWithPlaceholderTestAndOnePlaceholderValue_PopulatePlaceholdersWithDocument()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("", documentText[2]);
+            }
+
+            [Fact]
+            public void GivenTemplateDocumentWithPlaceholderTestAndPlaceholderValues_PopulatePlaceholdersWithDocument()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow", PlaceholderTwo = "Woof"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("Woof", documentText[2]);
+            }
+
+            [Fact]
+            public void GivenTemplateDocumentWithContentInFooter_PopulatesFooter()
+            {
+                var documentBuilder = new DocumentBuilder();
+                documentBuilder.AddFooter(fBuilder =>
+                {
+                    fBuilder.AddParagraph(pBuilder => pBuilder.AddText("[PlaceholderOne]"));
+                    fBuilder.AddParagraph(pBuilder => pBuilder.AddText("Non replaced text"));
+                    fBuilder.AddParagraph(pBuilder => pBuilder.AddText("[PlaceholderTwo]"));
+                });
+
+                var template = documentBuilder.Build();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow", PlaceholderTwo = "Woof"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentFooterText = createdDocument.MainDocumentPart.FooterParts
+                    .SelectMany(fp => fp.Footer.Descendants<Text>())
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentFooterText[0]);
+                Assert.Equal("Non replaced text", documentFooterText[1]);
+                Assert.Equal("Woof", documentFooterText[2]);
+            }
+        }
+
+        public class ReplacePlaceholderContentTests : DocumentBuilderTests
+        {
+            private class DocumentClass
+            {
+            }
+
+            [Fact]
+            public void GivenDocumentWithPlaceholderContent_AllowsYouToReplaceContent()
+            {
+                var documentBuilder = new DocumentBuilder();
+                documentBuilder.AddParagraph("Non replaced text");
+                documentBuilder.AddParagraph("[PlaceholderOne]");
+                documentBuilder.AddParagraph("Non replaced text");
+                documentBuilder.AddParagraph("[PlaceholderTwo]");
+                var template = documentBuilder.Build();
+
+                var memoryStream = new MemoryStream();
+                memoryStream.Write(template);
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(memoryStream, new object());
+
+                builderFromTemplate.ReplacePlaceholderWithContent("PlaceholderOne", builder =>
+                {
+                    builder.AddParagraph("Meow");
+                    builder.AddParagraph("Woof");
+                    builder.AddParagraph("Quack");
+                });
+
+                builderFromTemplate.ReplacePlaceholderWithContent("PlaceholderTwo",
+                    builder => { builder.AddParagraph("Moo"); });
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var createdParagraphs = createdDocument.MainDocumentPart.Document.Body
+                    .Descendants<Paragraph>()
+                    .ToList();
+
+                Assert.Equal("Non replaced text", createdParagraphs[0].InnerText);
+                Assert.Equal("Meow", createdParagraphs[1].InnerText);
+                Assert.Equal("Woof", createdParagraphs[2].InnerText);
+                Assert.Equal("Quack", createdParagraphs[3].InnerText);
+                Assert.Equal("Non replaced text", createdParagraphs[4].InnerText);
+                Assert.Equal("Moo", createdParagraphs[5].InnerText);
             }
         }
     }

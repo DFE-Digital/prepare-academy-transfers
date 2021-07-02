@@ -1,31 +1,31 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Interfaces;
 using System;
+using System.Collections.Generic;
 using DocumentGeneration.Elements;
 
 namespace DocumentGeneration.Builders
 {
-    public class TableBuilder : ITableBuilder
+    public class TableBuilder : ITableBuilder, IElementBuilder<Table>
     {
-        private readonly Table _parent;
-        private TableProperties _tableProperties;
+        private readonly Table _table;
+        private readonly TableProperties _tableProperties;
+        private readonly List<TableRow> _tableRows;
 
-        public TableBuilder(Table parent)
+        public TableBuilder()
         {
-            _parent = parent;
+            _table = new Table();
             _tableProperties = new TableProperties();
-            _parent.AppendChild(_tableProperties);
+            _tableRows = new List<TableRow>();
+            _table.AppendChild(_tableProperties);
             AddDefaultTableProperties();
         }
 
         public void AddRow(Action<ITableRowBuilder> action)
         {
-            var tableRow = new TableRow();
-            var tableRowBuilder = new TableRowBuilder(tableRow);
-
+            var tableRowBuilder = new TableRowBuilder();
             action(tableRowBuilder);
-
-            _parent.AppendChild(tableRow);
+            _tableRows.Add(tableRowBuilder.Build());
         }
 
         public void SetBorderStyle(TableBorderStyle style)
@@ -74,6 +74,12 @@ namespace DocumentGeneration.Builders
                 InsideHorizontalBorder = new InsideHorizontalBorder
                     {Color = "000000", Val = BorderValues.Single, Size = 8, Space = 0},
             };
+        }
+
+        public Table Build()
+        {
+            _table.Append(_tableRows);
+            return _table;
         }
     }
 }
