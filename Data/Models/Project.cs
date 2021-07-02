@@ -12,6 +12,7 @@ namespace Data.Models
             Dates = new TransferDates();
             Benefits = new TransferBenefits();
             Rationale = new TransferRationale();
+            AcademyAndTrustInformation = new TransferAcademyAndTrustInformation();
         }
 
         public string Urn { get; set; }
@@ -26,10 +27,14 @@ namespace Data.Models
         public TransferDates Dates { get; set; }
         public TransferBenefits Benefits { get; set; }
         public TransferRationale Rationale { get; set; }
+        public TransferAcademyAndTrustInformation AcademyAndTrustInformation { get; set; }
         public string AcademyPerformanceAdditionalInformation { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedAdditionalInformation { get; set; }
         public string OutgoingAcademyName => TransferringAcademies[0].OutgoingAcademyName;
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
+        public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
+        public string IncomingTrustName => TransferringAcademies[0].IncomingTrustName;
+        
     }
 }

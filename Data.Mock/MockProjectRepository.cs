@@ -151,6 +151,11 @@ namespace Data.Mock
                 {
                     Project = "This is the rationale for the project",
                     Trust = "This is the rationale for the trust or sponsor"
+                },
+                AcademyAndTrustInformation = new TransferAcademyAndTrustInformation
+                {
+                    Author = "Author",
+                    Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve
                 }
             };
         }

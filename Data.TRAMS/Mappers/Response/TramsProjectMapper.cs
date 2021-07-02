@@ -17,12 +17,23 @@ namespace Data.TRAMS.Mappers.Response
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
+                AcademyAndTrustInformation = AcademyAndTrustInformation(input),
                 State = input.State,
                 Status = input.Status,
                 Urn = input.ProjectUrn,
                 TransferringAcademies = TransferringAcademies(input),
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
-                OutgoingTrustUkprn = input.OutgoingTrust.Ukprn
+                OutgoingTrustUkprn = input.OutgoingTrust.Ukprn,
+                Name = input.TransferringAcademies[0]?.OutgoingAcademy?.Name
+            };
+        }
+
+        private static TransferAcademyAndTrustInformation AcademyAndTrustInformation(TramsProject input)
+        {
+            return new TransferAcademyAndTrustInformation
+            {
+                Author = input.GeneralInformation.Author,
+                Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.Parse(input.GeneralInformation.Recommendation) 
             };
         }
 

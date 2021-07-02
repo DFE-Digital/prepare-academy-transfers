@@ -61,7 +61,12 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     new TransferringAcademies {IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321"}
                 },
                 OutgoingTrustName = "Outgoing trust name",
-                OutgoingTrustUkprn = "Outgoing trust Ukprn"
+                OutgoingTrustUkprn = "Outgoing trust Ukprn",
+                AcademyAndTrustInformation = new TransferAcademyAndTrustInformation
+                {
+                    Author = "Author",
+                    Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Empty
+                }
             };
 
             var result = subject.Map(toMap);
@@ -76,6 +81,13 @@ namespace Data.TRAMS.Tests.Mappers.Request
             AssertDatesAreCorrect(toMap, result);
             AssertFeaturesAreCorrect(toMap, result);
             AssertRationaleIsCorrect(toMap, result);
+            AssertGeneralInformationIsCorrect(toMap, result);
+        }
+
+        private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
+        {
+            Assert.Equal(toMap.AcademyAndTrustInformation.Author, result.GeneralInformation.Author);
+            Assert.Equal(toMap.AcademyAndTrustInformation.Recommendation.ToString(), result.GeneralInformation.Recommendation);
         }
 
         private static void AssertRationaleIsCorrect(Project toMap, TramsProjectUpdate result)
