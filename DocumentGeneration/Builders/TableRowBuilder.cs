@@ -5,13 +5,13 @@ using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration.Builders
 {
-    public class TableRowBuilder : ITableRowBuilder
+    public class TableRowBuilder : ITableRowBuilder, IElementBuilder<TableRow>
     {
-        private OpenXmlElement _parent;
+        private readonly TableRow _tableRow;
 
-        public TableRowBuilder(TableRow tableRow)
+        public TableRowBuilder()
         {
-            _parent = tableRow;
+            _tableRow = new TableRow();
         }
 
         public void AddCell(string text)
@@ -25,7 +25,7 @@ namespace DocumentGeneration.Builders
             var paragraphBuilder = new ParagraphBuilder();
             paragraphBuilder.AddText(textElement);
             tableCell.AppendChild(paragraphBuilder.Build());
-            _parent.AppendChild(tableCell);
+            _tableRow.AppendChild(tableCell);
         }
 
         public void AddCells(string[] text)
@@ -42,6 +42,11 @@ namespace DocumentGeneration.Builders
             {
                 AddCell(t);
             }
+        }
+
+        public TableRow Build()
+        {
+            return _tableRow;
         }
     }
 }

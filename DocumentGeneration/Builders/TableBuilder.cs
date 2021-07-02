@@ -23,12 +23,9 @@ namespace DocumentGeneration.Builders
 
         public void AddRow(Action<ITableRowBuilder> action)
         {
-            var tableRow = new TableRow();
-            var tableRowBuilder = new TableRowBuilder(tableRow);
-
+            var tableRowBuilder = new TableRowBuilder();
             action(tableRowBuilder);
-
-            _tableRows.Add(tableRow);
+            _tableRows.Add(tableRowBuilder.Build());
         }
 
         public void SetBorderStyle(TableBorderStyle style)
