@@ -95,9 +95,15 @@ namespace Data.TRAMS
                 project.OutgoingTrust = new TrustSummary { Ukprn = project.OutgoingTrustUkprn };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                     {
+                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
                         var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                        transferring.IncomingTrust = new TrustSummary() { Ukprn = transferring.IncomingTrustUkprn };
+                        transferring.IncomingTrust = new TrustSummary
+                        {
+                            GroupName = incomingTrust.Result.Name,
+                            GroupId = incomingTrust.Result.GiasGroupId,
+                            Ukprn = transferring.IncomingTrustUkprn
+                        };
                         transferring.OutgoingAcademy = new AcademySummary
                         {
                             Name = outgoingAcademy.Result.Name,
