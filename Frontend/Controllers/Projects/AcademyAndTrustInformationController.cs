@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,25 +12,29 @@ namespace Frontend.Controllers.Projects
     [Route("project/{urn}/academy-and-trust-information")]
     public class AcademyAndTrustInformationController : Controller
     {
+        private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public AcademyAndTrustInformationController(IProjects projectsRepository)
+        public AcademyAndTrustInformationController(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
         {
             _projectsRepository = projectsRepository;
+            _getInformationForProject = getInformationForProject;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(string urn)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
+            var projectInformation = await _getInformationForProject.Execute(urn);
+
+            if (!projectInformation.IsValid)
             {
-                return View("ErrorPage", project.Error.ErrorMessage);
+                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
             var model = new AcademyAndTrustInformationViewModel
             {
-                Project = project.Result
+                Project = projectInformation.Project,
+                TransferringAcademy = projectInformation.OutgoingAcademy
             };
 
             return View(model);
