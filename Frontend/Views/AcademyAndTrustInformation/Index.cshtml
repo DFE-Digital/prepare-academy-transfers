@@ -79,7 +79,8 @@
                     }
                     else
                     {
-                        <span class="dfe-text-area-display">@Model.Project.Dates.Htb</span>
+                        var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Htb);
+                        @display
                     }
                 </dd>
                 <dd class="govuk-summary-list__value "/>
@@ -143,7 +144,8 @@
                     }
                     else
                     {
-                        <span class="dfe-text-area-display">@Model.Project.Dates.Target</span>
+                        var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Target);
+                        @display
                     }
                 </dd>
                 <dd class="govuk-summary-list__value "/>
@@ -159,7 +161,8 @@
                     }
                     else
                     {
-                        <span class="dfe-text-area-display">@Model.Project.Dates.FirstDiscussed</span>
+                        var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.FirstDiscussed);
+                        @display
                     }
                 </dd>
                 <dd class="govuk-summary-list__value "/>
