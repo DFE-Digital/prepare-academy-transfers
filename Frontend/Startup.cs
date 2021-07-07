@@ -35,9 +35,15 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages()
+                .AddViewOptions(options =>
+                {
+                    options.HtmlHelperOptions.ClientValidationEnabled = false;
+                });
             services.AddControllersWithViews(options => options.Filters.Add(
                 new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
+            
             var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
             var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
             var redisConfigurationOptions = new ConfigurationOptions()
@@ -102,6 +108,7 @@ namespace Frontend
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
             });
         }
