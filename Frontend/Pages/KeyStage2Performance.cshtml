@@ -1,0 +1,173 @@
+@page "/project/{id}/key-stage-2-performance"
+@model Frontend.Pages.KeyStage2Performance
+
+@{
+    ViewBag.Title = "Key stage 2 performance tables";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            URN @Model.Project.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-l">
+            Key stage 2 performance tables
+        </h1>
+        <p class="govuk-body">
+            This information is pre-populated from TRAMS.
+        </p>
+        <p class="govuk-body">
+            <a href="https://www.compare-school-performance.service.gov.uk/school/@Model.Project.OutgoingAcademyUrn" class="govuk-link" rel="noreferrer noopener" target="_blank">Source of data: Find and compare school performance (opens in new tab)</a>
+        </p>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
+        <table class="govuk-table govuk-!-margin-bottom-9">
+            <caption class="govuk-table__caption govuk-table__caption--m">{year} key stage 2</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header"></th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage meeting expected standard in reading, writing
+                    and maths
+                </th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage achieving a higher standard in reading,
+                    writing and maths
+                </th>
+                <th scope="col" class="govuk-table__header">Reading progress scores</th>
+                <th scope="col" class="govuk-table__header">Writing progress scores</th>
+                <th scope="col" class="govuk-table__header">Maths progress scores</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder}</th>
+                <td class="govuk-table__cell">{Placeholder} </td>
+                <td class="govuk-table__cell">{Placeholder} </td>
+                <td class="govuk-table__cell">{Placeholder} </td>
+                <td class="govuk-table__cell">{Placeholder} </td>
+                <td class="govuk-table__cell">{Placeholder} </td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder} LA average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">National average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="govuk-table govuk-!-margin-bottom-9">
+            <caption class="govuk-table__caption govuk-table__caption--m">{Year2} key stage 2</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header"></th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage meeting expected standard in reading, writing
+                    and maths
+                </th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage achieving a higher standard in reading,
+                    writing and maths
+                </th>
+                <th scope="col" class="govuk-table__header">Reading progress scores</th>
+                <th scope="col" class="govuk-table__header">Writing progress scores</th>
+                <th scope="col" class="govuk-table__header">Maths progress scores</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder}</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder} LA average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">National average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="govuk-table govuk-!-margin-bottom-9">
+            <caption class="govuk-table__caption govuk-table__caption--m">{Year3} key stage 2</caption>
+            <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header"></th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage meeting expected standard in reading, writing
+                    and maths
+                </th>
+                <th scope="col" class="govuk-table__header">
+                    Percentage achieving a higher standard in reading,
+                    writing and maths
+                </th>
+                <th scope="col" class="govuk-table__header">Reading progress scores</th>
+                <th scope="col" class="govuk-table__header">Writing progress scores</th>
+                <th scope="col" class="govuk-table__header">Maths progress scores</th>
+            </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder}</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">{Placeholder} LA average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">National average</th>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+                <td class="govuk-table__cell">{Placeholder}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation" />
+</div>

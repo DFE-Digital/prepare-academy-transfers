@@ -31,6 +31,7 @@ namespace Data.Models
         public string AcademyPerformanceAdditionalInformation { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedAdditionalInformation { get; set; }
+        public string KeyStage2PerformanceAdditionalInformation { get; set; }
         public string OutgoingAcademyName => TransferringAcademies[0].OutgoingAcademyName;
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
         public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
