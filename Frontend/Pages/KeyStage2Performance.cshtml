@@ -69,11 +69,11 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">National average</th>
-                    <td class="govuk-table__cell">@ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged<br>(disadvantaged @ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.Disadvantaged)</td>
-                    <td class="govuk-table__cell">@ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged<br>(disadvantaged @ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.Disadvantaged</td>
-                    <td class="govuk-table__cell">@ks2Result.NationalAverageReadingProgressScore.NotDisadvantaged</td>
-                    <td class="govuk-table__cell">@ks2Result.NationalAverageWritingProgressScore.NotDisadvantaged</td>
-                    <td class="govuk-table__cell">@ks2Result.NationalAverageMathsProgressScore.NotDisadvantaged</td>
+                    <td class="govuk-table__cell">@ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged<br>(disadvantaged @string.Format(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.Disadvantaged,"D"))</td>
+                    <td class="govuk-table__cell">@ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged<br>(disadvantaged @string.Format(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.Disadvantaged,"D"))</td>
+                    <td class="govuk-table__cell"></td>
+                    <td class="govuk-table__cell"></td>
+                    <td class="govuk-table__cell"></td>
                 </tr>
                 </tbody>
             </table>

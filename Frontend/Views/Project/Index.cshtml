@@ -78,11 +78,14 @@
                             <a class="govuk-link" aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@Model.Project.Urn">Latest Ofsted report</a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
                     </li>
-                    <li class="moj-task-list__item">
-                        <span class="moj-task-list__task-name">
-                            <a class="govuk-link" asp-page="/KeyStage2Performance" asp-route-id="@Model.Project.Urn" aria-describedby="key-stage-2-performance-tables">Key stage 2 performance tables</a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
-                    </li>
+                    @if ((bool)ViewData["HasKeyStage2PerformanceData"])
+                    {
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" asp-page="/KeyStage2Performance" asp-route-id="@Model.Project.Urn" aria-describedby="key-stage-2-performance-tables">Key stage 2 performance tables</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
+                        </li>
+                    }
                 </ul>
             </li>
         </ol>
