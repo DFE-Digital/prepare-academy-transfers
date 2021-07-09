@@ -1,4 +1,5 @@
 using Data.Models;
+using Data.Models.KeyStagePerformance;
 
 namespace Frontend.Services.Responses
 {
@@ -11,6 +12,7 @@ namespace Frontend.Services.Responses
 
         public Project Project { get; set; }
         public Academy OutgoingAcademy { get; set; }
+        public EducationPerformance EducationPerformance { get; set; }
         public ServiceResponseError ResponseError { get; set; }
         public bool IsValid => string.IsNullOrEmpty(ResponseError.ErrorMessage);
     }

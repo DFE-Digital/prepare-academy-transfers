@@ -11,7 +11,6 @@ namespace Frontend.Models
         public ProjectStatuses BenefitsAndOtherFactorsStatus => GetBenefitsAndOtherFactorsStatus();
         public ProjectStatuses RationaleStatus => GetRationaleStatus();
         public ProjectStatuses AcademyAndTrustInformationStatus() => GetAcademyAndTrustInformationStatus();
-
         private ProjectStatuses GetAcademyAndTrustInformationStatus()
         {
             var academyAndTrustInformation = Project.AcademyAndTrustInformation;

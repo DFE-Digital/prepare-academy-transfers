@@ -10,37 +10,60 @@ namespace Frontend.Services
     {
         private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
+        private readonly IEducationPerformance _educationPerformanceRepository;
 
         public GetInformationForProject(IAcademies academiesRepository,
-            IProjects projectsRepository)
+            IProjects projectsRepository, IEducationPerformance educationPerformanceRepository)
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
+            _educationPerformanceRepository = educationPerformanceRepository;
         }
 
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
+
+            if (!projectResult.IsValid)
+            {
+                return CreateErrorResponse(projectResult);
+            }
+
             var outgoingAcademyUkprn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUkprn;
             var academyResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyUkprn);
 
-            if (academyResult.IsValid)
+            if (!academyResult.IsValid)
             {
-                return new GetInformationForProjectResponse
-                {
-                    Project = projectResult.Result,
-                    OutgoingAcademy = academyResult.Result
-                };
+                return CreateErrorResponse(academyResult);
             }
 
-            if (academyResult.Error.StatusCode == HttpStatusCode.NotFound)
+            var outgoingAcademyUrn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUrn;
+            var educationPerformanceResult =
+                await _educationPerformanceRepository.GetByAcademyUrn(outgoingAcademyUrn);
+
+            if (!educationPerformanceResult.IsValid)
+            {
+                return CreateErrorResponse(educationPerformanceResult);
+            }
+
+            return new GetInformationForProjectResponse
+            {
+                Project = projectResult.Result,
+                OutgoingAcademy = academyResult.Result,
+                EducationPerformance = educationPerformanceResult.Result
+            };
+        }
+
+        private static GetInformationForProjectResponse CreateErrorResponse<T>(RepositoryResult<T> repositoryResult)
+        {
+            if (repositoryResult.Error.StatusCode == HttpStatusCode.NotFound)
             {
                 return new GetInformationForProjectResponse
                 {
                     ResponseError = new ServiceResponseError
                     {
                         ErrorCode = ErrorCode.NotFound,
-                        ErrorMessage = "Outgoing academy not found"
+                        ErrorMessage = "Not found"
                     }
                 };
             }

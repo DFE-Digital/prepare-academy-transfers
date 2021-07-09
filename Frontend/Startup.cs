@@ -2,10 +2,12 @@ using System;
 using Data;
 using Data.Mock;
 using Data.Models;
+using Data.Models.KeyStagePerformance;
 using Data.TRAMS;
 using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
+using Data.TRAMS.Models.EducationPerformance;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Helpers;
@@ -132,9 +134,11 @@ namespace Frontend
                 services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
                 services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
                 services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+                services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
                 services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
                 services.AddTransient<ITrusts, TramsTrustsRepository>();
                 services.AddTransient<IAcademies, TramsEstablishmentRepository>();
+                services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
                 services.AddSingleton<IProjects, TramsProjectsRepository>();
             }
         }
