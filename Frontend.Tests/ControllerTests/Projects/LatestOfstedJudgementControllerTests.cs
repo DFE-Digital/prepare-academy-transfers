@@ -43,7 +43,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Urn = _projectUrn,
                     TransferringAcademies = new List<TransferringAcademies>
                         {new TransferringAcademies() {OutgoingAcademyUkprn = "1234567"}},
-                    LatestOfstedAdditionalInformation = "some info"
+                    LatestOfstedJudgementAdditionalInformation = "some info"
                 };
 
                 _foundAcademy = new Academy
@@ -143,7 +143,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
                     Assert.Equal("LatestOfstedJudgement", redirectToActionResponse.ControllerName);
                     Assert.Equal("Index", redirectToActionResponse.ActionName);
-                    Assert.Equal(additionalInformation, _foundProject.LatestOfstedAdditionalInformation);
+                    Assert.Equal(additionalInformation, _foundProject.LatestOfstedJudgementAdditionalInformation);
                 }
 
                 [Fact]
@@ -166,7 +166,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     await _subject.Index(_projectUrn, additionalInfo);
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.LatestOfstedAdditionalInformation == additionalInfo
+                        project => project.LatestOfstedJudgementAdditionalInformation == additionalInfo
                     )));
                 }
 

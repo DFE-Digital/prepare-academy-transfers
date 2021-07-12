@@ -22,7 +22,15 @@ namespace Data.TRAMS.Mappers.Request
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
-                GeneralInformation = GeneralInformation(input)
+                GeneralInformation = GeneralInformation(input),
+                AcademyPerformanceAdditionalInformation = input.AcademyPerformanceAdditionalInformation,
+                PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation,
+                LatestOfstedJudgementAdditionalInformation = input.LatestOfstedJudgementAdditionalInformation,
+                KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation,
+                KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation,
+                KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation
+                
+                
             };
         }
 

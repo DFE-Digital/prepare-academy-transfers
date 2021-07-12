@@ -66,7 +66,13 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     Author = "Author",
                     Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Empty
-                }
+                },
+                AcademyPerformanceAdditionalInformation = "AcademyPerformanceAdditionalInformation",
+                PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
+                LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
+                KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
+                KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
+                KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation",
             };
 
             var result = subject.Map(toMap);
@@ -75,6 +81,12 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.State, result.State);
             Assert.Equal(toMap.Status, result.Status);
             Assert.Equal(toMap.Urn, result.ProjectUrn);
+            Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
+            Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
+            Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);
+            Assert.Equal(toMap.KeyStage2PerformanceAdditionalInformation, result.KeyStage2PerformanceAdditionalInformation);
+            Assert.Equal(toMap.KeyStage4PerformanceAdditionalInformation, result.KeyStage4PerformanceAdditionalInformation);
+            Assert.Equal(toMap.KeyStage5PerformanceAdditionalInformation, result.KeyStage5PerformanceAdditionalInformation);
 
             AssertTransferringAcademiesCorrect(toMap, result);
             AssertBenefitsAreCorrect(toMap, result);
