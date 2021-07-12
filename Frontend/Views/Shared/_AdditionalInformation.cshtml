@@ -11,7 +11,7 @@
             <div id="additional-information-hint" class="govuk-hint">
                 @Model.HintText
             </div>
-            <form asp-action="Index" asp-route-id="@Model.Urn" method="post">
+            <form method="post">
                 <textarea class="govuk-textarea" asp-for="@Model.AdditionalInformation" id="additionalInformation" name="additionalInformation" rows="5" aria-describedby="additional-information-hint"></textarea>
                 <button class="govuk-button" data-module="govuk-button">
                     Save and continue
