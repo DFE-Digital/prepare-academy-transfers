@@ -36,7 +36,7 @@ namespace Frontend.Controllers.Projects
                 Academy = projectInformation.OutgoingAcademy,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
-                    AdditionalInformation = projectInformation.Project.LatestOfstedAdditionalInformation,
+                    AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
                     HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
                     Urn = projectInformation.Project.Urn,
                     AddOrEditAdditionalInformation = addOrEditAdditionalInformation
@@ -55,7 +55,7 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", model.Error.ErrorMessage);
             }
 
-            model.Result.LatestOfstedAdditionalInformation = additionalInformation;
+            model.Result.LatestOfstedJudgementAdditionalInformation = additionalInformation;
             var result = await _projectsRepository.Update(model.Result);
             if (!result.IsValid)
             {
