@@ -17,25 +17,66 @@ namespace Data.TRAMS.Tests.Mappers.Response
             var tramsEducationPerformanceToMap = EducationPerformance.GetSingleTramsEducationPerformance();
 
             var mappedInternalEducationPerformance = _subject.Map(tramsEducationPerformanceToMap);
+            AssertKs2MappedCorrectly(mappedInternalEducationPerformance, tramsEducationPerformanceToMap);
+            var mappedKs5Results = mappedInternalEducationPerformance.KeyStage5Performance;
+            var tramsKs5Results = tramsEducationPerformanceToMap.KeyStage5;
+
+            Assert.Equal(tramsKs5Results[0].Year, mappedKs5Results[0].Year);
+            Assert.Equal(tramsKs5Results[0].AcademicQualificationAverage, mappedKs5Results[0].Academy.AcademicAverage);
+            Assert.Equal(tramsKs5Results[0].AppliedGeneralQualificationAverage,
+                mappedKs5Results[0].Academy.AppliedGeneralAverage);
+            Assert.Equal(tramsKs5Results[0].NationalAcademicQualificationAverage,
+                mappedKs5Results[0].National.AcademicAverage);
+            Assert.Equal(tramsKs5Results[0].NationalAppliedGeneralQualificationAverage,
+                mappedKs5Results[0].National.AppliedGeneralAverage);
+            Assert.Equal(tramsKs5Results[1].Year, mappedKs5Results[1].Year);
+            Assert.Equal(tramsKs5Results[1].AcademicQualificationAverage, mappedKs5Results[1].Academy.AcademicAverage);
+            Assert.Equal(tramsKs5Results[1].AppliedGeneralQualificationAverage,
+                mappedKs5Results[1].Academy.AppliedGeneralAverage);
+            Assert.Equal(tramsKs5Results[1].NationalAcademicQualificationAverage,
+                mappedKs5Results[1].National.AcademicAverage);
+            Assert.Equal(tramsKs5Results[1].NationalAppliedGeneralQualificationAverage,
+                mappedKs5Results[1].National.AppliedGeneralAverage);
+        }
+
+        private void AssertKs2MappedCorrectly(
+            Data.Models.KeyStagePerformance.EducationPerformance mappedInternalEducationPerformance,
+            TramsEducationPerformance tramsEducationPerformanceToMap)
+        {
             var mappedKs2Result = mappedInternalEducationPerformance.KeyStage2Performance.First();
             var tramsKs2Result = tramsEducationPerformanceToMap.KeyStage2.First();
-            
+
             Assert.Equal(tramsKs2Result.Year, mappedKs2Result.Year);
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.MathsProgressScore, mappedKs2Result.MathsProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.ReadingProgressScore, mappedKs2Result.ReadingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.WritingProgressScore, mappedKs2Result.WritingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageMathsProgressScore, mappedKs2Result.NationalAverageMathsProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageReadingProgressScore, mappedKs2Result.NationalAverageReadingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageMathsProgressScore, mappedKs2Result.LAAverageMathsProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageReadingProgressScore, mappedKs2Result.LAAverageReadingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageWritingProgressScore, mappedKs2Result.LAAverageWritingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAveragePercentageAchievingHigherStdInRWM, mappedKs2Result.LAAveragePercentageAchievingHigherStdInRWM));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAveragePercentageMeetingExpectedStdInRWM, mappedKs2Result.LAAveragePercentageMeetingExpectedStdInRWM));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageMathsProgressScore, mappedKs2Result.NationalAverageMathsProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageReadingProgressScore, mappedKs2Result.NationalAverageReadingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageWritingProgressScore, mappedKs2Result.NationalAverageWritingProgressScore));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageAchievingHigherStdInRWM, mappedKs2Result.NationalAveragePercentageAchievingHigherStdInRWM));
-            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM, mappedKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.MathsProgressScore,
+                mappedKs2Result.MathsProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.ReadingProgressScore,
+                mappedKs2Result.ReadingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.WritingProgressScore,
+                mappedKs2Result.WritingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageMathsProgressScore,
+                mappedKs2Result.NationalAverageMathsProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageReadingProgressScore,
+                mappedKs2Result.NationalAverageReadingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageMathsProgressScore,
+                mappedKs2Result.LAAverageMathsProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageReadingProgressScore,
+                mappedKs2Result.LAAverageReadingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAverageWritingProgressScore,
+                mappedKs2Result.LAAverageWritingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAveragePercentageAchievingHigherStdInRWM,
+                mappedKs2Result.LAAveragePercentageAchievingHigherStdInRWM));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.LAAveragePercentageMeetingExpectedStdInRWM,
+                mappedKs2Result.LAAveragePercentageMeetingExpectedStdInRWM));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageMathsProgressScore,
+                mappedKs2Result.NationalAverageMathsProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageReadingProgressScore,
+                mappedKs2Result.NationalAverageReadingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageWritingProgressScore,
+                mappedKs2Result.NationalAverageWritingProgressScore));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageAchievingHigherStdInRWM,
+                mappedKs2Result.NationalAveragePercentageAchievingHigherStdInRWM));
+            Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM,
+                mappedKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM));
         }
         
         [Fact]
