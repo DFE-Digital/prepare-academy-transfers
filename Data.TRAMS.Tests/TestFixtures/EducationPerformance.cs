@@ -74,6 +74,25 @@ namespace Data.TRAMS.Tests.TestFixtures
                         LAAverageP8Maths = GetTestResult(),
                         LAAverageP8Ebacc = GetTestResult(),
                     }
+                }, 
+                KeyStage5 = new List<KeyStage5>()
+                {
+                    new KeyStage5
+                    {
+                        Year = "2018-2019",
+                        AcademicQualificationAverage = "12.12",
+                        AppliedGeneralQualificationAverage = "21.21",
+                        NationalAcademicQualificationAverage = "11.11",
+                        NationalAppliedGeneralQualificationAverage = "22.22"
+                    },
+                    new KeyStage5
+                    {
+                        Year = "2019-2020",
+                        AcademicQualificationAverage = "12.12",
+                        AppliedGeneralQualificationAverage = "21.21",
+                        NationalAcademicQualificationAverage = "11.11",
+                        NationalAppliedGeneralQualificationAverage = "22.22"
+                    }
                 }
             };
         }

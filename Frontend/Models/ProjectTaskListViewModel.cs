@@ -1,36 +1,45 @@
 ﻿using Data.Models;
 using Data.Models.Projects;
 using System.Linq;
+using Data.Models.KeyStagePerformance;
 
 namespace Frontend.Models
 {
     public class ProjectTaskListViewModel : ProjectViewModel
     {
+        public EducationPerformance EducationPerformance { get; set; }
         public ProjectStatuses FeatureTransferStatus => GetFeatureTransferStatus();
         public ProjectStatuses TransferDatesStatus => GetTransferDatesStatus();
         public ProjectStatuses BenefitsAndOtherFactorsStatus => GetBenefitsAndOtherFactorsStatus();
         public ProjectStatuses RationaleStatus => GetRationaleStatus();
         public ProjectStatuses AcademyAndTrustInformationStatus() => GetAcademyAndTrustInformationStatus();
+
+        public bool HasKeyStage5PerformanceInformation =>
+            EducationPerformance.KeyStage5Performance != null &&
+            EducationPerformance.KeyStage5Performance.Count > 0;
+
         private ProjectStatuses GetAcademyAndTrustInformationStatus()
         {
             var academyAndTrustInformation = Project.AcademyAndTrustInformation;
-            return (string.IsNullOrEmpty(academyAndTrustInformation.Author) && 
-                    (academyAndTrustInformation.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.NotStarted
+            return (string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
+                    (academyAndTrustInformation.Recommendation ==
+                     TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.NotStarted
                 : (!string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
-                   (academyAndTrustInformation.Recommendation != TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.Completed
+                   (academyAndTrustInformation.Recommendation !=
+                    TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.Completed
                 : ProjectStatuses.InProgress;
         }
 
         private ProjectStatuses GetFeatureTransferStatus()
         {
             if (Project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty &&
-                    Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == null &&
-                    Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+                Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == null &&
+                Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                 return ProjectStatuses.NotStarted;
 
             if (Project.Features.WhoInitiatedTheTransfer != TransferFeatures.ProjectInitiators.Empty &&
-                    Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
-                    Project.Features.TypeOfTransfer != TransferFeatures.TransferTypes.Empty)
+                Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
+                Project.Features.TypeOfTransfer != TransferFeatures.TransferTypes.Empty)
                 return ProjectStatuses.Completed;
 
             return ProjectStatuses.InProgress;

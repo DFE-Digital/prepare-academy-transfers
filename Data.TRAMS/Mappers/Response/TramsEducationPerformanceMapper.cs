@@ -3,6 +3,7 @@ using Data.Models.KeyStagePerformance;
 using Data.TRAMS.Models.EducationPerformance;
 using KeyStage2 = Data.Models.KeyStagePerformance.KeyStage2;
 using KeyStage4 = Data.Models.KeyStagePerformance.KeyStage4;
+using KeyStage5 = Data.Models.KeyStagePerformance.KeyStage5;
 using Trams = Data.TRAMS.Models;
 
 namespace Data.TRAMS.Mappers.Response
@@ -241,7 +242,23 @@ namespace Data.TRAMS.Mappers.Response
                 },
                 LAAverageP8LowerConfidence = ks4Result.LAAverageP8LowerConfidence,
                 LAAverageP8UpperConfidence = ks4Result.LAAverageP8UpperConfidence
-                    }).ToList() 
+                    }).ToList() ,
+                KeyStage5Performance = input.KeyStage5.Select(ks5Result =>
+                    new KeyStage5
+                    {
+                        Year = ks5Result.Year,
+                        Academy = new KeyStage5Result
+                        {
+                            AcademicAverage = ks5Result.AcademicQualificationAverage,
+                            AppliedGeneralAverage = ks5Result.AppliedGeneralQualificationAverage,
+                        },
+                        National = new KeyStage5Result
+                        {
+                            AcademicAverage = ks5Result.NationalAcademicQualificationAverage,
+                            AppliedGeneralAverage = ks5Result.NationalAppliedGeneralQualificationAverage
+                        }
+                    }
+                ).ToList()
             };
         }
     }

@@ -1,0 +1,87 @@
+@page "/project/{id}/key-stage-5-performance"
+@using Frontend.Helpers
+@model Frontend.Pages.KeyStage5Performance
+
+@{
+    ViewBag.Title = "Key stage 5 performance tables";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            URN @Model.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-l">
+            Key stage 5 performance tables
+        </h1>
+        <p class="govuk-body">
+            This information is pre-populated from TRAMS.
+        </p>
+        <p class="govuk-body">
+            <a href="https://www.compare-school-performance.service.gov.uk/school/<URN>" class="govuk-link" rel="noreferrer noopener" target="_blank">Source of data: Find and compare school performance (opens in new tab)</a>
+        </p>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
+        @foreach (var ks5Result in Model.EducationPerformance.KeyStage5Performance.OrderByDescending(o => o.Year))
+        {
+            <h2 class="govuk-heading-m">
+                @ks5Result.Year scores for academic and applied general qualifications
+            </h2>
+            <table class="govuk-table govuk-!-margin-bottom-9">
+                <caption class="govuk-table__caption govuk-table__caption--s">Local authority: @Model.LocalAuthorityName</caption>
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header"></th>
+                    <th scope="col" class="govuk-table__header">Academic progress</th>
+                    <th scope="col" class="govuk-table__header">Academic average</th>
+                    <th scope="col" class="govuk-table__header">Applied general progress</th>
+                    <th scope="col" class="govuk-table__header">Applied general average</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">@Model.OutgoingAcademyName</th>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralAverage)</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">National average</th>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralAverage)</td>
+                </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
+</div>
+
+@if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <form asp-action="Index" asp-controller="Project" asp-route-id="@Model.ProjectUrn">
+                <button class="govuk-button" data-module="govuk-button">
+                    Confirm and continue
+                </button>
+            </form>
+        </div>
+    </div>
+}
