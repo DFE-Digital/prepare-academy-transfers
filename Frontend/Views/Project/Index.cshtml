@@ -86,6 +86,15 @@
                             </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
                         </li>
                     }
+                    
+                    @if (Model.HasKeyStage5PerformanceInformation)
+                    {
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" asp-page="/KeyStage5Performance" asp-route-id="@Model.Project.Urn" aria-describedby="key-stage-5-performance-tables">Key stage 5 performance tables</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-5-performance-tables">Reference only</strong>
+                        </li>
+                    }
                 </ul>
             </li>
         </ol>

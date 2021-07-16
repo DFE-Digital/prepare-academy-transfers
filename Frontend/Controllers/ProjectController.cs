@@ -30,10 +30,17 @@ namespace Frontend.Controllers
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
+            var viewModel = new ProjectTaskListViewModel
+            {
+                Project = project.Result
+            };
+
             var educationPerformance =
                 await _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn);
             if (educationPerformance.IsValid)
             {
+                viewModel.EducationPerformance = educationPerformance.Result;
+
                 ViewData["HasKeyStage2PerformanceData"] =
                     HasKeyStage2PerformanceData(educationPerformance.Result?.KeyStage2Performance);
             }
@@ -42,13 +49,8 @@ namespace Frontend.Controllers
                 ViewData["HasKeyStage2PerformanceData"] = false;
             }
 
-            var viewModel = new ProjectTaskListViewModel
-            {
-                Project = project.Result
-            };
-
             ViewData["ProjectId"] = id;
-            
+
             return View(viewModel);
         }
 

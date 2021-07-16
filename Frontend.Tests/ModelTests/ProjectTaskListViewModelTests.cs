@@ -2,6 +2,9 @@
 using Data.Models.Projects;
 using Frontend.Models;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Data.Models.KeyStagePerformance;
+using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using Xunit;
 using static Data.Models.Projects.TransferFeatures;
 
@@ -27,7 +30,7 @@ namespace Frontend.Tests.ModelTests
                         TypeOfTransfer = TransferFeatures.TransferTypes.Empty
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.FeatureTransferStatus;
@@ -52,7 +55,7 @@ namespace Frontend.Tests.ModelTests
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.FeatureTransferStatus;
@@ -68,7 +71,8 @@ namespace Frontend.Tests.ModelTests
             [InlineData(ProjectInitiators.Empty, null, TransferTypes.JoiningToFormMat)]
             [InlineData(ProjectInitiators.Empty, true, TransferTypes.Empty)]
             [InlineData(ProjectInitiators.Empty, true, TransferTypes.JoiningToFormMat)]
-            public void GivenTransferFeatureDataIsPartiallyCompleted_ReturnInProgress(ProjectInitiators projectInitiator,
+            public void GivenTransferFeatureDataIsPartiallyCompleted_ReturnInProgress(
+                ProjectInitiators projectInitiator,
                 bool? isSubjectToRddOrEsfaIntervention,
                 TransferTypes transferType)
             {
@@ -78,17 +82,47 @@ namespace Frontend.Tests.ModelTests
                     Features = new TransferFeatures
                     {
                         WhoInitiatedTheTransfer = projectInitiator,
-                        ReasonForTransfer = new ReasonForTransfer { IsSubjectToRddOrEsfaIntervention = isSubjectToRddOrEsfaIntervention },
+                        ReasonForTransfer = new ReasonForTransfer
+                            {IsSubjectToRddOrEsfaIntervention = isSubjectToRddOrEsfaIntervention},
                         TypeOfTransfer = transferType
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.FeatureTransferStatus;
 
                 // Assert
                 Assert.Equal(ProjectStatuses.InProgress, result);
+            }
+        }
+
+        public class HasKeyStage5PerformanceDataTests
+        {
+            [Fact]
+            public void GivenNull_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel {EducationPerformance = new EducationPerformance()};
+                Assert.False(model.HasKeyStage5PerformanceInformation);
+            }
+
+            [Fact]
+            public void GivenEmptyList_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel
+                    {EducationPerformance = new EducationPerformance() {KeyStage5Performance = new List<KeyStage5>()}};
+                Assert.False(model.HasKeyStage5PerformanceInformation);
+            }
+
+            [Fact]
+            public void GivenListWithItem_ReturnTrue()
+            {
+                var model = new ProjectTaskListViewModel
+                {
+                    EducationPerformance = new EducationPerformance
+                        {KeyStage5Performance = new List<KeyStage5> {new KeyStage5()}}
+                };
+                Assert.True(model.HasKeyStage5PerformanceInformation);
             }
         }
 
@@ -107,7 +141,7 @@ namespace Frontend.Tests.ModelTests
                         Htb = string.Empty
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.TransferDatesStatus;
@@ -129,7 +163,7 @@ namespace Frontend.Tests.ModelTests
                         Htb = null
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.TransferDatesStatus;
@@ -158,7 +192,7 @@ namespace Frontend.Tests.ModelTests
                         Htb = htbDate
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.TransferDatesStatus;
@@ -180,7 +214,7 @@ namespace Frontend.Tests.ModelTests
                         Htb = "test"
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.TransferDatesStatus;
@@ -204,7 +238,7 @@ namespace Frontend.Tests.ModelTests
                         OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>()
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.BenefitsAndOtherFactorsStatus;
@@ -221,11 +255,12 @@ namespace Frontend.Tests.ModelTests
                 {
                     Benefits = new TransferBenefits
                     {
-                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit> { TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport },
+                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit>
+                            {TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport},
                         OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>()
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.BenefitsAndOtherFactorsStatus;
@@ -243,10 +278,11 @@ namespace Frontend.Tests.ModelTests
                     Benefits = new TransferBenefits
                     {
                         IntendedBenefits = new List<TransferBenefits.IntendedBenefit>(),
-                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string> { { TransferBenefits.OtherFactor.HighProfile, "test" } }
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
+                            {{TransferBenefits.OtherFactor.HighProfile, "test"}}
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.BenefitsAndOtherFactorsStatus;
@@ -267,7 +303,7 @@ namespace Frontend.Tests.ModelTests
                         OtherFactors = null
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.BenefitsAndOtherFactorsStatus;
@@ -284,11 +320,13 @@ namespace Frontend.Tests.ModelTests
                 {
                     Benefits = new TransferBenefits
                     {
-                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit> { TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport },
-                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string> { { TransferBenefits.OtherFactor.HighProfile, "test" } }
+                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit>
+                            {TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport},
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
+                            {{TransferBenefits.OtherFactor.HighProfile, "test"}}
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.BenefitsAndOtherFactorsStatus;
@@ -312,7 +350,7 @@ namespace Frontend.Tests.ModelTests
                         Trust = string.Empty
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.RationaleStatus;
@@ -337,7 +375,7 @@ namespace Frontend.Tests.ModelTests
                         Trust = trustValue
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.RationaleStatus;
@@ -358,7 +396,7 @@ namespace Frontend.Tests.ModelTests
                         Trust = "some value"
                     }
                 };
-                var model = new ProjectTaskListViewModel { Project = project };
+                var model = new ProjectTaskListViewModel {Project = project};
 
                 // Act
                 var result = model.RationaleStatus;
@@ -371,13 +409,19 @@ namespace Frontend.Tests.ModelTests
         public class AcademyAndTrustInformationTests
         {
             [Theory]
-            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, null, ProjectStatuses.NotStarted)]
-            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Approve, "test author", ProjectStatuses.Completed)]
-            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, "test author", ProjectStatuses.InProgress)]
-            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, null, ProjectStatuses.InProgress)]
-            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, "", ProjectStatuses.InProgress)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, null,
+                ProjectStatuses.NotStarted)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Approve, "test author",
+                ProjectStatuses.Completed)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Empty, "test author",
+                ProjectStatuses.InProgress)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, null,
+                ProjectStatuses.InProgress)]
+            [InlineData(TransferAcademyAndTrustInformation.RecommendationResult.Decline, "",
+                ProjectStatuses.InProgress)]
             public void GivenRelevantData_ReturnCorrectStatus(
-                TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author, ProjectStatuses expectedStatus)
+                TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author,
+                ProjectStatuses expectedStatus)
             {
                 var project = new Project
                 {
@@ -389,7 +433,7 @@ namespace Frontend.Tests.ModelTests
                 };
                 var model = new ProjectTaskListViewModel {Project = project};
                 var result = model.AcademyAndTrustInformationStatus();
-                
+
                 Assert.Equal(expectedStatus, result);
             }
         }
