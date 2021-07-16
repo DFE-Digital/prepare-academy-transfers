@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using Data.Models.KeyStagePerformance;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models.EducationPerformance;
-using Data.TRAMS.Tests.TestFixtures;
 using Xunit;
 using EducationPerformance = Data.TRAMS.Tests.TestFixtures.EducationPerformance;
-using KeyStage2 = Data.TRAMS.Models.EducationPerformance.KeyStage2;
 
 namespace Data.TRAMS.Tests.Mappers.Response
 {
@@ -15,7 +12,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
         private readonly TramsEducationPerformanceMapper _subject = new TramsEducationPerformanceMapper();
 
         [Fact]
-        public void GivenTramsEducationPerformance_MapsToInternalEducationPerformanceSuccessfully()
+        public void GivenTramsEducationPerformanceKeyStage2Results_MapsToInternalEducationPerformance()
         {
             var tramsEducationPerformanceToMap = EducationPerformance.GetSingleTramsEducationPerformance();
 
@@ -39,6 +36,51 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAverageWritingProgressScore, mappedKs2Result.NationalAverageWritingProgressScore));
             Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageAchievingHigherStdInRWM, mappedKs2Result.NationalAveragePercentageAchievingHigherStdInRWM));
             Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM, mappedKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM));
+        }
+        
+        [Fact]
+        public void GivenTramsEducationPerformanceKeyStage4Results_MapsToInternalEducationPerformance()
+        {
+            var tramsEducationPerformanceToMap = EducationPerformance.GetSingleTramsEducationPerformance();
+
+            var mappedInternalEducationPerformance = _subject.Map(tramsEducationPerformanceToMap);
+            var mappedKs4Result = mappedInternalEducationPerformance.KeyStage4Performance.First();
+            var tramsKs4Result = tramsEducationPerformanceToMap.KeyStage4.First();
+
+            Assert.Equal(tramsKs4Result.Year, mappedKs4Result.Year);
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipAttainment8score, mappedKs4Result.SipAttainment8score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipAttainment8scoreebacc, mappedKs4Result.SipAttainment8scoreebacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipAttainment8scoreenglish, mappedKs4Result.SipAttainment8scoreenglish));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipAttainment8scoremaths, mappedKs4Result.SipAttainment8scoremaths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipNumberofpupilsprogress8, mappedKs4Result.SipNumberofpupilsprogress8));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipProgress8ebacc, mappedKs4Result.SipProgress8ebacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipProgress8english, mappedKs4Result.SipProgress8english));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipProgress8maths, mappedKs4Result.SipProgress8maths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.SipProgress8Score, mappedKs4Result.SipProgress8Score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageA8English, mappedKs4Result.NationalAverageA8English));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageA8Maths, mappedKs4Result.NationalAverageA8Maths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageA8Score, mappedKs4Result.NationalAverageA8Score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageP8Ebacc, mappedKs4Result.NationalAverageP8Ebacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageP8English, mappedKs4Result.NationalAverageP8English));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageP8Maths, mappedKs4Result.NationalAverageP8Maths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageP8Score, mappedKs4Result.NationalAverageP8Score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageA8English, mappedKs4Result.LAAverageA8English));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageA8Maths, mappedKs4Result.LAAverageA8Maths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageA8Score, mappedKs4Result.LAAverageA8Score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageP8Ebacc, mappedKs4Result.LAAverageP8Ebacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageP8English, mappedKs4Result.LAAverageP8English));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageP8Maths, mappedKs4Result.LAAverageP8Maths));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageP8Score, mappedKs4Result.LAAverageP8Score));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageA8EBacc, mappedKs4Result.NationalAverageA8EBacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.NationalAverageP8PupilsIncluded, mappedKs4Result.NationalAverageP8PupilsIncluded));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageA8EBacc, mappedKs4Result.LAAverageA8EBacc));
+            Assert.True(AssertPupilCategoryResponse(tramsKs4Result.LAAverageP8PupilsIncluded, mappedKs4Result.LAAverageP8PupilsIncluded));
+            Assert.Equal(tramsKs4Result.SipProgress8lowerconfidence, mappedKs4Result.SipProgress8lowerconfidence);
+            Assert.Equal(tramsKs4Result.SipProgress8upperconfidence, mappedKs4Result.SipProgress8upperconfidence);
+            Assert.Equal(tramsKs4Result.NationalAverageP8LowerConfidence, mappedKs4Result.NationalAverageP8LowerConfidence);
+            Assert.Equal(tramsKs4Result.NationalAverageP8UpperConfidence, mappedKs4Result.NationalAverageP8UpperConfidence);
+            Assert.Equal(tramsKs4Result.LAAverageP8LowerConfidence, mappedKs4Result.LAAverageP8LowerConfidence);
+            Assert.Equal(tramsKs4Result.LAAverageP8UpperConfidence, mappedKs4Result.LAAverageP8UpperConfidence);
         }
 
         private bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
