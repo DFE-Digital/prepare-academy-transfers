@@ -1,8 +1,8 @@
 using System.Linq;
 using Data.Models.KeyStagePerformance;
-using Data.TRAMS.Models;
 using Data.TRAMS.Models.EducationPerformance;
 using KeyStage2 = Data.Models.KeyStagePerformance.KeyStage2;
+using KeyStage4 = Data.Models.KeyStagePerformance.KeyStage4;
 using Trams = Data.TRAMS.Models;
 
 namespace Data.TRAMS.Mappers.Response
@@ -94,7 +94,154 @@ namespace Data.TRAMS.Mappers.Response
                             NotDisadvantaged = ks2Result.LAAverageMathsProgressScore.NotDisadvantaged,
                             Disadvantaged = ks2Result.LAAverageMathsProgressScore.Disadvantaged
                         }
-                    }).ToList()
+                    }).ToList(),
+                KeyStage4Performance = input.KeyStage4.Select(
+                    ks4Result => new KeyStage4
+                    {
+                        Year = ks4Result.Year,
+                 SipAttainment8score = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipAttainment8score.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipAttainment8score.Disadvantaged
+                 },
+                 SipAttainment8scoreenglish = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipAttainment8scoreenglish.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipAttainment8scoreenglish.Disadvantaged
+                 },
+                 SipAttainment8scoremaths = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipAttainment8scoremaths.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipAttainment8scoremaths.Disadvantaged
+                 },
+                 SipAttainment8scoreebacc = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipAttainment8scoreebacc.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipAttainment8scoreebacc.Disadvantaged
+                 },
+                 SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipNumberofpupilsprogress8.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipNumberofpupilsprogress8.Disadvantaged
+                 },
+                 SipProgress8upperconfidence = ks4Result.SipProgress8upperconfidence,
+                 SipProgress8lowerconfidence = ks4Result.SipProgress8lowerconfidence,
+                 SipProgress8english = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipProgress8english.NotDisadvantaged,
+                     Disadvantaged = 
+                         ks4Result.SipProgress8english.Disadvantaged
+                 },
+                 SipProgress8maths = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipProgress8maths.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipProgress8maths.Disadvantaged
+                 },
+                 SipProgress8ebacc = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipProgress8ebacc.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipProgress8ebacc.Disadvantaged
+                 },
+                 SipProgress8Score = new DisadvantagedPupilsResult
+                 {
+                     NotDisadvantaged = ks4Result.SipProgress8Score.NotDisadvantaged,
+                     Disadvantaged = ks4Result.SipProgress8Score.Disadvantaged
+                 },
+                 NationalAverageA8Score = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageA8Score.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageA8Score.Disadvantaged
+                },
+                NationalAverageA8English = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageA8English.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageA8English.Disadvantaged
+                },
+                NationalAverageA8Maths = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageA8Maths.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageA8Maths.Disadvantaged
+                },
+                NationalAverageA8EBacc = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageA8EBacc.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageA8EBacc.Disadvantaged
+                },
+                NationalAverageP8PupilsIncluded = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageP8PupilsIncluded.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageP8PupilsIncluded.Disadvantaged
+                },
+                NationalAverageP8Score = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageP8Score.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageP8Score.Disadvantaged
+                },
+                NationalAverageP8English = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageP8English.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageP8English.Disadvantaged
+                },
+                NationalAverageP8Maths = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageP8Maths.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageP8Maths.Disadvantaged
+                },
+                NationalAverageP8Ebacc = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.NationalAverageP8Ebacc.NotDisadvantaged,
+                    Disadvantaged = ks4Result.NationalAverageP8Ebacc.Disadvantaged
+                },
+                NationalAverageP8LowerConfidence = ks4Result.NationalAverageP8LowerConfidence,
+                NationalAverageP8UpperConfidence = ks4Result.NationalAverageP8UpperConfidence,
+                LAAverageA8Score = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageA8Score.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageA8Score.Disadvantaged
+                },
+                LAAverageA8English = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageA8English.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageA8English.Disadvantaged
+                },
+                LAAverageA8Maths = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageA8Maths.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageA8Maths.Disadvantaged
+                },
+                LAAverageA8EBacc = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageA8EBacc.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageA8EBacc.Disadvantaged
+                },
+                LAAverageP8PupilsIncluded = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageP8PupilsIncluded.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageP8PupilsIncluded.Disadvantaged
+                },
+                LAAverageP8Score = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageP8Score.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageP8Score.Disadvantaged
+                },
+                LAAverageP8English = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageP8English.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageP8English.Disadvantaged
+                },
+                LAAverageP8Maths = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageP8Maths.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageP8Maths.Disadvantaged
+                },
+                LAAverageP8Ebacc = new DisadvantagedPupilsResult
+                {
+                    NotDisadvantaged = ks4Result.LAAverageP8Ebacc.NotDisadvantaged,
+                    Disadvantaged = ks4Result.LAAverageP8Ebacc.Disadvantaged
+                },
+                LAAverageP8LowerConfidence = ks4Result.LAAverageP8LowerConfidence,
+                LAAverageP8UpperConfidence = ks4Result.LAAverageP8UpperConfidence
+                    }).ToList() 
             };
         }
     }
