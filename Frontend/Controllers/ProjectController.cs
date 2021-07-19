@@ -43,10 +43,13 @@ namespace Frontend.Controllers
 
                 ViewData["HasKeyStage2PerformanceData"] =
                     HasKeyStage2PerformanceData(educationPerformance.Result?.KeyStage2Performance);
+                ViewData["HasKeyStage4PerformanceData"] =
+                    HasKeyStage4PerformanceData(educationPerformance.Result?.KeyStage4Performance);
             }
             else
             {
                 ViewData["HasKeyStage2PerformanceData"] = false;
+                ViewData["HasKeyStage4PerformanceData"] = false;
             }
 
             ViewData["ProjectId"] = id;
@@ -61,6 +64,20 @@ namespace Frontend.Controllers
                 || HasValue(result.WritingProgressScore)
                 || HasValue(result.PercentageAchievingHigherStdInRWM)
                 || HasValue(result.PercentageMeetingExpectedStdInRWM));
+        }
+        
+        private static bool HasKeyStage4PerformanceData(List<KeyStage4> keyStage2Performance)
+        {
+            return keyStage2Performance != null && keyStage2Performance.Any(result => HasValue(result.SipAttainment8score)
+                || HasValue(result.SipAttainment8scoreebacc)
+                || HasValue(result.SipAttainment8scoreenglish)
+                || HasValue(result.SipAttainment8scoremaths)
+                || HasValue(result.SipAttainment8score)
+                || HasValue(result.SipProgress8ebacc)
+                || HasValue(result.SipProgress8english)
+                || HasValue(result.SipProgress8maths)
+                || HasValue(result.SipProgress8Score)
+                || HasValue(result.SipNumberofpupilsprogress8));
         }
 
         private static bool HasValue(DisadvantagedPupilsResult disadvantagedPupilResult)

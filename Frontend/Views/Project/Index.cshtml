@@ -86,6 +86,14 @@
                             </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
                         </li>
                     }
+                    @if ((bool) ViewData["HasKeyStage4PerformanceData"])
+                    {
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" asp-page="/KeyStage4Performance" asp-route-id="@Model.Project.Urn" aria-describedby="key-stage-4-performance-tables">Key stage 4 performance tables</a>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-4-performance-tables">Reference only</strong>
+                        </li>
+                    }
                     
                     @if (Model.HasKeyStage5PerformanceInformation)
                     {
