@@ -67,8 +67,7 @@ namespace Frontend.Pages
             OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
             LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
             OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
-            KeyStage4Results = projectInformation.EducationPerformance.KeyStage4Performance.Take(3).OrderByDescending(a => a.Year)
-                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
+            KeyStage4Results = GetLatestThreeResults(projectInformation.EducationPerformance.KeyStage4Performance);
             AdditionalInformation = new AdditionalInformationViewModel
             {
                 AdditionalInformation = projectInformation.Project.KeyStage2PerformanceAdditionalInformation,
@@ -77,6 +76,12 @@ namespace Frontend.Pages
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = addOrEditAdditionalInformation
             };
+        }
+
+        private static List<KeyStage4> GetLatestThreeResults(List<KeyStage4> keyStage4Performance)
+        {
+            return keyStage4Performance.Take(3).OrderByDescending(a => a.Year)
+                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
         }
     }
 }

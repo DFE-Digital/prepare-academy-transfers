@@ -66,9 +66,9 @@ namespace Frontend.Controllers
                 || HasValue(result.PercentageMeetingExpectedStdInRWM));
         }
         
-        private static bool HasKeyStage4PerformanceData(List<KeyStage4> keyStage2Performance)
+        private static bool HasKeyStage4PerformanceData(List<KeyStage4> keyStage4Performance)
         {
-            return keyStage2Performance != null && keyStage2Performance.Any(result => HasValue(result.SipAttainment8score)
+            return keyStage4Performance != null && keyStage4Performance.Any(result => HasValue(result.SipAttainment8score)
                 || HasValue(result.SipAttainment8scoreebacc)
                 || HasValue(result.SipAttainment8scoreenglish)
                 || HasValue(result.SipAttainment8scoremaths)
