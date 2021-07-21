@@ -1,3 +1,4 @@
+@using Frontend.ExtensionMethods
 @model Frontend.Views.Transfers.OutgoingTrustDetails
 
 @{
@@ -16,7 +17,7 @@
         <dl class="govuk-summary-list govuk-summary-list--no-border">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">School name</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.Name</dd>
+                <dd class="govuk-summary-list__value">@Model.Trust.Name.ToTitleCase()</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Companies House number</dt>
