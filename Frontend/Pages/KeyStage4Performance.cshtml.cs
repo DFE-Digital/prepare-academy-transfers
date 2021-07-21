@@ -81,7 +81,14 @@ namespace Frontend.Pages
         private static List<KeyStage4> GetLatestThreeResults(List<KeyStage4> keyStage4Performance)
         {
             return keyStage4Performance.Take(3).OrderByDescending(a => a.Year)
-                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
+                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c => 
+                {
+                    if (c.Year != null)
+                    {
+                        c.Year = c.Year.Replace("-", " - ");
+                    }
+                    return c;
+                }).ToList();        
         }
     }
 }

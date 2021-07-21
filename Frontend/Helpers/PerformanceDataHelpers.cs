@@ -10,8 +10,8 @@ namespace Frontend.Helpers
 
         public static HtmlString GetFormattedResult(DisadvantagedPupilsResult disadvantagedPupilResult)
         {
-            if (string.IsNullOrEmpty(disadvantagedPupilResult.NotDisadvantaged) &&
-                string.IsNullOrEmpty(disadvantagedPupilResult.Disadvantaged))
+            if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
+                string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
                 return new HtmlString(NoDataText);
 
             return new HtmlString(

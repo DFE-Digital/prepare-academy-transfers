@@ -219,9 +219,9 @@
             </tr>
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">School confidence interval</th>
-                <td class="govuk-table__cell">@Model.KeyStage4Results[2].SipProgress8lowerconfidence to @Model.KeyStage4Results[2].SipProgress8upperconfidence</td>
-                <td class="govuk-table__cell">@Model.KeyStage4Results[1].SipProgress8lowerconfidence to @Model.KeyStage4Results[1].SipProgress8upperconfidence</td>
-                <td class="govuk-table__cell">@Model.KeyStage4Results[0].SipProgress8lowerconfidence to @Model.KeyStage4Results[0].SipProgress8upperconfidence</td>
+                <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedConfidenceInterval(@Model.KeyStage4Results[2].SipProgress8lowerconfidence, @Model.KeyStage4Results[2].SipProgress8upperconfidence)</td>
+                <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedConfidenceInterval(@Model.KeyStage4Results[1].SipProgress8lowerconfidence, @Model.KeyStage4Results[1].SipProgress8upperconfidence)</td>
+                <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedConfidenceInterval(@Model.KeyStage4Results[0].SipProgress8lowerconfidence, @Model.KeyStage4Results[0].SipProgress8upperconfidence)</td>
             </tr>
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">@Model.LocalAuthorityName LA average</th>
