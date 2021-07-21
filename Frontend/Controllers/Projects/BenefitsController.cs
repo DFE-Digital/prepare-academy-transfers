@@ -132,6 +132,16 @@ namespace Frontend.Controllers.Projects
             {
                 Project = project.Result,
             };
+            
+            if (otherFactors.Count == 0)
+            {
+                var firstOtherFactor =
+                    EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayableValues(TransferBenefits.OtherFactor
+                        .Empty)[0];
+                model.FormErrors.AddError(firstOtherFactor.ToString(), "otherFactors",
+                    "Please select at least one other factor");
+                return View(model);
+            }
 
             var projectFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
 

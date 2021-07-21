@@ -6,6 +6,7 @@
 @{
     ViewBag.Title = "Other factors";
     Layout = "_Layout";
+    var formClasses = Model.FormErrors.FormClassesForField("otherFactors");
     var otherFactors = Model.Project.Benefits.OtherFactors;
 
     var highProfileChecked = otherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile);
@@ -38,10 +39,12 @@
     <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
 }
 
+@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="OtherFactors" method="post" novalidate="">
-            <div class="govuk-form-group">
+            <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend">
                         <h1 class="govuk-fieldset__heading">
@@ -56,6 +59,14 @@
                     <div id="waste-hint" class="govuk-hint">
                         Select all that apply.
                     </div>
+
+                    @if (Model.FormErrors.HasErrorForField("otherFactors"))
+                    {
+                        <span id="other-factors-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("otherFactors").ErrorMessage
+                        </span>
+                    }
+
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="@highProfile[0]" name="otherFactors" type="checkbox" value="@highProfile[0]" aria-controls="conditional-@highProfile[0]" aria-expanded="false" checked="@highProfileChecked">

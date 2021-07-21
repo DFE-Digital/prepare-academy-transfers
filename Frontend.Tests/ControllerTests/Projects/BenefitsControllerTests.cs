@@ -286,6 +286,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
+                
+                [Fact]
+                public async void GivenUrnAndNoOtherFactors_CreateErrorOnTheView()
+                {
+                    var otherFactors = new List<TransferBenefits.OtherFactor>();
+                    var response = await _subject.OtherFactorsPost("0001", otherFactors, "", "", "");
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    Assert.True(viewModel.FormErrors.HasErrorForField("otherFactors"));
+                }
             }
 
             public class PostTests : OtherFactorsTests
