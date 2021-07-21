@@ -13,7 +13,40 @@ namespace Frontend.Models
         public ProjectStatuses BenefitsAndOtherFactorsStatus => GetBenefitsAndOtherFactorsStatus();
         public ProjectStatuses RationaleStatus => GetRationaleStatus();
         public ProjectStatuses AcademyAndTrustInformationStatus() => GetAcademyAndTrustInformationStatus();
+        public bool HasKeyStage2PerformanceInformation
+        {
+            get
+            {
+                return EducationPerformance.KeyStage2Performance != null &&
+                       EducationPerformance.KeyStage2Performance.Any(result => HasValue(result.MathsProgressScore)
+                                                                               || HasValue(result.ReadingProgressScore)
+                                                                               || HasValue(result.WritingProgressScore)
+                                                                               || HasValue(result
+                                                                                   .PercentageAchievingHigherStdInRWM)
+                                                                               || HasValue(result
+                                                                                   .PercentageMeetingExpectedStdInRWM));
+            }
+        }
 
+        public bool HasKeyStage4PerformanceInformation
+        {
+            get
+            {
+                return EducationPerformance.KeyStage4Performance != null &&
+                       EducationPerformance.KeyStage4Performance.Any(result => 
+                           HasValue(result.SipAttainment8score)
+                           || HasValue(result.SipAttainment8scoreebacc)
+                           || HasValue(result.SipAttainment8scoreenglish)
+                           || HasValue(result.SipAttainment8scoremaths)
+                           || HasValue(result.SipAttainment8score)
+                           || HasValue(result.SipProgress8ebacc)
+                           || HasValue(result.SipProgress8english)
+                           || HasValue(result.SipProgress8maths)
+                           || HasValue(result.SipProgress8Score)
+                           || HasValue(result.SipNumberofpupilsprogress8));
+            }
+        }
+        
         public bool HasKeyStage5PerformanceInformation
         {
             get
@@ -26,6 +59,12 @@ namespace Frontend.Models
                            )
                        );
             }
+        }
+
+        private static bool HasValue(DisadvantagedPupilsResult disadvantagedPupilResult)
+        {
+            return !string.IsNullOrEmpty(disadvantagedPupilResult.Disadvantaged) ||
+                   !string.IsNullOrEmpty(disadvantagedPupilResult.NotDisadvantaged);
         }
 
         private ProjectStatuses GetAcademyAndTrustInformationStatus()
