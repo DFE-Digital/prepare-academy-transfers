@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Projects" />
+    <Folder Include="Pages\TaskList\GeneralInformation" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\htb-template.docx" />

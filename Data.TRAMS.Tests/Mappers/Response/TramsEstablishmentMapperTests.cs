@@ -98,10 +98,6 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(establishmentToMap.EstablishmentType.Name, performance.SchoolType);
             Assert.Equal(establishmentToMap.OfstedRating, performance.OfstedRating);
             Assert.Equal(establishmentToMap.OfstedLastInspection, performance.OfstedJudgementDate);
-            Assert.Equal("Requires improvement", performance.AchievementOfPupil);
-            Assert.Equal("Inadequate", performance.QualityOfTeaching);
-            Assert.Equal("Outstanding", performance.BehaviourAndSafetyOfPupil);
-            Assert.Equal("Good", performance.LeadershipAndManagement);
         }
 
         private static string ExpectedPercentageFull(TramsEstablishment establishmentToMap)

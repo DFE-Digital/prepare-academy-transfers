@@ -1,0 +1,63 @@
+@model ProjectPageModel
+
+<dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+            @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.SchoolName)
+        </dt>
+        <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.SchoolName"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions"/>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+            @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.InspectionDate)
+        </dt>
+
+        <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.InspectionDate"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions"/>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+            @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness)
+        </dt>
+        <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions"/>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key dfe-summary-list__key--width-50">
+            @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.OfstedReport)
+        </dt>
+        <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
+            @if (string.IsNullOrEmpty(Model.TransferringAcademy.LatestOfstedJudgement.OfstedReport))
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                <a class="govuk-link" href="@Model.TransferringAcademy.LatestOfstedJudgement.OfstedReport" rel="noreferrer noopener" target="_blank">Latest Ofsted report (opens in new tab)</a>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions"/>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Additional information (optional)
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <stringsummary value="@Model.Project.LatestOfstedJudgementAdditionalInformation"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link"
+               asp-controller="LatestOfstedJudgement" asp-action="Index"
+               asp-route-urn="@Model.Project.Urn" asp-route-addOrEditAdditionalInformation="true">
+                Change<span class="govuk-visually-hidden">latest ofsted judgement additional information</span>
+            </a>
+        </dd>
+    </div>
+</dl>

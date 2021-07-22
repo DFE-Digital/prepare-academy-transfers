@@ -57,17 +57,12 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new AcademyPerformance
             {
-                AchievementOfPupil = ParseOfstedRating(input.MisEstablishment.PersonalDevelopment),
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
-                BehaviourAndSafetyOfPupil = ParseOfstedRating(input.MisEstablishment.BehaviourAndAttitudes),
                 Capacity = input.SchoolCapacity,
-                LeadershipAndManagement =
-                    ParseOfstedRating(input.MisEstablishment.EffectivenessOfLeadershipAndManagement),
                 NumberOnRoll = input.Census.NumberOfPupils,
                 OfstedJudgementDate = input.OfstedLastInspection,
                 OfstedRating = input.OfstedRating,
                 PercentageFull = PercentageFull(input),
-                QualityOfTeaching = ParseOfstedRating(input.MisEstablishment.QualityOfEducation),
                 SchoolPhase = input.PhaseOfEducation.Name,
                 SchoolType = input.EstablishmentType.Name
             };

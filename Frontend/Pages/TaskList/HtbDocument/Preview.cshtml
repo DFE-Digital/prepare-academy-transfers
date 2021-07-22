@@ -1,0 +1,172 @@
+@page "/project/{id}/preview"
+@model Frontend.Pages.TaskList.HtbDocument.Preview
+
+@{
+    ViewBag.Title = "New preview";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            URN @Model.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-xl">
+            Preview headteacher board (HTB) template
+        </h1>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-s">Features of the transfer</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Features of the transfer details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="TaskList/Features/Features" model="Model"></partial>
+            </div>
+        </section>
+
+        <h2 class="govuk-heading-s">Set transfer dates</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Set transfer dates details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="TaskList/TransferDates/TransferDates" model="Model"></partial>
+            </div>
+        </section>
+
+        <h2 class="govuk-heading-s">Benefits and other factors</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Benefits and other factors details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="TaskList/Benefits/Benefits" model="Model"></partial>
+            </div>
+        </section>
+
+        <h2 class="govuk-heading-s">Rationale</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Rationale details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="TaskList/Rationale/Rationale" model="Model"></partial>
+            </div>
+        </section>
+
+        <h2 class="govuk-heading-s">Academy and trust information and project dates</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Academy and trust information and project dates details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="TaskList/AcademyAndTrustInformation/AcademyAndTrustInformation" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">General information</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    General information details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="GeneralInformation" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Pupil numbers</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Pupil numbers details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="PupilNumbers" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Latest Ofsted judgement</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Latest Ofsted judgement details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="LatestOfstedJudgement" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Latest Ofsted judgement</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Latest Ofsted judgement details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="LatestOfstedJudgement" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Key stage 2 performance tables</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Key stage 2 performance tables details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="KeyStage2PerformanceSummary" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Key stage 4 performance tables details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="KeyStage4PerformanceSummary" model="Model"></partial>
+            </div>
+        </section>
+        
+        <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Key stage 5 performance tables details
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="KeyStage5PerformanceSummary" model="Model"></partial>
+            </div>
+        </section>
+    </div>
+</div>
