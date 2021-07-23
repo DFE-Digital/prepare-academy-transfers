@@ -34,7 +34,7 @@
         @foreach (var ks2Result in Model.EducationPerformance.KeyStage2Performance.OrderByDescending(o => o.Year))
         {
             <table class="govuk-table govuk-!-margin-bottom-9">
-                <caption class="govuk-table__caption govuk-table__caption--m">@ks2Result.Year key stage 2</caption>
+                <caption class="govuk-table__caption govuk-table__caption--m">@PerformanceDataHelpers.GetFormattedYear(ks2Result.Year) key stage 2</caption>
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header"></th>

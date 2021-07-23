@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.KeyStagePerformance;
 using Frontend.ExtensionMethods;
+using Frontend.Helpers;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -52,7 +53,7 @@ namespace Frontend.Pages
                 return this.View("ErrorPage", project.Error.ErrorMessage);
             }
             
-            project.Result.KeyStage2PerformanceAdditionalInformation = additionalInformation;
+            project.Result.KeyStage4PerformanceAdditionalInformation = additionalInformation;
             await _projectRepository.Update(project.Result);
             
             return new RedirectToPageResult(nameof(KeyStage4Performance), 
@@ -70,7 +71,7 @@ namespace Frontend.Pages
             KeyStage4Results = GetLatestThreeResults(projectInformation.EducationPerformance.KeyStage4Performance);
             AdditionalInformation = new AdditionalInformationViewModel
             {
-                AdditionalInformation = projectInformation.Project.KeyStage2PerformanceAdditionalInformation,
+                AdditionalInformation = projectInformation.Project.KeyStage4PerformanceAdditionalInformation,
                 HintText =
                     "This information will populate in your HTB template under the key stage performance tables section.",
                 Urn = projectInformation.Project.Urn,
@@ -81,7 +82,14 @@ namespace Frontend.Pages
         private static List<KeyStage4> GetLatestThreeResults(List<KeyStage4> keyStage4Performance)
         {
             return keyStage4Performance.Take(3).OrderByDescending(a => a.Year)
-                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
+                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c =>
+                {
+                    if (c.Year != null)
+                    {
+                        c.Year = PerformanceDataHelpers.GetFormattedYear(c.Year);
+                    }
+                    return c;
+                }).ToList();        
         }
     }
 }

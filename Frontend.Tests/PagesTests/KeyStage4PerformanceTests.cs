@@ -46,7 +46,7 @@ namespace Frontend.Tests.PagesTests
                     {
                         new KeyStage4
                         {
-                            Year = "2020",
+                            Year = "2019-2020",
                             SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
                             {
                                 NotDisadvantaged = "20.5",
@@ -55,7 +55,7 @@ namespace Frontend.Tests.PagesTests
                         },
                         new KeyStage4
                         {
-                            Year = "2019",
+                            Year = "2018-2019",
                             SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
                             {
                                 NotDisadvantaged = "40.8",
@@ -107,8 +107,8 @@ namespace Frontend.Tests.PagesTests
                 Assert.Equal(AcademyName, _subject.OutgoingAcademyName);
                 Assert.Equal(LAName, _subject.LocalAuthorityName);
                 Assert.Equal(3, _subject.KeyStage4Results.Count);
-                Assert.Equal("2020", _subject.KeyStage4Results[0].Year);
-                Assert.Equal("2019", _subject.KeyStage4Results[1].Year);
+                Assert.Equal("2019 - 2020", _subject.KeyStage4Results[0].Year);
+                Assert.Equal("2018 - 2019", _subject.KeyStage4Results[1].Year);
                 Assert.Null(_subject.KeyStage4Results[2].Year);
             }
             
@@ -116,7 +116,7 @@ namespace Frontend.Tests.PagesTests
             public async void GivenAdditionalInformation_UpdatesTheViewModel()
             {
                 const string additionalInformation = "some additional info";
-                _foundInformationForProject.Project.KeyStage2PerformanceAdditionalInformation = additionalInformation;
+                _foundInformationForProject.Project.KeyStage4PerformanceAdditionalInformation = additionalInformation;
                 _getInformationForProject.Setup(s => s.Execute(ProjectUrn))
                     .ReturnsAsync(_foundInformationForProject);
 
@@ -180,7 +180,7 @@ namespace Frontend.Tests.PagesTests
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
                 var pageModel =
-                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage2Performance>(
+                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage4Performance>(
                         _getInformationForProject.Object, _projectRepository.Object);
 
                 var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty);
@@ -200,7 +200,7 @@ namespace Frontend.Tests.PagesTests
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage4Performance", redirectToPageResponse.PageName);
                 Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, _foundProject.KeyStage2PerformanceAdditionalInformation);
+                Assert.Equal(additionalInformation, _foundProject.KeyStage4PerformanceAdditionalInformation);
             }
             
             [Fact]
@@ -210,7 +210,7 @@ namespace Frontend.Tests.PagesTests
 
                 await _subject.OnPostAsync(ProjectUrn, additionalInfo);
                 _projectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.KeyStage2PerformanceAdditionalInformation == additionalInfo
+                    project => project.KeyStage4PerformanceAdditionalInformation == additionalInfo
                 )));
             }
         }
