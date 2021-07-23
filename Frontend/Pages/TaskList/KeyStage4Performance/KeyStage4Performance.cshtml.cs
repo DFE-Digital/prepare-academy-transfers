@@ -53,7 +53,7 @@ namespace Frontend.Pages
                 return this.View("ErrorPage", project.Error.ErrorMessage);
             }
             
-            project.Result.KeyStage2PerformanceAdditionalInformation = additionalInformation;
+            project.Result.KeyStage4PerformanceAdditionalInformation = additionalInformation;
             await _projectRepository.Update(project.Result);
             
             return new RedirectToPageResult(nameof(KeyStage4Performance), 
@@ -71,7 +71,7 @@ namespace Frontend.Pages
             KeyStage4Results = GetLatestThreeResults(projectInformation.EducationPerformance.KeyStage4Performance);
             AdditionalInformation = new AdditionalInformationViewModel
             {
-                AdditionalInformation = projectInformation.Project.KeyStage2PerformanceAdditionalInformation,
+                AdditionalInformation = projectInformation.Project.KeyStage4PerformanceAdditionalInformation,
                 HintText =
                     "This information will populate in your HTB template under the key stage performance tables section.",
                 Urn = projectInformation.Project.Urn,
