@@ -1,5 +1,7 @@
 using System.Globalization;
+using System.Linq;
 using Data.Models.KeyStagePerformance;
+using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using Microsoft.AspNetCore.Html;
 
 namespace Frontend.Helpers
@@ -10,8 +12,8 @@ namespace Frontend.Helpers
 
         public static HtmlString GetFormattedResult(DisadvantagedPupilsResult disadvantagedPupilResult)
         {
-            if (string.IsNullOrEmpty(disadvantagedPupilResult.NotDisadvantaged) &&
-                string.IsNullOrEmpty(disadvantagedPupilResult.Disadvantaged))
+            if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
+                string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
                 return new HtmlString(NoDataText);
 
             return new HtmlString(
@@ -33,7 +35,14 @@ namespace Frontend.Helpers
 
             return $"{lowerConfidenceInterval.ToString()} to {upperConfidenceInterval.ToString()}";
         }
-        
+
+        public static string GetFormattedYear(string year)
+        {
+            if (string.IsNullOrEmpty(year)) return year;
+            var trimmedYear = string.Concat(year.Where(c => !char.IsWhiteSpace(c)));
+            return trimmedYear.Contains("-") ? trimmedYear.Replace("-", " - ") : year;
+        }
+
         private static string FormatStringAsDouble(string result)
         {
             var resultIsDouble = double.TryParse(result, NumberStyles.Number, CultureInfo.InvariantCulture, out var resultAsDouble);
