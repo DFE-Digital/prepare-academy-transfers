@@ -1,0 +1,81 @@
+@using Data.Models.Projects
+@using Helpers
+@model ProjectPageModel
+
+@{
+    var transferBenefits = Model.Project.Benefits;
+    var benefitSummary = transferBenefits.IntendedBenefits
+        .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
+        .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
+        .ToList();
+
+    if (transferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
+    {
+        benefitSummary.Add($"Other: {transferBenefits.OtherIntendedBenefit}");
+    }
+
+    var otherFactorsSummary = Model.Project.Benefits.OtherFactors.Select(otherFactor => new[]
+    {
+        EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
+        otherFactor.Value
+    }).ToList();
+}
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            What are the benefits the transfer intended to bring?
+        </dt>
+        @if (transferBenefits.IntendedBenefits.Count == 0)
+        {
+            <dd class="govuk-summary-list__value">
+                <span class="dfe-empty-tag">Empty</span>
+            </dd>
+        }
+        else
+        {
+            <dd class="govuk-summary-list__value">
+                @foreach (var benefit in benefitSummary)
+                {
+                    <p class="govuk-body">
+                        @benefit
+                    </p>
+                }
+            </dd>
+        }
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-controller="Benefits" asp-action="IntendedBenefits" asp-route-urn="@Model.Project.Urn">
+                Change<span class="govuk-visually-hidden">intended benefits</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Are there any other factors to consider during this transfer?
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @if (transferBenefits.OtherFactors.Keys.Count == 0)
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                foreach (var otherFactor in otherFactorsSummary)
+                {
+                    <p class="govuk-body">
+                        @otherFactor[0]
+                        @if (!string.IsNullOrEmpty(otherFactor[1]))
+                        {
+                            <span>: @otherFactor[1]</span>
+                        }
+                    </p>
+                }
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-controller="Benefits" asp-action="OtherFactors" asp-route-urn="@Model.Project.Urn">
+                Change<span class="govuk-visually-hidden">other factors to consider</span>
+            </a>
+        </dd>
+    </div>
+</dl>

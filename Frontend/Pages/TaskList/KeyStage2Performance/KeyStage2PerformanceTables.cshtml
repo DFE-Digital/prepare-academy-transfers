@@ -1,0 +1,51 @@
+@using Frontend.Helpers
+@model ProjectPageModel
+
+@foreach (var ks2Result in Model.EducationPerformance.KeyStage2Performance.OrderByDescending(o => o.Year))
+{
+    <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-table__caption--m">@ks2Result.Year key stage 2</caption>
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header"></th>
+            <th scope="col" class="govuk-table__header">
+                Percentage meeting expected standard in reading, writing
+                and maths
+            </th>
+            <th scope="col" class="govuk-table__header">
+                Percentage achieving a higher standard in reading,
+                writing and maths
+            </th>
+            <th scope="col" class="govuk-table__header">Reading progress scores</th>
+            <th scope="col" class="govuk-table__header">Writing progress scores</th>
+            <th scope="col" class="govuk-table__header">Maths progress scores</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.Name</th>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageMeetingExpectedStdInRWM.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageAchievingHigherStdInRWM.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.ReadingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.WritingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.MathsProgressScore.NotDisadvantaged)</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.LocalAuthorityName LA average</th>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageReadingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageWritingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageMathsProgressScore.NotDisadvantaged)</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">National average</th>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged)<br>(disadvantaged @PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.Disadvantaged))</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged)<br>(disadvantaged @PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.Disadvantaged))</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageReadingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageWritingProgressScore.NotDisadvantaged)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageMathsProgressScore.NotDisadvantaged)</td>
+        </tr>
+        </tbody>
+    </table>
+}

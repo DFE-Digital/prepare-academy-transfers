@@ -44,5 +44,8 @@ namespace Data.Models.Projects
         public ReasonForTransfer ReasonForTransfer { get; set; }
         public TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
+
+        public bool HasTransferReasonBeenSet => ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null;
+        public bool IsTransferSubjectToIntervention => ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true;
     }
 }

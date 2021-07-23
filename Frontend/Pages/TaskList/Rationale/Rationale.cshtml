@@ -1,0 +1,44 @@
+@model ProjectPageModel
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Rationale for project
+        </dt>
+        <dd class="govuk-summary-list__value govuk-!-width-full">
+            @if (string.IsNullOrEmpty(Model.Project.Rationale.Project))
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                <span class="dfe-text-area-display">@Model.Project.Rationale.Project</span>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-action="Project" asp-route-urn="@Model.Project.Urn">
+                Change<span class="govuk-visually-hidden">rationale for project</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Rationale for the trust or sponsor
+        </dt>
+        <dd class="govuk-summary-list__value govuk-!-width-full">
+            @if (string.IsNullOrEmpty(Model.Project.Rationale.Trust))
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                <span class="dfe-text-area-display">@Model.Project.Rationale.Trust</span>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-action="TrustOrSponsor" asp-route-urn="@Model.Project.Urn">
+                Change<span class="govuk-visually-hidden">rationale for the trust or sponsor</span>
+            </a>
+        </dd>
+    </div>
+</dl>

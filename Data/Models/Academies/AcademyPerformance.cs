@@ -19,11 +19,6 @@ namespace Data.Models.Academies
         public string MpAndParty { get; set; }
         public string OfstedJudgementDate { get; set; }
         public string OfstedRating { get; set; }
-        public string CurrentFramework { get; set; }
-        public string AchievementOfPupil { get; set; }
-        public string QualityOfTeaching { get; set; }
-        public string BehaviourAndSafetyOfPupil { get; set; }
-        public string LeadershipAndManagement { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -42,11 +37,6 @@ namespace Data.Models.Academies
                 new FormField {Title = "Distance to sponsor HQ", Value = DistanceToSponsorHq},
                 new FormField {Title = "MP (Party)", Value = MpAndParty},
                 new FormField {Title = "Ofsted judgement date", Value = $"{OfstedRating} ({OfstedJudgementDate})"},
-                new FormField {Title = "Current framework", Value = CurrentFramework},
-                new FormField {Title = "Achievement of pupil", Value = AchievementOfPupil},
-                new FormField {Title = "Quality of teaching", Value = QualityOfTeaching},
-                new FormField {Title = "Behaviour and safety of pupil", Value = BehaviourAndSafetyOfPupil},
-                new FormField {Title = "Leadership and management", Value = LeadershipAndManagement},
             };
         }
     }

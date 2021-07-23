@@ -26,12 +26,7 @@ namespace Data.Mock
                     DiocesesPercent = "Placeholder",
                     DistanceToSponsorHq = "Placeholder",
                     MpAndParty = "Placeholder",
-                    OfstedJudgementDate = "Placeholder",
-                    CurrentFramework = "Placeholder",
-                    AchievementOfPupil = "Placeholder",
-                    QualityOfTeaching = "Placeholder",
-                    BehaviourAndSafetyOfPupil = "Placeholder",
-                    LeadershipAndManagement = "Placeholder"
+                    OfstedJudgementDate = "Placeholder"
                 },
 
                 PupilNumbers = new PupilNumbers

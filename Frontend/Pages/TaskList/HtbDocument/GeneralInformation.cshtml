@@ -1,0 +1,15 @@
+@model ProjectPageModel
+
+<dl class="govuk-summary-list">
+    @foreach (var field in Model.TransferringAcademy.Performance.FieldsToDisplay())
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @field.Title
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <stringsummary value="@field.Value"></stringsummary>
+            </dd>
+        </div>
+    }
+</dl>
