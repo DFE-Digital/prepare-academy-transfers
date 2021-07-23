@@ -2,11 +2,13 @@
 using Data.Models.Projects;
 using Frontend.Models;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Linq;
 using Data.Models.KeyStagePerformance;
-using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using Xunit;
 using static Data.Models.Projects.TransferFeatures;
+using KeyStage2 = Data.Models.KeyStagePerformance.KeyStage2;
+using KeyStage4 = Data.Models.KeyStagePerformance.KeyStage4;
+using KeyStage5 = Data.Models.KeyStagePerformance.KeyStage5;
 
 namespace Frontend.Tests.ModelTests
 {
@@ -94,6 +96,140 @@ namespace Frontend.Tests.ModelTests
 
                 // Assert
                 Assert.Equal(ProjectStatuses.InProgress, result);
+            }
+        }
+
+        public class HasKeyStage2PerformanceDataTests
+        {
+            [Fact]
+            public void GivenNull_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel {EducationPerformance = new EducationPerformance()};
+                Assert.False(model.HasKeyStage2PerformanceInformation);
+            }
+
+            [Fact]
+            public void GivenEmptyList_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel
+                    {EducationPerformance = new EducationPerformance() {KeyStage2Performance = new List<KeyStage2>()}};
+                Assert.False(model.HasKeyStage2PerformanceInformation);
+            }
+
+            [Theory]
+            [InlineData("12.5", null, null, null, null, null, null, null, null, null)]
+            [InlineData(null, "12.5", null, null, null, null, null, null, null, null)]
+            [InlineData(null, null, "12.5", null, null, null, null, null, null, null)]
+            [InlineData(null, null, null, "12.5", null, null, null, null, null, null)]
+            [InlineData(null, null, null, null, "12.5", null, null, null, null, null)]
+            [InlineData(null, null, null, null, null, "12.5", null, null, null, null)]
+            [InlineData(null, null, null, null, null, null, "12.5", null, null, null)]
+            [InlineData(null, null, null, null, null, null, null, "12.5", null, null)]
+            [InlineData(null, null, null, null, null, null, null, null, "12.5", null)]
+            [InlineData(null, null, null, null, null, null, null, null, null, "12.5")]
+            public void GivenAnyEducationPerformanceData_ReturnTrue(
+                string mathsDisadvantaged, string mathsNonDisadvantaged,
+                string readDisadvantaged, string readNonDisadvantaged,
+                string writeDisadvantaged, string writeNonDisadvantaged,
+                string rwmExpectedDisadvantaged, string rwmExpectedNonDisadvantaged,
+                string rwmHigherDisadvantaged, string rwmHigherNonDisadvantaged)
+            {
+                var model = new ProjectTaskListViewModel
+                {
+                    EducationPerformance = new EducationPerformance
+                    {
+                        KeyStage2Performance = new List<KeyStage2>
+                        {
+                            new KeyStage2
+                            {
+                                MathsProgressScore = new DisadvantagedPupilsResult
+                                    {Disadvantaged = mathsDisadvantaged, NotDisadvantaged = mathsNonDisadvantaged},
+                                ReadingProgressScore = new DisadvantagedPupilsResult
+                                    {Disadvantaged = readDisadvantaged, NotDisadvantaged = readNonDisadvantaged},
+                                WritingProgressScore = new DisadvantagedPupilsResult
+                                    {Disadvantaged = writeDisadvantaged, NotDisadvantaged = writeNonDisadvantaged},
+                                PercentageMeetingExpectedStdInRWM = new DisadvantagedPupilsResult
+                                {
+                                    Disadvantaged = rwmExpectedDisadvantaged,
+                                    NotDisadvantaged = rwmExpectedNonDisadvantaged
+                                },
+                                PercentageAchievingHigherStdInRWM = new DisadvantagedPupilsResult
+                                {
+                                    Disadvantaged = rwmHigherDisadvantaged, NotDisadvantaged = rwmHigherNonDisadvantaged
+                                }
+                            }
+                        }
+                    }
+                };
+                Assert.True(model.HasKeyStage2PerformanceInformation);
+            }
+        }
+
+        public class HasKeyStage4PerformanceDataTests
+        {
+            [Fact]
+            public void GivenNull_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel {EducationPerformance = new EducationPerformance()};
+                Assert.False(model.HasKeyStage4PerformanceInformation);
+            }
+
+            [Fact]
+            public void GivenEmptyList_ReturnFalse()
+            {
+                var model = new ProjectTaskListViewModel
+                    {EducationPerformance = new EducationPerformance() {KeyStage4Performance = new List<KeyStage4>()}};
+                Assert.False(model.HasKeyStage4PerformanceInformation);
+            }
+
+            [Fact]
+            public void GivenAnyEducationPerformanceData_ReturnTrue()
+            {
+                var model = new ProjectTaskListViewModel
+                {
+                    EducationPerformance = new EducationPerformance
+                    {
+                        KeyStage4Performance = new List<KeyStage4>
+                        {
+                            new KeyStage4()
+                        }
+                    }
+                };
+
+                var keyStage4PropertiesToTest = new[]
+                {
+                    "SipAttainment8score", "SipAttainment8scoreebacc",
+                    "SipAttainment8scoreenglish", "SipAttainment8scoremaths", "SipAttainment8score",
+                    "SipProgress8ebacc",
+                    "SipProgress8english", "SipProgress8maths", "SipProgress8Score", "SipNumberofpupilsprogress8"
+                };
+                var keyStage4Performance = model.EducationPerformance.KeyStage4Performance[0];
+                var keyStage4Properties = keyStage4Performance.GetType().GetProperties()
+                    .Where(n => keyStage4PropertiesToTest.Contains(n.Name)).ToList();
+
+                foreach (var property in keyStage4Properties)
+                {
+                    SetAllToNull();
+
+                    var disadvantagedPupilResult = new DisadvantagedPupilsResult
+                    {
+                        Disadvantaged = "10.45",
+                        NotDisadvantaged = null
+                    };
+                    property.SetValue(keyStage4Performance, disadvantagedPupilResult);
+                    Assert.True(model.HasKeyStage4PerformanceInformation);
+
+                    var notDisadvantagedPupilResult = new DisadvantagedPupilsResult
+                    {
+                        Disadvantaged = null,
+                        NotDisadvantaged = "10.45"
+                    };
+                    property.SetValue(keyStage4Performance, notDisadvantagedPupilResult);
+                    Assert.True(model.HasKeyStage4PerformanceInformation);
+                }
+
+                void SetAllToNull() => keyStage4Properties
+                    .ForEach(p => p.SetValue(keyStage4Performance, new DisadvantagedPupilsResult()));
             }
         }
 
