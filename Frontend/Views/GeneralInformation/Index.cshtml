@@ -12,25 +12,26 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-        <span class="govuk-caption-m">
+        <span class="govuk-caption-l">
             URN @Model.Project.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">General information</h1>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()" />
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel" />
+    <div class="govuk-grid-column-full">
+        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()"/>
+    </div>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
 </div>
 @if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
 {
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
-            <button class="govuk-button" data-module="govuk-button">
-                Confirm and continue
-            </button>
-        </form>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+                <button class="govuk-button" data-module="govuk-button">
+                    Confirm and continue
+                </button>
+            </form>
+        </div>
     </div>
-</div>
 }
-
