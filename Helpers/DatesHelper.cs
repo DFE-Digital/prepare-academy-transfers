@@ -33,7 +33,8 @@ namespace Helpers
 
         public static string DateStringToGovUkDate(string dateString)
         {
-            var splitDate = dateString.Split("/");
+            if (!DateTime.TryParseExact(dateString, new [] {"dd/MM/yyyy", "dd-MM-yyyy"}, null, DateTimeStyles.None, out _)) return dateString;
+            var splitDate = dateString.Split('-', '/');
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
         }
