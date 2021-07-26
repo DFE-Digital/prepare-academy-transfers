@@ -14,21 +14,21 @@ using Xunit;
 
 namespace Frontend.Tests.ControllerTests.Projects
 {
-    public class AcademyPerformanceControllerTests
+    public class GeneralInformationControllerTests
     {
-        private readonly AcademyPerformanceController _subject;
+        private readonly GeneralInformationController _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly Mock<IProjects> _projectsRepository;
 
-        public AcademyPerformanceControllerTests()
+        public GeneralInformationControllerTests()
         {
             _getInformationForProject = new Mock<IGetInformationForProject>();
             _projectsRepository = new Mock<IProjects>();
 
-            _subject = new AcademyPerformanceController(_getInformationForProject.Object, _projectsRepository.Object);
+            _subject = new GeneralInformationController(_getInformationForProject.Object, _projectsRepository.Object);
         }
 
-        public class IndexTests : AcademyPerformanceControllerTests
+        public class IndexTests : GeneralInformationControllerTests
         {
             private readonly string _projectUrn;
             private readonly Project _foundProject;
@@ -44,13 +44,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Urn = _projectUrn,
                     TransferringAcademies = new List<TransferringAcademies>
                         {new TransferringAcademies {OutgoingAcademyUkprn = academyUkprn}},
-                    AcademyPerformanceAdditionalInformation = "some info"
+                    GeneralInformationAdditionalInformation = "some info"
                 };
 
                 _foundAcademy = new Academy
                 {
                     Ukprn = "ukprn",
-                    Performance = new AcademyPerformance()
+                    GeneralInformation = new GeneralInformation()
                 };
 
                 _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
@@ -81,7 +81,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<AcademyPerformanceViewModel>(viewResponse.Model);
+                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundProject, viewModel.Project);
             }
@@ -92,7 +92,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<AcademyPerformanceViewModel>(viewResponse.Model);
+                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
             }
@@ -105,9 +105,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var response = await _subject.Index(_projectUrn, additionalInformation);
 
                 var redirectToActionResponse = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("AcademyPerformance", redirectToActionResponse.ControllerName);
+                Assert.Equal("GeneralInformation", redirectToActionResponse.ControllerName);
                 Assert.Equal("Index", redirectToActionResponse.ActionName);
-                Assert.Equal(additionalInformation, _foundProject.AcademyPerformanceAdditionalInformation);
+                Assert.Equal(additionalInformation, _foundProject.GeneralInformationAdditionalInformation);
             }
 
             [Fact]
@@ -116,7 +116,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var response = await _subject.Index(_projectUrn);
 
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<AcademyPerformanceViewModel>(viewResponse.Model);
+                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
 
                 Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
                 Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
@@ -130,7 +130,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                 await _subject.Index(_projectUrn, additionalInfo);
                 _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.AcademyPerformanceAdditionalInformation == additionalInfo
+                    project => project.GeneralInformationAdditionalInformation == additionalInfo
                 )));
             }
 

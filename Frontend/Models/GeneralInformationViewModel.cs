@@ -3,7 +3,7 @@ using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
-    public class AcademyPerformanceViewModel
+    public class GeneralInformationViewModel
     {
         public Project Project { get; set; }
         public Academy OutgoingAcademy { get; set; }

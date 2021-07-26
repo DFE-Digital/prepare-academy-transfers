@@ -1,7 +1,7 @@
-@model AcademyPerformanceViewModel
+@model GeneralInformationViewModel
 
 @{
-    ViewBag.Title = "Academy Performance (reference)";
+    ViewBag.Title = "General Information (reference)";
     Layout = "_Layout";
 }
 
@@ -15,9 +15,9 @@
         <span class="govuk-caption-m">
             URN @Model.Project.OutgoingAcademyUrn
         </span>
-        <h1 class="govuk-heading-l">Academy Performance</h1>
+        <h1 class="govuk-heading-l">General information</h1>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
-        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.Performance.FieldsToDisplay()" />
+        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()" />
     </div>
     <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel" />
 </div>

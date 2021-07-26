@@ -16,7 +16,7 @@
         @* <h2 class="govuk-heading-l">@Model.Project.TransferringAcademies[0].AcademyName</h2> *@
         @await Html.PartialAsync(
             "_FormFieldSummaryCardBody",
-            Model.OutgoingAcademy.Performance.FieldsToDisplay(),
+            Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay(),
             new ViewDataDictionary(ViewData) {{"SectionTitle", "Academy performance"}})
         @await Html.PartialAsync(
             "_FormFieldSummaryCardBody",

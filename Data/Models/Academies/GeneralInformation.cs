@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Data.Models.Academies
 {
-    public class AcademyPerformance
+    public class GeneralInformation
     {
         public string SchoolPhase { get; set; }
         public string AgeRange { get; set; }
@@ -17,8 +17,6 @@ namespace Data.Models.Academies
         public string DiocesesPercent { get; set; }
         public string DistanceToSponsorHq { get; set; }
         public string MpAndParty { get; set; }
-        public string OfstedJudgementDate { get; set; }
-        public string OfstedRating { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -36,7 +34,6 @@ namespace Data.Models.Academies
                 new FormField {Title = "Dioceses % G or O", Value = DiocesesPercent},
                 new FormField {Title = "Distance to sponsor HQ", Value = DistanceToSponsorHq},
                 new FormField {Title = "MP (Party)", Value = MpAndParty},
-                new FormField {Title = "Ofsted judgement date", Value = $"{OfstedRating} ({OfstedJudgementDate})"},
             };
         }
     }

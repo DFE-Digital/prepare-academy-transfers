@@ -27,7 +27,7 @@ namespace Data.Models
         public TransferBenefits Benefits { get; set; }
         public TransferRationale Rationale { get; set; }
         public TransferAcademyAndTrustInformation AcademyAndTrustInformation { get; set; }
-        public string AcademyPerformanceAdditionalInformation { get; set; }
+        public string GeneralInformationAdditionalInformation { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedJudgementAdditionalInformation { get; set; }
         public string KeyStage2PerformanceAdditionalInformation { get; set; }

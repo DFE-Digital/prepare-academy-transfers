@@ -7,7 +7,7 @@ namespace Data.Models
     {
         public Academy()
         {
-            Performance = new AcademyPerformance();
+            GeneralInformation = new GeneralInformation();
             PupilNumbers = new PupilNumbers();
             LatestOfstedJudgement = new LatestOfstedJudgement();
             Address = new List<string>();
@@ -20,7 +20,7 @@ namespace Data.Models
         public string EstablishmentType { get; set; }
         public string FaithSchool { get; set; }
         public string Pfi { get; set; }
-        public AcademyPerformance Performance { get; set; }
+        public GeneralInformation GeneralInformation { get; set; }
         public PupilNumbers PupilNumbers { get; set; }
 
         public LatestOfstedJudgement LatestOfstedJudgement { get; set; }
