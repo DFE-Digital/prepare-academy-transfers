@@ -15,7 +15,8 @@ namespace Frontend.Controllers.Projects
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public AcademyAndTrustInformationController(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
+        public AcademyAndTrustInformationController(IProjects projectsRepository,
+            IGetInformationForProject getInformationForProject)
         {
             _projectsRepository = projectsRepository;
             _getInformationForProject = getInformationForProject;
@@ -41,7 +42,7 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpGet("recommendation")]
-        public async Task<IActionResult> Recommendation(string urn)
+        public async Task<IActionResult> Recommendation(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -51,14 +52,17 @@ namespace Frontend.Controllers.Projects
 
             var model = new AcademyAndTrustInformationViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             return View(model);
         }
 
         [HttpPost("recommendation")]
-        public async Task<IActionResult> Recommendation(string urn, TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author)
+        public async Task<IActionResult> Recommendation(string urn,
+            TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author,
+            bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -76,11 +80,16 @@ namespace Frontend.Controllers.Projects
                 Recommendation = recommendation,
                 Author = author
             };
-            
+
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
+            }
+
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
             }
 
             return RedirectToAction("Index", new {urn});

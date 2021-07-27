@@ -8,6 +8,7 @@ namespace Frontend.Models
 {
     public class AcademyAndTrustInformationViewModel : ProjectViewModel
     {
+        public bool ReturnToPreview { get; set; }
         public static List<RadioButtonViewModel> RecommendedRadioButtons(TransferAcademyAndTrustInformation.RecommendationResult selected)
         {
             var values =
