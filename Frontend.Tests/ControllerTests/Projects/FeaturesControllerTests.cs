@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
-using DocumentFormat.OpenXml.Presentation;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -38,14 +38,14 @@ namespace Frontend.Tests.ControllerTests.Projects
             });
 
             _projectRepository.Setup(r => r.GetByUrn("errorUrn"))
-                        .ReturnsAsync(new RepositoryResult<Project>
-                        {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                StatusCode = System.Net.HttpStatusCode.NotFound,
-                                ErrorMessage = "Project not found"
-                            }
-                        });
+                .ReturnsAsync(new RepositoryResult<Project>
+                {
+                    Error = new RepositoryResultBase.RepositoryError
+                    {
+                        StatusCode = System.Net.HttpStatusCode.NotFound,
+                        ErrorMessage = "Project not found"
+                    }
+                });
 
             _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                 .ReturnsAsync(new RepositoryResult<Project>());
@@ -92,6 +92,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.Initiated("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -170,6 +179,26 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
+
+                [Fact]
+                public async void GivenReturnToPreviewWithInvalidInput_AssignToTheView()
+                {
+                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Empty, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe, true);
+
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
+                }
             }
         }
 
@@ -193,6 +222,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.Reason("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -277,6 +315,26 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
+
+                [Fact]
+                public async void GivenReturnToPreviewWithInvalidInput_AssignToTheView()
+                {
+                    var response = await _subject.ReasonPost("0001", null, null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.ReasonPost("0001", true, "Meow", true);
+
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
+                }
             }
         }
 
@@ -300,6 +358,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.Type("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -338,7 +405,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("Please select the type of transfer",
                         viewModel.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage);
                 }
-                
+
                 [Fact]
                 public async void GivenOtherTransferTypeButNoText_SetErrorOnTheView()
                 {
@@ -369,6 +436,26 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
+                public async void GivenReturnToPreviewWithError_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Empty, "", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.MatClosure, "Meow", true);
+
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
+                }
+
+                [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
                     _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
@@ -390,7 +477,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
-
             }
         }
 

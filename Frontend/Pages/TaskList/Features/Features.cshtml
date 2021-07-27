@@ -19,7 +19,8 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Features" asp-action="Initiated" asp-route-urn="@Model.Project.Urn">
+            <a class="govuk-link" asp-controller="Features" asp-action="Initiated" 
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden">who initiated the transfer</span>
             </a>
         </dd>
@@ -47,7 +48,8 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Features" asp-action="Reason" asp-route-urn="@Model.Project.Urn">
+            <a class="govuk-link" asp-controller="Features" asp-action="Reason" 
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden">reason for transfer</span>
             </a>
         </dd>
@@ -72,7 +74,8 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Features" asp-action="Type" asp-route-urn="@Model.Project.Urn">
+            <a class="govuk-link" asp-controller="Features" asp-action="Type" 
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden">type of transfer</span>
             </a>
         </dd>

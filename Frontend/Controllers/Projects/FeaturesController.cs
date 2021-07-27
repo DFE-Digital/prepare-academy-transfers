@@ -36,7 +36,7 @@ namespace Frontend.Controllers.Projects
 
         [AcceptVerbs(WebRequestMethods.Http.Get)]
         [Route("initiated")]
-        public async Task<IActionResult> Initiated(string urn)
+        public async Task<IActionResult> Initiated(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -46,15 +46,17 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
+            
             return View(model);
         }
 
         [ActionName("Initiated")]
         [Route("initiated")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> InitiatedPost(string urn, TransferFeatures.ProjectInitiators whoInitiated)
+        public async Task<IActionResult> InitiatedPost(string urn, TransferFeatures.ProjectInitiators whoInitiated, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -64,7 +66,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
@@ -82,12 +85,17 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+
             return RedirectToAction("Index", new {urn});
         }
 
         [Route("reason")]
         [AcceptVerbs(WebRequestMethods.Http.Get)]
-        public async Task<IActionResult> Reason(string urn)
+        public async Task<IActionResult> Reason(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -97,7 +105,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
             return View(model);
         }
@@ -105,7 +114,7 @@ namespace Frontend.Controllers.Projects
         [Route("reason")]
         [ActionName("Reason")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail)
+        public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -115,7 +124,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             if (!isSubjectToIntervention.HasValue)
@@ -134,12 +144,17 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+
             return RedirectToAction("Index", new {urn});
         }
 
         [Route("type")]
         [AcceptVerbs(WebRequestMethods.Http.Get)]
-        public async Task<IActionResult> Type(string urn)
+        public async Task<IActionResult> Type(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -149,7 +164,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
             return View(model);
         }
@@ -158,7 +174,7 @@ namespace Frontend.Controllers.Projects
         [ActionName("Type")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
         public async Task<IActionResult> TypePost(string urn, TransferFeatures.TransferTypes typeOfTransfer,
-            string otherType)
+            string otherType, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -168,7 +184,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             model.Project.Features.TypeOfTransfer = typeOfTransfer;
@@ -191,6 +208,11 @@ namespace Frontend.Controllers.Projects
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
+            }
+
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
             }
 
             return RedirectToAction("Index", new { urn });
