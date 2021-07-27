@@ -286,16 +286,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
-                
-                [Fact]
-                public async void GivenUrnAndNoOtherFactors_CreateErrorOnTheView()
-                {
-                    var otherFactors = new List<TransferBenefits.OtherFactor>();
-                    var response = await _subject.OtherFactorsPost("0001", otherFactors, "", "", "");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.True(viewModel.FormErrors.HasErrorForField("otherFactors"));
-                }
             }
 
             public class PostTests : OtherFactorsTests
@@ -303,13 +293,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrnAndAllOtherFactors_UpdateTheProject()
                 {
-                    var otherFactorDescriptions = new List<TransferBenefits.OtherFactor>
-                    {
-                        TransferBenefits.OtherFactor.HighProfile,
-                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
-                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
-                    };
-
                     Func<Project, bool> assertOtherFactorsEqual = project =>
                     {
                         var projectOtherFactors = project.Benefits.OtherFactors;
@@ -322,9 +305,30 @@ namespace Frontend.Tests.ControllerTests.Projects
                                complexIssues == "Complex issues" &&
                                finance == "Finance concerns";
                     };
+                    
+                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    {
+                        new BenefitsViewModel.OtherFactorsViewModel
+                        {
+                            OtherFactor = TransferBenefits.OtherFactor.HighProfile,
+                            Checked = true,
+                            Description = "High profile"
+                        },
+                        new BenefitsViewModel.OtherFactorsViewModel
+                        {
+                            OtherFactor = TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
+                            Checked = true,
+                            Description = "Finance concerns"
+                        },
+                        new BenefitsViewModel.OtherFactorsViewModel
+                        {
+                            OtherFactor = TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                            Checked = true,
+                            Description = "Complex issues"
+                        },
+                    };
 
-                    await _subject.OtherFactorsPost("0001", otherFactorDescriptions,
-                        "High profile", "Complex issues", "Finance concerns");
+                    await _subject.OtherFactorsPost("0001",  otherFactors);
 
                     _projectsRepository.Verify(r =>
                         r.Update(It.Is<Project>(project => assertOtherFactorsEqual(project)))
@@ -334,85 +338,43 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrnAndOtherFactors_RedirectsToTheSummaryPage()
                 {
-                    var otherFactorDescriptions = new List<TransferBenefits.OtherFactor>
-                    {
-                        TransferBenefits.OtherFactor.HighProfile,
-                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
-                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
-                    };
-
-
-                    var response = await _subject.OtherFactorsPost("0001", otherFactorDescriptions,
-                        "High profile", "Complex issues", "Finance concerns");
+                    var otherFactors = 
+                        Enum.GetValues(typeof(TransferBenefits.OtherFactor))
+                            .Cast<TransferBenefits.OtherFactor>()
+                            .Where(otherFactor => otherFactor != TransferBenefits.OtherFactor.Empty)
+                            .Select(otherFactor => new BenefitsViewModel.OtherFactorsViewModel
+                            {
+                                OtherFactor = otherFactor, Checked = true, Description = "test description"
+                            }).ToList();
+                    
+                    var response = await _subject.OtherFactorsPost("0001", otherFactors);
                     ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
                 }
 
-                [Fact]
-                public async void GivenUrnAndHighProfile_UpdatesTheProjectCorrectly()
+                [Theory]
+                [InlineData("HighProfile")]
+                [InlineData("ComplexLandAndBuildingIssues")]
+                [InlineData("FinanceAndDebtConcerns")]
+                public async void GivenUrnAndOtherFactor_UpdatesTheProjectCorrectly(string otherFactorString)
                 {
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
-                        {TransferBenefits.OtherFactor.HighProfile};
-
-                    await _subject.OtherFactorsPost("0001", otherFactors, "High profile", "", "");
-                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
-                                   project.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] ==
-                                   "High profile"
-                    )));
-                }
-
-                [Fact]
-                public async void GivenUrnAndComplexLandIssues_UpdatesTheProjectCorrectly()
-                {
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
-                        {TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues};
-
-                    await _subject.OtherFactorsPost("0001", otherFactors, "", "Complex issues", "");
-                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
-                                   project.Benefits.OtherFactors[
-                                       TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] ==
-                                   "Complex issues"
-                    )));
-                }
-
-                [Fact]
-                public async void GivenUrnAndFinanceAndDebtConcerns_UpdatesTheProjectCorrectly()
-                {
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
-                        {TransferBenefits.OtherFactor.FinanceAndDebtConcerns};
-
-                    await _subject.OtherFactorsPost("0001", otherFactors, "", "", "Finance concerns");
-                    _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
-                                   project.Benefits.OtherFactors[
-                                       TransferBenefits.OtherFactor.FinanceAndDebtConcerns] ==
-                                   "Finance concerns"
-                    )));
-                }
-
-                [Fact]
-                public async void GivenUrnAndOtherFactorsWithNoDescription_UpdatesTheProjectCorrectly()
-                {
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
+                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
                     {
-                        TransferBenefits.OtherFactor.HighProfile,
-                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
-                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
+                        new BenefitsViewModel.OtherFactorsViewModel
+                        {
+                            OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), otherFactorString),
+                            Checked = true,
+                            Description = "test Description"
+                        }
                     };
-
-                    await _subject.OtherFactorsPost("0001", otherFactors, "", "", "");
+                    
+                    await _subject.OtherFactorsPost("0001", otherFactors);
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
-                        project => project.Benefits.OtherFactors.Keys.Count == 3 &&
-                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
-                                       .HighProfile) &&
-                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
-                                       .ComplexLandAndBuildingIssues) &&
-                                   project.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
-                                       .FinanceAndDebtConcerns)
+                        project => project.Benefits.OtherFactors.Keys.Count == 1 &&
+                                   project.Benefits.OtherFactors[otherFactors[0].OtherFactor] ==
+                                   "test Description"
                     )));
                 }
-
+             
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
@@ -428,10 +390,9 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
-                        {TransferBenefits.OtherFactor.HighProfile};
+                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>();
 
-                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, "", "", "");
+                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
@@ -454,15 +415,36 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var otherFactors = new List<TransferBenefits.OtherFactor>
-                        {TransferBenefits.OtherFactor.HighProfile};
+                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>();
 
-                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, "", "", "");
+                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
+                }
+                
+                [Theory]
+                [InlineData("HighProfile")]
+                [InlineData("ComplexLandAndBuildingIssues")]
+                [InlineData("FinanceAndDebtConcerns")]
+                public async void GivenUrnAndOtherFactorsWithNoDescription_CreateErrorOnTheView(string otherFactorString)
+                {
+                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    {
+                        new BenefitsViewModel.OtherFactorsViewModel
+                        {
+                            OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), otherFactorString),
+                            Checked = true,
+                            Description = ""
+                        }
+                    };
+
+                    var response = await _subject.OtherFactorsPost("0001", otherFactors);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    Assert.True(viewModel.FormErrors.HasErrors);
+                    Assert.True(viewModel.FormErrors.HasErrorForField(otherFactorString));
                 }
             }
         }
