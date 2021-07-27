@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
@@ -113,16 +115,17 @@ namespace Frontend.Controllers.Projects
                 Project = project.Result,
             };
 
+            BuildOtherFactorsViewModel(model);
+
             return View(model);
         }
 
         [ActionName("OtherFactors")]
         [HttpPost("other-factors")]
-        public async Task<IActionResult> OtherFactorsPost(string urn, List<TransferBenefits.OtherFactor> otherFactors,
-            string highProfileDescription, string complexIssuesDescription, string financeAndDebtDescription)
+        public async Task<IActionResult> OtherFactorsPost(string urn, List<BenefitsViewModel.OtherFactorsViewModel> otherFactorsVm)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            
+
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
@@ -132,43 +135,53 @@ namespace Frontend.Controllers.Projects
             {
                 Project = project.Result,
             };
-            
-            if (otherFactors.Count == 0)
+
+            var formHasErrors = false;
+            foreach (var otherFactor in otherFactorsVm.Where(otherFactor =>
+                otherFactor.Checked &&
+                string.IsNullOrEmpty(otherFactor.Description)))
             {
-                var firstOtherFactor =
-                    EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayableValues(TransferBenefits.OtherFactor
-                        .Empty)[0];
-                model.FormErrors.AddError(firstOtherFactor.ToString(), "otherFactors",
-                    "Please select at least one other factor");
+                model.FormErrors.AddError(otherFactor.OtherFactor.ToString(), otherFactor.OtherFactor.ToString(),
+                    "Please specify the concern further");
+                formHasErrors = true;
+            }
+
+            if (formHasErrors)
+            {
+                BuildOtherFactorsViewModel(model);
                 return View(model);
             }
 
-            var projectFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
-
-            if (otherFactors.Contains(TransferBenefits.OtherFactor.HighProfile))
-            {
-                projectFactors.Add(TransferBenefits.OtherFactor.HighProfile, highProfileDescription);
-            }
-
-            if (otherFactors.Contains(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues))
-            {
-                projectFactors.Add(TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, complexIssuesDescription);
-            }
-
-            if (otherFactors.Contains(TransferBenefits.OtherFactor.FinanceAndDebtConcerns))
-            {
-                projectFactors.Add(TransferBenefits.OtherFactor.FinanceAndDebtConcerns, financeAndDebtDescription);
-            }
-
-            model.Project.Benefits.OtherFactors = projectFactors;
-
+            model.Project.Benefits.OtherFactors = otherFactorsVm
+                .Where(of => of.Checked)
+                .ToDictionary(d => d.OtherFactor, x => x.Description);
             var updateResult = await _projectsRepository.Update(model.Project);
             if (!updateResult.IsValid)
             {
                 return View("ErrorPage", updateResult.Error.ErrorMessage);
             }
 
-            return RedirectToAction("Index", new { urn });
+            return RedirectToAction("Index", new {urn});
+        }
+        
+        private static void BuildOtherFactorsViewModel(BenefitsViewModel model)
+        {
+            var otherFactors = model.Project.Benefits.OtherFactors;
+            model.OtherFactorsVm = new List<BenefitsViewModel.OtherFactorsViewModel>();
+            foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))
+            {
+                if (otherFactor != TransferBenefits.OtherFactor.Empty)
+                {
+                    var isChecked = otherFactors.ContainsKey(otherFactor);
+
+                    model.OtherFactorsVm.Add(new BenefitsViewModel.OtherFactorsViewModel
+                    {
+                        OtherFactor = otherFactor,
+                        Checked = isChecked,
+                        Description = isChecked ? otherFactors[otherFactor] : string.Empty
+                    });
+                }
+            }
         }
     }
 }
