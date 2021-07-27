@@ -44,7 +44,6 @@ namespace Frontend.Models
         public class OtherFactorsViewModel
         {
             public TransferBenefits.OtherFactor OtherFactor { get; set; }
-            public string DisplayText { get; set; }
             public bool Checked { get; set; }
             public string Description { get; set; }
         }
