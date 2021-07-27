@@ -12,7 +12,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
                asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-id="@Model.Project.Urn"
-               asp-route-add-or-edit-additional-information="true"
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true"
             >
                 Change<span class="govuk-visually-hidden">latest ofsted judgement additional information</span>
             </a>

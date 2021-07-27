@@ -1,6 +1,6 @@
 @page "/project/{id}/key-stage-5-performance"
 @using Frontend.Helpers
-@model Frontend.Pages.KeyStage5Performance
+@model Frontend.Pages.TaskList.KeyStage5Performance.KeyStage5Performance
 
 @{
     ViewBag.Title = "Key stage 5 performance tables";
@@ -9,7 +9,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    <backtopreview return-to-preview="@Model.ReturnToPreview" id="@Model.ProjectUrn">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    </backtopreview>
 }
 
 <div class="govuk-grid-row">
@@ -51,17 +53,17 @@
                 <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">@Model.OutgoingAcademyName</th>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicProgress)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicAverage)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralProgress)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralAverage)</td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">National average</th>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicProgress)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicAverage)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralProgress)</td>
-                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicAverage)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralProgress)</td>
+                    <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralAverage)</td>
                 </tr>
                 </tbody>
             </table>

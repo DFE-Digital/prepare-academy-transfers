@@ -1,6 +1,6 @@
 @model ProjectPageModel
 
-<partial name="TaskList/KeyStage5Performance/KeyStage5PerformanceTables" model="@Model" />
+<partial name="TaskList/KeyStage5Performance/KeyStage5PerformanceTables" model="@Model"/>
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     <div class="govuk-summary-list__row">
@@ -13,7 +13,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
                asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-id="@Model.Project.Urn"
-               asp-route-add-or-edit-additional-information="true">
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true">
                 Change<span class="govuk-visually-hidden">latest ofsted judgement additional information</span>
             </a>
         </dd>

@@ -1,6 +1,6 @@
 @page "/project/{id}/key-stage-4-performance"
 @using Frontend.Helpers
-@model Frontend.Pages.KeyStage4Performance
+@model Frontend.Pages.TaskList.KeyStage4Performance.KeyStage4Performance
 @{
     ViewBag.Title = "Key stage 4 performance tables";
     Layout = "_Layout";
@@ -8,7 +8,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    <backtopreview id="@Model.ProjectUrn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    </backtopreview>
 }
 
 <div class="govuk-grid-row">
