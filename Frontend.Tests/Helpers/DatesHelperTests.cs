@@ -43,5 +43,17 @@ namespace Frontend.Tests.Helpers
             var htbDates = DatesHelper.GetFirstWorkingDaysOfTheTheMonthForTheNextYear(startDate);
             Assert.Equal(expectedFirstDate, htbDates[0].ToString("dd/MM/yyyy"));
         }
+
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", "")]
+        [InlineData("not a date", "not a date")]
+        [InlineData("01/01/2010", "1 January 2010")]
+        [InlineData("01-01-2010", "1 January 2010")]
+        public void GivenDate_ShouldFormatAsGovUkDate(string unformattedDate, string expectedFormattedDate)
+        {
+            var result = DatesHelper.DateStringToGovUkDate(unformattedDate);
+            Assert.Equal(expectedFormattedDate, result);
+        }
     }
 }

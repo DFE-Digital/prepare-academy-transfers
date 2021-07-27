@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers.Projects
 {
     [Authorize]
-    [Route("project/{id}/academy-performance")]
-    public class AcademyPerformanceController : Controller
+    [Route("project/{id}/general-information")]
+    public class GeneralInformationController : Controller
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public AcademyPerformanceController(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public GeneralInformationController(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
         {
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
@@ -32,13 +32,13 @@ namespace Frontend.Controllers.Projects
             }
             
 
-            var model = new AcademyPerformanceViewModel
+            var model = new GeneralInformationViewModel
             {
                 Project = projectInformation.Project,
                 OutgoingAcademy = projectInformation.OutgoingAcademy,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
-                    AdditionalInformation = projectInformation.Project.AcademyPerformanceAdditionalInformation,
+                    AdditionalInformation = projectInformation.Project.GeneralInformationAdditionalInformation,
                     HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
                     Urn = projectInformation.Project.Urn,
                     AddOrEditAdditionalInformation = addOrEditAdditionalInformation
@@ -53,11 +53,11 @@ namespace Frontend.Controllers.Projects
         {
             var model = await _projectsRepository.GetByUrn(id);
 
-            model.Result.AcademyPerformanceAdditionalInformation = additionalInformation;
+            model.Result.GeneralInformationAdditionalInformation = additionalInformation;
             await _projectsRepository.Update(model.Result);
 
             return RedirectToAction(nameof(this.Index), 
-                "AcademyPerformance", 
+                "GeneralInformation", 
                 new { id }, 
                 "additional-information-hint");
         }

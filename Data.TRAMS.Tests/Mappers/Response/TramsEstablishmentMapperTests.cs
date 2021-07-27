@@ -70,7 +70,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(academyToMap.LocalAuthorityName, result.LocalAuthorityName);
             Assert.Equal(academyToMap.EstablishmentType.Name, result.EstablishmentType);
             Assert.Equal(academyToMap.MisEstablishment.ReligiousEthos, result.FaithSchool);
-            AssertAcademyPerformanceCorrect(result, academyToMap);
+            AssertGeneralInformationCorrect(result, academyToMap);
             AssertLatestOfstedJudgementCorrect(result);
             Assert.Equal(academyToMap.Census.NumberOfBoys, result.PupilNumbers.BoysOnRoll);
             Assert.Equal(academyToMap.Census.NumberOfGirls, result.PupilNumbers.GirlsOnRoll);
@@ -85,19 +85,17 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal("http://example.com", latestOfstedJudgement.OfstedReport);
         }
 
-        private static void AssertAcademyPerformanceCorrect(Academy result, TramsEstablishment establishmentToMap)
+        private static void AssertGeneralInformationCorrect(Academy result, TramsEstablishment establishmentToMap)
         {
             var expectedAgeRange = $"{establishmentToMap.StatutoryLowAge} to {establishmentToMap.StatutoryHighAge}";
             var expectedPercentageFull = ExpectedPercentageFull(establishmentToMap);
-            var performance = result.Performance;
-            Assert.Equal(establishmentToMap.PhaseOfEducation.Name, performance.SchoolPhase);
-            Assert.Equal(expectedAgeRange, performance.AgeRange);
-            Assert.Equal(establishmentToMap.SchoolCapacity, performance.Capacity);
-            Assert.Equal(establishmentToMap.Census.NumberOfPupils, performance.NumberOnRoll);
-            Assert.Equal(expectedPercentageFull, performance.PercentageFull);
-            Assert.Equal(establishmentToMap.EstablishmentType.Name, performance.SchoolType);
-            Assert.Equal(establishmentToMap.OfstedRating, performance.OfstedRating);
-            Assert.Equal(establishmentToMap.OfstedLastInspection, performance.OfstedJudgementDate);
+            var generalInformation = result.GeneralInformation;
+            Assert.Equal(establishmentToMap.PhaseOfEducation.Name, generalInformation.SchoolPhase);
+            Assert.Equal(expectedAgeRange, generalInformation.AgeRange);
+            Assert.Equal(establishmentToMap.SchoolCapacity, generalInformation.Capacity);
+            Assert.Equal(establishmentToMap.Census.NumberOfPupils, generalInformation.NumberOnRoll);
+            Assert.Equal(expectedPercentageFull, generalInformation.PercentageFull);
+            Assert.Equal(establishmentToMap.EstablishmentType.Name, generalInformation.SchoolType);
         }
 
         private static string ExpectedPercentageFull(TramsEstablishment establishmentToMap)

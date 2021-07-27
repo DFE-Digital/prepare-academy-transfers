@@ -1,3 +1,4 @@
+@using Frontend.ExtensionMethods
 @model Frontend.Views.Transfers.TrustSearch
 
 @{
@@ -26,7 +27,7 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="@trust.Ukprn" name="trustId" type="radio" value="@trust.Ukprn" aria-describedby="@trust.Ukprn-hint" />
                                 <label class="govuk-label govuk-radios__label" for="@trust.Ukprn">
-                                    @trust.TrustName (@trust.Ukprn)
+                                    @trust.TrustName.ToTitleCase() (@trust.Ukprn)
                                 </label>
                                 <div id="@trust.Ukprn-hint" class="govuk-hint govuk-radios__hint">
                                     Companies House number: @trust.CompaniesHouseNumber

@@ -1,3 +1,5 @@
+@using Frontend.ExtensionMethods
+@using Helpers
 @model Frontend.Views.Transfers.CheckYourAnswers
 
 @{
@@ -17,7 +19,7 @@
         <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Name</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Name</dd>
+                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Name.ToTitleCase()</dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="TrustName" asp-route-change="true">
                         Change <span class="govuk-visually-hidden">outgoing trust</span>
@@ -68,7 +70,7 @@
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Last inspection</dt>
-                    <dd class="govuk-summary-list__value">@academy.LatestOfstedJudgement.InspectionDate</dd>
+                    <dd class="govuk-summary-list__value">@DatesHelper.DateStringToGovUkDate(@academy.LatestOfstedJudgement.InspectionDate)</dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -95,7 +97,7 @@
                 }
                 else
                 {
-                    <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name</dd>
+                    <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name.ToTitleCase()</dd>
                 }
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden">incoming trust</span></a>

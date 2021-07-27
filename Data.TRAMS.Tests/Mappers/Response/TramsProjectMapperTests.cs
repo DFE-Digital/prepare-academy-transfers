@@ -87,7 +87,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                         }
                     }
                 },
-                AcademyPerformanceAdditionalInformation = "AcademyPerformanceAdditionalInformation",
+                AcademyPerformanceAdditionalInformation = "GeneralInformationAdditionalInformation",
                 PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
                 LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
                 KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
@@ -104,7 +104,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.ProjectUrn, result.Urn);
             Assert.Equal(toMap.OutgoingTrustUkprn, result.OutgoingTrustUkprn);
             Assert.Equal(toMap.OutgoingTrust.GroupName, result.OutgoingTrustName);
-            Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
+            Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.GeneralInformationAdditionalInformation);
             Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
             Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);
             Assert.Equal(toMap.KeyStage2PerformanceAdditionalInformation, result.KeyStage2PerformanceAdditionalInformation);

@@ -1,7 +1,7 @@
-@model Frontend.Models.PupilNumbersViewModel
+@model GeneralInformationViewModel
 
 @{
-    ViewBag.Title = "Pupil numbers (reference)";
+    ViewBag.Title = "General Information (reference)";
     Layout = "_Layout";
 }
 
@@ -15,13 +15,13 @@
         <span class="govuk-caption-l">
             URN @Model.Project.OutgoingAcademyUrn
         </span>
-        <h1 class="govuk-heading-l">Pupil numbers</h1>
+        <h1 class="govuk-heading-l">General information</h1>
         <p class="govuk-body">This information is pre-populated from TRAMS and the school's application form</p>
     </div>
     <div class="govuk-grid-column-full">
-        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.PupilNumbers.FieldsToDisplay()" />
+        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()"/>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel" />
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
 </div>
 @if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
 {

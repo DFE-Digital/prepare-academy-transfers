@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Data.Models;
 using Data.Models.Projects;
-using Frontend.Helpers;
 using Frontend.Models.Forms;
 using Helpers;
 
@@ -40,6 +37,15 @@ namespace Frontend.Models
                 EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
                 otherFactor.Value
             }).ToList();
+        }
+
+        public List<OtherFactorsViewModel> OtherFactorsVm { get; set; }
+
+        public class OtherFactorsViewModel
+        {
+            public TransferBenefits.OtherFactor OtherFactor { get; set; }
+            public bool Checked { get; set; }
+            public string Description { get; set; }
         }
     }
 }

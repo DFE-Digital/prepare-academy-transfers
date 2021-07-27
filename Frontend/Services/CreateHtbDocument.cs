@@ -60,15 +60,15 @@ namespace Frontend.Services
                 TrustName = project.OutgoingTrustName,
                 TrustReferenceNumber = project.OutgoingTrustUkprn,
                 SchoolType = academy.EstablishmentType,
-                SchoolPhase = academy.Performance.SchoolPhase,
-                AgeRange = academy.Performance.AgeRange,
-                SchoolCapacity = academy.Performance.Capacity,
-                PublishedAdmissionNumber = academy.Performance.Pan,
-                NumberOnRoll = academy.Performance.NumberOnRoll,
-                PercentageSchoolFull = academy.Performance.PercentageFull,
+                SchoolPhase = academy.GeneralInformation.SchoolPhase,
+                AgeRange = academy.GeneralInformation.AgeRange,
+                SchoolCapacity = academy.GeneralInformation.Capacity,
+                PublishedAdmissionNumber = academy.GeneralInformation.Pan,
+                NumberOnRoll = academy.GeneralInformation.NumberOnRoll,
+                PercentageSchoolFull = academy.GeneralInformation.PercentageFull,
                 PercentageFreeSchoolMeals = academy.PupilNumbers.EligibleForFreeSchoolMeals,
                 OfstedLastInspection = academy.LatestOfstedJudgement.InspectionDate,
-                OverallEffectiveness = academy.Performance.OfstedRating,
+                OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
                 Author = "Author name",
@@ -274,12 +274,12 @@ namespace Frontend.Services
                 new[]
                 {
                     new TextElement {Value = "School phase", Bold = true},
-                    new TextElement {Value = academy.Performance.SchoolPhase}
+                    new TextElement {Value = academy.GeneralInformation.SchoolPhase}
                 },
                 new[]
                 {
                     new TextElement {Value = "Age range", Bold = true},
-                    new TextElement {Value = academy.Performance.AgeRange}
+                    new TextElement {Value = academy.GeneralInformation.AgeRange}
                 }
             });
 
@@ -290,17 +290,17 @@ namespace Frontend.Services
                 new[]
                 {
                     new TextElement {Value = "Capacity", Bold = true},
-                    new TextElement {Value = academy.Performance.Capacity}
+                    new TextElement {Value = academy.GeneralInformation.Capacity}
                 },
                 new[]
                 {
                     new TextElement {Value = "Published admission number (PAN)", Bold = true},
-                    new TextElement {Value = academy.Performance.Pan}
+                    new TextElement {Value = academy.GeneralInformation.Pan}
                 },
                 new[]
                 {
                     new TextElement {Value = "Percentage the school is full", Bold = true},
-                    new TextElement {Value = academy.Performance.PercentageFull}
+                    new TextElement {Value = academy.GeneralInformation.PercentageFull}
                 },
                 new[]
                 {

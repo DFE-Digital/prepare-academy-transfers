@@ -19,7 +19,7 @@ namespace Data.TRAMS.Mappers.Response
                 LatestOfstedJudgement = LatestOfstedJudgement(input),
                 LocalAuthorityName = input.LocalAuthorityName,
                 Name = input.EstablishmentName,
-                Performance = Performance(input),
+                GeneralInformation = GeneralInformation(input),
                 PupilNumbers = new PupilNumbers
                 {
                     BoysOnRoll = input.Census.NumberOfBoys,
@@ -53,15 +53,13 @@ namespace Data.TRAMS.Mappers.Response
             };
         }
 
-        private static AcademyPerformance Performance(TramsEstablishment input)
+        private static GeneralInformation GeneralInformation(TramsEstablishment input)
         {
-            return new AcademyPerformance
+            return new GeneralInformation
             {
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
                 Capacity = input.SchoolCapacity,
                 NumberOnRoll = input.Census.NumberOfPupils,
-                OfstedJudgementDate = input.OfstedLastInspection,
-                OfstedRating = input.OfstedRating,
                 PercentageFull = PercentageFull(input),
                 SchoolPhase = input.PhaseOfEducation.Name,
                 SchoolType = input.EstablishmentType.Name

@@ -12,7 +12,7 @@ namespace Data.Mock
             {
                 Ukprn = ukprn,
                 Name = "Placeholder",
-                Performance = new AcademyPerformance
+                GeneralInformation = new GeneralInformation
                 {
                     SchoolPhase = "Placeholder",
                     AgeRange = "Placeholder",
@@ -25,8 +25,7 @@ namespace Data.Mock
                     SchoolType = "Placeholder",
                     DiocesesPercent = "Placeholder",
                     DistanceToSponsorHq = "Placeholder",
-                    MpAndParty = "Placeholder",
-                    OfstedJudgementDate = "Placeholder"
+                    MpAndParty = "Placeholder"
                 },
 
                 PupilNumbers = new PupilNumbers

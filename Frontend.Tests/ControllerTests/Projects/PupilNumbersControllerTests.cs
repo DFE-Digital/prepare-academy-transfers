@@ -50,7 +50,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 _foundAcademy = new Academy
                 {
                     Ukprn = "ukprn",
-                    Performance = new AcademyPerformance()
+                    GeneralInformation = new GeneralInformation()
                 };
 
                 _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(

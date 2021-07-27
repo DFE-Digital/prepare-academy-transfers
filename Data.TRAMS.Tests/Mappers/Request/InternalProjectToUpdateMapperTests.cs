@@ -67,7 +67,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     Author = "Author",
                     Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Empty
                 },
-                AcademyPerformanceAdditionalInformation = "AcademyPerformanceAdditionalInformation",
+                GeneralInformationAdditionalInformation = "GeneralInformationAdditionalInformation",
                 PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
                 LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
                 KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
@@ -81,7 +81,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.State, result.State);
             Assert.Equal(toMap.Status, result.Status);
             Assert.Equal(toMap.Urn, result.ProjectUrn);
-            Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
+            Assert.Equal(toMap.GeneralInformationAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
             Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
             Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);
             Assert.Equal(toMap.KeyStage2PerformanceAdditionalInformation, result.KeyStage2PerformanceAdditionalInformation);
