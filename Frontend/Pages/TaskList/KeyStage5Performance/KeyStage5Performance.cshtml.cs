@@ -1,15 +1,15 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.KeyStagePerformance;
 using Frontend.ExtensionMethods;
+using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Frontend.Pages
+namespace Frontend.Pages.TaskList.KeyStage5Performance
 {
     public class KeyStage5Performance : PageModel
     {
@@ -21,6 +21,7 @@ namespace Frontend.Pages
         public string OutgoingAcademyName { get; set; }
         public AdditionalInformationViewModel AdditionalInformation { get; set; }
         public string OutgoingAcademyUrn { get; set; }
+        public bool ReturnToPreview { get; set; }
 
         public KeyStage5Performance(IGetInformationForProject getInformationForProject, IProjects projects)
         {
@@ -28,7 +29,8 @@ namespace Frontend.Pages
             _projects = projects;
         }
 
-        public async Task<IActionResult> OnGetAsync(string id, bool addOrEditAdditionalInformation = false)
+        public async Task<IActionResult> OnGetAsync(string id, bool addOrEditAdditionalInformation = false,
+            bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 
@@ -37,11 +39,11 @@ namespace Frontend.Pages
                 return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
-            PopulateModel(addOrEditAdditionalInformation, projectInformation);
+            PopulateModel(addOrEditAdditionalInformation, projectInformation, returnToPreview);
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string id, string additionalInformation)
+        public async Task<IActionResult> OnPostAsync(string id, string additionalInformation, bool returnToPreview)
         {
             var project = await _projects.GetByUrn(id);
 
@@ -53,6 +55,14 @@ namespace Frontend.Pages
             project.Result.KeyStage5PerformanceAdditionalInformation = additionalInformation;
             await _projects.Update(project.Result);
 
+            if (returnToPreview)
+            {
+                return new RedirectToPageResult(
+                    Links.HeadteacherBoard.Preview.PageName,
+                    new {id}
+                );
+            }
+
             return new RedirectToPageResult(nameof(KeyStage5Performance),
                 "OnGetAsync",
                 new {id},
@@ -60,20 +70,22 @@ namespace Frontend.Pages
         }
 
         private void PopulateModel(bool addOrEditAdditionalInformation,
-            GetInformationForProjectResponse projectInformation)
+            GetInformationForProjectResponse projectInformation, bool returnToPreview)
         {
             ProjectUrn = projectInformation.Project.Urn;
             OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
             LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
             OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
             EducationPerformance = projectInformation.EducationPerformance;
+            ReturnToPreview = returnToPreview;
             AdditionalInformation = new AdditionalInformationViewModel
             {
                 AdditionalInformation = projectInformation.Project.KeyStage5PerformanceAdditionalInformation,
                 HintText =
                     "This information will populate in your HTB template under the key stage performance tables section.",
                 Urn = projectInformation.Project.Urn,
-                AddOrEditAdditionalInformation = addOrEditAdditionalInformation
+                AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
+                ReturnToPreview = returnToPreview
             };
         }
     }

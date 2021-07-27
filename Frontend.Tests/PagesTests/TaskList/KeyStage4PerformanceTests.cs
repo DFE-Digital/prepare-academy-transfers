@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
-using Frontend.Pages;
+using Frontend.Models;
+using Frontend.Pages.TaskList.KeyStage4Performance;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests
+namespace Frontend.Tests.PagesTests.TaskList
 {
     public class KeyStage4PerformanceTests
     {
@@ -19,7 +20,7 @@ namespace Frontend.Tests.PagesTests
         private const string ProjectUrn = "0001";
         private const string AcademyUrn = "1234";
         private const string AcademyName = "Academy Name";
-        private const string LAName = "LA Name";
+        private const string LaName = "LA Name";
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly Mock<IProjects> _projectRepository;
         private readonly GetInformationForProjectResponse _foundInformationForProject;
@@ -37,7 +38,7 @@ namespace Frontend.Tests.PagesTests
                 OutgoingAcademy = new Academy
                 {
                     Urn = AcademyUrn,
-                    LocalAuthorityName = LAName,
+                    LocalAuthorityName = LaName,
                     Name = AcademyName
                 },
                 EducationPerformance = new EducationPerformance
@@ -105,7 +106,7 @@ namespace Frontend.Tests.PagesTests
                 Assert.Equal(ProjectUrn, _subject.ProjectUrn);
                 Assert.Equal(AcademyUrn, _subject.OutgoingAcademyUrn);
                 Assert.Equal(AcademyName, _subject.OutgoingAcademyName);
-                Assert.Equal(LAName, _subject.LocalAuthorityName);
+                Assert.Equal(LaName, _subject.LocalAuthorityName);
                 Assert.Equal(3, _subject.KeyStage4Results.Count);
                 Assert.Equal("2019 - 2020", _subject.KeyStage4Results[0].Year);
                 Assert.Equal("2018 - 2019", _subject.KeyStage4Results[1].Year);
@@ -126,6 +127,14 @@ namespace Frontend.Tests.PagesTests
                 Assert.Equal(ProjectUrn, _subject.AdditionalInformation.Urn);
             }
             
+            [Fact]
+            public async void GivenReturnToPreview_UpdatesTheViewModel()
+            {
+                await _subject.OnGetAsync(ProjectUrn, false, true);
+
+                Assert.True(_subject.ReturnToPreview);
+            }
+
             [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
@@ -171,7 +180,7 @@ namespace Frontend.Tests.PagesTests
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync(ProjectUrn, string.Empty);
+                await _subject.OnPostAsync(ProjectUrn, string.Empty, false);
 
                 _projectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
             }
@@ -183,7 +192,7 @@ namespace Frontend.Tests.PagesTests
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage4Performance>(
                         _getInformationForProject.Object, _projectRepository.Object);
 
-                var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty);
+                var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty, false);
                 var viewResult = Assert.IsType<ViewResult>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -195,7 +204,7 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInformation = "some additional info";
 
-                var response = await _subject.OnPostAsync(ProjectUrn, additionalInformation);
+                var response = await _subject.OnPostAsync(ProjectUrn, additionalInformation, false);
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage4Performance", redirectToPageResponse.PageName);
@@ -208,10 +217,20 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInfo = "test info";
 
-                await _subject.OnPostAsync(ProjectUrn, additionalInfo);
+                await _subject.OnPostAsync(ProjectUrn, additionalInfo, false);
                 _projectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage4PerformanceAdditionalInformation == additionalInfo
                 )));
+            }
+                
+            [Fact]
+            public async void GivenReturnToPreview_RedirectsToThePreviewPage()
+            {
+                var response = await _subject.OnPostAsync(ProjectUrn, "", true);
+
+                var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
+                Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
+                Assert.Equal(ProjectUrn, redirectResponse.RouteValues["id"]);
             }
         }
     }

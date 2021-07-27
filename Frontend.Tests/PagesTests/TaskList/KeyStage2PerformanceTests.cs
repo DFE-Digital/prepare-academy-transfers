@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
-using Frontend.Pages;
+using Frontend.Models;
+using Frontend.Pages.TaskList.KeyStage2Performance;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests
+namespace Frontend.Tests.PagesTests.TaskList
 {
     public class KeyStage2PerformanceTests
     {
@@ -108,6 +109,14 @@ namespace Frontend.Tests.PagesTests
                 Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
                 Assert.Equal(ProjectUrn, _subject.AdditionalInformation.Urn);
             }
+            
+            [Fact]
+            public async void GivenReturnToPreview_UpdatesTheViewModel()
+            {
+                await _subject.OnGetAsync(ProjectUrn, false, true);
+
+                Assert.True(_subject.ReturnToPreview);
+            }
 
             [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
@@ -154,7 +163,7 @@ namespace Frontend.Tests.PagesTests
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync(ProjectUrn, string.Empty);
+                await _subject.OnPostAsync(ProjectUrn, string.Empty, false);
 
                 _projectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
             }
@@ -166,7 +175,7 @@ namespace Frontend.Tests.PagesTests
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage2Performance>(
                         _getInformationForProject.Object, _projectRepository.Object);
 
-                var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty);
+                var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty, false);
                 var viewResult = Assert.IsType<ViewResult>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -178,7 +187,7 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInformation = "some additional info";
 
-                var response = await _subject.OnPostAsync(ProjectUrn, additionalInformation);
+                var response = await _subject.OnPostAsync(ProjectUrn, additionalInformation, false);
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage2Performance", redirectToPageResponse.PageName);
@@ -191,10 +200,20 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInfo = "test info";
 
-                await _subject.OnPostAsync(ProjectUrn, additionalInfo);
+                await _subject.OnPostAsync(ProjectUrn, additionalInfo, false);
                 _projectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage2PerformanceAdditionalInformation == additionalInfo
                 )));
+            }
+            
+            [Fact]
+            public async void GivenReturnToPreview_RedirectsToThePreviewPage()
+            {
+                var response = await _subject.OnPostAsync(ProjectUrn, "", true);
+
+                var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
+                Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
+                Assert.Equal(ProjectUrn, redirectResponse.RouteValues["id"]);
             }
         }
     }

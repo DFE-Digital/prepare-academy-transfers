@@ -1,6 +1,6 @@
 @page "/project/{id}/key-stage-2-performance"
 @using Frontend.Helpers
-@model Frontend.Pages.KeyStage2Performance
+@model Frontend.Pages.TaskList.KeyStage2Performance.KeyStage2Performance
 
 @{
     ViewBag.Title = "Key stage 2 performance tables";
@@ -9,7 +9,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    <backtopreview id="@Model.ProjectUrn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    </backtopreview>
 }
 
 <div class="govuk-grid-row">
@@ -83,7 +85,7 @@
 </div>
 
 <div class="govuk-grid-row">
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformation" />
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
 </div>
 @if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
 {

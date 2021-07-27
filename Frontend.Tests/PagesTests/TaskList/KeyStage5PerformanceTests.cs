@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
-using Frontend.Pages;
+using Frontend.Models;
+using Frontend.Pages.TaskList.KeyStage5Performance;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
@@ -11,17 +12,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests
+namespace Frontend.Tests.PagesTests.TaskList
 {
     public class KeyStage5PerformanceTests
     {
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
-        private Mock<IProjects> _projectRepository;
+        private readonly Mock<IProjects> _projectRepository;
         private readonly KeyStage5Performance _subject;
-        private EducationPerformance _foundEducationPerformance;
-        private Project _foundProject;
-        private Academy _foundOutgoingAcademy;
-        private GetInformationForProjectResponse _foundInformationForProject;
+        private readonly EducationPerformance _foundEducationPerformance;
+        private readonly Project _foundProject;
+        private readonly Academy _foundOutgoingAcademy;
+        private readonly GetInformationForProjectResponse _foundInformationForProject;
 
         public KeyStage5PerformanceTests()
         {
@@ -100,6 +101,14 @@ namespace Frontend.Tests.PagesTests
             }
 
             [Fact]
+            public async void GivenReturnToPreview_UpdatesTheViewModel()
+            {
+                await _subject.OnGetAsync("123", false, true);
+
+                Assert.True(_subject.ReturnToPreview);
+            }
+
+            [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
                 var pageModel =
@@ -127,7 +136,7 @@ namespace Frontend.Tests.PagesTests
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync("1234", string.Empty);
+                await _subject.OnPostAsync("1234", string.Empty, false);
 
                 _projectRepository.Verify(r => r.GetByUrn("1234"), Times.Once);
             }
@@ -149,7 +158,7 @@ namespace Frontend.Tests.PagesTests
                     });
 
 
-                var response = await pageModel.OnPostAsync("1234", string.Empty);
+                var response = await pageModel.OnPostAsync("1234", string.Empty, false);
                 var viewResult = Assert.IsType<ViewResult>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -161,7 +170,7 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInformation = "some additional info";
 
-                var response = await _subject.OnPostAsync("1234", additionalInformation);
+                var response = await _subject.OnPostAsync("1234", additionalInformation, false);
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage5Performance", redirectToPageResponse.PageName);
@@ -174,10 +183,20 @@ namespace Frontend.Tests.PagesTests
             {
                 const string additionalInfo = "test info";
 
-                await _subject.OnPostAsync("1234", additionalInfo);
+                await _subject.OnPostAsync("1234", additionalInfo, false);
                 _projectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage5PerformanceAdditionalInformation == additionalInfo
                 )));
+            }
+
+            [Fact]
+            public async void GivenReturnToPreview_RedirectsToThePreviewPage()
+            {
+                var response = await _subject.OnPostAsync("1234", "", true);
+
+                var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
+                Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
+                Assert.Equal("1234", redirectResponse.RouteValues["id"]);
             }
         }
     }
