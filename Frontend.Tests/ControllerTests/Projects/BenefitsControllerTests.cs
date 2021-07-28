@@ -491,7 +491,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), "HighProfile"),
                             Checked = true,
-                            Description = ""
+                            Description = "Meow"
                         }
                     };
 

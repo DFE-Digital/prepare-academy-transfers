@@ -4,6 +4,7 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -19,16 +20,16 @@ namespace Frontend.Tests.ControllerTests.Projects
         {
             _projectRepository = new Mock<IProjects>();
             _projectRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Project> { Result = new Project() });
+                .ReturnsAsync(new RepositoryResult<Project> {Result = new Project()});
             _projectRepository.Setup(s => s.GetByUrn(_errorWithGetByUrn))
                 .ReturnsAsync(
-                  new RepositoryResult<Project>
-                  {
-                      Error = new RepositoryResultBase.RepositoryError
-                      {
-                          ErrorMessage = "Error"
-                      }
-                  });
+                    new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
 
             _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                 .ReturnsAsync(new RepositoryResult<Project>());
@@ -78,6 +79,15 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
                 }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignToTheViewModel()
+                {
+                    var response = await _subject.Project("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
             }
 
             public class PostTests : ProjectTests
@@ -121,22 +131,42 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
                     _projectRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                       new RepositoryResult<Project>
-                       {
-                           Error = new RepositoryResultBase.RepositoryError
-                           {
-                               ErrorMessage = "Update error"
-                           }
-                       });
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Update error"
+                            }
+                        });
 
                     var response = await _subject.ProjectPost("errorWithUpdate", "rationale");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
+                {
+                    var response = await _subject.ProjectPost("0001", null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.ProjectPost("0001", "meow", true);
+
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
                 }
             }
         }
@@ -161,6 +191,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+                
+                [Fact]
+                public async void GivenReturnToPreview_AssignToTheViewModel()
+                {
+                    var response = await _subject.TrustOrSponsor("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -205,22 +244,42 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenUpdatenReturnsError_DisplayErrorPage()
+                public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
                     _projectRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                       new RepositoryResult<Project>
-                       {
-                           Error = new RepositoryResultBase.RepositoryError
-                           {
-                               ErrorMessage = "Update error"
-                           }
-                       });
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Update error"
+                            }
+                        });
 
                     var response = await _subject.TrustOrSponsorPost("errorWithUpdate", "rationale");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
+                {
+                    var response = await _subject.TrustOrSponsorPost("0001", null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.TrustOrSponsorPost("0001", "meow", true);
+
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
                 }
             }
         }
