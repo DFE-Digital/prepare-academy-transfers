@@ -5,11 +5,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
+using Data.Models.Projects;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
+using Helpers;
 
 namespace Frontend.Services
 {
@@ -55,6 +57,11 @@ namespace Frontend.Services
             
             var htbDocument = new HtbDocument
             {
+                Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(project.AcademyAndTrustInformation.Recommendation),
+                Author = project.AcademyAndTrustInformation.Author,
+                ProjectName = project.Name,
+                SponsorName = project.IncomingTrustName,
+                AcademyTypeAndRoute = academy.EstablishmentType,
                 SchoolName = academy.Name,
                 SchoolUrn =  academy.Urn,
                 TrustName = project.OutgoingTrustName,
@@ -71,7 +78,6 @@ namespace Frontend.Services
                 OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
-                Author = "Author name",
                 ClearedBy = "Cleared by",
                 Version = "Version"
             };

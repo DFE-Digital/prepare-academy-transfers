@@ -8,6 +8,11 @@ namespace Frontend.Models
         [DocumentText("SchoolUrn")] public string SchoolUrn { get; set; }
         [DocumentText("TrustName")] public string TrustName { get; set; }
         [DocumentText("TrustReferenceNumber")] public string TrustReferenceNumber { get; set; }
+        [DocumentText("Recommendation")] public string Recommendation { get; set; }
+        [DocumentText("Author")] public string Author { get; set; }
+        [DocumentText("ProjectName")] public string ProjectName { get; set; }
+        [DocumentText("SponsorName")] public string SponsorName { get; set; }
+        [DocumentText("AcademyTypeAndRoute")] public string AcademyTypeAndRoute { get; set; }
         [DocumentText("SchoolType")] public string SchoolType { get; set; }
         [DocumentText("SchoolPhase")] public string SchoolPhase { get; set; }
         [DocumentText("AgeRange")] public string AgeRange { get; set; }
@@ -26,7 +31,6 @@ namespace Frontend.Models
         [DocumentText("OverallEffectiveness")] public string OverallEffectiveness { get; set; }
         [DocumentText("RationaleForProject")] public string RationaleForProject { get; set; }
         [DocumentText("RationaleForTrust")] public string RationaleForTrust { get; set; }
-        [DocumentText("Author")] public string Author { get; set; }
         [DocumentText("ClearedBy")] public string ClearedBy { get; set; }
         [DocumentText("Version")] public string Version { get; set; }
     }
