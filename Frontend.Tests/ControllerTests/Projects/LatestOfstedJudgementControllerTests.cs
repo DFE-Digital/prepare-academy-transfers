@@ -7,7 +7,9 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
+using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -18,14 +20,15 @@ namespace Frontend.Tests.ControllerTests.Projects
         private readonly LatestOfstedJudgementController _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly Mock<IProjects> _projectsRepository;
-        
+
 
         protected LatestOfstedJudgementControllerTests()
         {
             _getInformationForProject = new Mock<IGetInformationForProject>();
             _projectsRepository = new Mock<IProjects>();
 
-            _subject = new LatestOfstedJudgementController(_getInformationForProject.Object, _projectsRepository.Object);
+            _subject = new LatestOfstedJudgementController(_getInformationForProject.Object,
+                _projectsRepository.Object);
         }
 
         public class IndexTests : LatestOfstedJudgementControllerTests
@@ -60,10 +63,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                     });
 
                 _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
-                   new RepositoryResult<Project>
-                   {
-                       Result = _foundProject
-                   });
+                    new RepositoryResult<Project>
+                    {
+                        Result = _foundProject
+                    });
 
                 _getInformationForProject.Setup(s => s.Execute("errorUrn")).ReturnsAsync(
                     new GetInformationForProjectResponse
@@ -75,14 +78,14 @@ namespace Frontend.Tests.ControllerTests.Projects
                     });
 
                 _projectsRepository.Setup(r => r.GetByUrn("errorUrn"))
-                        .ReturnsAsync(new RepositoryResult<Project>
+                    .ReturnsAsync(new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
                         {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                StatusCode = System.Net.HttpStatusCode.NotFound,
-                                ErrorMessage = "Project not found"
-                            }
-                        });
+                            StatusCode = System.Net.HttpStatusCode.NotFound,
+                            ErrorMessage = "Project not found"
+                        }
+                    });
 
                 _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
                     .ReturnsAsync(new RepositoryResult<Project>());
@@ -128,6 +131,17 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn, false, true);
+                    var viewModel =
+                        ControllerTestHelpers.GetViewModelFromResult<LatestOfstedJudgementViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                    Assert.True(viewModel.AdditionalInformationModel.ReturnToPreview);
                 }
             }
 
@@ -198,6 +212,18 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectsToPreviewPage()
+                {
+                    var response = await _subject.Index(_projectUrn, "meow", true);
+                    
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response,
+                        Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = _projectUrn})
+                    );
                 }
             }
         }
