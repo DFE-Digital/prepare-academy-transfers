@@ -42,7 +42,7 @@
                         {
                             <div class="govuk-checkboxes__item">
                                 <input asp-for="@Model.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
-                                <label id="@Model.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" for="@Model.OtherFactorsVm[i].OtherFactor">
+                                <label id="@Model.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsVm[i].Checked">
                                     @{
                                         var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsVm[i].OtherFactor);
                                         @displayName
