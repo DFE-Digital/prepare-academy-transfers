@@ -22,7 +22,8 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false)
+        public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false,
+            bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
             if (!projectInformation.IsValid)
@@ -34,12 +35,15 @@ namespace Frontend.Controllers.Projects
             {
                 Project = projectInformation.Project,
                 OutgoingAcademy = projectInformation.OutgoingAcademy,
+                ReturnToPreview = returnToPreview,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,
-                    HintText = "This information will populate into your HTB template under the school pupil forecasts section.",
+                    HintText =
+                        "This information will populate into your HTB template under the school pupil forecasts section.",
                     Urn = projectInformation.Project.Urn,
-                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation
+                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
+                    ReturnToPreview = returnToPreview
                 }
             };
 
@@ -47,7 +51,7 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string id, string additionalInformation)
+        public async Task<IActionResult> Index(string id, string additionalInformation, bool returnToPreview = false)
         {
             var model = await _projectsRepository.GetByUrn(id);
             if (!model.IsValid)
@@ -62,9 +66,14 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", model.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id});
+            }
+
             return RedirectToAction(nameof(this.Index),
                 "PupilNumbers",
-                new { id },
+                new {id},
                 "additional-information-hint");
         }
     }
