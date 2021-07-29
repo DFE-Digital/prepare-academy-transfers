@@ -8,7 +8,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview return-to-preview="@Model.ReturnToPreview" id="@Model.Project.Urn">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    </backtopreview>
 }
 
 <div class="govuk-grid-row">

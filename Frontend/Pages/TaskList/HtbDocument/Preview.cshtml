@@ -1,8 +1,8 @@
-@page "/project/{id}/preview"
+@page "/project/{id}/headteacher-board/preview"
 @model Frontend.Pages.TaskList.HtbDocument.Preview
 
 @{
-    ViewBag.Title = "New preview";
+    ViewBag.Title = "Preview Headteacher Board (HTB) Template";
     Layout = "_Layout";
 }
 
@@ -84,7 +84,7 @@
                 <partial name="TaskList/AcademyAndTrustInformation/AcademyAndTrustInformation" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">General information</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -96,7 +96,7 @@
                 <partial name="GeneralInformation" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">Pupil numbers</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -108,7 +108,7 @@
                 <partial name="PupilNumbers" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">Latest Ofsted judgement</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -120,7 +120,7 @@
                 <partial name="LatestOfstedJudgement" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">Key stage 2 performance tables</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -132,7 +132,7 @@
                 <partial name="KeyStage2PerformanceSummary" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -144,7 +144,7 @@
                 <partial name="KeyStage4PerformanceSummary" model="Model"></partial>
             </div>
         </section>
-        
+
         <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
@@ -156,5 +156,26 @@
                 <partial name="KeyStage5PerformanceSummary" model="Model"></partial>
             </div>
         </section>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l">
+            Generate HTB template
+        </h2>
+        <p class="govuk-body govuk-!-margin-bottom-6">
+            Generate the HTB template into a Word document and download it.
+        </p>
+        <div class="govuk-button-group">
+            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn">
+                Generate HTB document
+            </a>
+            <p class="govuk-body">
+                <a asp-controller="Home" asp-action="Index" class="govuk-link govuk-link--no-visited-state">
+                    Save and return to this project later
+                </a>
+            </p>
+        </div>
     </div>
 </div>

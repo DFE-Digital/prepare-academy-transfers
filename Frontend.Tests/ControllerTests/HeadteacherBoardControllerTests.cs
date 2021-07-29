@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Data.Models;
 using Data.Models.Projects;
@@ -59,47 +58,6 @@ namespace Frontend.Tests.ControllerTests
                 });
         }
 
-        public class PreviewTests : HeadteacherBoardControllerTests
-        {
-            [Fact]
-            public async void GivenId_GetsProjectInformation()
-            {
-                await _subject.Preview(_projectUrn);
-
-                _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenId_PutsTheProjectInTheViewModel()
-            {
-                var response = await _subject.Preview(_projectUrn);
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
-
-                Assert.Equal(_foundProject, viewModel.Project);
-            }
-
-            [Fact]
-            public async void GivenId_PutsTheOutgoingAcademyInTheViewModel()
-            {
-                var response = await _subject.Preview(_projectUrn);
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
-
-                Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
-            }
-
-            [Fact]
-            public async void GivenGetInformationReturnsError_DisplayErrorPage()
-            {
-                var response = await _subject.Preview(_errorUrn);
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
-            }
-        }
-
         public class DownloadTests : HeadteacherBoardControllerTests
         {
             [Fact]
@@ -113,9 +71,9 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenId_PutsTheProjectInTheViewModel()
             {
-                var response = await _subject.Preview(_projectUrn);
+                var response = await _subject.Download(_projectUrn);
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<HeadTeacherBoardPreviewViewModel>(viewResponse.Model);
+                var viewModel = Assert.IsType<ProjectViewModel>(viewResponse.Model);
 
                 Assert.Equal(_foundProject, viewModel.Project);
             }

@@ -94,7 +94,7 @@
                             </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-4-performance-tables">Reference only</strong>
                         </li>
                     }
-                    
+
                     @if (Model.HasKeyStage5PerformanceInformation)
                     {
                         <li class="moj-task-list__item">
@@ -117,7 +117,7 @@
             Preview your HTB template before you generate it into a Word document, or you can generate the document without previewing it.
         </p>
         <div class="govuk-button-group">
-            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Preview" asp-route-id="@Model.Project.Urn">
+            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn">
                 Preview HTB template
             </a>
             <a role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn">

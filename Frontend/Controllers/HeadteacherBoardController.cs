@@ -21,24 +21,6 @@ namespace Frontend.Controllers
             _getInformationForProject = getInformationForProject;
         }
 
-        [Route("preview")]
-        public async Task<IActionResult> Preview([FromRoute] string id)
-        {
-            var projectInformation = await _getInformationForProject.Execute(id);
-            if (!projectInformation.IsValid)
-            {
-                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
-            var model = new HeadTeacherBoardPreviewViewModel
-            {
-                Project = projectInformation.Project,
-                OutgoingAcademy = projectInformation.OutgoingAcademy
-            };
-
-            return View(model);
-        }
-
         [Route("download")]
         public async Task<IActionResult> Download([FromRoute] string id)
         {
