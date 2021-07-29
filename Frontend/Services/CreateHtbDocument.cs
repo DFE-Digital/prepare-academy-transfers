@@ -79,7 +79,10 @@ namespace Frontend.Services
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
                 ClearedBy = "Cleared by",
-                Version = "Version"
+                Version = "Version",
+                DateOfHtb = project.Dates.Htb,
+                DateOfProposedTransfer = project.Dates.Target,
+                DateTransferWasFirstDiscussed = project.Dates.FirstDiscussed
             };
 
             var ms = CreateMemoryStream("htb-template");
