@@ -33,5 +33,9 @@ namespace Frontend.Models
         [DocumentText("RationaleForTrust")] public string RationaleForTrust { get; set; }
         [DocumentText("ClearedBy")] public string ClearedBy { get; set; }
         [DocumentText("Version")] public string Version { get; set; }
+        
+        [DocumentText("DateTransferWasFirstDiscussed")] public string DateTransferWasFirstDiscussed { get; set; }
+        [DocumentText("DateOfHtb")] public string DateOfHtb { get; set; }
+        [DocumentText("DateOfProposedTransfer")] public string DateOfProposedTransfer { get; set; }
     }
 }
