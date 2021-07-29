@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Xunit;
 
 namespace Frontend.Tests.Helpers
@@ -18,6 +19,14 @@ namespace Frontend.Tests.Helpers
             Assert.Equal(actionName, redirectResult.ActionName);
 
             return redirectResult;
+        }
+
+        public static void AssertResultRedirectsToPage(IActionResult result, string expectedPageName,
+            RouteValueDictionary expectedRouteValues = null)
+        {
+            var redirectResult = Assert.IsType<RedirectToPageResult>(result);
+            Assert.Equal(expectedPageName, redirectResult.PageName);
+            Assert.Equal(expectedRouteValues, redirectResult.RouteValues);
         }
     }
 }

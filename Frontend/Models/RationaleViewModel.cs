@@ -10,5 +10,7 @@ namespace Frontend.Models
         {
             FormErrors = new FormErrorsViewModel();
         }
+
+        public bool ReturnToPreview { get; set; }
     }
 }

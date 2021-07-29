@@ -7,7 +7,9 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
+using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -70,19 +72,19 @@ namespace Frontend.Tests.ControllerTests.Projects
                     });
 
                 _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
-                   new RepositoryResult<Project>
-                   {
-                       Result = _foundProject
-                   });
+                    new RepositoryResult<Project>
+                    {
+                        Result = _foundProject
+                    });
 
                 _projectsRepository.Setup(s => s.GetByUrn(_projectErrorUrn)).ReturnsAsync(
-                   new RepositoryResult<Project>
-                   {
-                       Error = new RepositoryResultBase.RepositoryError
-                       {
-                           ErrorMessage = "Error"
-                       }
-                   });
+                    new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
 
                 _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
                     .ReturnsAsync(new RepositoryResult<Project>());
@@ -118,7 +120,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
 
                     Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
-
                 }
 
                 [Fact]
@@ -142,6 +143,16 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignToTheViewModel()
+                {
+                    var response = await _subject.Index(_projectUrn, false, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<PupilNumbersViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                    Assert.True(viewModel.AdditionalInformationModel.ReturnToPreview);
                 }
             }
 
@@ -184,20 +195,30 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
-                   _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                   new RepositoryResult<Project>
-                   {
-                       Error = new RepositoryResultBase.RepositoryError
-                       {
-                           ErrorMessage = "Error"
-                       }
-                   });
+                    _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Error"
+                            }
+                        });
 
                     var response = await _subject.Index(_projectErrorUrn, "test info");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectToPreviewPage()
+                {
+                    var response = await _subject.Index(_projectUrn, "Test info", true);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response, Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = _projectUrn})
+                    );
                 }
             }
         }

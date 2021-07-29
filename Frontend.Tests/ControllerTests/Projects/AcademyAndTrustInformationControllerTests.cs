@@ -2,10 +2,12 @@ using Data;
 using Data.Models;
 using Data.Models.Projects;
 using Frontend.Controllers.Projects;
+using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -105,6 +107,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
+                public async void GivenReturnToPreview_AssignItToTheView()
+                {
+                    var response = await _subject.Recommendation(ProjectUrn, true);
+                    var model =
+                        ControllerTestHelpers.GetViewModelFromResult<AcademyAndTrustInformationViewModel>(response);
+
+                    Assert.True(model.ReturnToPreview);
+                }
+
+                [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
                     var response = await _subject.Recommendation(ProjectErrorUrn);
@@ -118,20 +130,20 @@ namespace Frontend.Tests.ControllerTests.Projects
             public class PostTests : RecommendationTests
             {
                 const string Author = "test author";
-                const TransferAcademyAndTrustInformation.RecommendationResult Recommendation = 
+
+                const TransferAcademyAndTrustInformation.RecommendationResult Recommendation =
                     TransferAcademyAndTrustInformation.RecommendationResult.Approve;
+
                 public PostTests()
                 {
                     _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                         .ReturnsAsync(
                             new RepositoryResult<Project>());
-
                 }
 
                 [Fact]
                 public async void GivenUrnAndRecommendationAndAuthor_UpdatesTheProject()
                 {
-                    
                     await _subject.Recommendation(ProjectUrn, Recommendation, Author);
 
                     _projectRepository.Verify(r =>
@@ -176,6 +188,14 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_ReturnToThePreviewPage()
+                {
+                    var response = await _subject.Recommendation(ProjectUrn, Recommendation, Author, true);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response,
+                        Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn}));
                 }
             }
         }

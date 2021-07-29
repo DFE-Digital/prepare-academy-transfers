@@ -10,7 +10,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    </backtopreview>
 }
 
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
@@ -18,6 +20,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="OtherFactors" method="post" novalidate="">
+            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend">
@@ -39,7 +42,7 @@
                         {
                             <div class="govuk-checkboxes__item">
                                 <input asp-for="@Model.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
-                                <label id="@Model.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" for="@Model.OtherFactorsVm[i].OtherFactor">
+                                <label id="@Model.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsVm[i].Checked">
                                     @{
                                         var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsVm[i].OtherFactor);
                                         @displayName

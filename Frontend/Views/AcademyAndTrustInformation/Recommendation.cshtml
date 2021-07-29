@@ -20,6 +20,7 @@
             Recommendation
         </h1>
         <form asp-action="Recommendation" method="post" novalidate="">
+            <input name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

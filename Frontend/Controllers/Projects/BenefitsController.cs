@@ -39,7 +39,7 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpGet("intended-benefits")]
-        public async Task<IActionResult> IntendedBenefits(string urn)
+        public async Task<IActionResult> IntendedBenefits(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -50,6 +50,7 @@ namespace Frontend.Controllers.Projects
             var model = new BenefitsViewModel
             {
                 Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             return View(model);
@@ -58,7 +59,7 @@ namespace Frontend.Controllers.Projects
         [ActionName("IntendedBenefits")]
         [HttpPost("intended-benefits")]
         public async Task<IActionResult> IntendedBenefitsPost(string urn,
-            TransferBenefits.IntendedBenefit[] intendedBenefits, string otherBenefit)
+            TransferBenefits.IntendedBenefit[] intendedBenefits, string otherBenefit, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -98,11 +99,16 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", updateResult.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+
             return RedirectToAction("Index", new {urn});
         }
 
         [HttpGet("other-factors")]
-        public async Task<IActionResult> OtherFactors(string urn)
+        public async Task<IActionResult> OtherFactors(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -113,6 +119,7 @@ namespace Frontend.Controllers.Projects
             var model = new BenefitsViewModel
             {
                 Project = project.Result,
+                ReturnToPreview = returnToPreview
             };
 
             BuildOtherFactorsViewModel(model);
@@ -122,7 +129,7 @@ namespace Frontend.Controllers.Projects
 
         [ActionName("OtherFactors")]
         [HttpPost("other-factors")]
-        public async Task<IActionResult> OtherFactorsPost(string urn, List<BenefitsViewModel.OtherFactorsViewModel> otherFactorsVm)
+        public async Task<IActionResult> OtherFactorsPost(string urn, List<BenefitsViewModel.OtherFactorsViewModel> otherFactorsVm, bool returnToPreview)
         {
             var project = await _projectsRepository.GetByUrn(urn);
 
@@ -161,6 +168,11 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", updateResult.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+            
             return RedirectToAction("Index", new {urn});
         }
         

@@ -20,6 +20,7 @@ namespace Frontend.Models
         public DateInputViewModel TransferFirstDiscussed => DateInputForField(Project.Dates.FirstDiscussed);
         public DateInputViewModel TargetDate => DateInputForField(Project.Dates.Target);
         public DateInputViewModel HtbDate => DateInputForField(Project.Dates.Htb);
+        public bool ReturnToPreview { get; set; }
 
         private static DateInputViewModel DateInputForField(string transferDatesFirstDiscussed)
         {

@@ -15,6 +15,8 @@ namespace Frontend.Models
             FormErrors = new FormErrorsViewModel();
         }
 
+        public bool ReturnToPreview { get; set; }
+
         public List<string> IntendedBenefitsSummary()
         {
             var summary = Project.Benefits.IntendedBenefits

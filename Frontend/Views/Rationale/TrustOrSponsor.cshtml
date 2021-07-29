@@ -8,7 +8,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    </backtopreview>
 }
 
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
@@ -16,6 +18,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="TrustOrSponsor" method="post" novalidate="">
+            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden />
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
                     <span class="govuk-caption-l">

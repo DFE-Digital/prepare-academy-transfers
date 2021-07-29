@@ -44,7 +44,8 @@
             </dd>
         }
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Benefits" asp-action="IntendedBenefits" asp-route-urn="@Model.Project.Urn">
+            <a class="govuk-link" asp-controller="Benefits" asp-action="IntendedBenefits" 
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="@true">
                 Change<span class="govuk-visually-hidden">intended benefits</span>
             </a>
         </dd>
@@ -73,7 +74,8 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Benefits" asp-action="OtherFactors" asp-route-urn="@Model.Project.Urn">
+            <a class="govuk-link" asp-controller="Benefits" asp-action="OtherFactors" 
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden">other factors to consider</span>
             </a>
         </dd>

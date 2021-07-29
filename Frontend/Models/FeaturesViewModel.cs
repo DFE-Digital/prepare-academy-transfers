@@ -22,6 +22,8 @@ namespace Frontend.Models
         public bool IsTransferSubjectToIntervention =>
             Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true;
 
+        public bool ReturnToPreview { get; set; }
+
         public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ProjectInitiators selected)
         {
             var values =

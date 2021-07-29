@@ -8,6 +8,6 @@ namespace Frontend.Models
         public Project Project { get; set; }
         public Academy OutgoingAcademy { get; set; }
         public AdditionalInformationViewModel AdditionalInformationModel { get; set; }
-
+        public bool ReturnToPreview { get; set; }
     }
 }

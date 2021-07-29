@@ -1,12 +1,10 @@
-using System;
 using Data;
 using Data.Models;
 using Frontend.Controllers.Projects;
-using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
-using Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
@@ -17,7 +15,6 @@ namespace Frontend.Tests.ControllerTests.Projects
         private const string _errorWithGetByUrn = "errorUrn";
         private readonly TransferDatesController _subject;
         private readonly Mock<IProjects> _projectsRepository;
-        private readonly Mock<IDateTimeProvider> _dateTimeProvider;
         private readonly Project _foundProject;
 
         public TransferDatesControllerTests()
@@ -28,25 +25,23 @@ namespace Frontend.Tests.ControllerTests.Projects
             };
 
             _projectsRepository = new Mock<IProjects>();
-            _dateTimeProvider = new Mock<IDateTimeProvider>();
 
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
             _projectsRepository.Setup(s => s.GetByUrn(_errorWithGetByUrn))
                 .ReturnsAsync(
-                  new RepositoryResult<Project>
-                  {
-                      Error = new RepositoryResultBase.RepositoryError
-                      {
-                          ErrorMessage = "Error"
-                      }
-                  });
+                    new RepositoryResult<Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            ErrorMessage = "Error"
+                        }
+                    });
 
             _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
                 .ReturnsAsync(new RepositoryResult<Project>());
-            _dateTimeProvider.Setup(r => r.Today()).Returns(new DateTime(2020, 1, 1));
 
-            _subject = new TransferDatesController(_projectsRepository.Object, _dateTimeProvider.Object);
+            _subject = new TransferDatesController(_projectsRepository.Object);
         }
 
         public class IndexTests : TransferDatesControllerTests
@@ -92,6 +87,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.FirstDiscussed("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -160,19 +164,39 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUpdatenReturnsError_DisplayErrorPage()
                 {
                     _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                       new RepositoryResult<Project>
-                       {
-                           Error = new RepositoryResultBase.RepositoryError
-                           {
-                               ErrorMessage = "Update error"
-                           }
-                       });
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Update error"
+                            }
+                        });
 
                     var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", null, null, null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectToPreviewPage()
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020", true);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response,
+                        Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
                 }
             }
         }
@@ -198,6 +222,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.TargetDate("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -266,19 +299,39 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUpdatenReturnsError_DisplayErrorPage()
                 {
                     _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                       new RepositoryResult<Project>
-                       {
-                           Error = new RepositoryResultBase.RepositoryError
-                           {
-                               ErrorMessage = "Update error"
-                           }
-                       });
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Update error"
+                            }
+                        });
 
                     var response = await _subject.TargetDatePost("0001", "01", "01", "2020");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
+                {
+                    var response = await _subject.TargetDatePost("0001", null, null, null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectToPreviewPage()
+                {
+                    var response = await _subject.TargetDatePost("0001", "01", "01", "2020", true);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response,
+                        Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
                 }
             }
         }
@@ -304,6 +357,15 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_AssignsItToTheViewModel()
+                {
+                    var response = await _subject.HtbDate("0001", true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
                 }
             }
 
@@ -371,19 +433,39 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUpdatenReturnsError_DisplayErrorPage()
                 {
                     _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                       new RepositoryResult<Project>
-                       {
-                           Error = new RepositoryResultBase.RepositoryError
-                           {
-                               ErrorMessage = "Update error"
-                           }
-                       });
+                        new RepositoryResult<Project>
+                        {
+                            Error = new RepositoryResultBase.RepositoryError
+                            {
+                                ErrorMessage = "Update error"
+                            }
+                        });
 
                     var response = await _subject.HtbDatePost("0001", "01", "01", "2020");
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
+                }
+
+                [Fact]
+                public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
+                {
+                    var response = await _subject.HtbDatePost("0001", null, null, null, true);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(viewModel.ReturnToPreview);
+                }
+
+                [Fact]
+                public async void GivenReturnToPreview_RedirectToPreviewPage()
+                {
+                    var response = await _subject.HtbDatePost("0001", "01", "01", "2020", true);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(
+                        response,
+                        Links.HeadteacherBoard.Preview.PageName,
+                        new RouteValueDictionary(new {id = "0001"})
+                    );
                 }
             }
         }

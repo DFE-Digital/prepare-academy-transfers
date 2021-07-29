@@ -55,7 +55,8 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
                asp-controller="LatestOfstedJudgement" asp-action="Index"
-               asp-route-urn="@Model.Project.Urn" asp-route-addOrEditAdditionalInformation="true">
+               asp-route-id="@Model.Project.Urn" asp-route-addOrEditAdditionalInformation="true"
+               asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden">latest ofsted judgement additional information</span>
             </a>
         </dd>

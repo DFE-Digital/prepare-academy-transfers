@@ -7,7 +7,9 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    </backtopreview>
 }
 
 @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
@@ -21,6 +23,7 @@
             Reason for transfer
         </h1>
         <form asp-action="Reason" method="post" novalidate="">
+            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
             <div class="govuk-form-group @Model.FormErrors.FormClassesForField("isSubjectToIntervention")">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

@@ -22,7 +22,7 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(string urn)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            if(!project.IsValid)
+            if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
@@ -36,7 +36,7 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpGet("rationale")]
-        public async Task<IActionResult> Project(string urn)
+        public async Task<IActionResult> Project(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -44,17 +44,14 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel
-            {
-                Project = project.Result
-            };
+            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             return View(model);
         }
 
         [ActionName("Project")]
         [HttpPost("rationale")]
-        public async Task<IActionResult> ProjectPost(string urn, string rationale)
+        public async Task<IActionResult> ProjectPost(string urn, string rationale, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -62,13 +59,10 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel
-            {
-                Project = project.Result
-            };
+            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             model.Project.Rationale.Project = rationale;
-            
+
             if (string.IsNullOrEmpty(rationale))
             {
                 model.FormErrors.AddError("rationale", "rationale", "Please enter a rationale");
@@ -80,11 +74,17 @@ namespace Frontend.Controllers.Projects
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
+
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+
             return RedirectToAction("Index", new {urn});
         }
 
         [HttpGet("trust-or-sponsor")]
-        public async Task<IActionResult> TrustOrSponsor(string urn)
+        public async Task<IActionResult> TrustOrSponsor(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -92,17 +92,14 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel
-            {
-                Project = project.Result
-            };
+            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             return View(model);
         }
 
         [ActionName("TrustOrSponsor")]
         [HttpPost("trust-or-sponsor")]
-        public async Task<IActionResult> TrustOrSponsorPost(string urn, string rationale)
+        public async Task<IActionResult> TrustOrSponsorPost(string urn, string rationale, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -110,13 +107,10 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel
-            {
-                Project = project.Result
-            };
+            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             model.Project.Rationale.Trust = rationale;
-            
+
             if (string.IsNullOrEmpty(rationale))
             {
                 model.FormErrors.AddError("rationale", "rationale", "Please enter a rationale");
@@ -128,6 +122,12 @@ namespace Frontend.Controllers.Projects
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
+
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+            }
+
             return RedirectToAction("Index", new {urn});
         }
     }

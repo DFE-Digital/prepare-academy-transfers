@@ -15,14 +15,16 @@ namespace Frontend.Controllers.Projects
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public LatestOfstedJudgementController(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public LatestOfstedJudgementController(IGetInformationForProject getInformationForProject,
+            IProjects projectsRepository)
         {
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false)
+        public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false,
+            bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
             if (!projectInformation.IsValid)
@@ -34,12 +36,15 @@ namespace Frontend.Controllers.Projects
             {
                 Project = projectInformation.Project,
                 Academy = projectInformation.OutgoingAcademy,
+                ReturnToPreview = returnToPreview,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
-                    HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
+                    HintText =
+                        "This information will populate into your HTB template under the school performance (Ofsted information) section.",
                     Urn = projectInformation.Project.Urn,
-                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation
+                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
+                    ReturnToPreview = returnToPreview
                 }
             };
 
@@ -47,7 +52,7 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string id, string additionalInformation)
+        public async Task<IActionResult> Index(string id, string additionalInformation, bool returnToPreview = false)
         {
             var model = await _projectsRepository.GetByUrn(id);
             if (!model.IsValid)
@@ -62,9 +67,14 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
+            if (returnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id});
+            }
+
             return RedirectToAction(nameof(this.Index),
                 "LatestOfstedJudgement",
-                new { id },
+                new {id},
                 "additional-information-hint");
         }
     }
