@@ -30,16 +30,16 @@ namespace Frontend.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var projects = await _projectsRepository.GetProjects();
+            var projects = await _projectsRepository.GetProjects(page);
             if (!projects.IsValid)
             {
                 return View("ErrorPage", projects.Error.ErrorMessage);
             }
 
             _logger.LogInformation("Home page loaded");
-            var model = new Index {Projects = projects.Result};
+            var model = new Index {Projects = projects.Result, Page = page};
             return View(model);
         }
 

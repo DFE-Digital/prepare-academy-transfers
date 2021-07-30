@@ -33,9 +33,10 @@ namespace Data.TRAMS
             _internalToUpdateMapper = internalToUpdateMapper;
         }
 
-        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects()
+        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1)
         {
-            var response = await _httpClient.GetAsync("academyTransferProject");
+            var response = await _httpClient.GetAsync($"academyTransferProject?page={page}");
+            
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();

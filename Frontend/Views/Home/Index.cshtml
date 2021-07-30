@@ -2,6 +2,13 @@
 
 @{
     ViewData["Title"] = "Transfer an academy to another trust";
+    var startingPage = 1;
+    if(Model.Page - 5 > 1) startingPage = Model.Page - 5;
+    var hasPreviousPage = Model.Page > 1;
+    var hasNextPage = Model.Projects.Count == 10;
+
+    var previousPage = Model.Page - 1;
+    var nextPage = Model.Page + 1;
 }
 
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
@@ -46,5 +53,33 @@
                 </div>
             </div>
         }
+        <nav class="moj-pagination" id="pagination-label">
+            <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+            <ul class="moj-pagination__list">
+                @if (hasPreviousPage)
+                {
+                    <li class="moj-pagination__item  moj-pagination__item--prev">
+                        <a class="moj-pagination__link" asp-action="Index" asp-route-page="@previousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                    </li>
+                    @for (var i = startingPage; i < Model.Page; i++)
+                    {
+                        <li class="moj-pagination__item">
+                            <a asp-action="Index" asp-route-page="@i" class="moj-pagination__link">@i</a>
+                        </li>
+                    }
+                }
+                <li class="moj-pagination__item moj-pagination__item--active">@Model.Page</li>
+                @if (hasNextPage)
+                {
+                    <li class="moj-pagination__item">
+                        <a asp-action="Index" asp-route-page="@nextPage" class="moj-pagination__link">@nextPage</a>
+                    </li>
+                    <li class="moj-pagination__item  moj-pagination__item--next">
+                        <a class="moj-pagination__link" asp-action="Index" asp-route-page="@nextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                    </li>
+                }
+            </ul>
+            <p class="moj-pagination__results"></p>
+        </nav>
     </div>
 </div>
