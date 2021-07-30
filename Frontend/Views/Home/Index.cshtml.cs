@@ -6,5 +6,6 @@ namespace Frontend.Views.Home
     public class Index
     {
         public List<ProjectSearchResult> Projects;
+        public int Page { get; set; }
     }
 }

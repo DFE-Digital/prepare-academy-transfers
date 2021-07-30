@@ -347,7 +347,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
                 });
@@ -376,7 +376,7 @@ namespace Data.TRAMS.Tests
                     }
                 );
 
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
                 });
@@ -392,7 +392,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
                 });
@@ -410,7 +410,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void Given404_ReturnsErrorFromRepository()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.NotFound
                 });
@@ -425,7 +425,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void Given500_ReturnsErrorFromRepository()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.InternalServerError
                 });
@@ -437,12 +437,28 @@ namespace Data.TRAMS.Tests
                 Assert.Equal("API encountered an error", response.Error.ErrorMessage);
             }
 
+            [Theory]
+            [InlineData(1)]
+            [InlineData(2)]
+            [InlineData(3)]
+            public async void GivenPage_GetsProjectForPage(int page)
+            {
+                _httpClient.Setup(c => c.GetAsync($"academyTransferProject?page={page}")).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                });
+
+                await _subject.GetProjects(page);
+                
+                _httpClient.Verify(c => c.GetAsync($"academyTransferProject?page={page}"), Times.Once());
+            }
+
             #region ApiInterim
 
             [Fact]
             public async void GivenProjectSummary_FillInExtraInformationFromMultipleRequestsAndMap()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
                 });
