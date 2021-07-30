@@ -196,13 +196,13 @@ namespace DocumentGeneration
 
         private void PopulateTemplateWithDocument<TDocument>(TDocument document)
         {
-            var texts = GetAllText();
+            var allParagraphs = GetAllParagraphs();
             var properties = GetProperties<TDocument>();
 
-            foreach (var text in texts)
+            foreach (var paragraph in allParagraphs)
             {
                 var property = properties.FirstOrDefault(p =>
-                    text.InnerText.Contains($"{p.GetCustomAttribute<DocumentTextAttribute>()?.Placeholder}",
+                    paragraph.InnerText.Contains($"{p.GetCustomAttribute<DocumentTextAttribute>()?.Placeholder}",
                         StringComparison.OrdinalIgnoreCase));
 
                 if (property == null) continue;
@@ -211,19 +211,31 @@ namespace DocumentGeneration
 
                 if (attribute == null) continue;
 
-                text.Text = text.Text.Replace(
-                    attribute.Placeholder,
-                    property.GetValue(document)?.ToString(),
-                    StringComparison.OrdinalIgnoreCase
-                );
+                foreach (var paragraphChildElement in paragraph.ChildElements.ToList())
+                {
+                    if (paragraphChildElement.GetType() != typeof(ParagraphProperties))
+                        paragraph.RemoveChild(paragraphChildElement);
+                }
+                
+                var val = property.GetValue(document)?.ToString();
+                var text = new Text(val);
+                paragraph.AppendChild(new Run(text));
+                
+                // paragraph.ChildElements = new Run(new Text(paragraph.InnerText))
+                //
+                // paragraph.Text = paragraph.Text.Replace(
+                //     attribute.Placeholder,
+                //     property.GetValue(document)?.ToString(),
+                //     StringComparison.OrdinalIgnoreCase
+                // );
             }
 
-            IEnumerable<Text> GetAllText()
+            IEnumerable<Paragraph> GetAllParagraphs()
             {
                 var footerParts = _document.MainDocumentPart.FooterParts
                     .Where(fp => fp.Footer != null)
-                    .SelectMany(fp => fp.Footer?.Descendants<Text>());
-                return _document.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .SelectMany(fp => fp.Footer?.Descendants<Paragraph>());
+                return _document.MainDocumentPart.Document.Body.Descendants<Paragraph>()
                     .Concat(footerParts)
                     .ToHashSet();
             }
