@@ -37,5 +37,15 @@ namespace Frontend.Models
         [DocumentText("DateTransferWasFirstDiscussed")] public string DateTransferWasFirstDiscussed { get; set; }
         [DocumentText("DateOfHtb")] public string DateOfHtb { get; set; }
         [DocumentText("DateOfProposedTransfer")] public string DateOfProposedTransfer { get; set; }
+        
+        [DocumentText("ViabilityIssues")] public string ViabilityIssues { get; set; }
+        [DocumentText("FinancialDeficit")] public string FinancialDeficit { get; set; }
+        [DocumentText("Pfi")] public string Pfi { get; set; }
+        
+        [DocumentText("PercentageGoodOrOutstandingInDiocesanTrust")]
+        public string PercentageGoodOrOutstandingInDiocesanTrust { get; set; }
+        [DocumentText("DistanceFromTheAcademyToTheTrustHeadquarters")]
+        public string DistanceFromTheAcademyToTheTrustHeadquarters { get; set; }
+        [DocumentText("MpAndParty")] public string MpAndParty { get; set; }
     }
 }

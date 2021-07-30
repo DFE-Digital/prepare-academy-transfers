@@ -82,7 +82,13 @@ namespace Frontend.Services
                 Version = "Version",
                 DateOfHtb = project.Dates.Htb,
                 DateOfProposedTransfer = project.Dates.Target,
-                DateTransferWasFirstDiscussed = project.Dates.FirstDiscussed
+                DateTransferWasFirstDiscussed = project.Dates.FirstDiscussed,
+                ViabilityIssues = academy.GeneralInformation.ViabilityIssue,
+                FinancialDeficit = academy.GeneralInformation.Pfi,
+                Pfi = academy.GeneralInformation.Pfi,
+                PercentageGoodOrOutstandingInDiocesanTrust = academy.GeneralInformation.DiocesesPercent,
+                DistanceFromTheAcademyToTheTrustHeadquarters = academy.GeneralInformation.DistanceToSponsorHq,
+                MpAndParty = academy.GeneralInformation.MpAndParty
             };
 
             var ms = CreateMemoryStream("htb-template");
