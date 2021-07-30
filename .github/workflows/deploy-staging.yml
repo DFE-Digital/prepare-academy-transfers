@@ -36,5 +36,8 @@ jobs:
           cf target -o dfe -s academy-transfers-staging
           cf push amsd-casework-staging --docker-image ${{ env.REGISTRY }}/${{ env.REPO_NAME }}:latest -f deploy-manifests/staging.yml \
           --strategy rolling \
+          --var aad_instance=${{ secrets.AAD_INSTANCE }} \
+          --var aad_resource_id=${{ secrets.AAD_RESOURCEID }} \
+          --var aad_tenant_id=${{ secrets.AAD_TENANTID }} \
           --var username=${{ secrets.USERNAME }} \
           --var password=${{ secrets.PASSWORD }} 
