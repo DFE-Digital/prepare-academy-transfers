@@ -3,6 +3,10 @@ name: Deploy to staging
 on:
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  REPO_NAME: dfe-digital/academy-transfers-api
+
 jobs:
   deploy_to_staging:
     runs-on: ubuntu-latest
