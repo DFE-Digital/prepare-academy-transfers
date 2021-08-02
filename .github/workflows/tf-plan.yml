@@ -6,7 +6,7 @@ on:
       environment:
         description: "Environment (dev, staging, production)"
         required: true
-        default: "dev"
+        default: "Dev"
 
 env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
@@ -15,6 +15,7 @@ jobs:
   terraform-plan:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
+    environment: ${{ github.events.inputs.environment }}
     defaults:
       run:
         working-directory: terraform

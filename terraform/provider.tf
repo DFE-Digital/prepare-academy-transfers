@@ -18,9 +18,6 @@ terraform {
   #  Terraform State S3 Bucket                                                   #
   ## ========================================================================== ##
   backend s3 {
-		# bucket 	= var.aws_bucket_name
-		# key    	= var.aws_bucket_key
-		# region 	= var.aws_region
 		key     = "tf-state"
 		encrypt = true
   }
