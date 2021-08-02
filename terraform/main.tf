@@ -6,6 +6,11 @@ resource cloudfoundry_app worker_app {
   service_binding { 
 		service_instance = cloudfoundry_service_instance.redis.id 
 	}
+
+	environment = {
+		"ASPNETCORE_ENVIRONMENT" = "Development"
+    "ASPNETCORE_URLS": "http://+:8080"
+	}
 }
 
 resource cloudfoundry_route web_app_cloudapp_digital_route {
