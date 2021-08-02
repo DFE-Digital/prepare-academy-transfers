@@ -12,6 +12,9 @@ jobs:
   terraform-plan:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ghre-rails
     steps:
       # Checkout the code
       # Marketplace: https://github.com/marketplace/actions/checkout
