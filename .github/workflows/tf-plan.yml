@@ -53,7 +53,7 @@ jobs:
         run: |
           BACKEND_CONFIG='-backend-config="key=${{ github.event.inputs.environment }}/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
           PARAMETER_STORE_ENVIRONMENT=${{ github.event.inputs.environment }}
-          VAR_FILE=${{ github.event.inputs.environment }}.tfvars
+          VAR_FILE=${{ github.event.inputs.environment.lowercase }}.tfvars
           echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
           echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
           echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
