@@ -69,7 +69,7 @@ jobs:
       # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
       - name: "Run - Terraform Plan"
         id: plan
-        run: terraform plan -input=false -no-color ${{ env.BACKEND_CONFIG }}
+        run: terraform plan -input=false -no-color
         env:
           TF_VAR_cf_user: ${{ secrets.CF_USER }}
           TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
