@@ -60,9 +60,9 @@ jobs:
 
       # The id value is used for reference in the comment step via "steps.plan.outputs.stdout"
       # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
-      - name: "Run - Terraform Plan"
+      - name: "Run - Terraform Apply"
         id: plan
-        run: terraform apply -input=false -no-color -var-file=${{env.VAR_FILE}}
+        run: terraform apply -input=false -auto-approve -var-file=${{env.VAR_FILE}}
         env:
           TF_VAR_cf_user: ${{ secrets.CF_USER }}
           TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
