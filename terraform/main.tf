@@ -8,7 +8,7 @@ resource cloudfoundry_app worker_app {
 	}
 
 	routes {
-		route = cloudfoundry_route.web_app_cloudapp_digital_route
+		route = cloudfoundry_route.web_app_cloudapp_digital_route.id
 	} 
 
 	environment = {
