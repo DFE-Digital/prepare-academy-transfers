@@ -9,7 +9,9 @@ resource cloudfoundry_app worker_app {
 
 	environment = {
 		"ASPNETCORE_ENVIRONMENT" = "Development"
-    "ASPNETCORE_URLS": "http://+:8080"
+    "ASPNETCORE_URLS"        = "http://+:8080"
+		"TRAMS_API_BASE"         = var.app_trams_api_base
+		"TRAMS_API_KEY"          = var.app_trams_api_key
 	}
 }
 

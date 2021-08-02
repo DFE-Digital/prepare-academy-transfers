@@ -57,6 +57,16 @@ variable app_environment {
   description 	= "Application environment development, staging, production"
 }
 
+variable app_trams_api_base {
+	type = string
+	description = "Application variable for the TRAMS API URL"
+}
+
+variable app_trams_api_key {
+	type = string
+	description = "Application variable for the TRAMS API Key"
+}
+
 ## ========================================================================== ##
 #  Locals					                                                   #
 ## ========================================================================== ##

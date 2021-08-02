@@ -74,6 +74,8 @@ jobs:
           TF_VAR_cf_user: ${{ secrets.CF_USER }}
           TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
           TF_VAR_cf_api_url: https://api.london.cloud.service.gov.uk
+          TF_VAR_app_trams_api_base: ${{ secrets.TRAMS_API_BASE }}
+          TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
 
       # # Submit a comment with the plan output to the pull request
       # - name: "Run - Terraform Comment"
