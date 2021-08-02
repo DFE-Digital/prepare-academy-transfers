@@ -53,7 +53,7 @@ jobs:
         run: |
           BACKEND_CONFIG='-backend-config="key=${{ github.event.inputs.environment }}/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
           PARAMETER_STORE_ENVIRONMENT=${{ github.event.inputs.environment }}
-          VAR_FILE=${{ github.event.inputs.environment }}
+          VAR_FILE=${{ github.event.inputs.environment }}.tfvars
           echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
           echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
           echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
@@ -69,10 +69,11 @@ jobs:
       # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
       - name: "Run - Terraform Plan"
         id: plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color -var-file=${{env.VAR_FILE}}
         env:
           TF_VAR_cf_user: ${{ secrets.CF_USER }}
           TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
+          TF_VAR_cf_api_url: api.london.cloud.service.gov.uk
 
       # # Submit a comment with the plan output to the pull request
       # - name: "Run - Terraform Comment"
