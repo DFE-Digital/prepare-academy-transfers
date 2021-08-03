@@ -1,19 +1,18 @@
-name: "Terraform Apply"
+name: "Deploy to environment"
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Environment (dev, staging, production)"
+        description: "Environment (staging, production)"
         required: true
-        default: "dev"
 
 env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   terraform-plan:
-    name: "Terraform Plan"
+    name: "Terraform Apply"
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment}}
     defaults:
