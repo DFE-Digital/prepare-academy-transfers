@@ -27,10 +27,10 @@ jobs:
 
       # Static analysis of Terraform templates to spot potential security issues
       # Marketplace: https://github.com/marketplace/actions/terraform-security-scan
-      # - name: "Setup - Security Scan"
-      #   uses: triat/terraform-security-scan@v3.0.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Setup - Security Scan"
+        uses: triat/terraform-security-scan@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Provides AWS credentials to Terraform
       # By default, Terraform checks the home directory for a .aws folder with a credential file
@@ -76,18 +76,3 @@ jobs:
           TF_VAR_cf_api_url: https://api.london.cloud.service.gov.uk
           TF_VAR_app_trams_api_base: ${{ secrets.TRAMS_API_BASE }}
           TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
-
-      # # Submit a comment with the plan output to the pull request
-      # - name: "Run - Terraform Comment"
-      #   uses: actions/github-script@v4
-      #   env:
-      #     STDOUT: "```${{ steps.plan.outputs.stdout }}```"
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       github.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: process.env.STDOUT
-      #       })
