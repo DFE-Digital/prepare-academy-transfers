@@ -111,10 +111,9 @@ jobs:
 
       - name: Set environment variables for environments
         run: |
-          ENVIRONMENT=dev
-          BACKEND_CONFIG='-backend-config="key=${ENVIRONMENT}/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
-          PARAMETER_STORE_ENVIRONMENT=${ENVIRONMENT}
-          VAR_FILE=${ENVIRONMENT}.tfvars
+          BACKEND_CONFIG='-backend-config="key=dev/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
+          PARAMETER_STORE_ENVIRONMENT=dev
+          VAR_FILE=dev.tfvars
           echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
           echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
           echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
