@@ -211,10 +211,10 @@ namespace DocumentGeneration
 
                 if (attribute == null) continue;
 
-                foreach (var paragraphChildElement in paragraph.ChildElements.ToList())
+                foreach (var paragraphChildElement in paragraph.ChildElements
+                    .Where(paragraphChildElement => paragraphChildElement.GetType() != typeof(ParagraphProperties)).ToList())
                 {
-                    if (paragraphChildElement.GetType() != typeof(ParagraphProperties))
-                        paragraph.RemoveChild(paragraphChildElement);
+                    paragraph.RemoveChild(paragraphChildElement);
                 }
                 
                 var val = property.GetValue(document)?.ToString();

@@ -47,5 +47,22 @@ namespace Frontend.Models
         [DocumentText("DistanceFromTheAcademyToTheTrustHeadquarters")]
         public string DistanceFromTheAcademyToTheTrustHeadquarters { get; set; }
         [DocumentText("MpAndParty")] public string MpAndParty { get; set; }
+        
+        [DocumentText("WhoInitiatedTheTransfer")] public string WhoInitiatedTheTransfer { get; set; }
+        [DocumentText("ReasonForTransfer")] public string ReasonForTransfer { get; set; }
+        [DocumentText("MoreDetailsAboutTheTransfer")] public string MoreDetailsAboutTheTransfer { get; set; }
+        [DocumentText("TypeOfTransfer")] public string TypeOfTransfer { get; set; }
+        [DocumentText("TransferBenefits")] public string TransferBenefits { get; set; }
+        [DocumentText("OtherFactors")] public string OtherFactors { get; set; }
+        
+        [DocumentText("GirlsOnRoll")] public string GirlsOnRoll { get; set; }
+        [DocumentText("BoysOnRoll")] public string BoysOnRoll { get; set; }
+        [DocumentText("PupilsWithSen")] public string PupilsWithSen { get; set; }
+        [DocumentText("PupilsWithFirstLanguageNotEnglish")] public string PupilsWithFirstLanguageNotEnglish { get; set; }
+        [DocumentText("PupilsFsm6Years")] public string PupilsFsm6Years { get; set; }
+        [DocumentText("PupilNumbersAdditionalInformation")] public string PupilNumbersAdditionalInformation { get; set; }
+        [DocumentText("OfstedReport")] public string OfstedReport { get; set; }
+        [DocumentText("OfstedAdditionalInformation")] public string OfstedAdditionalInformation { get; set; }
+        
     }
 }

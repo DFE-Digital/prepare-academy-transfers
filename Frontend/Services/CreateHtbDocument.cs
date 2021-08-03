@@ -88,7 +88,9 @@ namespace Frontend.Services
                 Pfi = academy.GeneralInformation.Pfi,
                 PercentageGoodOrOutstandingInDiocesanTrust = academy.GeneralInformation.DiocesesPercent,
                 DistanceFromTheAcademyToTheTrustHeadquarters = academy.GeneralInformation.DistanceToSponsorHq,
-                MpAndParty = academy.GeneralInformation.MpAndParty
+                MpAndParty = academy.GeneralInformation.MpAndParty,
+                WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features.WhoInitiatedTheTransfer)
+                
             };
 
             var ms = CreateMemoryStream("htb-template");
