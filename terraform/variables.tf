@@ -52,4 +52,5 @@ locals {
   web_app_name         = var.app_environment != "production" ? "tf-academy-transfers-${local.app_name_suffix}" : "academy-transfers"
   web_app_routes       = cloudfoundry_route.web_app_cloudapp_digital_route
   redis_service_name   = "academy-transfers-redis-${local.app_name_suffix}"
+	docker_image         = "ghcr.io/dfe-digital/academy-transfers-api:latest"
 }
