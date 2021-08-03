@@ -16,6 +16,8 @@ resource cloudfoundry_app worker_app {
     "ASPNETCORE_URLS"        = "http://+:8080"
 		"TRAMS_API_BASE"         = var.app_trams_api_base
 		"TRAMS_API_KEY"          = var.app_trams_api_key
+		"USERNAME"               = var.app_username
+		"PASSWORD"               = var.app_password
 	}
 }
 
