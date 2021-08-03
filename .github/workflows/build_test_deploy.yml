@@ -51,12 +51,12 @@ jobs:
       - name: build frontend
         run: make build-frontend
 
-      - name: log in to the container registry
+      - name: Log in to the Container registry
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.registry }}
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.github_token }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build and push docker image
         uses: docker/build-push-action@v2
