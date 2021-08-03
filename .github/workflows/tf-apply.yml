@@ -35,6 +35,10 @@ jobs:
           echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
           echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
 
+      - name: Set environment variables
+        run: |
+          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
       # Downloads a specific version of Terraform CLI and adds it to PATH
       # Marketplace: https://github.com/marketplace/actions/hashicorp-setup-terraform
       - name: "Setup - Terraform CLI"
@@ -71,3 +75,4 @@ jobs:
           TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
           TF_VAR_app_username: ${{ secrets.USERNAME }}
           TF_VAR_app_password: ${{ secrets.PASSWORD }}
+          TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
