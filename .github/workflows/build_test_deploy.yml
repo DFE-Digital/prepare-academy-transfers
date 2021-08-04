@@ -69,6 +69,7 @@ jobs:
       - name: Build and push docker image
         uses: docker/build-push-action@v2
         with:
+          context: .
           tags: |
             ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
