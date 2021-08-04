@@ -1,20 +1,85 @@
-name: "Deploy to environment"
+name: Test, build, and deploy
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment (staging, production)"
-        required: true
-
+  push:
+    branches: [ main ]
 env:
+  REGISTRY: ghcr.io
+  DOCKER_IMAGE: dfe-digital/academy-transfers-api
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
-  terraform-plan:
-    name: "Terraform Apply"
+  test:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Setup node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      # This could be cached in the future to allow for quicker build times
+      - name: Build Frontend
+        run: make build-frontend
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+  build-and-push-image:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set environment variables
+        run: |
+          GIT_REF=${{ github.ref }}
+          GIT_BRANCH=${GIT_REF##*/}
+          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
+      - name: setup node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: build frontend
+        run: make build-frontend
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+          push: true
+          build-args: |
+            COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+
+  deploy-image:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    environment: dev
     defaults:
       run:
         working-directory: terraform
@@ -47,9 +112,9 @@ jobs:
 
       - name: Set environment variables for environments
         run: |
-          BACKEND_CONFIG='-backend-config="key=${{ github.event.inputs.environment }}/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
-          PARAMETER_STORE_ENVIRONMENT=${{ github.event.inputs.environment }}
-          VAR_FILE=${{ github.event.inputs.environment }}.tfvars
+          BACKEND_CONFIG='-backend-config="key=dev/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
+          PARAMETER_STORE_ENVIRONMENT=dev
+          VAR_FILE=dev.tfvars
           echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
           echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
           echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV

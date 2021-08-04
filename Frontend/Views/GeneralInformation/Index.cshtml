@@ -21,17 +21,13 @@
     <div class="govuk-grid-column-full">
         <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()"/>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
 </div>
-@if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
-{
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
-                <button class="govuk-button" data-module="govuk-button">
-                    Confirm and continue
-                </button>
-            </form>
-        </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+            <button class="govuk-button" data-module="govuk-button">
+                Confirm and continue
+            </button>
+        </form>
     </div>
-}
+</div>

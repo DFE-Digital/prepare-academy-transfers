@@ -26,6 +26,11 @@ variable cf_redis_service_plan {
   description 	= "Cloud Foundry redis service plan"
 }
 
+variable cf_app_image_tag {
+	type        = string
+	description = "The tag to use for the docker image"
+}
+
 ## ========================================================================== ##
 #  Environment				                                                   #
 ## ========================================================================== ##
@@ -62,5 +67,5 @@ locals {
   web_app_name         = var.app_environment != "production" ? "tf-academy-transfers-${local.app_name_suffix}" : "academy-transfers"
   web_app_routes       = cloudfoundry_route.web_app_cloudapp_digital_route
   redis_service_name   = "academy-transfers-redis-${local.app_name_suffix}"
-	docker_image         = "ghcr.io/dfe-digital/academy-transfers-api:latest"
+	docker_image         = "ghcr.io/dfe-digital/academy-transfers-api:${var.cf_app_image_tag}"
 }
