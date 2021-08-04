@@ -143,7 +143,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText("Key stage performance tables (KS2)");
+                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS2)", Bold = true });
                 });
                 
                 foreach (var ks2Result in informationForProject.EducationPerformance.KeyStage2Performance.OrderByDescending(k => k.Year))
@@ -263,6 +263,16 @@ namespace Frontend.Services
                         }
                     });
                 }
+                
+                builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+                
+                builder.AddTable(new []
+                {
+                    new [] {
+                        new TextElement { Value = "Additional information", Bold = true},
+                        new TextElement { Value = informationForProject.Project.KeyStage2PerformanceAdditionalInformation }
+                    }
+                });
             });
         }
 
@@ -286,7 +296,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText("Key stage performance tables (KS4)");
+                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS4)", Bold = true });
                 });
                 
                 builder.AddHeading(hBuilder =>
@@ -702,13 +712,13 @@ namespace Frontend.Services
                     }
                 });
 
-                builder.AddTable(new[]
+                builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+                
+                builder.AddTable(new []
                 {
-                    new[]
-                    {
-                        new TextElement {Value = "Additional information", Bold = true},
-                        new TextElement
-                            {Value = informationForProject.Project.KeyStage4PerformanceAdditionalInformation}
+                    new [] {
+                        new TextElement { Value = "Additional information", Bold = true},
+                        new TextElement { Value = informationForProject.Project.KeyStage4PerformanceAdditionalInformation }
                     }
                 });
             });
@@ -722,7 +732,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText("Key stage performance tables (KS5)");
+                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS5)", Bold = true });
                 });
 
                 foreach (var ks5Result in informationForProject.EducationPerformance.KeyStage5Performance
@@ -793,15 +803,17 @@ namespace Frontend.Services
                             }
                         }
                     });
-                    
-                    builder.AddTable(new []
-                    {
-                        new [] {
-                            new TextElement { Value = "Additional information"},
-                            new TextElement { Value = informationForProject.Project.KeyStage5PerformanceAdditionalInformation }
-                        }
-                    });
                 }
+                
+                builder.AddParagraph(pBuilder => pBuilder.AddText(""));
+                
+                builder.AddTable(new []
+                {
+                    new [] {
+                        new TextElement { Value = "Additional information", Bold = true},
+                        new TextElement { Value = informationForProject.Project.KeyStage5PerformanceAdditionalInformation }
+                    }
+                });
             });
         }
 
