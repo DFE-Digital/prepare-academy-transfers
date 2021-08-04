@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Builders;
 using DocumentGeneration.Elements;
+using DocumentGeneration.Helpers;
 using DocumentGeneration.Interfaces;
 
 namespace DocumentGeneration
@@ -218,16 +219,9 @@ namespace DocumentGeneration
                 }
                 
                 var val = property.GetValue(document)?.ToString();
-                var text = new Text(val);
-                paragraph.AppendChild(new Run(text));
-                
-                // paragraph.ChildElements = new Run(new Text(paragraph.InnerText))
-                //
-                // paragraph.Text = paragraph.Text.Replace(
-                //     attribute.Placeholder,
-                //     property.GetValue(document)?.ToString(),
-                //     StringComparison.OrdinalIgnoreCase
-                // );
+                var run = new Run();
+                DocumentBuilderHelpers.AddTextToElement(run, val);
+                paragraph.AppendChild(run);
             }
 
             IEnumerable<Paragraph> GetAllParagraphs()

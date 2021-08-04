@@ -10,14 +10,14 @@ namespace Frontend.Helpers
     {
         private const string NoDataText = "no data";
 
-        public static HtmlString GetFormattedResult(DisadvantagedPupilsResult disadvantagedPupilResult)
+        public static HtmlString GetFormattedResult(DisadvantagedPupilsResult disadvantagedPupilResult, string newLineCharacter = "<br>")
         {
             if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
                 string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
                 return new HtmlString(NoDataText);
 
             return new HtmlString(
-                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}<br>(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
+                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}{newLineCharacter}(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
         }
         
         public static string GetFormattedResult(string result)

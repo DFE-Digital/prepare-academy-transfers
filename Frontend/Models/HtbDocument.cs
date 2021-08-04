@@ -52,6 +52,7 @@ namespace Frontend.Models
         [DocumentText("ReasonForTransfer")] public string ReasonForTransfer { get; set; }
         [DocumentText("MoreDetailsAboutTheTransfer")] public string MoreDetailsAboutTheTransfer { get; set; }
         [DocumentText("TypeOfTransfer")] public string TypeOfTransfer { get; set; }
+        
         [DocumentText("TransferBenefits")] public string TransferBenefits { get; set; }
         [DocumentText("OtherFactors")] public string OtherFactors { get; set; }
         
