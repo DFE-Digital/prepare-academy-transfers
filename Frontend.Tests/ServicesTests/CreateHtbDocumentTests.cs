@@ -138,6 +138,46 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
                 Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
             }
+            
+            [Fact]
+            public async void GivenGetInformationForProjectReturnsNotFound_ReturnsCorrectError()
+            {
+                _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
+                    new GetInformationForProjectResponse()
+                    {
+                        ResponseError = new ServiceResponseError
+                        {
+                            ErrorCode = ErrorCode.NotFound,
+                            ErrorMessage = "Error message"
+                        }
+                    });
+
+                var result = await _subject.Execute(_projectUrn);
+
+                Assert.False(result.IsValid);
+                Assert.Equal(ErrorCode.NotFound, result.ResponseError.ErrorCode);
+                Assert.Equal("Not found", result.ResponseError.ErrorMessage);
+            }
+
+            [Fact]
+            public async void GivenGetInformationForProjectReturnsServiceError_ReturnsCorrectError()
+            {
+                _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
+                    new GetInformationForProjectResponse()
+                    {
+                        ResponseError = new ServiceResponseError
+                        {
+                            ErrorCode = ErrorCode.ApiError,
+                            ErrorMessage = "Error message"
+                        }
+                    });
+
+                var result = await _subject.Execute(_projectUrn);
+
+                Assert.False(result.IsValid);
+                Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
+                Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
+            }
         }
     }
 }

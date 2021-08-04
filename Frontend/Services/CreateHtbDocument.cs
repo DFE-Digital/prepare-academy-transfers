@@ -64,9 +64,8 @@ namespace Frontend.Services
                 return CreateErrorResponse(informationForProjectResult.ResponseError);
             }
 
-            var project = projectResult.Result;
-            var academy = academyResult.Result;
-            var informationForProject = informationForProjectResult;
+            var project = informationForProjectResult.Project; // projectResult.Result;
+            var academy = informationForProjectResult.OutgoingAcademy; // academyResult.Result;
             
             var htbDocument = new HtbDocument
             {
@@ -121,15 +120,37 @@ namespace Frontend.Services
 
             var ms = CreateMemoryStream("htb-template");
             var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);
-            
-            BuildKeyStage2PerformanceInformation(builder, informationForProject);
-            BuildKeyStage4PerformanceInformation(builder, informationForProject);
-            BuildKeyStage5PerformanceInformation(builder, informationForProject);
+
+            BuildTitle(builder, informationForProjectResult);
+            BuildKeyStage2PerformanceInformation(builder, informationForProjectResult);
+            BuildKeyStage4PerformanceInformation(builder, informationForProjectResult);
+            BuildKeyStage5PerformanceInformation(builder, informationForProjectResult);
 
             return new CreateHtbDocumentResponse
             {
                 Document = builder.Build()
             };
+        }
+
+        private static void BuildTitle(DocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProjectResult)
+        {
+            var academy = informationForProjectResult.OutgoingAcademy;
+            var project = informationForProjectResult.Project;
+
+            documentBuilder.ReplacePlaceholderWithContent("HtbTemplateTitle", builder =>
+            {
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText(new TextElement
+                    {
+                        Value = "Headteacher board (HTB) template for:\n" +
+                                $"{academy.Name} - URN {academy.Urn}\n" +
+                                $"Outgoing trust - {project.OutgoingTrustName} ({project.OutgoingTrustUkprn})",
+                        Bold = true
+                    });
+                });
+            });
         }
 
         private static void BuildKeyStage2PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
@@ -711,7 +732,7 @@ namespace Frontend.Services
             });
         }
 
-        private void BuildKeyStage5PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        private static void BuildKeyStage5PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
         {
             var academy = informationForProject.OutgoingAcademy;
             documentBuilder.ReplacePlaceholderWithContent("KeyStage5PerformanceSection", builder =>
@@ -801,41 +822,7 @@ namespace Frontend.Services
                 }
             });
         }
-        
-        public async Task<CreateHtbDocumentResponse> XExecute(string projectUrn)
-        {
-            var projectResult = await _projectsRepository.GetByUrn(projectUrn);
-            if (!projectResult.IsValid)
-            {
-                return CreateErrorResponse(projectResult.Error);
-            }
 
-            var projectAcademy = projectResult.Result.TransferringAcademies.First();
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(projectAcademy.OutgoingAcademyUkprn);
-            if (!academyResult.IsValid)
-            {
-                return CreateErrorResponse(academyResult.Error);
-            }
-
-            var project = projectResult.Result;
-            var academy = academyResult.Result;
-
-            var builder = new DocumentBuilder();
-
-            HeaderAndFooter(builder);
-            Title(builder, academy);
-            IntroductorySection(builder, academy, project);
-            GeneralInformation(builder, academy);
-            Rationale(builder, project);
-            KeyStagePerformanceInformation(builder, academy);
-
-            var successResponse = new CreateHtbDocumentResponse
-            {
-                Document = builder.Build()
-            };
-            return successResponse;
-        }
-        
         private static string GetOtherFactors(TransferBenefits transferBenefits)
         {
             var otherFactorsSummary = transferBenefits.OtherFactors.Select(otherFactor => new[]
