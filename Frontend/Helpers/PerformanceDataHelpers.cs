@@ -10,7 +10,7 @@ namespace Frontend.Helpers
     {
         private const string NoDataText = "no data";
 
-        public static HtmlString GetFormattedResult(DisadvantagedPupilsResult disadvantagedPupilResult)
+        public static HtmlString GetFormattedHtmlResult(DisadvantagedPupilsResult disadvantagedPupilResult)
         {
             if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
                 string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
@@ -18,6 +18,15 @@ namespace Frontend.Helpers
 
             return new HtmlString(
                 $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}<br>(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
+        }
+
+        public static string GetFormattedStringResult(DisadvantagedPupilsResult disadvantagedPupilResult)
+        {
+            if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
+                string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
+                return NoDataText;
+
+            return $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}\n(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})";
         }
         
         public static string GetFormattedResult(string result)
