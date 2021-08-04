@@ -6,6 +6,7 @@ using Frontend.Services.Responses;
 using Moq;
 using System.Collections.Generic;
 using System.Net;
+using Frontend.Services.Interfaces;
 using Xunit;
 
 namespace Frontend.Tests.ServicesTests
@@ -15,6 +16,7 @@ namespace Frontend.Tests.ServicesTests
         private readonly CreateHtbDocument _subject;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<IAcademies> _academiesRepository;
+        private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly string _projectUrn = "projectId";
         private readonly string _academyUkprn = "academyId";
         private readonly Project _foundProject;
@@ -24,8 +26,9 @@ namespace Frontend.Tests.ServicesTests
         {
             _projectsRepository = new Mock<IProjects>();
             _academiesRepository = new Mock<IAcademies>();
+            _getInformationForProject = new Mock<IGetInformationForProject>();
 
-            _subject = new CreateHtbDocument(_projectsRepository.Object, _academiesRepository.Object);
+            _subject = new CreateHtbDocument(_projectsRepository.Object, _academiesRepository.Object, _getInformationForProject.Object);
 
             _foundProject = new Project
             {

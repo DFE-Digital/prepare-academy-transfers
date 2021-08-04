@@ -10,6 +10,7 @@ using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
+using DocumentGeneration.Interfaces;
 using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
@@ -122,6 +123,8 @@ namespace Frontend.Services
             var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);
             
             BuildKeyStage2PerformanceInformation(builder, informationForProject);
+            BuildKeyStage4PerformanceInformation(builder, informationForProject);
+            BuildKeyStage5PerformanceInformation(builder, informationForProject);
 
             return new CreateHtbDocumentResponse
             {
@@ -129,9 +132,9 @@ namespace Frontend.Services
             };
         }
 
-        private static void BuildKeyStage2PerformanceInformation(DocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        private static void BuildKeyStage2PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
         {
-            const string newLineCharacter = "\n";
+            var academy = informationForProject.OutgoingAcademy;
             documentBuilder.ReplacePlaceholderWithContent("KeyStage2PerformanceSection", builder =>
             {
                 builder.AddHeading(hBuilder =>
@@ -139,8 +142,7 @@ namespace Frontend.Services
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
                     hBuilder.AddText("Key stage performance tables (KS2)");
                 });
-
-                var academy = informationForProject.OutgoingAcademy;
+                
                 foreach (var ks2Result in informationForProject.EducationPerformance.KeyStage2Performance.OrderByDescending(k => k.Year))
                 {
                     builder.AddHeading(hBuilder =>
@@ -175,27 +177,27 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageMeetingExpectedStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.PercentageMeetingExpectedStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageAchievingHigherStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.PercentageAchievingHigherStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.ReadingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.ReadingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.WritingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.WritingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.MathsProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.MathsProgressScore)}"
                             },
                         },
                         new[]
@@ -204,27 +206,27 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageMeetingExpectedStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.LAAveragePercentageMeetingExpectedStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageAchievingHigherStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.LAAveragePercentageAchievingHigherStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageReadingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.LAAverageReadingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageWritingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.LAAverageWritingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageMathsProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.LAAverageMathsProgressScore)}"
                             },
                         },
                         new[]
@@ -233,27 +235,27 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageReadingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.NationalAverageReadingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageWritingProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.NationalAverageWritingProgressScore)}"
                             },
                             new TextElement
                             {
                                 Value =
-                                    $"{PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageMathsProgressScore, newLineCharacter)}"
+                                    $"{PerformanceDataHelpers.GetFormattedStringResult(ks2Result.NationalAverageMathsProgressScore)}"
                             },
                         }
                     });
@@ -261,6 +263,545 @@ namespace Frontend.Services
             });
         }
 
+        private static void BuildKeyStage4PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        {
+            var academy = informationForProject.OutgoingAcademy;
+            var ks4Results = informationForProject.EducationPerformance.KeyStage4Performance.Take(3)
+                .OrderByDescending(a => a.Year)
+                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c =>
+                {
+                    if (c.Year != null)
+                    {
+                        c.Year = PerformanceDataHelpers.GetFormattedYear(c.Year);
+                    }
+
+                    return c;
+                }).ToList();
+            
+            documentBuilder.ReplacePlaceholderWithContent("KeyStage4PerformanceSection", builder =>
+            {
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText("Key stage performance tables (KS4)");
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Attainment 8");
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Attainment 8 Scores");
+                });
+
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8score) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageA8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageA8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageA8Score) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Attainment 8 English");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoreenglish) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoreenglish) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoreenglish) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8English) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageA8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageA8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageA8English) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Attainment 8 Maths");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoremaths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoremaths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoremaths) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageA8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageA8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageA8Maths) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Attainment 8 Ebacc");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoreebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoreebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoreebacc) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8EBacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8EBacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageA8EBacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageA8EBacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageA8EBacc) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Progress 8");
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Pupils included in P8");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipNumberofpupilsprogress8) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipNumberofpupilsprogress8) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipNumberofpupilsprogress8) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8PupilsIncluded) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8PupilsIncluded) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8PupilsIncluded) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageP8PupilsIncluded) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageP8PupilsIncluded) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageP8PupilsIncluded) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("School progress score");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8Score) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "School confidence interval", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[2].SipProgress8lowerconfidence,ks4Results[2].SipProgress8upperconfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[1].SipProgress8lowerconfidence,ks4Results[1].SipProgress8upperconfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[0].SipProgress8lowerconfidence,ks4Results[0].SipProgress8upperconfidence) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA confidence interval", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[2].LAAverageP8LowerConfidence,ks4Results[2].LAAverageP8UpperConfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[1].LAAverageP8LowerConfidence,ks4Results[1].LAAverageP8UpperConfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[0].LAAverageP8LowerConfidence,ks4Results[0].LAAverageP8UpperConfidence) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageP8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageP8Score) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageP8Score) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National confidence interval", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[2].NationalAverageP8LowerConfidence,ks4Results[2].NationalAverageP8UpperConfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[1].NationalAverageP8LowerConfidence,ks4Results[1].NationalAverageP8UpperConfidence) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[0].NationalAverageP8LowerConfidence,ks4Results[0].NationalAverageP8UpperConfidence) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Progress 8 English");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8english) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8english) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8english) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8English) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageP8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageP8English) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageP8English) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Progress 8 Maths");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8maths) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageP8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageP8Maths) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageP8Maths) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Progress 8 EBacc");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8ebacc) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].NationalAverageP8Ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].NationalAverageP8Ebacc) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].NationalAverageP8Ebacc) }
+                    }
+                });
+                
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.AddText("Percentage of pupils entering Ebacc");
+                });
+                
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = ks4Results[2].Year, Bold = true},
+                        new TextElement {Value = ks4Results[1].Year, Bold = true},
+                        new TextElement {Value = ks4Results[0].Year, Bold = true}
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) }
+                    },
+                    new[]
+                    {
+                        new TextElement { Value = "National Average", Bold = true },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
+                        new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) }
+                    }
+                });
+
+                builder.AddTable(new[]
+                {
+                    new[]
+                    {
+                        new TextElement {Value = "Additional information", Bold = true},
+                        new TextElement
+                            {Value = informationForProject.Project.KeyStage4PerformanceAdditionalInformation}
+                    }
+                });
+            });
+        }
+
+        private void BuildKeyStage5PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        {
+            var academy = informationForProject.OutgoingAcademy;
+            documentBuilder.ReplacePlaceholderWithContent("KeyStage5PerformanceSection", builder =>
+            {
+                builder.AddHeading(hBuilder =>
+                {
+                    hBuilder.SetHeadingLevel(HeadingLevel.One);
+                    hBuilder.AddText("Key stage performance tables (KS5)");
+                });
+
+                foreach (var ks5Result in informationForProject.EducationPerformance.KeyStage5Performance
+                    .OrderByDescending(k => k.Year))
+                {
+                    builder.AddHeading(hBuilder =>
+                    {
+                        hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                        hBuilder.AddText($"{PerformanceDataHelpers.GetFormattedYear(ks5Result.Year)} Key stage 5");
+                    });
+
+                    builder.AddTable(new[]
+                    {
+                        new[]
+                        {
+                            new TextElement {Value = "", Bold = true},
+                            new TextElement {Value = "Academic progress", Bold = true},
+                            new TextElement {Value = "Academic average", Bold = true},
+                            new TextElement {Value = "Applied general progress", Bold = true},
+                            new TextElement {Value = "Applied general average", Bold = true}
+                        },
+                        new[]
+                        {
+                            new TextElement {Value = academy.Name, Bold = true},
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicProgress)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicAverage)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralProgress)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralAverage)}"
+                            }
+                        },
+                        new[]
+                        {
+                            new TextElement {Value = "National average", Bold = true},
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicProgress)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicAverage)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralProgress)}"
+                            },
+                            new TextElement
+                            {
+                                Value =
+                                    $"{PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralAverage)}"
+                            }
+                        }
+                    });
+                    
+                    builder.AddTable(new []
+                    {
+                        new [] {
+                            new TextElement { Value = "Additional information"},
+                            new TextElement { Value = informationForProject.Project.KeyStage5PerformanceAdditionalInformation }
+                        }
+                    });
+                }
+            });
+        }
+        
         public async Task<CreateHtbDocumentResponse> XExecute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);

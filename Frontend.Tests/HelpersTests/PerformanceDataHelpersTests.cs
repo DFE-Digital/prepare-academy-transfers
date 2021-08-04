@@ -29,16 +29,32 @@ namespace Frontend.Tests.HelpersTests
             [InlineData("3.45", null, "3.45<br>(disadvantaged no data)")]
             [InlineData("3.45", "2.44", "3.45<br>(disadvantaged 2.44)")]
             [InlineData(null, "3.44", "no data<br>(disadvantaged 3.44)")]
-            public void GivenUnformattedDisadvantagedPupilResult_ReturnsFormattedValue(string nonDisadvantagePupilResult, string disadvantagedPupilResult, string expectedResult)
+            public void GivenUnformattedDisadvantagedPupilResult_ReturnsFormattedHtmlValue(string nonDisadvantagePupilResult, string disadvantagedPupilResult, string expectedResult)
             {
                 var pupilResult = new DisadvantagedPupilsResult
                     {NotDisadvantaged = nonDisadvantagePupilResult, Disadvantaged = disadvantagedPupilResult};
 
                 var expectedResultAsHtml = new HtmlString(expectedResult);
                 
-                var formattedResult = PerformanceDataHelpers.GetFormattedResult(pupilResult);
+                var formattedResult = PerformanceDataHelpers.GetFormattedHtmlResult(pupilResult);
 
                 Assert.Equal(expectedResultAsHtml.ToString(), formattedResult.ToString());
+            }
+            
+            [Theory]
+            [InlineData(null, null , "no data")]
+            [InlineData("", "", "no data")]
+            [InlineData("3.45", null, "3.45\n(disadvantaged no data)")]
+            [InlineData("3.45", "2.44", "3.45\n(disadvantaged 2.44)")]
+            [InlineData(null, "3.44", "no data\n(disadvantaged 3.44)")]
+            public void GivenUnformattedDisadvantagedPupilResult_ReturnsFormattedValue(string nonDisadvantagePupilResult, string disadvantagedPupilResult, string expectedResult)
+            {
+                var pupilResult = new DisadvantagedPupilsResult
+                    {NotDisadvantaged = nonDisadvantagePupilResult, Disadvantaged = disadvantagedPupilResult};
+
+                var formattedResult = PerformanceDataHelpers.GetFormattedStringResult(pupilResult);
+
+                Assert.Equal(expectedResult, formattedResult.ToString());
             }
         }
 
