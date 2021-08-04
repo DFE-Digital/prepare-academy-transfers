@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
@@ -48,7 +49,7 @@ namespace Frontend.Controllers
 
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "Test.docx");
+                $"HtbTemplateFor{id}_{System.DateTime.Now.ToString("yyyyMMddhhmmss", CultureInfo.CurrentUICulture)}.docx");
         }
     }
 }

@@ -64,8 +64,8 @@ namespace Frontend.Services
                 return CreateErrorResponse(informationForProjectResult.ResponseError);
             }
 
-            var project = informationForProjectResult.Project; // projectResult.Result;
-            var academy = informationForProjectResult.OutgoingAcademy; // academyResult.Result;
+            var project = informationForProjectResult.Project;
+            var academy = informationForProjectResult.OutgoingAcademy;
             
             var htbDocument = new HtbDocument
             {
