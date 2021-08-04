@@ -93,7 +93,8 @@ namespace Data.TRAMS
 
                 #region API Interim
 
-                project.OutgoingTrust = new TrustSummary { Ukprn = project.OutgoingTrustUkprn };
+                var outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
+                project.OutgoingTrust = new TrustSummary { Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                     {
                         var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
