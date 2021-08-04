@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Data;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
+using Frontend.ExtensionMethods;
 using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
@@ -68,7 +68,7 @@ namespace Frontend.Services
                 NumberOnRoll = $"{academy.GeneralInformation.NumberOnRoll} ({academy.GeneralInformation.PercentageFull}%) ",
                 PercentageSchoolFull = academy.GeneralInformation.PercentageFull,
                 PercentageFreeSchoolMeals = academy.PupilNumbers.EligibleForFreeSchoolMeals,
-                OfstedLastInspection = academy.LatestOfstedJudgement.InspectionDate,
+                OfstedLastInspection = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate),
                 OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
@@ -127,8 +127,8 @@ namespace Frontend.Services
                     hBuilder.AddText(new TextElement
                     {
                         Value = "Headteacher board (HTB) template for:\n" +
-                                $"{academy.Name} - URN {academy.Urn}\n" +
-                                $"Outgoing trust - {project.OutgoingTrustName} ({project.OutgoingTrustUkprn})",
+                                $"{academy.Name} - URN {academy.Urn}\n \n" +
+                                $"Outgoing trust - {project.OutgoingTrustName.ToTitleCase()} ({project.OutgoingTrustUkprn})",
                         Bold = true
                     });
                 });
@@ -143,7 +143,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS2)", Bold = true });
+                    hBuilder.AddText(new TextElement { Value="Key stage 2 performance tables (KS2)", Bold = true });
                 });
                 
                 foreach (var ks2Result in informationForProject.EducationPerformance.KeyStage2Performance.OrderByDescending(k => k.Year))
@@ -296,7 +296,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS4)", Bold = true });
+                    hBuilder.AddText(new TextElement { Value="Key stage 4 performance tables (KS4)", Bold = true });
                 });
                 
                 builder.AddHeading(hBuilder =>
@@ -732,7 +732,7 @@ namespace Frontend.Services
                 builder.AddHeading(hBuilder =>
                 {
                     hBuilder.SetHeadingLevel(HeadingLevel.One);
-                    hBuilder.AddText(new TextElement { Value="Key stage performance tables (KS5)", Bold = true });
+                    hBuilder.AddText(new TextElement { Value="Key stage 5 performance tables (KS5)", Bold = true });
                 });
 
                 foreach (var ks5Result in informationForProject.EducationPerformance.KeyStage5Performance
@@ -856,32 +856,7 @@ namespace Frontend.Services
 
             return sb.ToString();
         }
-        
-        private static CreateHtbDocumentResponse CreateErrorResponse(
-            RepositoryResultBase.RepositoryError repositoryError)
-        {
-            if (repositoryError.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return new CreateHtbDocumentResponse
-                {
-                    ResponseError = new ServiceResponseError
-                    {
-                        ErrorCode = ErrorCode.NotFound,
-                        ErrorMessage = "Not found"
-                    }
-                };
-            }
 
-            return new CreateHtbDocumentResponse
-            {
-                ResponseError = new ServiceResponseError
-                {
-                    ErrorCode = ErrorCode.ApiError,
-                    ErrorMessage = "API has encountered an error"
-                }
-            };
-        }
-        
         private static CreateHtbDocumentResponse CreateErrorResponse(
             ServiceResponseError serviceResponseError)
         {
