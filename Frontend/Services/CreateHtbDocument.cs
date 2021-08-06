@@ -114,7 +114,7 @@ namespace Frontend.Services
             };
         }
 
-        private static void BuildTitle(DocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProjectResult)
+        private static void BuildTitle(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProjectResult)
         {
             var academy = informationForProjectResult.OutgoingAcademy;
             var project = informationForProjectResult.Project;

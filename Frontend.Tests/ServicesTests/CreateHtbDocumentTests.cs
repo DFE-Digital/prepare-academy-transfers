@@ -1,11 +1,6 @@
-﻿using Data;
-using Data.Models;
-using Data.Models.Projects;
-using Frontend.Services;
+﻿using Frontend.Services;
 using Frontend.Services.Responses;
 using Moq;
-using System.Collections.Generic;
-using System.Net;
 using Frontend.Services.Interfaces;
 using Xunit;
 
@@ -16,7 +11,6 @@ namespace Frontend.Tests.ServicesTests
         private readonly CreateHtbDocument _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly string _projectUrn = "projectId";
-        private readonly string _academyUkprn = "academyId";
 
         public CreateHtbDocumentTests()
         {
