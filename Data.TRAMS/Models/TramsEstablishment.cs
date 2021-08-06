@@ -105,5 +105,6 @@ namespace Data.TRAMS.Models
         public string Uprn { get; set; }
         public NameAndCode UrbanRural { get; set; }
         public string Urn { get; set; }
+        public ViewAcademyConversion ViewAcademyConversion { get; set; }
     }
 }

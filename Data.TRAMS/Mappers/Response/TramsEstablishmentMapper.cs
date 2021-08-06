@@ -55,15 +55,24 @@ namespace Data.TRAMS.Mappers.Response
 
         private static GeneralInformation GeneralInformation(TramsEstablishment input)
         {
-            return new GeneralInformation
+            var generalInformation = new GeneralInformation
             {
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
                 Capacity = input.SchoolCapacity,
                 NumberOnRoll = input.Census.NumberOfPupils,
                 PercentageFull = PercentageFull(input),
                 SchoolPhase = input.PhaseOfEducation.Name,
-                SchoolType = input.EstablishmentType.Name
+                SchoolType = input.EstablishmentType.Name,
             };
+
+            if (input.ViewAcademyConversion == null) return generalInformation;
+            
+            generalInformation.Pan = input.ViewAcademyConversion.Pan;
+            generalInformation.Pfi = input.ViewAcademyConversion.Pfi;
+            generalInformation.Deficit = input.ViewAcademyConversion.Deficit;
+            generalInformation.ViabilityIssue = input.ViewAcademyConversion.ViabilityIssue;
+
+            return generalInformation;
         }
 
         private static List<string> Address(TramsEstablishment input)
