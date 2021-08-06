@@ -9,21 +9,21 @@ namespace Frontend.Tests.ServicesTests
     public class CreateHtbDocumentTests
     {
         private readonly CreateHtbDocument _subject;
-        private readonly Mock<IGetHtbDocumentForProject> _getInformationForProject;
+        private readonly Mock<IGetHtbDocumentForProject> _getHtbDocumentForProject;
         private readonly string _projectUrn = "projectId";
 
         public CreateHtbDocumentTests()
         {
-            _getInformationForProject = new Mock<IGetHtbDocumentForProject>();
-            _subject = new CreateHtbDocument(_getInformationForProject.Object);
+            _getHtbDocumentForProject = new Mock<IGetHtbDocumentForProject>();
+            _subject = new CreateHtbDocument(_getHtbDocumentForProject.Object);
         }
 
         public class ExecuteTests : CreateHtbDocumentTests
         {
             [Fact]
-            public async void GivenGetInformationForProjectReturnsNotFound_ReturnsCorrectError()
+            public async void GivenGetHtbDocumentForProjectReturnsNotFound_ReturnsCorrectError()
             {
-                _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
+                _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
                     new GetHtbDocumentForProjectResponse()
                     {
                         ResponseError = new ServiceResponseError
@@ -41,9 +41,9 @@ namespace Frontend.Tests.ServicesTests
             }
 
             [Fact]
-            public async void GivenGetInformationForProjectReturnsServiceError_ReturnsCorrectError()
+            public async void GivenGetHtbDocumentForProjectReturnsServiceError_ReturnsCorrectError()
             {
-                _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
+                _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
                     new GetHtbDocumentForProjectResponse()
                     {
                         ResponseError = new ServiceResponseError

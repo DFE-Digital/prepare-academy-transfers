@@ -40,13 +40,13 @@ namespace Frontend.Services
 
         public async Task<CreateHtbDocumentResponse> Execute(string projectUrn)
         {
-            var htbDocumentForProject = await _getHtbDocumentForProject.Execute(projectUrn);
-            if (!htbDocumentForProject.IsValid)
+            var getHtbDocumentForProject = await _getHtbDocumentForProject.Execute(projectUrn);
+            if (!getHtbDocumentForProject.IsValid)
             {
-                return CreateErrorResponse(htbDocumentForProject.ResponseError);
+                return CreateErrorResponse(getHtbDocumentForProject.ResponseError);
             }
 
-            var htbDocument = htbDocumentForProject.HtbDocument;
+            var htbDocument = getHtbDocumentForProject.HtbDocument;
 
             var ms = CreateMemoryStream("htb-template");
             var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);

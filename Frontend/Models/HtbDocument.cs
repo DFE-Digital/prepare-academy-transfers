@@ -24,7 +24,6 @@ namespace Frontend.Models
         public string PublishedAdmissionNumber { get; set; }
 
         [DocumentText("NumberOnRoll")] public string NumberOnRoll { get; set; }
-        [DocumentText("PercentageSchoolFull")] public string PercentageSchoolFull { get; set; }
 
         [DocumentText("PercentageFreeSchoolMeals")]
         public string PercentageFreeSchoolMeals { get; set; }
