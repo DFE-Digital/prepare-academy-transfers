@@ -9,12 +9,12 @@ namespace Frontend.Tests.ServicesTests
     public class CreateHtbDocumentTests
     {
         private readonly CreateHtbDocument _subject;
-        private readonly Mock<IGetInformationForProject> _getInformationForProject;
+        private readonly Mock<IGetHtbDocumentForProject> _getInformationForProject;
         private readonly string _projectUrn = "projectId";
 
         public CreateHtbDocumentTests()
         {
-            _getInformationForProject = new Mock<IGetInformationForProject>();
+            _getInformationForProject = new Mock<IGetHtbDocumentForProject>();
             _subject = new CreateHtbDocument(_getInformationForProject.Object);
         }
 
@@ -24,7 +24,7 @@ namespace Frontend.Tests.ServicesTests
             public async void GivenGetInformationForProjectReturnsNotFound_ReturnsCorrectError()
             {
                 _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetInformationForProjectResponse()
+                    new GetHtbDocumentForProjectResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {
@@ -44,7 +44,7 @@ namespace Frontend.Tests.ServicesTests
             public async void GivenGetInformationForProjectReturnsServiceError_ReturnsCorrectError()
             {
                 _getInformationForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetInformationForProjectResponse()
+                    new GetHtbDocumentForProjectResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {
