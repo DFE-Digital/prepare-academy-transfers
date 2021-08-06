@@ -11,16 +11,12 @@ namespace Data.TRAMS.Tests.Mappers.Response
     public class TramsEstablishmentMapperTests
     {
         private readonly TramsEstablishmentMapper _subject;
+        private TramsEstablishment _tramsEstablishment;
 
         public TramsEstablishmentMapperTests()
         {
             _subject = new TramsEstablishmentMapper();
-        }
-
-        [Fact]
-        public void GivenTramsAcademy_MapsToInternalAcademySuccessfully()
-        {
-            var academyToMap = new TramsEstablishment
+            _tramsEstablishment = new TramsEstablishment
             {
                 Address = new Address
                 {
@@ -57,8 +53,21 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 OfstedRating = "Good",
                 PhaseOfEducation = new NameAndCode {Name = "Primary"},
                 Ukprn = "Ukprn",
-                Urn = "Urn"
+                Urn = "Urn",
+                ViewAcademyConversion = new ViewAcademyConversion
+                {
+                    Deficit = "Deficit",
+                    Pan = "Pan",
+                    Pfi = "Pfi",
+                    ViabilityIssue = "Viability issue"
+                }
             };
+        }
+
+        [Fact]
+        public void GivenTramsAcademy_MapsToInternalAcademySuccessfully()
+        {
+            var academyToMap = _tramsEstablishment;
 
             var result = _subject.Map(academyToMap);
             var expectedAddress = new List<string> {"Example street", "Town", "Fakeshire", "FA11 1KE"};
@@ -76,6 +85,19 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(academyToMap.Census.NumberOfGirls, result.PupilNumbers.GirlsOnRoll);
         }
 
+        [Fact]
+        public void GivenViewAcademyConversionNull_DontPopulateInformation()
+        {
+            var academyToMap = _tramsEstablishment;
+            academyToMap.ViewAcademyConversion = null;
+            
+            var result = _subject.Map(academyToMap);
+            Assert.True(string.IsNullOrEmpty(result.GeneralInformation.Deficit));
+            Assert.True(string.IsNullOrEmpty(result.GeneralInformation.Pan));
+            Assert.True(string.IsNullOrEmpty(result.GeneralInformation.Pfi));
+            Assert.True(string.IsNullOrEmpty(result.GeneralInformation.ViabilityIssue));
+        }
+
         private static void AssertLatestOfstedJudgementCorrect(Academy result)
         {
             var latestOfstedJudgement = result.LatestOfstedJudgement;
@@ -90,12 +112,17 @@ namespace Data.TRAMS.Tests.Mappers.Response
             var expectedAgeRange = $"{establishmentToMap.StatutoryLowAge} to {establishmentToMap.StatutoryHighAge}";
             var expectedPercentageFull = ExpectedPercentageFull(establishmentToMap);
             var generalInformation = result.GeneralInformation;
+            var viewAcademyConversion = establishmentToMap.ViewAcademyConversion;
             Assert.Equal(establishmentToMap.PhaseOfEducation.Name, generalInformation.SchoolPhase);
             Assert.Equal(expectedAgeRange, generalInformation.AgeRange);
             Assert.Equal(establishmentToMap.SchoolCapacity, generalInformation.Capacity);
             Assert.Equal(establishmentToMap.Census.NumberOfPupils, generalInformation.NumberOnRoll);
             Assert.Equal(expectedPercentageFull, generalInformation.PercentageFull);
             Assert.Equal(establishmentToMap.EstablishmentType.Name, generalInformation.SchoolType);
+            Assert.Equal(viewAcademyConversion.Deficit, generalInformation.Deficit);
+            Assert.Equal(viewAcademyConversion.Pan, generalInformation.Pan);
+            Assert.Equal(viewAcademyConversion.Pfi, generalInformation.Pfi);
+            Assert.Equal(viewAcademyConversion.ViabilityIssue, generalInformation.ViabilityIssue);
         }
 
         private static string ExpectedPercentageFull(TramsEstablishment establishmentToMap)
