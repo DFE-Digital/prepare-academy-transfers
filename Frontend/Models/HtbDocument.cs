@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Data.Models.KeyStagePerformance;
 using DocumentGeneration;
 
 namespace Frontend.Models
@@ -64,6 +66,12 @@ namespace Frontend.Models
         [DocumentText("PupilNumbersAdditionalInformation")] public string PupilNumbersAdditionalInformation { get; set; }
         [DocumentText("OfstedReport")] public string OfstedReport { get; set; }
         [DocumentText("OfstedAdditionalInformation")] public string OfstedAdditionalInformation { get; set; }
-        
+        public List<KeyStage2> KeyStage2Performance { get; set; }
+        public List<KeyStage4> KeyStage4Performance { get; set; }
+        public List<KeyStage5> KeyStage5Performance { get; set; }
+        public string KeyStage2AdditionalInformation { get; set; }
+        public string KeyStage4AdditionalInformation { get; set; }
+        public string KeyStage5AdditionalInformation { get; set; }
+        public string LocalAuthorityName { get; set; }
     }
 }
