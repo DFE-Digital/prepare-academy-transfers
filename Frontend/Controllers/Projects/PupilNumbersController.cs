@@ -40,7 +40,7 @@ namespace Frontend.Controllers.Projects
                 {
                     AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,
                     HintText =
-                        "This information will populate into your HTB template under the school pupil forecasts section.",
+                        "This information will populate into your HTB template under the pupil numbers section.",
                     Urn = projectInformation.Project.Urn,
                     AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
                     ReturnToPreview = returnToPreview
