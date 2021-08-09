@@ -17,6 +17,7 @@ namespace Data.Models.Academies
         public string DiocesesPercent { get; set; }
         public string DistanceToSponsorHq { get; set; }
         public string MpAndParty { get; set; }
+        public string PercentageFsm { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -25,14 +26,23 @@ namespace Data.Models.Academies
                 new FormField {Title = "School phase", Value = SchoolPhase},
                 new FormField {Title = "Age range", Value = AgeRange},
                 new FormField {Title = "Capacity", Value = Capacity},
-                new FormField {Title = "NOR (% full)", Value = $"{NumberOnRoll} ({PercentageFull}%)"},
-                new FormField {Title = "PAN", Value = Pan},
-                new FormField {Title = "PFI", Value = Pfi},
-                new FormField {Title = "Viability issue", Value = ViabilityIssue},
-                new FormField {Title = "Deficit", Value = Deficit},
+                new FormField
+                {
+                    Title = "Number on roll (percentage the school is full)",
+                    Value = $"{NumberOnRoll} ({PercentageFull}%)"
+                },
+                new FormField {Title = "Percentage of free school meals (%FSM)", Value = PercentageFsm},
+                new FormField {Title = "Published admission number (PAN)", Value = Pan},
+                new FormField {Title = "Private finance initiative (PFI) scheme", Value = Pfi},
+                new FormField {Title = "Viability issues", Value = ViabilityIssue},
+                new FormField {Title = "Financial deficit", Value = Deficit},
                 new FormField {Title = "School type", Value = SchoolType},
-                new FormField {Title = "Dioceses % G or O", Value = DiocesesPercent},
-                new FormField {Title = "Distance to sponsor HQ", Value = DistanceToSponsorHq},
+                new FormField
+                {
+                    Title = "Percentage of good or outstanding academies in the diocesan trust", Value = DiocesesPercent
+                },
+                new FormField
+                    {Title = "Distance from the academy to the trust headquarters", Value = DistanceToSponsorHq},
                 new FormField {Title = "MP (Party)", Value = MpAndParty},
             };
         }
