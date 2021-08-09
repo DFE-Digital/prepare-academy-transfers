@@ -147,6 +147,7 @@ namespace Frontend
         {
             serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
             serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
+            serviceCollection.AddTransient<IGetHtbDocumentForProject, GetHtbDocumentForProject>();
         }
     }
 }

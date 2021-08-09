@@ -2,10 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Data.Models.KeyStagePerformance;
-using Data.Models.Projects;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
@@ -14,17 +12,16 @@ using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
-using Helpers;
 
 namespace Frontend.Services
 {
     public class CreateHtbDocument : ICreateHtbDocument
     {
-        private readonly IGetInformationForProject _getInformationForProject;
+        private readonly IGetHtbDocumentForProject _getHtbDocumentForProject;
         
-        public CreateHtbDocument(IGetInformationForProject getInformationForProject )
+        public CreateHtbDocument(IGetHtbDocumentForProject getHtbDocumentForProject)
         {
-            _getInformationForProject = getInformationForProject;
+            _getHtbDocumentForProject = getHtbDocumentForProject;
         }
 
         private MemoryStream CreateMemoryStream(string template)
@@ -40,73 +37,21 @@ namespace Frontend.Services
 
         public async Task<CreateHtbDocumentResponse> Execute(string projectUrn)
         {
-            var informationForProjectResult = await _getInformationForProject.Execute(projectUrn);
-            if (!informationForProjectResult.IsValid)
+            var getHtbDocumentForProject = await _getHtbDocumentForProject.Execute(projectUrn);
+            if (!getHtbDocumentForProject.IsValid)
             {
-                return CreateErrorResponse(informationForProjectResult.ResponseError);
+                return CreateErrorResponse(getHtbDocumentForProject.ResponseError);
             }
 
-            var project = informationForProjectResult.Project;
-            var academy = informationForProjectResult.OutgoingAcademy;
-            
-            var htbDocument = new HtbDocument
-            {
-                Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(project.AcademyAndTrustInformation.Recommendation),
-                Author = project.AcademyAndTrustInformation.Author,
-                ProjectName = project.Name,
-                SponsorName = project.IncomingTrustName,
-                AcademyTypeAndRoute = academy.EstablishmentType,
-                SchoolName = academy.Name,
-                SchoolUrn =  academy.Urn,
-                TrustName = project.OutgoingTrustName,
-                TrustReferenceNumber = project.OutgoingTrustUkprn,
-                SchoolType = academy.EstablishmentType,
-                SchoolPhase = academy.GeneralInformation.SchoolPhase,
-                AgeRange = academy.GeneralInformation.AgeRange,
-                SchoolCapacity = academy.GeneralInformation.Capacity,
-                PublishedAdmissionNumber = academy.GeneralInformation.Pan,
-                NumberOnRoll = $"{academy.GeneralInformation.NumberOnRoll} ({academy.GeneralInformation.PercentageFull}%) ",
-                PercentageSchoolFull = academy.GeneralInformation.PercentageFull,
-                PercentageFreeSchoolMeals = academy.PupilNumbers.EligibleForFreeSchoolMeals,
-                OfstedLastInspection = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate),
-                OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
-                RationaleForProject = project.Rationale.Project,
-                RationaleForTrust = project.Rationale.Trust,
-                ClearedBy = "Cleared by",
-                Version = "Version",
-                DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
-                DateOfProposedTransfer = DatesHelper.DateStringToGovUkDate(project.Dates.Target),
-                DateTransferWasFirstDiscussed = DatesHelper.DateStringToGovUkDate(project.Dates.FirstDiscussed),
-                ViabilityIssues = academy.GeneralInformation.ViabilityIssue,
-                FinancialDeficit = academy.GeneralInformation.Pfi,
-                Pfi = academy.GeneralInformation.Pfi,
-                PercentageGoodOrOutstandingInDiocesanTrust = academy.GeneralInformation.DiocesesPercent,
-                DistanceFromTheAcademyToTheTrustHeadquarters = academy.GeneralInformation.DistanceToSponsorHq,
-                MpAndParty = academy.GeneralInformation.MpAndParty,
-                WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features.WhoInitiatedTheTransfer),
-                ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Subject to Intervention" : "Not subject to intervention",
-                MoreDetailsAboutTheTransfer = project.Features.ReasonForTransfer.InterventionDetails,
-                TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty ? project.Features.OtherTypeOfTransfer : 
-                    EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
-                TransferBenefits = GetTransferBenefits(project.Benefits),
-                OtherFactors = GetOtherFactors(project.Benefits),
-                GirlsOnRoll = academy.PupilNumbers.GirlsOnRoll,
-                BoysOnRoll = academy.PupilNumbers.BoysOnRoll,
-                PupilsWithSen = academy.PupilNumbers.WithStatementOfSen,
-                PupilsWithFirstLanguageNotEnglish = academy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
-                PupilsFsm6Years = academy.PupilNumbers.EligibleForFreeSchoolMeals,
-                PupilNumbersAdditionalInformation = project.PupilNumbersAdditionalInformation,
-                OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
-                OfstedAdditionalInformation = project.LatestOfstedJudgementAdditionalInformation
-            };
+            var htbDocument = getHtbDocumentForProject.HtbDocument;
 
             var ms = CreateMemoryStream("htb-template");
             var builder = DocumentBuilder.CreateFromTemplate(ms, htbDocument);
 
-            BuildTitle(builder, informationForProjectResult);
-            BuildKeyStage2PerformanceInformation(builder, informationForProjectResult);
-            BuildKeyStage4PerformanceInformation(builder, informationForProjectResult);
-            BuildKeyStage5PerformanceInformation(builder, informationForProjectResult);
+            BuildTitle(builder, htbDocument);
+            BuildKeyStage2PerformanceInformation(builder, htbDocument);
+            BuildKeyStage4PerformanceInformation(builder, htbDocument);
+            BuildKeyStage5PerformanceInformation(builder, htbDocument);
 
             return new CreateHtbDocumentResponse
             {
@@ -114,11 +59,8 @@ namespace Frontend.Services
             };
         }
 
-        private static void BuildTitle(DocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProjectResult)
+        private static void BuildTitle(IDocumentBuilder documentBuilder, HtbDocument htbDocument)
         {
-            var academy = informationForProjectResult.OutgoingAcademy;
-            var project = informationForProjectResult.Project;
-
             documentBuilder.ReplacePlaceholderWithContent("HtbTemplateTitle", builder =>
             {
                 builder.AddHeading(hBuilder =>
@@ -127,17 +69,16 @@ namespace Frontend.Services
                     hBuilder.AddText(new TextElement
                     {
                         Value = "Headteacher board (HTB) template for:\n" +
-                                $"{academy.Name} - URN {academy.Urn}\n \n" +
-                                $"Outgoing trust - {project.OutgoingTrustName.ToTitleCase()} ({project.OutgoingTrustUkprn})",
+                                $"{htbDocument.SchoolName} - URN {htbDocument.SchoolUrn}\n \n" +
+                                $"Outgoing trust - {htbDocument.TrustName.ToTitleCase()} ({htbDocument.TrustReferenceNumber})",
                         Bold = true
                     });
                 });
             });
         }
 
-        private static void BuildKeyStage2PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        private static void BuildKeyStage2PerformanceInformation(IDocumentBuilder documentBuilder, HtbDocument htbDocument)
         {
-            var academy = informationForProject.OutgoingAcademy;
             documentBuilder.ReplacePlaceholderWithContent("KeyStage2PerformanceSection", builder =>
             {
                 builder.AddHeading(hBuilder =>
@@ -146,7 +87,7 @@ namespace Frontend.Services
                     hBuilder.AddText(new TextElement { Value="Key stage 2 performance tables (KS2)", Bold = true });
                 });
                 
-                foreach (var ks2Result in informationForProject.EducationPerformance.KeyStage2Performance.OrderByDescending(k => k.Year))
+                foreach (var ks2Result in htbDocument.KeyStage2Performance.OrderByDescending(k => k.Year))
                 {
                     builder.AddHeading(hBuilder =>
                     {
@@ -176,7 +117,7 @@ namespace Frontend.Services
 
                         new[]
                         {
-                            new TextElement {Value = academy.Name, Bold = true},
+                            new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
                                 Value =
@@ -205,7 +146,7 @@ namespace Frontend.Services
                         },
                         new[]
                         {
-                            new TextElement {Value = $"{academy.LocalAuthorityName} LA average", Bold = true},
+                            new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA average", Bold = true},
                             new TextElement
                             {
                                 Value =
@@ -270,16 +211,15 @@ namespace Frontend.Services
                 {
                     new [] {
                         new TextElement { Value = "Additional information", Bold = true},
-                        new TextElement { Value = informationForProject.Project.KeyStage2PerformanceAdditionalInformation }
+                        new TextElement { Value = htbDocument.KeyStage2AdditionalInformation }
                     }
                 });
             });
         }
 
-        private static void BuildKeyStage4PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        private static void BuildKeyStage4PerformanceInformation(IDocumentBuilder documentBuilder, HtbDocument htbDocument)
         {
-            var academy = informationForProject.OutgoingAcademy;
-            var ks4Results = informationForProject.EducationPerformance.KeyStage4Performance.Take(3)
+            var ks4Results = htbDocument.KeyStage4Performance.Take(3)
                 .OrderByDescending(a => a.Year)
                 .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c =>
                 {
@@ -322,14 +262,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8score) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score) }
@@ -360,14 +300,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoreenglish) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoreenglish) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoreenglish) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8English) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8English) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8English) }
@@ -398,14 +338,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoremaths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoremaths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoremaths) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8Maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths) }
@@ -436,14 +376,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipAttainment8scoreebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipAttainment8scoreebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipAttainment8scoreebacc) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8EBacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageA8EBacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc) }
@@ -480,14 +420,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipNumberofpupilsprogress8) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipNumberofpupilsprogress8) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipNumberofpupilsprogress8) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8PupilsIncluded) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8PupilsIncluded) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8PupilsIncluded) }
@@ -518,7 +458,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8Score) }
@@ -532,14 +472,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Score) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA confidence interval", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA confidence interval", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[2].LAAverageP8LowerConfidence,ks4Results[2].LAAverageP8UpperConfidence) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[1].LAAverageP8LowerConfidence,ks4Results[1].LAAverageP8UpperConfidence) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(ks4Results[0].LAAverageP8LowerConfidence,ks4Results[0].LAAverageP8UpperConfidence) }
@@ -577,14 +517,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8english) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8english) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8english) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8English) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8English) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8English) }
@@ -615,14 +555,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8maths) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Maths) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths) }
@@ -653,14 +593,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8ebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].SipProgress8ebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8ebacc) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Ebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[1].LAAverageP8Ebacc) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc) }
@@ -691,14 +631,14 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.Name, Bold = true},
+                        new TextElement { Value = htbDocument.SchoolName, Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) }
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                        new TextElement { Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) },
                         new TextElement { Value = PerformanceDataHelpers.GetFormattedStringResult(null) }
@@ -718,15 +658,14 @@ namespace Frontend.Services
                 {
                     new [] {
                         new TextElement { Value = "Additional information", Bold = true},
-                        new TextElement { Value = informationForProject.Project.KeyStage4PerformanceAdditionalInformation }
+                        new TextElement { Value = htbDocument.KeyStage4AdditionalInformation }
                     }
                 });
             });
         }
 
-        private static void BuildKeyStage5PerformanceInformation(IDocumentBuilder documentBuilder, GetInformationForProjectResponse informationForProject)
+        private static void BuildKeyStage5PerformanceInformation(IDocumentBuilder documentBuilder, HtbDocument htbDocument)
         {
-            var academy = informationForProject.OutgoingAcademy;
             documentBuilder.ReplacePlaceholderWithContent("KeyStage5PerformanceSection", builder =>
             {
                 builder.AddHeading(hBuilder =>
@@ -735,7 +674,7 @@ namespace Frontend.Services
                     hBuilder.AddText(new TextElement { Value="Key stage 5 performance tables (KS5)", Bold = true });
                 });
 
-                foreach (var ks5Result in informationForProject.EducationPerformance.KeyStage5Performance
+                foreach (var ks5Result in htbDocument.KeyStage5Performance
                     .OrderByDescending(k => k.Year))
                 {
                     builder.AddHeading(hBuilder =>
@@ -756,7 +695,7 @@ namespace Frontend.Services
                         },
                         new[]
                         {
-                            new TextElement {Value = academy.Name, Bold = true},
+                            new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
                                 Value =
@@ -811,52 +750,12 @@ namespace Frontend.Services
                 {
                     new [] {
                         new TextElement { Value = "Additional information", Bold = true},
-                        new TextElement { Value = informationForProject.Project.KeyStage5PerformanceAdditionalInformation }
+                        new TextElement { Value = htbDocument.KeyStage5AdditionalInformation }
                     }
                 });
             });
         }
-
-        private static string GetOtherFactors(TransferBenefits transferBenefits)
-        {
-            var otherFactorsSummary = transferBenefits.OtherFactors.Select(otherFactor => new[]
-            {
-                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
-                otherFactor.Value
-            }).ToList();
-
-            var sb = new StringBuilder();
-            foreach (var otherFactor in otherFactorsSummary)
-            {
-                sb.Append($"{otherFactor[0]}\n");
-                if (!string.IsNullOrEmpty(otherFactor[1]))
-                    sb.Append($"{otherFactor[1]}\n");
-            }
-
-            return sb.ToString();
-        }
-
-        private static string GetTransferBenefits(TransferBenefits transferBenefits)
-        {
-            var benefitSummary = transferBenefits.IntendedBenefits
-                .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
-                .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
-                .ToList();
-
-            if (transferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
-            {
-                benefitSummary.Add($"Other: {transferBenefits.OtherIntendedBenefit}");
-            }
-
-            var sb = new StringBuilder();
-            foreach (var benefit in benefitSummary)
-            {
-                sb.Append($"{benefit}\n");
-            }
-
-            return sb.ToString();
-        }
-
+        
         private static CreateHtbDocumentResponse CreateErrorResponse(
             ServiceResponseError serviceResponseError)
         {
