@@ -87,5 +87,11 @@ namespace Frontend.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login");
+        }
     }
 }
