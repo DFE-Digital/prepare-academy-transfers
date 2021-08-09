@@ -91,6 +91,7 @@ namespace Frontend.Controllers
         public async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync();
+            TempData["Success.Message"] = "Successfully signed out";
             return RedirectToAction("Login");
         }
     }
