@@ -40,6 +40,12 @@
                 </span>
             </a>
         </div>
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+            <div class="govuk-grid-column-one-third">
+                <a asp-controller="Home" asp-action="SignOut" class="govuk-header__link dfe-sign-out">Sign out</a>
+            </div>
+        }
     </div>
 </header>
 
