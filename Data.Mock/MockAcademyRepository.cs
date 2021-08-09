@@ -34,7 +34,7 @@ namespace Data.Mock
                     BoysOnRoll = "Placeholder",
                     WithStatementOfSen = "Placeholder",
                     WhoseFirstLanguageIsNotEnglish = "Placeholder",
-                    EligibleForFreeSchoolMeals = "Placeholder"
+                    PercentageEligibleForFreeSchoolMealsDuringLast6Years = "Placeholder"
                 },
 
                 LatestOfstedJudgement = new LatestOfstedJudgement
