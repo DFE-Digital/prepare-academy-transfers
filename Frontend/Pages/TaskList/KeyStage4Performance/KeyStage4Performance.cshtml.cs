@@ -86,7 +86,7 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
             {
                 AdditionalInformation = projectInformation.Project.KeyStage4PerformanceAdditionalInformation,
                 HintText =
-                    "This information will populate in your HTB template under the key stage performance tables section.",
+                    "This information will populate in your HTB template under the key stage 4 performance tables section.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
                 ReturnToPreview = returnToPreview
