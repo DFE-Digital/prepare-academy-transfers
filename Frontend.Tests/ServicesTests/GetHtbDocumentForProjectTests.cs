@@ -48,7 +48,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.Capacity, htbDocumentResult.SchoolCapacity);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.Pan, htbDocumentResult.PublishedAdmissionNumber);
                 Assert.Equal("100 (100%)", htbDocumentResult.NumberOnRoll);
-                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.EligibleForFreeSchoolMeals, htbDocumentResult.PercentageFreeSchoolMeals);
+                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years, htbDocumentResult.PercentageFreeSchoolMeals);
                 Assert.Equal("1 January 2020", htbDocumentResult.OfstedLastInspection);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness, htbDocumentResult.OverallEffectiveness);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Project, htbDocumentResult.RationaleForProject);
@@ -74,7 +74,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.BoysOnRoll, htbDocumentResult.BoysOnRoll);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.WithStatementOfSen, htbDocumentResult.PupilsWithSen);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish, htbDocumentResult.PupilsWithFirstLanguageNotEnglish);
-                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.EligibleForFreeSchoolMeals, htbDocumentResult.PupilsFsm6Years);
+                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years, htbDocumentResult.PupilsFsm6Years);
                 Assert.Equal(getTestInformationForProject.Project.PupilNumbersAdditionalInformation, htbDocumentResult.PupilNumbersAdditionalInformation);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.LatestOfstedJudgement.OfstedReport, htbDocumentResult.OfstedReport);
                 Assert.Equal(getTestInformationForProject.Project.LatestOfstedJudgementAdditionalInformation, htbDocumentResult.OfstedAdditionalInformation);

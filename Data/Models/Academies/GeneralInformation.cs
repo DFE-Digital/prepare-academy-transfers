@@ -29,7 +29,7 @@ namespace Data.Models.Academies
                 new FormField
                 {
                     Title = "Number on roll (percentage the school is full)",
-                    Value = $"{NumberOnRoll} ({PercentageFull}%)"
+                    Value = $"{NumberOnRoll} ({PercentageFull})"
                 },
                 new FormField {Title = "Percentage of free school meals (%FSM)", Value = PercentageFsm},
                 new FormField {Title = "Published admission number (PAN)", Value = Pan},

@@ -8,7 +8,7 @@ namespace Data.Models.Academies
         public string BoysOnRoll { get; set; }
         public string WithStatementOfSen { get; set; }
         public string WhoseFirstLanguageIsNotEnglish { get; set; }
-        public string EligibleForFreeSchoolMeals { get; set; }
+        public string PercentageEligibleForFreeSchoolMealsDuringLast6Years { get; set; }
 
         public IEnumerable<FormField> FieldsToDisplay()
         {
@@ -23,7 +23,7 @@ namespace Data.Models.Academies
                 new FormField
                 {
                     Title = "Pupil eligible for free school meal during the past 6 years",
-                    Value = EligibleForFreeSchoolMeals
+                    Value = PercentageEligibleForFreeSchoolMealsDuringLast6Years
                 }
             };
         }

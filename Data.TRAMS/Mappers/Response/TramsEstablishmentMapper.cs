@@ -22,8 +22,11 @@ namespace Data.TRAMS.Mappers.Response
                 GeneralInformation = GeneralInformation(input),
                 PupilNumbers = new PupilNumbers
                 {
-                    BoysOnRoll = input.Census.NumberOfBoys,
-                    GirlsOnRoll = input.Census.NumberOfGirls
+                    BoysOnRoll = CalculatePercentage(input.Census.NumberOfBoys, input.Census.NumberOfPupils),
+                    GirlsOnRoll = CalculatePercentage(input.Census.NumberOfGirls, input.Census.NumberOfPupils),
+                    WithStatementOfSen = DisplayAsPercentage(input.Census.PercentageSen),
+                    WhoseFirstLanguageIsNotEnglish = DisplayAsPercentage(input.Census.PercentageEnglishNotFirstLanguage),
+                    PercentageEligibleForFreeSchoolMealsDuringLast6Years = DisplayAsPercentage(input.Census.PercentageEligableForFSM6Years)
                 },
                 Ukprn = input.Ukprn,
                 Urn = input.Urn
@@ -60,7 +63,7 @@ namespace Data.TRAMS.Mappers.Response
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
                 Capacity = input.SchoolCapacity,
                 NumberOnRoll = input.Census.NumberOfPupils,
-                PercentageFull = PercentageFull(input),
+                PercentageFull = CalculatePercentage(input.Census.NumberOfPupils, input.SchoolCapacity),
                 SchoolPhase = input.PhaseOfEducation.Name,
                 SchoolType = input.EstablishmentType.Name,
                 PercentageFsm = input.Census.PercentageFsm
@@ -81,13 +84,15 @@ namespace Data.TRAMS.Mappers.Response
             return new List<string>
                 {input.Address.Street, input.Address.Town, input.Address.County, input.Address.Postcode};
         }
-
-        private static string PercentageFull(TramsEstablishment input)
+        
+        private static string CalculatePercentage(string value, string total)
         {
-            return Math.Round(
-                    decimal.Parse(input.Census.NumberOfPupils) / decimal.Parse(input.SchoolCapacity) * 100,
-                    1)
-                .ToString(CultureInfo.InvariantCulture);
+            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(total))
+                return string.Empty;
+            return DisplayAsPercentage(Math.Round(decimal.Parse(value) / decimal.Parse(total) * 100, 1)
+                .ToString(CultureInfo.InvariantCulture));
         }
+        
+        private static string DisplayAsPercentage(string value) => string.IsNullOrEmpty(value) ? value : $"{value}%";
     }
 }

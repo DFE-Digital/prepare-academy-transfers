@@ -68,7 +68,7 @@ namespace Frontend.Tests.TestFixtures
                     Capacity = "capacity",
                     Pan = "pan",
                     NumberOnRoll = "100",
-                    PercentageFull = "100",
+                    PercentageFull = "100%",
                     ViabilityIssue = "viability issues",
                     Pfi = "pfi",
                     Deficit = "deficit",
@@ -79,10 +79,10 @@ namespace Frontend.Tests.TestFixtures
                 },
                 PupilNumbers = new PupilNumbers
                 {
-                    EligibleForFreeSchoolMeals = "fsm",
+                    PercentageEligibleForFreeSchoolMealsDuringLast6Years = "fsm",
                     BoysOnRoll = "50",
                     GirlsOnRoll = "45",
-                    WithStatementOfSen = "sen",
+                    WithStatementOfSen = "13",
                     WhoseFirstLanguageIsNotEnglish = "lan not english"
                 },
                 LatestOfstedJudgement = new LatestOfstedJudgement
