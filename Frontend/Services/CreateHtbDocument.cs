@@ -2,10 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Data.Models.KeyStagePerformance;
-using Data.Models.Projects;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
@@ -14,7 +12,6 @@ using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
-using Helpers;
 
 namespace Frontend.Services
 {
@@ -22,7 +19,7 @@ namespace Frontend.Services
     {
         private readonly IGetHtbDocumentForProject _getHtbDocumentForProject;
         
-        public CreateHtbDocument(IGetHtbDocumentForProject getHtbDocumentForProject )
+        public CreateHtbDocument(IGetHtbDocumentForProject getHtbDocumentForProject)
         {
             _getHtbDocumentForProject = getHtbDocumentForProject;
         }
@@ -758,47 +755,7 @@ namespace Frontend.Services
                 });
             });
         }
-
-        private static string GetOtherFactors(TransferBenefits transferBenefits)
-        {
-            var otherFactorsSummary = transferBenefits.OtherFactors.Select(otherFactor => new[]
-            {
-                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
-                otherFactor.Value
-            }).ToList();
-
-            var sb = new StringBuilder();
-            foreach (var otherFactor in otherFactorsSummary)
-            {
-                sb.Append($"{otherFactor[0]}\n");
-                if (!string.IsNullOrEmpty(otherFactor[1]))
-                    sb.Append($"{otherFactor[1]}\n");
-            }
-
-            return sb.ToString();
-        }
-
-        private static string GetTransferBenefits(TransferBenefits transferBenefits)
-        {
-            var benefitSummary = transferBenefits.IntendedBenefits
-                .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
-                .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
-                .ToList();
-
-            if (transferBenefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
-            {
-                benefitSummary.Add($"Other: {transferBenefits.OtherIntendedBenefit}");
-            }
-
-            var sb = new StringBuilder();
-            foreach (var benefit in benefitSummary)
-            {
-                sb.Append($"{benefit}\n");
-            }
-
-            return sb.ToString();
-        }
-
+        
         private static CreateHtbDocumentResponse CreateErrorResponse(
             ServiceResponseError serviceResponseError)
         {
