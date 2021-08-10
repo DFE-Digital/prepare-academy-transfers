@@ -2,6 +2,7 @@
 using Data.Models.Projects;
 using System.Linq;
 using Data.Models.KeyStagePerformance;
+using Frontend.Helpers;
 
 namespace Frontend.Models
 {
@@ -13,60 +14,13 @@ namespace Frontend.Models
         public ProjectStatuses BenefitsAndOtherFactorsStatus => GetBenefitsAndOtherFactorsStatus();
         public ProjectStatuses RationaleStatus => GetRationaleStatus();
         public ProjectStatuses AcademyAndTrustInformationStatus() => GetAcademyAndTrustInformationStatus();
-        public bool HasKeyStage2PerformanceInformation
-        {
-            get
-            {
-                return EducationPerformance.KeyStage2Performance != null &&
-                       EducationPerformance.KeyStage2Performance.Any(result => HasValue(result.MathsProgressScore)
-                                                                               || HasValue(result.ReadingProgressScore)
-                                                                               || HasValue(result.WritingProgressScore)
-                                                                               || HasValue(result
-                                                                                   .PercentageAchievingHigherStdInRWM)
-                                                                               || HasValue(result
-                                                                                   .PercentageMeetingExpectedStdInRWM));
-            }
-        }
+        public bool HasKeyStage2PerformanceInformation => PerformanceDataHelpers.HasKeyStage2PerformanceInformation(EducationPerformance.KeyStage2Performance);
+        public bool HasKeyStage4PerformanceInformation =>
+            PerformanceDataHelpers.HasKeyStage4PerformanceInformation(EducationPerformance.KeyStage4Performance);
 
-        public bool HasKeyStage4PerformanceInformation
-        {
-            get
-            {
-                return EducationPerformance.KeyStage4Performance != null &&
-                       EducationPerformance.KeyStage4Performance.Any(result => 
-                           HasValue(result.SipAttainment8score)
-                           || HasValue(result.SipAttainment8scoreebacc)
-                           || HasValue(result.SipAttainment8scoreenglish)
-                           || HasValue(result.SipAttainment8scoremaths)
-                           || HasValue(result.SipAttainment8score)
-                           || HasValue(result.SipProgress8ebacc)
-                           || HasValue(result.SipProgress8english)
-                           || HasValue(result.SipProgress8maths)
-                           || HasValue(result.SipProgress8Score)
-                           || HasValue(result.SipNumberofpupilsprogress8));
-            }
-        }
+        public bool HasKeyStage5PerformanceInformation =>
+            PerformanceDataHelpers.HasKeyStage5PerformanceInformation(EducationPerformance.KeyStage5Performance);
         
-        public bool HasKeyStage5PerformanceInformation
-        {
-            get
-            {
-                return EducationPerformance.KeyStage5Performance != null &&
-                       EducationPerformance.KeyStage5Performance.Any(ks5 =>
-                           ks5.Academy != null && (
-                               !string.IsNullOrEmpty(ks5.Academy.AcademicAverage) ||
-                               !string.IsNullOrEmpty(ks5.Academy.AppliedGeneralAverage)
-                           )
-                       );
-            }
-        }
-
-        private static bool HasValue(DisadvantagedPupilsResult disadvantagedPupilResult)
-        {
-            return !string.IsNullOrEmpty(disadvantagedPupilResult.Disadvantaged) ||
-                   !string.IsNullOrEmpty(disadvantagedPupilResult.NotDisadvantaged);
-        }
-
         private ProjectStatuses GetAcademyAndTrustInformationStatus()
         {
             var academyAndTrustInformation = Project.AcademyAndTrustInformation;
