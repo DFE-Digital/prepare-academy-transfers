@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,8 +53,8 @@ namespace Frontend.Services
                 OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
-                ClearedBy = "Cleared by",
-                Version = "Version",
+                ClearedBy = "",
+                Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
                 DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
                 DateOfProposedTransfer = DatesHelper.DateStringToGovUkDate(project.Dates.Target),
                 DateTransferWasFirstDiscussed = DatesHelper.DateStringToGovUkDate(project.Dates.FirstDiscussed),
