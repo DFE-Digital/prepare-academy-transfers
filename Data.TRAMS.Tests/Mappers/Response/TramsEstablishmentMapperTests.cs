@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Data.Models;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
+using Helpers;
 using Xunit;
 
 namespace Data.TRAMS.Tests.Mappers.Response
@@ -85,8 +84,8 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(academyToMap.MisEstablishment.ReligiousEthos, result.FaithSchool);
             AssertGeneralInformationCorrect(result, academyToMap);
             AssertLatestOfstedJudgementCorrect(result);
-            Assert.Equal(ExpectedPercentage(academyToMap.Census.NumberOfBoys, academyToMap.Census.NumberOfPupils), result.PupilNumbers.BoysOnRoll);
-            Assert.Equal(ExpectedPercentage(academyToMap.Census.NumberOfGirls, academyToMap.Census.NumberOfPupils), result.PupilNumbers.GirlsOnRoll);
+            Assert.Equal(PercentageHelper.CalculatePercentageFromStrings(academyToMap.Census.NumberOfBoys, academyToMap.Census.NumberOfPupils), result.PupilNumbers.BoysOnRoll);
+            Assert.Equal(PercentageHelper.CalculatePercentageFromStrings(academyToMap.Census.NumberOfGirls, academyToMap.Census.NumberOfPupils), result.PupilNumbers.GirlsOnRoll);
             Assert.Equal(academyToMap.Census.PercentageEnglishNotFirstLanguage+"%", result.PupilNumbers.WhoseFirstLanguageIsNotEnglish);
             Assert.Equal(academyToMap.Census.PercentageEligableForFSM6Years+"%", result.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years);
             Assert.Equal(academyToMap.Census.PercentageSen+"%", result.PupilNumbers.WithStatementOfSen);
@@ -97,14 +96,15 @@ namespace Data.TRAMS.Tests.Mappers.Response
         {
             var academyToMap = _tramsEstablishment;
             academyToMap.Census.PercentageSen = null;
+            academyToMap.Census.NumberOfPupils = null;
             academyToMap.Census.NumberOfBoys = null;
             academyToMap.Census.NumberOfGirls = null;
             academyToMap.Census.PercentageEligableForFSM6Years = null;
             academyToMap.Census.PercentageEnglishNotFirstLanguage = null;
             
             var result = _subject.Map(academyToMap);
-            Assert.Equal(string.Empty, result.PupilNumbers.BoysOnRoll);
-            Assert.Equal(string.Empty, result.PupilNumbers.GirlsOnRoll);
+            Assert.Null(result.PupilNumbers.BoysOnRoll);
+            Assert.Null(result.PupilNumbers.GirlsOnRoll);
             Assert.Null(result.PupilNumbers.WhoseFirstLanguageIsNotEnglish);
             Assert.Null(result.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years);
             Assert.Null(result.PupilNumbers.WithStatementOfSen);
@@ -135,7 +135,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
         private static void AssertGeneralInformationCorrect(Academy result, TramsEstablishment establishmentToMap)
         {
             var expectedAgeRange = $"{establishmentToMap.StatutoryLowAge} to {establishmentToMap.StatutoryHighAge}";
-            var expectedPercentageFull = ExpectedPercentage(establishmentToMap.Census.NumberOfPupils, establishmentToMap.SchoolCapacity);
+            var expectedPercentageFull = PercentageHelper.CalculatePercentageFromStrings(establishmentToMap.Census.NumberOfPupils, establishmentToMap.SchoolCapacity);
             var generalInformation = result.GeneralInformation;
             var viewAcademyConversion = establishmentToMap.ViewAcademyConversion;
             Assert.Equal(establishmentToMap.PhaseOfEducation.Name, generalInformation.SchoolPhase);
@@ -149,15 +149,6 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(viewAcademyConversion.Pan, generalInformation.Pan);
             Assert.Equal(viewAcademyConversion.Pfi, generalInformation.Pfi);
             Assert.Equal(viewAcademyConversion.ViabilityIssue, generalInformation.ViabilityIssue);
-        }
-
-        private static string ExpectedPercentage(string value, string total)
-        {
-            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(total))
-                return string.Empty;
-            var percentage = Math.Round(decimal.Parse(value) /
-                decimal.Parse(total) * 100, 1).ToString(CultureInfo.InvariantCulture);
-            return $"{percentage}%";
         }
     }
 }

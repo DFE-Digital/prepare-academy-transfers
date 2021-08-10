@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Data.Models;
 using Data.Models.Academies;
 using Data.TRAMS.Models;
+using Helpers;
 
 namespace Data.TRAMS.Mappers.Response
 {
@@ -22,11 +21,11 @@ namespace Data.TRAMS.Mappers.Response
                 GeneralInformation = GeneralInformation(input),
                 PupilNumbers = new PupilNumbers
                 {
-                    BoysOnRoll = CalculatePercentage(input.Census.NumberOfBoys, input.Census.NumberOfPupils),
-                    GirlsOnRoll = CalculatePercentage(input.Census.NumberOfGirls, input.Census.NumberOfPupils),
-                    WithStatementOfSen = DisplayAsPercentage(input.Census.PercentageSen),
-                    WhoseFirstLanguageIsNotEnglish = DisplayAsPercentage(input.Census.PercentageEnglishNotFirstLanguage),
-                    PercentageEligibleForFreeSchoolMealsDuringLast6Years = DisplayAsPercentage(input.Census.PercentageEligableForFSM6Years)
+                    BoysOnRoll = PercentageHelper.CalculatePercentageFromStrings(input.Census.NumberOfBoys, input.Census.NumberOfPupils),
+                    GirlsOnRoll = PercentageHelper.CalculatePercentageFromStrings(input.Census.NumberOfGirls, input.Census.NumberOfPupils),
+                    WithStatementOfSen = PercentageHelper.DisplayAsPercentage(input.Census.PercentageSen),
+                    WhoseFirstLanguageIsNotEnglish = PercentageHelper.DisplayAsPercentage(input.Census.PercentageEnglishNotFirstLanguage),
+                    PercentageEligibleForFreeSchoolMealsDuringLast6Years = PercentageHelper.DisplayAsPercentage(input.Census.PercentageEligableForFSM6Years)
                 },
                 Ukprn = input.Ukprn,
                 Urn = input.Urn
@@ -63,7 +62,7 @@ namespace Data.TRAMS.Mappers.Response
                 AgeRange = $"{input.StatutoryLowAge} to {input.StatutoryHighAge}",
                 Capacity = input.SchoolCapacity,
                 NumberOnRoll = input.Census.NumberOfPupils,
-                PercentageFull = CalculatePercentage(input.Census.NumberOfPupils, input.SchoolCapacity),
+                PercentageFull = PercentageHelper.CalculatePercentageFromStrings(input.Census.NumberOfPupils, input.SchoolCapacity),
                 SchoolPhase = input.PhaseOfEducation.Name,
                 SchoolType = input.EstablishmentType.Name,
                 PercentageFsm = input.Census.PercentageFsm
@@ -84,15 +83,5 @@ namespace Data.TRAMS.Mappers.Response
             return new List<string>
                 {input.Address.Street, input.Address.Town, input.Address.County, input.Address.Postcode};
         }
-        
-        private static string CalculatePercentage(string value, string total)
-        {
-            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(total))
-                return string.Empty;
-            return DisplayAsPercentage(Math.Round(decimal.Parse(value) / decimal.Parse(total) * 100, 1)
-                .ToString(CultureInfo.InvariantCulture));
-        }
-        
-        private static string DisplayAsPercentage(string value) => string.IsNullOrEmpty(value) ? value : $"{value}%";
     }
 }
