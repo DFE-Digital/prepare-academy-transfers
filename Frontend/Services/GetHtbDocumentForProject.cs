@@ -47,7 +47,7 @@ namespace Frontend.Services
                 SchoolCapacity = academy.GeneralInformation.Capacity,
                 PublishedAdmissionNumber = academy.GeneralInformation.Pan,
                 NumberOnRoll = $"{academy.GeneralInformation.NumberOnRoll} ({academy.GeneralInformation.PercentageFull})",
-                PercentageFreeSchoolMeals = academy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                PercentageFreeSchoolMeals = academy.GeneralInformation.PercentageFsm,
                 OfstedLastInspection = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate),
                 OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,

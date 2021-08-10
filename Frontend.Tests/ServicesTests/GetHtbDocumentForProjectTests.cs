@@ -47,8 +47,9 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.AgeRange, htbDocumentResult.AgeRange);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.Capacity, htbDocumentResult.SchoolCapacity);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.Pan, htbDocumentResult.PublishedAdmissionNumber);
+                Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.PercentageFsm, htbDocumentResult.PercentageFreeSchoolMeals);
                 Assert.Equal("100 (100%)", htbDocumentResult.NumberOnRoll);
-                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years, htbDocumentResult.PercentageFreeSchoolMeals);
+                Assert.Equal(getTestInformationForProject.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years, htbDocumentResult.PupilsFsm6Years);
                 Assert.Equal("1 January 2020", htbDocumentResult.OfstedLastInspection);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness, htbDocumentResult.OverallEffectiveness);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Project, htbDocumentResult.RationaleForProject);
