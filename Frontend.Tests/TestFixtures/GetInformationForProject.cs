@@ -68,6 +68,7 @@ namespace Frontend.Tests.TestFixtures
                     Capacity = "capacity",
                     Pan = "pan",
                     NumberOnRoll = "100",
+                    PercentageFsm = "80",
                     PercentageFull = "100%",
                     ViabilityIssue = "viability issues",
                     Pfi = "pfi",
