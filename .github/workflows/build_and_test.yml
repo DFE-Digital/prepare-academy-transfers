@@ -28,3 +28,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Cypress tests
+      uses: cypress-io/github-action@v2
+      with:
+        build: npm run build
+        start: npm start
