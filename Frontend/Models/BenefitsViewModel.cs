@@ -34,7 +34,7 @@ namespace Frontend.Models
 
         public List<string[]> OtherFactorsSummary()
         {
-            return Project.Benefits.OtherFactors.Select(otherFactor => new[]
+            return Project.Benefits.OtherFactors.OrderBy(o => (int)o.Key).Select(otherFactor => new[]
             {
                 EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
                 otherFactor.Value

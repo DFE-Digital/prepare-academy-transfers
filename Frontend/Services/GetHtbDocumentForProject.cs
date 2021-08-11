@@ -121,7 +121,9 @@ namespace Frontend.Services
         
         private static string GetOtherFactors(TransferBenefits transferBenefits)
         {
-            var otherFactorsSummary = transferBenefits.OtherFactors.Select(otherFactor => new[]
+            var otherFactorsSummary = transferBenefits.OtherFactors
+                .OrderBy(o=>(int)o.Key)
+                .Select(otherFactor => new[]
             {
                 EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
                 otherFactor.Value
