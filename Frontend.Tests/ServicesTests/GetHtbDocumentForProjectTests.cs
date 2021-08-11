@@ -37,7 +37,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("Defer", htbDocumentResult.Recommendation);
                 Assert.Equal("author", htbDocumentResult.Author);
                 Assert.Equal(getTestInformationForProject.Project.Name, htbDocumentResult.ProjectName);
-                Assert.Equal("incoming trust name", htbDocumentResult.SponsorName);
+                Assert.Equal("Incoming Trust Name", htbDocumentResult.SponsorName);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.EstablishmentType, htbDocumentResult.AcademyTypeAndRoute);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.Name, htbDocumentResult.SchoolName);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.Urn, htbDocumentResult.SchoolUrn);

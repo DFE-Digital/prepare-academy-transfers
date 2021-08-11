@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Models.Projects;
+using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -36,7 +37,7 @@ namespace Frontend.Services
                 Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(project.AcademyAndTrustInformation.Recommendation),
                 Author = project.AcademyAndTrustInformation.Author,
                 ProjectName = project.Name,
-                SponsorName = project.IncomingTrustName,
+                SponsorName = project.IncomingTrustName.ToTitleCase(),
                 AcademyTypeAndRoute = academy.EstablishmentType,
                 SchoolName = academy.Name,
                 SchoolUrn =  academy.Urn,
