@@ -14,7 +14,9 @@
         benefitSummary.Add($"Other: {transferBenefits.OtherIntendedBenefit}");
     }
 
-    var otherFactorsSummary = Model.Project.Benefits.OtherFactors.Select(otherFactor => new[]
+    var otherFactorsSummary = Model.Project.Benefits.OtherFactors
+        .OrderBy(o => (int)o.Key)
+        .Select(otherFactor => new[]
     {
         EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
         otherFactor.Value
