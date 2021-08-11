@@ -1,3 +1,4 @@
+@using Helpers
 @model ProjectPageModel
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -16,7 +17,7 @@
         </dt>
 
         <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.InspectionDate"></stringsummary>
+            <stringsummary value="@DatesHelper.DateStringToGovUkDate(Model.TransferringAcademy.LatestOfstedJudgement.InspectionDate)"></stringsummary>
         </dd>
         <dd class="govuk-summary-list__actions"/>
     </div>
