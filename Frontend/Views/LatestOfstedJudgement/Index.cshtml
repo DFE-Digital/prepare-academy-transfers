@@ -1,3 +1,4 @@
+@using Helpers
 @model Frontend.Models.LatestOfstedJudgementViewModel
 
 @{
@@ -51,7 +52,7 @@
                     }
                     else
                     {
-                        @Model.Academy.LatestOfstedJudgement.InspectionDate
+                        @DatesHelper.DateStringToGovUkDate(Model.Academy.LatestOfstedJudgement.InspectionDate)
                     }
                 </dd>
             </div>

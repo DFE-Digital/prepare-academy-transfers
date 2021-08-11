@@ -65,7 +65,7 @@ namespace Data.TRAMS.Mappers.Response
                 PercentageFull = PercentageHelper.CalculatePercentageFromStrings(input.Census.NumberOfPupils, input.SchoolCapacity),
                 SchoolPhase = input.PhaseOfEducation.Name,
                 SchoolType = input.EstablishmentType.Name,
-                PercentageFsm = input.Census.PercentageFsm
+                PercentageFsm = PercentageHelper.DisplayAsPercentage(input.Census.PercentageFsm)
             };
 
             if (input.ViewAcademyConversion == null) return generalInformation;

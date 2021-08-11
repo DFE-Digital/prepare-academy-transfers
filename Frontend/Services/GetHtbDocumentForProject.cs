@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,8 +53,8 @@ namespace Frontend.Services
                 OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
-                ClearedBy = "Cleared by",
-                Version = "Version",
+                ClearedBy = "",
+                Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
                 DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
                 DateOfProposedTransfer = DatesHelper.DateStringToGovUkDate(project.Dates.Target),
                 DateTransferWasFirstDiscussed = DatesHelper.DateStringToGovUkDate(project.Dates.FirstDiscussed),
@@ -66,7 +67,7 @@ namespace Frontend.Services
                 WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features.WhoInitiatedTheTransfer),
                 ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Subject to Intervention" : "Not subject to intervention",
                 MoreDetailsAboutTheTransfer = project.Features.ReasonForTransfer.InterventionDetails,
-                TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty ? project.Features.OtherTypeOfTransfer : 
+                TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other ? $"Other: {project.Features.OtherTypeOfTransfer}" : 
                     EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
                 OtherFactors = GetOtherFactors(project.Benefits),
@@ -120,7 +121,9 @@ namespace Frontend.Services
         
         private static string GetOtherFactors(TransferBenefits transferBenefits)
         {
-            var otherFactorsSummary = transferBenefits.OtherFactors.Select(otherFactor => new[]
+            var otherFactorsSummary = transferBenefits.OtherFactors
+                .OrderBy(o=>(int)o.Key)
+                .Select(otherFactor => new[]
             {
                 EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.Key),
                 otherFactor.Value

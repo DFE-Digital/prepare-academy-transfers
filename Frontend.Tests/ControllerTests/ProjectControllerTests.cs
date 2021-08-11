@@ -69,37 +69,6 @@ namespace Frontend.Tests.ControllerTests
             }
             
             [Fact]
-            public async void GivenAProjectID_PutsTheHasKeyStage2PerformanceDataInTheViewData()
-            {
-                await _subject.Index(ProjectId);
-
-                Assert.False((bool)_subject.ViewData["HasKeyStage2PerformanceData"]);
-            }
-            
-            [Fact]
-            public async void GivenAProjectWithKeyStage2Data_SetsHasKeyStage2PerformanceDataToTrueInTheViewData()
-            {
-                _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(AcademyUrn))
-                    .ReturnsAsync(new RepositoryResult<EducationPerformance>
-                    {
-                        Result = new EducationPerformance
-                        {
-                            KeyStage2Performance = new List<KeyStage2>
-                            {
-                                new KeyStage2
-                                {
-                                    MathsProgressScore = new DisadvantagedPupilsResult() { NotDisadvantaged = "score" }
-                                }
-                            }
-                        }
-                    });
-                
-                await _subject.Index(ProjectId);
-
-                Assert.True((bool)_subject.ViewData["HasKeyStage2PerformanceData"]);
-            }
-
-            [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
                 const string projectId = "errorProjectId";

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
@@ -54,8 +55,8 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness, htbDocumentResult.OverallEffectiveness);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Project, htbDocumentResult.RationaleForProject);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Trust, htbDocumentResult.RationaleForTrust);
-                Assert.Equal("Cleared by", htbDocumentResult.ClearedBy);
-                Assert.Equal("Version", htbDocumentResult.Version);
+                Assert.Equal("", htbDocumentResult.ClearedBy);
+                Assert.Equal(System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture), htbDocumentResult.Version);
                 Assert.Equal("1 January 2020", htbDocumentResult.DateOfHtb);
                 Assert.Equal("1 January 2020", htbDocumentResult.DateOfProposedTransfer);
                 Assert.Equal("1 January 2020", htbDocumentResult.DateTransferWasFirstDiscussed);
