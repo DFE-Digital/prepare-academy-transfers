@@ -1,4 +1,5 @@
 @page "/project/{id}/headteacher-board/preview"
+@using Frontend.Helpers
 @model Frontend.Pages.TaskList.HtbDocument.Preview
 
 @{
@@ -121,41 +122,50 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">Key stage 2 performance tables</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    Key stage 2 performance tables details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="KeyStage2PerformanceSummary" model="Model"></partial>
-            </div>
-        </section>
-
-        <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    Key stage 4 performance tables details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="KeyStage4PerformanceSummary" model="Model"></partial>
-            </div>
-        </section>
-
-        <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    Key stage 5 performance tables details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="KeyStage5PerformanceSummary" model="Model"></partial>
-            </div>
-        </section>
+        @if (PerformanceDataHelpers.HasKeyStage2PerformanceInformation(Model.EducationPerformance.KeyStage2Performance))
+        {
+            <h2 class="govuk-heading-s">Key stage 2 performance tables</h2>
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        Key stage 2 performance tables details
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="KeyStage2PerformanceSummary" model="Model"></partial>
+                </div>
+            </section>
+        }
+        
+        @if(PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance))
+        {
+            <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        Key stage 4 performance tables details
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="KeyStage4PerformanceSummary" model="Model"></partial>
+                </div>
+            </section>
+        }
+        
+        @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(Model.EducationPerformance.KeyStage5Performance))
+        {
+            <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        Key stage 5 performance tables details
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="KeyStage5PerformanceSummary" model="Model"></partial>
+                </div>
+            </section>
+        }
     </div>
 </div>
 
