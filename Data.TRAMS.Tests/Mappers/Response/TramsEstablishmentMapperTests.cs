@@ -142,7 +142,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedAgeRange, generalInformation.AgeRange);
             Assert.Equal(establishmentToMap.SchoolCapacity, generalInformation.Capacity);
             Assert.Equal(establishmentToMap.Census.NumberOfPupils, generalInformation.NumberOnRoll);
-            Assert.Equal(establishmentToMap.Census.PercentageFsm, generalInformation.PercentageFsm);
+            Assert.Equal($"{establishmentToMap.Census.PercentageFsm}%", generalInformation.PercentageFsm);
             Assert.Equal(expectedPercentageFull, generalInformation.PercentageFull);
             Assert.Equal(establishmentToMap.EstablishmentType.Name, generalInformation.SchoolType);
             Assert.Equal(viewAcademyConversion.Deficit, generalInformation.Deficit);
