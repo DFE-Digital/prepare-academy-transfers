@@ -48,7 +48,7 @@ namespace Frontend.Helpers
         {
             if (string.IsNullOrEmpty(year)) return year;
             var trimmedYear = string.Concat(year.Where(c => !char.IsWhiteSpace(c)));
-            return trimmedYear.Contains("-") ? trimmedYear.Replace("-", " - ") : year;
+            return trimmedYear.Contains("-") ? trimmedYear.Replace("-", " to ") : year;
         }
 
         public static bool HasKeyStage2PerformanceInformation(IList<KeyStage2> keyStage2Results)

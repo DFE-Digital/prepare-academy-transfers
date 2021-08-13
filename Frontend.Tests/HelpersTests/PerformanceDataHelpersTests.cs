@@ -86,8 +86,8 @@ namespace Frontend.Tests.HelpersTests
             [Theory]
             [InlineData(null, null)]
             [InlineData("", "")]
-            [InlineData("2018-2019", "2018 - 2019")]
-            [InlineData("2018 - 2019", "2018 - 2019")]
+            [InlineData("2018-2019", "2018 to 2019")]
+            [InlineData("2018 - 2019", "2018 to 2019")]
             [InlineData("randomness", "randomness")]
             public void GivenYear_ShouldFormatCorrectly(string unformattedYear, string expectedFormattedYear)
             {
