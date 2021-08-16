@@ -284,7 +284,7 @@ namespace Frontend.Tests.HelpersTests
                 if (year3 != null)
                     ks4Results.Add(new KeyStage4 { Year = year3 });
 
-                var result = PerformanceDataHelpers.GetKeyStage4Results(ks4Results);
+                var result = PerformanceDataHelpers.GetFormattedKeyStage4Results(ks4Results);
                 
                 Assert.Equal(3,result.Count);
                 Assert.Equal("2018-2019", result[0].Year);
@@ -295,7 +295,7 @@ namespace Frontend.Tests.HelpersTests
             [Fact]
             public void GivenNoYearData_ShouldNotErrorAndReturnEmptyData()
             {
-                var result = PerformanceDataHelpers.GetKeyStage4Results(new List<KeyStage4>());
+                var result = PerformanceDataHelpers.GetFormattedKeyStage4Results(new List<KeyStage4>());
                 
                 Assert.Equal(3,result.Count);
                 Assert.All(result, ks4Result => Assert.Null(ks4Result.Year));

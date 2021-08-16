@@ -82,7 +82,7 @@ namespace Frontend.Services
                 OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
                 OfstedAdditionalInformation = project.LatestOfstedJudgementAdditionalInformation,
                 KeyStage2Performance = educationPerformance.KeyStage2Performance,
-                KeyStage4Performance = PerformanceDataHelpers.GetKeyStage4Results(educationPerformance.KeyStage4Performance),
+                KeyStage4Performance = PerformanceDataHelpers.GetFormattedKeyStage4Results(educationPerformance.KeyStage4Performance),
                 KeyStage5Performance = educationPerformance.KeyStage5Performance,
                 KeyStage2AdditionalInformation = project.KeyStage2PerformanceAdditionalInformation,
                 KeyStage4AdditionalInformation = project.KeyStage4PerformanceAdditionalInformation,

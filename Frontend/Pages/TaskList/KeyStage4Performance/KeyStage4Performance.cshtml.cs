@@ -79,7 +79,7 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
             OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
             LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
             OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
-            KeyStage4Results = PerformanceDataHelpers.GetKeyStage4Results(projectInformation.EducationPerformance.KeyStage4Performance);
+            KeyStage4Results = PerformanceDataHelpers.GetFormattedKeyStage4Results(projectInformation.EducationPerformance.KeyStage4Performance);
             ReturnToPreview = returnToPreview;
             AdditionalInformation = new AdditionalInformationViewModel
             {

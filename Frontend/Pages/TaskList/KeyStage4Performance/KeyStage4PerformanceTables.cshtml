@@ -2,7 +2,7 @@
 @model ProjectPageModel
 
 @{
-    var keyStage4Results = PerformanceDataHelpers.GetKeyStage4Results(Model.EducationPerformance.KeyStage4Performance);
+    var keyStage4Results = PerformanceDataHelpers.GetFormattedKeyStage4Results(Model.EducationPerformance.KeyStage4Performance);
 }
 
 <h2 class="govuk-heading-l">
