@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -55,12 +56,12 @@ namespace Frontend.Helpers
         {
             return keyStage2Results != null &&
                    keyStage2Results.Any(result => HasValue(result.MathsProgressScore)
-                                                                           || HasValue(result.ReadingProgressScore)
-                                                                           || HasValue(result.WritingProgressScore)
-                                                                           || HasValue(result
-                                                                               .PercentageAchievingHigherStdInRWM)
-                                                                           || HasValue(result
-                                                                               .PercentageMeetingExpectedStdInRWM));
+                                                  || HasValue(result.ReadingProgressScore)
+                                                  || HasValue(result.WritingProgressScore)
+                                                  || HasValue(result
+                                                      .PercentageAchievingHigherStdInRWM)
+                                                  || HasValue(result
+                                                      .PercentageMeetingExpectedStdInRWM));
         }
 
         public static bool HasKeyStage4PerformanceInformation(IList<KeyStage4> keyStage4Results)
@@ -101,6 +102,39 @@ namespace Frontend.Helpers
             var resultIsDouble = double.TryParse(result, NumberStyles.Number, CultureInfo.InvariantCulture,
                 out var resultAsDouble);
             return resultIsDouble ? $"{resultAsDouble}" : result;
+        }
+
+        public static List<KeyStage4> GetKeyStage4Results(IEnumerable<KeyStage4> keyStage4Results)
+        {
+            var formattedKeyStage4Results = keyStage4Results.Take(3).OrderByDescending(a => a.Year)
+                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
+            
+            return GetResultsWithNextLatestYearPopulatedForMissingYearData(formattedKeyStage4Results).ToList();
+        }
+
+        private static IEnumerable<KeyStage4> GetResultsWithNextLatestYearPopulatedForMissingYearData(IList<KeyStage4> keyStage4Results)
+        {
+            if (!keyStage4Results.Any(k => string.IsNullOrEmpty(k.Year)))
+                return keyStage4Results;
+            
+            if (keyStage4Results.All(k => string.IsNullOrEmpty(k.Year)))
+                return keyStage4Results;
+            
+            for (var i = 0; i < keyStage4Results.Count; i++)
+            {
+                if (string.IsNullOrEmpty(keyStage4Results[i].Year))
+                {
+                    keyStage4Results[i].Year = GetPreviousYearFromYearString(keyStage4Results[i - 1].Year);
+                }
+            }
+
+            static string GetPreviousYearFromYearString(string year)
+            {
+                var yearAsNumber = Convert.ToInt16(year.Split('-')[0]);
+                return $"{yearAsNumber - 1}-{yearAsNumber}";
+            }
+
+            return keyStage4Results;
         }
     }
 }
