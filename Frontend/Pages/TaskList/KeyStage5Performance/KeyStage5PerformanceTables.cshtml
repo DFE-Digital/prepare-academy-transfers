@@ -4,7 +4,7 @@
 @foreach (var ks5Result in Model.EducationPerformance.KeyStage5Performance.OrderByDescending(o => o.Year))
 {
     <h2 class="govuk-heading-m">
-        @ks5Result.Year scores for academic and applied general qualifications
+        @PerformanceDataHelpers.GetFormattedYear(ks5Result.Year) scores for academic and applied general qualifications
     </h2>
     <table class="govuk-table govuk-!-margin-bottom-9">
         <caption class="govuk-table__caption govuk-table__caption--s">Local authority: @Model.TransferringAcademy.LocalAuthorityName</caption>

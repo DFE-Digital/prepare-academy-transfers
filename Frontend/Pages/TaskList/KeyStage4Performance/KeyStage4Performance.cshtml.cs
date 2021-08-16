@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.KeyStagePerformance;
@@ -80,7 +79,7 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
             OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
             LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
             OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
-            KeyStage4Results = GetLatestThreeResults(projectInformation.EducationPerformance.KeyStage4Performance);
+            KeyStage4Results = PerformanceDataHelpers.GetFormattedKeyStage4Results(projectInformation.EducationPerformance.KeyStage4Performance);
             ReturnToPreview = returnToPreview;
             AdditionalInformation = new AdditionalInformationViewModel
             {
@@ -91,20 +90,6 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
                 AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
                 ReturnToPreview = returnToPreview
             };
-        }
-
-        private static List<KeyStage4> GetLatestThreeResults(List<KeyStage4> keyStage4Performance)
-        {
-            return keyStage4Performance.Take(3).OrderByDescending(a => a.Year)
-                .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c =>
-                {
-                    if (c.Year != null)
-                    {
-                        c.Year = PerformanceDataHelpers.GetFormattedYear(c.Year);
-                    }
-
-                    return c;
-                }).ToList();
         }
     }
 }

@@ -86,8 +86,8 @@ namespace Frontend.Tests.HelpersTests
             [Theory]
             [InlineData(null, null)]
             [InlineData("", "")]
-            [InlineData("2018-2019", "2018 - 2019")]
-            [InlineData("2018 - 2019", "2018 - 2019")]
+            [InlineData("2018-2019", "2018 to 2019")]
+            [InlineData("2018 - 2019", "2018 to 2019")]
             [InlineData("randomness", "randomness")]
             public void GivenYear_ShouldFormatCorrectly(string unformattedYear, string expectedFormattedYear)
             {
@@ -259,6 +259,46 @@ namespace Frontend.Tests.HelpersTests
                     }
                 };
                 Assert.True(PerformanceDataHelpers.HasKeyStage5PerformanceInformation(model));
+            }
+        }
+
+        public class GetKeyStage4ResultsTests
+        {
+            [Theory]
+            [InlineData("2018-2019", "2017-2018", "2016-2017")]
+            [InlineData("2017-2018", "2016-2017", "2018-2019")]
+            [InlineData("2016-2017", "2017-2018", "2018-2019")]
+            [InlineData("2018-2019", "2017-2018", null)]
+            [InlineData(null, "2018-2019", "2017-2018")]
+            [InlineData("2018-2019", null, "2017-2018")]
+            [InlineData("2018-2019", null, null)]
+            [InlineData(null, "2018-2019", null)]
+            [InlineData(null, null, "2018-2019")]
+            public void GiveDataWithMissingYears_ShouldReturnCorrectMissingYearDataSet(string year1, string year2, string year3)
+            {
+                var ks4Results = new List<KeyStage4>();
+                if (year1 != null)
+                    ks4Results.Add(new KeyStage4 { Year = year1 });
+                if (year2 != null)
+                    ks4Results.Add(new KeyStage4 { Year = year2 });
+                if (year3 != null)
+                    ks4Results.Add(new KeyStage4 { Year = year3 });
+
+                var result = PerformanceDataHelpers.GetFormattedKeyStage4Results(ks4Results);
+                
+                Assert.Equal(3,result.Count);
+                Assert.Equal("2018-2019", result[0].Year);
+                Assert.Equal("2017-2018", result[1].Year);
+                Assert.Equal("2016-2017", result[2].Year);
+            }
+
+            [Fact]
+            public void GivenNoYearData_ShouldNotErrorAndReturnEmptyData()
+            {
+                var result = PerformanceDataHelpers.GetFormattedKeyStage4Results(new List<KeyStage4>());
+                
+                Assert.Equal(3,result.Count);
+                Assert.All(result, ks4Result => Assert.Null(ks4Result.Year));
             }
         }
     }

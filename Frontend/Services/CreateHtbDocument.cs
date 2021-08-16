@@ -237,17 +237,15 @@ namespace Frontend.Services
             }
             else
             {
-                var ks4Results = htbDocument.KeyStage4Performance.Take(3)
-                    .OrderByDescending(a => a.Year)
-                    .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).Select(c =>
+                var ks4Results = htbDocument.KeyStage4Performance.Select(c =>
+                {
+                    if (c.Year != null)
                     {
-                        if (c.Year != null)
-                        {
-                            c.Year = PerformanceDataHelpers.GetFormattedYear(c.Year);
-                        }
+                        c.Year = PerformanceDataHelpers.GetFormattedYear(c.Year);
+                    }
 
-                        return c;
-                    }).ToList();
+                    return c;
+                }).ToList();
 
                 documentBuilder.ReplacePlaceholderWithContent("KeyStage4PerformanceSection", builder =>
                 {
@@ -274,16 +272,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipAttainment8score)
                             },
                             new TextElement
@@ -293,7 +291,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipAttainment8score)
                             }
                         },
@@ -302,7 +300,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score)
                             },
                             new TextElement
                             {
@@ -310,7 +308,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Score)
                             }
                         },
                         new[]
@@ -319,7 +317,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageA8Score)
+                                    ks4Results[0].NationalAverageA8Score)
                             },
                             new TextElement
                             {
@@ -329,7 +327,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageA8Score)
+                                    ks4Results[2].NationalAverageA8Score)
                             }
                         }
                     });
@@ -345,16 +343,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipAttainment8scoreenglish)
                             },
                             new TextElement
@@ -364,7 +362,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipAttainment8scoreenglish)
                             }
                         },
@@ -374,7 +372,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].LAAverageA8English)
+                                    ks4Results[0].LAAverageA8English)
                             },
                             new TextElement
                             {
@@ -384,7 +382,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].LAAverageA8English)
+                                    ks4Results[2].LAAverageA8English)
                             }
                         },
                         new[]
@@ -392,7 +390,7 @@ namespace Frontend.Services
                             new TextElement {Value = "National Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .NationalAverageA8English)
                             },
                             new TextElement
@@ -402,7 +400,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .NationalAverageA8English)
                             }
                         }
@@ -419,16 +417,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipAttainment8scoremaths)
                             },
                             new TextElement
@@ -438,7 +436,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipAttainment8scoremaths)
                             }
                         },
@@ -447,7 +445,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths)
                             },
                             new TextElement
                             {
@@ -455,7 +453,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8Maths)
                             }
                         },
                         new[]
@@ -464,7 +462,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageA8Maths)
+                                    ks4Results[0].NationalAverageA8Maths)
                             },
                             new TextElement
                             {
@@ -474,7 +472,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageA8Maths)
+                                    ks4Results[2].NationalAverageA8Maths)
                             }
                         }
                     });
@@ -490,16 +488,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipAttainment8scoreebacc)
                             },
                             new TextElement
@@ -509,7 +507,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipAttainment8scoreebacc)
                             }
                         },
@@ -518,7 +516,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8EBacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc)
                             },
                             new TextElement
                             {
@@ -526,7 +524,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageA8EBacc)
                             }
                         },
                         new[]
@@ -535,7 +533,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageA8EBacc)
+                                    ks4Results[0].NationalAverageA8EBacc)
                             },
                             new TextElement
                             {
@@ -545,7 +543,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageA8EBacc)
+                                    ks4Results[2].NationalAverageA8EBacc)
                             }
                         }
                     });
@@ -567,16 +565,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipNumberofpupilsprogress8)
                             },
                             new TextElement
@@ -586,7 +584,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipNumberofpupilsprogress8)
                             }
                         },
@@ -595,7 +593,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .LAAverageP8PupilsIncluded)
                             },
                             new TextElement
@@ -605,7 +603,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .LAAverageP8PupilsIncluded)
                             }
                         },
@@ -614,7 +612,7 @@ namespace Frontend.Services
                             new TextElement {Value = "National Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .NationalAverageP8PupilsIncluded)
                             },
                             new TextElement
@@ -624,7 +622,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .NationalAverageP8PupilsIncluded)
                             }
                         }
@@ -641,16 +639,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8Score)
                             },
                             new TextElement
                             {
@@ -658,7 +656,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8Score)
                             }
                         },
                         new[]
@@ -667,8 +665,8 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[2].SipProgress8lowerconfidence,
-                                    ks4Results[2].SipProgress8upperconfidence)
+                                    ks4Results[0].SipProgress8lowerconfidence,
+                                    ks4Results[0].SipProgress8upperconfidence)
                             },
                             new TextElement
                             {
@@ -679,8 +677,8 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[0].SipProgress8lowerconfidence,
-                                    ks4Results[0].SipProgress8upperconfidence)
+                                    ks4Results[2].SipProgress8lowerconfidence,
+                                    ks4Results[2].SipProgress8upperconfidence)
                             }
                         },
                         new[]
@@ -688,7 +686,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score)
                             },
                             new TextElement
                             {
@@ -696,7 +694,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Score)
                             }
                         },
                         new[]
@@ -706,7 +704,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[2].LAAverageP8LowerConfidence, ks4Results[2].LAAverageP8UpperConfidence)
+                                    ks4Results[0].LAAverageP8LowerConfidence, ks4Results[0].LAAverageP8UpperConfidence)
                             },
                             new TextElement
                             {
@@ -716,7 +714,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[0].LAAverageP8LowerConfidence, ks4Results[0].LAAverageP8UpperConfidence)
+                                    ks4Results[2].LAAverageP8LowerConfidence, ks4Results[2].LAAverageP8UpperConfidence)
                             }
                         },
                         new[]
@@ -725,7 +723,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageP8Score)
+                                    ks4Results[0].NationalAverageP8Score)
                             },
                             new TextElement
                             {
@@ -735,7 +733,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageP8Score)
+                                    ks4Results[2].NationalAverageP8Score)
                             }
                         },
                         new[]
@@ -744,8 +742,8 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[2].NationalAverageP8LowerConfidence,
-                                    ks4Results[2].NationalAverageP8UpperConfidence)
+                                    ks4Results[0].NationalAverageP8LowerConfidence,
+                                    ks4Results[0].NationalAverageP8UpperConfidence)
                             },
                             new TextElement
                             {
@@ -756,8 +754,8 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
-                                    ks4Results[0].NationalAverageP8LowerConfidence,
-                                    ks4Results[0].NationalAverageP8UpperConfidence)
+                                    ks4Results[2].NationalAverageP8LowerConfidence,
+                                    ks4Results[2].NationalAverageP8UpperConfidence)
                             }
                         }
                     });
@@ -773,16 +771,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .SipProgress8english)
                             },
                             new TextElement
@@ -792,7 +790,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .SipProgress8english)
                             }
                         },
@@ -802,7 +800,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].LAAverageP8English)
+                                    ks4Results[0].LAAverageP8English)
                             },
                             new TextElement
                             {
@@ -812,7 +810,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].LAAverageP8English)
+                                    ks4Results[2].LAAverageP8English)
                             }
                         },
                         new[]
@@ -820,7 +818,7 @@ namespace Frontend.Services
                             new TextElement {Value = "National Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
                                     .NationalAverageP8English)
                             },
                             new TextElement
@@ -830,7 +828,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2]
                                     .NationalAverageP8English)
                             }
                         }
@@ -847,16 +845,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8maths)
                             },
                             new TextElement
                             {
@@ -864,7 +862,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8maths)
                             }
                         },
                         new[]
@@ -872,7 +870,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
                             },
                             new TextElement
                             {
@@ -880,7 +878,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Maths)
                             }
                         },
                         new[]
@@ -889,7 +887,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageP8Maths)
+                                    ks4Results[0].NationalAverageP8Maths)
                             },
                             new TextElement
                             {
@@ -899,7 +897,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageP8Maths)
+                                    ks4Results[2].NationalAverageP8Maths)
                             }
                         }
                     });
@@ -915,16 +913,16 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8ebacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8ebacc)
                             },
                             new TextElement
                             {
@@ -932,7 +930,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8ebacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].SipProgress8ebacc)
                             }
                         },
                         new[]
@@ -940,7 +938,7 @@ namespace Frontend.Services
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Ebacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc)
                             },
                             new TextElement
                             {
@@ -948,7 +946,7 @@ namespace Frontend.Services
                             },
                             new TextElement
                             {
-                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc)
+                                Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[2].LAAverageP8Ebacc)
                             }
                         },
                         new[]
@@ -957,7 +955,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[2].NationalAverageP8Ebacc)
+                                    ks4Results[0].NationalAverageP8Ebacc)
                             },
                             new TextElement
                             {
@@ -967,7 +965,7 @@ namespace Frontend.Services
                             new TextElement
                             {
                                 Value = PerformanceDataHelpers.GetFormattedStringResult(
-                                    ks4Results[0].NationalAverageP8Ebacc)
+                                    ks4Results[2].NationalAverageP8Ebacc)
                             }
                         }
                     });
@@ -983,9 +981,9 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = "", Bold = true},
-                            new TextElement {Value = ks4Results[2].Year, Bold = true},
+                            new TextElement {Value = ks4Results[0].Year, Bold = true},
                             new TextElement {Value = ks4Results[1].Year, Bold = true},
-                            new TextElement {Value = ks4Results[0].Year, Bold = true}
+                            new TextElement {Value = ks4Results[2].Year, Bold = true}
                         },
                         new[]
                         {

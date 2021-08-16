@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Models.Projects;
 using Frontend.ExtensionMethods;
+using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -81,7 +82,7 @@ namespace Frontend.Services
                 OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
                 OfstedAdditionalInformation = project.LatestOfstedJudgementAdditionalInformation,
                 KeyStage2Performance = educationPerformance.KeyStage2Performance,
-                KeyStage4Performance = educationPerformance.KeyStage4Performance,
+                KeyStage4Performance = PerformanceDataHelpers.GetFormattedKeyStage4Results(educationPerformance.KeyStage4Performance),
                 KeyStage5Performance = educationPerformance.KeyStage5Performance,
                 KeyStage2AdditionalInformation = project.KeyStage2PerformanceAdditionalInformation,
                 KeyStage4AdditionalInformation = project.KeyStage4PerformanceAdditionalInformation,
