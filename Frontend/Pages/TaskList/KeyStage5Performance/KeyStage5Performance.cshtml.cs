@@ -1,26 +1,21 @@
 using System.Threading.Tasks;
 using Data;
-using Data.Models.KeyStagePerformance;
 using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.TaskList.KeyStage5Performance
 {
-    public class KeyStage5Performance : PageModel
+    public class KeyStage5Performance : ProjectPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projects;
-        public string ProjectUrn { get; private set; }
-        public EducationPerformance EducationPerformance { get; set; }
-        public string LocalAuthorityName { get; set; }
-        public string OutgoingAcademyName { get; set; }
+        public string ProjectUrn => Project.Urn;
+        public string OutgoingAcademyUrn => TransferringAcademy.Urn;
         public AdditionalInformationViewModel AdditionalInformation { get; set; }
-        public string OutgoingAcademyUrn { get; set; }
         public bool ReturnToPreview { get; set; }
 
         public KeyStage5Performance(IGetInformationForProject getInformationForProject, IProjects projects)
@@ -72,10 +67,8 @@ namespace Frontend.Pages.TaskList.KeyStage5Performance
         private void PopulateModel(bool addOrEditAdditionalInformation,
             GetInformationForProjectResponse projectInformation, bool returnToPreview)
         {
-            ProjectUrn = projectInformation.Project.Urn;
-            OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
-            LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
-            OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
+            Project = projectInformation.Project;
+            TransferringAcademy = projectInformation.OutgoingAcademy;
             EducationPerformance = projectInformation.EducationPerformance;
             ReturnToPreview = returnToPreview;
             AdditionalInformation = new AdditionalInformationViewModel

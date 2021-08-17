@@ -84,8 +84,6 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.Equal(_foundProject.Urn, _subject.ProjectUrn);
                 Assert.Equal(_foundEducationPerformance, _subject.EducationPerformance);
                 Assert.Equal(_foundOutgoingAcademy.Urn, _subject.OutgoingAcademyUrn);
-                Assert.Equal(_foundOutgoingAcademy.Name, _subject.OutgoingAcademyName);
-                Assert.Equal(_foundOutgoingAcademy.LocalAuthorityName, _subject.LocalAuthorityName);
             }
 
             [Fact]
