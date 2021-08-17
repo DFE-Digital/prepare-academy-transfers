@@ -40,8 +40,8 @@
         </tr>
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">National average</th>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged)<br>(disadvantaged @PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM.Disadvantaged))</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged)<br>(disadvantaged @PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM.Disadvantaged))</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(ks2Result.NationalAveragePercentageMeetingExpectedStdInRWM)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(ks2Result.NationalAveragePercentageAchievingHigherStdInRWM)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageReadingProgressScore.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageWritingProgressScore.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.NationalAverageMathsProgressScore.NotDisadvantaged)</td>

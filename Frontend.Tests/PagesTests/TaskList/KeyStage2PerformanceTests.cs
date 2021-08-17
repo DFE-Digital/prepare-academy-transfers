@@ -91,8 +91,6 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.IsType<PageResult>(response);
                 Assert.Equal(ProjectUrn, _subject.ProjectUrn);
                 Assert.Equal(AcademyUrn, _subject.OutgoingAcademyUrn);
-                Assert.Equal(AcademyName, _subject.OutgoingAcademyName);
-                Assert.Equal(LAName, _subject.LocalAuthorityName);
                 Assert.Equal("test year", _subject.EducationPerformance.KeyStage2Performance[0].Year);
             }
 
