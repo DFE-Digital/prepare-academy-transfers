@@ -105,12 +105,9 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.IsType<PageResult>(response);
                 Assert.Equal(ProjectUrn, _subject.ProjectUrn);
                 Assert.Equal(AcademyUrn, _subject.OutgoingAcademyUrn);
-                Assert.Equal(AcademyName, _subject.OutgoingAcademyName);
-                Assert.Equal(LaName, _subject.LocalAuthorityName);
-                Assert.Equal(3, _subject.KeyStage4Results.Count);
-                Assert.Equal("2019-2020", _subject.KeyStage4Results[0].Year);
-                Assert.Equal("2018-2019", _subject.KeyStage4Results[1].Year);
-                Assert.Equal("2017-2018", _subject.KeyStage4Results[2].Year);
+                Assert.Equal(2, _subject.EducationPerformance.KeyStage4Performance.Count);
+                Assert.Equal("2019-2020", _subject.EducationPerformance.KeyStage4Performance[0].Year);
+                Assert.Equal("2018-2019", _subject.EducationPerformance.KeyStage4Performance[1].Year);
             }
             
             [Fact]

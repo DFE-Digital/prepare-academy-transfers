@@ -1,28 +1,21 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
-using Data.Models.KeyStagePerformance;
 using Frontend.ExtensionMethods;
-using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.TaskList.KeyStage4Performance
 {
-    public class KeyStage4Performance : PageModel
+    public class KeyStage4Performance : ProjectPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectRepository;
-        public string ProjectUrn { get; private set; }
-        public string OutgoingAcademyUrn { get; private set; }
-        public string OutgoingAcademyName { get; private set; }
-        public string LocalAuthorityName { get; private set; }
+        public string ProjectUrn => Project.Urn;
+        public string OutgoingAcademyUrn => TransferringAcademy.Urn;
         public AdditionalInformationViewModel AdditionalInformation { get; private set; }
-        public List<KeyStage4> KeyStage4Results { get; private set; }
         public bool ReturnToPreview { get; private set; }
 
         public KeyStage4Performance(IGetInformationForProject getInformationForProject, IProjects projectRepository)
@@ -75,11 +68,9 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
         private void BuildPageModel(GetInformationForProjectResponse projectInformation,
             bool addOrEditAdditionalInformation, bool returnToPreview)
         {
-            ProjectUrn = projectInformation.Project.Urn;
-            OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
-            LocalAuthorityName = projectInformation.OutgoingAcademy.LocalAuthorityName;
-            OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
-            KeyStage4Results = PerformanceDataHelpers.GetFormattedKeyStage4Results(projectInformation.EducationPerformance.KeyStage4Performance);
+            Project = projectInformation.Project;
+            TransferringAcademy = projectInformation.OutgoingAcademy;
+            EducationPerformance = projectInformation.EducationPerformance;
             ReturnToPreview = returnToPreview;
             AdditionalInformation = new AdditionalInformationViewModel
             {
