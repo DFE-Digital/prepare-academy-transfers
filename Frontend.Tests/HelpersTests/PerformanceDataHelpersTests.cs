@@ -28,9 +28,9 @@ namespace Frontend.Tests.HelpersTests
             [Theory]
             [InlineData(null, null, "no data")]
             [InlineData("", "", "no data")]
-            [InlineData("3.45", null, "3.45<br>(disadvantaged no data)")]
-            [InlineData("3.45", "2.44", "3.45<br>(disadvantaged 2.44)")]
-            [InlineData(null, "3.44", "no data<br>(disadvantaged 3.44)")]
+            [InlineData("3.45", null, "3.45<br>(disadvantaged pupils: no data)")]
+            [InlineData("3.45", "2.44", "3.45<br>(disadvantaged pupils: 2.44)")]
+            [InlineData(null, "3.44", "no data<br>(disadvantaged pupils: 3.44)")]
             public void GivenUnformattedDisadvantagedPupilResult_ReturnsFormattedHtmlValue(
                 string nonDisadvantagePupilResult, string disadvantagedPupilResult, string expectedResult)
             {
@@ -47,9 +47,9 @@ namespace Frontend.Tests.HelpersTests
             [Theory]
             [InlineData(null, null, "no data")]
             [InlineData("", "", "no data")]
-            [InlineData("3.45", null, "3.45\n(disadvantaged no data)")]
-            [InlineData("3.45", "2.44", "3.45\n(disadvantaged 2.44)")]
-            [InlineData(null, "3.44", "no data\n(disadvantaged 3.44)")]
+            [InlineData("3.45", null, "3.45\n(disadvantaged pupils: no data)")]
+            [InlineData("3.45", "2.44", "3.45\n(disadvantaged pupils: 2.44)")]
+            [InlineData(null, "3.44", "no data\n(disadvantaged pupils: 3.44)")]
             public void GivenUnformattedDisadvantagedPupilResult_ReturnsFormattedValue(
                 string nonDisadvantagePupilResult, string disadvantagedPupilResult, string expectedResult)
             {
