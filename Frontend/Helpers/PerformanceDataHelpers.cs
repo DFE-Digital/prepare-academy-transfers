@@ -18,7 +18,7 @@ namespace Frontend.Helpers
                 return new HtmlString(NoDataText);
 
             return new HtmlString(
-                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}<br>(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
+                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}<br>(disadvantaged pupils: {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
         }
 
         public static string GetFormattedStringResult(DisadvantagedPupilsResult disadvantagedPupilResult)
@@ -28,7 +28,7 @@ namespace Frontend.Helpers
                 return NoDataText;
 
             return
-                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}\n(disadvantaged {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})";
+                $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}\n(disadvantaged pupils: {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})";
         }
 
         public static string GetFormattedResult(string result)
