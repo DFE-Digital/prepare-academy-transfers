@@ -45,7 +45,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Initiated" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="Initiated" asp-route-urn="@Model.Project.Urn" data-test="initiated">
                         Change<span class="govuk-visually-hidden"> who initiated the transfer</span>
                     </a>
                 </dd>
@@ -73,7 +73,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Project.Urn" data-test="reason">
                         Change<span class="govuk-visually-hidden"> reason for transfer</span>
                     </a>
                 </dd>
@@ -98,7 +98,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Type" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="Type" asp-route-urn="@Model.Project.Urn" data-test="type">
                         Change<span class="govuk-visually-hidden"> type of transfer</span>
                     </a>
                 </dd>

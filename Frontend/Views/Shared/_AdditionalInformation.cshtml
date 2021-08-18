@@ -14,7 +14,7 @@
             <form method="post">
                 <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
                 <textarea class="govuk-textarea" asp-for="@Model.AdditionalInformation" id="additionalInformation" name="additionalInformation" rows="5" aria-describedby="additional-information-hint"></textarea>
-                <button class="govuk-button" data-module="govuk-button">
+                <button class="govuk-button" data-module="govuk-button" type="submit">
                     Save and continue
                 </button>
             </form>
@@ -50,7 +50,7 @@ else
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-route-addOrEditAdditionalInformation="true" asp-route-id="@Model.Urn" asp-fragment="additional-information-hint">
+                    <a class="govuk-link" asp-route-addOrEditAdditionalInformation="true" asp-route-id="@Model.Urn" asp-fragment="additional-information-hint" data-test="additional-information">
                         Change<span class="govuk-visually-hidden"> additional information</span>
                     </a>
                 </dd>

@@ -61,8 +61,6 @@ namespace Frontend
                 redisTls = (bool) redisCredentials?["tls_enabled"];
             } else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
             {
-                Console.WriteLine(Configuration["REDIS_URL"]);
-                
                 var redisUri = new Uri(Configuration["REDIS_URL"]);
                 redisPass = redisUri.UserInfo.Split(":")[1];
                 redisHost = redisUri.Host;

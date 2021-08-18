@@ -29,7 +29,7 @@
             </div>
             <div class="dfe-c-attachment__details">
                 <h2 class="dfe-c-attachment__title">
-                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Project.Urn">
+                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Project.Urn" data-test="download-htb">
                         @Model.Project.OutgoingAcademyName - HTB template
                     </a>
                 </h2>

@@ -23,3 +23,30 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('clickBackLink', () => cy.get('.govuk-back-link').click())
+Cypress.Commands.add('fillInText', (name, text) => cy.get(`[name="${name}"]`).clear().type(text))
+Cypress.Commands.add('fillInTextAtIndex', (index, text) =>{
+ cy.get('input[type="text"]:visible').then(options => {
+     let option = options[index];
+     cy.wrap(option).clear().type(text);
+ });
+});
+Cypress.Commands.add('fillInDate', (day, month, year) => {
+    cy.get('[name="day"]').clear().type(day)
+    cy.get('[name="month"]').clear().type(month)
+    cy.get('[name="year"]').clear().type(year)
+})
+Cypress.Commands.add('selectCheckbox', (index) => {
+    cy.get("[type='checkbox']").then(options => {
+        let option = options[index];
+        option.click();
+    });
+})
+
+Cypress.Commands.add('selectRadio', (index) => {
+    cy.get("[type='radio']").then(options => {
+        let option = options[index];
+        option.click();
+    });
+})
