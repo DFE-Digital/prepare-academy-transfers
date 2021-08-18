@@ -241,7 +241,10 @@ namespace Data.TRAMS.Mappers.Response
                     Disadvantaged = ks4Result.LAAverageP8Ebacc.Disadvantaged
                 },
                 LAAverageP8LowerConfidence = ks4Result.LAAverageP8LowerConfidence,
-                LAAverageP8UpperConfidence = ks4Result.LAAverageP8UpperConfidence
+                LAAverageP8UpperConfidence = ks4Result.LAAverageP8UpperConfidence,
+                Enteringebacc = ks4Result.Enteringebacc,
+                LAEnteringEbacc = ks4Result.LAEnteringEbacc,
+                NationalEnteringEbacc = ks4Result.NationalEnteringEbacc
                     }).ToList() ,
                 KeyStage5Performance = input.KeyStage5.Select(ks5Result =>
                     new KeyStage5

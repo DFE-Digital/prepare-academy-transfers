@@ -36,5 +36,8 @@ namespace Data.Models.KeyStagePerformance
         public DisadvantagedPupilsResult LAAverageP8English { get; set; }
         public DisadvantagedPupilsResult LAAverageP8Maths { get; set; }
         public DisadvantagedPupilsResult LAAverageP8Ebacc { get; set; }
+        public decimal? LAEnteringEbacc { get; set; }
+        public decimal? Enteringebacc { get; set; }
+        public decimal? NationalEnteringEbacc { get; set; }
     }
 }

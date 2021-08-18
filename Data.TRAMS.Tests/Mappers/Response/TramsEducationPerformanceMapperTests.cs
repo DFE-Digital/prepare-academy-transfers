@@ -122,6 +122,9 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(tramsKs4Result.NationalAverageP8UpperConfidence, mappedKs4Result.NationalAverageP8UpperConfidence);
             Assert.Equal(tramsKs4Result.LAAverageP8LowerConfidence, mappedKs4Result.LAAverageP8LowerConfidence);
             Assert.Equal(tramsKs4Result.LAAverageP8UpperConfidence, mappedKs4Result.LAAverageP8UpperConfidence);
+            Assert.Equal(tramsKs4Result.Enteringebacc, mappedKs4Result.Enteringebacc);
+            Assert.Equal(tramsKs4Result.LAEnteringEbacc, mappedKs4Result.LAEnteringEbacc);
+            Assert.Equal(tramsKs4Result.NationalEnteringEbacc, mappedKs4Result.NationalEnteringEbacc);
         }
 
         private bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
