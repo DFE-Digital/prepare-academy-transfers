@@ -73,6 +73,9 @@ namespace Data.TRAMS.Tests.TestFixtures
                         LAAverageP8English = GetTestResult(),
                         LAAverageP8Maths = GetTestResult(),
                         LAAverageP8Ebacc = GetTestResult(),
+                        Enteringebacc = new decimal(RandomGenerator.NextDouble()),
+                        LAEnteringEbacc = new decimal(RandomGenerator.NextDouble()),
+                        NationalEnteringEbacc = new decimal(RandomGenerator.NextDouble())
                     }
                 }, 
                 KeyStage5 = new List<KeyStage5>()

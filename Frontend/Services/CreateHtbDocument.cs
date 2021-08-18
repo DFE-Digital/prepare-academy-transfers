@@ -988,23 +988,50 @@ namespace Frontend.Services
                         new[]
                         {
                             new TextElement {Value = htbDocument.SchoolName, Bold = true},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)}
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].Enteringebacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[1].Enteringebacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[2].Enteringebacc.ToString())
+                            }
                         },
                         new[]
                         {
                             new TextElement {Value = $"{htbDocument.LocalAuthorityName} LA Average", Bold = true},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)}
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].LAEnteringEbacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[1].LAEnteringEbacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[2].LAEnteringEbacc.ToString())
+                            }
                         },
                         new[]
                         {
                             new TextElement {Value = "National Average", Bold = true},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)},
-                            new TextElement {Value = PerformanceDataHelpers.GetFormattedStringResult(null)}
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].NationalEnteringEbacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[1].NationalEnteringEbacc.ToString())
+                            },
+                            new TextElement
+                            {
+                                Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[2].NationalEnteringEbacc.ToString())
+                            }
                         }
                     });
 

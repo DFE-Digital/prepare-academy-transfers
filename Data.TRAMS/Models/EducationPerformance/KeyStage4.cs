@@ -36,5 +36,8 @@ namespace Data.TRAMS.Models.EducationPerformance
         public DisadvantagedPupilsResponse LAAverageP8English { get; set; }
         public DisadvantagedPupilsResponse LAAverageP8Maths { get; set; }
         public DisadvantagedPupilsResponse LAAverageP8Ebacc { get; set; }
+        public decimal? LAEnteringEbacc { get; set; }
+        public decimal? Enteringebacc { get; set; }
+        public decimal? NationalEnteringEbacc { get; set; }
     }
 }

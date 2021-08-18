@@ -332,21 +332,21 @@
     <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.Name</th>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].Enteringebacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].Enteringebacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].Enteringebacc.ToString())</td>
     </tr>
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.LocalAuthorityName LA average</th>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].LAEnteringEbacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].LAEnteringEbacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].LAEnteringEbacc.ToString())</td>
     </tr>
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">National average</th>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
-        <td class="govuk-table__cell">no data</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].NationalEnteringEbacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].NationalEnteringEbacc.ToString())</td>
+        <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].NationalEnteringEbacc.ToString())</td>
     </tr>
     </tbody>
 </table>
