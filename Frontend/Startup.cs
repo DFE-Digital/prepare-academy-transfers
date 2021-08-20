@@ -45,15 +45,35 @@ namespace Frontend
             services.AddControllersWithViews(options => options.Filters.Add(
                 new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
+
+            var redisPass = "";
+            var redisHost = "";
+            var redisPort = "";
+            var redisTls = false;
+
+            if (!string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]))
+            {
+                var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
+                var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
+                redisPass = (string) redisCredentials?["password"];
+                redisHost = (string) redisCredentials?["host"];
+                redisPort = (string) redisCredentials?["port"];
+                redisTls = (bool) redisCredentials?["tls_enabled"];
+            } else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
+            {
+                var redisUri = new Uri(Configuration["REDIS_URL"]);
+                redisPass = redisUri.UserInfo.Split(":")[1];
+                redisHost = redisUri.Host;
+                redisPort = redisUri.Port.ToString();
+            }
             
-            var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
-            var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
             var redisConfigurationOptions = new ConfigurationOptions()
             {
-                Password = (string) redisCredentials?["password"],
-                EndPoints = {$"{redisCredentials?["host"]}:{redisCredentials?["port"]}"},
-                Ssl = (bool) redisCredentials?["tls_enabled"]
+                Password = redisPass,
+                EndPoints = {$"{redisHost}:{redisPort}"},
+                Ssl = redisTls
             };
+            
             var redisConnection = ConnectionMultiplexer.Connect(redisConfigurationOptions);
 
             services.AddStackExchangeRedisCache(
@@ -98,7 +118,10 @@ namespace Frontend
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            if(!string.IsNullOrEmpty(Configuration["CI"])) {
+                app.UseHttpsRedirection();
+            }
+            
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -1,4 +1,3 @@
-@using Frontend.Helpers
 @using Helpers
 @model Frontend.Models.TransferDatesViewModel
 
@@ -47,7 +46,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn" data-test="first-discussed">
                         Change<span class="govuk-visually-hidden"> date first discussed</span>
                     </a>
                 </dd>
@@ -72,7 +71,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn" data-test="target-date">
                         Change<span class="govuk-visually-hidden"> target date for transfer</span>
                     </a>
                 </dd>
@@ -97,7 +96,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn" data-test="htb-date">
                         Change<span class="govuk-visually-hidden"> HTB date</span>
                     </a>
                 </dd>

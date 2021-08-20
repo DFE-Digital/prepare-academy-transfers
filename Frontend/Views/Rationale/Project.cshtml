@@ -39,9 +39,9 @@
                     </span>
                 }
 
-                <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint">@Model.Project.Rationale.Project</textarea>
+                <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint" data-test="project-rationale">@Model.Project.Rationale.Project</textarea>
             </div>
-            <button class="govuk-button" data-module="govuk-button">
+            <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue
             </button>
         </form>
