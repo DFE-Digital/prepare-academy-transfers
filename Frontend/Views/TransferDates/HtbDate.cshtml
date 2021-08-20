@@ -2,7 +2,7 @@
 @model TransferDatesViewModel
 
 @{
-    ViewBag.Title = "Set HTB date";
+    ViewBag.Title = "Set AB date";
     Layout = "_Layout";
     var htbDate = Model.Project.Dates.Htb;
     var htbStartDate = string.IsNullOrEmpty(htbDate) ? DatesHelper.DateTimeToDateString(DateTime.Today) : htbDate;
@@ -29,7 +29,7 @@
                             <span class="govuk-caption-l">
                                 @Model.Project.OutgoingAcademyName
                             </span>
-                            Set HTB date
+                            Set AB date
                         </h1>
                     </legend>
                     <div id="set-htb-date-hint" class="govuk-hint">
@@ -104,7 +104,7 @@
                 <ul class="govuk-list govuk-!-font-size-16">
                     <li>
                         <a class="govuk-link" href="#">
-                            Guidance for setting an HTB date
+                            Guidance for setting an AB date
                         </a>
                     </li>
                     <li>
