@@ -33,7 +33,7 @@ namespace Helpers
 
         public static string DateStringToGovUkDate(string dateString)
         {
-            if (!DateTime.TryParseExact(dateString, new [] {"dd/MM/yyyy", "dd-MM-yyyy"}, null, DateTimeStyles.None, out _)) return dateString;
+            if (ParseDateTime(dateString) == null) return dateString;
             var splitDate = dateString.Split('-', '/');
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
@@ -106,6 +106,26 @@ namespace Helpers
             }
 
             return date;
+        }
+
+        public static bool? SourceDateStringIsGreaterThanOrEqualToTargetDateString(string sourceDateString, string targetDateString)
+        {
+            var sourceDate = ParseDateTime(sourceDateString);
+            if (sourceDate == null)
+                return null;
+
+            var targetDate = ParseDateTime(targetDateString);
+            if (targetDate == null)
+                return null;
+
+            return sourceDate >= targetDate;
+        }
+
+        private static DateTime? ParseDateTime(string date)
+        {
+            var tryParseDate = DateTime.TryParseExact(date, new[] {"dd/MM/yyyy", "dd-MM-yyyy"}, null,
+                DateTimeStyles.None, out var parsedDate);
+            return tryParseDate ? parsedDate : (DateTime?)null;
         }
     }
 }
