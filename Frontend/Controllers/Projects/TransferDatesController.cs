@@ -129,6 +129,17 @@ namespace Frontend.Controllers.Projects
                 model.FormErrors.AddError("day", "day", "Please enter a valid date");
                 return View(model);
             }
+            
+            if (!string.IsNullOrEmpty(model.Project.Dates.Target))
+            {
+                if (DatesHelper.SourceDateStringIsGreaterThanOrEqualToTargetDateString(model.Project.Dates.Htb,
+                    model.Project.Dates.Target) == true)
+                {
+                    model.FormErrors.AddError("day", "day", 
+                        $"The target transfer date must be after the AB date ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Htb)})");
+                    return View(model);
+                }
+            }
 
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
@@ -184,7 +195,7 @@ namespace Frontend.Controllers.Projects
                 model.FormErrors.AddError("day", "day", "Please enter a valid date");
                 return View(model);
             }
-
+            
             if (!string.IsNullOrEmpty(model.Project.Dates.Target))
             {
                 if (DatesHelper.SourceDateStringIsGreaterThanOrEqualToTargetDateString(model.Project.Dates.Htb,

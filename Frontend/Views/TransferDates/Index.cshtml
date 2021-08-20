@@ -53,6 +53,31 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
+                    Set AB date
+                </dt>
+                @if (string.IsNullOrEmpty(transferDates.Htb))
+                {
+                    <dd class="govuk-summary-list__value">
+                        <span class="dfe-empty-tag">Empty</span>
+                    </dd>
+                }
+                else
+                {
+                    <dd class="govuk-summary-list__value">
+                        @{
+                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
+                            @display
+                        }
+                    </dd>
+                }
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn" data-test="htb-date">
+                        Change<span class="govuk-visually-hidden"> AB date</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
                     Target date for transfer
                 </dt>
                 @if (string.IsNullOrEmpty(transferDates.Target))
@@ -73,31 +98,6 @@
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn" data-test="target-date">
                         Change<span class="govuk-visually-hidden"> target date for transfer</span>
-                    </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Set HTB date
-                </dt>
-                @if (string.IsNullOrEmpty(transferDates.Htb))
-                {
-                    <dd class="govuk-summary-list__value">
-                        <span class="dfe-empty-tag">Empty</span>
-                    </dd>
-                }
-                else
-                {
-                    <dd class="govuk-summary-list__value">
-                        @{
-                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
-                            @display
-                        }
-                    </dd>
-                }
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn" data-test="htb-date">
-                        Change<span class="govuk-visually-hidden"> HTB date</span>
                     </a>
                 </dd>
             </div>
