@@ -196,7 +196,7 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
             
-            if (!string.IsNullOrEmpty(model.Project.Dates.Target))
+            if (!string.IsNullOrEmpty(model.Project.Dates.Htb))
             {
                 if (DatesHelper.SourceDateStringIsGreaterThanOrEqualToTargetDateString(model.Project.Dates.Htb,
                     model.Project.Dates.Target) == true)

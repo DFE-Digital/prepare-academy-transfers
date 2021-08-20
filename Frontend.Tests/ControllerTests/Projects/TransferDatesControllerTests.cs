@@ -432,7 +432,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
                 
                 [Fact]
-                public async void GivenABDateLessThanTransferDate_SetErrorOnTheModel()
+                public async void GivenABDateBeforeTransferDate_SetErrorOnTheModel()
                 {
                     _foundProject.Dates.Target = "12/10/2020";
                     
