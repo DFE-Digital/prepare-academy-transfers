@@ -29,7 +29,6 @@ namespace Frontend.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index(int page = 1)
         {
             var projects = await _projectsRepository.GetProjects(page);
@@ -43,6 +42,7 @@ namespace Frontend.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -50,11 +50,13 @@ namespace Frontend.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> SubmitLogin(string username, string password, string returnUrl)
         {
             var decodedUrl = "";
