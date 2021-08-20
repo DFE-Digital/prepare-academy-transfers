@@ -294,7 +294,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("The target transfer date must be after the AB date (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("The target transfer date must be on or after the AB date (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Fact]
@@ -440,7 +440,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("The AB date must be before the target date for the transfer (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("The AB date must be on or before the target date for the transfer (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Fact]

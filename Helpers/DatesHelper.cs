@@ -108,7 +108,7 @@ namespace Helpers
             return date;
         }
 
-        public static bool? SourceDateStringIsGreaterThanOrEqualToTargetDateString(string sourceDateString, string targetDateString)
+        public static bool? SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString, string targetDateString)
         {
             var sourceDate = ParseDateTime(sourceDateString);
             if (sourceDate == null)
@@ -118,7 +118,7 @@ namespace Helpers
             if (targetDate == null)
                 return null;
 
-            return sourceDate >= targetDate;
+            return sourceDate > targetDate;
         }
 
         private static DateTime? ParseDateTime(string date)

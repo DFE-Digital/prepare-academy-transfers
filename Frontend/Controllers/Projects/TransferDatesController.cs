@@ -132,11 +132,11 @@ namespace Frontend.Controllers.Projects
             
             if (!string.IsNullOrEmpty(model.Project.Dates.Target))
             {
-                if (DatesHelper.SourceDateStringIsGreaterThanOrEqualToTargetDateString(model.Project.Dates.Htb,
+                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
                     model.Project.Dates.Target) == true)
                 {
                     model.FormErrors.AddError("day", "day", 
-                        $"The target transfer date must be after the AB date ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Htb)})");
+                        $"The target transfer date must be on or after the AB date ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Htb)})");
                     return View(model);
                 }
             }
@@ -198,11 +198,11 @@ namespace Frontend.Controllers.Projects
             
             if (!string.IsNullOrEmpty(model.Project.Dates.Htb))
             {
-                if (DatesHelper.SourceDateStringIsGreaterThanOrEqualToTargetDateString(model.Project.Dates.Htb,
+                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
                     model.Project.Dates.Target) == true)
                 {
                     model.FormErrors.AddError("day", "day", 
-                        $"The AB date must be before the target date for the transfer ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Target)})");
+                        $"The AB date must be on or before the target date for the transfer ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Target)})");
                     return View(model);
                 }
             }
