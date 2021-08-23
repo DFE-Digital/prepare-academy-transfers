@@ -129,6 +129,17 @@ namespace Frontend.Controllers.Projects
                 model.FormErrors.AddError("day", "day", "Please enter a valid date");
                 return View(model);
             }
+            
+            if (!string.IsNullOrEmpty(model.Project.Dates.Target))
+            {
+                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
+                    model.Project.Dates.Target) == true)
+                {
+                    model.FormErrors.AddError("day", "day", 
+                        $"The target transfer date must be on or after the AB date ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Htb)})");
+                    return View(model);
+                }
+            }
 
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
@@ -175,7 +186,7 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                model.FormErrors.AddError("day", "day", "Please enter the HTB date");
+                model.FormErrors.AddError("day", "day", "Please enter the AB date");
                 return View(model);
             }
 
@@ -183,6 +194,17 @@ namespace Frontend.Controllers.Projects
             {
                 model.FormErrors.AddError("day", "day", "Please enter a valid date");
                 return View(model);
+            }
+            
+            if (!string.IsNullOrEmpty(model.Project.Dates.Htb))
+            {
+                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
+                    model.Project.Dates.Target) == true)
+                {
+                    model.FormErrors.AddError("day", "day", 
+                        $"The AB date must be on or before the target date for the transfer ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Target)})");
+                    return View(model);
+                }
             }
 
             var result = await _projectsRepository.Update(model.Project);

@@ -284,6 +284,18 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
+                
+                [Fact]
+                public async void GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
+                {
+                    _foundProject.Dates.Htb = "12/10/2020";
+                    
+                    var response = await _subject.TargetDatePost("0001", "11", "10", "2020");
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("The target transfer date must be on or after the AB date (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
 
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
@@ -401,7 +413,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter the HTB date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Please enter the AB date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Theory]
@@ -417,6 +429,18 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+                
+                [Fact]
+                public async void GivenABDateBeforeTransferDate_SetErrorOnTheModel()
+                {
+                    _foundProject.Dates.Target = "12/10/2020";
+                    
+                    var response = await _subject.HtbDatePost("0001", "13", "10", "2020");
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("The AB date must be on or before the target date for the transfer (12 October 2020)", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Fact]
