@@ -12,6 +12,7 @@ using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -37,48 +38,22 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages()
-                .AddViewOptions(options =>
-                {
-                    options.HtmlHelperOptions.ClientValidationEnabled = false;
-                });
+            services
+                .AddRazorPages(options => { options.Conventions.AuthorizeFolder("/"); })
+                .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
+
             services.AddControllersWithViews(options => options.Filters.Add(
-                new AutoValidateAntiforgeryTokenAttribute()))
+                    new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
 
-            var redisPass = "";
-            var redisHost = "";
-            var redisPort = "";
-            var redisTls = false;
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
 
-            if (!string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]))
-            {
-                var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
-                var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
-                redisPass = (string) redisCredentials?["password"];
-                redisHost = (string) redisCredentials?["host"];
-                redisPort = (string) redisCredentials?["port"];
-                redisTls = (bool) redisCredentials?["tls_enabled"];
-            } else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
-            {
-                var redisUri = new Uri(Configuration["REDIS_URL"]);
-                redisPass = redisUri.UserInfo.Split(":")[1];
-                redisHost = redisUri.Host;
-                redisPort = redisUri.Port.ToString();
-            }
-            
-            var redisConfigurationOptions = new ConfigurationOptions()
-            {
-                Password = redisPass,
-                EndPoints = {$"{redisHost}:{redisPort}"},
-                Ssl = redisTls
-            };
-            
-            var redisConnection = ConnectionMultiplexer.Connect(redisConfigurationOptions);
-
-            services.AddStackExchangeRedisCache(
-                options => { options.ConfigurationOptions = redisConfigurationOptions; });
-            services.AddDataProtection().PersistKeysToStackExchangeRedis(redisConnection, "DataProtectionKeys");
+            ConfigureRedisConnection(services);
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
@@ -104,6 +79,44 @@ namespace Frontend
             });
         }
 
+        private void ConfigureRedisConnection(IServiceCollection services)
+        {
+            var redisPass = "";
+            var redisHost = "";
+            var redisPort = "";
+            var redisTls = false;
+
+            if (!string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]))
+            {
+                var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
+                var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
+                redisPass = (string)redisCredentials?["password"];
+                redisHost = (string)redisCredentials?["host"];
+                redisPort = (string)redisCredentials?["port"];
+                redisTls = (bool)redisCredentials?["tls_enabled"];
+            }
+            else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
+            {
+                var redisUri = new Uri(Configuration["REDIS_URL"]);
+                redisPass = redisUri.UserInfo.Split(":")[1];
+                redisHost = redisUri.Host;
+                redisPort = redisUri.Port.ToString();
+            }
+
+            var redisConfigurationOptions = new ConfigurationOptions()
+            {
+                Password = redisPass,
+                EndPoints = { $"{redisHost}:{redisPort}" },
+                Ssl = redisTls
+            };
+
+            var redisConnection = ConnectionMultiplexer.Connect(redisConfigurationOptions);
+
+            services.AddStackExchangeRedisCache(
+                options => { options.ConfigurationOptions = redisConfigurationOptions; });
+            services.AddDataProtection().PersistKeysToStackExchangeRedis(redisConnection, "DataProtectionKeys");
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -118,10 +131,11 @@ namespace Frontend
                 app.UseHsts();
             }
 
-            if(!string.IsNullOrEmpty(Configuration["CI"])) {
+            if (!string.IsNullOrEmpty(Configuration["CI"]))
+            {
                 app.UseHttpsRedirection();
             }
-            
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -157,7 +171,9 @@ namespace Frontend
                 services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
                 services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
                 services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-                services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
+                services
+                    .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
+                        TramsEducationPerformanceMapper>();
                 services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
                 services.AddTransient<ITrusts, TramsTrustsRepository>();
                 services.AddTransient<IAcademies, TramsEstablishmentRepository>();

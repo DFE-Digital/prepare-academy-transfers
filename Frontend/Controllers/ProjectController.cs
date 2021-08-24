@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers
 {
-    [Authorize]
     [Route("project/{id}")]
     public class ProjectController : Controller
     {
