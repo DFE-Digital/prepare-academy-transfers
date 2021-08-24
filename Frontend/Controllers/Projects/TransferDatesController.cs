@@ -136,7 +136,7 @@ namespace Frontend.Controllers.Projects
                     model.Project.Dates.Target) == true)
                 {
                     model.FormErrors.AddError("day", "day", 
-                        $"The target transfer date must be on or after the AB date ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Htb)})");
+                        $"The target transfer date must be on or after the Advisory Board date");
                     return View(model);
                 }
             }
@@ -186,7 +186,7 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                model.FormErrors.AddError("day", "day", "Please enter the AB date");
+                model.FormErrors.AddError("day", "day", "Please enter the Advisory Board date");
                 return View(model);
             }
 
@@ -202,7 +202,7 @@ namespace Frontend.Controllers.Projects
                     model.Project.Dates.Target) == true)
                 {
                     model.FormErrors.AddError("day", "day", 
-                        $"The AB date must be on or before the target date for the transfer ({DatesHelper.DateStringToGovUkDate(model.Project.Dates.Target)})");
+                        $"The Advisory Board date must be on or before the target date for the transfer");
                     return View(model);
                 }
             }
