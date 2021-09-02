@@ -1,7 +1,7 @@
 @model RationaleViewModel
 
 @{
-    ViewBag.Title = "Write the rationale for the trust or sponsor";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Write the rationale for the trust or sponsor");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.FormClassesForField("rationale");
 }

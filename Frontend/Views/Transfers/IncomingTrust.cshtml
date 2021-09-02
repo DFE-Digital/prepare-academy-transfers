@@ -1,10 +1,8 @@
 @{
-    ViewBag.Title = $"Add the incoming trust name for {ViewData["OutgoingAcademyName"]}";
     Layout = "_Layout";
-}
-
-@{
     var errorExists = (bool) ViewData["Error.Exists"];
+    var pageTitle = $"Add the incoming trust name for {ViewData["OutgoingAcademyName"]}";
+    ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
 

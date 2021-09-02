@@ -8,6 +8,8 @@ namespace Frontend.Models.Forms
         public List<FormError> Errors { get; }
         public bool HasErrors => Errors.Count > 0;
 
+        public string ProcessPageTitleIfThereIsAnError(string pageTitle) => this.HasErrors ? $"Error: {pageTitle}" : pageTitle;
+
         public FormErrorsViewModel()
         {
             Errors = new List<FormError>();

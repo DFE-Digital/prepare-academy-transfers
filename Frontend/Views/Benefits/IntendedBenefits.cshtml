@@ -4,7 +4,8 @@
 @model BenefitsViewModel
 
 @{
-    ViewBag.Title = "Intended benefits";
+
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Intended benefits");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.FormClassesForField("intendedBenefits");
     var otherBenefitFormClasses = Model.FormErrors.FormClassesForField("otherBenefit");

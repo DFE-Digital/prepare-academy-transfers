@@ -1,7 +1,7 @@
 @model FeaturesViewModel    
 
 @{
-    ViewBag.Title = "Who initiated the academy transfer?";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Who initiated the academy transfer?");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
     var radioButtons = FeaturesViewModel.InitiatedRadioButtons(Model.Project.Features.WhoInitiatedTheTransfer);

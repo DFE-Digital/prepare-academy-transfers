@@ -1,7 +1,7 @@
 @model Frontend.Models.FeaturesViewModel
 
 @{
-    ViewBag.Title = "Reason for transfer";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Reason for transfer");
     Layout = "_Layout";
 }
 

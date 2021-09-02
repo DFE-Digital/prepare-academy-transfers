@@ -2,7 +2,7 @@
 @model TransferDatesViewModel
 
 @{
-    ViewBag.Title = "Set AB date";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Set AB date");
     Layout = "_Layout";
     var htbDate = Model.Project.Dates.Htb;
     var htbStartDate = string.IsNullOrEmpty(htbDate) ? DatesHelper.DateTimeToDateString(DateTime.Today) : htbDate;
