@@ -1,9 +1,10 @@
 @model Frontend.Views.Transfers.OutgoingTrustAcademies
 
 @{
-    ViewBag.Title = "Add the transferring academies";
     Layout = "_Layout";
     var errorExists = (bool) ViewData["Error.Exists"];
+    const string pageTitle = "Add the transferring academies";
+    ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
 

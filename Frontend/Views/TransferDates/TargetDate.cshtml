@@ -1,7 +1,7 @@
 @model TransferDatesViewModel
 
 @{
-    ViewBag.Title = "Add the target date for the transfer";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Add the target date for the transfer");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
 }

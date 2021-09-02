@@ -3,7 +3,7 @@
 @model BenefitsViewModel
 
 @{
-    ViewBag.Title = "Other factors";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Other factors");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.FormClassesForField("otherFactors");
 }

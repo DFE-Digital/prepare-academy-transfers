@@ -2,7 +2,7 @@
 @model FeaturesViewModel
 
 @{
-    ViewBag.Title = "Type of transfer";
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Type of transfer");
     Layout = "_Layout";
     var typeOfTransferFormClasses = Model.FormErrors.FormClassesForField("typeOfTransfer");
     var otherTypeFormClasses = Model.FormErrors.FormClassesForField("otherType");
