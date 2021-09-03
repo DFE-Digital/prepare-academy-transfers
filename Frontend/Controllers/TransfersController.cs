@@ -69,11 +69,25 @@ namespace Frontend.Controllers
             var model = new TrustSearch {Trusts = result.Result};
             ViewData["Query"] = query;
 
+            ViewData["Error.Exists"] = false;
+            if (TempData.Peek("ErrorMessage") == null) return View(model);
+
+            ViewData["Error.Exists"] = true;
+            ViewData["Error.Message"] = TempData["ErrorMessage"];
+            
             return View(model);
         }
 
         public async Task<IActionResult> OutgoingTrustDetails(string trustId, string query = "", bool change = false)
         {
+            ViewData["ChangeLink"] = change;
+
+            if (string.IsNullOrEmpty(trustId))
+            {
+                TempData["ErrorMessage"] = "Please select a trust";
+                return RedirectToAction("TrustSearch", new { query, change });
+            }
+            
             var result = await _trustsRepository.GetByUkprn(trustId);
 
             if (!result.IsValid)
