@@ -78,6 +78,20 @@ namespace Frontend.Tests.ControllerTests
         public class TrustSearchTests : TransfersControllerTests
         {
             [Fact]
+            public void GivenErrorMessageExists_SetErrorInViewData()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                
+                _subject.TempData["ErrorMessage"] = "This is an error message";
+                _subject.TrustSearch("test");
+
+                Assert.Equal(true, _subject.ViewData["Error.Exists"]);
+                Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
+            }
+            
+            [Fact]
             public async void GivenSearchingByEmptyString_RedirectToTrustNamePageWithAnError()
             {
                 var response = await _subject.TrustSearch("");
