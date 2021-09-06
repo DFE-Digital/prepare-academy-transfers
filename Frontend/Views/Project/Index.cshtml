@@ -20,7 +20,7 @@
             Task list
         </h2>
         <p class="govuk-body">
-            The task list will help you prepare for the headteacher board (HTB) meeting. You can complete the tasks in any order.
+            The task list will help you prepare for the Advisory Board meeting (formally headteacher board). You can complete the tasks in any order.
         </p>
         <hr class="govuk-section-break govuk-section-break--m">
     </div>
@@ -31,7 +31,7 @@
         <ol class="moj-task-list">
             <li>
                 <h2 class="moj-task-list__section">
-                    Create headteacher board (HTB) template
+                    Create project template
                 </h2>
                 <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
@@ -111,17 +111,17 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-m">
-            Preview or generate HTB template
+            Preview or generate project template
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
-            Preview your HTB template before you generate it into a Word document, or you can generate the document without previewing it.
+            Preview your template before you generate it into a Word document. Or, you can generate the document without previewing it.
         </p>
         <div class="govuk-button-group">
             <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn" data-test="preview-htb">
-                Preview HTB template
+                Preview project template
             </a>
             <a role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn" data-test="generate-htb">
-                Generate HTB document
+                Generate project document
             </a>
         </div>
     </div>
