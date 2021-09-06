@@ -4,7 +4,7 @@
 @{
     Layout = "_Layout";
     var errorExists = (bool) ViewData["Error.Exists"];
-    const string pageTitle = "Select an outgoing trust";
+    const string pageTitle = "Select the outgoing trust";
     ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
