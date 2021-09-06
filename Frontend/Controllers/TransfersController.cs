@@ -49,7 +49,7 @@ namespace Frontend.Controllers
 
             if (string.IsNullOrEmpty(query))
             {
-                TempData["ErrorMessage"] = "Please enter a search term";
+                TempData["ErrorMessage"] = "Enter a search term";
                 return RedirectToAction("TrustName");
             }
 
@@ -84,7 +84,7 @@ namespace Frontend.Controllers
 
             if (string.IsNullOrEmpty(trustId))
             {
-                TempData["ErrorMessage"] = "Please select a trust";
+                TempData["ErrorMessage"] = "Select a trust";
                 return RedirectToAction("TrustSearch", new { query, change });
             }
             
@@ -146,7 +146,7 @@ namespace Frontend.Controllers
         {
             if (string.IsNullOrEmpty(academyId))
             {
-                TempData["ErrorMessage"] = "Please select an academy";
+                TempData["ErrorMessage"] = "Select an academy";
                 return RedirectToAction("OutgoingTrustAcademies");
             }
 
@@ -182,7 +182,7 @@ namespace Frontend.Controllers
             ViewData["ChangeLink"] = change;
             if (string.IsNullOrEmpty(query))
             {
-                TempData["ErrorMessage"] = "Please enter a search term";
+                TempData["ErrorMessage"] = "Enter a search term";
                 return RedirectToAction("IncomingTrust");
             }
 

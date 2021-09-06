@@ -131,7 +131,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter the date the transfer was first discussed",
+                    Assert.Equal("Enter the date the transfer was first discussed",
                         responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
@@ -147,7 +147,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Fact]
@@ -266,7 +266,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter the target date for the transfer",
+                    Assert.Equal("Enter the target date for the transfer",
                         responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
@@ -282,7 +282,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
                 
                 [Fact]
@@ -413,7 +413,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter the Advisory Board date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Enter the Advisory Board date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Theory]
@@ -428,7 +428,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
                 
                 [Fact]
