@@ -41,7 +41,7 @@ namespace Frontend.Controllers.Projects
                 {
                     AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
                     HintText =
-                        "This information will populate into your HTB template under the latest ofsted judgement section.",
+                        "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                     Urn = projectInformation.Project.Urn,
                     AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
                     ReturnToPreview = returnToPreview
