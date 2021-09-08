@@ -82,14 +82,14 @@ namespace Frontend.Controllers.Projects
                     EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit
                         .Empty)[0];
                 model.FormErrors.AddError(firstBenefit.ToString(), "intendedBenefits",
-                    "Please select at least one intended benefit");
+                    "Select at least one intended benefit");
                 return View(model);
             }
 
             if (model.Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) &&
                 string.IsNullOrEmpty(otherBenefit))
             {
-                model.FormErrors.AddError("otherBenefit", "otherBenefit", "Please enter the other benefit");
+                model.FormErrors.AddError("otherBenefit", "otherBenefit", "Enter the other benefit");
                 return View(model);
             }
 
@@ -149,7 +149,7 @@ namespace Frontend.Controllers.Projects
                 string.IsNullOrEmpty(otherFactor.Description)))
             {
                 model.FormErrors.AddError(otherFactor.OtherFactor.ToString(), otherFactor.OtherFactor.ToString(),
-                    "Please specify the concern further");
+                    "Specify the concern further");
                 formHasErrors = true;
             }
 

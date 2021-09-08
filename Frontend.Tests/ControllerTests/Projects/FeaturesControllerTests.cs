@@ -143,7 +143,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     var error = viewModel.FormErrors.Errors[0];
-                    Assert.Equal("Please select who initiated the project", error.ErrorMessage);
+                    Assert.Equal("Select who initiated the project", error.ErrorMessage);
                 }
 
                 [Fact]
@@ -402,7 +402,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Empty, null);
                     var viewModel = GetViewModel(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.Equal("Please select the type of transfer",
+                    Assert.Equal("Select the type of transfer",
                         viewModel.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage);
                 }
 
@@ -412,7 +412,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Other, null);
                     var viewModel = GetViewModel(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.Equal("Please enter the type of transfer",
+                    Assert.Equal("Enter the type of transfer",
                         viewModel.FormErrors.ErrorForField("otherType").ErrorMessage);
                 }
 

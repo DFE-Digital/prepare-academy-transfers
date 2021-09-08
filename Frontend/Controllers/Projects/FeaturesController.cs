@@ -73,7 +73,7 @@ namespace Frontend.Controllers.Projects
             if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
             {
                 model.FormErrors.AddError(TransferFeatures.ProjectInitiators.Dfe.ToString(), "whoInitiated",
-                    "Please select who initiated the project");
+                    "Select who initiated the project");
                 return View(model);
             }
 
@@ -194,13 +194,13 @@ namespace Frontend.Controllers.Projects
             if (typeOfTransfer == TransferFeatures.TransferTypes.Empty)
             {
                 model.FormErrors.AddError(TransferFeatures.TransferTypes.SatClosure.ToString(), "typeOfTransfer",
-                    "Please select the type of transfer");
+                    "Select the type of transfer");
                 return View(model);
             }
 
             if (typeOfTransfer == TransferFeatures.TransferTypes.Other && string.IsNullOrEmpty(otherType))
             {
-                model.FormErrors.AddError("otherType", "otherType", "Please enter the type of transfer");
+                model.FormErrors.AddError("otherType", "otherType", "Enter the type of transfer");
                 return View(model);
             }
 

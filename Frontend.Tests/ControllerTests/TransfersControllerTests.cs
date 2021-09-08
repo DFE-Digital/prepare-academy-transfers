@@ -96,7 +96,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.TrustSearch("");
                 AssertRedirectToAction(response, "TrustName");
-                Assert.Equal("Please enter a search term", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("Enter a search term", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]
@@ -418,7 +418,7 @@ namespace Frontend.Tests.ControllerTests
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
-                Assert.Equal("Please select an academy", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("Select an academy", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]
@@ -496,7 +496,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.SearchIncomingTrust("");
                 AssertRedirectToAction(response, "IncomingTrust");
-                Assert.Equal("Please enter a search term", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("Enter a search term", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]

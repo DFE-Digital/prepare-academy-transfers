@@ -64,13 +64,13 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                model.FormErrors.AddError("day", "day", "Please enter the date the transfer was first discussed");
+                model.FormErrors.AddError("day", "day", "Enter the date the transfer was first discussed");
                 return View(model);
             }
 
             if (!DatesHelper.IsValidDate(dateString))
             {
-                model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
 
@@ -120,13 +120,13 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                model.FormErrors.AddError("day", "day", "Please enter the target date for the transfer");
+                model.FormErrors.AddError("day", "day", "Enter the target date for the transfer");
                 return View(model);
             }
 
             if (!DatesHelper.IsValidDate(dateString))
             {
-                model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
             
@@ -186,13 +186,13 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
             {
-                model.FormErrors.AddError("day", "day", "Please enter the Advisory Board date");
+                model.FormErrors.AddError("day", "day", "Enter the Advisory Board date");
                 return View(model);
             }
 
             if (!DatesHelper.IsValidDate(dateString))
             {
-                model.FormErrors.AddError("day", "day", "Please enter a valid date");
+                model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
             
