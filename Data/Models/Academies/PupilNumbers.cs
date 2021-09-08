@@ -17,12 +17,12 @@ namespace Data.Models.Academies
                 new FormField {Title = "Girls on roll", Value = GirlsOnRoll,},
                 new FormField {Title = "Boys on roll", Value = BoysOnRoll,},
                 new FormField
-                    {Title = "Pupil with a statement of special educational needs (SEN)", Value = WithStatementOfSen},
+                    {Title = "Pupils with a statement of special educational needs (SEN)", Value = WithStatementOfSen},
                 new FormField
-                    {Title = "Pupil whose first language is not English", Value = WhoseFirstLanguageIsNotEnglish},
+                    {Title = "Pupils with English as an additional language (EAL)", Value = WhoseFirstLanguageIsNotEnglish},
                 new FormField
                 {
-                    Title = "Pupil eligible for free school meal during the past 6 years",
+                    Title = "Pupils eligible for free school meals during the past 6 years",
                     Value = PercentageEligibleForFreeSchoolMealsDuringLast6Years
                 }
             };
