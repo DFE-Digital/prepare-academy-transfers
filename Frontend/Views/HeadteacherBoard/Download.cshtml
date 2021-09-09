@@ -1,7 +1,7 @@
 @model ProjectViewModel
 
 @{
-    ViewBag.Title = "Download headteacher board (HTB) documents";
+    ViewBag.Title = "Download project template";
     Layout = "_Layout";
 }
 
@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-9">
         <span class="govuk-caption-l">@Model.Project.OutgoingAcademyName</span>
         <h1 class="govuk-heading-xl">
-            Download headteacher board (HTB) documents
+            Download project template
         </h1>
         <div class="govuk-inset-text">
             Save these documents in the school's Sharepoint file.
@@ -30,7 +30,7 @@
             <div class="dfe-c-attachment__details">
                 <h2 class="dfe-c-attachment__title">
                     <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Project.Urn" data-test="download-htb">
-                        @Model.Project.OutgoingAcademyName - HTB template
+                        @Model.Project.OutgoingAcademyName - Project template
                     </a>
                 </h2>
                 <p class="dfe-c-attachment__metadata">

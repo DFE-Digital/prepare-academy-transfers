@@ -1,9 +1,9 @@
-@page "/project/{id}/headteacher-board/preview"
+@page "/project/{id}/advisory-board/preview"
 @using Frontend.Helpers
 @model Frontend.Pages.TaskList.HtbDocument.Preview
 
 @{
-    ViewBag.Title = "Preview Headteacher Board (HTB) Template";
+    ViewBag.Title = "Preview project template";
     Layout = "_Layout";
 }
 
@@ -18,7 +18,7 @@
             URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-xl">
-            Preview headteacher board (HTB) template
+            Preview project template
         </h1>
         <hr class="govuk-section-break govuk-section-break--l">
     </div>
@@ -172,14 +172,14 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l">
-            Generate HTB template
+            Generate project template
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
-            Generate the HTB template into a Word document and download it.
+            Generate the project template into a Word document and download it.
         </p>
         <div class="govuk-button-group">
             <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn">
-                Generate HTB document
+                Generate project template
             </a>
             <p class="govuk-body">
                 <a asp-controller="Home" asp-action="Index" class="govuk-link govuk-link--no-visited-state">

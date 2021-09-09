@@ -7,7 +7,7 @@
             @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.SchoolName)
         </dt>
         <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.SchoolName"></stringsummary>
+            <displaynodataforemptystring value="@Model.TransferringAcademy.LatestOfstedJudgement.SchoolName"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__actions"/>
     </div>
@@ -17,7 +17,7 @@
         </dt>
 
         <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-            <stringsummary value="@DatesHelper.DateStringToGovUkDate(Model.TransferringAcademy.LatestOfstedJudgement.InspectionDate)"></stringsummary>
+            <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.TransferringAcademy.LatestOfstedJudgement.InspectionDate)"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__actions"/>
     </div>
@@ -26,7 +26,7 @@
             @Html.DisplayNameFor(m => m.TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness)
         </dt>
         <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-            <stringsummary value="@Model.TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness"></stringsummary>
+            <displaynodataforemptystring value="@Model.TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__actions"/>
     </div>
@@ -37,7 +37,7 @@
         <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
             @if (string.IsNullOrEmpty(Model.TransferringAcademy.LatestOfstedJudgement.OfstedReport))
             {
-                <span class="dfe-empty-tag">Empty</span>
+                <span class="dfe-empty-tag">No data</span>
             }
             else
             {
