@@ -31,14 +31,7 @@
                     @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.SchoolName)
                 </dt>
                 <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.SchoolName))
-                    {
-                        <span class="dfe-empty-tag">Empty</span>
-                    }
-                    else
-                    {
-                        @Model.Academy.LatestOfstedJudgement.SchoolName
-                    }
+                    <displaynodataforemptystring value="@Model.Academy.LatestOfstedJudgement.SchoolName)"></displaynodataforemptystring>
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -46,14 +39,7 @@
                     @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.InspectionDate)
                 </dt>
                 <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.InspectionDate))
-                    {
-                        <span class="dfe-empty-tag">Empty</span>
-                    }
-                    else
-                    {
-                        @DatesHelper.DateStringToGovUkDate(Model.Academy.LatestOfstedJudgement.InspectionDate)
-                    }
+                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Academy.LatestOfstedJudgement.InspectionDate)"></displaynodataforemptystring>
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -61,14 +47,7 @@
                     @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.OverallEffectiveness)
                 </dt>
                 <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.OverallEffectiveness))
-                    {
-                        <span class="dfe-empty-tag">Empty</span>
-                    }
-                    else
-                    {
-                        @Model.Academy.LatestOfstedJudgement.OverallEffectiveness
-                    }
+                    <displaynodataforemptystring value="@Model.Academy.LatestOfstedJudgement.OverallEffectiveness)"></displaynodataforemptystring>
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
@@ -78,7 +57,7 @@
                 <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
                     @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.OfstedReport))
                     {
-                        <span class="dfe-empty-tag">Empty</span>
+                        <span>No data</span>
                     }
                     else
                     {
