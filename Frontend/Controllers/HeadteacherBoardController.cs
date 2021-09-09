@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Frontend.Controllers
 {
     [Authorize]
-    [Route("project/{id}/headteacher-board")]
+    [Route("project/{id}/advisory-board")]
     public class HeadteacherBoardController : Controller
     {
         private readonly ICreateHtbDocument _createHtbDocument;
