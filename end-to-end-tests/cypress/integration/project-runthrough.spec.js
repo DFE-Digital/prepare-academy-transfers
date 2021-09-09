@@ -160,14 +160,14 @@ describe("Creating and editing an academy transfer", function () {
 
         clickDataTest("generate-htb")
         cy.get("[data-test='download-htb']").should($a => {
-            expect($a.attr('href'), 'href').to.include("/headteacher-board")
+            expect($a.attr('href'), 'href').to.include("/advisory-board")
             expect($a.attr('target'), 'target').to.equal('_blank')
         })
 
         cy.location().then(location => {
             let currentUrn = location.pathname.split('/')[2]
             console.log(currentUrn);
-            cy.request(`/project/${currentUrn}/headteacher-board`).then(response => {
+            cy.request(`/project/${currentUrn}/advisory-board`).then(response => {
                 expect(response.status).to.equal(200)
                 expect(response.headers['content-type']).to.equal("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             })
