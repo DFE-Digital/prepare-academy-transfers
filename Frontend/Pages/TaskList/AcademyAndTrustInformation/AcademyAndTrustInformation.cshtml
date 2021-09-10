@@ -52,15 +52,7 @@
             Advisory Board
         </dt>
         <dd class="govuk-summary-list__value ">
-            @if (string.IsNullOrEmpty(Model.Project.Dates.Htb))
-            {
-                <span class="dfe-empty-tag">Empty</span>
-            }
-            else
-            {
-                var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Htb);
-                @display
-            }
+            <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Htb)"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__value "/>
     </div>
@@ -69,25 +61,18 @@
             Project name
         </dt>
         <dd class="govuk-summary-list__value ">
-            @if (string.IsNullOrEmpty(Model.Project.Name))
-            {
-                <span class="dfe-empty-tag">Empty</span>
-            }
-            else
-            {
-                <span class="dfe-text-area-display">@Model.Project.Name</span>
-            }
+            <displaynodataforemptystring value="@Model.Project.Name"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__value "/>
     </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Sponsor name
+            Proposed incoming transfer name
         </dt>
         <dd class="govuk-summary-list__value ">
             @if (string.IsNullOrEmpty(Model.Project.Name))
             {
-                <span class="dfe-empty-tag">Empty</span>
+                <span>No data</span>
             }
             else
             {
@@ -101,15 +86,7 @@
             Proposed academy transfer
         </dt>
         <dd class="govuk-summary-list__value ">
-            @if (string.IsNullOrEmpty(Model.Project.Dates.Target))
-            {
-                <span class="dfe-empty-tag">Empty</span>
-            }
-            else
-            {
-                var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Target);
-                @display
-            }
+            <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Target)"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__value "/>
     </div>
@@ -118,15 +95,7 @@
             Date the transfer was discussed with outgoing trust
         </dt>
         <dd class="govuk-summary-list__value ">
-            @if (string.IsNullOrEmpty(Model.Project.Dates.FirstDiscussed))
-            {
-                <span class="dfe-empty-tag">Empty</span>
-            }
-            else
-            {
-                var display = DatesHelper.DateStringToGovUkDate(Model.Project.Dates.FirstDiscussed);
-                @display
-            }
+            <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.FirstDiscussed)"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__value "/>
     </div>

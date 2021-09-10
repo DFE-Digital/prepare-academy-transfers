@@ -8,14 +8,7 @@
                 @field.Title
             </dt>
             <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                @if (string.IsNullOrEmpty(field.Value))
-                {
-                    <span>No data</span>
-                }
-                else
-                {
-                    @field.Value
-                }
+                <displaynodataforemptystring value="@field.Value"></displaynodataforemptystring>
             </dd>
         </div>
     }
