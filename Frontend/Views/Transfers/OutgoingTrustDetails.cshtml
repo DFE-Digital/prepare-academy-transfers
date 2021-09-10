@@ -41,9 +41,8 @@
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Ukprn" 
-           role="button" draggable="false" data-test="confirm-outgoing-trust">
-            Continue
-        </a>
+        <form asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Ukprn">
+            <button class="govuk-button" data-test="confirm-outgoing-trust">Continue</button>
+        </form>
     </div>
 </div>

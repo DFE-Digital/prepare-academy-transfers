@@ -136,8 +136,8 @@
                 </div>
             </section>
         }
-        
-        @if(PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance))
+
+        @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance))
         {
             <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
             <section class="app-summary-card govuk-!-margin-bottom-7">
@@ -151,7 +151,7 @@
                 </div>
             </section>
         }
-        
+
         @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(Model.EducationPerformance.KeyStage5Performance))
         {
             <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
@@ -178,9 +178,9 @@
             Generate the project template into a Word document and download it.
         </p>
         <div class="govuk-button-group">
-            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn">
-                Generate project template
-            </a>
+            <form asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn" method="get">
+                <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
+            </form>
             <p class="govuk-body">
                 <a asp-controller="Home" asp-action="Index" class="govuk-link govuk-link--no-visited-state">
                     Save and return to this project later

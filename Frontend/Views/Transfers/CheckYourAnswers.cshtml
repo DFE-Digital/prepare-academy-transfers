@@ -104,6 +104,8 @@
                 </dd>
             </div>
         </dl>
-        <a role="button" class="govuk-button govuk-button-primary" draggable="false" asp-action="SubmitProject" data-test="create-project">Continue</a>
+        <form method="get" asp-action="SubmitProject">
+            <button class="govuk-button govuk-button-primary" data-test="create-project">Continue</button>
+        </form>
     </div>
 </div>

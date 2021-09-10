@@ -82,6 +82,8 @@
                 </dd>
             </div>
         </dl>
-        <a class="govuk-button" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Confirm and continue</a>
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">
+            <button class="govuk-button">Confirm and continue</button>
+        </form>
     </div>
 </div>

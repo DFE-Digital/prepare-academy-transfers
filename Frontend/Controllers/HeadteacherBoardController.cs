@@ -49,7 +49,7 @@ namespace Frontend.Controllers
 
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                $"HtbTemplateFor{id}_{System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture)}.docx");
+                $"ProjectTemplateFor{id}_{System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture)}.docx");
         }
     }
 }

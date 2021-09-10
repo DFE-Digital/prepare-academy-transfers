@@ -20,7 +20,7 @@
             Task list
         </h2>
         <p class="govuk-body">
-            The task list will help you prepare for the Advisory Board meeting (formally headteacher board). You can complete the tasks in any order.
+            The task list will help you prepare for the Advisory Board meeting (formerly headteacher board). You can complete the tasks in any order.
         </p>
         <hr class="govuk-section-break govuk-section-break--m">
     </div>
@@ -117,12 +117,12 @@
             Preview your template before you generate it into a Word document. Or, you can generate the document without previewing it.
         </p>
         <div class="govuk-button-group">
-            <a role="button" draggable="false" class="govuk-button" data-module="govuk-button" asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn" data-test="preview-htb">
-                Preview project template
-            </a>
-            <a role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button" asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn" data-test="generate-htb">
-                Generate project document
-            </a>
+            <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn" method="get">
+                <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
+            </form>
+            <form asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn" method="get">
+                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
+            </form>
         </div>
     </div>
 </div>
