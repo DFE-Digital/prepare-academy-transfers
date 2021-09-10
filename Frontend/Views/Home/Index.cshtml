@@ -1,7 +1,7 @@
 ﻿@model Frontend.Views.Home.Index
 
 @{
-    ViewData["Title"] = "Transfer an academy to another trust";
+    ViewData["Title"] = null;
     var startingPage = 1;
     if(Model.Page - 5 > 1) startingPage = Model.Page - 5;
     var hasPreviousPage = Model.Page > 1;
