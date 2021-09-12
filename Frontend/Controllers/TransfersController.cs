@@ -200,12 +200,24 @@ namespace Frontend.Controllers
             }
 
             var model = new TrustSearch {Trusts = result.Result};
+            
+            ViewData["Error.Exists"] = false;
+            if (TempData.Peek("ErrorMessage") == null) return View(model);
 
+            ViewData["Error.Exists"] = true;
+            ViewData["Error.Message"] = TempData["ErrorMessage"];
+            
             return View(model);
         }
 
-        public IActionResult ConfirmIncomingTrust(string trustId)
+        public IActionResult ConfirmIncomingTrust(string trustId, string query = "", bool change = false)
         {
+            if (string.IsNullOrEmpty(trustId))
+            {
+                TempData["ErrorMessage"] = "Select a trust";
+                return RedirectToAction("SearchIncomingTrust", new { query, change });
+            }
+            
             HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
 
             return RedirectToAction("CheckYourAnswers");

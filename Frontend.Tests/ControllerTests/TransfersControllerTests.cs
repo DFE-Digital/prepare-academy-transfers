@@ -513,6 +513,46 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
                 Assert.Equal("No search results", _subject.TempData["ErrorMessage"]);
             }
+            
+            [Fact]
+            public void GivenErrorMessageExists_SetErrorInViewData()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                
+                _subject.TempData["ErrorMessage"] = "This is an error message";
+                _subject.SearchIncomingTrust("test");
+
+                Assert.Equal(true, _subject.ViewData["Error.Exists"]);
+                Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
+            }
+            
+            [Fact]
+            public async void GivenQuery_PutsQueryIntoTheViewData()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                
+                var response = await _subject.SearchIncomingTrust("test");
+                var viewResponse = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("test", viewResponse.ViewData["Query"]);
+            }
+
+            [Fact]
+            public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                
+                var response = await _subject.SearchIncomingTrust("test", true);
+                var viewResponse = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal(true, viewResponse.ViewData["ChangeLink"]);
+            }
 
             [Fact]
             public async void GivenRepositoryReturnsAnError_RedirectToTrustNamePageWithAnError()
@@ -593,6 +633,16 @@ namespace Frontend.Tests.ControllerTests
                         Encoding.UTF8.GetString(input) == trustId
                     )));
                 AssertRedirectToAction(response, "CheckYourAnswers");
+            }
+            
+            [Fact]
+            public void GivenNoTrustId_RedirectBackToSearchIncomingTrustPageWithError()
+            {
+                var result = _subject.ConfirmIncomingTrust(null);
+
+                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+                Assert.Equal("SearchIncomingTrust", resultRedirect.ActionName);
+                Assert.Equal("Select a trust", _subject.TempData["ErrorMessage"]);
             }
         }
 
