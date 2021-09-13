@@ -151,7 +151,7 @@ namespace Frontend
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
-                endpoints.MapHealthChecks("/health");
+                endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
             });
         }
 
