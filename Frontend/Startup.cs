@@ -77,6 +77,8 @@ namespace Frontend
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddHealthChecks();
         }
 
         private void ConfigureRedisConnection(IServiceCollection services)
@@ -149,6 +151,7 @@ namespace Frontend
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
+                endpoints.MapHealthChecks("/health");
             });
         }
 
