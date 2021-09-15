@@ -26,13 +26,11 @@
             <input name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
             <div class="govuk-form-group @formClasses @otherBenefitFormClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="intended-benefits-hint">
-                    <legend class="govuk-fieldset__legend">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
                                 @Model.Project.OutgoingAcademyName
                             </span>
-                        </h1>
-                        <h1 class="govuk-heading-l">
                             What are the benefits the transfer intended to bring?
                         </h1>
                     </legend>

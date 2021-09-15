@@ -24,13 +24,11 @@
             <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
             <div class="govuk-form-group @typeOfTransferFormClasses @otherTypeFormClasses">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
                                 @Model.Project.OutgoingAcademyName
                             </span>
-                        </h1>
-                        <h1 class="govuk-heading-l">
                             What type of transfer is it?
                         </h1>
                     </legend>
