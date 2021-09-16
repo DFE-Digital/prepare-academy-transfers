@@ -37,8 +37,9 @@ namespace Data.TRAMS
             var apiResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<TramsTrustSearchResult>>(apiResponse);
 
-            var mappedResult = result.Select(r => _searchResultMapper.Map(r)).ToList();
-
+            var mappedResult = result
+                .Select(r => _searchResultMapper.Map(r)).ToList();
+            
             return new RepositoryResult<List<TrustSearchResult>>
             {
                 Result = mappedResult

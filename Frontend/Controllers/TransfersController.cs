@@ -60,13 +60,13 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (result.Result.Count == 0)
+            if (result.Result.Count == 0 || result.Result.All(a=>!a.Academies.Any()))
             {
-                TempData["ErrorMessage"] = "No results found";
+                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
                 return RedirectToAction("TrustName", new {query});
             }
 
-            var model = new TrustSearch {Trusts = result.Result};
+            var model = new TrustSearch {Trusts = result.Result.Where(t => t.Academies.Any()).ToList()};
             ViewData["Query"] = query;
 
             ViewData["Error.Exists"] = false;

@@ -82,7 +82,10 @@ namespace Frontend.Tests.ControllerTests
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("test"))
                     .ReturnsAsync(
-                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>
+                        {
+                            new TrustSearchResult {Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()}}
+                        }});
                 
                 _subject.TempData["ErrorMessage"] = "This is an error message";
                 _subject.TrustSearch("test");
@@ -109,7 +112,25 @@ namespace Frontend.Tests.ControllerTests
 
                 var redirectResponse = AssertRedirectToAction(response, "TrustName");
                 Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
-                Assert.Equal("No results found", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            public async void GivenSearchReturnsTrustWithNoAcademies_RedirectToTrustNamePageWithAnError()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("Meow"))
+                    .ReturnsAsync(
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult
+                        {
+                            TrustName = "Meow",
+                            Ukprn = "test",
+                            Academies = new List<TrustSearchAcademy>()
+                        } }});
+                var response = await _subject.TrustSearch("Meow");
+
+                var redirectResponse = AssertRedirectToAction(response, "TrustName");
+                Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
+                Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]
@@ -143,8 +164,8 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = new List<TrustSearchResult>
                         {
-                            new TrustSearchResult {Ukprn = trustId},
-                            new TrustSearchResult {Ukprn = trustTwoId}
+                            new TrustSearchResult {Ukprn = trustId, Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()}},
+                            new TrustSearchResult {Ukprn = trustTwoId, Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()}}
                         }
                     }
                 );
@@ -166,8 +187,8 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = new List<TrustSearchResult>
                         {
-                            new TrustSearchResult {Ukprn = trustId},
-                            new TrustSearchResult {Ukprn = trustTwoId}
+                            new TrustSearchResult {Ukprn = trustId, Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()}},
+                            new TrustSearchResult {Ukprn = trustTwoId, Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()}}
                         }
                     }
                 );
@@ -187,8 +208,8 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = new List<TrustSearchResult>
                         {
-                            new TrustSearchResult {Ukprn = trustId},
-                            new TrustSearchResult {Ukprn = trustTwoId}
+                            new TrustSearchResult {Ukprn = trustId, Academies = new List<TrustSearchAcademy>()},
+                            new TrustSearchResult {Ukprn = trustTwoId, Academies = new List<TrustSearchAcademy>()}
                         }
                     }
                 );
