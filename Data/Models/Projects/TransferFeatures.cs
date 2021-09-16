@@ -34,7 +34,7 @@ namespace Data.Models.Projects
             [Display(Name = "Academies joining together to form a new MAT")]
             JoiningToFormMat,
 
-            [Display(Name = "Two or more academy trusts are merging")]
+            [Display(Name = "Closure of one of more MAT(s) to form a new MAT")]
             TrustsMerging,
 
             Other
