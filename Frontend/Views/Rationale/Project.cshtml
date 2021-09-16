@@ -18,7 +18,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Project" method="post" novalidate="">
-            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden />
+            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden/>
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
                     <span class="govuk-caption-l">
@@ -30,6 +30,9 @@
                 </label>
                 <div id="rationale-hint" class="govuk-hint">
                     Use the school's rationale from the application as a basis for your analysis.
+                </div>
+                <div class="govuk-inset-text">
+                    You can format this section after you download your project template.
                 </div>
 
                 @if (Model.FormErrors.HasErrorForField("rationale"))

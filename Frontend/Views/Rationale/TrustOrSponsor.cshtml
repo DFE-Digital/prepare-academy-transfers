@@ -18,7 +18,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="TrustOrSponsor" method="post" novalidate="">
-            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden />
+            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden/>
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
                     <span class="govuk-caption-l">
@@ -31,14 +31,17 @@
                 <div id="rationale-hint" class="govuk-hint">
                     Explain why the trust is a good match for the school.
                 </div>
-                
+                <div class="govuk-inset-text">
+                    You can format this section after you download your project template.
+                </div>
+
                 @if (Model.FormErrors.HasErrorForField("rationale"))
                 {
                     <span id="rationale-error" class="govuk-error-message">
                         <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("rationale").ErrorMessage
                     </span>
                 }
-                
+
                 <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint" data-test="trust-rationale">@Model.Project.Rationale.Trust</textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
