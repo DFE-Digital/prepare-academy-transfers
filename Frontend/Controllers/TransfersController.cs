@@ -195,7 +195,7 @@ namespace Frontend.Controllers
 
             if (result.Result.Count == 0)
             {
-                TempData["ErrorMessage"] = "No search results";
+                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
                 return RedirectToAction("IncomingTrust", new {query});
             }
 

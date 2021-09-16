@@ -532,7 +532,7 @@ namespace Frontend.Tests.ControllerTests
                 var response = await _subject.SearchIncomingTrust("Trust name");
                 var redirectResponse = AssertRedirectToAction(response, "IncomingTrust");
                 Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
-                Assert.Equal("No search results", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
             }
             
             [Fact]
