@@ -52,7 +52,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Reason for transfer
+                    Has this transfer started because of an intervention with the academy or trust?
                 </dt>
                 <dd class="govuk-summary-list__value">
                     @if (!Model.HasTransferReasonBeenSet)
@@ -74,7 +74,7 @@
                 </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Project.Urn" data-test="reason">
-                        Change<span class="govuk-visually-hidden"> reason for transfer</span>
+                        Change<span class="govuk-visually-hidden"> has this transfer started because of an intervention with the academy or trust?</span>
                     </a>
                 </dd>
             </div>
