@@ -56,7 +56,7 @@
     </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Type of transfer
+            What type of transfer is it?
         </dt>
         <dd class="govuk-summary-list__value">
             @if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
@@ -76,7 +76,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link" asp-controller="Features" asp-action="Type" 
                asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
-                Change<span class="govuk-visually-hidden"> type of transfer</span>
+                Change<span class="govuk-visually-hidden"> what type of transfer is it?</span>
             </a>
         </dd>
     </div>
