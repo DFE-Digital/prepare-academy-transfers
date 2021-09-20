@@ -93,8 +93,8 @@ namespace Frontend.Helpers
 
         private static bool HasValue(DisadvantagedPupilsResult disadvantagedPupilResult)
         {
-            return !string.IsNullOrEmpty(disadvantagedPupilResult.Disadvantaged) ||
-                   !string.IsNullOrEmpty(disadvantagedPupilResult.NotDisadvantaged);
+            return !string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged) ||
+                   !string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged);
         }
 
         private static string FormatStringAsDouble(string result)
