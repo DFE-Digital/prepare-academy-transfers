@@ -39,11 +39,6 @@ variable app_environment {
   description 	= "Application environment development, staging, production"
 }
 
-variable aspnetcore_environment {
-  type      = string
-  description   = "ASPNETCORE_ENVIRONMENT Development, Staging, Production"
-}
-
 variable app_trams_api_base {
 	type = string
 	description = "Application variable for the TRAMS API URL"
