@@ -517,7 +517,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.SearchIncomingTrust("");
                 AssertRedirectToAction(response, "IncomingTrust");
-                Assert.Equal("Enter a search term", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("Enter the incoming trust name", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]

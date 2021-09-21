@@ -182,7 +182,7 @@ namespace Frontend.Controllers
             ViewData["ChangeLink"] = change;
             if (string.IsNullOrEmpty(query))
             {
-                TempData["ErrorMessage"] = "Enter a search term";
+                TempData["ErrorMessage"] = "Enter the incoming trust name";
                 return RedirectToAction("IncomingTrust");
             }
 
