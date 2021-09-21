@@ -1,7 +1,7 @@
 @{
     Layout = "_Layout";
     var errorExists = (bool) ViewData["Error.Exists"];
-    const string pageTitle = "Add the outgoing trust name";
+    const string pageTitle = "What is the outgoing trust name?";
     ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
     var formClasses = errorExists ? "govuk-form-group--error" : "";
     var changeLinkClicked = (bool) ViewData["ChangeLink"];
@@ -43,7 +43,7 @@
             <div class="govuk-form-group @formClasses">
                 <h1 class="govuk-label-wrapper">
                     <label class="govuk-label govuk-label--xl" for="query">
-                        Add the outgoing trust name
+                        What is the outgoing trust name?
                     </label>
                 </h1>
 

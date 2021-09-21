@@ -84,7 +84,7 @@ namespace Frontend.Controllers
 
             if (string.IsNullOrEmpty(trustId))
             {
-                TempData["ErrorMessage"] = "Select a trust";
+                TempData["ErrorMessage"] = "Enter the outgoing trust name";
                 return RedirectToAction("TrustSearch", new { query, change });
             }
             
