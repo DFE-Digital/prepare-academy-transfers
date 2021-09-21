@@ -146,7 +146,7 @@ namespace Frontend.Controllers
         {
             if (string.IsNullOrEmpty(academyId))
             {
-                TempData["ErrorMessage"] = "Select an academy";
+                TempData["ErrorMessage"] = "Select the transferring academy";
                 return RedirectToAction("OutgoingTrustAcademies");
             }
 

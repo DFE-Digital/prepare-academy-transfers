@@ -439,7 +439,7 @@ namespace Frontend.Tests.ControllerTests
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
-                Assert.Equal("Select an academy", _subject.TempData["ErrorMessage"]);
+                Assert.Equal("Select the transferring academy", _subject.TempData["ErrorMessage"]);
             }
 
             [Fact]

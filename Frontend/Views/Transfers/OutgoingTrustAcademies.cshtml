@@ -3,7 +3,7 @@
 @{
     Layout = "_Layout";
     var errorExists = (bool) ViewData["Error.Exists"];
-    const string pageTitle = "Select the transferring academies";
+    const string pageTitle = "Select the transferring academy";
     ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
     var formClasses = errorExists ? "govuk-form-group--error" : "";
 }
@@ -46,7 +46,7 @@
                 <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">
-                            Select the transferring academies
+                            Select the transferring academy
                         </h1>
                     </legend>
                     <div id="add-academies-hint" class="govuk-hint">
