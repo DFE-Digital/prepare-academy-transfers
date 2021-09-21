@@ -77,7 +77,7 @@ namespace Frontend
                 options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
