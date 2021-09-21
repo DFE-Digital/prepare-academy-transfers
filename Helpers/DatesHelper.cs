@@ -16,7 +16,7 @@ namespace Helpers
         {
             day = string.IsNullOrEmpty(day) ? "" : day.PadLeft(2, '0');
             month = string.IsNullOrEmpty(month) ? "" : month.PadLeft(2, '0');
-            year = string.IsNullOrEmpty(year) ? "" : year.PadLeft(4, '0');
+            year = string.IsNullOrEmpty(year) ? "" : year;
 
             return $"{day}/{month}/{year}";
         }
