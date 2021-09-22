@@ -136,7 +136,7 @@ namespace Frontend.Controllers.Projects
             }
 
             model.Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = isSubjectToIntervention;
-            model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail;
+            model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail ?? string.Empty;
 
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
