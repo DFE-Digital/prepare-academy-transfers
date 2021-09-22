@@ -67,7 +67,7 @@ namespace Frontend.Services
                 DistanceFromTheAcademyToTheTrustHeadquarters = academy.GeneralInformation.DistanceToSponsorHq,
                 MpAndParty = academy.GeneralInformation.MpAndParty,
                 WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features.WhoInitiatedTheTransfer),
-                ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Subject to Intervention" : "Not subject to intervention",
+                ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Yes" : "No",
                 MoreDetailsAboutTheTransfer = project.Features.ReasonForTransfer.InterventionDetails,
                 TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other ? $"Other: {project.Features.OtherTypeOfTransfer}" : 
                     EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
