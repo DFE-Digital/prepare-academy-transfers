@@ -1,5 +1,6 @@
 # academy-transfers-api
-The internal service for managing Academy Transfers
+
+The internal service for managing Academy Transfers.
 
 ## Tech notes
 
@@ -9,7 +10,7 @@ To get the Frontend project running you will require:
 
 - .NET Core 3.1
 - Redis (running locally or in Docker, see below)
-- Node v 12.x
+- Node v12.x
 
 1. **Install dependencies**
 - .NET
