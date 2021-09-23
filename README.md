@@ -21,7 +21,7 @@ To get the Frontend project running you will require:
 3. **Set user secrets**
    - `dotnet user-secrets set "Key" "Value" --project Frontend`
 4. **Run the application**
-- `dotnet start --project Frontend`
+- `dotnet run --project Frontend`
 
 ### User-secrets
 
