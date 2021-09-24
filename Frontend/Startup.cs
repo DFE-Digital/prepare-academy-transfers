@@ -77,7 +77,10 @@ namespace Frontend
                 options.Cookie.Name = ".AcademyTransfers.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                if (!string.IsNullOrEmpty(Configuration["CI"]))
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                }
             });
 
             services.AddHealthChecks();
