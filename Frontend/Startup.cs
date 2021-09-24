@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -65,8 +64,8 @@ namespace Frontend
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
+                options.IdleTimeout = TimeSpan.FromHours(24);
+                options.Cookie.Name = ".AcademyTransfers.Session";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -74,11 +73,9 @@ namespace Frontend
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/home/login";
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
+                options.Cookie.Name = ".AcademyTransfers.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
             services.AddHealthChecks();
