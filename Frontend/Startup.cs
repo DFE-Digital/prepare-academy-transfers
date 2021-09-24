@@ -77,7 +77,7 @@ namespace Frontend
                 options.Cookie.Name = ".AcademyTransfers.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                if (!string.IsNullOrEmpty(Configuration["CI"]))
+                if (string.IsNullOrEmpty(Configuration["CI"]))
                 {
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
