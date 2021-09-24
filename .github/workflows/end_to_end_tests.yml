@@ -3,6 +3,8 @@ name: End to end tests
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 env:
   REGISTRY: ghcr.io
@@ -107,3 +109,9 @@ jobs:
         run: npm run cypress:run
         env:
           CYPRESS_BASE_URL: http://localhost:5000
+          
+- uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: end-to-end-tests/cypress/screenshots

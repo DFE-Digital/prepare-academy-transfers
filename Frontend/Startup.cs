@@ -78,7 +78,10 @@ namespace Frontend
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                if (string.IsNullOrEmpty(Configuration["CI"]))
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                }
             });
 
             services.AddHealthChecks();
