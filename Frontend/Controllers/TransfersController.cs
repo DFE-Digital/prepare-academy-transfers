@@ -49,7 +49,7 @@ namespace Frontend.Controllers
 
             if (string.IsNullOrEmpty(query))
             {
-                TempData["ErrorMessage"] = "Enter the outgoing trust name";
+                TempData["ErrorMessage"] = "Enter a search term";
                 return RedirectToAction("TrustName");
             }
 
@@ -84,7 +84,7 @@ namespace Frontend.Controllers
 
             if (string.IsNullOrEmpty(trustId))
             {
-                TempData["ErrorMessage"] = "Select the outgoing trust";
+                TempData["ErrorMessage"] = "Select a trust";
                 return RedirectToAction("TrustSearch", new { query, change });
             }
             
@@ -182,7 +182,7 @@ namespace Frontend.Controllers
             ViewData["ChangeLink"] = change;
             if (string.IsNullOrEmpty(query))
             {
-                TempData["ErrorMessage"] = "Enter the incoming trust name";
+                TempData["ErrorMessage"] = "Enter a search term";
                 return RedirectToAction("IncomingTrust");
             }
 
@@ -214,7 +214,7 @@ namespace Frontend.Controllers
         {
             if (string.IsNullOrEmpty(trustId))
             {
-                TempData["ErrorMessage"] = "Select an incoming trust";
+                TempData["ErrorMessage"] = "Select a trust";
                 return RedirectToAction("SearchIncomingTrust", new { query, change });
             }
             

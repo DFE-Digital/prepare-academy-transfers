@@ -65,7 +65,7 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(rationale))
             {
-                model.FormErrors.AddError("rationale", "rationale", "Enter the rationale for the project");
+                model.FormErrors.AddError("rationale", "rationale", "Enter a rationale");
                 return View(model);
             }
 
@@ -113,7 +113,7 @@ namespace Frontend.Controllers.Projects
 
             if (string.IsNullOrEmpty(rationale))
             {
-                model.FormErrors.AddError("rationale", "rationale", "Enter the rationale for the incoming trust or sponsor");
+                model.FormErrors.AddError("rationale", "rationale", "Enter a rationale");
                 return View(model);
             }
 

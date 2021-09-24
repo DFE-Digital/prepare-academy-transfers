@@ -67,7 +67,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.DistanceToSponsorHq, htbDocumentResult.DistanceFromTheAcademyToTheTrustHeadquarters);
                 Assert.Equal(getTestInformationForProject.OutgoingAcademy.GeneralInformation.MpAndParty, htbDocumentResult.MpAndParty);
                 Assert.Equal("Department for Education", htbDocumentResult.WhoInitiatedTheTransfer);
-                Assert.Equal("Yes", htbDocumentResult.ReasonForTransfer);
+                Assert.Equal("Subject to Intervention", htbDocumentResult.ReasonForTransfer);
                 Assert.Equal("intervention", htbDocumentResult.MoreDetailsAboutTheTransfer);
                 Assert.Equal("Closure of a SAT and the academy joining a MAT", htbDocumentResult.TypeOfTransfer);
                 Assert.Equal("Strengthening governance\nStronger leadership\n", htbDocumentResult.TransferBenefits);

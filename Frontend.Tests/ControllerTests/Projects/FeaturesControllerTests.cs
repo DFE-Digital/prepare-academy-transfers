@@ -261,7 +261,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     _projectRepository.Verify(r => r.Update(It.Is<Project>(project =>
                         project.Urn == "0001" &&
                         project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == false &&
-                        project.Features.ReasonForTransfer.InterventionDetails == string.Empty)), Times.Once);
+                        project.Features.ReasonForTransfer.InterventionDetails == null)), Times.Once);
                 }
 
                 [Fact]

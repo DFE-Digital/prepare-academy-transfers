@@ -79,8 +79,6 @@ jobs:
           CI: 'yes'
           ASPNETCORE_ENVIRONMENT: 'Development'
           ASPNETCORE_URLS: 'http://0.0.0.0:5000'
-          USERNAME: "username"
-          PASSWORD: "password"
           TRAMS_API_BASE: ${{ secrets.E2E_TRAMS_API_BASE }}
           TRAMS_API_KEY: ${{ secrets.E2E_TRAMS_API_KEY }}
           REDIS_URL: redis://user:password@redis:6379
@@ -109,9 +107,3 @@ jobs:
         run: npm run cypress:run
         env:
           CYPRESS_BASE_URL: http://localhost:5000
-
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: end-to-end-tests/cypress/screenshots

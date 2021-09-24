@@ -31,6 +31,7 @@
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Models\Projects" />
     <Folder Include="Pages\TaskList\GeneralInformation" />
   </ItemGroup>
   <ItemGroup>

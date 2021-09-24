@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = null;
     var startingPage = 1;
-    if (Model.Page - 5 > 1) { startingPage = Model.Page - 5; }
+    if(Model.Page - 5 > 1) startingPage = Model.Page - 5;
     var hasPreviousPage = Model.Page > 1;
     var hasNextPage = Model.Projects.Count == 10;
 
