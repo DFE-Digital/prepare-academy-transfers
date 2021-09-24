@@ -79,6 +79,8 @@ jobs:
           CI: 'yes'
           ASPNETCORE_ENVIRONMENT: 'Development'
           ASPNETCORE_URLS: 'http://0.0.0.0:5000'
+          USERNAME: "username"
+          PASSWORD: "password"
           TRAMS_API_BASE: ${{ secrets.E2E_TRAMS_API_BASE }}
           TRAMS_API_KEY: ${{ secrets.E2E_TRAMS_API_KEY }}
           REDIS_URL: redis://user:password@redis:6379
