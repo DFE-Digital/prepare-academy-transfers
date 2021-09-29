@@ -142,7 +142,7 @@ namespace Frontend
                     //context.Response.Headers.Add("X-Frame-Options", "deny");
                     context.Response.Headers.Add("X-XSS-Protection", "0");
                     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+                    //context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
                     await next();
                 });
             }
