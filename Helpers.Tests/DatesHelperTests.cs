@@ -20,5 +20,19 @@ namespace Helpers.Tests
                 Assert.Equal(expectedResult, result);
             }
         }
+
+        public class DayMonthYearToDateStringTests
+        {
+            [Theory]
+            [InlineData(null, null, null, null)]
+            [InlineData("", "", "", null)]
+            [InlineData("1", "1", "2020", "01/01/2020")]
+            public void GivenDayMonthYear_ShouldReturnCorrectDateString(string day, string month, string year,
+                string expectedResult)
+            {
+                var result = DatesHelper.DayMonthYearToDateString(day, month, year);
+                Assert.Equal(expectedResult, result);
+            }
+        }
     }
 }

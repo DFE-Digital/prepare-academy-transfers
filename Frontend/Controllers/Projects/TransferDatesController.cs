@@ -62,13 +62,7 @@ namespace Frontend.Controllers.Projects
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.FirstDiscussed = dateString;
 
-            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
-            {
-                model.FormErrors.AddError("day", "day", "Enter the date the transfer was first discussed");
-                return View(model);
-            }
-
-            if (!DatesHelper.IsValidDate(dateString))
+            if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
@@ -118,13 +112,7 @@ namespace Frontend.Controllers.Projects
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.Target = dateString;
 
-            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
-            {
-                model.FormErrors.AddError("day", "day", "Enter the target date for the transfer");
-                return View(model);
-            }
-
-            if (!DatesHelper.IsValidDate(dateString))
+            if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
@@ -184,13 +172,7 @@ namespace Frontend.Controllers.Projects
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
             model.Project.Dates.Htb = dateString;
 
-            if (string.IsNullOrEmpty(day) || string.IsNullOrEmpty(month) || string.IsNullOrEmpty(year))
-            {
-                model.FormErrors.AddError("day", "day", "Enter the Advisory Board date");
-                return View(model);
-            }
-
-            if (!DatesHelper.IsValidDate(dateString))
+            if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
