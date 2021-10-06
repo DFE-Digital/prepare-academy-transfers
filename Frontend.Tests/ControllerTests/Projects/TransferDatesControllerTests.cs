@@ -131,7 +131,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Enter the date the transfer was first discussed",
+                    Assert.Equal("Enter a valid date",
                         responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
@@ -182,7 +182,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", null, null, null, true);
+                    var response = await _subject.FirstDiscussedPost("0001", "01", null, null, true);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -266,7 +266,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Enter the target date for the transfer",
+                    Assert.Equal("Enter a valid date",
                         responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
@@ -329,7 +329,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
-                    var response = await _subject.TargetDatePost("0001", null, null, null, true);
+                    var response = await _subject.TargetDatePost("0001", "45", null, "2020", true);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -413,7 +413,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
-                    Assert.Equal("Enter the Advisory Board date", responseModel.FormErrors.Errors[0].ErrorMessage);
+                    Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
 
                 [Theory]
@@ -475,7 +475,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
-                    var response = await _subject.HtbDatePost("0001", null, null, null, true);
+                    var response = await _subject.HtbDatePost("0001", null, "01", null, true);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
