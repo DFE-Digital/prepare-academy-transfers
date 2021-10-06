@@ -69,8 +69,11 @@ namespace Data.TRAMS.Mappers.Request
             return new AcademyTransferProjectDates
             {
                 HtbDate = input.Dates.Htb,
+                HasHtbDate = !string.IsNullOrEmpty(input.Dates.Htb),
                 TransferFirstDiscussed = input.Dates.FirstDiscussed,
-                TargetDateForTransfer = input.Dates.Target
+                HasTransferFirstDiscussedDate = !string.IsNullOrEmpty(input.Dates.FirstDiscussed),
+                TargetDateForTransfer = input.Dates.Target,
+                HasTargetDateForTransfer = !string.IsNullOrEmpty(input.Dates.Target)
             };
         }
 

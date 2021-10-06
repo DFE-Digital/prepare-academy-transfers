@@ -96,6 +96,26 @@ namespace Data.TRAMS.Tests.Mappers.Request
             AssertGeneralInformationIsCorrect(toMap, result);
         }
 
+        [Fact]
+        public void GivenNullDate_ShouldSetHasDateToFalse()
+        {
+            var subject = new InternalProjectToUpdateMapper();
+            var toMap = new Project
+            {
+                Dates = new TransferDates
+                {
+                    Htb = null,
+                    Target = null,
+                    FirstDiscussed = null
+                },
+            };
+
+            var result = subject.Map(toMap);
+            Assert.False(result.Dates.HasHtbDate);
+            Assert.False(result.Dates.HasTargetDateForTransfer);
+            Assert.False(result.Dates.HasTransferFirstDiscussedDate);
+        }
+
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
         {
             Assert.Equal(toMap.AcademyAndTrustInformation.Author, result.GeneralInformation.Author);
@@ -124,6 +144,9 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.Dates.FirstDiscussed, result.Dates.TransferFirstDiscussed);
             Assert.Equal(toMap.Dates.Htb, result.Dates.HtbDate);
             Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
+            Assert.True(result.Dates.HasHtbDate);
+            Assert.True(result.Dates.HasTargetDateForTransfer);
+            Assert.True(result.Dates.HasTransferFirstDiscussedDate);
         }
 
         private static void AssertBenefitsAreCorrect(Project toMap, TramsProjectUpdate result)
