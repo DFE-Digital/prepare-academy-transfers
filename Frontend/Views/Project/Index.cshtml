@@ -17,11 +17,13 @@
             @Model.Project.OutgoingAcademyName
         </h1>
         <h2 class="govuk-heading-l">
-            Task list
+            Create a project template
         </h2>
         <p class="govuk-body">
-            The task list will help you prepare for the Advisory Board meeting (formerly Headteacher Board). You can complete the tasks in any order.
+            By completing the following sections, you can create a project template that will help you prepare for an advisory board meeting.
         </p>
+        <p class="govuk-body">You can complete them in any order.</p>
+        <p class="govuk-body">‘Reference only’ sections get their information from other sources and can’t be changed here.</p>
         <hr class="govuk-section-break govuk-section-break--m">
     </div>
 </div>
@@ -31,7 +33,7 @@
         <ol class="moj-task-list">
             <li>
                 <h2 class="moj-task-list__section">
-                    Create project template
+                    Template sections
                 </h2>
                 <ul class="moj-task-list__items govuk-!-padding-left-0">
                     <li class="moj-task-list__item">
@@ -111,10 +113,10 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-m">
-            Preview or generate project template
+            Preview or download your template
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
-            Preview your template before you generate it into a Word document. Or, you can generate the document without previewing it.
+            Download the template as a Word document or preview its contents.
         </p>
         <div class="govuk-button-group">
             <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn" method="get">
