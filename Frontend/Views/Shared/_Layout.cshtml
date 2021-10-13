@@ -1,8 +1,9 @@
 ﻿@using Microsoft.Extensions.Configuration
+@using NetEscapades.AspNetCore.SecurityHeaders
 @inject IConfiguration _configuration
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
-
+@{ var nonce = Context.GetNonce(); }
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -28,7 +29,7 @@
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    <script nonce="@nonce">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -38,10 +39,10 @@
 
 <body class="govuk-template__body ">
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src=https://www.googletagmanager.com/ns.html?id=GTM-T43KJ2P
+<noscript nonce="@nonce"><iframe src=https://www.googletagmanager.com/ns.html?id=GTM-T43KJ2P
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-<script>
+<script nonce="@nonce">
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
 </script>
 
@@ -115,6 +116,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 </footer>
 
-<script src="~/dist/index.bundle.js"></script>
+<script src="~/dist/index.bundle.js" nonce="@nonce"></script>
 </body>
 </html>
