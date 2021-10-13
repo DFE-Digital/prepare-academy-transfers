@@ -84,14 +84,6 @@ namespace Frontend
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
             });
-            
-            if (string.IsNullOrEmpty(Configuration["CI"]))
-            {
-                services.AddAntiforgery(options =>
-                {
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                });
-            }
 
             services.AddHealthChecks();
         }
