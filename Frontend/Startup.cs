@@ -47,6 +47,11 @@ namespace Frontend
                     new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
 
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+            
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
