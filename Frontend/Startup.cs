@@ -8,6 +8,7 @@ using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.EducationPerformance;
+using Frontend.Security;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Helpers;
@@ -47,6 +48,14 @@ namespace Frontend
                     new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
 
+            if (string.IsNullOrEmpty(Configuration["CI"]))
+            {
+                services.AddAntiforgery(options =>
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+            }
+            
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -137,15 +146,10 @@ namespace Frontend
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                app.Use(async (context, next) =>
-                {
-                    //context.Response.Headers.Add("X-Frame-Options", "deny");
-                    context.Response.Headers.Add("X-XSS-Protection", "0");
-                    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                    //context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
-                    await next();
-                });
             }
+            
+            app.UseSecurityHeaders(
+                SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
 
             if (!string.IsNullOrEmpty(Configuration["CI"]))
             {
