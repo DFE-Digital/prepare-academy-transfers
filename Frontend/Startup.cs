@@ -48,10 +48,13 @@ namespace Frontend
                     new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
 
-            services.AddAntiforgery(options =>
+            if (string.IsNullOrEmpty(Configuration["CI"]))
             {
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            });
+                services.AddAntiforgery(options =>
+                {
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+            }
             
             services.AddAuthorization(options =>
             {
