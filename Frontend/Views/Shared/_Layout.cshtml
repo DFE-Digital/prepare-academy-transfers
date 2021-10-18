@@ -27,7 +27,7 @@
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
 
-    <environment include="production">
+    <environment include="development,production">
         <!-- Google Tag Manager -->
         <script asp-add-nonce>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -39,7 +39,7 @@
 </head>
 
 <body class="govuk-template__body ">
-<environment include="production">
+<environment include="development,production">
     <!-- Google Tag Manager (noscript) -->
         <noscript asp-add-nonce>
             <iframe src=https://www.googletagmanager.com/ns.html?id=GTM-T43KJ2P
