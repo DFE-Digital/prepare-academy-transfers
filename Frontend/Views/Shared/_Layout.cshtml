@@ -1,9 +1,7 @@
 ﻿@using Microsoft.Extensions.Configuration
-@using NetEscapades.AspNetCore.SecurityHeaders
 @inject IConfiguration _configuration
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
-@{ var nonce = Context.GetNonce(); }
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -31,28 +29,26 @@
 
     <environment include="production">
         <!-- Google Tag Manager -->
-        <script nonce="@nonce">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        <script asp-add-nonce>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-T43KJ2P');</script>
         <!-- End Google Tag Manager -->
     </environment>
-    }
 </head>
 
 <body class="govuk-template__body ">
 <environment include="production">
     <!-- Google Tag Manager (noscript) -->
-        <noscript nonce="@nonce">
+        <noscript asp-add-nonce>
             <iframe src=https://www.googletagmanager.com/ns.html?id=GTM-T43KJ2P
                     class="not-visible" height="0" width="0">
             </iframe>
         </noscript>
         <!-- End Google Tag Manager (noscript) -->
 </environment>
-}
-<script nonce="@nonce">
+<script asp-add-nonce>
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
 </script>
 
@@ -126,6 +122,6 @@
     </div>
 </footer>
 
-<script src="~/dist/index.bundle.js" nonce="@nonce"></script>
+<script src="~/dist/index.bundle.js" asp-add-nonce></script>
 </body>
 </html>
