@@ -124,6 +124,32 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Null(result.Dates.TargetDateForTransfer);
             Assert.Null(result.Dates.TransferFirstDiscussed);
         }
+        
+        [Fact]
+        public void GivenHasDateIsNull_ShouldSetHasDate()
+        {
+            var subject = new InternalProjectToUpdateMapper();
+            var toMap = new Project
+            {
+                Dates = new TransferDates
+                {
+                    Htb = "Date1",
+                    Target = "Date2",
+                    FirstDiscussed = "Date3",
+                    HasHtbDate = null,
+                    HasTargetDateForTransfer = null,
+                    HasFirstDiscussedDate = null
+                },
+            };
+
+            var result = subject.Map(toMap);
+            Assert.Null(result.Dates.HasHtbDate);
+            Assert.Null(result.Dates.HasTargetDateForTransfer);
+            Assert.Null(result.Dates.HasTransferFirstDiscussedDate);
+            Assert.Equal(result.Dates.HtbDate, toMap.Dates.Htb);
+            Assert.Equal(result.Dates.TargetDateForTransfer, toMap.Dates.Target);
+            Assert.Equal(result.Dates.TransferFirstDiscussed, toMap.Dates.FirstDiscussed);
+        }
 
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
         {
