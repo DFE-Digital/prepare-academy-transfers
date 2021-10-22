@@ -90,7 +90,10 @@ namespace Data.TRAMS.Mappers.Response
             {
                 Htb = input.Dates.HtbDate,
                 Target = input.Dates.TargetDateForTransfer,
-                FirstDiscussed = input.Dates.TransferFirstDiscussed
+                FirstDiscussed = input.Dates.TransferFirstDiscussed,
+                HasHtbDate = input.Dates.HasHtbDate,
+                HasFirstDiscussedDate = input.Dates.HasTransferFirstDiscussedDate,
+                HasTargetDateForTransfer = input.Dates.HasTargetDateForTransfer
             };
         }
 

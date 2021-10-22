@@ -34,7 +34,10 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     FirstDiscussed = "01/01/2020",
                     Htb = "02/01/2020",
-                    Target = "03/01/2020"
+                    Target = "03/01/2020",
+                    HasHtbDate = true,
+                    HasFirstDiscussedDate = true,
+                    HasTargetDateForTransfer = true
                 },
                 Features = new TransferFeatures
                 {
@@ -97,16 +100,19 @@ namespace Data.TRAMS.Tests.Mappers.Request
         }
 
         [Fact]
-        public void GivenNullDate_ShouldSetHasDateToFalse()
+        public void GivenHasDateIsFalse_ShouldSetHasDateToNull()
         {
             var subject = new InternalProjectToUpdateMapper();
             var toMap = new Project
             {
                 Dates = new TransferDates
                 {
-                    Htb = null,
-                    Target = null,
-                    FirstDiscussed = null
+                    Htb = "Date1",
+                    Target = "Date2",
+                    FirstDiscussed = "Date3",
+                    HasHtbDate = false,
+                    HasTargetDateForTransfer = false,
+                    HasFirstDiscussedDate = false
                 },
             };
 
@@ -114,6 +120,9 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.False(result.Dates.HasHtbDate);
             Assert.False(result.Dates.HasTargetDateForTransfer);
             Assert.False(result.Dates.HasTransferFirstDiscussedDate);
+            Assert.Null(result.Dates.HtbDate);
+            Assert.Null(result.Dates.TargetDateForTransfer);
+            Assert.Null(result.Dates.TransferFirstDiscussed);
         }
 
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
