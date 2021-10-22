@@ -182,7 +182,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", "01", null, null, true);
+                    var response = await _subject.FirstDiscussedPost("0001", "01", null, null, returnToPreview:true);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -191,12 +191,22 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectToPreviewPage()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020", true);
+                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020", returnToPreview:true);
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response,
                         Links.HeadteacherBoard.Preview.PageName,
                         new RouteValueDictionary(new {id = "0001"})
                     );
+                }
+
+                [Fact]
+                public async void GivenNoDateAndUnknownIsFalse_SetsErrorOnViewModel()
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", null, null, null, dateUnknown:false);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("You must enter the date or confirm that you don't know it", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
             }
         }

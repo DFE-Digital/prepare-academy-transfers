@@ -18,8 +18,11 @@ namespace Frontend.Models
         }
 
         public DateInputViewModel TransferFirstDiscussed => DateInputForField(Project.Dates.FirstDiscussed);
+        public bool UnknownFirstDiscussedDate => Project.Dates.HasFirstDiscussedDate is false;
         public DateInputViewModel TargetDate => DateInputForField(Project.Dates.Target);
+        public bool UnknownTargetDateForTransfer => Project.Dates.HasTargetDateForTransfer is false;
         public DateInputViewModel HtbDate => DateInputForField(Project.Dates.Htb);
+        public bool UnknownHtbDate => Project.Dates.HasHtbDate is false;
         public bool ReturnToPreview { get; set; }
 
         private static DateInputViewModel DateInputForField(string transferDatesFirstDiscussed)

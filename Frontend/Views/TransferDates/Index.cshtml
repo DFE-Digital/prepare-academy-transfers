@@ -30,7 +30,7 @@
                 <dt class="govuk-summary-list__key">
                     Date when the transfer was first discussed with a trust
                 </dt>
-                @if (string.IsNullOrEmpty(transferDates.FirstDiscussed))
+                @if (string.IsNullOrEmpty(transferDates.FirstDiscussed) && transferDates.HasFirstDiscussedDate == null)
                 {
                     <dd class="govuk-summary-list__value">
                         <span class="dfe-empty-tag">Empty</span>
@@ -40,7 +40,7 @@
                 {
                     <dd class="govuk-summary-list__value">
                         @{
-                            var display = DatesHelper.DateStringToGovUkDate(transferDates.FirstDiscussed);
+                            var display = transferDates.HasFirstDiscussedDate == false ? "I don't know this" : DatesHelper.DateStringToGovUkDate(transferDates.FirstDiscussed);
                             @display
                         }
                     </dd>

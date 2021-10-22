@@ -19,7 +19,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn" method="post" novalidate="">
-            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" role="group" aria-describedby="transfer-first-discussed-date-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -65,6 +65,15 @@
                                 </label>
                                 <input class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" id="year" name="year" type="text" pattern="[0-9]*" inputmode="numeric" value="@Model.TransferFirstDiscussed.Year">
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-top-4" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input asp-for="@Model.UnknownFirstDiscussedDate" id="dateUnknown" name="dateUnknown" class="govuk-checkboxes__input" type="checkbox">
+                            <label class="govuk-label govuk-checkboxes__label" for="dateUnknown">
+                                I don't know this
+                            </label>
                         </div>
                     </div>
                 </fieldset>
