@@ -1,7 +1,7 @@
 @model TransferDatesViewModel
 
 @{
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("When was the transfer first discussed with the incoming or outgoing trust?");
+    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("When was the transfer first discussed with a trust?");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
     var inputError = Model.FormErrors.HasErrorForField("day") ? "govuk-input--error" : "";
@@ -27,7 +27,7 @@
                             <span class="govuk-caption-l">
                                 @Model.Project.OutgoingAcademyName
                             </span>
-                            When was the transfer first discussed with the incoming or outgoing trust?
+                            When was the transfer first discussed with a trust?
                         </h1>
                     </legend>
                     <div id="target-date-for-transfer-hint" class="govuk-hint">
