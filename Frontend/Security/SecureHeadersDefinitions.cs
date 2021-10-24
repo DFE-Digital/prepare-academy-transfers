@@ -30,7 +30,8 @@ namespace Frontend.Security
                      {
                          builder.AddObjectSrc().None();
                          builder.AddBlockAllMixedContent();
-                         builder.AddImgSrc().Self().From("data:");
+                         builder.AddImgSrc().Self().From("data:").From("https://www.googletagmanager.com")
+                             .From("https://www.google-analytics.com/");
                          builder.AddFormAction().Self();
                          builder.AddFontSrc().Self();
                          builder.AddStyleSrc().Self();
