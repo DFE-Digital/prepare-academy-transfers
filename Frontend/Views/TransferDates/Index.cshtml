@@ -30,21 +30,9 @@
                 <dt class="govuk-summary-list__key">
                     Date when the transfer was first discussed with a trust
                 </dt>
-                @if (string.IsNullOrEmpty(transferDates.FirstDiscussed) && transferDates.HasFirstDiscussedDate == null)
-                {
-                    <dd class="govuk-summary-list__value">
-                        <span class="dfe-empty-tag">Empty</span>
-                    </dd>
-                }
-                else
-                {
-                    <dd class="govuk-summary-list__value">
-                        @{
-                            var display = transferDates.HasFirstDiscussedDate == false ? "I don't know this" : DatesHelper.DateStringToGovUkDate(transferDates.FirstDiscussed);
-                            @display
-                        }
-                    </dd>
-                }
+                <dd class="govuk-summary-list__value">
+                    <datesummary value="@transferDates.FirstDiscussed" has-date="@transferDates.HasFirstDiscussedDate"></datesummary>
+                </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn" data-test="first-discussed">
                         Change<span class="govuk-visually-hidden"> date first discussed with a trust</span>
