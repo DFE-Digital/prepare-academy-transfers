@@ -59,7 +59,7 @@ namespace Frontend.Services
                 Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
                 DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
                 DateOfProposedTransfer = DatesHelper.DateStringToGovUkDate(project.Dates.Target),
-                DateTransferWasFirstDiscussed = DatesHelper.DateStringToGovUkDate(project.Dates.FirstDiscussed),
+                DateTransferWasFirstDiscussed = DatesHelper.FormatDateString(project.Dates.FirstDiscussed, project.Dates.HasFirstDiscussedDate),
                 ViabilityIssues = academy.GeneralInformation.ViabilityIssue,
                 FinancialDeficit = academy.GeneralInformation.Deficit,
                 Pfi = academy.GeneralInformation.Pfi,
