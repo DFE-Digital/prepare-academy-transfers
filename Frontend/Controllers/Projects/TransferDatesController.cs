@@ -69,7 +69,7 @@ namespace Frontend.Controllers.Projects
             
             if (string.IsNullOrEmpty(dateString) && !dateUnknown)
             {
-                model.FormErrors.AddError("hasDate", "hasDate", "You must enter the date or confirm that you don't know it");
+                model.FormErrors.AddError("day", "day", "You must enter the date or confirm that you don't know it");
                 return View(model);
             }
 
