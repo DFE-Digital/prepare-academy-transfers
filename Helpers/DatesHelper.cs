@@ -34,6 +34,13 @@ namespace Helpers
             return dateString.Split("/").ToList();
         }
 
+        public static string FormatDateString(string dateString, bool? hasDate, string unKnownDateText = "I don't know this")
+        {
+            if (hasDate ?? true)
+                return DateStringToGovUkDate(dateString);
+            return unKnownDateText;
+        }
+        
         public static string DateStringToGovUkDate(string dateString)
         {
             if (ParseDateTime(dateString) == null) return dateString;

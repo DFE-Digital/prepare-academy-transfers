@@ -34,5 +34,33 @@ namespace Helpers.Tests
                 Assert.Equal(expectedResult, result);
             }
         }
+
+        public class FormatDateStringTests
+        {
+            [Fact]
+            public void GivenDateNoKnown_FormatsDateCorrectly()
+            {
+                var result = DatesHelper.FormatDateString("", false);
+                
+                Assert.Equal("I don't know this", result);
+            }
+            
+            [Fact]
+            public void GivenDateNoKnownAndUnknownDateString_FormatsDateCorrectly()
+            {
+                var result = DatesHelper.FormatDateString("", false, "test");
+                
+                Assert.Equal("test", result);
+            }
+
+            [Fact]
+            public void GivenDateString_FormatsDateCorrectly()
+            {
+                var dateString = "01/01/2018";
+                var result = DatesHelper.FormatDateString(dateString, true);
+                
+                Assert.Equal(DatesHelper.DateStringToGovUkDate(dateString), result);
+            }
+        }
     }
 }
