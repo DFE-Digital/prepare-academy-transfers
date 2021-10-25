@@ -50,14 +50,14 @@ namespace Frontend.Models
 
         private ProjectStatuses GetTransferDatesStatus()
         {
-            if (string.IsNullOrEmpty(Project.Dates.FirstDiscussed) &&
-                string.IsNullOrEmpty(Project.Dates.Target) &&
-                string.IsNullOrEmpty(Project.Dates.Htb))
+            if ((string.IsNullOrEmpty(Project.Dates.FirstDiscussed) && (Project.Dates.HasFirstDiscussedDate ?? true)) &&
+                (string.IsNullOrEmpty(Project.Dates.Target) && (Project.Dates.HasTargetDateForTransfer ?? true)) &&
+                (string.IsNullOrEmpty(Project.Dates.Htb) && (Project.Dates.HasHtbDate ?? true)))
                 return ProjectStatuses.NotStarted;
 
-            if (!string.IsNullOrEmpty(Project.Dates.FirstDiscussed) &&
-                !string.IsNullOrEmpty(Project.Dates.Target) &&
-                !string.IsNullOrEmpty(Project.Dates.Htb))
+            if ((!string.IsNullOrEmpty(Project.Dates.FirstDiscussed) || Project.Dates.HasFirstDiscussedDate == false) &&
+                (!string.IsNullOrEmpty(Project.Dates.Target) || Project.Dates.HasTargetDateForTransfer == false) &&
+                (!string.IsNullOrEmpty(Project.Dates.Htb) || Project.Dates.HasHtbDate == false))
                 return ProjectStatuses.Completed;
 
             return ProjectStatuses.InProgress;
