@@ -190,6 +190,28 @@ namespace Frontend.Tests.ModelTests
                 // Assert
                 Assert.Equal(ProjectStatuses.Completed, result);
             }
+            
+            [Fact]
+            public void GivenTransferDatesAreNotKnown_ReturnCompleted()
+            {
+                // Arrange
+                var project = new Project
+                {
+                    Dates = new TransferDates
+                    {
+                        HasFirstDiscussedDate = false,
+                        HasHtbDate = false,
+                        HasTargetDateForTransfer = false
+                    }
+                };
+                var model = new ProjectTaskListViewModel {Project = project};
+
+                // Act
+                var result = model.TransferDatesStatus;
+
+                // Assert
+                Assert.Equal(ProjectStatuses.Completed, result);
+            }
         }
 
         public class BenefitsAndOtherFactorsTests
