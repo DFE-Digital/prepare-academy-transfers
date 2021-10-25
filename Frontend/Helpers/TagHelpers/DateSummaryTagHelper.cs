@@ -8,7 +8,6 @@ namespace Frontend.Helpers.TagHelpers
     {
         public string Value { get; set; }
         public bool? HasDate { get; set; }
-        public string DateUnknownText { get; set; } = "I don't know this";        
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -21,7 +20,7 @@ namespace Frontend.Helpers.TagHelpers
             }
             else
             {
-                output.Content.SetContent(DatesHelper.FormatDateString(Value, HasDate, DateUnknownText));
+                output.Content.SetContent(DatesHelper.FormatDateString(Value, HasDate));
             }
 
             base.Process(context, output);

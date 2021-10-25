@@ -42,7 +42,7 @@ namespace Helpers.Tests
             {
                 var result = DatesHelper.FormatDateString("", false);
                 
-                Assert.Equal("I don't know this", result);
+                Assert.Equal("I do not know this", result);
             }
             
             [Fact]
