@@ -15,6 +15,7 @@ namespace Frontend
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(new RenderedCompactJsonFormatter())
+                .WriteTo.Sentry()
                 .CreateLogger();
 
             Log.Information("Starting web host");
@@ -26,6 +27,7 @@ namespace Frontend
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(options =>
                     {
