@@ -58,7 +58,7 @@ namespace Frontend.Services
                 ClearedBy = "",
                 Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
                 DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
-                DateOfProposedTransfer = DatesHelper.DateStringToGovUkDate(project.Dates.Target),
+                DateOfProposedTransfer = DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer),
                 DateTransferWasFirstDiscussed = DatesHelper.FormatDateString(project.Dates.FirstDiscussed, project.Dates.HasFirstDiscussedDate),
                 ViabilityIssues = academy.GeneralInformation.ViabilityIssue,
                 FinancialDeficit = academy.GeneralInformation.Deficit,

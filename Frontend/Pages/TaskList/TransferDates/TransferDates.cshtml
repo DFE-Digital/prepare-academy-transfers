@@ -13,43 +13,17 @@
             <datesummary value="@transferDates.FirstDiscussed" has-date="@transferDates.HasFirstDiscussedDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="FirstDiscussed" 
+            <a class="govuk-link" asp-controller="TransferDates" asp-action="FirstDiscussed"
                asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden"> date first discussed</span>
             </a>
         </dd>
     </div>
     <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Set Advisory Board date
-            </dt>
-            @if (string.IsNullOrEmpty(transferDates.Htb))
-            {
-                <dd class="govuk-summary-list__value">
-                    <span class="dfe-empty-tag">Empty</span>
-                </dd>
-            }
-            else
-            {
-                <dd class="govuk-summary-list__value">
-                    @{
-                        var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
-                        @display
-                    }
-                </dd>
-            }
-            <dd class="govuk-summary-list__actions">
-                <a class="govuk-link" asp-controller="TransferDates" asp-action="HtbDate" 
-                   asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
-                    Change<span class="govuk-visually-hidden"> Advisory Board date</span>
-                </a>
-            </dd>
-        </div>
-    <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Target date for transfer
+            Set Advisory Board date
         </dt>
-        @if (string.IsNullOrEmpty(transferDates.Target))
+        @if (string.IsNullOrEmpty(transferDates.Htb))
         {
             <dd class="govuk-summary-list__value">
                 <span class="dfe-empty-tag">Empty</span>
@@ -59,13 +33,27 @@
         {
             <dd class="govuk-summary-list__value">
                 @{
-                    var display = DatesHelper.DateStringToGovUkDate(transferDates.Target);
+                    var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
                     @display
                 }
             </dd>
         }
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="TargetDate" 
+            <a class="govuk-link" asp-controller="TransferDates" asp-action="HtbDate"
+               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
+                Change<span class="govuk-visually-hidden"> Advisory Board date</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Target date for transfer
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <datesummary value="@transferDates.Target" has-date="@transferDates.HasTargetDateForTransfer"></datesummary>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-controller="TransferDates" asp-action="TargetDate"
                asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
                 Change<span class="govuk-visually-hidden"> target date for transfer</span>
             </a>

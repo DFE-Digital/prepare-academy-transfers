@@ -68,21 +68,9 @@
                 <dt class="govuk-summary-list__key">
                     Target date for transfer
                 </dt>
-                @if (string.IsNullOrEmpty(transferDates.Target))
-                {
-                    <dd class="govuk-summary-list__value">
-                        <span class="dfe-empty-tag">Empty</span>
-                    </dd>
-                }
-                else
-                {
-                    <dd class="govuk-summary-list__value">
-                        @{
-                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Target);
-                            @display
-                        }
-                    </dd>
-                }
+                <dd class="govuk-summary-list__value">
+                    <datesummary value="@transferDates.Target" has-date="@transferDates.HasTargetDateForTransfer"></datesummary>
+                </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn" data-test="target-date">
                         Change<span class="govuk-visually-hidden"> target date for transfer</span>
