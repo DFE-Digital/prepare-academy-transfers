@@ -118,13 +118,14 @@ namespace Frontend.Controllers.Projects
             var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
             
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-            model.Project.Dates.Target = dateUnknown ? null : dateString;
             
             if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
+            
+            model.Project.Dates.Target = dateUnknown ? null : dateString;
             
             if (!string.IsNullOrEmpty(model.Project.Dates.Target))
             {
@@ -175,7 +176,7 @@ namespace Frontend.Controllers.Projects
         [HttpPost("htb-date")]
         [ActionName("HtbDate")]
         public async Task<IActionResult> HtbDatePost(string urn, string day, string month, string year,
-            bool returnToPreview = false)
+            bool returnToPreview = false, bool dateUnknown = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
@@ -186,13 +187,14 @@ namespace Frontend.Controllers.Projects
             var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-            model.Project.Dates.Htb = dateString;
 
             if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
+            
+            model.Project.Dates.Htb = dateUnknown ? null : dateString;
             
             if (!string.IsNullOrEmpty(model.Project.Dates.Htb))
             {
@@ -204,7 +206,15 @@ namespace Frontend.Controllers.Projects
                     return View(model);
                 }
             }
+            
+            if (string.IsNullOrEmpty(dateString) && !dateUnknown)
+            {
+                model.FormErrors.AddError("day", "day", "You must enter the date or confirm that you don't know it");
+                return View(model);
+            }
 
+            model.Project.Dates.HasHtbDate = !dateUnknown;
+            
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
             {

@@ -57,7 +57,7 @@ namespace Frontend.Services
                 RationaleForTrust = project.Rationale.Trust,
                 ClearedBy = "",
                 Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
-                DateOfHtb = DatesHelper.DateStringToGovUkDate(project.Dates.Htb),
+                DateOfHtb = DatesHelper.FormatDateString(project.Dates.Htb, project.Dates.HasHtbDate),
                 DateOfProposedTransfer = DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer),
                 DateTransferWasFirstDiscussed = DatesHelper.FormatDateString(project.Dates.FirstDiscussed, project.Dates.HasFirstDiscussedDate),
                 ViabilityIssues = academy.GeneralInformation.ViabilityIssue,

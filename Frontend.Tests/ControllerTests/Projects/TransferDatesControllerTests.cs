@@ -511,6 +511,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                         new RouteValueDictionary(new {id = "0001"})
                     );
                 }
+                
+                [Fact]
+                public async void GivenNoDateAndUnknownIsFalse_SetsErrorOnViewModel()
+                {
+                    var response = await _subject.HtbDatePost("0001", null, null, null, dateUnknown:false);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("You must enter the date or confirm that you don't know it", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
             }
         }
     }

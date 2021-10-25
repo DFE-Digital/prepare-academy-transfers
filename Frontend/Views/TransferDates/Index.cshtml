@@ -43,21 +43,9 @@
                 <dt class="govuk-summary-list__key">
                     Set Advisory Board date
                 </dt>
-                @if (string.IsNullOrEmpty(transferDates.Htb))
-                {
-                    <dd class="govuk-summary-list__value">
-                        <span class="dfe-empty-tag">Empty</span>
-                    </dd>
-                }
-                else
-                {
-                    <dd class="govuk-summary-list__value">
-                        @{
-                            var display = DatesHelper.DateStringToGovUkDate(transferDates.Htb);
-                            @display
-                        }
-                    </dd>
-                }
+                <dd class="govuk-summary-list__value">
+                    <datesummary value="@transferDates.Htb" has-date="@transferDates.HasHtbDate"></datesummary>
+                </dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn" data-test="htb-date">
                         Change<span class="govuk-visually-hidden"> Advisory Board date</span>
