@@ -152,6 +152,8 @@ namespace Frontend
 
             app.UseRouting();
 
+            app.UseSentryTracing();
+            
             app.UseAuthentication();
             app.UseAuthorization();
 
