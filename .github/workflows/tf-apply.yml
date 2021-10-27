@@ -75,3 +75,4 @@ jobs:
           TF_VAR_app_username: ${{ secrets.USERNAME }}
           TF_VAR_app_password: ${{ secrets.PASSWORD }}
           TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+          TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
