@@ -109,6 +109,18 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Null(result.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years);
             Assert.Null(result.PupilNumbers.WithStatementOfSen);
         }
+        
+        [Fact]
+        public void GiveNullMisEstablishment_ReturnsCorrectValue()
+        {
+            var academyToMap = _tramsEstablishment;
+            academyToMap.MisEstablishment = null;
+
+            var result = _subject.Map(academyToMap);
+            Assert.Null(result.FaithSchool);
+            Assert.Equal("N/A", result.LatestOfstedJudgement.OverallEffectiveness);
+            Assert.Null(result.LatestOfstedJudgement.OfstedReport);
+        }
 
         [Fact]
         public void GivenViewAcademyConversionNull_DontPopulateInformation()
