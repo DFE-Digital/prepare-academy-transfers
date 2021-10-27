@@ -5,7 +5,11 @@ resource cloudfoundry_app worker_app {
 	strategy           = "blue-green-v2"
 
 	service_binding { 
-		service_instance = [ cloudfoundry_service_instance.redis.id, cloudfoundry_user_provided_service.logit.id ]
+		service_instance = cloudfoundry_service_instance.redis.id
+	}
+
+	service_binding {
+		service_instance = cloudfoundry_user_provided_service.logit.id
 	}
 
 	routes {
