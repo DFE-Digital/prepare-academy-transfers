@@ -14,7 +14,7 @@ namespace Data.TRAMS.Mappers.Response
             {
                 Address = Address(input),
                 EstablishmentType = input.EstablishmentType.Name,
-                FaithSchool = input.MisEstablishment.ReligiousEthos,
+                FaithSchool = input.MisEstablishment?.ReligiousEthos,
                 LatestOfstedJudgement = LatestOfstedJudgement(input),
                 LocalAuthorityName = input.LocalAuthorityName,
                 Name = input.EstablishmentName,
@@ -37,9 +37,9 @@ namespace Data.TRAMS.Mappers.Response
             return new LatestOfstedJudgement
             {
                 InspectionDate = input.OfstedLastInspection,
-                OverallEffectiveness = ParseOfstedRating(input.MisEstablishment.OverallEffectiveness),
+                OverallEffectiveness = ParseOfstedRating(input.MisEstablishment?.OverallEffectiveness),
                 SchoolName = input.EstablishmentName,
-                OfstedReport = input.MisEstablishment.WebLink
+                OfstedReport = input.MisEstablishment?.WebLink
             };
         }
 
