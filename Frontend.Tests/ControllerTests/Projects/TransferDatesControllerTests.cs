@@ -208,6 +208,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("You must enter the date or confirm that you don't know it", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenValidDateAndUnknownIsTrue_SetsErrorOnViewModel()
+                {
+                    var response = await _subject.FirstDiscussedPost("0001", "25", "10", "2021", dateUnknown: true);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("You must either enter the date or select 'I do not know this'", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
             }
         }
 
@@ -365,6 +375,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("You must enter the date or confirm that you don't know it", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
+
+                [Fact]
+                public async void GivenValidDateAndUnknownIsTrue_SetsErrorOnViewModel()
+                {
+                    var response = await _subject.TargetDatePost("0001", "25", "10", "2021", dateUnknown: true);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("You must either enter the date or select 'I do not know this'", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
             }
         }
 
@@ -520,6 +540,16 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("You must enter the date or confirm that you don't know it", responseModel.FormErrors.Errors[0].ErrorMessage);
+                }
+
+                [Fact]
+                public async void GivenValidDateAndUnknownIsTrue_SetsErrorOnViewModel()
+                {
+                    var response = await _subject.HtbDatePost("0001", "25", "10", "2021", dateUnknown: true);
+                    var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
+
+                    Assert.True(responseModel.FormErrors.HasErrors);
+                    Assert.Equal("You must either enter the date or select 'I do not know this'", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
             }
         }
