@@ -27,7 +27,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             _projectsRepository = new Mock<IProjects>();
 
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
+                .ReturnsAsync(new RepositoryResult<Project> { Result = _foundProject });
             _projectsRepository.Setup(s => s.GetByUrn(_errorWithGetByUrn))
                 .ReturnsAsync(
                     new RepositoryResult<Project>
@@ -141,9 +141,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [InlineData("1", "0", "2020")]
                 [InlineData("1", "13", "2020")]
                 [InlineData("1", "13", "0")]
-                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year)
+                [InlineData("40", "20", "0", true)]
+                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year, bool dateUnknown = false)
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", day, month, year);
+                    var response = await _subject.FirstDiscussedPost("0001", day, month, year, dateUnknown: dateUnknown);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
@@ -182,7 +183,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", "01", null, null, returnToPreview:true);
+                    var response = await _subject.FirstDiscussedPost("0001", "01", null, null, returnToPreview: true);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -191,18 +192,18 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectToPreviewPage()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020", returnToPreview:true);
+                    var response = await _subject.FirstDiscussedPost("0001", "01", "01", "2020", returnToPreview: true);
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response,
                         Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
 
                 [Fact]
                 public async void GivenNoDateAndUnknownIsFalse_SetsErrorOnViewModel()
                 {
-                    var response = await _subject.FirstDiscussedPost("0001", null, null, null, dateUnknown:false);
+                    var response = await _subject.FirstDiscussedPost("0001", null, null, null, dateUnknown: false);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
@@ -296,20 +297,21 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [InlineData("1", "0", "2020")]
                 [InlineData("1", "13", "2020")]
                 [InlineData("1", "13", "0")]
-                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year)
+                [InlineData("41", "20", "0", true)]
+                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year, bool dateUnknown = false)
                 {
-                    var response = await _subject.TargetDatePost("0001", day, month, year);
+                    var response = await _subject.TargetDatePost("0001", day, month, year, dateUnknown: dateUnknown);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
-                
+
                 [Fact]
                 public async void GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
                 {
                     _foundProject.Dates.Htb = "12/10/2020";
-                    
+
                     var response = await _subject.TargetDatePost("0001", "11", "10", "2020");
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
@@ -362,14 +364,14 @@ namespace Frontend.Tests.ControllerTests.Projects
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response,
                         Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
-                
+
                 [Fact]
                 public async void GivenNoDateAndUnknownIsFalse_SetsErrorOnViewModel()
                 {
-                    var response = await _subject.TargetDatePost("0001", null, null, null, dateUnknown:false);
+                    var response = await _subject.TargetDatePost("0001", null, null, null, dateUnknown: false);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
@@ -462,20 +464,21 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [InlineData("1", "0", "2020")]
                 [InlineData("1", "13", "2020")]
                 [InlineData("1", "13", "0")]
-                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year)
+                [InlineData("41", "20", "0", true)]
+                public async void GivenInvalidDate_SetErrorOnTheModel(string day, string month, string year, bool dateUnknown = false)
                 {
-                    var response = await _subject.HtbDatePost("0001", day, month, year);
+                    var response = await _subject.HtbDatePost("0001", day, month, year, dateUnknown: dateUnknown);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
                     Assert.Equal("Enter a valid date", responseModel.FormErrors.Errors[0].ErrorMessage);
                 }
-                
+
                 [Fact]
                 public async void GivenABDateBeforeTransferDate_SetErrorOnTheModel()
                 {
                     _foundProject.Dates.Target = "12/10/2020";
-                    
+
                     var response = await _subject.HtbDatePost("0001", "13", "10", "2020");
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
@@ -528,14 +531,14 @@ namespace Frontend.Tests.ControllerTests.Projects
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response,
                         Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
-                
+
                 [Fact]
                 public async void GivenNoDateAndUnknownIsFalse_SetsErrorOnViewModel()
                 {
-                    var response = await _subject.HtbDatePost("0001", null, null, null, dateUnknown:false);
+                    var response = await _subject.HtbDatePost("0001", null, null, null, dateUnknown: false);
                     var responseModel = ControllerTestHelpers.GetViewModelFromResult<TransferDatesViewModel>(response);
 
                     Assert.True(responseModel.FormErrors.HasErrors);
