@@ -1,10 +1,16 @@
+const webpack = require('webpack');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var path = require('path');
+const commitHash = require('child_process').execSync('git rev-parse HEAD').toString()
 
 module.exports = {
     mode: 'production',
     entry: ['./src/js/site.js', './src/css/site.scss'],
-    plugins: [new MiniCssExtractPlugin({filename: 'site.css'})],
+    plugins: [
+        new MiniCssExtractPlugin({filename: 'site.css'}),
+        new webpack.DefinePlugin({
+        'process.env.COMMIT_HASH': JSON.stringify(commitHash),
+        })],
     module: {
         rules: [
             {

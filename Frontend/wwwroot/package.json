@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "^0.2.2",
+    "@sentry/browser": "^6.13.3",
+    "@sentry/tracing": "^6.13.3",
     "govuk-frontend": "^3.11.0"
   }
 }
