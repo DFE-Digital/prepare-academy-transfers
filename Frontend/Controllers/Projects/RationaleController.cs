@@ -51,8 +51,15 @@ namespace Frontend.Controllers.Projects
 
         [ActionName("Project")]
         [HttpPost("rationale")]
-        public async Task<IActionResult> ProjectPost(string urn, string rationale, bool returnToPreview = false)
+        //public async Task<IActionResult> ProjectPost(string urn, string rationale, bool returnToPreview = false)
+        public async Task<IActionResult> ProjectPost(string urn, [FromForm]RationaleViewModel rationaleViewModel, bool returnToPreview = false)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(rationaleViewModel);
+            }
+
+            var rationale = rationaleViewModel.Project.Rationale.Project;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {

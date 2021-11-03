@@ -1,9 +1,10 @@
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model RationaleViewModel
 
 @{
     ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Write the rationale for the project");
     Layout = "_Layout";
-    var formClasses = Model.FormErrors.FormClassesForField("rationale");
+    var formClasses = ViewData.ModelState.ErrorCount > 0 ? "govuk-form-group--error" : ""; // Model.FormErrors.FormClassesForField("rationale");
 }
 
 @section BeforeMain
@@ -13,12 +14,14 @@
     </backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
+@* @await Html.PartialAsync("_FormErrorSummary", Model.FormErrors) *@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Project" method="post" novalidate="">
             <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden/>
+            <input asp-for="Project.TransferringAcademies[0].OutgoingAcademyName" type="hidden" value="@Model.Project.TransferringAcademies[0].OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
                     <span class="govuk-caption-l">
@@ -35,14 +38,16 @@
                     You can format this section after you download your project template.
                 </div>
 
-                @if (Model.FormErrors.HasErrorForField("rationale"))
-                {
-                    <span id="rationale-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("rationale").ErrorMessage
-                    </span>
-                }
+                @* @if (Model.FormErrors.HasErrorForField("rationale")) *@
+                @* { *@
+                @*     <span id="rationale-error" class="govuk-error-message"> *@
+                @*         <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("rationale").ErrorMessage *@
+                @*     </span> *@
+                @* } *@
+                
+                <div><span asp-validation-for="@Model.Project.Rationale.Project" class="govuk-error-message"></span> </div>
 
-                <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint" data-test="project-rationale">@Model.Project.Rationale.Project</textarea>
+                <textarea asp-for="@Model.Project.Rationale.Project" class="govuk-textarea" rows="20" aria-describedby="rationale-hint" data-test="project-rationale">@Model.Project.Rationale.Project</textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue
