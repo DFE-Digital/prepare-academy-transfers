@@ -45,7 +45,7 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var model = new FeaturesInitiatedViewModel
             {
                 Project = project.Result,
                 ReturnToPreview = returnToPreview,                
@@ -57,7 +57,7 @@ namespace Frontend.Controllers.Projects
         [ActionName("Initiated")]
         [Route("initiated")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> InitiatedPost([Bind("ReturnToPreview", "Project", "WhoInitiated")] FeaturesViewModel vm)
+        public async Task<IActionResult> InitiatedPost([Bind("ReturnToPreview", "Project", "WhoInitiated")] FeaturesInitiatedViewModel vm)
         {
             var urn = vm.Project.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
@@ -97,48 +97,45 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var projectResult = project.Result;
+            var vm = new FeaturesReasonViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                IsSubjectToIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                ReturnToPreview = returnToPreview,
+                MoreDetail = projectResult.Features.ReasonForTransfer.InterventionDetails
             };
-            return View(model);
+            return View(vm);
         }
 
         [Route("reason")]
         [ActionName("Reason")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail, bool returnToPreview = false)
+        public async Task<IActionResult> ReasonPost(FeaturesReasonViewModel vm)
         {
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            if (!isSubjectToIntervention.HasValue)
-            {
-                model.FormErrors.AddError("True", "isSubjectToIntervention",
-                    "Select whether or not the transfer is subject to intervention");
-                return View(model);
+                return View(vm);
             }
 
-            model.Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = isSubjectToIntervention;
-            model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail ?? string.Empty;
+            project.Result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = vm.IsSubjectToIntervention;
+            project.Result.Features.ReasonForTransfer.InterventionDetails = vm.MoreDetail ?? string.Empty;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(project.Result);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }

@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model FeaturesViewModel
+@model FeaturesInitiatedViewModel
 
 @{
     ViewBag.Title = !ViewData.ModelState.IsValid ? "Error: Who initiated the academy transfer?" : "Who initiated the academy transfer?";
@@ -33,7 +33,7 @@
                             Who initiated the academy transfer?
                         </h1>
                     </legend>
-                    @if (ViewData.ModelState.GetFieldValidationState("WhoInitiated") == ModelValidationState.Invalid)
+                    @if (ViewData.ModelState.GetFieldValidationState(nameof(Model.WhoInitiated)) == ModelValidationState.Invalid)
                     {
                         <span id="who-initiated-error" class="govuk-error-message">
                             <span class="govuk-visually-hidden">Error:</span>@Html.ValidationMessageFor(m => m.WhoInitiated)

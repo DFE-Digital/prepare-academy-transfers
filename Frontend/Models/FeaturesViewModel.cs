@@ -1,13 +1,39 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Data.Models.Projects;
-using Frontend.Helpers;
 using Frontend.Models.Forms;
 using Helpers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Frontend.Models
 {
+    //todo:remove base project model
+    public class FeaturesInitiatedViewModel : FeaturesViewModel
+    {
+        public string WhoInitiated { get; set; }
+    }
+
+    public class FeaturesReasonViewModel
+    {
+        public string Urn { get; set; }
+        public string OutgoingAcademyName { get; set; }
+        public bool? IsSubjectToIntervention { get; set; }
+        public string MoreDetail { get; set; }
+        public bool ReturnToPreview { get; set; }
+
+        public List<RadioButtonViewModel> ReasonRadioButtons()
+        {
+            var result = new[] { true, false }.Select(value => new RadioButtonViewModel
+            {
+                Value = value.ToString(),
+                Name = nameof(IsSubjectToIntervention),
+                DisplayName = value ? "Yes" : "No",
+                Checked = IsSubjectToIntervention == value
+            }).ToList();
+
+            return result;
+        }
+    }
+
     public class FeaturesViewModel : ProjectViewModel
     {
         //todo: remove once all views using ModelState
@@ -23,8 +49,6 @@ namespace Frontend.Models
 
         public bool IsTransferSubjectToIntervention =>
             Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true;
-
-        public bool ReturnToPreview { get; set; }
 
         public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ProjectInitiators selected)
         {
@@ -43,17 +67,7 @@ namespace Frontend.Models
             return result;
         }        
 
-        public List<RadioButtonViewModel> ReasonRadioButtons()
-        {
-            var result = new[] {true, false}.Select(value => new RadioButtonViewModel
-            {
-                Value = value.ToString(), Name = "isSubjectToIntervention",
-                DisplayName = value ? "Yes" : "No",
-                Checked = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == value
-            }).ToList();
-
-            return result;
-        }
+        
 
         public List<RadioButtonViewModel> TypeOfTransferRadioButtons()
         {
@@ -70,8 +84,8 @@ namespace Frontend.Models
 
             return result;
         }
-        
-        public string WhoInitiated { get; set; }           
+
+        public bool ReturnToPreview { get; set; }
 
     }
 }
