@@ -1,10 +1,11 @@
 @model List<Frontend.Models.Forms.RadioButtonViewModel>
 
 <div class="govuk-radios">
-    @foreach (var radioButton in Model)
+    @for (var i = 0; i < Model.Count(); i++)
     {
+        var radioButton = Model[i];
         <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="@radioButton.Value" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
+            <input class="govuk-radios__input" id="@(i == 0 ? radioButton.Name : radioButton.Value)" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
             <label class="govuk-label govuk-radios__label" for="@radioButton.Value">
                 @radioButton.DisplayName
             </label>

@@ -6,10 +6,12 @@ using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
+using Frontend.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
+using FluentValidation.AspNetCore;
 
 namespace Frontend.Tests.ControllerTests.Projects
 {
@@ -109,14 +111,24 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrnAndInitiator_GetsProjectFromRepository()
                 {
-                    await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        WhoInitiated = TransferFeatures.ProjectInitiators.Dfe.ToString()
+                    };
+                    await _subject.InitiatedPost(vm);
                     _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
                 }
 
                 [Fact]
                 public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
                 {
-                    var request = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        WhoInitiated = TransferFeatures.ProjectInitiators.Dfe.ToString()
+                    };
+                    var request = await _subject.InitiatedPost(vm);
 
                     var redirectResponse = Assert.IsType<RedirectToActionResult>(request);
                     Assert.Equal("Index", redirectResponse.ActionName);
@@ -128,7 +140,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrnAndWhoInitiated_AssignsTheCorrectEnumAndUpdatesTheProject(
                     TransferFeatures.ProjectInitiators whoInitiated)
                 {
-                    await _subject.InitiatedPost("0001", whoInitiated);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        WhoInitiated = whoInitiated.ToString()
+                    };
+                    await _subject.InitiatedPost(vm);
                     _projectRepository.Verify(
                         r => r.Update(
                             It.Is<Project>(project => project.Features.WhoInitiatedTheTransfer == whoInitiated))
@@ -138,18 +155,34 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenEmptyInitiator_AddAnErrorMessageToThePageAndDoNotUpdateTheModel()
                 {
-                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Empty);
-                    var viewModel = GetViewModel(response);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        WhoInitiated = string.Empty
+                    };
+
+                    //Validate object with empty Initiator and post to controller
+                    var validator = new FeaturesValidator();
+                    var results = validator.Validate(vm);
+                    results.AddToModelState(_subject.ModelState, null);
+                    var response = await _subject.InitiatedPost(vm);
+                    
+                    //Assert
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    var error = viewModel.FormErrors.Errors[0];
-                    Assert.Equal("Select who initiated the project", error.ErrorMessage);
+                    Assert.False(results.IsValid);
+                    Assert.Equal("WhoInitiated", results.Errors[0].PropertyName);
+                    Assert.Equal("Select who initiated the project", results.Errors[0].ErrorMessage);
                 }
 
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                    var response = await _subject.InitiatedPost("errorUrn", TransferFeatures.ProjectInitiators.Dfe);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "errorUrn" },
+                        WhoInitiated = TransferFeatures.ProjectInitiators.Dfe.ToString()
+                    };
+                    var response = await _subject.InitiatedPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
@@ -172,7 +205,12 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new FeaturesController(_projectRepository.Object);
 
-                    var response = await controller.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        WhoInitiated = TransferFeatures.ProjectInitiators.Dfe.ToString()
+                    };
+                    var response = await controller.InitiatedPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
@@ -183,7 +221,19 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreviewWithInvalidInput_AssignToTheView()
                 {
-                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Empty, true);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        ReturnToPreview = true,
+                        WhoInitiated = string.Empty
+                    };
+
+                    //Validate object and post to controller
+                    var validator = new FeaturesValidator();
+                    var results = validator.Validate(vm);
+                    results.AddToModelState(_subject.ModelState, null);
+                    var response = await _subject.InitiatedPost(vm);
+
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -192,11 +242,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectsToPreviewPage()
                 {
-                    var response = await _subject.InitiatedPost("0001", TransferFeatures.ProjectInitiators.Dfe, true);
+                    FeaturesViewModel vm = new FeaturesViewModel
+                    {
+                        Project = new Project { Urn = "0001" },
+                        ReturnToPreview = true,
+                        WhoInitiated = TransferFeatures.ProjectInitiators.Dfe.ToString()
+                    };
+                    var response = await _subject.InitiatedPost(vm);
 
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
             }
@@ -332,7 +388,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
             }
@@ -451,7 +507,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
+                        new RouteValueDictionary(new { id = "0001" })
                     );
                 }
 

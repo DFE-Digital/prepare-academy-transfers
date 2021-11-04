@@ -8,9 +8,11 @@ using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.EducationPerformance;
+using FluentValidation.AspNetCore;
 using Frontend.Security;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
+using Frontend.Validators;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +27,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
+
+
 
 namespace Frontend
 {
@@ -47,6 +51,13 @@ namespace Frontend
             services.AddControllersWithViews(options => options.Filters.Add(
                     new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider();
+
+
+            services.AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<FeaturesValidator>();
+                //fv.DisableDataAnnotationsValidation = true;
+            });
 
             services.AddAuthorization(options =>
             {
@@ -139,7 +150,7 @@ namespace Frontend
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseSecurityHeaders(
                 SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
 
@@ -153,7 +164,7 @@ namespace Frontend
             app.UseRouting();
 
             app.UseSentryTracing();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

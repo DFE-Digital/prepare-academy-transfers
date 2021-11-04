@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Data.Models.Projects;
 using Frontend.Helpers;
@@ -9,6 +10,7 @@ namespace Frontend.Models
 {
     public class FeaturesViewModel : ProjectViewModel
     {
+        //todo: remove once all views using ModelState
         public readonly FormErrorsViewModel FormErrors;
 
         public FeaturesViewModel()
@@ -32,13 +34,14 @@ namespace Frontend.Models
 
             var result = values.Select(value => new RadioButtonViewModel
             {
-                Value = value.ToString(), Name = "whoInitiated",
+                Value = value.ToString(), 
+                Name = "WhoInitiated",
                 DisplayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(value),
                 Checked = selected == value
             }).ToList();
 
             return result;
-        }
+        }        
 
         public List<RadioButtonViewModel> ReasonRadioButtons()
         {
@@ -67,5 +70,8 @@ namespace Frontend.Models
 
             return result;
         }
+        
+        public string WhoInitiated { get; set; }           
+
     }
 }

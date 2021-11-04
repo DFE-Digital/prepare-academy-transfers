@@ -5,6 +5,7 @@ using Data.Models.Projects;
 using Frontend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Helpers;
 
 namespace Frontend.Controllers.Projects
 {
@@ -47,50 +48,43 @@ namespace Frontend.Controllers.Projects
             var model = new FeaturesViewModel
             {
                 Project = project.Result,
-                ReturnToPreview = returnToPreview
+                ReturnToPreview = returnToPreview,                
             };
-            
+
             return View(model);
         }
 
         [ActionName("Initiated")]
         [Route("initiated")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> InitiatedPost(string urn, TransferFeatures.ProjectInitiators whoInitiated, bool returnToPreview = false)
+        public async Task<IActionResult> InitiatedPost([Bind("ReturnToPreview", "Project", "WhoInitiated")] FeaturesViewModel vm)
         {
+            var urn = vm.Project.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
-            {
-                model.FormErrors.AddError(TransferFeatures.ProjectInitiators.Dfe.ToString(), "whoInitiated",
-                    "Select who initiated the project");
-                return View(model);
+                return View(vm);
             }
 
-            model.Project.Features.WhoInitiatedTheTransfer = whoInitiated;
+            project.Result.Features.WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(vm.WhoInitiated);
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(project.Result);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new { urn });
         }
 
         [Route("reason")]
@@ -146,10 +140,10 @@ namespace Frontend.Controllers.Projects
 
             if (returnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new { urn });
         }
 
         [Route("type")]
@@ -212,7 +206,7 @@ namespace Frontend.Controllers.Projects
 
             if (returnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
             return RedirectToAction("Index", new { urn });
