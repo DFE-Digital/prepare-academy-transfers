@@ -45,9 +45,12 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
+            var projectResult = project.Result;
             var model = new FeaturesInitiatedViewModel
             {
-                Project = project.Result,
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                WhoInitiated  = projectResult.Features.WhoInitiatedTheTransfer,
                 ReturnToPreview = returnToPreview,                
             };
 
@@ -57,9 +60,9 @@ namespace Frontend.Controllers.Projects
         [ActionName("Initiated")]
         [Route("initiated")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> InitiatedPost([Bind("ReturnToPreview", "Project", "WhoInitiated")] FeaturesInitiatedViewModel vm)
+        public async Task<IActionResult> InitiatedPost(FeaturesInitiatedViewModel vm)
         {
-            var urn = vm.Project.Urn;
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
@@ -71,7 +74,7 @@ namespace Frontend.Controllers.Projects
                 return View(vm);
             }
 
-            project.Result.Features.WhoInitiatedTheTransfer = EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(vm.WhoInitiated);
+            project.Result.Features.WhoInitiatedTheTransfer = vm.WhoInitiated;
 
             var result = await _projectsRepository.Update(project.Result);
             if (!result.IsValid)

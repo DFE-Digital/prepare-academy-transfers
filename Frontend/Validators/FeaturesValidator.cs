@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Data.Models.Projects;
+using FluentValidation;
 using Frontend.Models;
 
 namespace Frontend.Validators
@@ -8,7 +9,7 @@ namespace Frontend.Validators
         public FeaturesInitiatedValidator()
         {
             var whoInitiatedError = "Select who initiated the project";
-            RuleFor(x => x.WhoInitiated).NotEmpty().WithMessage(whoInitiatedError);
+            RuleFor(x => x.WhoInitiated).NotEqual(TransferFeatures.ProjectInitiators.Empty).WithMessage(whoInitiatedError);
         }
     }
 

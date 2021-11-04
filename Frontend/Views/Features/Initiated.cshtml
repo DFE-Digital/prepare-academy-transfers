@@ -5,13 +5,13 @@
     ViewBag.Title = !ViewData.ModelState.IsValid ? "Error: Who initiated the academy transfer?" : "Who initiated the academy transfer?";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
-    var radioButtons = FeaturesViewModel.InitiatedRadioButtons(Model.Project.Features.WhoInitiatedTheTransfer);
+    var radioButtons = FeaturesInitiatedViewModel.InitiatedRadioButtons(Model.WhoInitiated);
 }
 
 @section BeforeMain
 {
-<backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+<backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
 </backtopreview>
 }
 
@@ -20,15 +20,16 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Initiated" method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Project.Urn" />
+            <input type="hidden" asp-for="@Model.Urn" />
             <input type="hidden" asp-for="@Model.ReturnToPreview" />
-            <input asp-for="Project.TransferringAcademies[0].OutgoingAcademyName" type="hidden" value="@Model.Project.TransferringAcademies[0].OutgoingAcademyName"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
+
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.Project.OutgoingAcademyName
+                                @Model.OutgoingAcademyName
                             </span>
                             Who initiated the academy transfer?
                         </h1>
