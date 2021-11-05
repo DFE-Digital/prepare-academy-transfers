@@ -488,7 +488,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsItToTheViewModel()
                 {
                     var response = await _subject.Type("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -501,7 +501,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [InlineData(TransferFeatures.TransferTypes.TrustsMerging)]
                 public async void GivenNonOtherType_UpdatesTheProject(TransferFeatures.TransferTypes transferType)
                 {
-                    await _subject.TypePost("0001", transferType, "");
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = transferType,
+                        OtherType = string.Empty
+                    };
+                    await _subject.TypePost(vm);
 
                     _projectRepository.Verify(
                         r => r.Update(It.Is<Project>(project => project.Features.TypeOfTransfer == transferType)),
@@ -511,7 +517,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenOtherTypeAndText_UpdatesTheProject()
                 {
-                    await _subject.TypePost("0001", TransferFeatures.TransferTypes.Other, "Other");
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.Other,
+                        OtherType = "Other"
+                    };
+                    await _subject.TypePost(vm);
 
                     _projectRepository.Verify(
                         r => r.Update(It.Is<Project>(project =>
@@ -520,31 +532,53 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Times.Once);
                 }
 
-                //TODO:
-                //[Fact]
-                //public async void GivenNoTransferType_SetErrorOnTheView()
-                //{
-                //    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Empty, null);
-                //    var viewModel = GetViewModel(response);
-                //    Assert.True(viewModel.FormErrors.HasErrors);
-                //    Assert.Equal("Select the type of transfer",
-                //        viewModel.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage);
-                //}
+                
+                [Fact]
+                public async void GivenNoTransferType_SetErrorOnTheView()
+                {
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.Empty
+                    };
+                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    var response = await _subject.TypePost(vm);
 
-                //[Fact]
-                //public async void GivenOtherTransferTypeButNoText_SetErrorOnTheView()
-                //{
-                //    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Other, null);
-                //    var viewModel = GetViewModel(response);
-                //    Assert.True(viewModel.FormErrors.HasErrors);
-                //    Assert.Equal("Enter the type of transfer",
-                //        viewModel.FormErrors.ErrorForField("otherType").ErrorMessage);
-                //}
+                    Assert.False(results.IsValid);
+                    Assert.Equal(nameof(vm.TypeOfTransfer), results.Errors[0].PropertyName);
+                    Assert.Equal("Select the type of transfer", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
+                }
+
+
+                [Fact]
+                public async void GivenOtherTransferTypeButNoText_SetErrorOnTheView()
+                {
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.Other
+                    };
+
+                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    var response = await _subject.TypePost(vm);
+
+                    Assert.False(results.IsValid);
+                    Assert.Equal(nameof(vm.OtherType), results.Errors[0].PropertyName);
+                    Assert.Equal("Enter the type of transfer", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
+                }
 
                 [Fact]
                 public async void GivenTypeOfTransfer_RedirectsToIndex()
                 {
-                    var result = await _subject.TypePost("0001", TransferFeatures.TransferTypes.SatClosure, null);
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
+                    };
+
+                    var result = await _subject.TypePost(vm);
                     var redirect = Assert.IsType<RedirectToActionResult>(result);
                     Assert.Equal("Index", redirect.ActionName);
                 }
@@ -552,7 +586,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                    var response = await _subject.TypePost("errorUrn", TransferFeatures.TransferTypes.SatClosure, null);
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "errorUrn",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
+                    };
+
+                    var response = await _subject.TypePost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
@@ -563,8 +603,15 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreviewWithError_AssignsItToTheViewModel()
                 {
-                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.Empty, "", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.Empty,
+                        ReturnToPreview = true
+                    };
+                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    var response = await _subject.TypePost(vm);
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -572,7 +619,14 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectsToPreviewPage()
                 {
-                    var response = await _subject.TypePost("0001", TransferFeatures.TransferTypes.MatClosure, "Meow", true);
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
+                        OtherType = "Meow",
+                        ReturnToPreview = true
+                    };
+                    var response = await _subject.TypePost(vm);
 
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
@@ -583,6 +637,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
+                    var vm = new FeaturesTypeViewModel
+                    {
+                        Urn = "0001",
+                        TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
+                    };
+
                     _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                         .ReturnsAsync(new RepositoryResult<Project>
                         {
@@ -595,7 +655,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new FeaturesController(_projectRepository.Object);
 
-                    var response = await controller.TypePost("0001", TransferFeatures.TransferTypes.SatClosure, null);
+                    var response = await controller.TypePost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
