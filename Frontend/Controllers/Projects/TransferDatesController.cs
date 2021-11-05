@@ -61,20 +61,27 @@ namespace Frontend.Controllers.Projects
 
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
 
+            model.Project.Dates.FirstDiscussed = dateString;
+            model.Project.Dates.HasFirstDiscussedDate = !dateUnknown;
+
+            //TODO move validation from controller to attributes
             if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
-            {
+            {              
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
             
             if (string.IsNullOrEmpty(dateString) && !dateUnknown)
-            {
+            {                
                 model.FormErrors.AddError("day", "day", "You must enter the date or confirm that you don't know it");
                 return View(model);
             }
 
-            model.Project.Dates.FirstDiscussed = dateUnknown ? null : dateString;
-            model.Project.Dates.HasFirstDiscussedDate = !dateUnknown;
+            if (DatesHelper.IsValidDate(dateString) && dateUnknown)
+            {                
+                model.FormErrors.AddError("day", "day", "You must either enter the date or select 'I do not know this'");
+                return View(model);
+            }
             
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
@@ -118,15 +125,16 @@ namespace Frontend.Controllers.Projects
             var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
             
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-            
+
+            model.Project.Dates.Target = dateString;
+            model.Project.Dates.HasTargetDateForTransfer = !dateUnknown;
+
             if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
-            
-            model.Project.Dates.Target = dateUnknown ? null : dateString;
-            
+
             if (!string.IsNullOrEmpty(model.Project.Dates.Target))
             {
                 if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
@@ -144,8 +152,12 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            model.Project.Dates.HasTargetDateForTransfer = !dateUnknown;
-            
+            if (DatesHelper.IsValidDate(dateString) && dateUnknown)
+            {
+                model.FormErrors.AddError("day", "day", "You must either enter the date or select 'I do not know this'");
+                return View(model);
+            }
+
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
             {
@@ -187,14 +199,15 @@ namespace Frontend.Controllers.Projects
             var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
 
             var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
+            
+            model.Project.Dates.Htb = dateString;
+            model.Project.Dates.HasHtbDate = !dateUnknown;
 
             if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
             {
                 model.FormErrors.AddError("day", "day", "Enter a valid date");
                 return View(model);
             }
-            
-            model.Project.Dates.Htb = dateUnknown ? null : dateString;
             
             if (!string.IsNullOrEmpty(model.Project.Dates.Htb))
             {
@@ -213,7 +226,11 @@ namespace Frontend.Controllers.Projects
                 return View(model);
             }
 
-            model.Project.Dates.HasHtbDate = !dateUnknown;
+            if (DatesHelper.IsValidDate(dateString) && dateUnknown)
+            {
+                model.FormErrors.AddError("day", "day", "You must either enter the date or select 'I do not know this'");
+                return View(model);
+            }
             
             var result = await _projectsRepository.Update(model.Project);
             if (!result.IsValid)
