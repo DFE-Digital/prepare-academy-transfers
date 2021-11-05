@@ -168,6 +168,7 @@ namespace Frontend.Controllers.Projects
             var vm = new FeaturesTypeViewModel
             {
                 Urn = project.Result.Urn,
+                OutgoingAcademyName = project.Result.OutgoingAcademyName,
                 ReturnToPreview = returnToPreview
             };
             return View(vm);
