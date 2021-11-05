@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
+using FluentValidation;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 
 namespace Frontend.Tests.ControllerTests.Projects
 {
@@ -63,7 +65,8 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
             {
                 var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
-                await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                await request();
+                _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
             }
 
             [Fact]
@@ -86,7 +89,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Initiated("0001"));
-                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                    await request();
+                    _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
                 }
 
                 [Fact]
@@ -165,17 +169,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                         WhoInitiated = TransferFeatures.ProjectInitiators.Empty
                     };
 
-                    //Validate object with empty Initiator and post to controller
-                    var validator = new FeaturesInitiatedValidator();
-                    var results = validator.Validate(vm);
-                    results.AddToModelState(_subject.ModelState, null);
+                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _subject.ModelState);
                     var response = await _subject.InitiatedPost(vm);
 
                     //Assert
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
+
                     Assert.False(results.IsValid);
                     Assert.Equal("WhoInitiated", results.Errors[0].PropertyName);
                     Assert.Equal("Select who initiated the project", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.GetViewModelFromResult<FeaturesInitiatedViewModel>(response);
                 }
 
                 [Fact]
@@ -232,10 +235,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         WhoInitiated = TransferFeatures.ProjectInitiators.Empty
                     };
 
-                    //Validate object and post to controller
-                    var validator = new FeaturesInitiatedValidator();
-                    var results = validator.Validate(vm);
-                    results.AddToModelState(_subject.ModelState, null);
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _subject.ModelState);
                     var response = await _subject.InitiatedPost(vm);
 
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesInitiatedViewModel>(response);
@@ -270,7 +270,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_GetsProjectAndAssignsToTheView()
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Reason("0001"));
-                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                    var result = await request();
+                    _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+                    var vm = ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(result);
+
+                    Assert.Equal(_foundProject.OutgoingAcademyName, vm.OutgoingAcademyName);
+                    Assert.IsType<FeaturesReasonViewModel>(vm);
                 }
 
                 [Fact]
@@ -348,7 +353,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                     {
                         Urn = "0001",
                     };
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _subject.ModelState);
                     await _subject.ReasonPost(vm);
+
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
                 }
 
@@ -360,16 +367,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Urn = "0001",
                     };
 
-                    //Validate object and post to controller
-                    var validator = new FeaturesReasonValidator();
-                    var results = validator.Validate(vm);
-                    results.AddToModelState(_subject.ModelState, null);
-
-                    var result = await _subject.ReasonPost(vm);
+                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _subject.ModelState);
+                    var resultPost = await _subject.ReasonPost(vm);
 
                     Assert.False(results.IsValid);
                     Assert.Equal(nameof(vm.IsSubjectToIntervention), results.Errors[0].PropertyName);
                     Assert.Equal("Select whether or not the transfer is subject to intervention", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(resultPost);
                 }
 
                 [Fact]
@@ -412,9 +416,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
 
                     var response = await controller.ReasonPost(vm);
-                    var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
 
+                    var viewResult = Assert.IsType<ViewResult>(response);
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
@@ -428,9 +432,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                         ReturnToPreview = true
                     };
 
-                    var response = await _subject.ReasonPost(vm);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesViewModel>(response);
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _subject.ModelState);
 
+                    var response = await _subject.ReasonPost(vm);
+
+                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(response);
                     Assert.True(viewModel.ReturnToPreview);
                 }
 
@@ -462,7 +468,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_GetsProjectAndAssignsToTheView()
                 {
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Type("0001"));
-                    await AssertProjectIsGottenFromRepositoryAndAssignedToView(request);
+                    await request();
+                    _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
                 }
 
                 [Fact]
@@ -596,25 +603,5 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
             }
         }
-
-        #region Helpers
-
-        private async Task AssertProjectIsGottenFromRepositoryAndAssignedToView(Func<Task<IActionResult>> request)
-        {
-            var result = await request();
-            _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-            var viewModel = GetViewModel(result);
-
-            Assert.Equal(_foundProject.OutgoingAcademyName, viewModel.OutgoingAcademyName);
-        }
-
-        private static FeaturesInitiatedViewModel GetViewModel(IActionResult result)
-        {
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var viewModel = Assert.IsType<FeaturesInitiatedViewModel>(viewResult.Model);
-            return viewModel;
-        }
-
-        #endregion
     }
 }
