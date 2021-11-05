@@ -1,5 +1,4 @@
 @using Data.Models.Projects
-@using Frontend.Helpers
 @using Helpers
 @model Frontend.Models.Features.FeaturesViewModel
 
@@ -10,13 +9,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Features of the transfer
@@ -34,18 +33,18 @@
                     Who initiated this academy transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.Project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
+                    @if (Model.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
-                        var displayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(Model.Project.Features.WhoInitiatedTheTransfer);
+                        var displayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(Model.WhoInitiatedTheTransfer);
                         @displayName
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Initiated" asp-route-urn="@Model.Project.Urn" data-test="initiated">
+                    <a class="govuk-link" asp-action="Initiated" asp-route-urn="@Model.Urn" data-test="initiated">
                         Change<span class="govuk-visually-hidden"> who initiated the transfer</span>
                     </a>
                 </dd>
@@ -64,17 +63,17 @@
                         @if (Model.IsTransferSubjectToIntervention)
                         {
                             <p class="govuk-body">Yes</p>
-                            <p class="govuk-body">@Model.Project.Features.ReasonForTransfer.InterventionDetails</p>
+                            <p class="govuk-body">@Model.InterventionDetails</p>
                         }
                         else
                         {
                             <p class="govuk-body">No</p>
-                            <p class="govuk-body">@Model.Project.Features.ReasonForTransfer.InterventionDetails</p>
+                            <p class="govuk-body">@Model.InterventionDetails</p>
                         }
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Project.Urn" data-test="reason">
+                    <a class="govuk-link" asp-action="Reason" asp-route-urn="@Model.Urn" data-test="reason">
                         Change<span class="govuk-visually-hidden"> has this transfer started because of an intervention with the academy or trust?</span>
                     </a>
                 </dd>
@@ -84,29 +83,29 @@
                     What type of transfer is it?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+                    @if (Model.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
-                    else if (Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
+                    else if (Model.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
                     {
-                        <p class="govuk-body">Other: @Model.Project.Features.OtherTypeOfTransfer</p>
+                        <p class="govuk-body">Other: @Model.OtherTypeOfTransfer</p>
                     }
                     else
                     {
-                        var displayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(Model.Project.Features.TypeOfTransfer);
+                        var displayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(Model.TypeOfTransfer);
                         @displayName
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Type" asp-route-urn="@Model.Project.Urn" data-test="type">
+                    <a class="govuk-link" asp-action="Type" asp-route-urn="@Model.Urn" data-test="type">
                         Change<span class="govuk-visually-hidden"> what type of transfer is it?</span>
                     </a>
                 </dd>
             </div>
         </dl>
 
-        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">
             <button class="govuk-button">Confirm and continue</button>
         </form>
     </div>

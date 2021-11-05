@@ -29,9 +29,17 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
+            var projectResult = project.Result;
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Urn = projectResult.Urn,
+                IsSubjectToRddOrEsfaIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                TypeOfTransfer = projectResult.Features.TypeOfTransfer,
+                OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer,
+                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
+                WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer,
+                InterventionDetails = projectResult.Features.ReasonForTransfer.InterventionDetails
+
             };
             return View(model);
         }

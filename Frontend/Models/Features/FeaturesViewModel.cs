@@ -1,44 +1,21 @@
-using System.Collections.Generic;
-using System.Linq;
 using Data.Models.Projects;
-using Frontend.Models.Forms;
-using Helpers;
 
 namespace Frontend.Models.Features
 {
-    public class FeaturesViewModel : ProjectViewModel
+    public class FeaturesViewModel
     {
-        //todo: remove once all views using ModelState
-        public readonly FormErrorsViewModel FormErrors;
-
-        public FeaturesViewModel()
-        {
-            FormErrors = new FormErrorsViewModel();
-        }
-
+        public string Urn { get; set; }
+        public string OutgoingAcademyUrn { get; set; }
+        public bool? IsSubjectToRddOrEsfaIntervention { get; set; }
         public bool HasTransferReasonBeenSet =>
-            Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null;
+            IsSubjectToRddOrEsfaIntervention != null;
 
         public bool IsTransferSubjectToIntervention =>
-            Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true; 
+            IsSubjectToRddOrEsfaIntervention == true;
 
-        public List<RadioButtonViewModel> TypeOfTransferRadioButtons()
-        {
-            var values =
-                EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayableValues(TransferFeatures.TransferTypes
-                    .Empty);
-
-            var result = values.Select(value => new RadioButtonViewModel
-            {
-                Value = value.ToString(), Name = "typeOfTransfer",
-                DisplayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(value),
-                Checked = Project.Features.TypeOfTransfer == value
-            }).ToList();
-
-            return result;
-        }
-
-        public bool ReturnToPreview { get; set; }
-
+        public TransferFeatures.ProjectInitiators WhoInitiatedTheTransfer { get; set; }
+        public string InterventionDetails { get; set; }
+        public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
+        public string OtherTypeOfTransfer { get; set; }
     }
 }
