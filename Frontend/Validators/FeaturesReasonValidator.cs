@@ -7,8 +7,9 @@ namespace Frontend.Validators
     {
         public FeaturesReasonValidator()
         {
-            var subjectToInterventionError = "Select whether or not the transfer is subject to intervention";
-            RuleFor(x => x.IsSubjectToIntervention).NotNull().WithMessage(subjectToInterventionError);
+            RuleFor(x => x.IsSubjectToIntervention)
+                .NotNull()
+                .WithMessage("Select whether or not the transfer is subject to intervention");
         }
     }
 }

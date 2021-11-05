@@ -157,55 +157,42 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var vm = new FeaturesTypeViewModel
             {
-                Project = project.Result,
+                Urn = project.Result.Urn,
                 ReturnToPreview = returnToPreview
             };
-            return View(model);
+            return View(vm);
         }
 
         [Route("type")]
         [ActionName("Type")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> TypePost(string urn, TransferFeatures.TransferTypes typeOfTransfer,
-            string otherType, bool returnToPreview = false)
+        public async Task<IActionResult> TypePost(FeaturesTypeViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var urn = vm.Urn;
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            model.Project.Features.TypeOfTransfer = typeOfTransfer;
-            model.Project.Features.OtherTypeOfTransfer = otherType;
-
-            if (typeOfTransfer == TransferFeatures.TransferTypes.Empty)
-            {
-                model.FormErrors.AddError(TransferFeatures.TransferTypes.SatClosure.ToString(), "typeOfTransfer",
-                    "Select the type of transfer");
-                return View(model);
+                return View(vm);
             }
 
-            if (typeOfTransfer == TransferFeatures.TransferTypes.Other && string.IsNullOrEmpty(otherType))
-            {
-                model.FormErrors.AddError("otherType", "otherType", "Enter the type of transfer");
-                return View(model);
-            }
+            var projectResult = project.Result;
+            projectResult.Features.TypeOfTransfer = vm.TypeOfTransfer;
+            projectResult.Features.OtherTypeOfTransfer = vm.OtherType;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }

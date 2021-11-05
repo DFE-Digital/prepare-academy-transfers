@@ -9,8 +9,9 @@ namespace Frontend.Validators
     {
         public FeaturesInitiatedValidator()
         {
-            var whoInitiatedError = "Select who initiated the project";
-            RuleFor(x => x.WhoInitiated).NotEqual(TransferFeatures.ProjectInitiators.Empty).WithMessage(whoInitiatedError);
+            RuleFor(x => x.WhoInitiated)
+                .NotEqual(TransferFeatures.ProjectInitiators.Empty)
+                .WithMessage("Select who initiated the project");
         }
     }
 }
