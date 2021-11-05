@@ -2,9 +2,8 @@ using Data.Models.Projects;
 
 namespace Frontend.Models.Features
 {
-    public class FeaturesViewModel
+    public class FeaturesViewModel : FeaturesCommonViewModel
     {
-        public string Urn { get; set; }
         public string OutgoingAcademyUrn { get; set; }
         public bool? IsSubjectToRddOrEsfaIntervention { get; set; }
         public bool HasTransferReasonBeenSet =>

@@ -6,12 +6,9 @@ using Helpers;
 
 namespace Frontend.Models.Features
 {
-    public class FeaturesInitiatedViewModel
+    public class FeaturesInitiatedViewModel : FeaturesCommonViewModel
     {
-        public string Urn { get; set; }
-        public string OutgoingAcademyName { get; set; }
         public TransferFeatures.ProjectInitiators WhoInitiated { get; set; }
-        public bool ReturnToPreview { get; set; }
 
         public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ProjectInitiators selected)
         {

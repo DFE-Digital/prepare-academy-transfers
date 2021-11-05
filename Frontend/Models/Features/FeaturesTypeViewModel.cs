@@ -6,15 +6,10 @@ using Helpers;
 
 namespace Frontend.Models.Features
 {
-    public class FeaturesTypeViewModel
+    public class FeaturesTypeViewModel : FeaturesCommonViewModel
     {
-        public string Urn { get; set; }
-        public bool ReturnToPreview { get; set; }
         public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
-
         public string OtherType { get; set; }
-        public string OutgoingAcademyName { get; set; }
-
         public List<RadioButtonViewModel> TypeOfTransferRadioButtons()
         {
             var values =
