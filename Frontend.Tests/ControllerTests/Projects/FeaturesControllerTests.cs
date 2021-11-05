@@ -14,6 +14,7 @@ using Moq;
 using Xunit;
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
+using Frontend.Models.Features;
 
 namespace Frontend.Tests.ControllerTests.Projects
 {

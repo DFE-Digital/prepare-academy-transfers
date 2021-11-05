@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model FeaturesInitiatedViewModel
+@using Frontend.Models.Features
+@model Frontend.Models.Features.FeaturesInitiatedViewModel
 
 @{
     ViewBag.Title = !ViewData.ModelState.IsValid ? "Error: Who initiated the academy transfer?" : "Who initiated the academy transfer?";

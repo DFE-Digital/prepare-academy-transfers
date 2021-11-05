@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Helpers;
