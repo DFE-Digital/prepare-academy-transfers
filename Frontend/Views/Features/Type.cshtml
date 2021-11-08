@@ -50,14 +50,14 @@
                         @await Html.PartialAsync("_RadioButtons", Model.TypeOfTransferRadioButtons())
                         <div class="govuk-radios__divider">or</div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="other" name="typeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
+                            <input class="govuk-radios__input" asp-for="TypeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
                             <label class="govuk-label govuk-radios__label" for="other">
                                 Any other type of transfer
                             </label>
                         </div>
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-other">
                             <div class="govuk-form-group">
-                                <label class="govuk-label" for="otherType">
+                                <label class="govuk-label" asp-for="OtherType">
                                     Enter the type of transfer
                                 </label>
 

@@ -1,9 +1,8 @@
 ﻿using Data.Models.Projects;
 using FluentValidation;
-using Frontend.Models;
 using Frontend.Models.Features;
 
-namespace Frontend.Validators
+namespace Frontend.Validators.Features
 {
     public class FeaturesInitiatedValidator : AbstractValidator<FeaturesInitiatedViewModel>
     {

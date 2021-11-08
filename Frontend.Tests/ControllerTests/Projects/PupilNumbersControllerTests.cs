@@ -149,7 +149,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignToTheViewModel()
                 {
                     var response = await _subject.Index(_projectUrn, false, true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<PupilNumbersViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<PupilNumbersViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                     Assert.True(viewModel.AdditionalInformationModel.ReturnToPreview);

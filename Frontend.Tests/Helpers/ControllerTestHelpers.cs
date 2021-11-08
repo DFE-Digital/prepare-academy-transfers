@@ -11,7 +11,7 @@ namespace Frontend.Tests.Helpers
 {
     public static class ControllerTestHelpers
     {
-        public static TViewModel GetViewModelFromResult<TViewModel>(IActionResult result)
+        public static TViewModel AssertViewModelFromResult<TViewModel>(IActionResult result)
         {
             var viewResult = Assert.IsType<ViewResult>(result);
             var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
@@ -36,7 +36,6 @@ namespace Frontend.Tests.Helpers
 
         public static async Task<ValidationResult> ValidateAndAddToModelState<TViewModel>(IValidator validator, TViewModel vm, ModelStateDictionary modelState)
         {
-            //Validate object and add errors to model state
             var vc = new ValidationContext<TViewModel>(vm);
             var results = await validator.ValidateAsync(vc);
             results.AddToModelState(modelState, null);

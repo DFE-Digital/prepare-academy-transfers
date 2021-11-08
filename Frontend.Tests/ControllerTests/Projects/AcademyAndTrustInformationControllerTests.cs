@@ -111,7 +111,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Recommendation(ProjectUrn, true);
                     var model =
-                        ControllerTestHelpers.GetViewModelFromResult<AcademyAndTrustInformationViewModel>(response);
+                        ControllerTestHelpers.AssertViewModelFromResult<AcademyAndTrustInformationViewModel>(response);
 
                     Assert.True(model.ReturnToPreview);
                 }

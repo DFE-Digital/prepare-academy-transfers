@@ -44,7 +44,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_AssignsModelToTheView()
             {
                 var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
 
                 Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
             }
@@ -66,7 +66,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                 var response = await controller.Index("projectUrn");
                 var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Project not found", viewModel);
@@ -81,7 +81,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_AssignsModelToTheView()
                 {
                     var result = await _subject.IntendedBenefits("0001");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
                 }
@@ -90,7 +90,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsToTheModel()
                 {
                     var result = await _subject.IntendedBenefits("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -112,7 +112,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.IntendedBenefits("projectUrn");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -175,7 +175,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var intendedBenefits = new TransferBenefits.IntendedBenefit[] { };
                     var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField("intendedBenefits"));
                 }
@@ -185,7 +185,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var intendedBenefits = new[] {TransferBenefits.IntendedBenefit.Other};
                     var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
                 }
@@ -198,7 +198,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
                     };
                     var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
                 }
@@ -225,7 +225,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -254,7 +254,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -285,7 +285,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_AssignsModelToTheView()
                 {
                     var result = await _subject.OtherFactors("0001");
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
                 }
@@ -294,7 +294,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsToTheModel()
                 {
                     var result = await _subject.OtherFactors("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -316,7 +316,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.OtherFactors("projectUrn");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -429,7 +429,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.OtherFactorsPost("projectUrn", otherFactors, false);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -454,7 +454,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.OtherFactorsPost("projectUrn", otherFactors, false);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -477,7 +477,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
 
                     var response = await _subject.OtherFactorsPost("0001", otherFactors, false);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<BenefitsViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
                     Assert.True(viewModel.FormErrors.HasErrors);
                     Assert.True(viewModel.FormErrors.HasErrorForField(otherFactorString));
                 }

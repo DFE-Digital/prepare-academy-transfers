@@ -2,7 +2,7 @@
 using FluentValidation;
 using Frontend.Models.Features;
 
-namespace Frontend.Validators
+namespace Frontend.Validators.Features
 {
     public class FeaturesTypeValidator : AbstractValidator<FeaturesTypeViewModel>
     {

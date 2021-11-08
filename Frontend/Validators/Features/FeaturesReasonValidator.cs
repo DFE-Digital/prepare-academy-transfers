@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Frontend.Models.Features;
 
-namespace Frontend.Validators
+namespace Frontend.Validators.Features
 {
     public class FeaturesReasonValidator : AbstractValidator<FeaturesReasonViewModel>
     {

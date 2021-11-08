@@ -165,11 +165,14 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
+            var projectResult = project.Result;
             var vm = new FeaturesTypeViewModel
             {
-                Urn = project.Result.Urn,
-                OutgoingAcademyName = project.Result.OutgoingAcademyName,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                TypeOfTransfer = projectResult.Features.TypeOfTransfer,
+                OtherType = projectResult.Features.OtherTypeOfTransfer
             };
             return View(vm);
         }

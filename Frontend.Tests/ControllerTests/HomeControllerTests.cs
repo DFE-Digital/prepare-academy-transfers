@@ -39,7 +39,7 @@ namespace Frontend.Tests.ControllerTests
                     .ReturnsAsync(new RepositoryResult<List<ProjectSearchResult>> {Result = foundProjects});
                 
                 var response = await _subject.Index(page);
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<Index>(response);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<Index>(response);
 
                 _projectsRepository.Verify(r => r.GetProjects(page), Times.Once());
                 Assert.Equal(page, viewModel.Page);

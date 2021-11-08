@@ -149,7 +149,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                 var response = await _subject.Index(_projectUrn);
                 var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Project information not found", viewModel);

@@ -1,20 +1,17 @@
-using System;
-using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
-using FluentValidation;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Models.Features;
 using Frontend.Tests.Helpers;
-using Frontend.Validators;
+using Frontend.Validators.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Moq;
+using System;
+using System.Threading.Tasks;
 using Xunit;
-using FluentValidation.AspNetCore;
-using FluentValidation.Results;
-using Frontend.Models.Features;
 
 namespace Frontend.Tests.ControllerTests.Projects
 {
@@ -75,7 +72,7 @@ namespace Frontend.Tests.ControllerTests.Projects
             {
                 var response = await _subject.Index("errorUrn");
                 var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Project not found", viewModel);
@@ -99,7 +96,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Initiated("errorUrn");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -109,7 +106,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsItToTheViewModel()
                 {
                     var response = await _subject.Initiated("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesInitiatedViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesInitiatedViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -162,7 +159,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenEmptyInitiator_AddAnErrorMessageToThePageAndDoNotUpdateTheModel()
+                public async void GivenEmptyInitiator_DoNotUpdateTheModel()
                 {
                     FeaturesInitiatedViewModel vm = new FeaturesInitiatedViewModel
                     {
@@ -170,16 +167,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                         WhoInitiated = TransferFeatures.ProjectInitiators.Empty
                     };
 
-                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _subject.ModelState);
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _subject.ModelState);
                     var response = await _subject.InitiatedPost(vm);
 
                     //Assert
                     _projectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
-
-                    Assert.False(results.IsValid);
-                    Assert.Equal("WhoInitiated", results.Errors[0].PropertyName);
-                    Assert.Equal("Select who initiated the project", results.Errors[0].ErrorMessage);
-                    ControllerTestHelpers.GetViewModelFromResult<FeaturesInitiatedViewModel>(response);
+                    ControllerTestHelpers.AssertViewModelFromResult<FeaturesInitiatedViewModel>(response);
                 }
 
                 [Fact]
@@ -192,7 +185,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var response = await _subject.InitiatedPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -220,7 +213,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var response = await controller.InitiatedPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -239,7 +232,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _subject.ModelState);
                     var response = await _subject.InitiatedPost(vm);
 
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesInitiatedViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesInitiatedViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -273,7 +266,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var request = new Func<Task<IActionResult>>(async () => await _subject.Reason("0001"));
                     var result = await request();
                     _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-                    var vm = ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(result);
+                    var vm = ControllerTestHelpers.AssertViewModelFromResult<FeaturesReasonViewModel>(result);
 
                     Assert.Equal(_foundProject.OutgoingAcademyName, vm.OutgoingAcademyName);
                     Assert.IsType<FeaturesReasonViewModel>(vm);
@@ -284,7 +277,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Reason("errorUrn");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -294,7 +287,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsItToTheViewModel()
                 {
                     var response = await _subject.Reason("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesReasonViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -361,20 +354,18 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenNothingSubmitted_SetsAnErrorWithMessageOnTheViewModel()
+                public async void GivenNothingSubmitted_ViewModelReturned()
                 {
                     var vm = new FeaturesReasonViewModel
                     {
                         Urn = "0001",
                     };
 
-                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _subject.ModelState);
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _subject.ModelState);
                     var resultPost = await _subject.ReasonPost(vm);
 
-                    Assert.False(results.IsValid);
-                    Assert.Equal(nameof(vm.IsSubjectToIntervention), results.Errors[0].PropertyName);
-                    Assert.Equal("Select whether or not the transfer is subject to intervention", results.Errors[0].ErrorMessage);
-                    ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(resultPost);
+                    ControllerTestHelpers.AssertViewModelFromResult<FeaturesReasonViewModel>(resultPost);
+                    Assert.False(_subject.ModelState.IsValid);
                 }
 
                 [Fact]
@@ -388,7 +379,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var response = await _subject.ReasonPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -417,7 +408,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
 
                     var response = await controller.ReasonPost(vm);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     var viewResult = Assert.IsType<ViewResult>(response);
                     Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -437,7 +428,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await _subject.ReasonPost(vm);
 
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesReasonViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesReasonViewModel>(response);
                     Assert.True(viewModel.ReturnToPreview);
                 }
 
@@ -478,7 +469,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Type("errorUrn");
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -488,7 +479,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignsItToTheViewModel()
                 {
                     var response = await _subject.Type("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -544,10 +535,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
                     var response = await _subject.TypePost(vm);
 
-                    Assert.False(results.IsValid);
-                    Assert.Equal(nameof(vm.TypeOfTransfer), results.Errors[0].PropertyName);
-                    Assert.Equal("Select the type of transfer", results.Errors[0].ErrorMessage);
-                    ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
+                    //Assert.False(results.IsValid);
+                    //Assert.Equal(nameof(vm.TypeOfTransfer), results.Errors[0].PropertyName);
+                    //Assert.Equal("Select the type of transfer", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
+                    Assert.False(_subject.ModelState.IsValid);
                 }
 
 
@@ -563,10 +555,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
                     var response = await _subject.TypePost(vm);
 
-                    Assert.False(results.IsValid);
-                    Assert.Equal(nameof(vm.OtherType), results.Errors[0].PropertyName);
-                    Assert.Equal("Enter the type of transfer", results.Errors[0].ErrorMessage);
-                    ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
+                    //Assert.False(results.IsValid);
+                    //Assert.Equal(nameof(vm.OtherType), results.Errors[0].PropertyName);
+                    //Assert.Equal("Enter the type of transfer", results.Errors[0].ErrorMessage);
+                    ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
+                    Assert.False(_subject.ModelState.IsValid);
                 }
 
                 [Fact]
@@ -594,7 +587,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await _subject.TypePost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
@@ -609,10 +602,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                         TypeOfTransfer = TransferFeatures.TransferTypes.Empty,
                         ReturnToPreview = true
                     };
-                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
                     var response = await _subject.TypePost(vm);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<FeaturesTypeViewModel>(response);
-
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
                     Assert.True(viewModel.ReturnToPreview);
                 }
 
@@ -657,7 +650,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await controller.TypePost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<string>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);

@@ -138,7 +138,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Index(_projectUrn, false, true);
                     var viewModel =
-                        ControllerTestHelpers.GetViewModelFromResult<LatestOfstedJudgementViewModel>(response);
+                        ControllerTestHelpers.AssertViewModelFromResult<LatestOfstedJudgementViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                     Assert.True(viewModel.AdditionalInformationModel.ReturnToPreview);
