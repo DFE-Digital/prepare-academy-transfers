@@ -532,12 +532,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Urn = "0001",
                         TypeOfTransfer = TransferFeatures.TransferTypes.Empty
                     };
-                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
                     var response = await _subject.TypePost(vm);
 
-                    //Assert.False(results.IsValid);
-                    //Assert.Equal(nameof(vm.TypeOfTransfer), results.Errors[0].PropertyName);
-                    //Assert.Equal("Select the type of transfer", results.Errors[0].ErrorMessage);
                     ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
                     Assert.False(_subject.ModelState.IsValid);
                 }
@@ -552,12 +550,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         TypeOfTransfer = TransferFeatures.TransferTypes.Other
                     };
 
-                    var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
+                    await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _subject.ModelState);
                     var response = await _subject.TypePost(vm);
 
-                    //Assert.False(results.IsValid);
-                    //Assert.Equal(nameof(vm.OtherType), results.Errors[0].PropertyName);
-                    //Assert.Equal("Enter the type of transfer", results.Errors[0].ErrorMessage);
                     ControllerTestHelpers.AssertViewModelFromResult<FeaturesTypeViewModel>(response);
                     Assert.False(_subject.ModelState.IsValid);
                 }
