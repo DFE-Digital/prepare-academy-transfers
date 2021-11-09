@@ -69,12 +69,11 @@ namespace Frontend.Controllers.Projects
             {
                 return View(vm);
             }
-
-            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = vm.ReturnToPreview};
+            
             var projectResult = project.Result;
             projectResult.Rationale.Project = vm.ProjectRationale;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
