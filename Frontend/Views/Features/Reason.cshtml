@@ -2,7 +2,7 @@
 @model Frontend.Models.Features.FeaturesReasonViewModel
 
 @{
-    ViewBag.Title = !ViewData.ModelState.IsValid ? "Error: Reason for transfer" : "Reason for transfer";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Reason for transfer";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
     Layout = "_Layout";
 }

@@ -5,7 +5,7 @@
 @model Frontend.Models.Features.FeaturesTypeViewModel
 
 @{
-    ViewBag.Title =!ViewData.ModelState.IsValid ? "Error: What type of transfer is it?" : "What type of transfer is it?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What type of transfer is it?";
     Layout = "_Layout";
     var typeOfTransferFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.TypeOfTransfer)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
     var otherTypeFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherType)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
