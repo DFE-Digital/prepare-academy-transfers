@@ -63,7 +63,7 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            var validator = new TrustSearchResultValidator();
+            var validator = new OutgoingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
             if (!validationResult.IsValid)
             {
@@ -207,7 +207,7 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            var validator = new TrustSearchResultValidator();
+            var validator = new IncomingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
 
             if (!validationResult.IsValid)

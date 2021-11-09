@@ -31,7 +31,7 @@
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         <li>
-                            <a href="#@Model.Academies[0].Name" data-qa="error__text">
+                            <a href="#@Model.Academies.First().Ukprn" data-qa="error__text">
                                 @ViewData["Error.Message"]
                             </a>
                         </li>
