@@ -196,9 +196,12 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (result.Result.Count == 0)
+            var validator = new TrustSearchResultValidator();
+            var validationResult = await validator.ValidateAsync(result.Result);
+
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("IncomingTrust", new {query});
             }
 
