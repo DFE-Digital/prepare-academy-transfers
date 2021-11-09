@@ -1,4 +1,9 @@
+using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Xunit;
 
@@ -6,7 +11,7 @@ namespace Frontend.Tests.Helpers
 {
     public static class ControllerTestHelpers
     {
-        public static TViewModel GetViewModelFromResult<TViewModel>(IActionResult result)
+        public static TViewModel AssertViewModelFromResult<TViewModel>(IActionResult result)
         {
             var viewResult = Assert.IsType<ViewResult>(result);
             var viewModel = Assert.IsType<TViewModel>(viewResult.Model);
@@ -27,6 +32,14 @@ namespace Frontend.Tests.Helpers
             var redirectResult = Assert.IsType<RedirectToPageResult>(result);
             Assert.Equal(expectedPageName, redirectResult.PageName);
             Assert.Equal(expectedRouteValues, redirectResult.RouteValues);
+        }
+
+        public static async Task<ValidationResult> ValidateAndAddToModelState<TViewModel>(IValidator validator, TViewModel vm, ModelStateDictionary modelState)
+        {
+            var vc = new ValidationContext<TViewModel>(vm);
+            var results = await validator.ValidateAsync(vc);
+            results.AddToModelState(modelState, null);
+            return results;
         }
     }
 }

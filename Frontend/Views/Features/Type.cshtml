@@ -1,76 +1,74 @@
 @using Data.Models.Projects
-@model FeaturesViewModel
+@using Frontend.Models.Features
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Frontend.Models.Features.FeaturesTypeViewModel
 
 @{
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("What type of transfer is it?");
+    ViewBag.Title =!ViewData.ModelState.IsValid ? "Error: What type of transfer is it?" : "What type of transfer is it?";
     Layout = "_Layout";
-    var typeOfTransferFormClasses = Model.FormErrors.FormClassesForField("typeOfTransfer");
-    var otherTypeFormClasses = Model.FormErrors.FormClassesForField("otherType");
-    var otherSelected = Model.Project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other;
+    var typeOfTransferFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.TypeOfTransfer)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherTypeFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherType)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherSelected = Model.TypeOfTransfer == TransferFeatures.TransferTypes.Other;
 }
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Type" method="post" novalidate="">
-            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
+
             <div class="govuk-form-group @typeOfTransferFormClasses @otherTypeFormClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.Project.OutgoingAcademyName
+                                @Model.OutgoingAcademyName
                             </span>
                             What type of transfer is it?
                         </h1>
                     </legend>
 
-                    @if (Model.FormErrors.HasErrorForField("typeOfTransfer"))
+                    @if (ViewData.ModelState.GetFieldValidationState(nameof(Model.TypeOfTransfer)) == ModelValidationState.Invalid)
                     {
                         <span id="who-initiated-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("typeOfTransfer").ErrorMessage
+                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.TypeOfTransfer)
                         </span>
                     }
 
                     <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-                        @foreach (var radioButton in Model.TypeOfTransferRadioButtons())
-                        {
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="@radioButton.Value" name="@radioButton.Name" type="radio" value="@radioButton.Value" checked="@radioButton.Checked">
-                                <label class="govuk-label govuk-radios__label" for="@radioButton.Value">
-                                    @radioButton.DisplayName
-                                </label>
-                            </div>
-                        }
+                        @await Html.PartialAsync("_RadioButtons", Model.TypeOfTransferRadioButtons())
                         <div class="govuk-radios__divider">or</div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="other" name="typeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
+                            <input class="govuk-radios__input" asp-for="TypeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
                             <label class="govuk-label govuk-radios__label" for="other">
                                 Any other type of transfer
                             </label>
                         </div>
                         <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-other">
                             <div class="govuk-form-group">
-                                <label class="govuk-label" for="otherType">
+                                <label class="govuk-label" asp-for="OtherType">
                                     Enter the type of transfer
                                 </label>
 
-                                @if (Model.FormErrors.HasErrorForField("otherType"))
+                                @if (ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherType)) == ModelValidationState.Invalid)
                                 {
                                     <span id="who-initiated-error" class="govuk-error-message">
-                                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("otherType").ErrorMessage
+                                        <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.OtherType)
                                     </span>
                                 }
 
-                                <input class="govuk-input govuk-!-width-two-thirds" id="otherType" name="otherType" type="text" value="@Model.Project.Features.OtherTypeOfTransfer">
+                                <input class="govuk-input govuk-!-width-two-thirds" asp-for="OtherType">
                             </div>
                         </div>
                     </div>

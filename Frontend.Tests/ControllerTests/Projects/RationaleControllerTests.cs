@@ -84,7 +84,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignToTheViewModel()
                 {
                     var response = await _subject.Project("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -115,7 +115,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrnAndNoRationale_AddsErrorToTheModel()
                 {
                     var result = await _subject.ProjectPost("0001", "");
-                    var model = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(result);
+                    var model = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(result);
                     Assert.True(model.FormErrors.HasErrors);
                     Assert.True(model.FormErrors.HasErrorForField("rationale"));
                 }
@@ -153,7 +153,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
                 {
                     var response = await _subject.ProjectPost("0001", null, true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
                     
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -197,7 +197,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignToTheViewModel()
                 {
                     var response = await _subject.TrustOrSponsor("0001", true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -228,7 +228,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrnAndNoRationale_AddsErrorToTheModel()
                 {
                     var result = await _subject.TrustOrSponsorPost("0001", "");
-                    var model = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(result);
+                    var model = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(result);
                     Assert.True(model.FormErrors.HasErrors);
                     Assert.True(model.FormErrors.HasErrorForField("rationale"));
                 }
@@ -266,7 +266,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
                 {
                     var response = await _subject.TrustOrSponsorPost("0001", null, true);
-                    var viewModel = ControllerTestHelpers.GetViewModelFromResult<RationaleViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
                     
                     Assert.True(viewModel.ReturnToPreview);
                 }

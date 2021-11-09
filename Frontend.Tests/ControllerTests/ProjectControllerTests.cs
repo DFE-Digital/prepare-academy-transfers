@@ -62,7 +62,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenAProjectID_PutsTheProjectNameAndTrustNameInTheViewData()
             {
                 var actionResult = await _subject.Index(ProjectId);
-                var viewModel = ControllerTestHelpers.GetViewModelFromResult<ProjectTaskListViewModel>(actionResult);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<ProjectTaskListViewModel>(actionResult);
 
                 Assert.Equal("Some name", viewModel.Project.Name);
                 Assert.Equal("Meow Meowington's Trust", viewModel.Project.OutgoingTrustName);

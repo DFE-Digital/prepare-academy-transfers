@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Helpers;
 
 namespace Frontend.Controllers.Projects
 {
@@ -27,9 +29,17 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
+            var projectResult = project.Result;
             var model = new FeaturesViewModel
             {
-                Project = project.Result
+                Urn = projectResult.Urn,
+                IsSubjectToRddOrEsfaIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                TypeOfTransfer = projectResult.Features.TypeOfTransfer,
+                OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer,
+                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
+                WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer,
+                InterventionDetails = projectResult.Features.ReasonForTransfer.InterventionDetails
+
             };
             return View(model);
         }
@@ -44,53 +54,49 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var projectResult = project.Result;
+            var model = new FeaturesInitiatedViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                WhoInitiated  = projectResult.Features.WhoInitiatedTheTransfer,
+                ReturnToPreview = returnToPreview,                
             };
-            
+
             return View(model);
         }
 
         [ActionName("Initiated")]
         [Route("initiated")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> InitiatedPost(string urn, TransferFeatures.ProjectInitiators whoInitiated, bool returnToPreview = false)
+        public async Task<IActionResult> InitiatedPost(FeaturesInitiatedViewModel vm)
         {
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            if (whoInitiated == TransferFeatures.ProjectInitiators.Empty)
-            {
-                model.FormErrors.AddError(TransferFeatures.ProjectInitiators.Dfe.ToString(), "whoInitiated",
-                    "Select who initiated the project");
-                return View(model);
+                return View(vm);
             }
 
-            model.Project.Features.WhoInitiatedTheTransfer = whoInitiated;
+            project.Result.Features.WhoInitiatedTheTransfer = vm.WhoInitiated;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(project.Result);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new { urn });
         }
 
         [Route("reason")]
@@ -103,53 +109,50 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var projectResult = project.Result;
+            var vm = new FeaturesReasonViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                IsSubjectToIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                ReturnToPreview = returnToPreview,
+                MoreDetail = projectResult.Features.ReasonForTransfer.InterventionDetails
             };
-            return View(model);
+            return View(vm);
         }
 
         [Route("reason")]
         [ActionName("Reason")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> ReasonPost(string urn, bool? isSubjectToIntervention, string moreDetail, bool returnToPreview = false)
+        public async Task<IActionResult> ReasonPost(FeaturesReasonViewModel vm)
         {
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            if (!isSubjectToIntervention.HasValue)
-            {
-                model.FormErrors.AddError("True", "isSubjectToIntervention",
-                    "Select whether or not the transfer is subject to intervention");
-                return View(model);
+                return View(vm);
             }
 
-            model.Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = isSubjectToIntervention;
-            model.Project.Features.ReasonForTransfer.InterventionDetails = moreDetail ?? string.Empty;
+            project.Result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = vm.IsSubjectToIntervention;
+            project.Result.Features.ReasonForTransfer.InterventionDetails = vm.MoreDetail ?? string.Empty;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(project.Result);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new { urn });
         }
 
         [Route("type")]
@@ -162,57 +165,48 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            var projectResult = project.Result;
+            var vm = new FeaturesTypeViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                TypeOfTransfer = projectResult.Features.TypeOfTransfer,
+                OtherType = projectResult.Features.OtherTypeOfTransfer
             };
-            return View(model);
+            return View(vm);
         }
 
         [Route("type")]
         [ActionName("Type")]
         [AcceptVerbs(WebRequestMethods.Http.Post)]
-        public async Task<IActionResult> TypePost(string urn, TransferFeatures.TransferTypes typeOfTransfer,
-            string otherType, bool returnToPreview = false)
+        public async Task<IActionResult> TypePost(FeaturesTypeViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var urn = vm.Urn;
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new FeaturesViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
-            };
-
-            model.Project.Features.TypeOfTransfer = typeOfTransfer;
-            model.Project.Features.OtherTypeOfTransfer = otherType;
-
-            if (typeOfTransfer == TransferFeatures.TransferTypes.Empty)
-            {
-                model.FormErrors.AddError(TransferFeatures.TransferTypes.SatClosure.ToString(), "typeOfTransfer",
-                    "Select the type of transfer");
-                return View(model);
+                return View(vm);
             }
 
-            if (typeOfTransfer == TransferFeatures.TransferTypes.Other && string.IsNullOrEmpty(otherType))
-            {
-                model.FormErrors.AddError("otherType", "otherType", "Enter the type of transfer");
-                return View(model);
-            }
+            var projectResult = project.Result;
+            projectResult.Features.TypeOfTransfer = vm.TypeOfTransfer;
+            projectResult.Features.OtherTypeOfTransfer = vm.OtherType;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
             return RedirectToAction("Index", new { urn });
