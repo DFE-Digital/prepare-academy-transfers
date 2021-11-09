@@ -7,11 +7,11 @@ namespace Frontend.Tests.ValidatorTests
 {
     public class RationaleProjectValidatorTests
     {
-        private RationalProjectValidator validator;
+        private RationaleProjectValidator validator;
 
         public RationaleProjectValidatorTests()
         {
-            validator = new RationalProjectValidator();
+            validator = new RationaleProjectValidator();
         }
 
         [Fact]
