@@ -1,28 +1,30 @@
-@model RationaleViewModel
+@model Frontend.Models.Rationale.RationaleProjectViewModel
 
 @{
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Write the rationale for the project");
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Write the rationale for the project";
     Layout = "_Layout";
-    var formClasses = Model.FormErrors.FormClassesForField("rationale");
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
 }
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="Project" method="post" novalidate="">
-            <input type="text" value="@Model.ReturnToPreview.ToString()" name="returnToPreview" hidden/>
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
                     <span class="govuk-caption-l">
-                        @Model.Project.OutgoingAcademyName
+                        @Model.OutgoingAcademyName
                     </span>
                     <h1 class="govuk-heading-l">
                         Write the rationale for the project
@@ -35,19 +37,13 @@
                     You can format this section after you download your project template.
                 </div>
 
-                @if (Model.FormErrors.HasErrorForField("rationale"))
-                {
-                    <span id="rationale-error" class="govuk-error-message">
-                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("rationale").ErrorMessage
-                    </span>
-                }
-
-                <textarea class="govuk-textarea" id="rationale" name="rationale" rows="20" aria-describedby="rationale-hint" data-test="project-rationale">@Model.Project.Rationale.Project</textarea>
+                <span asp-gds-validation-for="ProjectRationale"></span>
+                
+                <textarea asp-for="ProjectRationale" class="govuk-textarea" rows="20" aria-describedby="rationale-hint" data-test="project-rationale"></textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue
             </button>
         </form>
     </div>
-    <!--related navigation-->
 </div>
