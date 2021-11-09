@@ -643,10 +643,10 @@ namespace Frontend.Tests.ControllerTests
         public class ConfirmIncomingTrustTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
+            public async void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
             {
                 const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var response = _subject.ConfirmIncomingTrust(trustId);
+                var response = await _subject.ConfirmIncomingTrust(trustId);
 
                 _session.Verify(s => s.Set(
                     "IncomingTrustId",
