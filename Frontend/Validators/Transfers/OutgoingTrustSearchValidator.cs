@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace Frontend.Validators.Transfers
 {
-    public class TrustSearchResultValidator : AbstractValidator<List<TrustSearchResult>>
+    public class OutgoingTrustSearchValidator : AbstractValidator<List<TrustSearchResult>>
     {
-        public TrustSearchResultValidator()
+        public OutgoingTrustSearchValidator()
         {
             RuleFor(x => x)
-                .Must(x => x.Count > 0 && x.Any(t => t.Academies.Count > 0))
+                .Must(x => x.Count > 0 && x.All(r => r.Academies.Count > 0))
                 .WithMessage("We could not find any trusts matching your search criteria");
         }
     }

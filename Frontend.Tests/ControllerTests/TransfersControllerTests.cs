@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Castle.Components.DictionaryAdapter;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -416,11 +417,11 @@ namespace Frontend.Tests.ControllerTests
         public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
         {
             [Fact]
-            public void GivenAcademyId_StoresItInTheSessionAndRedirects()
+            public async void GivenAcademyId_StoresItInTheSessionAndRedirects()
             {
                 var idOne = "9a7be920-eaa0-e911-a83f-000d3a3852af";
 
-                var result = _subject.SubmitOutgoingTrustAcademies(idOne);
+                var result = await _subject.SubmitOutgoingTrustAcademies(idOne);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("IncomingTrust", resultRedirect.ActionName);
@@ -433,9 +434,9 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public void GivenNoAcademyId_RedirectBackToOutgoingTrustAcademiesWithError()
+            public async void GivenNoAcademyId_RedirectBackToOutgoingTrustAcademiesWithError()
             {
-                var result = _subject.SubmitOutgoingTrustAcademies(null);
+                var result = await _subject.SubmitOutgoingTrustAcademies(null);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
@@ -443,10 +444,10 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
+            public async void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
             {
                 var idOne = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var result = _subject.SubmitOutgoingTrustAcademies(idOne, true);
+                var result = await _subject.SubmitOutgoingTrustAcademies(idOne, true);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("CheckYourAnswers", resultRedirect.ActionName);
@@ -536,14 +537,14 @@ namespace Frontend.Tests.ControllerTests
             }
             
             [Fact]
-            public void GivenErrorMessageExists_SetErrorInViewData()
+            public async void GivenErrorMessageExists_SetErrorInViewData()
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("test"))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
                 
                 _subject.TempData["ErrorMessage"] = "This is an error message";
-                _subject.SearchIncomingTrust("test");
+                await _subject.SearchIncomingTrust("test");
 
                 Assert.Equal(true, _subject.ViewData["Error.Exists"]);
                 Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
@@ -567,7 +568,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("test"))
                     .ReturnsAsync(
-                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult{Academies = new List<TrustSearchAcademy>()} }});
                 
                 var response = await _subject.SearchIncomingTrust("test", true);
                 var viewResponse = Assert.IsType<ViewResult>(response);
@@ -657,9 +658,9 @@ namespace Frontend.Tests.ControllerTests
             }
             
             [Fact]
-            public void GivenNoTrustId_RedirectBackToSearchIncomingTrustPageWithError()
+            public async void GivenNoTrustId_RedirectBackToSearchIncomingTrustPageWithError()
             {
-                var result = _subject.ConfirmIncomingTrust(null);
+                var result = await _subject.ConfirmIncomingTrust(null);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Equal("SearchIncomingTrust", resultRedirect.ActionName);

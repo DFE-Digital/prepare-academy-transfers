@@ -11,7 +11,7 @@ namespace Frontend.Validators.Transfers
         {
             RuleFor(x => x)
                 .NotEmpty()
-                .WithMessage("Select the incoming trust");
+                .WithMessage("Select an incoming trust");
         }
 
         protected override void EnsureInstanceNotNull(object instanceToValidate)
