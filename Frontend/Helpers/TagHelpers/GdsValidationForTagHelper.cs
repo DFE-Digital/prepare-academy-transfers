@@ -10,7 +10,7 @@ namespace Frontend.Helpers.TagHelpers
     [HtmlTargetElement("span", Attributes = GdsValidationForAttributeName)]
     public class GdsValidationForTagHelper : TagHelper
     {
-        private const string GdsValidationForAttributeName = "gds-asp-validation-for";
+        private const string GdsValidationForAttributeName = "asp-gds-validation-for";
         
         [HtmlAttributeNotBound]
         [ViewContext]
