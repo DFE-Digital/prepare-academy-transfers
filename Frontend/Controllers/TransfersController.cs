@@ -5,6 +5,7 @@ using Data.Models;
 using Data.Models.Projects;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Frontend.Helpers;
+using Frontend.Validators.Transfers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -60,9 +61,11 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (result.Result.Count == 0 || result.Result.All(a=>!a.Academies.Any()))
+            var validator = new TrustSearchResultValidator();
+            var validationResult = await validator.ValidateAsync(result.Result);
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("TrustName", new {query});
             }
 
