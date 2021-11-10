@@ -11,9 +11,6 @@ namespace Data.Models.Projects
             [Display(Name = "Approve")]
             Approve,
             
-            [Display(Name = "Defer")]
-            Defer,
-            
             [Display(Name="Decline")]
             Decline
         }
