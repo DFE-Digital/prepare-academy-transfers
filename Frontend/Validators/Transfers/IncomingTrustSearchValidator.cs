@@ -1,7 +1,6 @@
 ﻿using Data.Models;
 using FluentValidation;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Frontend.Validators.Transfers
 {
