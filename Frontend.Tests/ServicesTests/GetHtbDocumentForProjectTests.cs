@@ -34,7 +34,7 @@ namespace Frontend.Tests.ServicesTests
                 var result = await _subject.Execute(_projectUrn);
                 var htbDocumentResult = result.HtbDocument;
                 
-                Assert.Equal("Defer", htbDocumentResult.Recommendation);
+                Assert.Equal("Approve", htbDocumentResult.Recommendation);
                 Assert.Equal("author", htbDocumentResult.Author);
                 Assert.Equal(getTestInformationForProject.Project.Name, htbDocumentResult.ProjectName);
                 Assert.Equal("Incoming Trust Name", htbDocumentResult.SponsorName);

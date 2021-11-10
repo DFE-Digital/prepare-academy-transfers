@@ -17,7 +17,7 @@ namespace Frontend.Tests.TestFixtures
                 AcademyAndTrustInformation = new TransferAcademyAndTrustInformation
                 {
                     Author = "author",
-                    Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Defer
+                    Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve
                 },
                 Name = "test name",
                 OutgoingTrustName = "trust name",
