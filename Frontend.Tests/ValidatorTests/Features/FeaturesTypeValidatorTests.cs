@@ -5,7 +5,7 @@ using Frontend.Validators.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Xunit;
 
-namespace Frontend.Tests.ValidatorTests
+namespace Frontend.Tests.ValidatorTests.Features
 {
     public class FeaturesTypeValidatorTests
     {
