@@ -568,7 +568,7 @@ namespace Frontend.Tests.ControllerTests
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("test"))
                     .ReturnsAsync(
-                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult{Academies = new List<TrustSearchAcademy>()} }});
+                        new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
                 
                 var response = await _subject.SearchIncomingTrust("test", true);
                 var viewResponse = Assert.IsType<ViewResult>(response);

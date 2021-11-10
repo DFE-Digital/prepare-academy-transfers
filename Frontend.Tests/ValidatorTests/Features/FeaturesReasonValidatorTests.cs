@@ -1,4 +1,5 @@
-﻿using Frontend.Models.Features;
+﻿using FluentValidation.TestHelper;
+using Frontend.Models.Features;
 using Frontend.Tests.Helpers;
 using Frontend.Validators.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -8,10 +9,10 @@ namespace Frontend.Tests.ValidatorTests.Features
 {
     public class FeaturesReasonValidatorTests
     {
-        private readonly ModelStateDictionary _modelStateDictionary;
+        private readonly FeaturesReasonValidator _featuresReasonValidator;
         public FeaturesReasonValidatorTests()
         {
-            _modelStateDictionary = new ModelStateDictionary();
+            _featuresReasonValidator = new FeaturesReasonValidator();
         }
 
         [Theory]
@@ -28,8 +29,9 @@ namespace Frontend.Tests.ValidatorTests.Features
                 OutgoingAcademyName = "Test",
                 MoreDetail = moreDetail
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _modelStateDictionary);
-            Assert.True(results.IsValid);
+            var result = await _featuresReasonValidator.TestValidateAsync(vm);
+            result.ShouldNotHaveValidationErrorFor(x => x.IsSubjectToIntervention);
+
         }
 
         [Fact]
@@ -39,11 +41,10 @@ namespace Frontend.Tests.ValidatorTests.Features
             {
                 Urn = "001"
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), vm, _modelStateDictionary);
+            var result = await _featuresReasonValidator.TestValidateAsync(vm);
 
-            Assert.False(results.IsValid);
-            Assert.Equal(nameof(vm.IsSubjectToIntervention), results.Errors[0].PropertyName);
-            Assert.Equal("Select whether or not the transfer is subject to intervention", results.Errors[0].ErrorMessage);
+            result.ShouldHaveValidationErrorFor(x => x.IsSubjectToIntervention)
+                .WithErrorMessage("Select whether or not the transfer is subject to intervention");
         }
     }
 }

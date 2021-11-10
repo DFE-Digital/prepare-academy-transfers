@@ -1,4 +1,5 @@
 ﻿using Data.Models.Projects;
+using FluentValidation.TestHelper;
 using Frontend.Models.Features;
 using Frontend.Tests.Helpers;
 using Frontend.Validators.Features;
@@ -9,10 +10,10 @@ namespace Frontend.Tests.ValidatorTests.Features
 {
     public class FeaturesTypeValidatorTests
     {
-        private readonly ModelStateDictionary _modelStateDictionary;
+        private readonly FeaturesTypeValidator _featuresTypeValidator;
         public FeaturesTypeValidatorTests()
         {
-            _modelStateDictionary = new ModelStateDictionary();
+            _featuresTypeValidator = new FeaturesTypeValidator();
         }
 
         [Theory]
@@ -29,8 +30,8 @@ namespace Frontend.Tests.ValidatorTests.Features
                 TypeOfTransfer = transferType,
                 OtherType = otherType
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _modelStateDictionary);
-            Assert.True(results.IsValid);
+            var result = await _featuresTypeValidator.TestValidateAsync(vm);
+            result.ShouldNotHaveValidationErrorFor(x => x.TypeOfTransfer);
         }
 
         [Fact]
@@ -40,11 +41,10 @@ namespace Frontend.Tests.ValidatorTests.Features
             {
                 TypeOfTransfer = TransferFeatures.TransferTypes.Empty
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _modelStateDictionary);
-
-            Assert.False(results.IsValid);
-            Assert.Equal(nameof(vm.TypeOfTransfer), results.Errors[0].PropertyName);
-            Assert.Equal("Select the type of transfer", results.Errors[0].ErrorMessage);
+            
+            var result = await _featuresTypeValidator.TestValidateAsync(vm);
+            result.ShouldHaveValidationErrorFor(x => x.TypeOfTransfer)
+                .WithErrorMessage("Select the type of transfer");
         }
 
         [Fact]
@@ -54,11 +54,9 @@ namespace Frontend.Tests.ValidatorTests.Features
             {
                 TypeOfTransfer = TransferFeatures.TransferTypes.Other
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesTypeValidator(), vm, _modelStateDictionary);
-
-            Assert.False(results.IsValid);
-            Assert.Equal(nameof(vm.OtherType), results.Errors[0].PropertyName);
-            Assert.Equal("Enter the type of transfer", results.Errors[0].ErrorMessage);
+            var result = await _featuresTypeValidator.TestValidateAsync(vm);
+            result.ShouldHaveValidationErrorFor(x => x.OtherType)
+                .WithErrorMessage("Enter the type of transfer");
         }
 
     }
