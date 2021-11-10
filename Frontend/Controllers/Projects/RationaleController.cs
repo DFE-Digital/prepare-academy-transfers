@@ -96,43 +96,48 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
+            var projectResult = project.Result;
+            var vm = new RationaleTrustOrSponsorViewModel
+            {
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                TrustOrSponsorRationale = projectResult.Rationale.Trust
+            };
 
-            return View(model);
+            return View(vm);
         }
 
         [ActionName("TrustOrSponsor")]
         [HttpPost("trust-or-sponsor")]
-        public async Task<IActionResult> TrustOrSponsorPost(string urn, string rationale, bool returnToPreview = false)
+        public async Task<IActionResult> TrustOrSponsorPost(RationaleTrustOrSponsorViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
-
-            model.Project.Rationale.Trust = rationale;
-
-            if (string.IsNullOrEmpty(rationale))
+            if (!ModelState.IsValid)
             {
-                model.FormErrors.AddError("rationale", "rationale", "Enter the rationale for the incoming trust or sponsor");
-                return View(model);
+                return View(vm);
             }
+            
+            var projectResult = project.Result;
+            projectResult.Rationale.Trust = vm.TrustOrSponsorRationale;
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new {vm.Urn});
         }
     }
 }

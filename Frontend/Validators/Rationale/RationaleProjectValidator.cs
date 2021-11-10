@@ -3,9 +3,9 @@ using Frontend.Models.Rationale;
 
 namespace Frontend.Validators.Rationale
 {
-    public class RationalProjectValidator : AbstractValidator<RationaleProjectViewModel>
+    public class RationaleProjectValidator : AbstractValidator<RationaleProjectViewModel>
     {
-        public RationalProjectValidator()
+        public RationaleProjectValidator()
         {
             RuleFor(x => x.ProjectRationale)
                 .NotEmpty()

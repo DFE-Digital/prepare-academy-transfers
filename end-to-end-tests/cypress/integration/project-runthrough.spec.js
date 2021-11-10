@@ -108,7 +108,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("ProjectRationale", "this is the project rationale")
         submit();
         clickDataTest("trust-rationale")
-        cy.fillInText("rationale", "this is the project rationale")
+        cy.fillInText("TrustOrSponsorRationale", "this is the project rationale")
         submit();
         clickBackLink()
 

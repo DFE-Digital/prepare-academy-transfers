@@ -256,7 +256,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenReturnToPreview_AssignToTheViewModel()
                 {
                     var response = await _subject.TrustOrSponsor("0001", true);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleTrustOrSponsorViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -268,7 +268,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrnAndRationale_UpdatesTheProject()
                 {
                     const string rationale = "This is the trust rationale";
-                    await _subject.TrustOrSponsorPost("0001", rationale);
+                    var vm = new RationaleTrustOrSponsorViewModel
+                    {
+                        Urn = "0001",
+                        TrustOrSponsorRationale = rationale
+                    };
+                    await _subject.TrustOrSponsorPost(vm);
 
                     _projectRepository.Verify(r =>
                         r.Update(It.Is<Project>(project => project.Rationale.Trust == rationale)), Times.Once);
@@ -278,24 +283,45 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
                 {
                     const string rationale = "This is the project rationale";
-                    var result = await _subject.TrustOrSponsorPost("0001", rationale);
+                    var vm = new RationaleTrustOrSponsorViewModel
+                    {
+                        Urn = "0001",
+                        TrustOrSponsorRationale = rationale
+                    };
+                    var result = await _subject.TrustOrSponsorPost(vm);
 
                     ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
                 }
 
                 [Fact]
-                public async void GivenUrnAndNoRationale_AddsErrorToTheModel()
+                public async void GivenErrorInModelState_ReturnsCorrectView()
                 {
-                    var result = await _subject.TrustOrSponsorPost("0001", "");
-                    var model = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(result);
-                    Assert.True(model.FormErrors.HasErrors);
-                    Assert.True(model.FormErrors.HasErrorForField("rationale"));
+                    var vm = new RationaleTrustOrSponsorViewModel()
+                    {
+                        Urn = "0001",
+                        TrustOrSponsorRationale = ""
+                    };
+                    _subject.ModelState.AddModelError(nameof(vm.TrustOrSponsorRationale), "error");
+                    var result = await _subject.TrustOrSponsorPost(vm);
+
+                    _projectRepository.Verify(r =>
+                        r.Update(It.Is<Project>(project => project.Rationale.Trust == "")), Times.Never);
+                    
+                    var viewResult = Assert.IsType<ViewResult>(result);
+
+                    Assert.False(_subject.ModelState.IsValid);
+                    Assert.Equal(vm, viewResult.Model);
                 }
 
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                    var response = await _subject.TrustOrSponsorPost(_errorWithGetByUrn, "rationale");
+                    var vm = new RationaleTrustOrSponsorViewModel()
+                    {
+                        Urn = _errorWithGetByUrn,
+                        TrustOrSponsorRationale = "rationale"
+                    };
+                    var response = await _subject.TrustOrSponsorPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -314,7 +340,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                             }
                         });
 
-                    var response = await _subject.TrustOrSponsorPost("errorWithUpdate", "rationale");
+                    var vm = new RationaleTrustOrSponsorViewModel()
+                    {
+                        Urn = "errorWithUpdate",
+                        TrustOrSponsorRationale = "rationale"
+                    };
+                    
+                    var response = await _subject.TrustOrSponsorPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
 
                     Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -324,8 +356,15 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
                 {
-                    var response = await _subject.TrustOrSponsorPost("0001", null, true);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleViewModel>(response);
+                    var vm = new RationaleTrustOrSponsorViewModel()
+                    {
+                        Urn = "errorWithUpdate",
+                        TrustOrSponsorRationale = "rationale",
+                        ReturnToPreview = true
+                    };
+                    _subject.ModelState.AddModelError(nameof(vm.TrustOrSponsorRationale), "error");
+                    var response = await _subject.TrustOrSponsorPost(vm);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleTrustOrSponsorViewModel>(response);
                     
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -333,7 +372,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectsToPreviewPage()
                 {
-                    var response = await _subject.TrustOrSponsorPost("0001", "meow", true);
+                    var vm = new RationaleTrustOrSponsorViewModel()
+                    {
+                        Urn = "0001",
+                        TrustOrSponsorRationale = "meow",
+                        ReturnToPreview = true
+                    };
+                    var response = await _subject.TrustOrSponsorPost(vm);
 
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
