@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using Castle.Components.DictionaryAdapter;
 using Data;
 using Data.Models;
 using Frontend.Controllers;
@@ -13,6 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Session;
 using Moq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
 using Xunit;
 
 namespace Frontend.Tests.ControllerTests
