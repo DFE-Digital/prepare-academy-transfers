@@ -3,7 +3,7 @@
 @model Frontend.Models.Features.FeaturesInitiatedViewModel
 
 @{
-    ViewBag.Title = !ViewData.ModelState.IsValid ? "Error: Who initiated the academy transfer?" : "Who initiated the academy transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Who initiated the academy transfer?";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
     var radioButtons = FeaturesInitiatedViewModel.InitiatedRadioButtons(Model.WhoInitiated);

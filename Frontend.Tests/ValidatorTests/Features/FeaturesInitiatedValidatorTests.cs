@@ -1,18 +1,19 @@
 ﻿using Data.Models.Projects;
+using FluentValidation.TestHelper;
 using Frontend.Models.Features;
 using Frontend.Tests.Helpers;
 using Frontend.Validators.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Xunit;
 
-namespace Frontend.Tests.ValidatorTests
+namespace Frontend.Tests.ValidatorTests.Features
 {
     public class FeaturesInitiatedValidatorTests
     {
-        private readonly ModelStateDictionary _modelStateDictionary;
+        private readonly FeaturesInitiatedValidator _featuresInitiatedValidator;
         public FeaturesInitiatedValidatorTests()
         {
-            _modelStateDictionary = new ModelStateDictionary();
+            _featuresInitiatedValidator = new FeaturesInitiatedValidator();
         }
 
         [Theory]
@@ -26,9 +27,9 @@ namespace Frontend.Tests.ValidatorTests
                 WhoInitiated = projectInitiator,
                 OutgoingAcademyName = "Test"
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _modelStateDictionary);
 
-            Assert.True(results.IsValid);
+            var result = await _featuresInitiatedValidator.TestValidateAsync(vm);
+            result.ShouldNotHaveValidationErrorFor(x => x.WhoInitiated);
         }
 
         [Theory]
@@ -41,11 +42,10 @@ namespace Frontend.Tests.ValidatorTests
                 WhoInitiated = projectInitiator,
                 OutgoingAcademyName = "Test"
             };
-            var results = await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(), vm, _modelStateDictionary);
 
-            Assert.False(results.IsValid);
-            Assert.Equal(nameof(vm.WhoInitiated), results.Errors[0].PropertyName);
-            Assert.Equal("Select who initiated the project", results.Errors[0].ErrorMessage);
+            var result = await _featuresInitiatedValidator.TestValidateAsync(vm);
+            result.ShouldHaveValidationErrorFor(x => x.WhoInitiated)
+                .WithErrorMessage("Select who initiated the project");
         }
     }
 }

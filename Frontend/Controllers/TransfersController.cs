@@ -5,6 +5,7 @@ using Data.Models;
 using Data.Models.Projects;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Frontend.Helpers;
+using Frontend.Validators.Transfers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -47,9 +48,11 @@ namespace Frontend.Controllers
         {
             ViewData["ChangeLink"] = change;
 
-            if (string.IsNullOrEmpty(query))
+            var validatorQuery = new OutgoingTrustNameValidator();
+            var validationQueryResult = await validatorQuery.ValidateAsync(query);
+            if (!validationQueryResult.IsValid)
             {
-                TempData["ErrorMessage"] = "Enter the outgoing trust name";
+                TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
                 return RedirectToAction("TrustName");
             }
 
@@ -60,9 +63,11 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (result.Result.Count == 0 || result.Result.All(a=>!a.Academies.Any()))
+            var validator = new OutgoingTrustSearchValidator();
+            var validationResult = await validator.ValidateAsync(result.Result);
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("TrustName", new {query});
             }
 
@@ -82,9 +87,12 @@ namespace Frontend.Controllers
         {
             ViewData["ChangeLink"] = change;
 
-            if (string.IsNullOrEmpty(trustId))
+            var validator= new OutgoingTrustConfirmValidator();
+            var validationResult = await validator.ValidateAsync(trustId);
+
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "Select the outgoing trust";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("TrustSearch", new { query, change });
             }
             
@@ -142,11 +150,14 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult SubmitOutgoingTrustAcademies(string academyId, bool change = false)
+        public async Task<IActionResult> SubmitOutgoingTrustAcademies(string academyId, bool change = false)
         {
-            if (string.IsNullOrEmpty(academyId))
+            var validator = new OutgoingTrustAcademiesValidator();
+            var validationResult = await validator.ValidateAsync(academyId);
+
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "Select an academy";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("OutgoingTrustAcademies");
             }
 
@@ -180,9 +191,12 @@ namespace Frontend.Controllers
         {
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
-            if (string.IsNullOrEmpty(query))
+
+            var validatorQuery = new IncomingTrustNameValidator();
+            var validationQueryResult = await validatorQuery.ValidateAsync(query);
+            if (!validationQueryResult.IsValid)
             {
-                TempData["ErrorMessage"] = "Enter the incoming trust name";
+                TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
                 return RedirectToAction("IncomingTrust");
             }
 
@@ -193,9 +207,12 @@ namespace Frontend.Controllers
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (result.Result.Count == 0)
+            var validator = new IncomingTrustSearchValidator();
+            var validationResult = await validator.ValidateAsync(result.Result);
+
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "We could not find any trusts matching your search criteria";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("IncomingTrust", new {query});
             }
 
@@ -210,11 +227,14 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public IActionResult ConfirmIncomingTrust(string trustId, string query = "", bool change = false)
+        public async Task<IActionResult> ConfirmIncomingTrust(string trustId, string query = "", bool change = false)
         {
-            if (string.IsNullOrEmpty(trustId))
+            var validator = new IncomingTrustConfirmValidator();
+            var validationResult = await validator.ValidateAsync(trustId);
+
+            if (!validationResult.IsValid)
             {
-                TempData["ErrorMessage"] = "Select an incoming trust";
+                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("SearchIncomingTrust", new { query, change });
             }
             
