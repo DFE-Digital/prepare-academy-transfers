@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.Benefits;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,13 +48,16 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new BenefitsViewModel
+            var projectResult = project.Result;
+            var vm = new IntendedBenefitsViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+               ProjectUrn = projectResult.Urn,
+               OutgoingAcademyName = projectResult.OutgoingAcademyName,
+               ReturnToPreview = returnToPreview,
+               SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits
             };
 
-            return View(model);
+            return View(vm);
         }
 
         [ActionName("IntendedBenefits")]

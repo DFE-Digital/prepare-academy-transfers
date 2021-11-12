@@ -1,11 +1,11 @@
 @using Frontend.Helpers
 @using Data.Models.Projects
 @using Helpers
-@model BenefitsViewModel
+@model Frontend.Models.Benefits.IntendedBenefitsViewModel
 
 @{
 
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("What are the benefits the transfer intended to bring?");
+    ViewBag.Title = !ViewData.ModelState.IsValid ? "What are the benefits the transfer intended to bring?");
     Layout = "_Layout";
     var formClasses = Model.FormErrors.FormClassesForField("intendedBenefits");
     var otherBenefitFormClasses = Model.FormErrors.FormClassesForField("otherBenefit");
