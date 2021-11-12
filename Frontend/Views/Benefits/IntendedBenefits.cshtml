@@ -57,7 +57,8 @@
                                 </label>
                             </div>
                         }*@
-                        <partial name="_Checkboxes" model="@Model.GetIntendedBenefitsCheckboxes()" />
+                        @*<partial name="_Checkboxes" model="@Model.GetIntendedBenefitsCheckboxes()" />*@
+                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()"></gds-checkboxes>
 
                         @{
                             var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString();
