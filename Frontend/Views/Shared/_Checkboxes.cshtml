@@ -1,0 +1,13 @@
+@model List<Frontend.Models.Forms.CheckboxViewModel>
+
+@for (var i = 0; i < Model.Count(); i++)
+{
+    var checkBox = Model[i];
+    var nameOrValue = (i == 0 ? checkBox.Name : checkBox.Value);
+    <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input" id="@nameOrValue" name="@checkBox.Name" type="checkbox" value="@checkBox.Value" checked="@checkBox.Checked">
+        <label class="govuk-label govuk-checkboxes__label" for="@nameOrValue">
+            @checkBox.DisplayName
+        </label>
+    </div>
+}

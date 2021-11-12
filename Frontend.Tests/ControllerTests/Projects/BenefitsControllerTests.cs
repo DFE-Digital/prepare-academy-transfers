@@ -119,162 +119,162 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
             }
 
-            public class PostTests : IntendedBenefitsTests
-            {
-                [Fact]
-                public async void GivenUrnAndIntendedBenefits_UpdatesTheProject()
-                {
-                    var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.StrengtheningGovernance
-                    };
+            //public class PostTests : IntendedBenefitsTests
+            //{
+            //    [Fact]
+            //    public async void GivenUrnAndIntendedBenefits_UpdatesTheProject()
+            //    {
+            //        var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+            //            TransferBenefits.IntendedBenefit.StrengtheningGovernance
+            //        };
 
-                    await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "");
+            //        await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "");
 
-                    _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(
-                            project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains))));
-                }
+            //        _projectsRepository.Verify(r =>
+            //            r.Update(It.Is<Project>(
+            //                project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains))));
+            //    }
 
-                [Fact]
-                public async void GivenOtherBenefitAndItsDetails_UpdatesTheProject()
-                {
-                    var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.StrengtheningGovernance,
-                        TransferBenefits.IntendedBenefit.Other
-                    };
+            //    [Fact]
+            //    public async void GivenOtherBenefitAndItsDetails_UpdatesTheProject()
+            //    {
+            //        var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+            //            TransferBenefits.IntendedBenefit.StrengtheningGovernance,
+            //            TransferBenefits.IntendedBenefit.Other
+            //        };
 
-                    await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "Other benefit");
-                    _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(
-                            project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains) &&
-                                       project.Benefits.OtherIntendedBenefit == "Other benefit")
-                        )
-                    );
-                }
+            //        await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "Other benefit");
+            //        _projectsRepository.Verify(r =>
+            //            r.Update(It.Is<Project>(
+            //                project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains) &&
+            //                           project.Benefits.OtherIntendedBenefit == "Other benefit")
+            //            )
+            //        );
+            //    }
 
-                [Fact]
-                public async void GivenUrnAndIntendedBenefits_RedirectsToTheSummaryPage()
-                {
-                    var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.StrengtheningGovernance
-                    };
+            //    [Fact]
+            //    public async void GivenUrnAndIntendedBenefits_RedirectsToTheSummaryPage()
+            //    {
+            //        var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+            //            TransferBenefits.IntendedBenefit.StrengtheningGovernance
+            //        };
 
-                    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "");
+            //        var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits.ToArray(), "");
 
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
-                }
+            //        ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+            //    }
 
-                [Fact]
-                public async void GivenUrnAndNoBenefits_CreateErrorOnTheView()
-                {
-                    var intendedBenefits = new TransferBenefits.IntendedBenefit[] { };
-                    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.True(viewModel.FormErrors.HasErrorForField("intendedBenefits"));
-                }
+            //    [Fact]
+            //    public async void GivenUrnAndNoBenefits_CreateErrorOnTheView()
+            //    {
+            //        var intendedBenefits = new TransferBenefits.IntendedBenefit[] { };
+            //        var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
+            //        var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
+            //        Assert.True(viewModel.FormErrors.HasErrors);
+            //        Assert.True(viewModel.FormErrors.HasErrorForField("intendedBenefits"));
+            //    }
 
-                [Fact]
-                public async void GivenOtherBenefitButNoDescription_CreateErrorOnTheView()
-                {
-                    var intendedBenefits = new[] {TransferBenefits.IntendedBenefit.Other};
-                    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
-                }
+            //    [Fact]
+            //    public async void GivenOtherBenefitButNoDescription_CreateErrorOnTheView()
+            //    {
+            //        var intendedBenefits = new[] {TransferBenefits.IntendedBenefit.Other};
+            //        var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
+            //        var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
+            //        Assert.True(viewModel.FormErrors.HasErrors);
+            //        Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
+            //    }
 
-                [Fact]
-                public async void GivenManyBenefitsIncludingOtherButNoDescription_CreateErrorOnTheView()
-                {
-                    var intendedBenefits = new[]
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
-                    };
-                    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
-                }
+            //    [Fact]
+            //    public async void GivenManyBenefitsIncludingOtherButNoDescription_CreateErrorOnTheView()
+            //    {
+            //        var intendedBenefits = new[]
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
+            //        };
+            //        var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
+            //        var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
+            //        Assert.True(viewModel.FormErrors.HasErrors);
+            //        Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
+            //    }
 
-                [Fact]
-                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-                {
-                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                        .ReturnsAsync(new RepositoryResult<Project>
-                        {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                StatusCode = System.Net.HttpStatusCode.NotFound,
-                                ErrorMessage = "Project not found"
-                            }
-                        });
+            //    [Fact]
+            //    public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            //    {
+            //        _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+            //            .ReturnsAsync(new RepositoryResult<Project>
+            //            {
+            //                Error = new RepositoryResultBase.RepositoryError
+            //                {
+            //                    StatusCode = System.Net.HttpStatusCode.NotFound,
+            //                    ErrorMessage = "Project not found"
+            //                }
+            //            });
 
-                    var controller = new BenefitsController(_projectsRepository.Object);
+            //        var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var intendedBenefits = new[]
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
-                    };
+            //        var intendedBenefits = new[]
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
+            //        };
 
-                    var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
-                    var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
+            //        var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
+            //        var viewResult = Assert.IsType<ViewResult>(response);
+            //        var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Project not found", viewModel);
-                }
+            //        Assert.Equal("ErrorPage", viewResult.ViewName);
+            //        Assert.Equal("Project not found", viewModel);
+            //    }
 
-                [Fact]
-                public async void GivenUpdateReturnsError_DisplayErrorPage()
-                {
-                    _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
-                        .ReturnsAsync(new RepositoryResult<Project>
-                        {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                StatusCode = System.Net.HttpStatusCode.NotFound,
-                                ErrorMessage = "Project not found"
-                            }
-                        });
+            //    [Fact]
+            //    public async void GivenUpdateReturnsError_DisplayErrorPage()
+            //    {
+            //        _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
+            //            .ReturnsAsync(new RepositoryResult<Project>
+            //            {
+            //                Error = new RepositoryResultBase.RepositoryError
+            //                {
+            //                    StatusCode = System.Net.HttpStatusCode.NotFound,
+            //                    ErrorMessage = "Project not found"
+            //                }
+            //            });
 
-                    var controller = new BenefitsController(_projectsRepository.Object);
+            //        var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var intendedBenefits = new[]
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
-                    };
+            //        var intendedBenefits = new[]
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+            //            TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
+            //        };
 
-                    var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
-                    var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
+            //        var response = await controller.IntendedBenefitsPost("projectUrn", intendedBenefits, "");
+            //        var viewResult = Assert.IsType<ViewResult>(response);
+            //        var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Project not found", viewModel);
-                }
+            //        Assert.Equal("ErrorPage", viewResult.ViewName);
+            //        Assert.Equal("Project not found", viewModel);
+            //    }
 
-                [Fact]
-                public async void GivenReturnToPreview_RedirectToThePreviewPage()
-                {
-                    var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
-                    {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.StrengtheningGovernance
-                    };
+            //    [Fact]
+            //    public async void GivenReturnToPreview_RedirectToThePreviewPage()
+            //    {
+            //        var intendedBenefits = new List<TransferBenefits.IntendedBenefit>
+            //        {
+            //            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+            //            TransferBenefits.IntendedBenefit.StrengtheningGovernance
+            //        };
 
-                    var result =
-                        await _subject.IntendedBenefitsPost("projectUrn", intendedBenefits.ToArray(), "", true);
-                    ControllerTestHelpers.AssertResultRedirectsToPage(result, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "projectUrn"}));
-                }
-            }
+            //        var result =
+            //            await _subject.IntendedBenefitsPost("projectUrn", intendedBenefits.ToArray(), "", true);
+            //        ControllerTestHelpers.AssertResultRedirectsToPage(result, Links.HeadteacherBoard.Preview.PageName,
+            //            new RouteValueDictionary(new {id = "projectUrn"}));
+            //    }
+            //}
         }
 
         public class OtherFactorsTests : BenefitsControllerTests
