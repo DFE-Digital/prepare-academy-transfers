@@ -45,20 +45,8 @@
                     <span asp-gds-validation-for="SelectedIntendedBenefits"></span>
 
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                        @* @foreach (var intendedBenefit in EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit.Empty))
-                        {
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="@intendedBenefit.ToString()" name="intendedBenefits" type="checkbox" value="@intendedBenefit.ToString()" checked="@Model.SelectedIntendedBenefits.Contains(intendedBenefit)">
-                                <label class="govuk-label govuk-checkboxes__label" for="@intendedBenefit.ToString()">
-                                    @{
-                                        var displayValue = EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue(intendedBenefit);
-                                        @displayValue
-                                    }
-                                </label>
-                            </div>
-                        }*@
-                        @*<partial name="_Checkboxes" model="@Model.GetIntendedBenefitsCheckboxes()" />*@
-                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()"></gds-checkboxes>
+
+                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-checkboxes-container="true"></gds-checkboxes>
 
                         @{
                             var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString();
@@ -75,7 +63,7 @@
                                 <label class="govuk-label" for="otherBenefit">
                                     Enter the benefit
                                 </label>
-                                
+
                                 <span asp-gds-validation-for="OtherBenefit"></span>
 
                                 <input class="govuk-input govuk-!-width-two-thirds" id="otherBenefit" name="otherBenefit" type="text" spellcheck="false">

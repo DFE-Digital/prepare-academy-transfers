@@ -15,9 +15,21 @@ namespace Frontend.Helpers.TagHelpers
     {
         public IList<CheckboxViewModel> Checkboxes { get; set; }
 
+        public bool WithoutCheckboxesContainer { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = null;
+            if (WithoutCheckboxesContainer)
+            {
+                output.TagName = null;
+            }
+            else
+            {
+                output.TagName = "div";
+                output.AddClass("govuk-checkboxes", HtmlEncoder.Default);
+                output.Attributes.Add("data-module", "govuk-checkboxes");
+            }
+
             for (int i = 0; i < Checkboxes.Count; i++)
             {
                 var checkBox = Checkboxes[i];
