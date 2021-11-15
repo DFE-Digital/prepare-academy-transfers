@@ -7,9 +7,9 @@ using Frontend.Models.Benefits;
 
 namespace Frontend.Validators.Benefits
 {
-    public class BenefitsValidator : AbstractValidator<IntendedBenefitsViewModel>
+    public class IntendedBenefitsValidator : AbstractValidator<IntendedBenefitsViewModel>
     {
-        public BenefitsValidator()
+        public IntendedBenefitsValidator()
         {
             CascadeMode = CascadeMode.Stop;
             RuleFor(x => x.SelectedIntendedBenefits)
