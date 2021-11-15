@@ -192,46 +192,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                     ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
                 }
 
-                //[Fact]
-                //public async void GivenUrnAndNoBenefits_CreateErrorOnTheView()
-                //{
-                //    var intendedBenefits = new List<TransferBenefits.IntendedBenefit>();
-                //    var vm = new IntendedBenefitsViewModel
-                //    {
-                //        ProjectUrn = "0001",
-                //        SelectedIntendedBenefits = intendedBenefits,
-                //        OtherBenefit = ""
-                //    };
-
-                //    var response = await _subject.IntendedBenefitsPost(vm);
-                //    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<IntendedBenefitsViewModel>(response);
-                //    Assert.True(viewModel.FormErrors.HasErrors);
-                //    Assert.True(viewModel.FormErrors.HasErrorForField("intendedBenefits"));
-                //}
-
-                //[Fact]
-                //public async void GivenOtherBenefitButNoDescription_CreateErrorOnTheView()
-                //{
-                //    var intendedBenefits = new[] { TransferBenefits.IntendedBenefit.Other };
-                //    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                //    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                //    Assert.True(viewModel.FormErrors.HasErrors);
-                //    Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
-                //}
-
-                //[Fact]
-                //public async void GivenManyBenefitsIncludingOtherButNoDescription_CreateErrorOnTheView()
-                //{
-                //    var intendedBenefits = new[]
-                //    {
-                //        TransferBenefits.IntendedBenefit.ImprovingSafeguarding, TransferBenefits.IntendedBenefit.Other
-                //    };
-                //    var response = await _subject.IntendedBenefitsPost("0001", intendedBenefits, "");
-                //    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                //    Assert.True(viewModel.FormErrors.HasErrors);
-                //    Assert.True(viewModel.FormErrors.HasErrorForField("otherBenefit"));
-                //}
-
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
