@@ -8,10 +8,10 @@ using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.Features
 {
-    public class FeaturesInitiatedValidatorTests
+    public class IntendedBenefitsValidatorTests
     {
         private readonly FeaturesInitiatedValidator _featuresInitiatedValidator;
-        public FeaturesInitiatedValidatorTests()
+        public IntendedBenefitsValidatorTests()
         {
             _featuresInitiatedValidator = new FeaturesInitiatedValidator();
         }

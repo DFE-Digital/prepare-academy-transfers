@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.Benefits;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,59 +48,47 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new BenefitsViewModel
+            var projectResult = project.Result;
+            var vm = new IntendedBenefitsViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+               ProjectUrn = projectResult.Urn,
+               OutgoingAcademyName = projectResult.OutgoingAcademyName,
+               ReturnToPreview = returnToPreview,
+               SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
+               OtherBenefit = projectResult.Benefits.OtherIntendedBenefit
             };
 
-            return View(model);
+            return View(vm);
         }
 
         [ActionName("IntendedBenefits")]
         [HttpPost("intended-benefits")]
-        public async Task<IActionResult> IntendedBenefitsPost(string urn,
-            TransferBenefits.IntendedBenefit[] intendedBenefits, string otherBenefit, bool returnToPreview = false)
+        public async Task<IActionResult> IntendedBenefitsPost(IntendedBenefitsViewModel vm)
         {
+            var urn = vm.ProjectUrn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new BenefitsViewModel
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-            };
-
-            model.Project.Benefits.IntendedBenefits =
-                new List<TransferBenefits.IntendedBenefit>(intendedBenefits);
-            model.Project.Benefits.OtherIntendedBenefit = otherBenefit;
-
-            if (model.Project.Benefits.IntendedBenefits.Count == 0)
-            {
-                var firstBenefit =
-                    EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit
-                        .Empty)[0];
-                model.FormErrors.AddError(firstBenefit.ToString(), "intendedBenefits",
-                    "Select at least one intended benefit");
-                return View(model);
+                return View(vm);
             }
 
-            if (model.Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) &&
-                string.IsNullOrEmpty(otherBenefit))
-            {
-                model.FormErrors.AddError("otherBenefit", "otherBenefit", "Enter the other benefit");
-                return View(model);
-            }
+            var projectResult = project.Result;
+            projectResult.Benefits.IntendedBenefits =
+                new List<TransferBenefits.IntendedBenefit>(vm.SelectedIntendedBenefits);
+            projectResult.Benefits.OtherIntendedBenefit = vm.OtherBenefit;
 
-            var updateResult = await _projectsRepository.Update(model.Project);
+            var updateResult = await _projectsRepository.Update(projectResult);
             if (!updateResult.IsValid)
             {
                 return View("ErrorPage", updateResult.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
             }

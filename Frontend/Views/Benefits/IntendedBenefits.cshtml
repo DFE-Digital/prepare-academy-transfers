@@ -1,35 +1,39 @@
 @using Frontend.Helpers
 @using Data.Models.Projects
 @using Helpers
-@model BenefitsViewModel
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Frontend.Models.Benefits.IntendedBenefitsViewModel
 
 @{
 
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("What are the benefits the transfer intended to bring?");
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the benefits the transfer intended to bring?";
     Layout = "_Layout";
-    var formClasses = Model.FormErrors.FormClassesForField("intendedBenefits");
-    var otherBenefitFormClasses = Model.FormErrors.FormClassesForField("otherBenefit");
+    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.SelectedIntendedBenefits)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherBenefit)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
-    </backtopreview>
+<backtopreview id="@Model.ProjectUrn" return-to-preview="@Model.ReturnToPreview">
+    <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.ProjectUrn">Back</a>
+</backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="IntendedBenefits" method="post" novalidate="">
-            <input name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="hidden" asp-for="@Model.ProjectUrn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
             <div class="govuk-form-group @formClasses @otherBenefitFormClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="intended-benefits-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.Project.OutgoingAcademyName
+                                @Model.OutgoingAcademyName
                             </span>
                             What are the benefits the transfer intended to bring?
                         </h1>
@@ -38,33 +42,18 @@
                         Select all that apply.
                     </div>
 
-                    @if (Model.FormErrors.HasErrorForField("intendedBenefits"))
-                    {
-                        <span id="intended-benefits-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("intendedBenefits").ErrorMessage
-                        </span>
-                    }
+                    <span asp-gds-validation-for="SelectedIntendedBenefits"></span>
 
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                        @foreach (var intendedBenefit in EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayableValues(TransferBenefits.IntendedBenefit.Empty))
-                        {
-                            <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="@intendedBenefit.ToString()" name="intendedBenefits" type="checkbox" value="@intendedBenefit.ToString()" checked="@Model.Project.Benefits.IntendedBenefits.Contains(intendedBenefit)">
-                                <label class="govuk-label govuk-checkboxes__label" for="@intendedBenefit.ToString()">
-                                    @{
-                                        var displayValue = EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue(intendedBenefit);
-                                        @displayValue
-                                    }
-                                </label>
-                            </div>
-                        }
+
+                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-container="true"></gds-checkboxes>
 
                         @{
                             var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString();
                         }
 
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="intendedBenefits" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.Project.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
+                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="@nameof(Model.SelectedIntendedBenefits)" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
                             <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit">
                                 Add an other benefit
                             </label>
@@ -75,14 +64,9 @@
                                     Enter the benefit
                                 </label>
 
-                                @if (Model.FormErrors.HasErrorForField("otherBenefit"))
-                                {
-                                    <span id="other-benefit-error" class="govuk-error-message">
-                                        <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("otherBenefit").ErrorMessage
-                                    </span>
-                                }
+                                <span asp-gds-validation-for="OtherBenefit"></span>
 
-                                <input class="govuk-input govuk-!-width-two-thirds" id="otherBenefit" name="otherBenefit" type="text" spellcheck="false">
+                                <input class="govuk-input govuk-!-width-two-thirds" asp-for="OtherBenefit" spellcheck="false">
                             </div>
                         </div>
                     </div>
