@@ -46,14 +46,14 @@
 
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
 
-                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-checkboxes-container="true"></gds-checkboxes>
+                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-container="true"></gds-checkboxes>
 
                         @{
                             var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString();
                         }
 
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="intendedBenefits" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
+                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="@nameof(Model.SelectedIntendedBenefits)" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
                             <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit">
                                 Add an other benefit
                             </label>
@@ -66,7 +66,7 @@
 
                                 <span asp-gds-validation-for="OtherBenefit"></span>
 
-                                <input class="govuk-input govuk-!-width-two-thirds" id="otherBenefit" name="otherBenefit" type="text" spellcheck="false">
+                                <input class="govuk-input govuk-!-width-two-thirds" asp-for="OtherBenefit" spellcheck="false">
                             </div>
                         </div>
                     </div>

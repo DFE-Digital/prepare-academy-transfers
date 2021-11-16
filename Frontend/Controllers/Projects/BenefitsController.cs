@@ -54,7 +54,8 @@ namespace Frontend.Controllers.Projects
                ProjectUrn = projectResult.Urn,
                OutgoingAcademyName = projectResult.OutgoingAcademyName,
                ReturnToPreview = returnToPreview,
-               SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits
+               SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
+               OtherBenefit = projectResult.Benefits.OtherIntendedBenefit
             };
 
             return View(vm);

@@ -15,11 +15,11 @@ namespace Frontend.Helpers.TagHelpers
     {
         public IList<CheckboxViewModel> Checkboxes { get; set; }
 
-        public bool WithoutCheckboxesContainer { get; set; }
+        public bool WithoutContainer { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (WithoutCheckboxesContainer)
+            if (WithoutContainer)
             {
                 output.TagName = null;
             }
