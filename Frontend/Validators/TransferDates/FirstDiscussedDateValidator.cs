@@ -8,10 +8,7 @@ namespace Frontend.Validators.TransferDates
         public FirstDiscussedDateValidator()
         {
             RuleFor(x => x.FirstDiscussed)
-                .SetInheritanceValidator(v =>
-                {
-                    v.Add<DateViewModel>(new DateValidator());
-                });
+                .SetValidator(new DateValidator());
         }
     }
 }
