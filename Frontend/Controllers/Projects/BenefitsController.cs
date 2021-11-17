@@ -30,11 +30,15 @@ namespace Frontend.Controllers.Projects
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
-
-            var model = new BenefitsViewModel
-            {
-                Project = project.Result,
-            };
+            
+            var projectResult = project.Result;
+            var model = new BenefitsSummaryViewModel(
+                projectResult.Benefits.IntendedBenefits.ToList(),
+                projectResult.Benefits.OtherIntendedBenefit,
+                BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors),
+                projectResult.Urn,
+                projectResult.OutgoingAcademyUrn
+            );
 
             return View(model);
         }

@@ -1,4 +1,4 @@
-@model BenefitsViewModel
+@model BenefitsSummaryViewModel
 
 @{
     ViewBag.Title = "Benefits and other factors";
@@ -7,13 +7,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model._projectUrn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model._outgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Benefits and other factors
@@ -29,7 +29,7 @@
                 <dt class="govuk-summary-list__key">
                     What are the benefits the transfer intended to bring?
                 </dt>
-                @if (Model.Project.Benefits.IntendedBenefits.Count == 0)
+                @if (!Model.IntendedBenefitsSummary().Any())
                 {
                     <dd class="govuk-summary-list__value">
                         <span class="dfe-empty-tag">Empty</span>
@@ -47,7 +47,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model.Project.Urn" data-test="intended-benefits">
+                    <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model._projectUrn" data-test="intended-benefits">
                         Change<span class="govuk-visually-hidden"> intended benefits</span>
                     </a>
                 </dd>
@@ -57,7 +57,7 @@
                     Are there any other factors to consider during this transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.Project.Benefits.OtherFactors.Keys.Count == 0)
+                    @if (!Model.OtherFactorsSummary().Any())
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
@@ -76,13 +76,13 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="OtherFactors" asp-route-urn="@Model.Project.Urn" data-test="other-factors">
+                    <a class="govuk-link" asp-action="OtherFactors" asp-route-urn="@Model._projectUrn" data-test="other-factors">
                         Change<span class="govuk-visually-hidden"> other factors to consider</span>
                     </a>
                 </dd>
             </div>
         </dl>
-        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model._projectUrn">
             <button class="govuk-button">Confirm and continue</button>
         </form>
     </div>
