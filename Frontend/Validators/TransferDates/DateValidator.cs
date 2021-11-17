@@ -17,7 +17,7 @@ namespace Frontend.Validators.TransferDates
                 .Custom((day, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
-                    if (dateVm.UnknownDate is false && DateIsEmpty(dateVm.Date))
+                    if (!dateVm.UnknownDate && DateIsEmpty(dateVm.Date))
                     {
                         context.AddFailure("You must enter the date or confirm that you don't know it");
                     }
@@ -37,7 +37,7 @@ namespace Frontend.Validators.TransferDates
                 .Custom((day, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
-                    if (dateVm.UnknownDate is false && !IsAValidDate(dateVm.Date))
+                    if (!dateVm.UnknownDate && !IsAValidDate(dateVm.Date))
                     {
                         context.AddFailure("Enter a valid date");
                     }
