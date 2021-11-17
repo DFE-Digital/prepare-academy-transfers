@@ -48,7 +48,7 @@
                                 <label asp-for="FirstDiscussed.Date.Day" class="govuk-label govuk-date-input__label">
                                     Day
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric">
+                                <input asp-for="FirstDiscussed.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
@@ -56,7 +56,7 @@
                                 <label asp-for="FirstDiscussed.Date.Month" class="govuk-label govuk-date-input__label">
                                     Month
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric">
+                                <input asp-for="FirstDiscussed.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
@@ -64,7 +64,7 @@
                                 <label asp-for="FirstDiscussed.Date.Year" class="govuk-label govuk-date-input__label">
                                     Year
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric">
+                                <input asp-for="FirstDiscussed.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
                             </div>
                         </div>
                     </div>
