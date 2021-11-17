@@ -40,14 +40,5 @@ namespace Frontend.Models
                 otherFactor.Value
             }).ToList();
         }
-
-        public List<OtherFactorsViewModel> OtherFactorsVm { get; set; }
-
-        public class OtherFactorsViewModel
-        {
-            public TransferBenefits.OtherFactor OtherFactor { get; set; }
-            public bool Checked { get; set; }
-            public string Description { get; set; }
-        }
     }
 }
