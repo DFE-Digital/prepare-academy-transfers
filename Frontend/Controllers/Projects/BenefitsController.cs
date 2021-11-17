@@ -131,22 +131,11 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
             
-            //
-            // var formHasErrors = false;
-            // foreach (var otherFactor in otherFactorsVm.Where(otherFactor =>
-            //     otherFactor.Checked &&
-            //     string.IsNullOrEmpty(otherFactor.Description)))
-            // {
-            //     model.FormErrors.AddError(otherFactor.OtherFactor.ToString(), otherFactor.OtherFactor.ToString(),
-            //         "Specify the concern further");
-            //     formHasErrors = true;
-            // }
-            //
-            // if (formHasErrors)
-            // {
-            //     BuildOtherFactorsViewModel(model);
-            //     return View(model);
-            // }
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+            
             var projectResult = project.Result;
             projectResult.Benefits.OtherFactors = vm.OtherFactorsVm
                 .Where(of => of.Checked)
