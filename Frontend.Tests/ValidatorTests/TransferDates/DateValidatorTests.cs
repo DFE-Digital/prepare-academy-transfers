@@ -37,6 +37,26 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
                 .WithErrorMessage("You must enter the date or confirm that you don't know it");
         }
         
+        [Fact]
+        public async void WhenDateIsNotNullAndUnknownIsTrue_ShouldShowError()
+        {
+            var dateVm = new DateViewModel
+            {
+                Date = new DateInputViewModel
+                {
+                    Day = "1",
+                    Month = "1",
+                    Year = "2000"
+                },
+                UnknownDate = true
+            };
+
+            var result = await _validator.TestValidateAsync(dateVm);
+
+            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+                .WithErrorMessage("You must either enter the date or select 'I do not know this'");
+        }
+        
         [Theory]
         [InlineData("1//2021")]
         [InlineData("/1/2021")]
@@ -70,26 +90,6 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
                 .WithErrorMessage("Enter a valid date");
-        }
-        
-        [Fact]
-        public async void WhenDateIsNotNullAndUnknownIsTrue_ShouldShowError()
-        {
-            var dateVm = new DateViewModel
-            {
-                Date = new DateInputViewModel
-                {
-                    Day = "1",
-                    Month = "1",
-                    Year = "2000"
-                },
-                UnknownDate = true
-            };
-
-            var result = await _validator.TestValidateAsync(dateVm);
-
-            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("You must either enter the date or select 'I do not know this'");
         }
     }
 }

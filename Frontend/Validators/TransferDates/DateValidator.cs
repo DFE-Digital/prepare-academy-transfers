@@ -14,25 +14,39 @@ namespace Frontend.Validators.TransferDates
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.Date.Day)
-                .NotEmpty()
-                .When(a => a.UnknownDate is false)
-                .When(a => string.IsNullOrEmpty(a.Date.Month))
-                .When(a => string.IsNullOrEmpty(a.Date.Year))
-                .WithMessage("You must enter the date or confirm that you don't know it");
+                .Custom((day, context) =>
+                {
+                    var dateVm = context.InstanceToValidate;
+                    if (dateVm.UnknownDate is false && DateIsEmpty(dateVm.Date))
+                    {
+                        context.AddFailure("You must enter the date or confirm that you don't know it");
+                    }
+                });
 
             RuleFor(x => x.Date.Day)
-                .Must(a => false)
-                .When(a => !IsAValidDate(a.Date))
-                .WithMessage("Enter a valid date");
+                .Custom((day, context) =>
+                {
+                    var dateVm = context.InstanceToValidate;
+                    if (dateVm.UnknownDate && !DateIsEmpty(dateVm.Date))
+                    {
+                        context.AddFailure("You must either enter the date or select 'I do not know this'");
+                    }
+                });
             
             RuleFor(x => x.Date.Day)
-                .Must(a => false)
-                .When(a => a.UnknownDate)
-                .When(a => IsAValidDate(a.Date))
-                .WithMessage("You must either enter the date or select 'I do not know this'");
-
+                .Custom((day, context) =>
+                {
+                    var dateVm = context.InstanceToValidate;
+                    if (dateVm.UnknownDate is false && !IsAValidDate(dateVm.Date))
+                    {
+                        context.AddFailure("Enter a valid date");
+                    }
+                });
         }
 
+        private static bool DateIsEmpty(DateInputViewModel dateVm) =>
+            (string.IsNullOrEmpty(dateVm.Day) && string.IsNullOrEmpty(dateVm.Month) && string.IsNullOrEmpty(dateVm.Year));
+        
         private bool IsAValidDate(DateInputViewModel dateVm)
         {
             var dateString =
