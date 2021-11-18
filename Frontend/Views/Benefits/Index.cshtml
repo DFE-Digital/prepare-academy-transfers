@@ -7,13 +7,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model._projectUrn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model._outgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Benefits and other factors
@@ -47,7 +47,7 @@
                     </dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model._projectUrn" data-test="intended-benefits">
+                    <a class="govuk-link" asp-action="IntendedBenefits" asp-route-urn="@Model.ProjectUrn" data-test="intended-benefits">
                         Change<span class="govuk-visually-hidden"> intended benefits</span>
                     </a>
                 </dd>
@@ -76,13 +76,13 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="OtherFactors" asp-route-urn="@Model._projectUrn" data-test="other-factors">
+                    <a class="govuk-link" asp-action="OtherFactors" asp-route-urn="@Model.ProjectUrn" data-test="other-factors">
                         Change<span class="govuk-visually-hidden"> other factors to consider</span>
                     </a>
                 </dd>
             </div>
         </dl>
-        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model._projectUrn">
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">
             <button class="govuk-button">Confirm and continue</button>
         </form>
     </div>

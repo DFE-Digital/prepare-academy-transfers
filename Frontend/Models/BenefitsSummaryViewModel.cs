@@ -13,8 +13,8 @@ namespace Frontend.Models
         private readonly IList<TransferBenefits.IntendedBenefit> _intendedBenefits;
         private readonly string _otherIntendedBenefit;
         private readonly IList<OtherFactorsItemViewModel> _otherFactorsItems;
-        public readonly string _projectUrn;
-        public readonly string _outgoingAcademyUrn;
+        public readonly string ProjectUrn;
+        public readonly string OutgoingAcademyUrn;
 
         public BenefitsSummaryViewModel(IList<TransferBenefits.IntendedBenefit> intendedBenefits, 
             string otherIntendedBenefit, 
@@ -26,8 +26,8 @@ namespace Frontend.Models
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
             _otherFactorsItems = otherFactorsItems;
-            _projectUrn = projectUrn;
-            _outgoingAcademyUrn = outgoingAcademyUrn;
+            ProjectUrn = projectUrn;
+            OutgoingAcademyUrn = outgoingAcademyUrn;
         }
 
         public List<string> IntendedBenefitsSummary()
