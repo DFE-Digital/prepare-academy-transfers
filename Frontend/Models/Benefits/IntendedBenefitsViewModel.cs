@@ -5,15 +5,12 @@ using Helpers;
 
 namespace Frontend.Models.Benefits
 {
-    public class IntendedBenefitsViewModel
+    public class IntendedBenefitsViewModel : CommonViewModel
     {
         public IntendedBenefitsViewModel()
         {
             SelectedIntendedBenefits = new List<TransferBenefits.IntendedBenefit>();
         }
-        public string ProjectUrn { get; set; }
-        public string OutgoingAcademyName { get; set; }
-        public bool ReturnToPreview { get; set; }
         public IList<TransferBenefits.IntendedBenefit> SelectedIntendedBenefits { get; set; }
         public string OtherBenefit { get; set; }
 

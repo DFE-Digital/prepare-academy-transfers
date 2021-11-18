@@ -55,7 +55,7 @@ namespace Frontend.Controllers.Projects
             var projectResult = project.Result;
             var vm = new IntendedBenefitsViewModel
             {
-               ProjectUrn = projectResult.Urn,
+               Urn = projectResult.Urn,
                OutgoingAcademyName = projectResult.OutgoingAcademyName,
                ReturnToPreview = returnToPreview,
                SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
@@ -71,7 +71,7 @@ namespace Frontend.Controllers.Projects
         [HttpPost("intended-benefits")]
         public async Task<IActionResult> IntendedBenefitsPost(IntendedBenefitsViewModel vm)
         {
-            var urn = vm.ProjectUrn;
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
@@ -114,7 +114,7 @@ namespace Frontend.Controllers.Projects
             var projectResult = project.Result;
             var vm = new OtherFactorsViewModel()
             {
-                ProjectUrn = projectResult.Urn,
+                Urn = projectResult.Urn,
                 OutgoingAcademyName = projectResult.OutgoingAcademyName,
                 ReturnToPreview = returnToPreview,
                 OtherFactorsVm = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors)
@@ -127,8 +127,8 @@ namespace Frontend.Controllers.Projects
         [HttpPost("other-factors")]
         public async Task<IActionResult> OtherFactorsPost(OtherFactorsViewModel vm)
         {
-            var urn = vm.ProjectUrn;
-            var project = await _projectsRepository.GetByUrn(vm.ProjectUrn);
+            var urn = vm.Urn;
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
 
             if (!project.IsValid)
             {
@@ -152,7 +152,7 @@ namespace Frontend.Controllers.Projects
 
             if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.ProjectUrn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
             
             return RedirectToAction("Index", new {urn});

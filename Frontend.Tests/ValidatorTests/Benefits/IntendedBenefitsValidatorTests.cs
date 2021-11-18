@@ -19,7 +19,7 @@ namespace Frontend.Tests.ValidatorTests.Benefits
         {
             var vm = new IntendedBenefitsViewModel
             {
-                ProjectUrn = "0001",
+                Urn = "0001",
                 SelectedIntendedBenefits = new List<TransferBenefits.IntendedBenefit>(),
                 OtherBenefit = ""
             };
@@ -37,7 +37,7 @@ namespace Frontend.Tests.ValidatorTests.Benefits
         {
             var vm = new IntendedBenefitsViewModel
             {
-                ProjectUrn = "0001",
+                Urn = "0001",
                 SelectedIntendedBenefits = new List<TransferBenefits.IntendedBenefit>() { TransferBenefits.IntendedBenefit.Other },
                 OtherBenefit = otherBenefit
             };
@@ -54,7 +54,7 @@ namespace Frontend.Tests.ValidatorTests.Benefits
         {
             var vm = new IntendedBenefitsViewModel
             {
-                ProjectUrn = "0001",
+                Urn = "0001",
                 SelectedIntendedBenefits = new List<TransferBenefits.IntendedBenefit>() { 
                     TransferBenefits.IntendedBenefit.ImprovingSafeguarding, 
                     TransferBenefits.IntendedBenefit.StrongerLeadership,

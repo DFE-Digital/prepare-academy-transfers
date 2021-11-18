@@ -93,7 +93,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var result = await _subject.IntendedBenefits("0001");
 
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<IntendedBenefitsViewModel>(result);
-                    Assert.Equal(_foundProject.Urn, viewModel.ProjectUrn);
+                    Assert.Equal(_foundProject.Urn, viewModel.Urn);
                 }
 
                 [Fact]
@@ -142,7 +142,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits,
                         OtherBenefit = ""
                     };
@@ -165,7 +165,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits,
                         OtherBenefit = "Other benefit"
                     };
@@ -190,7 +190,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits
                     };
 
@@ -220,7 +220,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
                             TransferBenefits.IntendedBenefit.Other
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         OtherBenefit = ""
                     };
 
@@ -253,7 +253,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
                             TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         OtherBenefit = ""
                     };
 
@@ -275,7 +275,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
                             TransferBenefits.IntendedBenefit.StrengtheningGovernance
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         ReturnToPreview = true
                     };
 
@@ -316,7 +316,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var result = await _subject.OtherFactors("0001");
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<OtherFactorsViewModel>(result);
 
-                    Assert.Equal(_foundProject.Urn, viewModel.ProjectUrn);
+                    Assert.Equal(_foundProject.Urn, viewModel.Urn);
                 }
 
                 [Fact]
@@ -359,7 +359,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var vm = new OtherFactorsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         ReturnToPreview = false,
                         OtherFactorsVm = new List<OtherFactorsItemViewModel>()
                     };
@@ -411,7 +411,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         ReturnToPreview = false
                     };
 
@@ -438,7 +438,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         ReturnToPreview = false
                     };
 
@@ -467,7 +467,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         ReturnToPreview = false
                     };
 
@@ -498,7 +498,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         ReturnToPreview = false
                     };
 
@@ -529,7 +529,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         ReturnToPreview = false
                     };
 
@@ -558,7 +558,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         ReturnToPreview = true
                     };
 

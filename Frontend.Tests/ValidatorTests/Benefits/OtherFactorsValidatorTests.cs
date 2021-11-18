@@ -22,7 +22,7 @@ namespace Frontend.Tests.ValidatorTests.Benefits
         {
             var vm = new OtherFactorsViewModel()
             {
-                ProjectUrn = "0001",
+                Urn = "0001",
             };
 
             var result = await _otherFactorsValidator.TestValidateAsync(vm);

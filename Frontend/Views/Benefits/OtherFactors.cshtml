@@ -12,8 +12,8 @@
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.ProjectUrn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.ProjectUrn">Back</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
@@ -22,7 +22,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="OtherFactors" method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.ProjectUrn"/>
+            <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">

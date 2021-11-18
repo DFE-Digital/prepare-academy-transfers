@@ -2,19 +2,17 @@
 using System.Linq;
 using Data.Models;
 using Data.Models.Projects;
+using Frontend.Models.Forms;
 using Helpers;
 
 namespace Frontend.Models.Benefits
 {
-    public class OtherFactorsViewModel
+    public class OtherFactorsViewModel : CommonViewModel
     {
-        public string ProjectUrn { get; set; }
-        public string OutgoingAcademyName { get; set; }
-        public bool ReturnToPreview { get; set; }
         public List<OtherFactorsItemViewModel> OtherFactorsVm { get; set; }
     }
 
-    
+
     public class OtherFactorsItemViewModel
     {
         public TransferBenefits.OtherFactor OtherFactor { get; set; }
