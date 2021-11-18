@@ -35,7 +35,7 @@ namespace Frontend.Controllers.Projects
             var model = new BenefitsSummaryViewModel(
                 projectResult.Benefits.IntendedBenefits.ToList(),
                 projectResult.Benefits.OtherIntendedBenefit,
-                BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors),
+                BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
                 projectResult.Urn,
                 projectResult.OutgoingAcademyUrn
             );
