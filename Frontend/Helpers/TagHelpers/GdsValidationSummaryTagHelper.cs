@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -47,11 +48,10 @@ namespace Frontend.Helpers.TagHelpers
                 foreach (var e in p.Errors)
                 {
                     sb.Append("<li>");
-                    sb.Append($"<a href='#{p.Key.Replace('.', '_')}' data-qa='error_text'>");
+                    sb.Append($"<a href='#{p.Key.ToHtmlName()}' data-qa='error_text'>");
                     sb.Append(e.ErrorMessage);
                     sb.Append("</a>");
                     sb.Append("</li>");
-
                 }
             }
 
@@ -64,4 +64,6 @@ namespace Frontend.Helpers.TagHelpers
             output.Content.SetHtmlContent(sb.ToString());
         }
     }
+    
+   
 }
