@@ -64,6 +64,4 @@ namespace Frontend.Helpers.TagHelpers
             output.Content.SetHtmlContent(sb.ToString());
         }
     }
-    
-   
 }
