@@ -75,7 +75,7 @@ namespace Frontend.Controllers.Projects
 
             var projectResult = project.Result;
 
-            projectResult.Dates.FirstDiscussed =  vm.FirstDiscussed.DateInputAsString();;
+            projectResult.Dates.FirstDiscussed =  vm.FirstDiscussed.DateInputAsString();
             projectResult.Dates.HasFirstDiscussedDate = !vm.FirstDiscussed.UnknownDate;
 
             var result = await _projectsRepository.Update(projectResult);

@@ -172,10 +172,6 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await _subject.FirstDiscussedPost(vm);
                     var responseModel = ControllerTestHelpers.AssertViewModelFromResult<FirstDiscussedViewModel>(response);
-            
-                    Assert.False(_subject.ModelState.IsValid);
-                    Assert.Equal(1, _subject.ModelState.ErrorCount);
-                    Assert.Equal("error", _subject.ModelState["FirstDiscussed"].Errors.First().ErrorMessage);
                 }
 
                 [Fact]
