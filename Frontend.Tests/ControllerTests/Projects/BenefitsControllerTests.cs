@@ -25,13 +25,20 @@ namespace Frontend.Tests.ControllerTests.Projects
         {
             _foundProject = new Project
             {
-                Urn = "0001"
+                Urn = "0001",
+                TransferringAcademies = new List<TransferringAcademies>
+                {
+                    new TransferringAcademies()
+                    {
+                        OutgoingAcademyUrn = "Outgoing Academy Urn"
+                    }
+                }
             };
 
             _projectsRepository = new Mock<IProjects>();
 
             _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Project> { Result = _foundProject });
+                .ReturnsAsync(new RepositoryResult<Project> {Result = _foundProject});
 
             _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
                 .ReturnsAsync(new RepositoryResult<Project>());
@@ -45,9 +52,9 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_AssignsModelToTheView()
             {
                 var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsSummaryViewModel>(result);
 
-                Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                Assert.Equal(_foundProject.Urn, viewModel.ProjectUrn);
             }
 
             [Fact]
@@ -86,7 +93,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var result = await _subject.IntendedBenefits("0001");
 
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<IntendedBenefitsViewModel>(result);
-                    Assert.Equal(_foundProject.Urn, viewModel.ProjectUrn);
+                    Assert.Equal(_foundProject.Urn, viewModel.Urn);
                 }
 
                 [Fact]
@@ -135,7 +142,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits,
                         OtherBenefit = ""
                     };
@@ -158,7 +165,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits,
                         OtherBenefit = "Other benefit"
                     };
@@ -183,7 +190,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var vm = new IntendedBenefitsViewModel
                     {
-                        ProjectUrn = "0001",
+                        Urn = "0001",
                         SelectedIntendedBenefits = intendedBenefits
                     };
 
@@ -213,7 +220,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
                             TransferBenefits.IntendedBenefit.Other
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         OtherBenefit = ""
                     };
 
@@ -246,7 +253,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
                             TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         OtherBenefit = ""
                     };
 
@@ -265,17 +272,17 @@ namespace Frontend.Tests.ControllerTests.Projects
                     {
                         SelectedIntendedBenefits = new List<TransferBenefits.IntendedBenefit>
                         {
-                        TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
-                        TransferBenefits.IntendedBenefit.StrengtheningGovernance
+                            TransferBenefits.IntendedBenefit.ImprovingSafeguarding,
+                            TransferBenefits.IntendedBenefit.StrengtheningGovernance
                         },
-                        ProjectUrn = "projectUrn",
+                        Urn = "projectUrn",
                         ReturnToPreview = true
                     };
 
                     var result = await _subject.IntendedBenefitsPost(vm);
-                    
+
                     ControllerTestHelpers.AssertResultRedirectsToPage(result, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new { id = "projectUrn" }));
+                        new RouteValueDictionary(new {id = "projectUrn"}));
                 }
             }
 
@@ -307,16 +314,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_AssignsModelToTheView()
                 {
                     var result = await _subject.OtherFactors("0001");
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<OtherFactorsViewModel>(result);
 
-                    Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                    Assert.Equal(_foundProject.Urn, viewModel.Urn);
                 }
 
                 [Fact]
                 public async void GivenReturnToPreview_AssignsToTheModel()
                 {
                     var result = await _subject.OtherFactors("0001", true);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(result);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<OtherFactorsViewModel>(result);
 
                     Assert.True(viewModel.ReturnToPreview);
                 }
@@ -348,6 +355,23 @@ namespace Frontend.Tests.ControllerTests.Projects
             public class PostTests : OtherFactorsTests
             {
                 [Fact]
+                public async void GivenUrnAndNoOtherFactors_UpdateTheProject()
+                {
+                    var vm = new OtherFactorsViewModel
+                    {
+                        Urn = "0001",
+                        ReturnToPreview = false,
+                        OtherFactorsVm = new List<OtherFactorsItemViewModel>()
+                    };
+
+                    await _subject.OtherFactorsPost(vm);
+
+                    _projectsRepository.Verify(r =>
+                        r.Update(It.Is<Project>(project => !project.Benefits.OtherFactors.Any()))
+                    );
+                }
+
+                [Fact]
                 public async void GivenUrnAndAllOtherFactors_UpdateTheProject()
                 {
                     Func<Project, bool> assertOtherFactorsEqual = project =>
@@ -363,29 +387,35 @@ namespace Frontend.Tests.ControllerTests.Projects
                                finance == "Finance concerns";
                     };
 
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    var otherFactors = new List<OtherFactorsItemViewModel>
                     {
-                        new BenefitsViewModel.OtherFactorsViewModel
+                        new OtherFactorsItemViewModel
                         {
                             OtherFactor = TransferBenefits.OtherFactor.HighProfile,
                             Checked = true,
                             Description = "High profile"
                         },
-                        new BenefitsViewModel.OtherFactorsViewModel
+                        new OtherFactorsItemViewModel
                         {
                             OtherFactor = TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
                             Checked = true,
                             Description = "Finance concerns"
                         },
-                        new BenefitsViewModel.OtherFactorsViewModel
+                        new OtherFactorsItemViewModel
                         {
                             OtherFactor = TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
                             Checked = true,
                             Description = "Complex issues"
                         },
                     };
+                    var vm = new OtherFactorsViewModel
+                    {
+                        OtherFactorsVm = otherFactors,
+                        Urn = "0001",
+                        ReturnToPreview = false
+                    };
 
-                    await _subject.OtherFactorsPost("0001", otherFactors, false);
+                    await _subject.OtherFactorsPost(vm);
 
                     _projectsRepository.Verify(r =>
                         r.Update(It.Is<Project>(project => assertOtherFactorsEqual(project)))
@@ -399,14 +429,21 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Enum.GetValues(typeof(TransferBenefits.OtherFactor))
                             .Cast<TransferBenefits.OtherFactor>()
                             .Where(otherFactor => otherFactor != TransferBenefits.OtherFactor.Empty)
-                            .Select(otherFactor => new BenefitsViewModel.OtherFactorsViewModel
+                            .Select(otherFactor => new OtherFactorsItemViewModel()
                             {
                                 OtherFactor = otherFactor,
                                 Checked = true,
                                 Description = "test description"
                             }).ToList();
+                    var vm = new OtherFactorsViewModel
+                    {
+                        OtherFactorsVm = otherFactors,
+                        Urn = "0001",
+                        ReturnToPreview = false
+                    };
 
-                    var response = await _subject.OtherFactorsPost("0001", otherFactors, false);
+                    var response = await _subject.OtherFactorsPost(vm);
+
                     ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
                 }
 
@@ -416,17 +453,25 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [InlineData("FinanceAndDebtConcerns")]
                 public async void GivenUrnAndOtherFactor_UpdatesTheProjectCorrectly(string otherFactorString)
                 {
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    var otherFactors = new List<OtherFactorsItemViewModel>
                     {
-                        new BenefitsViewModel.OtherFactorsViewModel
+                        new OtherFactorsItemViewModel
                         {
-                            OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), otherFactorString),
+                            OtherFactor =
+                                (TransferBenefits.OtherFactor) Enum.Parse(typeof(TransferBenefits.OtherFactor),
+                                    otherFactorString),
                             Checked = true,
                             Description = "test Description"
                         }
                     };
+                    var vm = new OtherFactorsViewModel
+                    {
+                        OtherFactorsVm = otherFactors,
+                        Urn = "0001",
+                        ReturnToPreview = false
+                    };
 
-                    await _subject.OtherFactorsPost("0001", otherFactors, false);
+                    await _subject.OtherFactorsPost(vm);
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
                         project => project.Benefits.OtherFactors.Keys.Count == 1 &&
                                    project.Benefits.OtherFactors[otherFactors[0].OtherFactor] ==
@@ -449,12 +494,18 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>();
+                    var otherFactors = new List<OtherFactorsItemViewModel>();
+                    var vm = new OtherFactorsViewModel
+                    {
+                        OtherFactorsVm = otherFactors,
+                        Urn = "projectUrn",
+                        ReturnToPreview = false
+                    };
 
-                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, false);
+                    var response = await controller.OtherFactorsPost(vm);
+
                     var viewResult = Assert.IsType<ViewResult>(response);
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Project not found", viewModel);
                 }
@@ -474,54 +525,46 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var controller = new BenefitsController(_projectsRepository.Object);
 
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>();
-
-                    var response = await controller.OtherFactorsPost("projectUrn", otherFactors, false);
-                    var viewResult = Assert.IsType<ViewResult>(response);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Project not found", viewModel);
-                }
-
-                [Theory]
-                [InlineData("HighProfile")]
-                [InlineData("ComplexLandAndBuildingIssues")]
-                [InlineData("FinanceAndDebtConcerns")]
-                public async void GivenUrnAndOtherFactorsWithNoDescription_CreateErrorOnTheView(string otherFactorString)
-                {
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    var otherFactors = new List<OtherFactorsItemViewModel>();
+                    var vm = new OtherFactorsViewModel
                     {
-                        new BenefitsViewModel.OtherFactorsViewModel
-                        {
-                            OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), otherFactorString),
-                            Checked = true,
-                            Description = ""
-                        }
+                        OtherFactorsVm = otherFactors,
+                        Urn = "projectUrn",
+                        ReturnToPreview = false
                     };
 
-                    var response = await _subject.OtherFactorsPost("0001", otherFactors, false);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsViewModel>(response);
-                    Assert.True(viewModel.FormErrors.HasErrors);
-                    Assert.True(viewModel.FormErrors.HasErrorForField(otherFactorString));
+                    var response = await controller.OtherFactorsPost(vm);
+
+                    var viewResult = Assert.IsType<ViewResult>(response);
+                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
+                    Assert.Equal("ErrorPage", viewResult.ViewName);
+                    Assert.Equal("Project not found", viewModel);
                 }
 
                 [Fact]
                 public async void GivenReturnToPreview_RedirectToThePreviewPage()
                 {
-                    var otherFactors = new List<BenefitsViewModel.OtherFactorsViewModel>
+                    var otherFactors = new List<OtherFactorsItemViewModel>
                     {
-                        new BenefitsViewModel.OtherFactorsViewModel
+                        new OtherFactorsItemViewModel
                         {
-                            OtherFactor = (TransferBenefits.OtherFactor)Enum.Parse(typeof(TransferBenefits.OtherFactor), "HighProfile"),
+                            OtherFactor =
+                                (TransferBenefits.OtherFactor) Enum.Parse(typeof(TransferBenefits.OtherFactor),
+                                    "HighProfile"),
                             Checked = true,
                             Description = "Meow"
                         }
                     };
+                    var vm = new OtherFactorsViewModel
+                    {
+                        OtherFactorsVm = otherFactors,
+                        Urn = "projectUrn",
+                        ReturnToPreview = true
+                    };
 
-                    var result = await _subject.OtherFactorsPost("projectUrn", otherFactors, true);
+                    var result = await _subject.OtherFactorsPost(vm);
                     ControllerTestHelpers.AssertResultRedirectsToPage(result, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new { id = "projectUrn" }));
+                        new RouteValueDictionary(new {id = "projectUrn"}));
                 }
             }
         }

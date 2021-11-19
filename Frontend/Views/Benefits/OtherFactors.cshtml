@@ -1,32 +1,36 @@
 @using Data.Models.Projects
 @using Helpers
-@model BenefitsViewModel
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Frontend.Models.Benefits.OtherFactorsViewModel
 
 @{
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Are there any other factors to consider during this transfer?");
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Are there any other factors to consider during this transfer?";
     Layout = "_Layout";
-    var formClasses = Model.FormErrors.FormClassesForField("otherFactors");
+    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherFactorsVm)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="OtherFactors" method="post" novalidate="">
-            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.Project.OutgoingAcademyName
+                                @Model.OutgoingAcademyName
                             </span>
                             Are there any other factors to consider during this transfer?
                         </h1>
@@ -52,12 +56,7 @@
                                     <label class="govuk-label" asp-for="@(Model.OtherFactorsVm[i].Description)">
                                         Specify this concern further
                                     </label>
-                                    @if (Model.FormErrors.HasErrorForField(Model.OtherFactorsVm[i].OtherFactor.ToString()))
-                                    {
-                                        <span id="other-factors-error" class="govuk-error-message">
-                                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField(Model.OtherFactorsVm[i].OtherFactor.ToString()).ErrorMessage
-                                        </span>
-                                    }
+                                    <span asp-gds-validation-for="OtherFactorsVm[i].Description"></span>
                                     <input asp-for="@Model.OtherFactorsVm[i].Description" class="govuk-input govuk-!-width-two-thirds" type="text" spellcheck="false" value="@Model.OtherFactorsVm[i].Description">
                                 </div>
                             </div>

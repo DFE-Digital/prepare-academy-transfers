@@ -30,11 +30,15 @@ namespace Frontend.Controllers.Projects
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
-
-            var model = new BenefitsViewModel
-            {
-                Project = project.Result,
-            };
+            
+            var projectResult = project.Result;
+            var model = new BenefitsSummaryViewModel(
+                projectResult.Benefits.IntendedBenefits.ToList(),
+                projectResult.Benefits.OtherIntendedBenefit,
+                BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
+                projectResult.Urn,
+                projectResult.OutgoingAcademyUrn
+            );
 
             return View(model);
         }
@@ -51,11 +55,13 @@ namespace Frontend.Controllers.Projects
             var projectResult = project.Result;
             var vm = new IntendedBenefitsViewModel
             {
-               ProjectUrn = projectResult.Urn,
+               Urn = projectResult.Urn,
                OutgoingAcademyName = projectResult.OutgoingAcademyName,
                ReturnToPreview = returnToPreview,
                SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
-               OtherBenefit = projectResult.Benefits.OtherIntendedBenefit
+               OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) ?
+                projectResult.Benefits.OtherIntendedBenefit :
+                null
             };
 
             return View(vm);
@@ -65,7 +71,7 @@ namespace Frontend.Controllers.Projects
         [HttpPost("intended-benefits")]
         public async Task<IActionResult> IntendedBenefitsPost(IntendedBenefitsViewModel vm)
         {
-            var urn = vm.ProjectUrn;
+            var urn = vm.Urn;
             var project = await _projectsRepository.GetByUrn(urn);
             if (!project.IsValid)
             {
@@ -105,84 +111,72 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new BenefitsViewModel
+            var projectResult = project.Result;
+            var vm = new OtherFactorsViewModel()
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                OtherFactorsVm = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors)
             };
 
-            BuildOtherFactorsViewModel(model);
-
-            return View(model);
+            return View(vm);
         }
 
         [ActionName("OtherFactors")]
         [HttpPost("other-factors")]
-        public async Task<IActionResult> OtherFactorsPost(string urn, List<BenefitsViewModel.OtherFactorsViewModel> otherFactorsVm, bool returnToPreview)
+        public async Task<IActionResult> OtherFactorsPost(OtherFactorsViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var urn = vm.Urn;
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
 
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
-
-            var model = new BenefitsViewModel
+            
+            if (!ModelState.IsValid)
             {
-                Project = project.Result,
-            };
-
-            var formHasErrors = false;
-            foreach (var otherFactor in otherFactorsVm.Where(otherFactor =>
-                otherFactor.Checked &&
-                string.IsNullOrEmpty(otherFactor.Description)))
-            {
-                model.FormErrors.AddError(otherFactor.OtherFactor.ToString(), otherFactor.OtherFactor.ToString(),
-                    "Specify the concern further");
-                formHasErrors = true;
+                return View(vm);
             }
-
-            if (formHasErrors)
-            {
-                BuildOtherFactorsViewModel(model);
-                return View(model);
-            }
-
-            model.Project.Benefits.OtherFactors = otherFactorsVm
+            
+            var projectResult = project.Result;
+            projectResult.Benefits.OtherFactors = vm.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
-            var updateResult = await _projectsRepository.Update(model.Project);
+            var updateResult = await _projectsRepository.Update(projectResult);
             if (!updateResult.IsValid)
             {
                 return View("ErrorPage", updateResult.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
             
             return RedirectToAction("Index", new {urn});
         }
         
-        private static void BuildOtherFactorsViewModel(BenefitsViewModel model)
+        private static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
-            var otherFactors = model.Project.Benefits.OtherFactors;
-            model.OtherFactorsVm = new List<BenefitsViewModel.OtherFactorsViewModel>();
+            List<OtherFactorsItemViewModel> items = new List<OtherFactorsItemViewModel>();
             foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))
             {
                 if (otherFactor != TransferBenefits.OtherFactor.Empty)
                 {
-                    var isChecked = otherFactors.ContainsKey(otherFactor);
+                    var isChecked = otherFactorsToSet.ContainsKey(otherFactor);
 
-                    model.OtherFactorsVm.Add(new BenefitsViewModel.OtherFactorsViewModel
+                    items.Add(new OtherFactorsItemViewModel()
                     {
                         OtherFactor = otherFactor,
                         Checked = isChecked,
-                        Description = isChecked ? otherFactors[otherFactor] : string.Empty
+                        Description = isChecked ? otherFactorsToSet[otherFactor] : string.Empty
                     });
                 }
             }
+
+            return items;
         }
     }
 }
