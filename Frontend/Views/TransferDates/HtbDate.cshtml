@@ -1,34 +1,34 @@
-@using Helpers
-@model TransferDatesViewModel
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model Frontend.Models.TransferDates.HtbDateViewModel
 
 @{
-    ViewBag.Title = Model.FormErrors.ProcessPageTitleIfThereIsAnError("Set Advisory Board date");
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Set Advisory Board date";
     Layout = "_Layout";
-    var htbDate = Model.Project.Dates.Htb;
-    var htbStartDate = string.IsNullOrEmpty(htbDate) ? DatesHelper.DateTimeToDateString(DateTime.Today) : htbDate;
-    var formClasses = Model.FormErrors.HasErrors ? "govuk-form-group--error" : "";
-    var inputError = Model.FormErrors.HasErrorForField("day") ? "govuk-input--error" : "";
+    var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
+    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.HtbDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
 }
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
-@await Html.PartialAsync("_FormErrorSummary", Model.FormErrors)
+<div asp-gds-validation-summary></div>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form asp-action="HtbDate" method="post" novalidate="">
-            <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-htb-date-hint">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.Project.OutgoingAcademyName
+                                @Model.OutgoingAcademyName
                             </span>
                             Set Advisory Board date
                         </h1>
@@ -37,46 +37,41 @@
                         For example, 12 11 2021. You can change this date later.
                     </div>
 
-                    @if (Model.FormErrors.HasErrorForField("htbDate"))
-                    {
-                        <span id="htb-date-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Model.FormErrors.ErrorForField("htbDate").ErrorMessage
-                        </span>
-                    }
+                   <span asp-gds-validation-for="HtbDate.Date.Day"></span>
 
                     <div class="govuk-date-input" id="htb-date">
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="day">
+                                <label asp-for="HtbDate.Date.Day" class="govuk-label govuk-date-input__label" for="day">
                                     Day
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" id="day" name="day" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day" value="@Model.HtbDate.Day">
+                                <input asp-for="HtbDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="month">
+                                <label asp-for="HtbDate.Date.Month" class="govuk-label govuk-date-input__label" for="month">
                                     Month
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" id="month" name="month" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month" value="@Model.HtbDate.Month">
+                                <input asp-for="HtbDate.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="year">
+                                <label asp-for="HtbDate.Date.Year" class="govuk-label govuk-date-input__label" for="year">
                                     Year
                                 </label>
-                                <input class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" id="year" name="year" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year" value="@Model.HtbDate.Year">
+                                <input asp-for="HtbDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="govuk-body govuk-!-margin-top-4">or</div>
 
                     <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input asp-for="@Model.UnknownHtbDate" id="dateUnknown" name="dateUnknown" class="govuk-checkboxes__input" type="checkbox">
-                            <label class="govuk-label govuk-checkboxes__label" for="dateUnknown">
+                            <input asp-for="HtbDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
+                            <label asp-for="HtbDate.UnknownDate" class="govuk-label govuk-checkboxes__label" for="dateUnknown">
                                 I do not know this
                             </label>
                         </div>
