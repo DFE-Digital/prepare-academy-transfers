@@ -1,0 +1,81 @@
+@using Data.Models.Projects
+@using Helpers
+@model Frontend.Models.Features.FeaturesViewModel
+
+ <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Who initiated this academy transfer?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @if (Model.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        var displayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(Model.WhoInitiatedTheTransfer);
+                        @displayName
+                    }
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="Initiated" asp-controller="Features" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@Model.ReturnToPreview" data-test="initiated">
+                        Change<span class="govuk-visually-hidden"> who initiated the transfer</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Has this transfer started because of an intervention with the academy or trust?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @if (!Model.HasTransferReasonBeenSet)
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else
+                    {
+                        @if (Model.IsTransferSubjectToIntervention)
+                        {
+                            <p class="govuk-body">Yes</p>
+                            <p class="govuk-body">@Model.InterventionDetails</p>
+                        }
+                        else
+                        {
+                            <p class="govuk-body">No</p>
+                            <p class="govuk-body">@Model.InterventionDetails</p>
+                        }
+                    }
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="Reason" asp-controller="Features" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@Model.ReturnToPreview" data-test="reason">
+                        Change<span class="govuk-visually-hidden"> has this transfer started because of an intervention with the academy or trust?</span>
+                    </a>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    What type of transfer is it?
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @if (Model.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+                    {
+                        <span class="dfe-empty-tag">Empty</span>
+                    }
+                    else if (Model.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
+                    {
+                        <p class="govuk-body">Other: @Model.OtherTypeOfTransfer</p>
+                    }
+                    else
+                    {
+                        var displayName = EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(Model.TypeOfTransfer);
+                        @displayName
+                    }
+                </dd>
+                <dd class="govuk-summary-list__actions">
+                    <a class="govuk-link" asp-action="Type" asp-controller="Features" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@Model.ReturnToPreview" data-test="type">
+                        Change<span class="govuk-visually-hidden"> what type of transfer is it?</span>
+                    </a>
+                </dd>
+            </div>
+        </dl>
