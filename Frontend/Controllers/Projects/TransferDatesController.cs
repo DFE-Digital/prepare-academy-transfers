@@ -1,8 +1,10 @@
-using System.Reflection;
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using FluentValidation;
 using Frontend.Models;
 using Frontend.Models.TransferDates;
+using Frontend.Validators.TransferDates;
 using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -202,26 +204,31 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
             
+            var projectResult = project.Result;
+
             if (!ModelState.IsValid)
             {
                 return View(vm);
             }
-
-            var projectResult = project.Result;
             
+            var validationContext = new ValidationContext<HtbDateViewModel>(vm)
+            {
+                RootContextData =
+                {
+                    ["TargetDate"] = projectResult.Dates.Target
+                }
+            };
+            var validator = new HtbDateValidator();
+            var validationResult = await validator.ValidateAsync(validationContext);
+            
+            if (!validationResult.IsValid)
+            {
+                ModelState.AddModelError("HtbDate.Date.Day", validationResult.Errors.First().ErrorMessage);
+                return View(vm);
+            }
+
             projectResult.Dates.Htb = vm.HtbDate.DateInputAsString();
             projectResult.Dates.HasHtbDate = !vm.HtbDate.UnknownDate;
-
-            if (!string.IsNullOrEmpty(projectResult.Dates.Htb))
-            {
-                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(projectResult.Dates.Htb,
-                    projectResult.Dates.Target) == true)
-                {
-                    ModelState.AddModelError("HtbDate.Date.Day", 
-                        "The Advisory Board date must be on or before the target date for the transfer");
-                    return View(vm);
-                }
-            }
 
             var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)

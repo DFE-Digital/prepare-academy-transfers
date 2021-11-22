@@ -1,6 +1,7 @@
 using System.Linq;
 using Data;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.Forms;
@@ -662,6 +663,40 @@ namespace Frontend.Tests.ControllerTests.Projects
                         Links.HeadteacherBoard.Preview.PageName,
                         new RouteValueDictionary(new { id = "0001" })
                     );
+                }
+
+                [Fact]
+                public async void GivenHtbDateGreaterThanTargetDate_SetsErrorOnViewModel()
+                {
+                    _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
+                        .ReturnsAsync(new RepositoryResult<Project>
+                        {
+                            Result = new Project
+                            {
+                                Urn = "0002",
+                                Dates = new TransferDates
+                                {
+                                    Target = "01/01/2000"
+                                }
+                            }
+                        });
+                    
+                    var vm = new HtbDateViewModel
+                    {
+                        Urn = "0002",
+                        HtbDate = new DateViewModel
+                        {
+                            Date = new DateInputViewModel
+                            {
+                                Day = "01",
+                                Month = "01",
+                                Year = "2020"
+                            }
+                        },
+                        ReturnToPreview = true
+                    };
+                    Assert.True(await _subject.HtbDatePost(vm) is ViewResult result 
+                                && result.ViewData.ModelState["HtbDate.Date.Day"].Errors.Any());
                 }
             }
         }
