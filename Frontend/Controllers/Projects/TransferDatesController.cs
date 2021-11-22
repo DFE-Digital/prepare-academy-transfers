@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Frontend.Models;
 using Frontend.Models.TransferDates;
 using Frontend.Validators.TransferDates;
@@ -223,7 +224,7 @@ namespace Frontend.Controllers.Projects
             
             if (!validationResult.IsValid)
             {
-                ModelState.AddModelError("HtbDate.Date.Day", validationResult.Errors.First().ErrorMessage);
+                validationResult.AddToModelState(ModelState, null);
                 return View(vm);
             }
 
