@@ -388,8 +388,6 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.False(_subject.ModelState.IsValid);
                     Assert.Equal(1, _subject.ModelState.ErrorCount);
-                    Assert.Equal("The target transfer date must be on or after the Advisory Board date", 
-                        _subject.ModelState["TargetDate.Date.Day"].Errors.First().ErrorMessage);
                 }
 
                 [Fact]
