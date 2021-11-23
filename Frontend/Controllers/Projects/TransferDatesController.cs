@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using FluentValidation;
@@ -6,7 +5,6 @@ using FluentValidation.AspNetCore;
 using Frontend.Models;
 using Frontend.Models.TransferDates;
 using Frontend.Validators.TransferDates;
-using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -105,70 +103,71 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
+            var projectResult = project.Result;
 
-            return View(model);
+            var vm = new TargetDateViewModel
+            {
+                Urn = urn,
+                ReturnToPreview = returnToPreview,
+                TargetDate = new DateViewModel
+                {
+                    Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.Target),
+                    UnknownDate = projectResult.Dates.HasTargetDateForTransfer is false
+                }
+            };
+
+            return View(vm);
         }
 
         [HttpPost("target-date")]
         [ActionName("TargetDate")]
-        public async Task<IActionResult> TargetDatePost(string urn, string day, string month, string year,
-            bool returnToPreview = false, bool dateUnknown = false)
+        public async Task<IActionResult> TargetDatePost(TargetDateViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new TransferDatesViewModel {Project = project.Result, ReturnToPreview = returnToPreview};
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
             
-            var dateString = DatesHelper.DayMonthYearToDateString(day, month, year);
-
-            model.Project.Dates.Target = dateString;
-            model.Project.Dates.HasTargetDateForTransfer = !dateUnknown;
-
-            if (!string.IsNullOrEmpty(dateString) && !DatesHelper.IsValidDate(dateString))
+            var projectResult = project.Result;
+            
+            var validationContext = new ValidationContext<TargetDateViewModel>(vm)
             {
-                model.FormErrors.AddError("day", "day", "Enter a valid date");
-                return View(model);
-            }
-
-            if (!string.IsNullOrEmpty(model.Project.Dates.Target))
-            {
-                if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(model.Project.Dates.Htb,
-                    model.Project.Dates.Target) == true)
+                RootContextData =
                 {
-                    model.FormErrors.AddError("day", "day", 
-                        $"The target transfer date must be on or after the Advisory Board date");
-                    return View(model);
+                    ["HtbDate"] = projectResult.Dates.Htb
                 }
-            }
-
-            if (string.IsNullOrEmpty(dateString) && !dateUnknown)
+            };
+            var validator = new TargetDateValidator();
+            var validationResult = await validator.ValidateAsync(validationContext);
+            
+            if (!validationResult.IsValid)
             {
-                model.FormErrors.AddError("day", "day", "You must enter the date or confirm that you don't know it");
-                return View(model);
+                validationResult.AddToModelState(ModelState, null);
+                return View(vm);
             }
 
-            if (DatesHelper.IsValidDate(dateString) && dateUnknown)
-            {
-                model.FormErrors.AddError("day", "day", "You must either enter the date or select 'I do not know this'");
-                return View(model);
-            }
+            projectResult.Dates.Target = vm.TargetDate.DateInputAsString();
+            projectResult.Dates.HasTargetDateForTransfer = !vm.TargetDate.UnknownDate;
+            
 
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new {vm.Urn});
         }
 
         [HttpGet("htb-date")]
