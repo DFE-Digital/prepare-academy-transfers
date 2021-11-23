@@ -158,7 +158,7 @@ namespace Frontend.Controllers.Projects
             return RedirectToAction("Index", new {urn});
         }
         
-        private static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
+        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
             List<OtherFactorsItemViewModel> items = new List<OtherFactorsItemViewModel>();
             foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))

@@ -2,6 +2,7 @@
 using System.Linq;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.Benefits;
 using Helpers;
 using Xunit;
 
