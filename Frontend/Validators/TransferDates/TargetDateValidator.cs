@@ -8,6 +8,8 @@ namespace Frontend.Validators.TransferDates
     {
         public TargetDateValidator()
         {
+            CascadeMode = CascadeMode.Stop;
+            
             RuleFor(x => x.TargetDate)
                 .SetValidator(new DateValidator());
 
