@@ -45,7 +45,11 @@ namespace Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddRazorPages(options => { options.Conventions.AuthorizeFolder("/"); })
+                .AddRazorPages(options =>
+                {
+                    options.Conventions.AuthorizeFolder("/");
+                    options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
+                })
                 .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
 
             services.AddControllersWithViews(options => options.Filters.Add(

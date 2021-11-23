@@ -42,7 +42,7 @@
                     <div class="govuk-date-input" id="htb-date">
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="HtbDate.Date.Day" class="govuk-label govuk-date-input__label" for="day">
+                                <label asp-for="HtbDate.Date.Day" class="govuk-label govuk-date-input__label">
                                     Day
                                 </label>
                                 <input asp-for="HtbDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="HtbDate.Date.Month" class="govuk-label govuk-date-input__label" for="month">
+                                <label asp-for="HtbDate.Date.Month" class="govuk-label govuk-date-input__label">
                                     Month
                                 </label>
                                 <input asp-for="HtbDate.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="HtbDate.Date.Year" class="govuk-label govuk-date-input__label" for="year">
+                                <label asp-for="HtbDate.Date.Year" class="govuk-label govuk-date-input__label">
                                     Year
                                 </label>
                                 <input asp-for="HtbDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
@@ -71,7 +71,7 @@
                     <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
                             <input asp-for="HtbDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
-                            <label asp-for="HtbDate.UnknownDate" class="govuk-label govuk-checkboxes__label" for="dateUnknown">
+                            <label asp-for="HtbDate.UnknownDate" class="govuk-label govuk-checkboxes__label">
                                 I do not know this
                             </label>
                         </div>
