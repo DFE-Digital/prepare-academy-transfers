@@ -1,19 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using Data.Models;
 using Data.Models.Projects;
-using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
 using Helpers;
 
-namespace Frontend.Models
+namespace Frontend.Models.Benefits
 {
-    public class BenefitsSummaryViewModel
+    public class BenefitsSummaryViewModel : CommonViewModel
     {
         private readonly IList<TransferBenefits.IntendedBenefit> _intendedBenefits;
         private readonly string _otherIntendedBenefit;
         private readonly IList<OtherFactorsItemViewModel> _otherFactorsItems;
-        public readonly string ProjectUrn;
         public readonly string OutgoingAcademyUrn;
 
         public BenefitsSummaryViewModel(IList<TransferBenefits.IntendedBenefit> intendedBenefits, 
@@ -26,7 +23,7 @@ namespace Frontend.Models
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
             _otherFactorsItems = otherFactorsItems;
-            ProjectUrn = projectUrn;
+            Urn = projectUrn;
             OutgoingAcademyUrn = outgoingAcademyUrn;
         }
 

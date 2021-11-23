@@ -54,7 +54,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var result = await _subject.Index("0001");
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsSummaryViewModel>(result);
 
-                Assert.Equal(_foundProject.Urn, viewModel.ProjectUrn);
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
             }
 
             [Fact]

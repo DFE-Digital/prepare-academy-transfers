@@ -1,5 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
+using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +17,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
         
         public FeaturesViewModel FeaturesViewModel { get; set; }
+        public BenefitsSummaryViewModel BenefitsViewModel { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -38,6 +42,19 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 InterventionDetails = Project.Features.ReasonForTransfer.InterventionDetails,
                 ReturnToPreview = true
             };
+
+            BenefitsViewModel = new BenefitsSummaryViewModel(
+                Project.Benefits.IntendedBenefits.ToList(),
+                Project.Benefits.OtherIntendedBenefit,
+                BenefitsController.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
+                    .ToList(),
+                Project.Urn,
+                Project.OutgoingAcademyUrn
+            )
+            {
+                ReturnToPreview = true
+            };
+            
             return Page();
         }
     }
