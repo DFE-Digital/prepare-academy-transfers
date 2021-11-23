@@ -118,10 +118,10 @@ namespace Frontend.Controllers.Projects
 
             return View(vm);
         }
-
+        
         [HttpPost("target-date")]
         [ActionName("TargetDate")]
-        public async Task<IActionResult> TargetDatePost(TargetDateViewModel vm)
+        public async Task<IActionResult> TargetDatePost([CustomizeValidator(Skip=true)] TargetDateViewModel vm)
         {
             var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
@@ -129,11 +129,6 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-            
             var projectResult = project.Result;
             
             var validationContext = new ValidationContext<TargetDateViewModel>(vm)
@@ -146,9 +141,10 @@ namespace Frontend.Controllers.Projects
             var validator = new TargetDateValidator();
             var validationResult = await validator.ValidateAsync(validationContext);
             
+            validationResult.AddToModelState(ModelState, null);
+
             if (!validationResult.IsValid)
             {
-                validationResult.AddToModelState(ModelState, null);
                 return View(vm);
             }
 

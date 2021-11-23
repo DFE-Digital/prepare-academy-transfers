@@ -425,7 +425,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                             Date = new DateInputViewModel
                             {
                                 Day = "01",
-                                Month = "01",
+                                Month = "13",
                                 Year = "2020"
                             }
                         },
