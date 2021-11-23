@@ -78,7 +78,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async void GivenTargetDateAndNoHtbDate_ShouldNotGiveError(string targetDate)
+        public async void GivenTargetDateAndNoHtbDate_ShouldNotGiveError(string htbDate)
         {
             var vm = new TargetDateViewModel
             {
@@ -97,7 +97,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = targetDate
+                    ["HtbDate"] = htbDate
                 }
             };
             
