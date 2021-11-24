@@ -1,7 +1,7 @@
 @using Data.Models.Projects
 @using Frontend.ExtensionMethods
 @using Helpers
-@model AcademyAndTrustInformationViewModel
+@model Frontend.Models.AcademyAndTrustInformation.AcademyAndTrustInformationSummaryViewModel
 
 @{
     ViewBag.Title = "Academy and trust information and project dates";
@@ -10,13 +10,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Academy and trust information and project dates
@@ -33,18 +33,18 @@
                     Recommendation
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.Project.AcademyAndTrustInformation.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)
+                    @if (Model.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
-                        var displayName = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(Model.Project.AcademyAndTrustInformation.Recommendation);
+                        var displayName = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(Model.Recommendation);
                         @displayName
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Project.Urn" data-test="recommendation">
+                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Urn" data-test="recommendation">
                         Change<span class="govuk-visually-hidden"> recommendation</span>
                     </a>
                 </dd>
@@ -54,17 +54,17 @@
                     Author
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    @if (string.IsNullOrEmpty(Model.Project.AcademyAndTrustInformation.Author))
+                    @if (string.IsNullOrEmpty(Model.Author))
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
-                        <span class="dfe-text-area-display">@Model.Project.AcademyAndTrustInformation.Author</span>
+                        <span class="dfe-text-area-display">@Model.Author</span>
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Project.Urn">
+                    <a class="govuk-link" asp-action="Recommendation" asp-route-urn="@Model.Urn">
                         Change<span class="govuk-visually-hidden"> author</span>
                     </a>
                 </dd>
@@ -74,7 +74,7 @@
                     Advisory Board
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Htb)"></displaynodataforemptystring>
+                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.HtbDate)"></displaynodataforemptystring>
                 </dd>
                 <dd class="govuk-summary-list__value "/>
             </div>
@@ -83,7 +83,7 @@
                     Project name
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    <displaynodataforemptystring value="@Model.Project.Name"></displaynodataforemptystring>
+                    <displaynodataforemptystring value="@Model.ProjectName"></displaynodataforemptystring>
                 </dd>
                 <dd class="govuk-summary-list__value "/>
             </div>
@@ -92,13 +92,13 @@
                     Proposed incoming transfer name
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    @if (string.IsNullOrEmpty(Model.Project.Name))
+                    @if (string.IsNullOrEmpty(Model.ProjectName))
                     {
                         <span>No data</span>
                     }
                     else
                     {
-                        <span class="dfe-text-area-display">@Model.Project.IncomingTrustName.ToTitleCase()</span>
+                        <span class="dfe-text-area-display">@Model.IncomingTrustName.ToTitleCase()</span>
                     }
                 </dd>
                 <dd class="govuk-summary-list__value "/>
@@ -108,7 +108,7 @@
                     Proposed academy transfer
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Target)"></displaynodataforemptystring>
+                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.TargetDate)"></displaynodataforemptystring>
                 </dd>
                 <dd class="govuk-summary-list__value "/>
             </div>
@@ -117,12 +117,12 @@
                     Date the transfer was discussed with outgoing trust
                 </dt>
                 <dd class="govuk-summary-list__value ">
-                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.FirstDiscussed)"></displaynodataforemptystring>
+                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.FirstDiscussedDate)"></displaynodataforemptystring>
                 </dd>
                 <dd class="govuk-summary-list__value "/>
             </div>
         </dl>
-        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn" method="get">
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn" method="get">
             <button class="govuk-button" >Confirm and continue</button>
         </form>
     </div>

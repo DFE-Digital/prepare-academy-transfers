@@ -18,11 +18,13 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
-        public FeaturesViewModel FeaturesViewModel { get; set; }
-        public BenefitsSummaryViewModel BenefitsViewModel { get; set; }
+        public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
+        public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
 
+        
+        
         public Preview(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
@@ -35,7 +37,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesViewModel = new FeaturesViewModel
+            FeaturesSummaryViewModel = new FeaturesSummaryViewModel
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
@@ -47,7 +49,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ReturnToPreview = true
             };
 
-            BenefitsViewModel = new BenefitsSummaryViewModel(
+            BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 Project.Benefits.IntendedBenefits.ToList(),
                 Project.Benefits.OtherIntendedBenefit,
                 BenefitsController.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
