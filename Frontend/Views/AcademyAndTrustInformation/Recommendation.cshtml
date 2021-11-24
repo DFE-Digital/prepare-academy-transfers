@@ -1,28 +1,31 @@
-@model AcademyAndTrustInformationViewModel
+@using Frontend.Models.AcademyAndTrustInformation
+@model Frontend.Models.AcademyAndTrustInformation.RecommendationViewModel
 
 @{
     ViewBag.Title = "Recommendation";
     Layout = "_Layout";
-    var radioButtons = AcademyAndTrustInformationViewModel.RecommendedRadioButtons(Model.Project.AcademyAndTrustInformation.Recommendation);
+    var radioButtons = RecommendationViewModel.RecommendedRadioButtons(Model.Recommendation);
 }
 
 @section BeforeMain
 {
-    <backtopreview return-to-preview="@Model.ReturnToPreview" id="@Model.Project.Urn">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Project.Urn">Back</a>
+    <backtopreview return-to-preview="@Model.ReturnToPreview" id="@Model.Urn">
+        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Recommendation
         </h1>
         <form asp-action="Recommendation" method="post" novalidate="">
-            <input name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -35,7 +38,7 @@
                 <label class="govuk-label govuk-label--m" for="author">
                     Enter the full name of the author of this project template
                 </label>
-                <input class="govuk-input govuk-!-width-two-thirds" id="author" name="author" type="text" value="@Model.Project.AcademyAndTrustInformation.Author">
+                <input class="govuk-input govuk-!-width-two-thirds" id="author" name="author" type="text" value="@Model.Author">
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue

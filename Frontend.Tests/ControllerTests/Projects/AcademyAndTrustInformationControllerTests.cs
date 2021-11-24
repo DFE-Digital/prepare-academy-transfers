@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
@@ -40,7 +42,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Project = new Project
                             {
-                                Urn = ProjectUrn
+                                Urn = ProjectUrn,
+                                TransferringAcademies = new List<TransferringAcademies>()
+                                {
+                                    new TransferringAcademies{OutgoingAcademyName = "Outgoing Academy One"}
+                                }
                             }
                         });
 
@@ -83,6 +89,15 @@ namespace Frontend.Tests.ControllerTests.Projects
                         new RepositoryResult<Project>
                         {
                             Result = new Project()
+                            {
+                                TransferringAcademies = new List<TransferringAcademies>
+                                {
+                                    new TransferringAcademies
+                                    {
+                                        OutgoingAcademyName = "Outgoing Academy One"
+                                    }
+                                }
+                            }
                         });
 
                 _projectRepository.Setup(r => r.GetByUrn(ProjectErrorUrn))
@@ -111,7 +126,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.Recommendation(ProjectUrn, true);
                     var model =
-                        ControllerTestHelpers.AssertViewModelFromResult<AcademyAndTrustInformationViewModel>(response);
+                        ControllerTestHelpers.AssertViewModelFromResult<RecommendationViewModel>(response);
 
                     Assert.True(model.ReturnToPreview);
                 }
@@ -130,46 +145,66 @@ namespace Frontend.Tests.ControllerTests.Projects
             public class PostTests : RecommendationTests
             {
                 const string Author = "test author";
-
+            
                 const TransferAcademyAndTrustInformation.RecommendationResult Recommendation =
                     TransferAcademyAndTrustInformation.RecommendationResult.Approve;
-
+                
                 public PostTests()
                 {
                     _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                         .ReturnsAsync(
                             new RepositoryResult<Project>());
                 }
-
+            
                 [Fact]
                 public async void GivenUrnAndRecommendationAndAuthor_UpdatesTheProject()
                 {
-                    await _subject.Recommendation(ProjectUrn, Recommendation, Author);
-
+                    var vm = new RecommendationViewModel
+                    {
+                        Urn = ProjectUrn,
+                        Recommendation = Recommendation,
+                        Author = Author
+                    };
+                    
+                    await _subject.Recommendation(vm);
+            
                     _projectRepository.Verify(r =>
                         r.Update(It.Is<Project>(project =>
                             project.AcademyAndTrustInformation.Recommendation == Recommendation &&
                             project.AcademyAndTrustInformation.Author == Author)), Times.Once);
                 }
-
+            
                 [Fact]
                 public async void GivenUrnAndRecommendationAndAuthor_RedirectsBackToTheSummary()
                 {
-                    var result = await _subject.Recommendation(ProjectUrn, Recommendation, Author);
-
+                    var vm = new RecommendationViewModel
+                    {
+                        Urn = ProjectUrn,
+                        Recommendation = Recommendation,
+                        Author = Author
+                    };
+                    
+                    var result = await _subject.Recommendation(vm);
+            
                     ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
                 }
-
+            
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
-                    var response = await _subject.Recommendation(ProjectErrorUrn, Recommendation, Author);
+                    var vm = new RecommendationViewModel
+                    {
+                        Urn = ProjectErrorUrn,
+                        Recommendation = Recommendation,
+                        Author = Author
+                    };
+                    var response = await _subject.Recommendation(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-
+            
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
                 }
-
+            
                 [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
@@ -182,18 +217,31 @@ namespace Frontend.Tests.ControllerTests.Projects
                                     ErrorMessage = "Update error"
                                 }
                             });
-
-                    var response = await _subject.Recommendation(ProjectUrn, Recommendation, null);
+                    var vm = new RecommendationViewModel()
+                    {
+                        Urn = ProjectUrn,
+                        Recommendation = Recommendation
+                    };
+            
+                    var response = await _subject.Recommendation(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-
+            
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
                 }
-
+            
                 [Fact]
                 public async void GivenReturnToPreview_ReturnToThePreviewPage()
                 {
-                    var response = await _subject.Recommendation(ProjectUrn, Recommendation, Author, true);
+                    var vm = new RecommendationViewModel
+                    {
+                        Urn = ProjectUrn,
+                        Recommendation = Recommendation,
+                        Author = Author,
+                        ReturnToPreview = true
+                    };
+                    
+                    var response = await _subject.Recommendation(vm);
                     ControllerTestHelpers.AssertResultRedirectsToPage(response,
                         Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn}));
                 }

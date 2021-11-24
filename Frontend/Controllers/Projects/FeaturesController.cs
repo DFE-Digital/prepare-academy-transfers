@@ -30,7 +30,7 @@ namespace Frontend.Controllers.Projects
             }
 
             var projectResult = project.Result;
-            var model = new FeaturesViewModel
+            var model = new FeaturesSummaryViewModel
             {
                 Urn = projectResult.Urn,
                 IsSubjectToRddOrEsfaIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
