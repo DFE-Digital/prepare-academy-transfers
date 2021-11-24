@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Data.Models;
@@ -25,7 +26,14 @@ namespace Frontend.Tests.ControllerTests.Projects
         {
             _foundProject = new Project()
             {
-                Urn = "0001"
+                Urn = "0001",
+                TransferringAcademies = new List<TransferringAcademies>
+                {
+                    new TransferringAcademies
+                    {
+                        OutgoingAcademyUrn = "0002"
+                    }
+                }
             };
 
             _projectsRepository = new Mock<IProjects>();
@@ -54,9 +62,9 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_AssignsModelToTheView()
             {
                 var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<TransferDatesViewModel>(result);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<TransferDatesSummaryViewModel>(result);
 
-                Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
             }
 
             [Fact]

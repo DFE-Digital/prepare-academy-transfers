@@ -29,11 +29,19 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new TransferDatesViewModel
+            var projectResult = project.Result;
+            var vm = new TransferDatesSummaryViewModel
             {
-                Project = project.Result
+                Urn = projectResult.Urn,
+                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
+                FirstDiscussedDate = projectResult.Dates?.FirstDiscussed,
+                HasFirstDiscussedDate = projectResult.Dates?.HasFirstDiscussedDate,
+                HtbDate = projectResult.Dates?.Htb,
+                HasHtbDate = projectResult.Dates?.HasHtbDate,
+                TargetDate = projectResult.Dates?.Target,
+                HasTargetDate = projectResult.Dates?.HasTargetDateForTransfer
             };
-            return View(model);
+            return View(vm);
         }
 
         [HttpGet("first-discussed")]
