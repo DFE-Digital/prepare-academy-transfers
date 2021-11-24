@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Data.Models;
@@ -25,7 +26,14 @@ namespace Frontend.Tests.ControllerTests.Projects
         {
             _foundProject = new Project()
             {
-                Urn = "0001"
+                Urn = "0001",
+                TransferringAcademies = new List<TransferringAcademies>
+                {
+                    new TransferringAcademies
+                    {
+                        OutgoingAcademyUrn = "0002"
+                    }
+                }
             };
 
             _projectsRepository = new Mock<IProjects>();
@@ -53,10 +61,24 @@ namespace Frontend.Tests.ControllerTests.Projects
             [Fact]
             public async void GivenUrn_AssignsModelToTheView()
             {
+                _foundProject.Dates = new TransferDates
+                {
+                    Htb = "01/01/2000",
+                    HasHtbDate = true,
+                    FirstDiscussed = "02/02/1999",
+                    HasFirstDiscussedDate = true,
+                    Target = "01/01/2020",
+                    HasTargetDateForTransfer = true
+                };
                 var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<TransferDatesViewModel>(result);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<TransferDatesSummaryViewModel>(result);
 
-                Assert.Equal(_foundProject.Urn, viewModel.Project.Urn);
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
+                Assert.Equal(_foundProject.TransferringAcademies[0].OutgoingAcademyUrn, viewModel.OutgoingAcademyUrn);
+                Assert.Equal(_foundProject.Dates.Htb, viewModel.HtbDate);
+                Assert.Equal(_foundProject.Dates.HasHtbDate, viewModel.HasHtbDate);
+                Assert.Equal(_foundProject.Dates.Target, viewModel.TargetDate);
+                Assert.Equal(_foundProject.Dates.HasTargetDateForTransfer, viewModel.HasTargetDate);
             }
 
             [Fact]

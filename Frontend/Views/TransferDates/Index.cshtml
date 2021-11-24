@@ -1,21 +1,19 @@
-@using Helpers
-@model Frontend.Models.TransferDatesViewModel
+@model Frontend.Models.TransferDates.TransferDatesSummaryViewModel
 
 @{
     ViewBag.Title = "Set transfer dates";
     Layout = "_Layout";
-    var transferDates = Model.Project.Dates;
 }
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">
             Set transfer dates
@@ -25,49 +23,9 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Date when the transfer was first discussed with a trust
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <datesummary value="@transferDates.FirstDiscussed" has-date="@transferDates.HasFirstDiscussedDate"></datesummary>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="FirstDiscussed" asp-route-urn="@Model.Project.Urn" data-test="first-discussed">
-                        Change<span class="govuk-visually-hidden"> date first discussed with a trust</span>
-                    </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Set Advisory Board date
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <datesummary value="@transferDates.Htb" has-date="@transferDates.HasHtbDate"></datesummary>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="HtbDate" asp-route-urn="@Model.Project.Urn" data-test="htb-date">
-                        Change<span class="govuk-visually-hidden"> Advisory Board date</span>
-                    </a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Target date for transfer
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <datesummary value="@transferDates.Target" has-date="@transferDates.HasTargetDateForTransfer"></datesummary>
-                </dd>
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="TargetDate" asp-route-urn="@Model.Project.Urn" data-test="target-date">
-                        Change<span class="govuk-visually-hidden"> target date for transfer</span>
-                    </a>
-                </dd>
-            </div>
-        </dl>
-        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">
-            <button class="govuk-button">Confirm and continue</button>
+        <partial for="@Model" name="_TransferDatesSummary" />
+        <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">
+            <button class="govuk-button govuk-!-margin-top-6">Confirm and continue</button>
         </form>
     </div>
 </div>
