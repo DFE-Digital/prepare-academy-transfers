@@ -1,44 +1,44 @@
-@model ProjectPageModel
+@model Frontend.Models.Rationale.RationaleSummaryViewModel
 
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Rationale for project
+            What is the rationale for the project?
         </dt>
         <dd class="govuk-summary-list__value">
-            @if (string.IsNullOrEmpty(Model.Project.Rationale.Project))
+            @if (string.IsNullOrEmpty(Model.ProjectRationale))
             {
                 <span class="dfe-empty-tag">Empty</span>
             }
             else
             {
-                <span class="dfe-text-area-display">@Model.Project.Rationale.Project</span>
+                <span class="dfe-text-area-display">@Model.ProjectRationale</span>
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Rationale" asp-action="Project" 
-               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
+            <a class="govuk-link" asp-controller="Rationale" asp-action="Project" data-test="project-rationale"
+               asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> rationale for project</span>
             </a>
         </dd>
     </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Rationale for the trust or sponsor
+            What is the rationale for the incoming trust or sponsor?
         </dt>
         <dd class="govuk-summary-list__value">
-            @if (string.IsNullOrEmpty(Model.Project.Rationale.Trust))
+            @if (string.IsNullOrEmpty(Model.TrustRationale))
             {
                 <span class="dfe-empty-tag">Empty</span>
             }
             else
             {
-                <span class="dfe-text-area-display">@Model.Project.Rationale.Trust</span>
+                <span class="dfe-text-area-display">@Model.TrustRationale</span>
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Rationale" asp-action="TrustOrSponsor" 
-               asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="true">
+            <a class="govuk-link" asp-controller="Rationale" asp-action="TrustOrSponsor" data-test="trust-rationale"
+               asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> rationale for the trust or sponsor</span>
             </a>
         </dd>

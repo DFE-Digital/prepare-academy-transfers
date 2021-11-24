@@ -52,6 +52,36 @@ namespace Frontend.Tests.ControllerTests.Projects
         public class IndexTests : RationaleControllerTests
         {
             [Fact]
+            public async void GivenUrn_AssignsModelToTheView()
+            {
+                const string testUrn = "testUrn";
+                _projectRepository.Setup(r => r.GetByUrn(testUrn))
+                    .ReturnsAsync(new RepositoryResult<Project> {Result = new Project
+                    {
+                        Urn = testUrn,
+                        TransferringAcademies = new List<TransferringAcademies>
+                        {
+                            new TransferringAcademies
+                            {
+                                OutgoingAcademyUrn= "AcademyUrn"
+                            }
+                        },
+                        Rationale = new TransferRationale
+                        {
+                            Project = "projectRationale",
+                            Trust = "trustRationale"
+                        }
+                    }});
+                var result = await _subject.Index(testUrn);
+                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleSummaryViewModel>(result);
+
+                Assert.Equal(testUrn, viewModel.Urn);
+                Assert.Equal("AcademyUrn", viewModel.OutgoingAcademyUrn);
+                Assert.Equal("projectRationale", viewModel.ProjectRationale);
+                Assert.Equal("trustRationale", viewModel.TrustRationale);
+            }
+            
+            [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
                 await _subject.Index("0001");

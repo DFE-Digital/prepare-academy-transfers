@@ -4,6 +4,7 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
+using Frontend.Models.Rationale;
 using Frontend.Models.TransferDates;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public FeaturesViewModel FeaturesViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
+        public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -68,6 +70,15 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 HasHtbDate = Project.Dates.HasHtbDate,
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
+            };
+
+            RationaleSummaryViewModel = new RationaleSummaryViewModel
+            {
+                Urn = Project.Urn,
+                ReturnToPreview = true,
+                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                ProjectRationale = Project.Rationale.Project,
+                TrustRationale = Project.Rationale.Trust
             };
 
             return Page();
