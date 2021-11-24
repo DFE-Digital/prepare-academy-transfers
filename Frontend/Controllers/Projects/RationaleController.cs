@@ -26,12 +26,17 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new RationaleViewModel
+            var projectResult = project.Result;
+
+            var vm = new RationaleSummaryViewModel
             {
-                Project = project.Result
+                Urn = projectResult.Urn,
+                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
+                ProjectRationale = projectResult.Rationale?.Project,
+                TrustRationale = projectResult.Rationale?.Trust
             };
 
-            return View(model);
+            return View(vm);
         }
 
         [HttpGet("rationale")]
