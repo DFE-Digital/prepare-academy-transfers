@@ -4,6 +4,7 @@ using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
+using Frontend.Models.TransferDates;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +16,10 @@ namespace Frontend.Pages.TaskList.HtbDocument
         private readonly IGetInformationForProject _getInformationForProject;
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
-        
+
         public FeaturesViewModel FeaturesViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsViewModel { get; set; }
+        public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -54,7 +56,20 @@ namespace Frontend.Pages.TaskList.HtbDocument
             {
                 ReturnToPreview = true
             };
-            
+
+            TransferDatesSummaryViewModel = new TransferDatesSummaryViewModel
+            {
+                Urn = Project.Urn,
+                ReturnToPreview = true,
+                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                FirstDiscussedDate = Project.Dates.FirstDiscussed,
+                HasFirstDiscussedDate = Project.Dates.HasFirstDiscussedDate,
+                HtbDate = Project.Dates.Htb,
+                HasHtbDate = Project.Dates.HasHtbDate,
+                TargetDate = Project.Dates.Target,
+                HasTargetDate = Project.Dates.HasTargetDateForTransfer
+            };
+
             return Page();
         }
     }
