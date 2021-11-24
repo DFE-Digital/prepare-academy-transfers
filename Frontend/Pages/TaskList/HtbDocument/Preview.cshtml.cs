@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Models.Rationale;
@@ -22,8 +23,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
-
-        
+        public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
         
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -82,6 +82,22 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ProjectRationale = Project.Rationale.Project,
                 TrustRationale = Project.Rationale.Trust
             };
+
+            AcademyAndTrustInformationSummaryViewModel =
+                new AcademyAndTrustInformationSummaryViewModel
+                {
+                    OutgoingAcademyName = Project.OutgoingAcademyName,
+                    Recommendation = Project.AcademyAndTrustInformation.Recommendation,
+                    Author = Project.AcademyAndTrustInformation.Author,
+                    HtbDate = Project.Dates?.Htb,
+                    ProjectName = Project.Name,
+                    IncomingTrustName = Project.IncomingTrustName,
+                    TargetDate = Project.Dates?.Target,
+                    FirstDiscussedDate = Project.Dates?.FirstDiscussed,
+                    OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                    Urn = Project.Urn,
+                    ReturnToPreview = true
+                };
 
             return Page();
         }
