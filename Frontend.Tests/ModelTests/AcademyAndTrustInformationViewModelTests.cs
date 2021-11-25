@@ -1,6 +1,7 @@
 using System.Linq;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
 using Xunit;
 
 namespace Frontend.Tests.ModelTests
@@ -15,7 +16,7 @@ namespace Frontend.Tests.ModelTests
                 const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
                     TransferAcademyAndTrustInformation.RecommendationResult.Empty;
 
-                var result = AcademyAndTrustInformationViewModel.RecommendedRadioButtons(recommendationResult);
+                var result = RecommendationViewModel.RecommendedRadioButtons(recommendationResult);
 
                 Assert.All(result, item => Assert.False(item.Checked));
             }
@@ -26,7 +27,7 @@ namespace Frontend.Tests.ModelTests
                 const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
                     TransferAcademyAndTrustInformation.RecommendationResult.Approve;
 
-                var result = AcademyAndTrustInformationViewModel.RecommendedRadioButtons(recommendationResult);
+                var result = RecommendationViewModel.RecommendedRadioButtons(recommendationResult);
 
                 Assert.Single(result.Where(item => item.Value == recommendationResult.ToString() && item.Checked));
             }

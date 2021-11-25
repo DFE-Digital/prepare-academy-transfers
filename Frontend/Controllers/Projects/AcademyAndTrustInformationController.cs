@@ -2,7 +2,9 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Services.Interfaces;
+using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,13 +34,21 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
-            var model = new AcademyAndTrustInformationViewModel
+            var vm = new AcademyAndTrustInformationSummaryViewModel
             {
-                Project = projectInformation.Project,
-                TransferringAcademy = projectInformation.OutgoingAcademy
+                OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name,
+                Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation,
+                Author = projectInformation.Project.AcademyAndTrustInformation.Author,
+                HtbDate = projectInformation.Project.Dates?.Htb,
+                ProjectName = projectInformation.Project.Name,
+                IncomingTrustName = projectInformation.Project.IncomingTrustName,
+                TargetDate = projectInformation.Project.Dates?.Target,
+                FirstDiscussedDate = projectInformation.Project.Dates?.FirstDiscussed,
+                OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn,
+                Urn = projectInformation.Project.Urn
             };
 
-            return View(model);
+            return View(vm);
         }
 
         [HttpGet("recommendation")]
@@ -50,49 +60,45 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new AcademyAndTrustInformationViewModel
+            var projectResult = project.Result;
+            var vm = new RecommendationViewModel
             {
-                Project = project.Result,
-                ReturnToPreview = returnToPreview
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                Author = projectResult.AcademyAndTrustInformation.Author,
+                Recommendation = projectResult.AcademyAndTrustInformation.Recommendation,
+                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn
             };
 
-            return View(model);
+            return View(vm);
         }
 
         [HttpPost("recommendation")]
-        public async Task<IActionResult> Recommendation(string urn,
-            TransferAcademyAndTrustInformation.RecommendationResult recommendation, string author,
-            bool returnToPreview = false)
+        public async Task<IActionResult> Recommendation(RecommendationViewModel vm)
         {
-            var project = await _projectsRepository.GetByUrn(urn);
+            var project = await _projectsRepository.GetByUrn(vm.Urn);
             if (!project.IsValid)
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
 
-            var model = new AcademyAndTrustInformationViewModel
-            {
-                Project = project.Result
-            };
+            var projectResult = project.Result;
+            projectResult.AcademyAndTrustInformation.Recommendation = vm.Recommendation;
+            projectResult.AcademyAndTrustInformation.Author = vm.Author;
 
-            model.Project.AcademyAndTrustInformation = new TransferAcademyAndTrustInformation
-            {
-                Recommendation = recommendation,
-                Author = author
-            };
-
-            var result = await _projectsRepository.Update(model.Project);
+            var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)
             {
                 return View("ErrorPage", result.Error.ErrorMessage);
             }
 
-            if (returnToPreview)
+            if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToAction("Index", new {vm.Urn});
         }
     }
 }

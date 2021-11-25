@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Models.Rationale;
@@ -18,11 +19,13 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
-        public FeaturesViewModel FeaturesViewModel { get; set; }
-        public BenefitsSummaryViewModel BenefitsViewModel { get; set; }
+        public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
+        public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
+        
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
-
+        public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
+        
         public Preview(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
@@ -35,7 +38,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesViewModel = new FeaturesViewModel
+            FeaturesSummaryViewModel = new FeaturesSummaryViewModel
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
@@ -47,7 +50,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ReturnToPreview = true
             };
 
-            BenefitsViewModel = new BenefitsSummaryViewModel(
+            BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 Project.Benefits.IntendedBenefits.ToList(),
                 Project.Benefits.OtherIntendedBenefit,
                 BenefitsController.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
@@ -71,7 +74,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
             };
-
+            
             RationaleSummaryViewModel = new RationaleSummaryViewModel
             {
                 Urn = Project.Urn,
@@ -80,6 +83,22 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ProjectRationale = Project.Rationale.Project,
                 TrustRationale = Project.Rationale.Trust
             };
+
+            AcademyAndTrustInformationSummaryViewModel =
+                new AcademyAndTrustInformationSummaryViewModel
+                {
+                    OutgoingAcademyName = Project.OutgoingAcademyName,
+                    Recommendation = Project.AcademyAndTrustInformation.Recommendation,
+                    Author = Project.AcademyAndTrustInformation.Author,
+                    HtbDate = Project.Dates?.Htb,
+                    ProjectName = Project.Name,
+                    IncomingTrustName = Project.IncomingTrustName,
+                    TargetDate = Project.Dates?.Target,
+                    FirstDiscussedDate = Project.Dates?.FirstDiscussed,
+                    OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                    Urn = Project.Urn,
+                    ReturnToPreview = true
+                };
 
             return Page();
         }
