@@ -23,11 +23,12 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
-
+        
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
+
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -117,8 +118,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 }
             };
-            
-            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
+
             return Page();
         }
     }
