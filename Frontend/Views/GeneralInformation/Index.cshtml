@@ -7,13 +7,13 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">General information</h1>
         <div class="govuk-inset-text">
@@ -22,12 +22,12 @@
         <p class="govuk-body">This information is from the Get Information about Schools service and Knowledge and Information Management (KIM).</p>
     </div>
     <div class="govuk-grid-column-full">
-        <partial name="_FormFieldSummaryList" model="Model.OutgoingAcademy.GeneralInformation.FieldsToDisplay()"/>
+        <partial name="_FormFieldSummaryList" model="Model.NameValues"/>
     </div>
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+        <form asp-controller="Project" asp-route-id="@Model.Urn">
             <button class="govuk-button" data-module="govuk-button">
                 Confirm and continue
             </button>

@@ -1,12 +1,14 @@
+using System;
+using System.Collections.Generic;
 using Data.Models;
 using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
-    public class GeneralInformationViewModel
+    public class GeneralInformationViewModel : CommonViewModel
     {
-        public Project Project { get; set; }
-        public Academy OutgoingAcademy { get; set; }
+        public IEnumerable<FormFieldViewModel> NameValues { get; set; }
         public AdditionalInformationViewModel AdditionalInformationModel { get; set; }
+        public object OutgoingAcademyUrn { get; set; }
     }
 }

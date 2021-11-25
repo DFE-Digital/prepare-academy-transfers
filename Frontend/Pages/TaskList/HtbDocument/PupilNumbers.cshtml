@@ -1,7 +1,7 @@
-@model ProjectPageModel
+@model PupilNumbersViewModel
 
 <dl class="govuk-summary-list">
-    @foreach (var field in Model.TransferringAcademy.PupilNumbers.FieldsToDisplay())
+    @foreach (var field in Model.FieldsToDisplay())
     {
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
