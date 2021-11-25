@@ -74,23 +74,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
             };
-
-            AcademyAndTrustInformationSummaryViewModel =
-                new AcademyAndTrustInformationSummaryViewModel
-                {
-                    OutgoingAcademyName = Project.OutgoingAcademyName,
-                    Recommendation = Project.AcademyAndTrustInformation.Recommendation,
-                    Author = Project.AcademyAndTrustInformation.Author,
-                    HtbDate = Project.Dates?.Htb,
-                    ProjectName = Project.Name,
-                    IncomingTrustName = Project.IncomingTrustName,
-                    TargetDate = Project.Dates?.Target,
-                    FirstDiscussedDate = Project.Dates?.FirstDiscussed,
-                    OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                    Urn = Project.Urn,
-                    ReturnToPreview = true
-                };
-
+            
             RationaleSummaryViewModel = new RationaleSummaryViewModel
             {
                 Urn = Project.Urn,
