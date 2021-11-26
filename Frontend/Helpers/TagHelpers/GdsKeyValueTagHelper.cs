@@ -88,13 +88,3 @@ namespace Frontend.Helpers.TagHelpers
         }
     }
 }
-
-
-
-// <div class="govuk-summary-list__row">
-//     <dt class="govuk-summary-list__key">
-//     </dt>
-//     <dd class="govuk-summary-list__value">
-//     <displaynodataforemptystring value="@field.Value"></displaynodataforemptystring>
-//     </dd>
-//     </div>

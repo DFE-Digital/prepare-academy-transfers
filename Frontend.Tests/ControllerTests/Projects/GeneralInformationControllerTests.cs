@@ -75,27 +75,27 @@ namespace Frontend.Tests.ControllerTests.Projects
                 _getInformationForProject.Verify(s => s.Execute(_projectUrn), Times.Once);
             }
 
-            // [Fact]
-            // public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
-            // {
-            //     var response = await _subject.Index(_projectUrn);
-            //
-            //     var viewResponse = Assert.IsType<ViewResult>(response);
-            //     var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
-            //
-            //     Assert.Equal(_foundProject, viewModel.Project);
-            // }
-            //
-            // [Fact]
-            // public async void GivenAcademy_AssignsTheProjectToTheViewModel()
-            // {
-            //     var response = await _subject.Index(_projectUrn);
-            //
-            //     var viewResponse = Assert.IsType<ViewResult>(response);
-            //     var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
-            //
-            //     Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
-            // }
+            [Fact]
+            public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+            {
+                var response = await _subject.Index(_projectUrn);
+            
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
+            
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
+            }
+            
+            [Fact]
+            public async void GivenAcademy_AssignsTheProjectToTheViewModel()
+            {
+                var response = await _subject.Index(_projectUrn);
+            
+                var viewResponse = Assert.IsType<ViewResult>(response);
+                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
+            
+                Assert.Equal(_foundAcademy.GeneralInformation.PercentageFsm, viewModel.FreeSchoolMeals);
+            }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()

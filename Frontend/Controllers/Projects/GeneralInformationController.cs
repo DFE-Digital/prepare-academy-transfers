@@ -72,7 +72,9 @@ namespace Frontend.Controllers.Projects
                 SchoolType = generalInformation.SchoolType,
                 DiocesePercent = generalInformation.DiocesesPercent,
                 DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
-                MP = generalInformation.MpAndParty
+                MP = generalInformation.MpAndParty,
+                Urn = projectResponse.Project.Urn,
+                OutgoingAcademyUrn = projectResponse.Project.OutgoingAcademyUrn
             };
         }
     }
