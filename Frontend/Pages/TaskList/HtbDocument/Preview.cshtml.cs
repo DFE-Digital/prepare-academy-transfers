@@ -118,7 +118,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 }
             };
-
+            
+            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
             return Page();
         }
     }
