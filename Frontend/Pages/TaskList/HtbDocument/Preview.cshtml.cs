@@ -27,7 +27,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
-
+        public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -117,7 +117,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 }
             };
-
+            
+            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
             return Page();
         }
     }

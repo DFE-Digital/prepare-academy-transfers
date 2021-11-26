@@ -25,6 +25,7 @@ namespace Frontend.Helpers.TagHelpers
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             output.AddClass("govuk-summary-list__row", HtmlEncoder.Default);
 
@@ -48,12 +49,12 @@ namespace Frontend.Helpers.TagHelpers
         private string RenderInnerTagHelper()
         {
             DisplayNoDataForEmptyStringTagHelper innerTagHelper = new DisplayNoDataForEmptyStringTagHelper();
-            var attributes = new TagHelperAttributeList {{nameof(DisplayNoDataForEmptyStringTagHelper.Value), Value}};
-            
+            // var attributes = new TagHelperAttributeList {{nameof(DisplayNoDataForEmptyStringTagHelper.Value), Value}};
+            innerTagHelper.Value = Value;
             // Create a TagHelperOutput instance
             TagHelperOutput innerOutput = new TagHelperOutput(
-                "div",
-                attributes,
+                "span",
+                new TagHelperAttributeList(),
                 (useCachedResult, encoder) =>
                     Task.Run<TagHelperContent>(() => new DefaultTagHelperContent())
             )
@@ -62,7 +63,7 @@ namespace Frontend.Helpers.TagHelpers
             };
             // Create a TagHelperContext instance
             TagHelperContext innerContext = new TagHelperContext(
-                attributes,
+                new TagHelperAttributeList(),
                 new Dictionary<object, object>(), 
                 Guid.NewGuid().ToString()
             );

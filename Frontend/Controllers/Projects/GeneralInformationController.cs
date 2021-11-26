@@ -30,14 +30,9 @@ namespace Frontend.Controllers.Projects
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 
-            if (!projectInformation.IsValid)
-            {
-                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
-            FieldsToDisplay(out GeneralInformationViewModel vm,projectInformation);
-
-            return View(vm);
+            return !projectInformation.IsValid 
+                ? View("ErrorPage", projectInformation.ResponseError.ErrorMessage) 
+                : View(BuildViewModel(projectInformation));
         }
 
         [HttpPost]
@@ -54,10 +49,10 @@ namespace Frontend.Controllers.Projects
                 "additional-information-hint");
         }
         
-        private void FieldsToDisplay(out GeneralInformationViewModel vm, GetInformationForProjectResponse projectResponse)
+        public static GeneralInformationViewModel BuildViewModel(GetInformationForProjectResponse projectResponse)
         {
             var generalInformation = projectResponse.OutgoingAcademy.GeneralInformation;
-            vm = new GeneralInformationViewModel
+            return new GeneralInformationViewModel
             {
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
