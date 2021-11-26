@@ -35,7 +35,11 @@ namespace Frontend.Helpers.TagHelpers
             
             var dd = new TagBuilder("dd");
             dd.AddCssClass("govuk-summary-list__value");
-            dd.InnerHtml.SetHtmlContent(RenderInnerTagHelper());
+            var noDataTagHelper = new DisplayNoDataForEmptyStringTagHelper
+            {
+                Value = Value
+            };
+            dd.InnerHtml.SetHtmlContent(Common.RenderTagHelper(noDataTagHelper,"span", new TagHelperAttributeList(), _htmlEncoder));
 
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());
@@ -44,47 +48,6 @@ namespace Frontend.Helpers.TagHelpers
             output.Content.AppendHtml(dd.RenderStartTag());
             output.Content.AppendHtml(dd.RenderBody());
             output.Content.AppendHtml(dd.RenderEndTag());
-        }
-        
-        private string RenderInnerTagHelper()
-        {
-            DisplayNoDataForEmptyStringTagHelper innerTagHelper = new DisplayNoDataForEmptyStringTagHelper();
-            // var attributes = new TagHelperAttributeList {{nameof(DisplayNoDataForEmptyStringTagHelper.Value), Value}};
-            innerTagHelper.Value = Value;
-            // Create a TagHelperOutput instance
-            TagHelperOutput innerOutput = new TagHelperOutput(
-                "span",
-                new TagHelperAttributeList(),
-                (useCachedResult, encoder) =>
-                    Task.Run<TagHelperContent>(() => new DefaultTagHelperContent())
-            )
-            {
-                TagMode = TagMode.StartTagAndEndTag
-            };
-            // Create a TagHelperContext instance
-            TagHelperContext innerContext = new TagHelperContext(
-                new TagHelperAttributeList(),
-                new Dictionary<object, object>(), 
-                Guid.NewGuid().ToString()
-            );
-
-            // Process the InnerTagHelper instance 
-            innerTagHelper.Process(innerContext, innerOutput);
-            
-            // Render and return the tag helper attributes and content
-            return RenderTagHelperOutput(innerOutput);
-        }
-
-        /*
-         * Helper Method to gather the html content
-         */
-        private string RenderTagHelperOutput(TagHelperOutput output)
-        {
-            using (var writer = new StringWriter())
-            {
-                output.WriteTo(writer, _htmlEncoder);
-                return writer.ToString();
-            }
         }
     }
 }
