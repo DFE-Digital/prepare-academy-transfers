@@ -33,8 +33,8 @@ namespace Frontend.Controllers.Projects
 
             var model = new PupilNumbersViewModel
             {
-                Project = projectInformation.Project,
-                OutgoingAcademy = projectInformation.OutgoingAcademy,
+                Urn = projectInformation.Project.Urn,
+                
                 ReturnToPreview = returnToPreview,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
