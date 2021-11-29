@@ -94,7 +94,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
             
-                Assert.Equal(_foundAcademy.GeneralInformation.PercentageFsm, viewModel.FreeSchoolMeals);
+                Assert.Equal(_foundAcademy.Urn, viewModel.OutgoingAcademyUrn);
             }
 
             [Fact]

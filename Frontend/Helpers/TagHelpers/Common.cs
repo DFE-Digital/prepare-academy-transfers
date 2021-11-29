@@ -12,7 +12,6 @@ namespace Frontend.Helpers.TagHelpers
         public static string RenderTagHelper(TagHelper tagHelper, string tagName,
             TagHelperAttributeList tagHelperAttributeList, HtmlEncoder htmlEncoder)
         {
-            // Create a TagHelperOutput instance
             TagHelperOutput innerOutput = new TagHelperOutput(
                 tagName,
                 tagHelperAttributeList,
@@ -22,17 +21,15 @@ namespace Frontend.Helpers.TagHelpers
             {
                 TagMode = TagMode.StartTagAndEndTag
             };
-            // Create a TagHelperContext instance
+            
             TagHelperContext innerContext = new TagHelperContext(
                 new TagHelperAttributeList(),
                 new Dictionary<object, object>(),
                 Guid.NewGuid().ToString()
             );
-
-            // Process the InnerTagHelper instance 
+            
             tagHelper.Process(innerContext, innerOutput);
-
-            // Render and return the tag helper attributes and content
+            
             using var writer = new StringWriter();
             innerOutput.WriteTo(writer, htmlEncoder);
             return writer.ToString();
