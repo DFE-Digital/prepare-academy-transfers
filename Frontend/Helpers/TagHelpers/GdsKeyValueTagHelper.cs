@@ -34,6 +34,7 @@ namespace Frontend.Helpers.TagHelpers
             dt.InnerHtml.SetContent(Key);
             
             var dd = new TagBuilder("dd");
+            dd.AddCssClass("dfe-summary-list__value--width-50");
             dd.AddCssClass("govuk-summary-list__value");
             var noDataTagHelper = new DisplayNoDataForEmptyStringTagHelper
             {
