@@ -34,8 +34,14 @@ namespace Frontend.Controllers.Projects
             var model = new PupilNumbersViewModel
             {
                 Urn = projectInformation.Project.Urn,
-                
                 ReturnToPreview = returnToPreview,
+                GirlsOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.GirlsOnRoll,
+                BoysOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.BoysOnRoll,
+                WithStatementOfSEN = projectInformation.OutgoingAcademy.PupilNumbers.WithStatementOfSen,
+                WithEAL = projectInformation.OutgoingAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
+                FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn,
+                OutgoingAcademyName = projectInformation.OutgoingAcademy.Name,
                 AdditionalInformationModel = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,
