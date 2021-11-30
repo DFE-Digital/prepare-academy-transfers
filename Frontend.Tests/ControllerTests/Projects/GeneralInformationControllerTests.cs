@@ -79,22 +79,22 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
             {
                 var response = await _subject.Index(_projectUrn);
-
+            
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
-
-                Assert.Equal(_foundProject, viewModel.Project);
+            
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
             }
-
+            
             [Fact]
             public async void GivenAcademy_AssignsTheProjectToTheViewModel()
             {
                 var response = await _subject.Index(_projectUrn);
-
+            
                 var viewResponse = Assert.IsType<ViewResult>(response);
                 var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
-
-                Assert.Equal(_foundAcademy, viewModel.OutgoingAcademy);
+            
+                Assert.Equal(_foundAcademy.Urn, viewModel.OutgoingAcademyUrn);
             }
 
             [Fact]

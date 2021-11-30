@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
+using Data.Models;
+using Data.Models.Academies;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,30 +26,13 @@ namespace Frontend.Controllers.Projects
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string id, bool addOrEditAdditionalInformation = false)
+        public async Task<IActionResult> Index(string id)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
 
-            if (!projectInformation.IsValid)
-            {
-                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-            
-
-            var model = new GeneralInformationViewModel
-            {
-                Project = projectInformation.Project,
-                OutgoingAcademy = projectInformation.OutgoingAcademy,
-                AdditionalInformationModel = new AdditionalInformationViewModel
-                {
-                    AdditionalInformation = projectInformation.Project.GeneralInformationAdditionalInformation,
-                    HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
-                    Urn = projectInformation.Project.Urn,
-                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation
-                }
-            };
-
-            return View(model);
+            return !projectInformation.IsValid 
+                ? View("ErrorPage", projectInformation.ResponseError.ErrorMessage) 
+                : View(BuildViewModel(projectInformation));
         }
 
         [HttpPost]
@@ -60,6 +47,35 @@ namespace Frontend.Controllers.Projects
                 "GeneralInformation", 
                 new { id }, 
                 "additional-information-hint");
+        }
+        
+        public static GeneralInformationViewModel BuildViewModel(GetInformationForProjectResponse projectResponse)
+        {
+            var generalInformation = projectResponse.OutgoingAcademy.GeneralInformation;
+            return new GeneralInformationViewModel
+            {
+                AdditionalInformationModel = new AdditionalInformationViewModel
+                {
+                    AdditionalInformation = projectResponse.Project.GeneralInformationAdditionalInformation,
+                    HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
+                    Urn = projectResponse.Project.Urn
+                },
+                SchoolPhase = generalInformation.SchoolPhase,
+                AgeRange = generalInformation.AgeRange,
+                Capacity = generalInformation.Capacity,
+                NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})",
+                FreeSchoolMeals = generalInformation.PercentageFsm,
+                PublishedAdmissionNumber = generalInformation.Pan,
+                PrivateFinanceInitiative = generalInformation.Pfi,
+                ViabilityIssues = generalInformation.ViabilityIssue,
+                FinancialDeficit = generalInformation.Deficit,
+                SchoolType = generalInformation.SchoolType,
+                DiocesePercent = generalInformation.DiocesesPercent,
+                DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
+                MP = generalInformation.MpAndParty,
+                Urn = projectResponse.Project.Urn,
+                OutgoingAcademyUrn = projectResponse.Project.OutgoingAcademyUrn
+            };
         }
     }
 }

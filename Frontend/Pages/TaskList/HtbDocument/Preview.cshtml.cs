@@ -5,6 +5,7 @@ using Frontend.Models;
 using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
+using Frontend.Models.Forms;
 using Frontend.Models.Rationale;
 using Frontend.Models.TransferDates;
 using Frontend.Services.Interfaces;
@@ -22,10 +23,12 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
-        
+
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
-        
+        public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
+        public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
+
         public Preview(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
@@ -74,7 +77,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
             };
-            
+
             RationaleSummaryViewModel = new RationaleSummaryViewModel
             {
                 Urn = Project.Urn,
@@ -100,6 +103,22 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
+            //todo: remove project academy models etc
+            PupilNumbersViewModel = new PupilNumbersViewModel
+            {
+                Project = Project,
+                OutgoingAcademy = TransferringAcademy,
+                AdditionalInformationModel = new AdditionalInformationViewModel
+                {
+                    AdditionalInformation = Project.PupilNumbersAdditionalInformation,
+                    HintText =
+                        "If you add comments, they'll be included in the pupil numbers section of your project template.",
+                    Urn = Project.Urn,
+                    ReturnToPreview = true
+                }
+            };
+            
+            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
             return Page();
         }
     }
