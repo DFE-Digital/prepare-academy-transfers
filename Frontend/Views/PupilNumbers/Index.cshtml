@@ -24,11 +24,11 @@
         <p class="govuk-body">This information is pre-populated from TRAMS</p>
     </div>
     <div class="govuk-grid-column-full">
-        @* <partial name="_FormFieldSummaryList" model="Model.FieldsToDisplay()"/> *@
+       <partial name="_PupilNumbers" for="@Model"/>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
 </div>
-@if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
+@if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">

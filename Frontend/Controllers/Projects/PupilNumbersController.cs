@@ -42,7 +42,7 @@ namespace Frontend.Controllers.Projects
                 FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                 OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn,
                 OutgoingAcademyName = projectInformation.OutgoingAcademy.Name,
-                AdditionalInformationModel = new AdditionalInformationViewModel
+                AdditionalInformation = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,
                     HintText =

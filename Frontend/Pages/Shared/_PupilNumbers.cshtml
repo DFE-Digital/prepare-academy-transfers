@@ -1,0 +1,28 @@
+@model PupilNumbersViewModel
+
+<dl class="govuk-summary-list">
+    <gds-key-value key="Girls on roll" value="@Model.GirlsOnRoll"/>
+    <gds-key-value key="Boys on roll" value="@Model.BoysOnRoll"/>
+    <gds-key-value key="Pupils with a statement of special educational needs (SEN)" value="@Model.WithStatementOfSEN"/>
+    <gds-key-value key="Pupils with English as an additional language (EAL)" value="@Model.WithEAL"/>
+    <gds-key-value key="Pupils eligible for free school meals during the past 6 years" value="@Model.FreeSchoolMealsLast6Years"/>
+    @if (Model.ReturnToPreview)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Additional information
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <stringsummary value="@Model.AdditionalInformation.AdditionalInformation"></stringsummary>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link"
+                   asp-controller="PupilNumbers" asp-action="Index"
+                   asp-route-id="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+                   asp-route-returnToPreview="true">
+                    Change<span class="govuk-visually-hidden"> pupil numbers additional information</span>
+                </a>
+            </dd>
+        </div>
+    }
+</dl>

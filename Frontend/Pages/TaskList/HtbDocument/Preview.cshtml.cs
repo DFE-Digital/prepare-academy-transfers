@@ -103,12 +103,18 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            //todo: remove project academy models etc
             PupilNumbersViewModel = new PupilNumbersViewModel
             {
-                Project = Project,
-                OutgoingAcademy = TransferringAcademy,
-                AdditionalInformationModel = new AdditionalInformationViewModel
+                Urn = Project.Urn,
+                ReturnToPreview = true,
+                GirlsOnRoll = TransferringAcademy.PupilNumbers.GirlsOnRoll,
+                BoysOnRoll = TransferringAcademy.PupilNumbers.BoysOnRoll,
+                WithStatementOfSEN = TransferringAcademy.PupilNumbers.WithStatementOfSen,
+                WithEAL = TransferringAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
+                FreeSchoolMealsLast6Years = TransferringAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                OutgoingAcademyUrn = TransferringAcademy.Urn,
+                OutgoingAcademyName = TransferringAcademy.Name,
+                AdditionalInformation = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = Project.PupilNumbersAdditionalInformation,
                     HintText =
