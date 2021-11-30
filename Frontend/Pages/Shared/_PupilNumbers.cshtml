@@ -1,11 +1,11 @@
 @model PupilNumbersViewModel
 
 <dl class="govuk-summary-list">
-    <gds-key-value key="Girls on roll" value="@Model.GirlsOnRoll"/>
-    <gds-key-value key="Boys on roll" value="@Model.BoysOnRoll"/>
-    <gds-key-value key="Pupils with a statement of special educational needs (SEN)" value="@Model.WithStatementOfSEN"/>
-    <gds-key-value key="Pupils with English as an additional language (EAL)" value="@Model.WithEAL"/>
-    <gds-key-value key="Pupils eligible for free school meals during the past 6 years" value="@Model.FreeSchoolMealsLast6Years"/>
+    <gds-key-value key="Girls on roll" value="@Model.GirlsOnRoll" show-action="@Model.ReturnToPreview"/>
+    <gds-key-value key="Boys on roll" value="@Model.BoysOnRoll" show-action="@Model.ReturnToPreview"/>
+    <gds-key-value key="Pupils with a statement of special educational needs (SEN)" value="@Model.WithStatementOfSEN" show-action="@Model.ReturnToPreview"/>
+    <gds-key-value key="Pupils with English as an additional language (EAL)" value="@Model.WithEAL" show-action="@Model.ReturnToPreview"/>
+    <gds-key-value key="Pupils eligible for free school meals during the past 6 years" value="@Model.FreeSchoolMealsLast6Years" show-action="@Model.ReturnToPreview"/>
     @if (Model.ReturnToPreview)
     {
         <div class="govuk-summary-list__row">

@@ -16,6 +16,8 @@ namespace Frontend.Helpers.TagHelpers
         public string Key { get; set; }
         public string Value { get; set; }
         
+        public bool ShowAction { get; set; }
+        
         private readonly HtmlEncoder _htmlEncoder;
 
         public GdsKeyValueTagHelper(HtmlEncoder htmlEncoder)
@@ -42,6 +44,7 @@ namespace Frontend.Helpers.TagHelpers
             };
             dd.InnerHtml.SetHtmlContent(Common.RenderTagHelper(noDataTagHelper,"span", new TagHelperAttributeList(), _htmlEncoder));
 
+           
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());
             output.Content.AppendHtml(dt.RenderEndTag());
@@ -49,6 +52,14 @@ namespace Frontend.Helpers.TagHelpers
             output.Content.AppendHtml(dd.RenderStartTag());
             output.Content.AppendHtml(dd.RenderBody());
             output.Content.AppendHtml(dd.RenderEndTag());
+
+            if (ShowAction)
+            {
+                var ddAction = new TagBuilder("dd");
+                ddAction.AddCssClass("govuk-summary-list__actions");
+                output.Content.AppendHtml(ddAction.RenderStartTag());
+                output.Content.AppendHtml(ddAction.RenderEndTag());
+            }
         }
     }
 }

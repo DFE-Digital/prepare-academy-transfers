@@ -104,6 +104,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
+            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
+            
             PupilNumbersViewModel = new PupilNumbersViewModel
             {
                 Urn = Project.Urn,
@@ -125,7 +127,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 }
             };
             
-            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
             return Page();
         }
     }
