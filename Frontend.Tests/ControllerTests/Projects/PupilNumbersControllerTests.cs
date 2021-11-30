@@ -119,7 +119,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewResponse = Assert.IsType<ViewResult>(response);
                     var viewModel = Assert.IsType<PupilNumbersViewModel>(viewResponse.Model);
 
-                    Assert.Equal(_foundAcademy.Ukprn, viewModel.OutgoingAcademyUrn);
+                    Assert.Equal(_foundAcademy.Urn, viewModel.OutgoingAcademyUrn);
                 }
 
                 [Fact]
