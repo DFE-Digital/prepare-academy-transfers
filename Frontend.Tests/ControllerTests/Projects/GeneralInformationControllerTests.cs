@@ -109,20 +109,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 Assert.Equal("Index", redirectToActionResponse.ActionName);
                 Assert.Equal(additionalInformation, _foundProject.GeneralInformationAdditionalInformation);
             }
-
-            [Fact]
-            public async void GivenAdditionalInformation_UpdatesTheViewModel()
-            {
-                var response = await _subject.Index(_projectUrn);
-
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<GeneralInformationViewModel>(viewResponse.Model);
-
-                Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
-                Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
-                Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
-            }
-
+            
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
             {
