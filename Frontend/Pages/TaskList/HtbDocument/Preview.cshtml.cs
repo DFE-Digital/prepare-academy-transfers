@@ -23,7 +23,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
-        
+
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
@@ -104,29 +104,10 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
-            
-            PupilNumbersViewModel = new PupilNumbersViewModel
-            {
-                Urn = Project.Urn,
-                ReturnToPreview = true,
-                GirlsOnRoll = TransferringAcademy.PupilNumbers.GirlsOnRoll,
-                BoysOnRoll = TransferringAcademy.PupilNumbers.BoysOnRoll,
-                WithStatementOfSEN = TransferringAcademy.PupilNumbers.WithStatementOfSen,
-                WithEAL = TransferringAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
-                FreeSchoolMealsLast6Years = TransferringAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
-                OutgoingAcademyUrn = TransferringAcademy.Urn,
-                OutgoingAcademyName = TransferringAcademy.Name,
-                AdditionalInformation = new AdditionalInformationViewModel
-                {
-                    AdditionalInformation = Project.PupilNumbersAdditionalInformation,
-                    HintText =
-                        "If you add comments, they'll be included in the pupil numbers section of your project template.",
-                    Urn = Project.Urn,
-                    ReturnToPreview = true
-                }
-            };
-            
+            GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
+
+            PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true);
+
             return Page();
         }
     }

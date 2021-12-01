@@ -3,6 +3,7 @@ using Data;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,13 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
+            var model = BuildViewModel(projectInformation, returnToPreview, addOrEditAdditionalInformation);
+
+            return View(model);
+        }
+
+        public static PupilNumbersViewModel BuildViewModel(GetInformationForProjectResponse projectInformation, bool returnToPreview, bool addOrEditAdditionalInformation = false)
+        {
             var model = new PupilNumbersViewModel
             {
                 Urn = projectInformation.Project.Urn,
@@ -39,7 +47,8 @@ namespace Frontend.Controllers.Projects
                 BoysOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.BoysOnRoll,
                 WithStatementOfSEN = projectInformation.OutgoingAcademy.PupilNumbers.WithStatementOfSen,
                 WithEAL = projectInformation.OutgoingAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
-                FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers
+                    .PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                 OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn,
                 OutgoingAcademyName = projectInformation.OutgoingAcademy.Name,
                 AdditionalInformation = new AdditionalInformationViewModel
@@ -52,8 +61,7 @@ namespace Frontend.Controllers.Projects
                     ReturnToPreview = returnToPreview
                 }
             };
-
-            return View(model);
+            return model;
         }
 
         [HttpPost]

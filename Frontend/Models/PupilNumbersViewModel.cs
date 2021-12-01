@@ -4,7 +4,6 @@ using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
-    //todo: remove project academy models etc
     public class PupilNumbersViewModel : CommonViewModel
     {
         public string GirlsOnRoll { get; set; }
