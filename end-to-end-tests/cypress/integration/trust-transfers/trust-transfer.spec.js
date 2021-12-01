@@ -22,7 +22,7 @@ describe('Tests to ensure correct transfer functionality', () => {
         cy.get('.govuk-button').click()
     });
 
-    it('Should prevent a user from transferring to the same trust', () => {
+    it.skip('Should prevent a user from transferring to the same trust', () => {
         cy.get('.govuk-radios__item input').click()
         cy.get('.govuk-button').click()
         cy.get('.govuk-input').type(academyId+'{enter}')
