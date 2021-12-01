@@ -46,6 +46,14 @@ function clickBackLink() {
 }
 
 describe("Creating and editing an academy transfer", function () {
+    after(function () {
+        cy.clearLocalStorage();
+    });
+
+    afterEach(() => {
+        cy.storeSessionData();
+    });
+    
     it("Loads the page", function () {
         cy.visit("/")
         login();

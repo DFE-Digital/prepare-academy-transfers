@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^8.2.0"
+    "cypress": "^8.2.0",
+    "cypress-localstorage-commands": "^1.6.1"
   }
 }
