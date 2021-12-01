@@ -86,6 +86,7 @@ jobs:
           REDIS_URL: redis://user:password@redis:6379
 
     runs-on: ubuntu-latest
+    environment: Dev
     defaults:
       run:
         working-directory: end-to-end-tests
