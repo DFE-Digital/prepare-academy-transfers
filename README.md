@@ -49,6 +49,7 @@ The Cypress tests will run against the front-end of the application, so the cred
 To execute the tests locally and view the output, run the following:
 
 ```
+cd end-to-end-tests
 npm run cypress:open -- --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
 ```
 
