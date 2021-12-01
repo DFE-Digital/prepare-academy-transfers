@@ -80,10 +80,11 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 },
                 WithoutContainer = false
             };
-            var expectedContent = "<div class=\"govuk-checkboxes__item\"><input class=\"govuk-checkboxes__input\" name=\"\" type=\"checkbox\" value=\"1\"><label class=\"govuk-label govuk-checkboxes__label\" for=\"\">Box 1</label></div><div class=\"govuk-checkboxes__item\"><input checked=\"\" class=\"govuk-checkboxes__input\" id=\"2\" name=\"\" type=\"checkbox\" value=\"2\"><label class=\"govuk-label govuk-checkboxes__label\" for=\"2\">Box 2</label></div>";
-
+         
             tagHelper.Process(_tagHelperContext, _tagHelperOutput);
-
+            
+            var expectedContent =
+                "<div class=\"govuk-checkboxes__item\"><input class=\"govuk-checkboxes__input\" name=\"\" type=\"checkbox\" value=\"1\"><label class=\"govuk-label govuk-checkboxes__label\" for=\"\">Box 1</label></div><div class=\"govuk-checkboxes__item\"><input checked=\"\" class=\"govuk-checkboxes__input\" id=\"2\" name=\"\" type=\"checkbox\" value=\"2\"><label class=\"govuk-label govuk-checkboxes__label\" for=\"2\">Box 2</label></div>";
             Assert.Equal(expectedContent, _tagHelperOutput.Content.GetContent());
         }
     }

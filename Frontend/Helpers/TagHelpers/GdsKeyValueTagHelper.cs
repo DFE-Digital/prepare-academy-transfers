@@ -29,7 +29,7 @@ namespace Frontend.Helpers.TagHelpers
         {
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
-            output.AddClass("govuk-summary-list__row", HtmlEncoder.Default);
+            output.AddClass("govuk-summary-list__row", _htmlEncoder);
 
             var dt = new TagBuilder("dt");
             dt.AddCssClass("govuk-summary-list__key");
@@ -43,8 +43,7 @@ namespace Frontend.Helpers.TagHelpers
                 Value = Value
             };
             dd.InnerHtml.SetHtmlContent(Common.RenderTagHelper(noDataTagHelper,"span", new TagHelperAttributeList(), _htmlEncoder));
-
-           
+            
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());
             output.Content.AppendHtml(dt.RenderEndTag());
