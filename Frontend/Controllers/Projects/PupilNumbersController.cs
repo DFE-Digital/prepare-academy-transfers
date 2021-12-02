@@ -1,8 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,12 +33,28 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
+            var model = BuildViewModel(projectInformation, returnToPreview, false, addOrEditAdditionalInformation);
+
+            return View(model);
+        }
+
+        public static PupilNumbersViewModel BuildViewModel(GetInformationForProjectResponse projectInformation,
+            bool returnToPreview, bool isPreview = false, bool addOrEditAdditionalInformation = false)
+        {
             var model = new PupilNumbersViewModel
             {
-                Project = projectInformation.Project,
-                OutgoingAcademy = projectInformation.OutgoingAcademy,
+                Urn = projectInformation.Project.Urn,
                 ReturnToPreview = returnToPreview,
-                AdditionalInformationModel = new AdditionalInformationViewModel
+                IsPreview = isPreview,
+                GirlsOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.GirlsOnRoll,
+                BoysOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.BoysOnRoll,
+                WithStatementOfSEN = projectInformation.OutgoingAcademy.PupilNumbers.WithStatementOfSen,
+                WithEAL = projectInformation.OutgoingAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
+                FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers
+                    .PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn,
+                OutgoingAcademyName = projectInformation.OutgoingAcademy.Name,
+                AdditionalInformation = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,
                     HintText =
@@ -46,8 +64,7 @@ namespace Frontend.Controllers.Projects
                     ReturnToPreview = returnToPreview
                 }
             };
-
-            return View(model);
+            return model;
         }
 
         [HttpPost]

@@ -54,12 +54,6 @@ namespace Frontend.Controllers.Projects
             var generalInformation = projectResponse.OutgoingAcademy.GeneralInformation;
             return new GeneralInformationViewModel
             {
-                AdditionalInformationModel = new AdditionalInformationViewModel
-                {
-                    AdditionalInformation = projectResponse.Project.GeneralInformationAdditionalInformation,
-                    HintText = "This information will populate into your HTB template under the school performance (Ofsted information) section.",
-                    Urn = projectResponse.Project.Urn
-                },
                 SchoolPhase = generalInformation.SchoolPhase,
                 AgeRange = generalInformation.AgeRange,
                 Capacity = generalInformation.Capacity,

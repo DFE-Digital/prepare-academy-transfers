@@ -20,9 +20,6 @@ namespace Frontend.Models
         public string DiocesePercent { get; set; }
         public string DistanceFromAcademyToTrustHq { get; set; }
         public string MP { get; set; }
-        
-        
-        public AdditionalInformationViewModel AdditionalInformationModel { get; set; }
         public string OutgoingAcademyUrn { get; set; }
     }
 }

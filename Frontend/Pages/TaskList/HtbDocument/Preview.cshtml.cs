@@ -29,6 +29,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
 
+
         public Preview(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
@@ -103,22 +104,10 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            //todo: remove project academy models etc
-            PupilNumbersViewModel = new PupilNumbersViewModel
-            {
-                Project = Project,
-                OutgoingAcademy = TransferringAcademy,
-                AdditionalInformationModel = new AdditionalInformationViewModel
-                {
-                    AdditionalInformation = Project.PupilNumbersAdditionalInformation,
-                    HintText =
-                        "If you add comments, they'll be included in the pupil numbers section of your project template.",
-                    Urn = Project.Urn,
-                    ReturnToPreview = true
-                }
-            };
-            
-            GeneralInformationViewModel= GeneralInformationController.BuildViewModel(response);
+            GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
+
+            PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
+
             return Page();
         }
     }

@@ -7,15 +7,15 @@
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
     </backtopreview>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">Pupil numbers</h1>
         <div class="govuk-inset-text">
@@ -24,15 +24,15 @@
         <p class="govuk-body">This information is taken from TRAMS</p>
     </div>
     <div class="govuk-grid-column-full">
-        <partial name="_FormFieldSummaryList" model="Model.FieldsToDisplay()"/>
+       <partial name="_PupilNumbers" for="@Model"/>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
 </div>
-@if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
+@if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+            <form asp-controller="Project" asp-route-id="@Model.Urn">
                 <button class="govuk-button" data-module="govuk-button">
                     Confirm and continue
                 </button>
