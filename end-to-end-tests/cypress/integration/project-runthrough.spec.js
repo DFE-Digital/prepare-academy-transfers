@@ -46,9 +46,18 @@ function clickBackLink() {
 }
 
 describe("Creating and editing an academy transfer", function () {
+
+    afterEach(() => {
+		cy.storeSessionData();
+	});
+
+	before(function () {
+		cy.login();
+	});
+
     it("Loads the page", function () {
-        cy.visit("/")
-        login();
+        // cy.visit("/")
+        // login();
         createNewTransfer();
         searchForTrustWithQuery("bishop fraser")
         selectFirstRadio();
@@ -173,5 +182,8 @@ describe("Creating and editing an academy transfer", function () {
             })
         })
 
+    });
+    after(function () {
+        cy.clearLocalStorage();
     });
 });
