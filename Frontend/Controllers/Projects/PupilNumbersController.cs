@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
@@ -32,17 +33,19 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
-            var model = BuildViewModel(projectInformation, returnToPreview, addOrEditAdditionalInformation);
+            var model = BuildViewModel(projectInformation, returnToPreview, false, addOrEditAdditionalInformation);
 
             return View(model);
         }
 
-        public static PupilNumbersViewModel BuildViewModel(GetInformationForProjectResponse projectInformation, bool returnToPreview, bool addOrEditAdditionalInformation = false)
+        public static PupilNumbersViewModel BuildViewModel(GetInformationForProjectResponse projectInformation,
+            bool returnToPreview, bool isPreview = false, bool addOrEditAdditionalInformation = false)
         {
             var model = new PupilNumbersViewModel
             {
                 Urn = projectInformation.Project.Urn,
                 ReturnToPreview = returnToPreview,
+                IsPreview = isPreview,
                 GirlsOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.GirlsOnRoll,
                 BoysOnRoll = projectInformation.OutgoingAcademy.PupilNumbers.BoysOnRoll,
                 WithStatementOfSEN = projectInformation.OutgoingAcademy.PupilNumbers.WithStatementOfSen,

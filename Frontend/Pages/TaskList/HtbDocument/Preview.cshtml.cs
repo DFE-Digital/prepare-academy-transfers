@@ -106,7 +106,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
 
-            PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true);
+            PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
 
             return Page();
         }

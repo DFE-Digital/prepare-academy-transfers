@@ -13,5 +13,6 @@ namespace Frontend.Models
         public string FreeSchoolMealsLast6Years { get; set; }
         public AdditionalInformationViewModel AdditionalInformation { get; set; }
         public string OutgoingAcademyUrn { get; set; }
+        public bool IsPreview { get; set; }
     }
 }
