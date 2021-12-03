@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -23,6 +24,7 @@ namespace Frontend.Helpers.TagHelpers
         public GdsKeyValueTagHelper(HtmlEncoder htmlEncoder)
         {
             _htmlEncoder = htmlEncoder;
+            
         }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -42,7 +44,9 @@ namespace Frontend.Helpers.TagHelpers
             {
                 Value = Value
             };
-            dd.InnerHtml.SetHtmlContent(Common.RenderTagHelper(noDataTagHelper,"span", new TagHelperAttributeList(), _htmlEncoder));
+            var noDataTagHelperResult = Common.RenderTagHelper(noDataTagHelper, "span", new TagHelperAttributeList(), _htmlEncoder);
+
+            dd.InnerHtml.SetHtmlContent(WebUtility.HtmlDecode(noDataTagHelperResult));
             
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());
