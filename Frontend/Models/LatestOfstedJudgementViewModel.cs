@@ -1,13 +1,17 @@
+using System.ComponentModel;
 using Data.Models;
 using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
-    public class LatestOfstedJudgementViewModel
+    public class LatestOfstedJudgementViewModel : CommonViewModel
     {
-        public Project Project { get; set; }
-        public Academy Academy { get; set; }
-        public AdditionalInformationViewModel AdditionalInformationModel { get; set; }
-        public bool ReturnToPreview { get; set; }
+        public string SchoolName { get; set; }
+        public string InspectionDate { get; set; }
+        public string OverallEffectiveness { get; set; }
+        public string OfstedReport { get; set; }
+        public AdditionalInformationViewModel AdditionalInformation { get; set; }
+        public string OutgoingAcademyUrn { get; set; }
+        public bool IsPreview { get; set; }
     }
 }
