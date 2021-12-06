@@ -43,9 +43,9 @@ namespace Frontend.Helpers.TagHelpers
             {
                 Value = Value
             };
-            var noDataTagHelperResult = Common.RenderTagHelper(noDataTagHelper, "span", new TagHelperAttributeList(), _htmlEncoder);
+            var renderedNoDataTagHelper = Common.RenderTagHelper(noDataTagHelper, "span", new TagHelperAttributeList(), _htmlEncoder);
 
-            dd.InnerHtml.SetHtmlContent(WebUtility.HtmlDecode(noDataTagHelperResult));
+            dd.InnerHtml.SetHtmlContent(WebUtility.HtmlDecode(renderedNoDataTagHelper));
             
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());

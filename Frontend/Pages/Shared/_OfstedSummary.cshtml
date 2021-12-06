@@ -1,7 +1,7 @@
 @using Helpers
 @model LatestOfstedJudgementViewModel
 @{
-    var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{@Model.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
+    var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
 }
 <dl class="govuk-summary-list @(!Model.IsPreview ? "govuk-!-margin-bottom-9" : null)">
     <gds-key-value key="School name" value="@Model.SchoolName" show-action="@Model.IsPreview"/>
