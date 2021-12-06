@@ -7,9 +7,9 @@ using Helpers;
 
 namespace Frontend.Validators.TransferDates
 {
-    public class NotPastDateValidator : AbstractValidator<DateViewModel>
+    public class FutureDateValidator : AbstractValidator<DateViewModel>
     {
-        public NotPastDateValidator()
+        public FutureDateValidator()
         {
             RuleFor(x => x.Date.Day)
                 .Custom((day, context) =>

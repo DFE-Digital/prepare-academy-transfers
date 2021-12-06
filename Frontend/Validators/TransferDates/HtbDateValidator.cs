@@ -12,7 +12,7 @@ namespace Frontend.Validators.TransferDates
                 .SetValidator(new DateValidator());
 
             RuleFor(x => x.HtbDate)
-                .SetValidator(new NotPastDateValidator());
+                .SetValidator(new FutureDateValidator());
             
             RuleFor(x => x.HtbDate.Date.Day)
                 .Custom((day, context) =>

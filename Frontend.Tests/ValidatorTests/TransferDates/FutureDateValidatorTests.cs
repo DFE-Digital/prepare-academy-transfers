@@ -7,13 +7,13 @@ using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.TransferDates
 {
-    public class NotPastDateValidatorTests
+    public class FutureDateValidatorTests
     {
-        private readonly NotPastDateValidator _validator;
+        private readonly FutureDateValidator _validator;
         
-        public NotPastDateValidatorTests()
+        public FutureDateValidatorTests()
         {
-            _validator = new NotPastDateValidator();
+            _validator = new FutureDateValidator();
         }
         
         [Fact]
