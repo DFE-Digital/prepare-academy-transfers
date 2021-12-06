@@ -24,7 +24,6 @@ namespace Frontend.Helpers.TagHelpers
         public GdsKeyValueTagHelper(HtmlEncoder htmlEncoder)
         {
             _htmlEncoder = htmlEncoder;
-            
         }
         
         public override void Process(TagHelperContext context, TagHelperOutput output)
