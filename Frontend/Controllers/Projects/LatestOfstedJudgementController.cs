@@ -3,6 +3,7 @@ using Data;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
+using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,23 +33,7 @@ namespace Frontend.Controllers.Projects
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
-            var model = new LatestOfstedJudgementViewModel
-            {
-                Project = projectInformation.Project,
-                Academy = projectInformation.OutgoingAcademy,
-                ReturnToPreview = returnToPreview,
-                AdditionalInformationModel = new AdditionalInformationViewModel
-                {
-                    AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
-                    HintText =
-                        "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
-                    Urn = projectInformation.Project.Urn,
-                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
-                    ReturnToPreview = returnToPreview
-                }
-            };
-
-            return View(model);
+            return View(BuildViewModel(projectInformation, returnToPreview, false, addOrEditAdditionalInformation));
         }
 
         [HttpPost]
@@ -76,6 +61,32 @@ namespace Frontend.Controllers.Projects
                 "LatestOfstedJudgement",
                 new {id},
                 "additional-information-hint");
+        }
+
+        public static LatestOfstedJudgementViewModel BuildViewModel(GetInformationForProjectResponse projectInformation,
+            bool returnToPreview, bool isPreview = false, bool addOrEditAdditionalInformation = false)
+        {
+            return new LatestOfstedJudgementViewModel
+            {
+                Urn = projectInformation.Project.Urn,
+                ReturnToPreview = returnToPreview,
+                OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn,
+                OutgoingAcademyName = projectInformation.Project.OutgoingAcademyName,
+                SchoolName = projectInformation.OutgoingAcademy.LatestOfstedJudgement.SchoolName,
+                InspectionDate = projectInformation.OutgoingAcademy.LatestOfstedJudgement.InspectionDate,
+                OverallEffectiveness = projectInformation.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness,
+                OfstedReport = projectInformation.OutgoingAcademy.LatestOfstedJudgement.OfstedReport,
+                AdditionalInformation = new AdditionalInformationViewModel
+                {
+                    AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
+                    HintText =
+                        "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
+                    Urn = projectInformation.Project.Urn,
+                    AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
+                    ReturnToPreview = returnToPreview
+                },
+                IsPreview = isPreview
+            };
         }
     }
 }

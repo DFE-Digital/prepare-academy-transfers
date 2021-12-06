@@ -51,6 +51,25 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
         }
         
         [Fact]
+        public void GivenKeyValuesWithHtml_RenderSummaryListRowWithHtml()
+        {
+            var tagHelper = new GdsKeyValueTagHelper(HtmlEncoder.Default)
+            {
+                Key = "My Key",
+                Value = "<a>test</a>"
+            };
+
+            tagHelper.Process(_tagHelperContext, _tagHelperOutput);
+            
+            var expectedContent =
+                "<dt class=\"govuk-summary-list__key\">My Key</dt><dd class=\"govuk-summary-list__value dfe-summary-list__value--width-50\"><span><a>test</a></span></dd>";
+            
+            Assert.Equal("div", _tagHelperOutput.TagName);
+            Assert.Equal("govuk-summary-list__row", _tagHelperOutput.Attributes["class"].Value);
+            Assert.Equal(expectedContent,_tagHelperOutput.Content.GetContent());
+        }
+        
+        [Fact]
         public void GivenShowAction_RenderSummaryListRowWithBlankAction()
         {
             var tagHelper = new GdsKeyValueTagHelper(HtmlEncoder.Default)
