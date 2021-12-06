@@ -33,11 +33,12 @@ Cypress.Commands.add('fillInTextAtIndex', (index, text) =>{
      cy.wrap(option).clear().type(text);
  });
 });
-Cypress.Commands.add('fillInDate', (day, month, year) => {
-    cy.get('[data-test="day"]').clear().type(day)
-    cy.get('[data-test="month"]').clear().type(month)
-    cy.get('[data-test="year"]').clear().type(year)
+Cypress.Commands.add('fillInDate', (dayJs) => {
+    cy.get('[data-test="day"]').clear().type(dayJs.date())
+    cy.get('[data-test="month"]').clear().type(dayJs.month()+1)
+    cy.get('[data-test="year"]').clear().type(dayJs.year())
 })
+
 Cypress.Commands.add('selectCheckbox', (index) => {
     cy.get("[type='checkbox']").then(options => {
         let option = options[index];
