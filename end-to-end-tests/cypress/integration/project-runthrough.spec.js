@@ -166,6 +166,10 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("additionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
+        
+        // Go to preview
+        clickDataTest("preview-htb")
+        clickBackLink()
 
         clickDataTest("generate-htb")
         cy.get("[data-test='download-htb']").should($a => {
