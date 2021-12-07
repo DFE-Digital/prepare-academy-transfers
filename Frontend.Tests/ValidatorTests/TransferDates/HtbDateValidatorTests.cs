@@ -4,6 +4,7 @@ using FluentValidation.TestHelper;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Frontend.Validators.TransferDates;
+using Helpers;
 using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.TransferDates
@@ -42,7 +43,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["TargetDate"] = targetDate.ToShortDateString()
+                    ["TargetDate"] = targetDate.ToShortDate()
                 }
             };
             
@@ -73,7 +74,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["TargetDate"] = targetDate.ToShortDateString()
+                    ["TargetDate"] = targetDate.ToShortDate()
                 }
             };
             

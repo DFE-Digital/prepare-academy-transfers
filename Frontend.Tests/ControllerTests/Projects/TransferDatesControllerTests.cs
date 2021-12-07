@@ -66,11 +66,11 @@ namespace Frontend.Tests.ControllerTests.Projects
             {
                 _foundProject.Dates = new TransferDates
                 {
-                    Htb = DateTime.Now.AddYears(-2).ToShortDateString(),
+                    Htb = DateTime.Now.AddYears(-2).ToShortDate(),
                     HasHtbDate = true,
-                    FirstDiscussed =  DateTime.Now.AddYears(-10).ToShortDateString(),
+                    FirstDiscussed =  DateTime.Now.AddYears(-10).ToShortDate(),
                     HasFirstDiscussedDate = true,
-                    Target =  DateTime.Now.AddYears(-1).ToShortDateString(),
+                    Target =  DateTime.Now.AddYears(-1).ToShortDate(),
                     HasTargetDateForTransfer = true
                 };
                 var result = await _subject.Index("0001");
@@ -390,7 +390,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
                 {
-                    _foundProject.Dates.Htb = DateTime.Now.AddYears(-1).ToShortDateString();
+                    _foundProject.Dates.Htb = DateTime.Now.AddYears(-1).ToShortDate();
 
                     var targetDate = DateTime.Now.AddYears(-2);
                     var vm = new TargetDateViewModel
@@ -501,7 +501,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                                 Urn = "0002",
                                 Dates = new TransferDates
                                 {
-                                    Htb = DateTime.Now.AddYears(1).ToShortDateString()
+                                    Htb = DateTime.Now.AddYears(1).ToShortDate()
                                 }
                             }
                         });
@@ -612,7 +612,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var htbDate = DateTime.Now.AddDays(3);
                     var targetDate = DateTime.Now.AddDays(2);
-                    _foundProject.Dates.Target = targetDate.ToShortDateString();
+                    _foundProject.Dates.Target = targetDate.ToShortDate();
 
                     var vm = new HtbDateViewModel
                     {
