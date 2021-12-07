@@ -27,7 +27,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
-
+using System.Globalization;
 
 
 namespace Frontend
@@ -180,6 +180,16 @@ namespace Frontend
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
                 endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
             });
+            
+            var cultureInfo = new CultureInfo($"en-GB")
+            {
+                NumberFormat =
+                {
+                    CurrencySymbol = "£"
+                }
+            };
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
 
         private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
