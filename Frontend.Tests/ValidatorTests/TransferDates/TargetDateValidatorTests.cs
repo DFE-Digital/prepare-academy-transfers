@@ -41,7 +41,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = htbDate.ToString("dd/MM/yyyy")
+                    ["HtbDate"] = htbDate.ToShortDate()
                 }
             };
             
