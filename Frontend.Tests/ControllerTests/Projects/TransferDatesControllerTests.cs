@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Data;
 using Data.Models;
@@ -9,6 +10,7 @@ using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Frontend.Tests.Helpers;
+using Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -360,7 +362,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.TargetDatePost(vm);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Dates.Target == targetDate.ToShortDateString())));
+                        r.Update(It.Is<Project>(project => project.Dates.Target == targetDate.ToShortDate())));
                 }
 
                 [Fact]

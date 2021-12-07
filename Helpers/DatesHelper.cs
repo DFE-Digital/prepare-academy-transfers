@@ -7,7 +7,7 @@ namespace Helpers
 {
     public static class DatesHelper
     {
-        public static string DateTimeToDateString(DateTime dateTime)
+        public static string ToShortDate(this DateTime dateTime)
         {
             return dateTime.ToString("dd/MM/yyyy");
         }

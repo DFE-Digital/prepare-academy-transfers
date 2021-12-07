@@ -181,27 +181,6 @@ namespace Frontend
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
                 endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
             });
-            
-            var cultureInfo = new CultureInfo($"en-GB")
-            {
-                NumberFormat =
-                {
-                    CurrencySymbol = "£"
-                }
-            };
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
-            CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-            
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en-GB"),
-                // Formatting numbers, dates, etc.
-                SupportedCultures = new[]{ new CultureInfo("en-GB")},
-                // UI strings that we have localized.
-                SupportedUICultures = new[]{ new CultureInfo("en-GB")},
-            });
         }
 
         private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
