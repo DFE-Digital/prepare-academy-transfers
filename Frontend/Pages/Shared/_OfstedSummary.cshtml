@@ -1,0 +1,30 @@
+@using Helpers
+@model LatestOfstedJudgementViewModel
+@{
+    var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
+}
+<dl class="govuk-summary-list @(!Model.IsPreview ? "govuk-!-margin-bottom-9" : null)">
+    <gds-key-value key="School name" value="@Model.SchoolName" show-action="@Model.IsPreview"/>
+    <gds-key-value key="Ofsted inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.InspectionDate)" show-action="@Model.IsPreview"/>
+    <gds-key-value key="Overall effectiveness" value='@Model.OverallEffectiveness' show-action="@Model.IsPreview"/>
+    <gds-key-value key="Ofsted report" value="@ofstedReportElement" show-action="@Model.IsPreview"/>
+    @if (Model.IsPreview)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Additional information
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <stringsummary value="@Model.AdditionalInformation.AdditionalInformation"></stringsummary>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link"
+                   asp-controller="LatestOfstedJudgement" asp-action="Index"
+                   asp-route-id="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+                   asp-route-returnToPreview="true">
+                    Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
+                </a>
+            </dd>
+        </div>
+    }
+</dl>
