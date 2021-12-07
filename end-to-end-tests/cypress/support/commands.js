@@ -33,6 +33,7 @@ Cypress.Commands.add('fillInTextAtIndex', (index, text) =>{
      cy.wrap(option).clear().type(text);
  });
 });
+
 Cypress.Commands.add('fillInDate', (dayJs) => {
     cy.get('[data-test="day"]').clear().type(dayJs.date())
     cy.get('[data-test="month"]').clear().type(dayJs.month()+1)
