@@ -583,7 +583,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.HtbDatePost(vm);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Dates.Htb == expectedDate.ToShortDateString())));
+                        r.Update(It.Is<Project>(project => project.Dates.Htb == expectedDate.ToShortDate())));
                 }
 
                 [Fact]

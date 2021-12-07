@@ -28,6 +28,7 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Globalization;
+using System.Threading;
 using Microsoft.AspNetCore.Localization;
 
 
@@ -211,6 +212,10 @@ namespace Frontend
                 services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
                 services.AddSingleton<IProjects, TramsProjectsRepository>();
             }
+            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-GB");
+            ///home/runner/work/academy-transfers-api/academy-transfers-api/Frontend.Tests/ValidatorTests/TransferDates/HtbDateValidatorTests.cs(51,0)
+            ///  Frontend.Tests.ControllerTests.Projects.TransferDatesControllerTests+HtbDateTests+PostTests.GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate
         }
 
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
