@@ -188,6 +188,8 @@ namespace Frontend
                     CurrencySymbol = "£"
                 }
             };
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+            CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
