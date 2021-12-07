@@ -28,6 +28,7 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 
 namespace Frontend
@@ -192,6 +193,15 @@ namespace Frontend
             CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-GB"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = new[]{ new CultureInfo("en-GB")},
+                // UI strings that we have localized.
+                SupportedUICultures = new[]{ new CultureInfo("en-GB")},
+            });
         }
 
         private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
