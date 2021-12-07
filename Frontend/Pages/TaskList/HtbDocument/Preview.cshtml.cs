@@ -5,7 +5,6 @@ using Frontend.Models;
 using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
-using Frontend.Models.Forms;
 using Frontend.Models.Rationale;
 using Frontend.Models.TransferDates;
 using Frontend.Services.Interfaces;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages.TaskList.HtbDocument
 {
-    //todo: remove models and add view models
     public class Preview : ProjectPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
@@ -28,7 +26,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
-
+        public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
         {
@@ -107,6 +105,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
             GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
 
             PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
+
+            LatestOfstedJudgementViewModel = LatestOfstedJudgementController.BuildViewModel(response, true, true);
 
             return Page();
         }

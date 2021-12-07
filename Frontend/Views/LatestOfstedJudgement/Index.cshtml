@@ -8,15 +8,15 @@
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Project.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back to task list</a>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
     </backtopreview>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.Project.OutgoingAcademyUrn
+            URN @Model.OutgoingAcademyUrn
         </span>
         <h1 class="govuk-heading-l">Latest Ofsted judgement</h1>
         <div class="govuk-inset-text">
@@ -28,53 +28,13 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.SchoolName)
-                </dt>
-                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    <displaynodataforemptystring value="@Model.Academy.LatestOfstedJudgement.SchoolName)"></displaynodataforemptystring>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.InspectionDate)
-                </dt>
-                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    <displaynodataforemptystring value="@DatesHelper.DateStringToGovUkDate(Model.Academy.LatestOfstedJudgement.InspectionDate)"></displaynodataforemptystring>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.OverallEffectiveness)
-                </dt>
-                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    <displaynodataforemptystring value="@Model.Academy.LatestOfstedJudgement.OverallEffectiveness"></displaynodataforemptystring>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    @Html.DisplayNameFor(m => m.Academy.LatestOfstedJudgement.OfstedReport)
-                </dt>
-                <dd class="govuk-summary-list__value dfe-summary-list__value--width-50">
-                    @if (string.IsNullOrEmpty(Model.Academy.LatestOfstedJudgement.OfstedReport))
-                    {
-                        <span>No data</span>
-                    }
-                    else
-                    {
-                        <a class="govuk-link" href="@Model.Academy.LatestOfstedJudgement.OfstedReport" rel="noreferrer noopener" target="_blank">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>
-                    }
-                </dd>
-            </div>
-        </dl>
+        <partial name="_OfstedSummary" for="@Model"></partial>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformationModel"/>
-    @if (!Model.AdditionalInformationModel.AddOrEditAdditionalInformation)
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
+    @if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
     {
         <div class="govuk-grid-column-two-thirds">
-            <form asp-controller="Project" asp-route-id="@Model.Project.Urn">
+            <form asp-controller="Project" asp-route-id="@Model.Urn">
                 <button class="govuk-button" data-module="govuk-button">
                     Confirm and continue
                 </button>

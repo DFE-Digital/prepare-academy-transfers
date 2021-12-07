@@ -109,7 +109,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewResponse = Assert.IsType<ViewResult>(response);
                     var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
 
-                    Assert.Equal(_foundProject, viewModel.Project);
+                    Assert.Equal(_foundProject.Urn, viewModel.Urn);
                 }
 
                 [Fact]
@@ -120,7 +120,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewResponse = Assert.IsType<ViewResult>(response);
                     var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
 
-                    Assert.Equal(_foundAcademy, viewModel.Academy);
+                    Assert.Equal(_foundAcademy.Urn, viewModel.OutgoingAcademyUrn);
                 }
 
                 [Fact]
@@ -141,7 +141,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         ControllerTestHelpers.AssertViewModelFromResult<LatestOfstedJudgementViewModel>(response);
 
                     Assert.True(viewModel.ReturnToPreview);
-                    Assert.True(viewModel.AdditionalInformationModel.ReturnToPreview);
+                    Assert.True(viewModel.AdditionalInformation.ReturnToPreview);
                 }
             }
 
@@ -168,9 +168,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var viewResponse = Assert.IsType<ViewResult>(response);
                     var viewModel = Assert.IsType<LatestOfstedJudgementViewModel>(viewResponse.Model);
 
-                    Assert.Equal(_projectUrn, viewModel.AdditionalInformationModel.Urn);
-                    Assert.False(viewModel.AdditionalInformationModel.AddOrEditAdditionalInformation);
-                    Assert.Equal("some info", viewModel.AdditionalInformationModel.AdditionalInformation);
+                    Assert.Equal(_projectUrn, viewModel.AdditionalInformation.Urn);
+                    Assert.False(viewModel.AdditionalInformation.AddOrEditAdditionalInformation);
+                    Assert.Equal("some info", viewModel.AdditionalInformation.AdditionalInformation);
                 }
 
                 [Fact]
