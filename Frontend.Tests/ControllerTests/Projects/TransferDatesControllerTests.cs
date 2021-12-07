@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
@@ -63,11 +64,11 @@ namespace Frontend.Tests.ControllerTests.Projects
             {
                 _foundProject.Dates = new TransferDates
                 {
-                    Htb = "01/01/2000",
+                    Htb = DateTime.Now.AddYears(-2).ToShortDateString(),
                     HasHtbDate = true,
-                    FirstDiscussed = "02/02/1999",
+                    FirstDiscussed =  DateTime.Now.AddYears(-10).ToShortDateString(),
                     HasFirstDiscussedDate = true,
-                    Target = "01/01/2020",
+                    Target =  DateTime.Now.AddYears(-1).ToShortDateString(),
                     HasTargetDateForTransfer = true
                 };
                 var result = await _subject.Index("0001");
@@ -338,13 +339,10 @@ namespace Frontend.Tests.ControllerTests.Projects
 
             public class PostTests : TargetDateTests
             {
-                [Theory]
-                [InlineData("01", "01", "2020", "01/01/2020")]
-                [InlineData("20", "02", "2021", "20/02/2021")]
-                [InlineData("2", "2", "2021", "02/02/2021")]
-                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate(string day, string month,
-                    string year, string expectedDate)
+                [Fact]
+                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate()
                 {
+                    var targetDate = DateTime.Today;
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0001",
@@ -352,9 +350,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = day,
-                                Month = month,
-                                Year = year
+                                Day = targetDate.Day.ToString(),
+                                Month =  targetDate.Month.ToString(),
+                                Year =  targetDate.Year.ToString(),
                             }
                         }
                     };
@@ -362,12 +360,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.TargetDatePost(vm);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Dates.Target == expectedDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.Target == targetDate.ToShortDateString())));
                 }
 
                 [Fact]
                 public async void GivenUrnAndFullDate_RedirectsToTheSummaryPage()
                 {
+                    var targetDate = DateTime.Today;
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0001",
@@ -375,9 +374,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString()
                             }
                         }
                     };
@@ -389,8 +388,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
                 {
-                    _foundProject.Dates.Htb = "12/10/2020";
+                    _foundProject.Dates.Htb = DateTime.Now.AddYears(-1).ToShortDateString();
 
+                    var targetDate = DateTime.Now.AddYears(-2);
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0001",
@@ -398,9 +398,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "11",
-                                Month = "01",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString()
                             }
                         }
                     };
@@ -415,6 +415,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
+                    var targetDate = DateTime.Now.AddYears(-1);
                     var vm = new TargetDateViewModel
                     {
                         Urn = ErrorWithGetByUrn,
@@ -422,9 +423,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "11",
-                                Month = "01",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString()
                             }
                         }
                     };
@@ -439,6 +440,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
+                    var targetDate = DateTime.Now.AddYears(-1);
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0001",
@@ -446,9 +448,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "13",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString()
                             }
                         },
                         ReturnToPreview = true
@@ -463,6 +465,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectToPreviewPage()
                 {
+                    var targetDate = DateTime.Today;
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0001",
@@ -470,9 +473,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString(),
                             }
                         },
                         ReturnToPreview = true
@@ -496,11 +499,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                                 Urn = "0002",
                                 Dates = new TransferDates
                                 {
-                                    Htb = "01/01/2022"
+                                    Htb = DateTime.Now.AddYears(1).ToShortDateString()
                                 }
                             }
                         });
-                    
+
+                    var targetDate = DateTime.Now.AddYears(-1);
                     var vm = new TargetDateViewModel
                     {
                         Urn = "0002",
@@ -508,9 +512,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = targetDate.Day.ToString(),
+                                Month = targetDate.Month.ToString(),
+                                Year = targetDate.Year.ToString(),
                             }
                         },
                         ReturnToPreview = true
@@ -556,13 +560,10 @@ namespace Frontend.Tests.ControllerTests.Projects
 
             public class PostTests : HtbDateTests
             {
-                [Theory]
-                [InlineData("01", "01", "2020", "01/01/2020")]
-                [InlineData("20", "02", "2021", "20/02/2021")]
-                [InlineData("2", "2", "2021", "02/02/2021")]
-                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate(string day, string month,
-                    string year, string expectedDate)
+                [Fact]
+                public async void GivenUrnAndFullDate_UpdatesTheProjectWithTheCorrectDate()
                 {
+                    var expectedDate = DateTime.Now.AddYears(1);
                     var vm = new HtbDateViewModel
                     {
                         Urn = "0001",
@@ -570,9 +571,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = day,
-                                Month = month,
-                                Year = year
+                                Day = expectedDate.Day.ToString(),
+                                Month = expectedDate.Month.ToString(),
+                                Year = expectedDate.Year.ToString()
                             }
                         }
                     };
@@ -580,12 +581,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                     await _subject.HtbDatePost(vm);
 
                     _projectsRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Dates.Htb == expectedDate)));
+                        r.Update(It.Is<Project>(project => project.Dates.Htb == expectedDate.ToShortDateString())));
                 }
 
                 [Fact]
                 public async void GivenUrnAndFullDate_RedirectsToTheSummaryPage()
                 {
+                    var htbDate = DateTime.Now;
                     var vm = new HtbDateViewModel
                     {
                         Urn = "0001",
@@ -593,9 +595,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         }
                     };
@@ -604,9 +606,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenABDateBeforeTransferDate_SetErrorOnTheModel()
+                public async void GivenABDateAfterTransferDate_SetErrorOnTheModel()
                 {
-                    _foundProject.Dates.Target = "12/10/2020";
+                    var htbDate = DateTime.Now.AddDays(3);
+                    var targetDate = DateTime.Now.AddDays(2);
+                    _foundProject.Dates.Target = targetDate.ToShortDateString();
 
                     var vm = new HtbDateViewModel
                     {
@@ -615,9 +619,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "13",
-                                Month = "10",
-                                Year = "2020"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         }
                     };
@@ -627,13 +631,13 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     Assert.False(_subject.ModelState.IsValid);
                     Assert.Equal(1, _subject.ModelState.ErrorCount);
-                    Assert.Equal("The Advisory Board date must be on or before the target date for the transfer", 
-                        _subject.ModelState["HtbDate.Date.Day"].Errors.First().ErrorMessage);
+                    Assert.Single(_subject.ModelState["HtbDate.Date.Day"].Errors);
                 }
 
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
+                    var htbDate = DateTime.Today;
                     var vm = new HtbDateViewModel
                     {
                         Urn = ErrorWithGetByUrn,
@@ -641,9 +645,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "13",
-                                Month = "10",
-                                Year = "2020"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         }
                     };
@@ -658,6 +662,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUpdatenReturnsError_DisplayErrorPage()
                 {
+                    var htbDate = DateTime.Today;
                     _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
                         new RepositoryResult<Project>
                         {
@@ -674,9 +679,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2000"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         }
                     };
@@ -691,6 +696,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignItToTheViewModel()
                 {
+                    var htbDate = DateTime.Today;
                     var vm = new HtbDateViewModel
                     {
                         Urn = "0001",
@@ -698,9 +704,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         },
                         ReturnToPreview = true
@@ -715,6 +721,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_RedirectToPreviewPage()
                 {
+                    var htbDate = DateTime.Today;
                     var vm = new HtbDateViewModel
                     {
                         Urn = "0001",
@@ -722,9 +729,9 @@ namespace Frontend.Tests.ControllerTests.Projects
                         {
                             Date = new DateInputViewModel
                             {
-                                Day = "01",
-                                Month = "01",
-                                Year = "2020"
+                                Day = htbDate.Day.ToString(),
+                                Month = htbDate.Month.ToString(),
+                                Year = htbDate.Year.ToString()
                             }
                         },
                         ReturnToPreview = true
