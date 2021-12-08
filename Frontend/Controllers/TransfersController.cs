@@ -200,7 +200,8 @@ namespace Frontend.Controllers
                 return RedirectToAction("IncomingTrust");
             }
 
-            var result = await _trustsRepository.SearchTrusts(query);
+            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
+            var result = await _trustsRepository.SearchTrusts(query, outgoingTrustId);
 
             if (!result.IsValid)
             {
