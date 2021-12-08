@@ -6,7 +6,7 @@ namespace Data.Mock
 {
     public class MockTrustsRepository : ITrusts
     {
-        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "")
+        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "", string outgoingTrustId = "")
         {
             var result = new RepositoryResult<List<TrustSearchResult>>
             {

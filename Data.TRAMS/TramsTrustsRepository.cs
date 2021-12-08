@@ -24,7 +24,7 @@ namespace Data.TRAMS
             _trustMapper = trustMapper;
         }
 
-        public async Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "")
+        public async Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "", string outgoingTrustId = "")
         {
             var url = $"trusts?groupName={searchQuery}&ukprn={searchQuery}&companiesHouseNumber={searchQuery}";
             using var response = await _httpClient.GetAsync(url);
@@ -37,7 +37,8 @@ namespace Data.TRAMS
             var apiResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<List<TramsTrustSearchResult>>(apiResponse);
 
-            var mappedResult = result.Where(t => !string.IsNullOrEmpty(t.Ukprn))
+            var mappedResult = result.Where(t => !string.IsNullOrEmpty(t.Ukprn) && 
+                                                 t.Ukprn != outgoingTrustId)
                 .Select(r => _searchResultMapper.Map(r)).ToList();
             
             return new RepositoryResult<List<TrustSearchResult>>
