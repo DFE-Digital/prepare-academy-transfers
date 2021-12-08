@@ -26,6 +26,8 @@ describe('Tests to ensure correct transfer functionality', () => {
         cy.get('.govuk-radios__item input').click()
         cy.get('.govuk-button').click()
         cy.get('.govuk-input').type(academyId+'{enter}')
+        cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', ' We could not find any trusts matching your search criteria ').should('be.visible');
+        cy.get('#query-error').should('have.text', 'We could not find any trusts matching your search criteria').should('be.visible');
         // Once 81405 is fixed, we should add any error messaging or assertions below
         // to ensure a user cannot transfer to the same trust
         cy.get('.govuk-radios__item input').click()
