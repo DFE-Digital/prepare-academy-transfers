@@ -83,6 +83,25 @@ namespace Data.TRAMS.Tests
                 Assert.Equal("Mapped 1", response.Result[0].Ukprn);
                 Assert.Equal("Mapped 2", response.Result[1].Ukprn);
             }
+            
+            [Fact]
+            public async void GivenMultipleSearchResultsWithTrustToExclude_ReturnsTheMappedResultWithTheTrustExcluded()
+            {
+                HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
+
+                _trustSearchResultsMapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>()))
+                    .Returns<TramsTrustSearchResult>(result =>
+                        new TrustSearchResult
+                        {
+                            Ukprn = $"Mapped {result.Ukprn}",
+                            TrustName = $"Mapped {result.GroupName}"
+                        });
+
+                var response = await _subject.SearchTrusts("query", "2");
+
+                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
+                Assert.Single(response.Result);
+            }
 
             [Fact]
             public async void GivenNonSuccessCode_ReturnsApiError()

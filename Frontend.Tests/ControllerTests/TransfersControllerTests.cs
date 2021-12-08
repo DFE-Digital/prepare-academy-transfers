@@ -80,7 +80,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public void GivenErrorMessageExists_SetErrorInViewData()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                _trustsRepository.Setup(r => r.SearchTrusts("test", ""))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>
                         {
@@ -105,7 +105,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenSearchReturnsNoTrusts_RedirectToTrustNamePageWithAnError()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("Meow"))
+                _trustsRepository.Setup(r => r.SearchTrusts("Meow", ""))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>()});
                 var response = await _subject.TrustSearch("Meow");
@@ -118,7 +118,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenSearchReturnsTrustWithNoAcademies_RedirectToTrustNamePageWithAnError()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("Meow"))
+                _trustsRepository.Setup(r => r.SearchTrusts("Meow", ""))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult
                         {
@@ -136,7 +136,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenRepositoryReturnsAnError_DisplayErrorPage()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", "")).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Error = new RepositoryResultBase.RepositoryError
@@ -159,7 +159,7 @@ namespace Frontend.Tests.ControllerTests
                 const string trustId = "1234";
                 const string trustTwoId = "4321";
 
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", "")).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>
@@ -173,7 +173,7 @@ namespace Frontend.Tests.ControllerTests
                 var result = await _subject.TrustSearch("Trust name");
 
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
-                _trustsRepository.Verify(r => r.SearchTrusts("Trust name"));
+                _trustsRepository.Verify(r => r.SearchTrusts("Trust name", ""));
             }
 
             [Fact]
@@ -182,7 +182,7 @@ namespace Frontend.Tests.ControllerTests
                 const string trustId = "1234";
                 const string trustTwoId = "4321";
 
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", "")).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>
@@ -203,7 +203,7 @@ namespace Frontend.Tests.ControllerTests
                 const string trustId = "1234";
                 const string trustTwoId = "4321";
 
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", "")).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>
@@ -523,7 +523,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", null)).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>()
@@ -538,7 +538,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenErrorMessageExists_SetErrorInViewData()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                _trustsRepository.Setup(r => r.SearchTrusts("test", null))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
                 
@@ -552,7 +552,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenQuery_PutsQueryIntoTheViewData()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                _trustsRepository.Setup(r => r.SearchTrusts("test", null))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
                 
@@ -565,7 +565,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("test"))
+                _trustsRepository.Setup(r => r.SearchTrusts("test", null))
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult> { new TrustSearchResult() }});
                 
@@ -578,7 +578,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenRepositoryReturnsAnError_RedirectToTrustNamePageWithAnError()
             {
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", null)).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Error = new RepositoryResultBase.RepositoryError
@@ -601,7 +601,7 @@ namespace Frontend.Tests.ControllerTests
                 var trustId = "1234";
                 var trustTwoId = "4321";
 
-                _trustsRepository.Setup(r => r.SearchTrusts(It.IsAny<string>())).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts(It.IsAny<string>(), null)).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>
@@ -614,7 +614,7 @@ namespace Frontend.Tests.ControllerTests
                 var result = await _subject.SearchIncomingTrust("Trust name");
 
                 AssertTrustsAreAssignedToTheView(result, trustId, trustTwoId);
-                _trustsRepository.Verify(r => r.SearchTrusts("Trust name"));
+                _trustsRepository.Verify(r => r.SearchTrusts("Trust name", null));
             }
 
             [Fact]
@@ -623,7 +623,7 @@ namespace Frontend.Tests.ControllerTests
                 const string trustId = "1234";
                 const string trustTwoId = "4321";
 
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name")).ReturnsAsync(
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", null)).ReturnsAsync(
                     new RepositoryResult<List<TrustSearchResult>>
                     {
                         Result = new List<TrustSearchResult>
