@@ -34,7 +34,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("Please enter a future date");
+                .WithErrorMessage("You must enter a future date");
         }
         
         [Fact]
