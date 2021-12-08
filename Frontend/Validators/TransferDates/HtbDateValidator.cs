@@ -8,6 +8,8 @@ namespace Frontend.Validators.TransferDates
     {
         public HtbDateValidator()
         {
+            CascadeMode = CascadeMode.Stop;
+            
             RuleFor(x => x.HtbDate)
                 .SetValidator(new DateValidator());
 

@@ -15,10 +15,14 @@ namespace Frontend.Validators.TransferDates
                 .Custom((day, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
+                    if (dateVm.UnknownDate)
+                    {
+                       return;
+                    }
                     DateTime.TryParseExact(dateVm.DateInputAsString(), "dd/MM/yyyy", null, DateTimeStyles.None, out var dateTime);
                     if (dateTime.Date < DateTime.Today)
                     {
-                        context.AddFailure("Please enter a future date");
+                        context.AddFailure("You must enter a future date");
                     }
                 });
         }
