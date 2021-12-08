@@ -27,7 +27,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
-
+using System.Globalization;
+using System.Threading;
+using Microsoft.AspNetCore.Localization;
 
 
 namespace Frontend

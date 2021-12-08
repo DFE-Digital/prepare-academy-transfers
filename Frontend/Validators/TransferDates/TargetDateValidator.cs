@@ -12,6 +12,9 @@ namespace Frontend.Validators.TransferDates
             
             RuleFor(x => x.TargetDate)
                 .SetValidator(new DateValidator());
+            
+            RuleFor(x => x.TargetDate)
+                .SetValidator(new FutureDateValidator());
 
             RuleFor(x => x.TargetDate.Date.Day)
                 .Custom((day, context) =>

@@ -1,8 +1,10 @@
+using System;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Frontend.Validators.TransferDates;
+using Helpers;
 using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.TransferDates
@@ -20,17 +22,19 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         }
 
         [Fact]
-        public async void GivenTargetDateAndHtbDateLessThanTargetDate_ShouldGiveError()
+        public async void GivenHtbDateGreaterThanTargetDate_ShouldGiveError()
         {
+            var htbDate = DateTime.Now.AddMonths(2);
+            var targetDate = DateTime.Now.AddMonths(1);
             var vm = new HtbDateViewModel
             {
                 HtbDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = "01",
-                        Month = "01",
-                        Year = "2022"
+                        Day = htbDate.Day.ToString(),
+                        Month = htbDate.Month.ToString(),
+                        Year = htbDate.Year.ToString(),
                     }
                 }
             };
@@ -39,7 +43,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["TargetDate"] = "01/01/2000"
+                    ["TargetDate"] = targetDate.ToShortDate()
                 }
             };
             
@@ -49,17 +53,19 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void GivenTargetDateAndHtbDateGreaterThanTargetDate_ShouldNotGiveError()
+        public async void GivenTargetDateGreaterThanHtbDate_ShouldNotGiveError()
         {
+            var htbDate = DateTime.Now.AddMonths(1);
+            var targetDate = DateTime.Now.AddMonths(2);
             var vm = new HtbDateViewModel
             {
                 HtbDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = "01",
-                        Month = "01",
-                        Year = "2000"
+                        Day = htbDate.Day.ToString(),
+                        Month = htbDate.Month.ToString(),
+                        Year = htbDate.Year.ToString(),
                     }
                 }
             };
@@ -68,7 +74,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["TargetDate"] = "01/01/2001"
+                    ["TargetDate"] = targetDate.ToShortDate()
                 }
             };
             
@@ -82,15 +88,16 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         [InlineData(" ")]
         public async void GivenHtbDateAndNoTargetDate_ShouldNotGiveError(string targetDate)
         {
+            var htbDate = DateTime.Today;
             var vm = new HtbDateViewModel
             {
                 HtbDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = "01",
-                        Month = "01",
-                        Year = "2000"
+                        Day = htbDate.Day.ToString(),
+                        Month = htbDate.Month.ToString(),
+                        Year = htbDate.Year.ToString(),
                     }
                 }
             };

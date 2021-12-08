@@ -3,7 +3,7 @@ using Helpers;
 
 namespace Frontend.Models.TransferDates
 {
-    public class DateViewModel : CommonViewModel
+    public class DateViewModel
     {
         public DateInputViewModel Date { get; set; }
         public bool UnknownDate { get; set; }

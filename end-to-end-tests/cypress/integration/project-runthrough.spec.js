@@ -87,13 +87,13 @@ describe("Creating and editing an academy transfer", function () {
         // Dates
         clickDataTest("transfer-dates")
         clickDataTest("first-discussed")
-        cy.fillInDate("12", "12", "2020")
+        cy.fillInDate(Cypress.dayjs().add(1,'M'))
         submit();
         clickDataTest("target-date")
-        cy.fillInDate("12", "12", "2020")
+        cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
         clickDataTest("htb-date")
-        cy.fillInDate("12", "12", "2020")
+        cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
         clickBackLink()
 
