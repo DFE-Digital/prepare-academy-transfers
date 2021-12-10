@@ -6,7 +6,8 @@ namespace Data.Mock
 {
     public class MockTrustsRepository : ITrusts
     {
-        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "", string outgoingTrustId = "")
+        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "",
+            string outgoingTrustId = "")
         {
             var result = new RepositoryResult<List<TrustSearchResult>>
             {
@@ -30,7 +31,26 @@ namespace Data.Mock
 
         public Task<RepositoryResult<Trust>> GetByUkprn(string ukprn)
         {
-            throw new System.NotImplementedException();
+            var result = new RepositoryResult<Trust>
+            {
+                Result = new Trust()
+                {
+                    Name = "Trust Name",
+                    Ukprn = "ukprn",
+                    Address = new List<string>() {"line1", "line2"},
+                    Academies = new List<Academy>()
+                    {
+                        new Academy()
+                        {
+                            Name = "Academy name",
+                            Urn = "Academy Urn",
+                            Ukprn = "Academy Ukprn"
+                        }
+                    }
+                }
+            };
+
+            return Task.FromResult(result);
         }
     }
 }
