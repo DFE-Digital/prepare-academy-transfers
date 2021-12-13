@@ -1,4 +1,4 @@
-@model ProjectViewModel
+@model DownloadViewModel
 
 @{
     ViewBag.Title = "Download project template";
@@ -7,12 +7,12 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Project.Urn">Back</a>
+    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-9">
-        <span class="govuk-caption-l">@Model.Project.OutgoingAcademyName</span>
+        <span class="govuk-caption-l">@Model.OutgoingAcademyName</span>
         <h1 class="govuk-heading-xl">
             Download project template
         </h1>
@@ -29,8 +29,8 @@
             </div>
             <div class="dfe-c-attachment__details">
                 <h2 class="dfe-c-attachment__title">
-                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Project.Urn" data-test="download-htb">
-                        @Model.Project.OutgoingAcademyName - Project template
+                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-action="GenerateDocument" asp-route-id="@Model.Urn" data-test="download-htb">
+                        @Model.OutgoingAcademyName - Project template
                     </a>
                 </h2>
                 <p class="dfe-c-attachment__metadata">

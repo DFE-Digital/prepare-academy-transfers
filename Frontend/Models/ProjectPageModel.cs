@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Models
 {
+    //todo: Remove class
     public class ProjectPageModel : PageModel
     {
         public EducationPerformance EducationPerformance { get; set; }

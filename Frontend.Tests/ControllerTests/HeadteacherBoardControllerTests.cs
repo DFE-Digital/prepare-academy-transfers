@@ -73,9 +73,9 @@ namespace Frontend.Tests.ControllerTests
             {
                 var response = await _subject.Download(_projectUrn);
                 var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<ProjectViewModel>(viewResponse.Model);
+                var viewModel = Assert.IsType<DownloadViewModel>(viewResponse.Model);
 
-                Assert.Equal(_foundProject, viewModel.Project);
+                Assert.Equal(_foundProject.Urn, viewModel.Urn);
             }
 
             [Fact]
