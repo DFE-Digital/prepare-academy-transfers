@@ -71,7 +71,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToPage("AcademyAndTrustInformationIndex", new {vm.Urn});
+            return RedirectToPage("/Projects/AcademyAndTrustInformation/Index", new {vm.Urn});
         }
     }
 }
