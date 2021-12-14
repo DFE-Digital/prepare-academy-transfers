@@ -3,14 +3,12 @@ using Data;
 using Data.Models.Projects;
 using Frontend.ExtensionMethods;
 using Frontend.Models;
-using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Frontend.Pages.Projects
+namespace Frontend.Pages.Projects.AcademyAndTrustInformation
 {
-    public class AcademyAndTrustInformationIndex : CommonPageModel
+    public class Index : CommonPageModel
     {
         public string OutgoingAcademyUrn { get; set; }
         public TransferAcademyAndTrustInformation.RecommendationResult Recommendation { get; set; }
@@ -24,7 +22,7 @@ namespace Frontend.Pages.Projects
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public AcademyAndTrustInformationIndex(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
+        public Index(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
         {
             _projectsRepository = projectsRepository;
             _getInformationForProject = getInformationForProject;
