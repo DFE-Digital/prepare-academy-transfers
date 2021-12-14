@@ -169,8 +169,12 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     
                     var result = await _subject.Recommendation(vm);
-            
-                    ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
+
+                    var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("Urn", ProjectUrn)
+                    });
+                    ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/AcademyAndTrustInformation/{nameof(Pages.Projects.AcademyAndTrustInformation.Index)}", routeValues);
                 }
             
                 [Fact]
