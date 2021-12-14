@@ -131,12 +131,6 @@ namespace Frontend.Tests.PagesTests.TaskList
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()
             {
-                // var foundProject = new Project {Urn = "1234"};
-                // ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                //     new RepositoryResult<Project>
-                //     {
-                //         Result = foundProject
-                //     });
                 const string additionalInformation = "some additional info";
 
                 var response = await _subject.OnPostAsync("1234", additionalInformation, false);
@@ -144,7 +138,7 @@ namespace Frontend.Tests.PagesTests.TaskList
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage5Performance", redirectToPageResponse.PageName);
                 Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, FoundInformationForProject.Project.KeyStage5PerformanceAdditionalInformation);
+                Assert.Equal(additionalInformation, FoundProjectFromRepo.KeyStage5PerformanceAdditionalInformation);
             }
 
             [Fact]
