@@ -18,16 +18,16 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public string IncomingTrustName { get; set; }
         public string TargetDate { get; set; }
         public string FirstDiscussedDate { get; set; }
-        
+
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public Index(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
+        public Index(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
             _getInformationForProject = getInformationForProject;
         }
-        
+
         public async Task<IActionResult> OnGetAsync(string urn)
         {
             var projectInformation = await _getInformationForProject.Execute(urn);
@@ -36,7 +36,7 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
             {
                 return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
-            
+
             OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name;
             Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation;
             Author = projectInformation.Project.AcademyAndTrustInformation.Author;

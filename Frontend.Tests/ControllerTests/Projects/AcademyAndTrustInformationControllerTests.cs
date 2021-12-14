@@ -61,23 +61,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         });
             }
 
-            // [Fact]
-            // public async void GivenUrn_FetchesProjectFromTheRepository()
-            // {
-            //     await _subject.Index(ProjectUrn);
-            //
-            //     _getInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
-            // }
-            //
-            // [Fact]
-            // public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            // {
-            //     var response = await _subject.Index(ProjectErrorUrn);
-            //     var viewResult = Assert.IsType<ViewResult>(response);
-            //
-            //     Assert.Equal("ErrorPage", viewResult.ViewName);
-            //     Assert.Equal("Error", viewResult.Model);
-            // }
+            
         }
 
         public class RecommendationTests : AcademyAndTrustInformationControllerTests

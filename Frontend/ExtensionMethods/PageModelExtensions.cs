@@ -19,8 +19,14 @@ namespace Frontend.ExtensionMethods
             var viewDataDictionary = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary()) {
                 Model = model
             };
-            foreach (var kvp in pageModel.ViewData)
+            
+            if (pageModel.ViewData != null)
+            {
+                foreach (var kvp in pageModel.ViewData)
+                {
                     viewDataDictionary.Add(kvp);
+                }
+            }
 
             return new ViewResult {
                 ViewName = viewName,
