@@ -1,9 +1,16 @@
-﻿using Data.Models.Projects;
+﻿using System.Threading.Tasks;
+using Data;
+using Data.Models.Projects;
+using Frontend.ExtensionMethods;
+using Frontend.Models;
+using Frontend.Models.AcademyAndTrustInformation;
+using Frontend.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects
 {
-    public class AcademyAndTrustInformationIndex : PageModel
+    public class AcademyAndTrustInformationIndex : CommonPageModel
     {
         public string OutgoingAcademyUrn { get; set; }
         public TransferAcademyAndTrustInformation.RecommendationResult Recommendation { get; set; }
@@ -14,9 +21,36 @@ namespace Frontend.Pages.Projects
         public string TargetDate { get; set; }
         public string FirstDiscussedDate { get; set; }
         
-        public void OnGet()
+        private readonly IGetInformationForProject _getInformationForProject;
+        private readonly IProjects _projectsRepository;
+
+        public AcademyAndTrustInformationIndex(IProjects projectsRepository, IGetInformationForProject getInformationForProject)
         {
+            _projectsRepository = projectsRepository;
+            _getInformationForProject = getInformationForProject;
+        }
+        
+        public async Task<IActionResult> OnGetAsync(string urn)
+        {
+            var projectInformation = await _getInformationForProject.Execute(urn);
+
+            if (!projectInformation.IsValid)
+            {
+                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
+            }
             
+            OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name;
+            Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation;
+            Author = projectInformation.Project.AcademyAndTrustInformation.Author;
+            HtbDate = projectInformation.Project.Dates?.Htb;
+            ProjectName = projectInformation.Project.Name;
+            IncomingTrustName = projectInformation.Project.IncomingTrustName;
+            TargetDate = projectInformation.Project.Dates?.Target;
+            FirstDiscussedDate = projectInformation.Project.Dates?.FirstDiscussed;
+            OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
+            Urn = projectInformation.Project.Urn;
+
+            return Page();
         }
     }
 }

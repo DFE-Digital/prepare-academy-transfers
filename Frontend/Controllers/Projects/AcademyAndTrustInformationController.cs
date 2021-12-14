@@ -24,33 +24,6 @@ namespace Frontend.Controllers.Projects
             _getInformationForProject = getInformationForProject;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string urn)
-        {
-            var projectInformation = await _getInformationForProject.Execute(urn);
-
-            if (!projectInformation.IsValid)
-            {
-                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
-            var vm = new AcademyAndTrustInformationSummaryViewModel
-            {
-                OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name,
-                Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation,
-                Author = projectInformation.Project.AcademyAndTrustInformation.Author,
-                HtbDate = projectInformation.Project.Dates?.Htb,
-                ProjectName = projectInformation.Project.Name,
-                IncomingTrustName = projectInformation.Project.IncomingTrustName,
-                TargetDate = projectInformation.Project.Dates?.Target,
-                FirstDiscussedDate = projectInformation.Project.Dates?.FirstDiscussed,
-                OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn,
-                Urn = projectInformation.Project.Urn
-            };
-
-            return View(vm);
-        }
-
         [HttpGet("recommendation")]
         public async Task<IActionResult> Recommendation(string urn, bool returnToPreview = false)
         {
@@ -98,7 +71,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {vm.Urn});
+            return RedirectToPage("AcademyAndTrustInformationIndex", new {vm.Urn});
         }
     }
 }
