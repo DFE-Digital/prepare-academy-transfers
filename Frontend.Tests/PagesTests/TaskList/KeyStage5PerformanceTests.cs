@@ -33,7 +33,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             [Theory]
             [InlineData("1234")]
             [InlineData("4321")]
-            public async void OnGetGetInformationForProjectId(string id)
+            public async void OnGet_GetInformationForProjectId(string id)
             {
                 await _subject.OnGetAsync(id);
 
