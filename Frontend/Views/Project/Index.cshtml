@@ -58,7 +58,7 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="academyandtrustinformation" asp-controller="AcademyAndTrustInformation" asp-action="Index" asp-route-urn="@Model.Project.Urn" data-test="academy-trust-information">
+                            <a class="govuk-link" aria-describedby="academyandtrustinformation" asp-page="/Projects/AcademyAndTrustInformation/Index" asp-route-urn="@Model.Project.Urn" data-test="academy-trust-information">
                                 Academy and trust information and project dates
                             </a>
                         </span><projectstatus id="academyandtrustinformation" , status="@Model.AcademyAndTrustInformationStatus()"></projectstatus>
