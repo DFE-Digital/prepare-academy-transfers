@@ -20,11 +20,9 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public string FirstDiscussedDate { get; set; }
 
         private readonly IGetInformationForProject _getInformationForProject;
-        private readonly IProjects _projectsRepository;
 
-        public Index(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public Index(IGetInformationForProject getInformationForProject)
         {
-            _projectsRepository = projectsRepository;
             _getInformationForProject = getInformationForProject;
         }
 
