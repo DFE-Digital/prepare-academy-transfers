@@ -7,6 +7,7 @@ using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Models.Rationale;
 using Frontend.Models.TransferDates;
+using Frontend.Pages.Projects.AcademyAndTrustInformation;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
 
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
-        public AcademyAndTrustInformationSummaryViewModel AcademyAndTrustInformationSummaryViewModel { get; set; }
+        public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
@@ -87,8 +88,9 @@ namespace Frontend.Pages.TaskList.HtbDocument
             };
 
             AcademyAndTrustInformationSummaryViewModel =
-                new AcademyAndTrustInformationSummaryViewModel
+                new Pages.Projects.AcademyAndTrustInformation.Index(_getInformationForProject)
                 {
+                    
                     OutgoingAcademyName = Project.OutgoingAcademyName,
                     Recommendation = Project.AcademyAndTrustInformation.Recommendation,
                     Author = Project.AcademyAndTrustInformation.Author,

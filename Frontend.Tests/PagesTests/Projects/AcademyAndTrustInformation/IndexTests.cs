@@ -10,7 +10,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         private readonly Index _subject;
         public IndexTests()
         {
-            _subject = new Index(GetInformationForProject.Object, ProjectRepository.Object);
+            _subject = new Index(GetInformationForProject.Object);
         }
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
