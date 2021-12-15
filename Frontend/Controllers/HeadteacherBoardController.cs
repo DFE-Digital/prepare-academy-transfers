@@ -31,9 +31,10 @@ namespace Frontend.Controllers
                 return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
 
-            var model = new ProjectViewModel()
+            var model = new DownloadViewModel()
             {
-                Project = projectInformation.Project
+                Urn = projectInformation.Project.Urn,
+                OutgoingAcademyName = projectInformation.OutgoingAcademy.Name
             };
 
             return View(model);

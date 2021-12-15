@@ -3,11 +3,14 @@ using Data.Models.Projects;
 using System.Linq;
 using Data.Models.KeyStagePerformance;
 using Frontend.Helpers;
+using Frontend.Models.Forms;
 
 namespace Frontend.Models
 {
-    public class ProjectTaskListViewModel : ProjectViewModel
+    public class ProjectTaskListViewModel 
     {
+        //todo: Remove full project here
+        public Project Project { get; set; }
         public EducationPerformance EducationPerformance { get; set; }
         public ProjectStatuses FeatureTransferStatus => GetFeatureTransferStatus();
         public ProjectStatuses TransferDatesStatus => GetTransferDatesStatus();
@@ -21,6 +24,7 @@ namespace Frontend.Models
         public bool HasKeyStage5PerformanceInformation =>
             PerformanceDataHelpers.HasKeyStage5PerformanceInformation(EducationPerformance.KeyStage5Performance);
         
+        //todo:move to a Tasklist Service
         private ProjectStatuses GetAcademyAndTrustInformationStatus()
         {
             var academyAndTrustInformation = Project.AcademyAndTrustInformation;

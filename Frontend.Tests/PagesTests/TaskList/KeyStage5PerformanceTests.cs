@@ -14,53 +14,18 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.TaskList
 {
-    public class KeyStage5PerformanceTests
+    public class KeyStage5PerformanceTests : PageTests
     {
-        private readonly Mock<IGetInformationForProject> _getInformationForProject;
-        private readonly Mock<IProjects> _projectRepository;
         private readonly KeyStage5Performance _subject;
-        private readonly EducationPerformance _foundEducationPerformance;
-        private readonly Project _foundProject;
-        private readonly Academy _foundOutgoingAcademy;
-        private readonly GetInformationForProjectResponse _foundInformationForProject;
-
         public KeyStage5PerformanceTests()
         {
-            _projectRepository = new Mock<IProjects>();
-            _getInformationForProject = new Mock<IGetInformationForProject>();
-
-            _foundEducationPerformance = new EducationPerformance
+            FoundInformationForProject.EducationPerformance = new EducationPerformance
             {
-                KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2019"}}
+                KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2019"}},
+
             };
 
-            _foundProject = new Project {Urn = "1234"};
-
-            _foundOutgoingAcademy = new Academy
-            {
-                Name = "Academy name", Urn = "Urn", LocalAuthorityName = "LA Name"
-            };
-
-            _foundInformationForProject = new GetInformationForProjectResponse
-            {
-                Project = _foundProject,
-                EducationPerformance = _foundEducationPerformance,
-                OutgoingAcademy = _foundOutgoingAcademy
-            };
-
-            _getInformationForProject
-                .Setup(s => s.Execute(It.IsAny<string>()))
-                .ReturnsAsync(
-                    _foundInformationForProject
-                );
-
-            _projectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Project>
-                {
-                    Result = _foundProject
-                });
-
-            _subject = new KeyStage5Performance(_getInformationForProject.Object, _projectRepository.Object);
+            _subject = new KeyStage5Performance(GetInformationForProject.Object, ProjectRepository.Object);
         }
 
         public class OnGetAsyncTests : KeyStage5PerformanceTests
@@ -72,7 +37,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 await _subject.OnGetAsync(id);
 
-                _getInformationForProject.Verify(s => s.Execute(id));
+                GetInformationForProject.Verify(s => s.Execute(id));
             }
 
             [Fact]
@@ -81,21 +46,21 @@ namespace Frontend.Tests.PagesTests.TaskList
                 var result = await _subject.OnGetAsync("1234");
 
                 Assert.IsType<PageResult>(result);
-                Assert.Equal(_foundProject.Urn, _subject.ProjectUrn);
-                Assert.Equal(_foundEducationPerformance, _subject.EducationPerformance);
-                Assert.Equal(_foundOutgoingAcademy.Urn, _subject.OutgoingAcademyUrn);
+                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.ProjectUrn);
+                Assert.Equal(FoundInformationForProject.EducationPerformance, _subject.EducationPerformance);
+                Assert.Equal(FoundInformationForProject.OutgoingAcademy.Urn, _subject.OutgoingAcademyUrn);
             }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheViewModel()
             {
                 const string additionalInformation = "some additional info";
-                _foundInformationForProject.Project.KeyStage5PerformanceAdditionalInformation = additionalInformation;
+                FoundInformationForProject.Project.KeyStage5PerformanceAdditionalInformation = additionalInformation;
 
                 await _subject.OnGetAsync("1234");
 
                 Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
-                Assert.Equal(_foundProject.Urn, _subject.AdditionalInformation.Urn);
+                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.AdditionalInformation.Urn);
             }
 
             [Fact]
@@ -111,9 +76,9 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 var pageModel =
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage5Performance>(
-                        _getInformationForProject.Object, _projectRepository.Object);
+                        GetInformationForProject.Object, ProjectRepository.Object);
 
-                _getInformationForProject.Setup(s => s.Execute(_foundProject.Urn)).ReturnsAsync(
+                GetInformationForProject.Setup(s => s.Execute(FoundInformationForProject.Project.Urn)).ReturnsAsync(
                     new GetInformationForProjectResponse
                     {
                         ResponseError = new ServiceResponseError
@@ -121,7 +86,7 @@ namespace Frontend.Tests.PagesTests.TaskList
                     }
                 );
 
-                var response = await pageModel.OnGetAsync(_foundProject.Urn);
+                var response = await pageModel.OnGetAsync(FoundInformationForProject.Project.Urn);
                 var viewResult = Assert.IsType<ViewResult>(response);
 
                 Assert.Equal("ErrorPage", viewResult.ViewName);
@@ -136,7 +101,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 await _subject.OnPostAsync("1234", string.Empty, false);
 
-                _projectRepository.Verify(r => r.GetByUrn("1234"), Times.Once);
+                ProjectRepository.Verify(r => r.GetByUrn("1234"), Times.Once);
             }
 
             [Fact]
@@ -144,9 +109,9 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 var pageModel =
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage5Performance>(
-                        _getInformationForProject.Object, _projectRepository.Object);
+                        GetInformationForProject.Object, ProjectRepository.Object);
 
-                _projectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
+                ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Error = new RepositoryResultBase.RepositoryError
@@ -173,7 +138,7 @@ namespace Frontend.Tests.PagesTests.TaskList
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage5Performance", redirectToPageResponse.PageName);
                 Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, _foundProject.KeyStage5PerformanceAdditionalInformation);
+                Assert.Equal(additionalInformation, FoundProjectFromRepo.KeyStage5PerformanceAdditionalInformation);
             }
 
             [Fact]
@@ -182,7 +147,7 @@ namespace Frontend.Tests.PagesTests.TaskList
                 const string additionalInfo = "test info";
 
                 await _subject.OnPostAsync("1234", additionalInfo, false);
-                _projectRepository.Verify(r => r.Update(It.Is<Project>(
+                ProjectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage5PerformanceAdditionalInformation == additionalInfo
                 )));
             }

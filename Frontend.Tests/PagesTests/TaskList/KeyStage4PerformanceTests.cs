@@ -14,77 +14,39 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.TaskList
 {
-    public class KeyStage4PerformanceTests
+    public class KeyStage4PerformanceTests : PageTests
     {
-        private const string ProjectErrorUrn = "errorUrn";
-        private const string ProjectUrn = "0001";
-        private const string AcademyUrn = "1234";
-        private const string AcademyName = "Academy Name";
-        private const string LaName = "LA Name";
-        private readonly Mock<IGetInformationForProject> _getInformationForProject;
-        private readonly Mock<IProjects> _projectRepository;
-        private readonly GetInformationForProjectResponse _foundInformationForProject;
         private readonly KeyStage4Performance _subject;
 
         public KeyStage4PerformanceTests()
         {
-            _getInformationForProject = new Mock<IGetInformationForProject>();
-            _foundInformationForProject = new GetInformationForProjectResponse
+            //arrange
+            FoundInformationForProject.EducationPerformance = new EducationPerformance
             {
-                Project = new Project
+                KeyStage4Performance = new List<KeyStage4>
                 {
-                    Urn = ProjectUrn
-                },
-                OutgoingAcademy = new Academy
-                {
-                    Urn = AcademyUrn,
-                    LocalAuthorityName = LaName,
-                    Name = AcademyName
-                },
-                EducationPerformance = new EducationPerformance
-                {
-                    KeyStage4Performance = new List<KeyStage4>
+                    new KeyStage4
                     {
-                        new KeyStage4
+                        Year = "2019-2020",
+                        SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
                         {
-                            Year = "2019-2020",
-                            SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
-                            {
-                                NotDisadvantaged = "20.5",
-                                Disadvantaged = "10.5"
-                            }
-                        },
-                        new KeyStage4
+                            NotDisadvantaged = "20.5",
+                            Disadvantaged = "10.5"
+                        }
+                    },
+                    new KeyStage4
+                    {
+                        Year = "2018-2019",
+                        SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
                         {
-                            Year = "2018-2019",
-                            SipNumberofpupilsprogress8 = new DisadvantagedPupilsResult
-                            {
-                                NotDisadvantaged = "40.8",
-                                Disadvantaged = "30.4"
-                            }
+                            NotDisadvantaged = "40.8",
+                            Disadvantaged = "30.4"
                         }
                     }
                 }
             };
-            
-            _projectRepository = new Mock<IProjects>();
 
-            _getInformationForProject.Setup(s => s.Execute(ProjectUrn))
-                .ReturnsAsync(
-                    _foundInformationForProject
-                );
-
-            _getInformationForProject.Setup(s => s.Execute(ProjectErrorUrn))
-                .ReturnsAsync(
-                    new GetInformationForProjectResponse
-                    {
-                        ResponseError = new ServiceResponseError
-                        {
-                            ErrorMessage = "Error"
-                        }
-                    });
-
-            _subject = new KeyStage4Performance(_getInformationForProject.Object, _projectRepository.Object);
+            _subject = new KeyStage4Performance(GetInformationForProject.Object, ProjectRepository.Object);
         }
 
         public class OnGetAsyncTests : KeyStage4PerformanceTests
@@ -94,9 +56,9 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 await _subject.OnGetAsync(ProjectUrn);
 
-                _getInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
+                GetInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
             }
-            
+
             [Fact]
             public async void GivenExistingProject_AssignsItToThePageModel()
             {
@@ -109,21 +71,21 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.Equal("2019-2020", _subject.EducationPerformance.KeyStage4Performance[0].Year);
                 Assert.Equal("2018-2019", _subject.EducationPerformance.KeyStage4Performance[1].Year);
             }
-            
+
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheViewModel()
             {
                 const string additionalInformation = "some additional info";
-                _foundInformationForProject.Project.KeyStage4PerformanceAdditionalInformation = additionalInformation;
-                _getInformationForProject.Setup(s => s.Execute(ProjectUrn))
-                    .ReturnsAsync(_foundInformationForProject);
+                FoundInformationForProject.Project.KeyStage4PerformanceAdditionalInformation = additionalInformation;
+                GetInformationForProject.Setup(s => s.Execute(ProjectUrn))
+                    .ReturnsAsync(FoundInformationForProject);
 
                 await _subject.OnGetAsync(ProjectUrn);
 
                 Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
                 Assert.Equal(ProjectUrn, _subject.AdditionalInformation.Urn);
             }
-            
+
             [Fact]
             public async void GivenReturnToPreview_UpdatesTheViewModel()
             {
@@ -137,7 +99,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 var pageModel =
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage4Performance>(
-                        _getInformationForProject.Object, _projectRepository.Object);
+                        GetInformationForProject.Object, ProjectRepository.Object);
 
                 var response = await pageModel.OnGetAsync(ProjectErrorUrn);
                 var viewResult = Assert.IsType<ViewResult>(response);
@@ -158,13 +120,13 @@ namespace Frontend.Tests.PagesTests.TaskList
                     Urn = ProjectUrn
                 };
 
-                _projectRepository.Setup(s => s.GetByUrn(ProjectUrn)).ReturnsAsync(
+                ProjectRepository.Setup(s => s.GetByUrn(ProjectUrn)).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Result = _foundProject
                     });
 
-                _projectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn)).ReturnsAsync(
+                ProjectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn)).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Error = new RepositoryResultBase.RepositoryError
@@ -173,21 +135,21 @@ namespace Frontend.Tests.PagesTests.TaskList
                         }
                     });
             }
-            
+
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
                 await _subject.OnPostAsync(ProjectUrn, string.Empty, false);
 
-                _projectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
+                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
             }
-            
+
             [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
                 var pageModel =
                     RazorPageTestHelpers.GetPageModelWithViewData<KeyStage4Performance>(
-                        _getInformationForProject.Object, _projectRepository.Object);
+                        GetInformationForProject.Object, ProjectRepository.Object);
 
                 var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty, false);
                 var viewResult = Assert.IsType<ViewResult>(response);
@@ -195,7 +157,7 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Error", viewResult.Model);
             }
-            
+
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()
             {
@@ -208,18 +170,18 @@ namespace Frontend.Tests.PagesTests.TaskList
                 Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
                 Assert.Equal(additionalInformation, _foundProject.KeyStage4PerformanceAdditionalInformation);
             }
-            
+
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
             {
                 const string additionalInfo = "test info";
 
                 await _subject.OnPostAsync(ProjectUrn, additionalInfo, false);
-                _projectRepository.Verify(r => r.Update(It.Is<Project>(
+                ProjectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage4PerformanceAdditionalInformation == additionalInfo
                 )));
             }
-                
+
             [Fact]
             public async void GivenReturnToPreview_RedirectsToThePreviewPage()
             {
