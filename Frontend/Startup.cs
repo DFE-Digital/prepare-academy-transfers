@@ -1,5 +1,4 @@
 using Data;
-using Data.Mock;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.TRAMS;
@@ -27,9 +26,6 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
-using System.Globalization;
-using System.Threading;
-using Microsoft.AspNetCore.Localization;
 
 
 namespace Frontend
@@ -107,6 +103,14 @@ namespace Frontend
 
         private void ConfigureRedisConnection(IServiceCollection services)
         {
+            var vcapServicesDefined = !string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]);
+            var redisUrlDefined = !string.IsNullOrEmpty(Configuration["REDIS_URL"]);
+
+            if (!vcapServicesDefined && !redisUrlDefined)
+            {
+                return;
+            }
+
             var redisPass = "";
             var redisHost = "";
             var redisPort = "";
@@ -188,30 +192,22 @@ namespace Frontend
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
-            if (string.IsNullOrEmpty(tramsApiBase) || string.IsNullOrEmpty(tramsApiKey))
-            {
-                services.AddTransient<IAcademies, MockAcademyRepository>();
-                services.AddTransient<ITrusts, MockTrustsRepository>();
-                services.AddSingleton<IProjects, MockProjectRepository>();
-            }
-            else
-            {
-                services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
-                services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
-                services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
-                services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
-                services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
-                services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
-                services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-                services
-                    .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
-                        TramsEducationPerformanceMapper>();
-                services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
-                services.AddTransient<ITrusts, TramsTrustsRepository>();
-                services.AddTransient<IAcademies, TramsEstablishmentRepository>();
-                services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
-                services.AddSingleton<IProjects, TramsProjectsRepository>();
-            }
+            
+            services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
+            services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
+            services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
+            services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
+            services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
+            services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
+            services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+            services
+                .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
+                    TramsEducationPerformanceMapper>();
+            services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
+            services.AddTransient<ITrusts, TramsTrustsRepository>();
+            services.AddTransient<IAcademies, TramsEstablishmentRepository>();
+            services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
+            services.AddSingleton<IProjects, TramsProjectsRepository>();
         }
 
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
