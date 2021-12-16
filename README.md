@@ -59,6 +59,12 @@ To execute the tests in headless mode, run the following (the output will log to
 npm run cypress:run -- --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
 ```
 
+To execute the tests and push the results to the cypress dashboard:
+
+```
+npm run cypress:run -- --record --key 'KEY' --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
+```
+
 ### Useful tips
 
 #### Maintaining sessions
