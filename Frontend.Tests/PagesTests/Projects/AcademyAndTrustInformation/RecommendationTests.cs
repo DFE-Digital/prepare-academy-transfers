@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
+using System.Linq;
 
 namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
 {
@@ -133,6 +134,31 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             
             ControllerTestHelpers.AssertResultRedirectsToPage(response,
                 Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn}));
+        }
+    }
+
+    public class RecommendationRadioButtonTests
+    {
+        [Fact]
+        public void GivenEmptySelectedValue_GeneratesListWithNoItemsChecked()
+        {
+            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
+                TransferAcademyAndTrustInformation.RecommendationResult.Empty;
+
+            var result = Recommendation.RecommendedRadioButtons(recommendationResult);
+
+            Assert.All(result, item => Assert.False(item.Checked));
+        }
+            
+        [Fact]
+        public void GivenASelectedValue_GeneratesListWithRelevantItemChecked()
+        {
+            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
+                TransferAcademyAndTrustInformation.RecommendationResult.Approve;
+
+            var result = Recommendation.RecommendedRadioButtons(recommendationResult);
+
+            Assert.Single(result.Where(item => item.Value == recommendationResult.ToString() && item.Checked));
         }
     }
 }
