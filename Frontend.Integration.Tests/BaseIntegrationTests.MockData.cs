@@ -8,10 +8,9 @@ namespace Frontend.Integration.Tests
 {
     public partial class BaseIntegrationTests
     {
-        private AcademiesApiFixtures _fixtures =new AcademiesApiFixtures();
         protected IEnumerable<TramsProjectSummary> GetProjects(Action<TramsProjectSummary> postSetup = null)
         {
-            var projects = _fixtures.Projects();
+            var projects = AcademiesApiFixtures.Projects();
             if (postSetup != null)
             {
                 postSetup(projects.First());

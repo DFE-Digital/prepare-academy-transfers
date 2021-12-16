@@ -20,7 +20,7 @@ namespace Frontend.Integration.Tests.Fixtures
         private const string OutgoingTrustUkprn = "OutgoingTrustUkprn";
         private const string OutgoingTrustName = "OutgoingTrustName";
 
-        public List<TramsProjectSummary> Projects()
+        public static List<TramsProjectSummary> Projects()
         {
             var tramsProjectSummary = new TramsProjectSummary
             {
