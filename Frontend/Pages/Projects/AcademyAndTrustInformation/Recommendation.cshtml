@@ -1,10 +1,10 @@
-@using Frontend.Models.AcademyAndTrustInformation
-@model Frontend.Models.AcademyAndTrustInformation.RecommendationViewModel
+﻿@page "/project/{urn}/academy-and-trust-information/recommendation"
+@model Frontend.Pages.Projects.AcademyAndTrustInformation.Recommendation
 
 @{
     ViewBag.Title = "Recommendation";
     Layout = "_Layout";
-    var radioButtons = RecommendationViewModel.RecommendedRadioButtons(Model.Recommendation);
+    var radioButtons = Frontend.Pages.Projects.AcademyAndTrustInformation.Recommendation.RecommendedRadioButtons(Model.RecommendationResult);
 }
 
 @section BeforeMain
@@ -22,7 +22,7 @@
         <h1 class="govuk-heading-l">
             Recommendation
         </h1>
-        <form asp-action="Recommendation" method="post" novalidate="">
+        <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
