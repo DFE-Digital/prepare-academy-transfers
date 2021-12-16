@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using Data;
 using Data.Models;
-using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -16,12 +16,54 @@ namespace Frontend.Tests.PagesTests
         protected const string AcademyUrn = "1234";
         private const string AcademyName = "Academy Name";
         private const string LAName = "LA Name";
-        protected readonly Mock<IGetInformationForProject> GetInformationForProject;
-        protected readonly Mock<IProjects> ProjectRepository;
-        protected readonly GetInformationForProjectResponse FoundInformationForProject;
-        protected readonly Project FoundProjectFromRepo;
+        protected Mock<IGetInformationForProject> GetInformationForProject;
+        protected Mock<IProjects> ProjectRepository;
+        protected GetInformationForProjectResponse FoundInformationForProject;
+        protected Project FoundProjectFromRepo;
 
         public PageTests()
+        {
+            MockGetInformationForProject();
+            MockProjectRepository();
+        }
+
+        private void MockProjectRepository()
+        {
+            ProjectRepository = new Mock<IProjects>();
+
+            FoundProjectFromRepo = new Project
+            {
+                Urn = ProjectUrn,
+                TransferringAcademies = new List<TransferringAcademies>
+                {
+                    new TransferringAcademies()
+                    {
+                        OutgoingAcademyName = AcademyName
+                    }
+                }
+            };
+            
+            ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
+                new RepositoryResult<Project>
+                {
+                    Result = FoundProjectFromRepo
+                });
+            
+            ProjectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn)).ReturnsAsync(
+                new RepositoryResult<Project>
+                {
+                    Error = new RepositoryResultBase.RepositoryError()
+                    {
+                        ErrorMessage = "Error",
+                        StatusCode = HttpStatusCode.UnavailableForLegalReasons
+                    }
+                });
+            
+            ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
+            .ReturnsAsync(new RepositoryResult<Project>());
+        }
+
+        private void MockGetInformationForProject()
         {
             GetInformationForProject = new Mock<IGetInformationForProject>();
             FoundInformationForProject = new GetInformationForProjectResponse
@@ -56,18 +98,6 @@ namespace Frontend.Tests.PagesTests
                             ErrorMessage = "Error"
                         }
                     });
-
-            ProjectRepository = new Mock<IProjects>();
-            
-            FoundProjectFromRepo = new Project
-            {
-                Urn = ProjectUrn
-            };
-            ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Project>
-                {
-                    Result = FoundProjectFromRepo
-                });
         }
     }
 }
