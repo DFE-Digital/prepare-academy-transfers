@@ -19,7 +19,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-controller="AcademyAndTrustInformation" asp-action="Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="recommendation">
+                    <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="recommendation">
                         Change<span class="govuk-visually-hidden"> recommendation</span>
                     </a>
                 </dd>
@@ -39,7 +39,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-controller="AcademyAndTrustInformation" asp-action="Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
+                    <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                         Change<span class="govuk-visually-hidden"> author</span>
                     </a>
                 </dd>

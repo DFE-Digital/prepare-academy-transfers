@@ -20,7 +20,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="AcademyAndTrustInformation" asp-action="Recommendation" 
+            <a class="govuk-link" asp-page="Pages/AcademyAndTrustInformation/Recommendation"
                asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="@true">
                 Change<span class="govuk-visually-hidden"> recommendation</span>
             </a>
@@ -41,7 +41,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="AcademyAndTrustInformation" asp-action="Recommendation" 
+            <a class="govuk-link" asp-page="Pages/AcademyAndTrustInformation/Recommendation"
                asp-route-urn="@Model.Project.Urn" asp-route-returnToPreview="@true">
                 Change<span class="govuk-visually-hidden"> author</span>
             </a>
