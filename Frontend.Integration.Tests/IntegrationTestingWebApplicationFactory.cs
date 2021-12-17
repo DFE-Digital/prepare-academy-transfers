@@ -31,6 +31,7 @@ namespace Frontend.Integration.Tests
         {
             _port = AllocateNext();
             _server = WireMockServer.Start(_port);
+            
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -44,7 +45,7 @@ namespace Frontend.Integration.Tests
                 config
                     .AddJsonFile(configPath)
                     .AddInMemoryCollection(new Dictionary<string, string>
-                        { { "TramsApi:Endpoint", $"http://localhost:{_port}" } })
+                        { { "TRAMS_API_BASE", $"http://localhost:{_port}" } })
                     .AddEnvironmentVariables();
             });
 
