@@ -48,7 +48,7 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="benefits" asp-controller="Benefits" asp-action="Index" asp-route-urn="@Model.Project.Urn" data-test="transfer-benefits">Benefits and other factors</a>
+                            <a class="govuk-link" aria-describedby="benefits" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Project.Urn" data-test="transfer-benefits">Benefits and other factors</a>
                         </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">

@@ -38,18 +38,18 @@ namespace Frontend.Tests.PagesTests.TaskList
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnGetAsync(ProjectUrn);
+                await _subject.OnGetAsync(ProjectUrn0001);
 
-                GetInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
+                GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
             }
 
             [Fact]
             public async void GivenExistingProject_AssignsItToThePageModel()
             {
-                var response = await _subject.OnGetAsync(ProjectUrn);
+                var response = await _subject.OnGetAsync(ProjectUrn0001);
 
                 Assert.IsType<PageResult>(response);
-                Assert.Equal(ProjectUrn, _subject.ProjectUrn);
+                Assert.Equal(ProjectUrn0001, _subject.ProjectUrn);
                 Assert.Equal(AcademyUrn, _subject.OutgoingAcademyUrn);
                 Assert.Equal("test year", _subject.EducationPerformance.KeyStage2Performance[0].Year);
             }
@@ -59,19 +59,19 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 const string additionalInformation = "some additional info";
                 FoundInformationForProject.Project.KeyStage2PerformanceAdditionalInformation = additionalInformation;
-                GetInformationForProject.Setup(s => s.Execute(ProjectUrn))
+                GetInformationForProject.Setup(s => s.Execute(ProjectUrn0001))
                     .ReturnsAsync(FoundInformationForProject);
 
-                await _subject.OnGetAsync(ProjectUrn);
+                await _subject.OnGetAsync(ProjectUrn0001);
 
                 Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
-                Assert.Equal(ProjectUrn, _subject.AdditionalInformation.Urn);
+                Assert.Equal(ProjectUrn0001, _subject.AdditionalInformation.Urn);
             }
             
             [Fact]
             public async void GivenReturnToPreview_UpdatesTheViewModel()
             {
-                await _subject.OnGetAsync(ProjectUrn, false, true);
+                await _subject.OnGetAsync(ProjectUrn0001, false, true);
 
                 Assert.True(_subject.ReturnToPreview);
             }
@@ -99,10 +99,10 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 _foundProject = new Project
                 {
-                    Urn = ProjectUrn
+                    Urn = ProjectUrn0001
                 };
 
-                ProjectRepository.Setup(s => s.GetByUrn(ProjectUrn)).ReturnsAsync(
+                ProjectRepository.Setup(s => s.GetByUrn(ProjectUrn0001)).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Result = _foundProject
@@ -121,9 +121,9 @@ namespace Frontend.Tests.PagesTests.TaskList
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync(ProjectUrn, string.Empty, false);
+                await _subject.OnPostAsync(ProjectUrn0001, string.Empty, false);
 
-                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
+                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
             }
 
             [Fact]
@@ -145,7 +145,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 const string additionalInformation = "some additional info";
 
-                var response = await _subject.OnPostAsync(ProjectUrn, additionalInformation, false);
+                var response = await _subject.OnPostAsync(ProjectUrn0001, additionalInformation, false);
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage2Performance", redirectToPageResponse.PageName);
@@ -158,7 +158,7 @@ namespace Frontend.Tests.PagesTests.TaskList
             {
                 const string additionalInfo = "test info";
 
-                await _subject.OnPostAsync(ProjectUrn, additionalInfo, false);
+                await _subject.OnPostAsync(ProjectUrn0001, additionalInfo, false);
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
                     project => project.KeyStage2PerformanceAdditionalInformation == additionalInfo
                 )));
@@ -167,11 +167,11 @@ namespace Frontend.Tests.PagesTests.TaskList
             [Fact]
             public async void GivenReturnToPreview_RedirectsToThePreviewPage()
             {
-                var response = await _subject.OnPostAsync(ProjectUrn, "", true);
+                var response = await _subject.OnPostAsync(ProjectUrn0001, "", true);
 
                 var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
-                Assert.Equal(ProjectUrn, redirectResponse.RouteValues["id"]);
+                Assert.Equal(ProjectUrn0001, redirectResponse.RouteValues["id"]);
             }
         }
     }

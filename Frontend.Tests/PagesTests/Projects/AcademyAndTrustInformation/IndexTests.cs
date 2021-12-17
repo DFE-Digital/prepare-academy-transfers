@@ -15,9 +15,9 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {
-            await _subject.OnGetAsync(ProjectUrn);
+            await _subject.OnGetAsync(ProjectUrn0001);
         
-            GetInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
+            GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
         }
         
         [Fact]

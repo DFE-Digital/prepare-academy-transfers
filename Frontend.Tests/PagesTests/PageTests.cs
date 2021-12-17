@@ -12,7 +12,7 @@ namespace Frontend.Tests.PagesTests
     public abstract class PageTests
     {
         protected const string ProjectErrorUrn = "errorUrn";
-        protected const string ProjectUrn = "0001";
+        protected const string ProjectUrn0001 = "0001";
         protected const string AcademyUrn = "1234";
         private const string AcademyName = "Academy Name";
         private const string LAName = "LA Name";
@@ -33,7 +33,7 @@ namespace Frontend.Tests.PagesTests
 
             FoundProjectFromRepo = new Project
             {
-                Urn = ProjectUrn,
+                Urn = ProjectUrn0001,
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies()
@@ -70,7 +70,7 @@ namespace Frontend.Tests.PagesTests
             {
                 Project = new Project
                 {
-                    Urn = ProjectUrn,
+                    Urn = ProjectUrn0001,
                     TransferringAcademies = new List<TransferringAcademies>
                     {
                         new TransferringAcademies()
