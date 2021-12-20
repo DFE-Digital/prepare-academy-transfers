@@ -15,7 +15,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
     public class Recommendation : CommonPageModel
     {
         private readonly IProjects _projectRepository;
-        public string OutgoingAcademyUrn { get; set; }
         public TransferAcademyAndTrustInformation.RecommendationResult RecommendationResult { get; set; }
         public string Author { get; set; }
 

@@ -7,5 +7,6 @@ namespace Frontend.Models
         public string Urn { get; set; }
         public bool ReturnToPreview { get; set; }
         public string OutgoingAcademyName { get; set; }
+        public string OutgoingAcademyUrn { get; set; }
     }
 }
