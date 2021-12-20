@@ -26,7 +26,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
-        public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
+        public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
@@ -105,7 +105,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 };
 
             var generalInformation = TransferringAcademy.GeneralInformation;
-            GeneralInformationViewModel = new GeneralInformationViewModel
+            GeneralInformationViewModel = new Pages.Projects.GeneralInformation.Index(_getInformationForProject)
             {
                 SchoolPhase = generalInformation.SchoolPhase,
                 AgeRange = generalInformation.AgeRange,

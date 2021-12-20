@@ -32,13 +32,11 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
             FoundInformationForProject.OutgoingAcademy = outgoingAcademy;
                 
             var response = await _subject.OnGetAsync(ProjectUrn0001);
-            
-            var viewModel = _subject.ViewModel;
 
             var expectedGeneralInformation = outgoingAcademy.GeneralInformation;
             Assert.IsType<PageResult>(response);
             Assert.Equal(ProjectUrn0001, _subject.Urn);
-            Assert.Equal(expectedGeneralInformation.SchoolPhase, viewModel.SchoolPhase);
+            Assert.Equal(expectedGeneralInformation.SchoolPhase, _subject.SchoolPhase);
         }
         
         [Fact]

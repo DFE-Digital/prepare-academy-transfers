@@ -9,14 +9,26 @@ namespace Frontend.Pages.Projects.GeneralInformation
     public class Index : CommonPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
-        
-        public GeneralInformationViewModel ViewModel { get; private set; }
-        
+
+        public string SchoolPhase { get; set; }
+        public string AgeRange { get; set; }
+        public string Capacity { get; set; }
+        public string NumberOnRoll { get; set; }
+        public string FreeSchoolMeals { get; set; }
+        public string PublishedAdmissionNumber { get; set; }
+        public string PrivateFinanceInitiative { get; set; }
+        public string ViabilityIssues { get; set; }
+        public string FinancialDeficit { get; set; }
+        public string SchoolType { get; set; }
+        public string DiocesePercent { get; set; }
+        public string DistanceFromAcademyToTrustHq { get; set; }
+        public string MP { get; set; }
+
         public Index(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
         }
-        
+
         public async Task<IActionResult> OnGetAsync(string urn)
         {
             var getInformationForProjectResponse = await _getInformationForProject.Execute(urn);
@@ -25,25 +37,22 @@ namespace Frontend.Pages.Projects.GeneralInformation
             {
                 return this.View("ErrorPage", getInformationForProjectResponse.ResponseError.ErrorMessage);
             }
-            
+
             var generalInformation = getInformationForProjectResponse.OutgoingAcademy.GeneralInformation;
 
-            ViewModel = new GeneralInformationViewModel
-            {
-                SchoolPhase = generalInformation.SchoolPhase,
-                AgeRange = generalInformation.AgeRange,
-                Capacity = generalInformation.Capacity,
-                NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})",
-                FreeSchoolMeals = generalInformation.PercentageFsm,
-                PublishedAdmissionNumber = generalInformation.Pan,
-                PrivateFinanceInitiative = generalInformation.Pfi,
-                ViabilityIssues = generalInformation.ViabilityIssue,
-                FinancialDeficit = generalInformation.Deficit,
-                SchoolType = generalInformation.SchoolType,
-                DiocesePercent = generalInformation.DiocesesPercent,
-                DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
-                MP = generalInformation.MpAndParty
-            };
+            SchoolPhase = generalInformation.SchoolPhase;
+            AgeRange = generalInformation.AgeRange;
+            Capacity = generalInformation.Capacity;
+            NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})";
+            FreeSchoolMeals = generalInformation.PercentageFsm;
+            PublishedAdmissionNumber = generalInformation.Pan;
+            PrivateFinanceInitiative = generalInformation.Pfi;
+            ViabilityIssues = generalInformation.ViabilityIssue;
+            FinancialDeficit = generalInformation.Deficit;
+            SchoolType = generalInformation.SchoolType;
+            DiocesePercent = generalInformation.DiocesesPercent;
+            DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
+            MP = generalInformation.MpAndParty;
 
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
