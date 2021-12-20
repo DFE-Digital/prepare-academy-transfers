@@ -19,9 +19,9 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {
-            await _subject.OnGetAsync(ProjectUrn);
+            await _subject.OnGetAsync(ProjectUrn0001);
         
-            GetInformationForProject.Verify(r => r.Execute(ProjectUrn), Times.Once);
+            GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
         }
         
         [Fact]
@@ -31,13 +31,13 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
             var outgoingAcademy = fixture.Create<Academy>();
             FoundInformationForProject.OutgoingAcademy = outgoingAcademy;
                 
-            var response = await _subject.OnGetAsync(ProjectUrn);
+            var response = await _subject.OnGetAsync(ProjectUrn0001);
             
             var viewModel = _subject.ViewModel;
 
             var expectedGeneralInformation = outgoingAcademy.GeneralInformation;
             Assert.IsType<PageResult>(response);
-            Assert.Equal(ProjectUrn, _subject.Urn);
+            Assert.Equal(ProjectUrn0001, _subject.Urn);
             Assert.Equal(expectedGeneralInformation.SchoolPhase, viewModel.SchoolPhase);
         }
         
