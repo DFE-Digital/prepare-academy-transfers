@@ -65,7 +65,7 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="general-information" asp-controller="GeneralInformation" asp-action="Index" asp-route-id="@Model.Project.Urn" data-test="general-information">
+                            <a class="govuk-link" aria-describedby="general-information" asp-page="/Projects/GeneralInformation/Index" asp-route-urn="@Model.Project.Urn" data-test="general-information">
                                 General information
                             </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">Reference only</strong>

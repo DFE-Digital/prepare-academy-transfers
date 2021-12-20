@@ -104,7 +104,23 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
+            var generalInformation = TransferringAcademy.GeneralInformation;
+            GeneralInformationViewModel = new GeneralInformationViewModel
+            {
+                SchoolPhase = generalInformation.SchoolPhase,
+                AgeRange = generalInformation.AgeRange,
+                Capacity = generalInformation.Capacity,
+                NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})",
+                FreeSchoolMeals = generalInformation.PercentageFsm,
+                PublishedAdmissionNumber = generalInformation.Pan,
+                PrivateFinanceInitiative = generalInformation.Pfi,
+                ViabilityIssues = generalInformation.ViabilityIssue,
+                FinancialDeficit = generalInformation.Deficit,
+                SchoolType = generalInformation.SchoolType,
+                DiocesePercent = generalInformation.DiocesesPercent,
+                DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
+                MP = generalInformation.MpAndParty
+            };
 
             PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
 
