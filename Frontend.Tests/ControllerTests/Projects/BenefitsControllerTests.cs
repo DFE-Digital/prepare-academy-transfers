@@ -20,12 +20,13 @@ namespace Frontend.Tests.ControllerTests.Projects
         private readonly BenefitsController _subject;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Project _foundProject;
+        private const string Urn0001 = "0001";
 
         public BenefitsControllerTests()
         {
             _foundProject = new Project
             {
-                Urn = "0001",
+                Urn = Urn0001,
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies()
@@ -45,42 +46,7 @@ namespace Frontend.Tests.ControllerTests.Projects
 
             _subject = new BenefitsController(_projectsRepository.Object);
         }
-
-        public class IndexTests : BenefitsControllerTests
-        {
-            [Fact]
-            public async void GivenUrn_AssignsModelToTheView()
-            {
-                var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<BenefitsSummaryViewModel>(result);
-
-                Assert.Equal(_foundProject.Urn, viewModel.Urn);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>()))
-                    .ReturnsAsync(new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            StatusCode = System.Net.HttpStatusCode.NotFound,
-                            ErrorMessage = "Project not found"
-                        }
-                    });
-
-                var controller = new BenefitsController(_projectsRepository.Object);
-
-                var response = await controller.Index("projectUrn");
-                var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Project not found", viewModel);
-            }
-        }
-
+        
         public class IntendedBenefitsTests : BenefitsControllerTests
         {
             public class GetTests : IntendedBenefitsTests
@@ -196,7 +162,8 @@ namespace Frontend.Tests.ControllerTests.Projects
 
                     var response = await _subject.IntendedBenefitsPost(vm);
 
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/Benefits/Index",
+                        new RouteValueDictionary(new {urn = "0001"}));
                 }
 
                 [Fact]
@@ -313,7 +280,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrn_AssignsModelToTheView()
                 {
-                    var result = await _subject.OtherFactors("0001");
+                    var result = await _subject.OtherFactors(Urn0001);
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<OtherFactorsViewModel>(result);
 
                     Assert.Equal(_foundProject.Urn, viewModel.Urn);
@@ -322,7 +289,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenReturnToPreview_AssignsToTheModel()
                 {
-                    var result = await _subject.OtherFactors("0001", true);
+                    var result = await _subject.OtherFactors(Urn0001, true);
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<OtherFactorsViewModel>(result);
 
                     Assert.True(viewModel.ReturnToPreview);
@@ -359,7 +326,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var vm = new OtherFactorsViewModel
                     {
-                        Urn = "0001",
+                        Urn = Urn0001,
                         ReturnToPreview = false,
                         OtherFactorsVm = new List<OtherFactorsItemViewModel>()
                     };
@@ -411,7 +378,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        Urn = "0001",
+                        Urn = Urn0001,
                         ReturnToPreview = false
                     };
 
@@ -438,13 +405,14 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        Urn = "0001",
+                        Urn = Urn0001,
                         ReturnToPreview = false
                     };
 
                     var response = await _subject.OtherFactorsPost(vm);
 
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/Benefits/Index",
+                        new RouteValueDictionary(new {urn = Urn0001}));
                 }
 
                 [Theory]
@@ -467,7 +435,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     var vm = new OtherFactorsViewModel
                     {
                         OtherFactorsVm = otherFactors,
-                        Urn = "0001",
+                        Urn = Urn0001,
                         ReturnToPreview = false
                     };
 

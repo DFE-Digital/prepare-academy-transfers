@@ -30,15 +30,15 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {
-            await Subject.OnGetAsync(ProjectUrn);
+            await Subject.OnGetAsync(ProjectUrn0001);
         
-            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn), Times.Once);
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
         
         [Fact]
         public async void GivenReturnToPreview_AssignItToTheView()
         {
-            var response = await Subject.OnGetAsync(ProjectUrn, true);
+            var response = await Subject.OnGetAsync(ProjectUrn0001, true);
             
             Assert.IsType<PageResult>(response);
             Assert.True(Subject.ReturnToPreview);
@@ -62,7 +62,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         {
             _vm = new RecommendationViewModel
             {
-                Urn = ProjectUrn,
+                Urn = ProjectUrn0001,
                 Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve,
                 Author = "Author"
             };
@@ -85,7 +85,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         
             var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Urn", ProjectUrn)
+                new KeyValuePair<string, string>("Urn", ProjectUrn0001)
             });
             ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/AcademyAndTrustInformation/{nameof(Index)}", routeValues);
         }
@@ -133,7 +133,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             var response = await Subject.OnPostAsync(_vm);
             
             ControllerTestHelpers.AssertResultRedirectsToPage(response,
-                Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn}));
+                Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn0001}));
         }
     }
 

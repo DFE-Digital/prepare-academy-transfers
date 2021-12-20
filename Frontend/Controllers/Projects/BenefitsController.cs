@@ -23,26 +23,6 @@ namespace Frontend.Controllers.Projects
             _projectsRepository = projectsRepository;
         }
 
-        public async Task<IActionResult> Index(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-            
-            var projectResult = project.Result;
-            var model = new BenefitsSummaryViewModel(
-                projectResult.Benefits.IntendedBenefits.ToList(),
-                projectResult.Benefits.OtherIntendedBenefit,
-                BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
-                projectResult.Urn,
-                projectResult.OutgoingAcademyUrn
-            );
-
-            return View(model);
-        }
-
         [HttpGet("intended-benefits")]
         public async Task<IActionResult> IntendedBenefits(string urn, bool returnToPreview = false)
         {
@@ -55,13 +35,13 @@ namespace Frontend.Controllers.Projects
             var projectResult = project.Result;
             var vm = new IntendedBenefitsViewModel
             {
-               Urn = projectResult.Urn,
-               OutgoingAcademyName = projectResult.OutgoingAcademyName,
-               ReturnToPreview = returnToPreview,
-               SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
-               OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other) ?
-                projectResult.Benefits.OtherIntendedBenefit :
-                null
+                Urn = projectResult.Urn,
+                OutgoingAcademyName = projectResult.OutgoingAcademyName,
+                ReturnToPreview = returnToPreview,
+                SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
+                OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)
+                    ? projectResult.Benefits.OtherIntendedBenefit
+                    : null
             };
 
             return View(vm);
@@ -99,7 +79,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
             }
 
-            return RedirectToAction("Index", new {urn});
+            return RedirectToPage("/Projects/Benefits/Index", new {urn});
         }
 
         [HttpGet("other-factors")]
@@ -134,12 +114,12 @@ namespace Frontend.Controllers.Projects
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return View(vm);
             }
-            
+
             var projectResult = project.Result;
             projectResult.Benefits.OtherFactors = vm.OtherFactorsVm
                 .Where(of => of.Checked)
@@ -154,11 +134,12 @@ namespace Frontend.Controllers.Projects
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
-            
-            return RedirectToAction("Index", new {urn});
+
+            return RedirectToPage("/Projects/Benefits/Index", new {urn});
         }
-        
-        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
+
+        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
+            Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
             List<OtherFactorsItemViewModel> items = new List<OtherFactorsItemViewModel>();
             foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))
