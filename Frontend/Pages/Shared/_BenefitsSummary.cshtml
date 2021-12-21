@@ -23,7 +23,7 @@
             </dd>
         }
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-action="IntendedBenefits" asp-controller="Benefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="intended-benefits">
+            <a class="govuk-link" asp-page="/Projects/Benefits/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="intended-benefits">
                 Change<span class="govuk-visually-hidden"> intended benefits</span>
             </a>
         </dd>

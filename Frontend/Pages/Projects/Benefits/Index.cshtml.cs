@@ -17,9 +17,9 @@ namespace Frontend.Pages.Projects.Benefits
         private readonly IProjects _projects;
         public BenefitsSummaryViewModel BenefitsSummaryViewModel;
         
-        public Index(IProjects _projects)
+        public Index(IProjects projects)
         {
-            this._projects = _projects;
+            _projects = projects;
         }
 
         public async Task<IActionResult> OnGetAsync(string urn)

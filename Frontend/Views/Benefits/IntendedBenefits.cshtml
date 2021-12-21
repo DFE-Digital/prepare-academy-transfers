@@ -1,80 +1,80 @@
-@using Frontend.Helpers
-@using Data.Models.Projects
-@using Helpers
-@using Microsoft.AspNetCore.Mvc.ModelBinding
-@using Microsoft.AspNetCore.Mvc.Rendering
-@model Frontend.Models.Benefits.IntendedBenefitsViewModel
-
-@{
-
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the benefits the transfer intended to bring?";
-    Layout = "_Layout";
-    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.SelectedIntendedBenefits)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
-    var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherBenefit)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
-}
-
-@section BeforeMain
-{
-<backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-    <a class="govuk-back-link" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn">Back</a>
-</backtopreview>
-}
-
-<div asp-gds-validation-summary></div>
-
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <form asp-action="IntendedBenefits" method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn" />
-            <input type="hidden" asp-for="@Model.ReturnToPreview" />
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
-            <div class="govuk-form-group @formClasses @otherBenefitFormClasses">
-                <fieldset class="govuk-fieldset" aria-describedby="intended-benefits-hint">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
-                            <span class="govuk-caption-l">
-                                @Model.OutgoingAcademyName
-                            </span>
-                            What are the benefits the transfer intended to bring?
-                        </h1>
-                    </legend>
-                    <div id="intended-benefits-hint" class="govuk-hint">
-                        Select all that apply.
-                    </div>
-
-                    <span asp-gds-validation-for="SelectedIntendedBenefits"></span>
-
-                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-
-                        <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-container="true"></gds-checkboxes>
-
-                        @{
-                            var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString();
-                        }
-
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="@otherBenefit" name="@nameof(Model.SelectedIntendedBenefits)" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
-                            <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit">
-                                Add an other benefit
-                            </label>
-                        </div>
-                        <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-other-benefit">
-                            <div class="govuk-form-group">
-                                <label class="govuk-label" for="otherBenefit">
-                                    Enter the benefit
-                                </label>
-
-                                <span asp-gds-validation-for="OtherBenefit"></span>
-
-                                <input class="govuk-input govuk-!-width-two-thirds" asp-for="OtherBenefit" spellcheck="false">
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-            </div>
-            <button class="govuk-button" data-module="govuk-button" type="submit">
-                Save and continue
-            </button>
-        </form>
-    </div>
-</div>
+@* @using Frontend.Helpers *@
+@* @using Data.Models.Projects *@
+@* @using Helpers *@
+@* @using Microsoft.AspNetCore.Mvc.ModelBinding *@
+@* @using Microsoft.AspNetCore.Mvc.Rendering *@
+@* @model Frontend.Models.Benefits.IntendedBenefitsViewModel *@
+@* *@
+@* @{ *@
+@* *@
+@*     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the benefits the transfer intended to bring?"; *@
+@*     Layout = "_Layout"; *@
+@*     var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.SelectedIntendedBenefits)) == ModelValidationState.Invalid ? "govuk-form-group--error" : ""; *@
+@*     var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherBenefit)) == ModelValidationState.Invalid ? "govuk-form-group--error" : ""; *@
+@* } *@
+@* *@
+@* @section BeforeMain *@
+@* { *@
+@* <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview"> *@
+@*     <a class="govuk-back-link" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn">Back</a> *@
+@* </backtopreview> *@
+@* } *@
+@* *@
+@* <div asp-gds-validation-summary></div> *@
+@* *@
+@* <div class="govuk-grid-row"> *@
+@*     <div class="govuk-grid-column-two-thirds"> *@
+@*         <form asp-action="IntendedBenefits" method="post" novalidate=""> *@
+@*             <input type="hidden" asp-for="@Model.Urn" /> *@
+@*             <input type="hidden" asp-for="@Model.ReturnToPreview" /> *@
+@*             <input type="hidden" asp-for="@Model.OutgoingAcademyName" /> *@
+@*             <div class="govuk-form-group @formClasses @otherBenefitFormClasses"> *@
+@*                 <fieldset class="govuk-fieldset" aria-describedby="intended-benefits-hint"> *@
+@*                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l"> *@
+@*                         <h1 class="govuk-fieldset__heading"> *@
+@*                             <span class="govuk-caption-l"> *@
+@*                                 @Model.OutgoingAcademyName *@
+@*                             </span> *@
+@*                             What are the benefits the transfer intended to bring? *@
+@*                         </h1> *@
+@*                     </legend> *@
+@*                     <div id="intended-benefits-hint" class="govuk-hint"> *@
+@*                         Select all that apply. *@
+@*                     </div> *@
+@* *@
+@*                     <span asp-gds-validation-for="SelectedIntendedBenefits"></span> *@
+@* *@
+@*                     <div class="govuk-checkboxes" data-module="govuk-checkboxes"> *@
+@* *@
+@*                         <gds-checkboxes checkboxes="Model.GetIntendedBenefitsCheckboxes()" without-container="true"></gds-checkboxes> *@
+@* *@
+@*                         @{ *@
+@*                             var otherBenefit = TransferBenefits.IntendedBenefit.Other.ToString(); *@
+@*                         } *@
+@* *@
+@*                         <div class="govuk-checkboxes__item"> *@
+@*                             <input class="govuk-checkboxes__input" id="@otherBenefit" name="@nameof(Model.SelectedIntendedBenefits)" type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)"> *@
+@*                             <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit"> *@
+@*                                 Add an other benefit *@
+@*                             </label> *@
+@*                         </div> *@
+@*                         <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-other-benefit"> *@
+@*                             <div class="govuk-form-group"> *@
+@*                                 <label class="govuk-label" for="otherBenefit"> *@
+@*                                     Enter the benefit *@
+@*                                 </label> *@
+@* *@
+@*                                 <span asp-gds-validation-for="OtherBenefit"></span> *@
+@* *@
+@*                                 <input class="govuk-input govuk-!-width-two-thirds" asp-for="OtherBenefit" spellcheck="false"> *@
+@*                             </div> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </fieldset> *@
+@*             </div> *@
+@*             <button class="govuk-button" data-module="govuk-button" type="submit"> *@
+@*                 Save and continue *@
+@*             </button> *@
+@*         </form> *@
+@*     </div> *@
+@* </div> *@

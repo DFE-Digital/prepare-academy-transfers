@@ -6,8 +6,6 @@ namespace Frontend.Integration.Tests.Views.Rationale
 {
     public class IndexIntegrationTests : BaseIntegrationTests
     {
-        private readonly IntegrationTestingWebApplicationFactory _factory;
-        
         public IndexIntegrationTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
         }
