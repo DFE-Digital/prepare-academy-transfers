@@ -5,18 +5,17 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
-
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the benefits the transfer intended to bring?";
     Layout = "_Layout";
-    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.IntendedBenefitsViewModel.SelectedIntendedBenefits)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
-    var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.IntendedBenefitsViewModel.OtherBenefit)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.IntendedBenefitsViewModel)}.{nameof(Model.IntendedBenefitsViewModel.SelectedIntendedBenefits)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.IntendedBenefitsViewModel)}.{nameof(Model.IntendedBenefitsViewModel.OtherBenefit)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
 
 @section BeforeMain
 {
-<backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-    <a class="govuk-back-link" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn">Back</a>
-</backtopreview>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
 }
 
 <div asp-gds-validation-summary></div>
@@ -24,9 +23,9 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn" />
-            <input type="hidden" asp-for="@Model.ReturnToPreview" />
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses @otherBenefitFormClasses">
                 <fieldset class="govuk-fieldset" aria-describedby="intended-benefits-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
