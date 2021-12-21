@@ -26,7 +26,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
-        public GeneralInformationViewModel GeneralInformationViewModel { get; set; }
+        public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
 
         public Preview(IGetInformationForProject getInformationForProject)
@@ -104,7 +104,23 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            GeneralInformationViewModel = GeneralInformationController.BuildViewModel(response);
+            var generalInformation = TransferringAcademy.GeneralInformation;
+            GeneralInformationViewModel = new Pages.Projects.GeneralInformation.Index(_getInformationForProject)
+            {
+                SchoolPhase = generalInformation.SchoolPhase,
+                AgeRange = generalInformation.AgeRange,
+                Capacity = generalInformation.Capacity,
+                NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})",
+                FreeSchoolMeals = generalInformation.PercentageFsm,
+                PublishedAdmissionNumber = generalInformation.Pan,
+                PrivateFinanceInitiative = generalInformation.Pfi,
+                ViabilityIssues = generalInformation.ViabilityIssue,
+                FinancialDeficit = generalInformation.Deficit,
+                SchoolType = generalInformation.SchoolType,
+                DiocesePercent = generalInformation.DiocesesPercent,
+                DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
+                MP = generalInformation.MpAndParty
+            };
 
             PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
 

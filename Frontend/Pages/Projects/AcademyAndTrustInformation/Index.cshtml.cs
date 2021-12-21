@@ -10,7 +10,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
 {
     public class Index : CommonPageModel
     {
-        public string OutgoingAcademyUrn { get; set; }
         public TransferAcademyAndTrustInformation.RecommendationResult Recommendation { get; set; }
         public string Author { get; set; }
         public string ProjectName { get; set; }

@@ -6,8 +6,6 @@ namespace Frontend.Integration.Tests.Views.Rationale
 {
     public class IndexIntegrationTests : BaseIntegrationTests
     {
-        private readonly IntegrationTestingWebApplicationFactory _factory;
-        
         public IndexIntegrationTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
         }
@@ -19,12 +17,12 @@ namespace Frontend.Integration.Tests.Views.Rationale
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}");
             
-            Document.QuerySelector("#rationale").TextContent.Trim().Should().Be("COMPLETED");
+            Document.QuerySelector("#rationale")?.TextContent.Trim().Should().Be("COMPLETED");
             
             await NavigateAsync("Rationale");
             
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span").TextContent.Should().Be(project.Rationale.ProjectRationale);
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span").TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.ProjectRationale);
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
         [Fact]
@@ -34,13 +32,13 @@ namespace Frontend.Integration.Tests.Views.Rationale
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}");
             
-            Document.QuerySelector("#rationale")!.TextContent.Trim().Should().Be("IN PROGRESS");
+            Document.QuerySelector("#rationale")?.TextContent.Trim().Should().Be("IN PROGRESS");
             Document.QuerySelector("#rationale")?.ClassName.Should().Contain("blue");
             
             await NavigateAsync("Rationale");
             
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span").TextContent.Should().Be("Empty");
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span").TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be("Empty");
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
         [Fact]
@@ -54,13 +52,13 @@ namespace Frontend.Integration.Tests.Views.Rationale
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}");
             
-            Document.QuerySelector("#rationale").TextContent.Trim().Should().Be("NOT STARTED");
-            Document.QuerySelector("#rationale").ClassName.Should().Contain("grey");
+            Document.QuerySelector("#rationale")?.TextContent.Trim().Should().Be("NOT STARTED");
+            Document.QuerySelector("#rationale")?.ClassName.Should().Contain("grey");
 
             await NavigateAsync("Rationale");
             
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span").TextContent.Should().Be("Empty");
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span").TextContent.Should().Be("Empty");
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be("Empty");
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be("Empty");
         }
     }
 }
