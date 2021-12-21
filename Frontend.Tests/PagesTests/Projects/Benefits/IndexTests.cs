@@ -25,7 +25,7 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
         }
        
         [Fact]
-        public async void GivenUrn_AssignsModelToTheView()
+        public async void GivenUrn_AssignsModelToThePage()
         {
             var response = await _subject.OnGetAsync(ProjectUrn0001);
             

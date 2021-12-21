@@ -5,9 +5,9 @@ namespace Frontend.Models
 {
     public abstract class CommonPageModel : PageModel
     {
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public string Urn { get; set; }
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public bool ReturnToPreview { get; set; }
         [BindProperty]
         public string OutgoingAcademyName { get; set; }

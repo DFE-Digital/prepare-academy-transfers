@@ -28,9 +28,9 @@ namespace Frontend.Pages.Projects.Benefits
             _projects = projects;
         }
         
-        public async Task<IActionResult> OnGetAsync(string urn, bool returnToPreview = false)
+        public async Task<IActionResult> OnGetAsync()
         {
-            var project = await _projects.GetByUrn(urn);
+            var project = await _projects.GetByUrn(Urn);
             if (!project.IsValid)
             {
                 return this.View("ErrorPage", project.Error.ErrorMessage);
@@ -40,7 +40,7 @@ namespace Frontend.Pages.Projects.Benefits
 
             Urn = projectResult.Urn;
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
-            ReturnToPreview = returnToPreview;
+            ReturnToPreview = ReturnToPreview;
             IntendedBenefitsViewModel.SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits;
             IntendedBenefitsViewModel.OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)
                     ? projectResult.Benefits.OtherIntendedBenefit

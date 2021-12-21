@@ -14,12 +14,14 @@ namespace Frontend.Tests.PagesTests
         protected const string ProjectErrorUrn = "errorUrn";
         protected const string ProjectUrn0001 = "0001";
         protected const string AcademyUrn = "1234";
-        private const string AcademyName = "Academy Name";
-        private const string LAName = "LA Name";
+        protected const string ErrorMessage = "Error";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
         protected GetInformationForProjectResponse FoundInformationForProject;
         protected Project FoundProjectFromRepo;
+        
+        private const string AcademyName = "Academy Name";
+        private const string LAName = "LA Name";
 
         public PageTests()
         {
@@ -54,7 +56,7 @@ namespace Frontend.Tests.PagesTests
                 {
                     Error = new RepositoryResultBase.RepositoryError()
                     {
-                        ErrorMessage = "Error",
+                        ErrorMessage = ErrorMessage,
                         StatusCode = HttpStatusCode.UnavailableForLegalReasons
                     }
                 });
@@ -95,7 +97,7 @@ namespace Frontend.Tests.PagesTests
                     {
                         ResponseError = new ServiceResponseError
                         {
-                            ErrorMessage = "Error"
+                            ErrorMessage = ErrorMessage
                         }
                     });
         }
