@@ -11,5 +11,6 @@ namespace Frontend.Models
         public bool ReturnToPreview { get; set; }
         [BindProperty]
         public string OutgoingAcademyName { get; set; }
+        public string OutgoingAcademyUrn { get; set; }
     }
 }
