@@ -6,7 +6,6 @@ using Data;
 using Data.Models.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
-using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,65 +20,6 @@ namespace Frontend.Controllers.Projects
         public BenefitsController(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
-        }
-
-        [HttpGet("intended-benefits")]
-        public async Task<IActionResult> IntendedBenefits(string urn, bool returnToPreview = false)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
-            var projectResult = project.Result;
-            var vm = new IntendedBenefitsViewModel
-            {
-                Urn = projectResult.Urn,
-                OutgoingAcademyName = projectResult.OutgoingAcademyName,
-                ReturnToPreview = returnToPreview,
-                SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits,
-                OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)
-                    ? projectResult.Benefits.OtherIntendedBenefit
-                    : null
-            };
-
-            return View(vm);
-        }
-
-        [ActionName("IntendedBenefits")]
-        [HttpPost("intended-benefits")]
-        public async Task<IActionResult> IntendedBenefitsPost(IntendedBenefitsViewModel vm)
-        {
-            var urn = vm.Urn;
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
-            var projectResult = project.Result;
-            projectResult.Benefits.IntendedBenefits =
-                new List<TransferBenefits.IntendedBenefit>(vm.SelectedIntendedBenefits);
-            projectResult.Benefits.OtherIntendedBenefit = vm.OtherBenefit;
-
-            var updateResult = await _projectsRepository.Update(projectResult);
-            if (!updateResult.IsValid)
-            {
-                return View("ErrorPage", updateResult.Error.ErrorMessage);
-            }
-
-            if (vm.ReturnToPreview)
-            {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = urn});
-            }
-
-            return RedirectToPage("/Projects/Benefits/Index", new {urn});
         }
 
         [HttpGet("other-factors")]
