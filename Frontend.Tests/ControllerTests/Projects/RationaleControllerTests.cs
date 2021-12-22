@@ -18,7 +18,7 @@ namespace Frontend.Tests.ControllerTests.Projects
         private const string _errorWithGetByUrn = "errorUrn";
         private readonly RationaleController _subject;
         private readonly Mock<IProjects> _projectRepository;
-
+    
         public RationaleControllerTests()
         {
             _projectRepository = new Mock<IProjects>();
@@ -42,13 +42,13 @@ namespace Frontend.Tests.ControllerTests.Projects
                             ErrorMessage = "Error"
                         }
                     });
-
+    
             _projectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                 .ReturnsAsync(new RepositoryResult<Project>());
-
+    
             _subject = new RationaleController(_projectRepository.Object);
         }
-
+    
         public class IndexTests : RationaleControllerTests
         {
             [Fact]
@@ -74,7 +74,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     }});
                 var result = await _subject.Index(testUrn);
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleSummaryViewModel>(result);
-
+    
                 Assert.Equal(testUrn, viewModel.Urn);
                 Assert.Equal("AcademyUrn", viewModel.OutgoingAcademyUrn);
                 Assert.Equal("projectRationale", viewModel.ProjectRationale);
@@ -85,178 +85,18 @@ namespace Frontend.Tests.ControllerTests.Projects
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
                 await _subject.Index("0001");
-
+    
                 _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
             }
-
+    
             [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
                 var response = await _subject.Index(_errorWithGetByUrn);
                 var viewResult = Assert.IsType<ViewResult>(response);
-
+    
                 Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Error", viewResult.Model);
-            }
-        }
-
-        public class ProjectTests : RationaleControllerTests
-        {
-            public class GetTests : ProjectTests
-            {
-                [Fact]
-                public async void GivenUrn_FetchesProjectFromTheRepository()
-                {
-                    await _subject.Project("0001");
-
-                    _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-                }
-
-                [Fact]
-                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-                {
-                    var response = await _subject.Project(_errorWithGetByUrn);
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
-                }
-
-                [Fact]
-                public async void GivenReturnToPreview_AssignToTheViewModel()
-                {
-                    var response = await _subject.Project("0001", true);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleProjectViewModel>(response);
-
-                    Assert.True(viewModel.ReturnToPreview);
-                }
-            }
-
-            public class PostTests : ProjectTests
-            {
-                [Fact]
-                public async void GivenUrnAndRationale_UpdatesTheProject()
-                {
-                    const string rationale = "This is the project rationale";
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "0001",
-                        ProjectRationale = rationale
-                    };
-                    await _subject.ProjectPost(vm);
-
-                    _projectRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Rationale.Project == rationale)), Times.Once);
-                }
-
-                [Fact]
-                public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
-                {
-                    const string rationale = "This is the project rationale";
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "0001",
-                        ProjectRationale = rationale
-                    };
-                    var result = await _subject.ProjectPost(vm);
-
-                    ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
-                }
-
-                [Fact]
-                public async void GivenErrorInModelState_ReturnsCorrectView()
-                {
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "0001",
-                        ProjectRationale = ""
-                    };
-                    _subject.ModelState.AddModelError(nameof(vm.ProjectRationale), "error");
-                    var result = await _subject.ProjectPost(vm);
-
-                    _projectRepository.Verify(r =>
-                        r.Update(It.Is<Project>(project => project.Rationale.Project == "")), Times.Never);
-                    
-                    var viewResult = Assert.IsType<ViewResult>(result);
-
-                    Assert.False(_subject.ModelState.IsValid);
-                    Assert.Equal(vm, viewResult.Model);
-                }
-
-                [Fact]
-                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-                {
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = _errorWithGetByUrn,
-                        ProjectRationale = "rationale"
-                    };
-                    var response = await _subject.ProjectPost(vm);
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
-                }
-
-                [Fact]
-                public async void GivenUpdateReturnsError_DisplayErrorPage()
-                {
-                    _projectRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                        new RepositoryResult<Project>
-                        {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                ErrorMessage = "Update error"
-                            }
-                        });
-
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "errorWithUpdate",
-                        ProjectRationale = "rationale"
-                    };
-                    
-                    var response = await _subject.ProjectPost(vm);
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Update error", viewResult.Model);
-                }
-
-                [Fact]
-                public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
-                {
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "0001",
-                        ProjectRationale = null,
-                        ReturnToPreview = true
-                    };
-                    _subject.ModelState.AddModelError(nameof(vm.ProjectRationale), "error");
-                    
-                    var response = await _subject.ProjectPost(vm);
-                    var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleProjectViewModel>(response);
-                    
-                    Assert.True(viewModel.ReturnToPreview);
-                }
-
-                [Fact]
-                public async void GivenReturnToPreview_RedirectsToPreviewPage()
-                {
-                    var vm = new RationaleProjectViewModel
-                    {
-                        Urn = "0001",
-                        ProjectRationale = "meow",
-                        ReturnToPreview = true
-                    };
-                    
-                    var response = await _subject.ProjectPost(vm);
-
-                    ControllerTestHelpers.AssertResultRedirectsToPage(
-                        response, Links.HeadteacherBoard.Preview.PageName,
-                        new RouteValueDictionary(new {id = "0001"})
-                    );
-                }
             }
         }
 
@@ -268,16 +108,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 public async void GivenUrn_FetchesProjectFromTheRepository()
                 {
                     await _subject.TrustOrSponsor("0001");
-
+    
                     _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
                 }
-
+    
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
                     var response = await _subject.TrustOrSponsor(_errorWithGetByUrn);
                     var viewResult = Assert.IsType<ViewResult>(response);
-
+    
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
                 }
@@ -287,11 +127,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                 {
                     var response = await _subject.TrustOrSponsor("0001", true);
                     var viewModel = ControllerTestHelpers.AssertViewModelFromResult<RationaleTrustOrSponsorViewModel>(response);
-
+    
                     Assert.True(viewModel.ReturnToPreview);
                 }
             }
-
+    
             public class PostTests : TrustOrSponsorTests
             {
                 [Fact]
@@ -304,11 +144,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                         TrustOrSponsorRationale = rationale
                     };
                     await _subject.TrustOrSponsorPost(vm);
-
+    
                     _projectRepository.Verify(r =>
                         r.Update(It.Is<Project>(project => project.Rationale.Trust == rationale)), Times.Once);
                 }
-
+    
                 [Fact]
                 public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
                 {
@@ -319,10 +159,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                         TrustOrSponsorRationale = rationale
                     };
                     var result = await _subject.TrustOrSponsorPost(vm);
-
+    
                     ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
                 }
-
+    
                 [Fact]
                 public async void GivenErrorInModelState_ReturnsCorrectView()
                 {
@@ -333,16 +173,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     _subject.ModelState.AddModelError(nameof(vm.TrustOrSponsorRationale), "error");
                     var result = await _subject.TrustOrSponsorPost(vm);
-
+    
                     _projectRepository.Verify(r =>
                         r.Update(It.Is<Project>(project => project.Rationale.Trust == "")), Times.Never);
                     
                     var viewResult = Assert.IsType<ViewResult>(result);
-
+    
                     Assert.False(_subject.ModelState.IsValid);
                     Assert.Equal(vm, viewResult.Model);
                 }
-
+    
                 [Fact]
                 public async void GivenGetByUrnReturnsError_DisplayErrorPage()
                 {
@@ -353,11 +193,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     var response = await _subject.TrustOrSponsorPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-
+    
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Error", viewResult.Model);
                 }
-
+    
                 [Fact]
                 public async void GivenUpdateReturnsError_DisplayErrorPage()
                 {
@@ -369,7 +209,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                                 ErrorMessage = "Update error"
                             }
                         });
-
+    
                     var vm = new RationaleTrustOrSponsorViewModel()
                     {
                         Urn = "errorWithUpdate",
@@ -378,11 +218,11 @@ namespace Frontend.Tests.ControllerTests.Projects
                     
                     var response = await _subject.TrustOrSponsorPost(vm);
                     var viewResult = Assert.IsType<ViewResult>(response);
-
+    
                     Assert.Equal("ErrorPage", viewResult.ViewName);
                     Assert.Equal("Update error", viewResult.Model);
                 }
-
+    
                 [Fact]
                 public async void GivenInvalidInputAndReturnToPreview_AssignsToTheViewModel()
                 {
@@ -398,7 +238,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                     
                     Assert.True(viewModel.ReturnToPreview);
                 }
-
+    
                 [Fact]
                 public async void GivenReturnToPreview_RedirectsToPreviewPage()
                 {
@@ -409,7 +249,7 @@ namespace Frontend.Tests.ControllerTests.Projects
                         ReturnToPreview = true
                     };
                     var response = await _subject.TrustOrSponsorPost(vm);
-
+    
                     ControllerTestHelpers.AssertResultRedirectsToPage(
                         response, Links.HeadteacherBoard.Preview.PageName,
                         new RouteValueDictionary(new {id = "0001"})
