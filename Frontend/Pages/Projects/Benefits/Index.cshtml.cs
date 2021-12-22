@@ -22,9 +22,9 @@ namespace Frontend.Pages.Projects.Benefits
             _projects = projects;
         }
 
-        public async Task<IActionResult> OnGetAsync(string urn)
+        public async Task<IActionResult> OnGetAsync()
         {
-            var project = await _projects.GetByUrn(urn);
+            var project = await _projects.GetByUrn(Urn);
             if (!project.IsValid)
             {
                 return this.View("ErrorPage", project.Error.ErrorMessage);
@@ -38,9 +38,8 @@ namespace Frontend.Pages.Projects.Benefits
                 BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
                 projectResult.Urn,
                 projectResult.OutgoingAcademyUrn
-            ); 
-            Urn= urn;
-            
+            );
+
             return Page();
         }
 
