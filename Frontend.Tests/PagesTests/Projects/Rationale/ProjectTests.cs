@@ -1,0 +1,174 @@
+using AutoFixture;
+using Data;
+using Frontend.Models;
+using Frontend.Models.Rationale;
+using Frontend.Tests.Helpers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
+using Moq;
+using Xunit;
+using Project = Frontend.Pages.Projects.Rationale.Project;
+
+namespace Frontend.Tests.PagesTests.Projects.Rationale
+{
+    public class ProjectTests : PageTests
+    {
+        private readonly Project _subject;
+
+        public ProjectTests()
+        {
+            _subject = new Project(ProjectRepository.Object) { Urn = ProjectUrn0001 };
+        }
+
+        public class OnGetAsync : ProjectTests
+        {
+            [Fact]
+            public async void GivenUrn_FetchesProjectFromTheRepository()
+            {
+                await _subject.OnGetAsync();
+
+                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenReturnToPreview_AssignItToTheView()
+            {
+                _subject.ReturnToPreview = true;
+                var response = await _subject.OnGetAsync();
+
+                Assert.IsType<PageResult>(response);
+                Assert.True(_subject.ReturnToPreview);
+            }
+
+            [Fact]
+            public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+            {
+                var fixture = new Fixture();
+                var foundProject = fixture.Create<Data.Models.Project>();
+
+                ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
+                    new RepositoryResult<Data.Models.Project>
+                    {
+                        Result = foundProject
+                    });
+
+                var response = await _subject.OnGetAsync();
+
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(foundProject.Urn, _subject.Urn);
+                Assert.Equal(foundProject.Rationale.Project, _subject.ViewModel.ProjectRationale);
+            }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                _subject.Urn = ProjectErrorUrn;
+                var response = await _subject.OnGetAsync();
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
+        }
+
+        public class OnPostAsync : ProjectTests
+        {
+            public OnPostAsync()
+            {
+                _subject.Urn = ProjectUrn0001;
+                _subject.ViewModel = new RationaleProjectViewModel
+                {
+                    ProjectRationale = "This is the project rationale"
+                };
+            }
+
+            [Fact]
+            public async void GivenUrn_FetchesProjectFromTheRepository()
+            {
+                await _subject.OnPostAsync();
+
+                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
+            {
+                _subject.Urn = ProjectErrorUrn;
+                var response = await _subject.OnPostAsync();
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
+            }
+
+            [Fact]
+            public async void GivenErrorInModelState_ReturnsCorrectView()
+            {
+                _subject.ModelState.AddModelError(nameof(_subject.ViewModel.ProjectRationale), "error");
+                var result = await _subject.OnPostAsync();
+
+                ProjectRepository.Verify(r =>
+                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                
+                Assert.IsType<PageResult>(result);
+            }
+
+            [Fact]
+            public async void GivenUrnAndRationale_UpdatesTheProject()
+            {
+                await _subject.OnPostAsync();
+
+                ProjectRepository.Verify(r =>
+                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
+                    Times.Once);
+            }
+
+            [Fact]
+            public async void GivenUpdateReturnsError_DisplayErrorPage()
+            {
+                ProjectRepository.Setup(s => s.Update(It.IsAny<Data.Models.Project>())).ReturnsAsync(
+                    new RepositoryResult<Data.Models.Project>
+                    {
+                        Error = new RepositoryResultBase.RepositoryError
+                        {
+                            ErrorMessage = "Update error"
+                        }
+                    });
+
+                var response = await _subject.OnPostAsync();
+                var viewResult = Assert.IsType<ViewResult>(response);
+
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Update error", viewResult.Model);
+            }
+
+            [Fact]
+            public async void GivenReturnToPreview_RedirectsToPreviewPage()
+            {
+                _subject.ReturnToPreview = true;
+
+                var response = await _subject.OnPostAsync();
+    
+                ControllerTestHelpers.AssertResultRedirectsToPage(
+                    response, Links.HeadteacherBoard.Preview.PageName,
+                    new RouteValueDictionary(new {id = ProjectUrn0001})
+                );
+            }
+            
+            [Fact]
+            public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
+            {
+                const string rationale = "This is the project rationale";
+                _subject.ViewModel = new RationaleProjectViewModel
+                {
+                    ProjectRationale = rationale
+                };
+
+                var result = await _subject.OnPostAsync();
+
+                ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
+            }
+        }
+    }
+}
