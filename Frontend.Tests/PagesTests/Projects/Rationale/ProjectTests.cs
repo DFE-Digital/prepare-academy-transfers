@@ -32,7 +32,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenReturnToPreview_AssignItToTheView()
+            public async void GivenReturnToPreview_AssignItToThePage()
             {
                 _subject.ReturnToPreview = true;
                 var response = await _subject.OnGetAsync();
@@ -42,7 +42,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+            public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
                 var fixture = new Fixture();
                 var foundProject = fixture.Create<Data.Models.Project>();
@@ -103,7 +103,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenErrorInModelState_ReturnsCorrectView()
+            public async void GivenErrorInModelState_ReturnsCorrectPage()
             {
                 _subject.ModelState.AddModelError(nameof(_subject.ViewModel.ProjectRationale), "error");
                 var result = await _subject.OnPostAsync();
