@@ -13,13 +13,16 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
         private readonly Index _subject;
         public IndexTests()
         {
-            _subject = new Index(ProjectRepository.Object);
+            _subject = new Index(ProjectRepository.Object)
+            {
+                Urn = ProjectUrn0001
+            };
         }
         
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {
-            await _subject.OnGetAsync(ProjectUrn0001);
+            await _subject.OnGetAsync();
             
             ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
@@ -27,7 +30,7 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
         [Fact]
         public async void GivenUrn_AssignsModelToThePage()
         {
-            var response = await _subject.OnGetAsync(ProjectUrn0001);
+            var response = await _subject.OnGetAsync();
             
             Assert.IsType<PageResult>(response);
             Assert.Equal(ProjectUrn0001,_subject.Urn);
@@ -37,7 +40,8 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
         [Fact]
         public async void GivenGetByUrnReturnsError_DisplayErrorPage()
         {
-            var response = await _subject.OnGetAsync(ProjectErrorUrn);
+            _subject.Urn = ProjectErrorUrn;
+            var response = await _subject.OnGetAsync();
             
             var viewResult = Assert.IsType<ViewResult>(response);
             Assert.Equal("ErrorPage", viewResult.ViewName);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Frontend.Models.Forms;
+using Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -33,7 +34,7 @@ namespace Frontend.Helpers.TagHelpers
             for (int i = 0; i < Checkboxes.Count; i++)
             {
                 var checkBox = Checkboxes[i];
-                var nameOrValue = (i == 0 ? checkBox.Name : checkBox.Value);
+                var nameOrValue = (i == 0 ? checkBox.Name.ToHtmlName() : checkBox.Value);
 
                 var div = new TagBuilder("div");
                 div.AddCssClass("govuk-checkboxes__item");
