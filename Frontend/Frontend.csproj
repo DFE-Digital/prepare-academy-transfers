@@ -11,6 +11,7 @@
     <Content Remove="wwwroot\package.json" />
     <Content Remove="wwwroot\src\**" />
     <Content Remove="wwwroot\webpack.config.js" />
+    <Content Remove="Views\Rationale\Project.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\package-lock.json" />
