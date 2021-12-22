@@ -114,10 +114,10 @@ describe("Creating and editing an academy transfer", function () {
         //Rationale
         clickDataTest("transfer-rationale")
         clickDataTest("project-rationale")
-        cy.fillInText("ProjectRationale", "this is the project rationale")
+        cy.fillInText("ViewModel.ProjectRationale", "this is the project rationale")
         submit();
         clickDataTest("trust-rationale")
-        cy.fillInText("TrustOrSponsorRationale", "this is the project rationale")
+        cy.fillInText("ViewModel.TrustOrSponsorRationale", "this is the project rationale")
         submit();
         clickBackLink()
 
