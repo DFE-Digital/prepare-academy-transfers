@@ -16,7 +16,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Rationale" asp-action="Project" data-test="project-rationale"
+            <a class="govuk-link" asp-page="/Projects/Rationale/Project" data-test="project-rationale"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> rationale for project</span>
             </a>

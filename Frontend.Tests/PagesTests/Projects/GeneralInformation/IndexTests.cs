@@ -16,6 +16,7 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
         {
             _subject = new Index(GetInformationForProject.Object);
         }
+        
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {

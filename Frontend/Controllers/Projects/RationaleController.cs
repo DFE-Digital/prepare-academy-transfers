@@ -38,60 +38,7 @@ namespace Frontend.Controllers.Projects
 
             return View(vm);
         }
-
-        [HttpGet("rationale")]
-        public async Task<IActionResult> Project(string urn, bool returnToPreview = false)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
-            var projectResult = project.Result;
-            var vm = new RationaleProjectViewModel
-            {
-                Urn = projectResult.Urn,
-                OutgoingAcademyName = projectResult.OutgoingAcademyName,
-                ReturnToPreview = returnToPreview,
-                ProjectRationale = projectResult.Rationale.Project
-            };
-            
-            return View(vm);
-        }
-
-        [ActionName("Project")]
-        [HttpPost("rationale")]
-        public async Task<IActionResult> ProjectPost(RationaleProjectViewModel vm)
-        {
-            var project = await _projectsRepository.GetByUrn(vm.Urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-            
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-            
-            var projectResult = project.Result;
-            projectResult.Rationale.Project = vm.ProjectRationale;
-
-            var result = await _projectsRepository.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
-            if (vm.ReturnToPreview)
-            {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
-            }
-
-            return RedirectToAction("Index", new {vm.Urn});
-        }
-
+        
         [HttpGet("trust-or-sponsor")]
         public async Task<IActionResult> TrustOrSponsor(string urn, bool returnToPreview = false)
         {
