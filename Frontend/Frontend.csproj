@@ -40,7 +40,4 @@
     <None Remove="Resources\htb-template.docx" />
     <EmbeddedResource Include="Resources\htb-template.docx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\TaskList\GeneralInformation" />
-  </ItemGroup>
 </Project>
