@@ -66,7 +66,7 @@ namespace Frontend.Pages.Projects.Rationale
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
             }
 
-            return RedirectToAction("Index", "Rationale", new { Urn });
+            return RedirectToPage("/Projects/Rationale/Index", new {Urn});
         }
     }
 }
