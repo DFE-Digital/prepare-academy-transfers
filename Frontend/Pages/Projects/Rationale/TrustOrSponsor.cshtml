@@ -1,4 +1,6 @@
-@model Frontend.Models.Rationale.RationaleTrustOrSponsorViewModel
+@page "/project/{urn}/rationale/trust-or-sponsor"
+@model Frontend.Pages.Projects.Rationale.TrustOrSponsor
+
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Write the rationale for the trust or sponsor";
@@ -17,12 +19,12 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="TrustOrSponsor" method="post" novalidate="">
+        <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
-                <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
+                <label class="govuk-label govuk-!-font-weight-bold" asp-for="ViewModel.TrustOrSponsorRationale">
                     <span class="govuk-caption-l">
                         @Model.OutgoingAcademyName
                     </span>
@@ -37,9 +39,9 @@
                     You can format this section after you download your project template.
                 </div>
 
-                <span asp-gds-validation-for="TrustOrSponsorRationale"></span>
+                <span asp-gds-validation-for="ViewModel.TrustOrSponsorRationale"></span>
 
-                <textarea asp-for="TrustOrSponsorRationale" class="govuk-textarea" rows="20" aria-describedby="rationale-hint" data-test="trust-rationale">@Model.TrustOrSponsorRationale</textarea>
+                <textarea asp-for="ViewModel.TrustOrSponsorRationale" class="govuk-textarea" rows="20" aria-describedby="rationale-hint" data-test="trust-rationale"></textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue

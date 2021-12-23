@@ -23,7 +23,7 @@
             <input type="hidden" asp-for="@Model.ReturnToPreview" />
             <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
             <div class="govuk-form-group @formClasses">
-                <label class="govuk-label govuk-!-font-weight-bold" for="rationale">
+                <label class="govuk-label govuk-!-font-weight-bold" asp-for="ViewModel.ProjectRationale">
                     <span class="govuk-caption-l">
                         @Model.OutgoingAcademyName
                     </span>

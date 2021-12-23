@@ -2,26 +2,26 @@ using AutoFixture;
 using Data;
 using Frontend.Models;
 using Frontend.Models.Rationale;
+using Frontend.Pages.Projects.Rationale;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
-using Project = Frontend.Pages.Projects.Rationale.Project;
 
 namespace Frontend.Tests.PagesTests.Projects.Rationale
 {
-    public class ProjectTests : PageTests
+    public class TrustOrSponsorTests : PageTests
     {
-        private readonly Project _subject;
+        private readonly TrustOrSponsor _subject;
 
-        protected ProjectTests()
+        public TrustOrSponsorTests()
         {
-            _subject = new Project(ProjectRepository.Object) { Urn = ProjectUrn0001 };
+            _subject = new TrustOrSponsor(ProjectRepository.Object) { Urn = ProjectUrn0001 };
         }
-
-        public class OnGetAsync : ProjectTests
+        
+        public class OnGetAsync : TrustOrSponsorTests
         {
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
@@ -58,7 +58,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
 
                 Assert.IsType<PageResult>(response);
                 Assert.Equal(foundProject.Urn, _subject.Urn);
-                Assert.Equal(foundProject.Rationale.Project, _subject.ViewModel.ProjectRationale);
+                Assert.Equal(foundProject.Rationale.Trust, _subject.ViewModel.TrustOrSponsorRationale);
             }
 
             [Fact]
@@ -68,19 +68,19 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnGetAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
             }
         }
 
-        public class OnPostAsync : ProjectTests
+        public class OnPostAsync : TrustOrSponsorTests
         {
             public OnPostAsync()
             {
                 _subject.Urn = ProjectUrn0001;
-                _subject.ViewModel = new RationaleProjectViewModel
+                _subject.ViewModel = new RationaleTrustOrSponsorViewModel()
                 {
-                    ProjectRationale = "This is the project rationale"
+                    TrustOrSponsorRationale = "This is the trust rationale"
                 };
             }
 
@@ -99,14 +99,14 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
+                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal("Error", viewResult.Model);
             }
 
             [Fact]
             public async void GivenErrorInModelState_ReturnsCorrectPage()
             {
-                _subject.ModelState.AddModelError(nameof(_subject.ViewModel.ProjectRationale), "error");
+                _subject.ModelState.AddModelError(nameof(_subject.ViewModel.TrustOrSponsorRationale), "error");
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
@@ -121,7 +121,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
+                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Trust == _subject.ViewModel.TrustOrSponsorRationale)),
                     Times.Once);
             }
 
@@ -140,7 +140,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal("ErrorPage", viewResult.ViewName);
                 Assert.Equal("Update error", viewResult.Model);
             }
 
@@ -160,10 +160,10 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             [Fact]
             public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
             {
-                const string rationale = "This is the project rationale";
-                _subject.ViewModel = new RationaleProjectViewModel
+                const string rationale = "This is the trust rationale";
+                _subject.ViewModel = new RationaleTrustOrSponsorViewModel()
                 {
-                    ProjectRationale = rationale
+                    TrustOrSponsorRationale = rationale
                 };
 
                 var result = await _subject.OnPostAsync();

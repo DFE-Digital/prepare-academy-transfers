@@ -4,21 +4,22 @@ using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Rationale;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Rationale
 {
-    public class Project : CommonPageModel
+    public class TrustOrSponsor : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
 
-        public Project(IProjects projectsRepository)
+        [BindProperty]
+        public RationaleTrustOrSponsorViewModel ViewModel { get; set; }
+
+        public TrustOrSponsor(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
         }
-
-        [BindProperty]
-        public RationaleProjectViewModel ViewModel { get; set; }
-
+        
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
@@ -30,14 +31,14 @@ namespace Frontend.Pages.Projects.Rationale
             var projectResult = project.Result;
 
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
-            ViewModel = new RationaleProjectViewModel
+            ViewModel = new RationaleTrustOrSponsorViewModel
             {
-                ProjectRationale = projectResult.Rationale.Project
+                TrustOrSponsorRationale = projectResult.Rationale.Trust
             };
 
             return Page();
         }
-
+        
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
@@ -52,7 +53,7 @@ namespace Frontend.Pages.Projects.Rationale
             }
 
             var projectResult = project.Result;
-            projectResult.Rationale.Project = ViewModel.ProjectRationale;
+            projectResult.Rationale.Trust = ViewModel.TrustOrSponsorRationale;
 
             var result = await _projectsRepository.Update(projectResult);
             if (!result.IsValid)

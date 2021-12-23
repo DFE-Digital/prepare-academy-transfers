@@ -37,7 +37,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="Rationale" asp-action="TrustOrSponsor" data-test="trust-rationale"
+            <a class="govuk-link" asp-page="/Projects/Rationale/TrustOrSponsor" data-test="trust-rationale"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> rationale for the trust or sponsor</span>
             </a>
