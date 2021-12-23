@@ -3,14 +3,13 @@ using AutoFixture;
 using Data;
 using Frontend.Models;
 using Frontend.Models.Rationale;
-using Frontend.Pages.Projects.AcademyAndTrustInformation;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
-using Project = Frontend.Pages.Projects.Rationale.Project;
+using Frontend.Pages.Projects.Rationale;
 
 namespace Frontend.Tests.PagesTests.Projects.Rationale
 {

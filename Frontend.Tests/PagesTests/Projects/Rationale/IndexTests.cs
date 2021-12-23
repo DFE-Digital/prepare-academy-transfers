@@ -31,7 +31,6 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             
             Assert.IsType<PageResult>(response);
             Assert.Equal(ProjectUrn0001,_subject.Urn);
-            Assert.Equal(ProjectUrn0001,_subject.Urn);
         }
         
         [Fact]
