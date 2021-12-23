@@ -32,8 +32,8 @@ jobs:
       - name: Npm install
         run: npm install
       
-      - name: Verify logs
-        run: docker logs "${{ job.services.web-app.id }}"
+#      - name: Verify logs
+#        run: docker logs "${{ job.services.web-app.id }}"
 
       - name: Run tests
         run: npm run cypress:run -- --record --key ${{ secrets.CYPRESS_KEY }} --env username='${{ secrets.USERNAME }}',password='${{ secrets.PASSWORD }}',url='${{ secrets.ENDPOINT }}'
