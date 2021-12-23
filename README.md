@@ -1,4 +1,4 @@
-[![End to end tests](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml/badge.svg)](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml)
+[![Test, build, and deploy](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/build_test_deploy.yml/badge.svg)](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/build_test_deploy.yml)   [![End to end tests](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml/badge.svg)](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml)
 
 # academy-transfers-api
 
