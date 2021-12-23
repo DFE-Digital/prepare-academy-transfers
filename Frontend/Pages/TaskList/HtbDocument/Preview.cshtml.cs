@@ -2,12 +2,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
-using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
-using Frontend.Models.Rationale;
 using Frontend.Models.TransferDates;
-using Frontend.Pages.Projects.AcademyAndTrustInformation;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,13 +19,12 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
-
-        public RationaleSummaryViewModel RationaleSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
-
+        public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
+        
         public Preview(IGetInformationForProject getInformationForProject)
         {
             _getInformationForProject = getInformationForProject;
@@ -77,16 +73,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
             };
-
-            RationaleSummaryViewModel = new RationaleSummaryViewModel
-            {
-                Urn = Project.Urn,
-                ReturnToPreview = true,
-                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                ProjectRationale = Project.Rationale.Project,
-                TrustRationale = Project.Rationale.Trust
-            };
-
+            
             AcademyAndTrustInformationSummaryViewModel =
                 new Pages.Projects.AcademyAndTrustInformation.Index(_getInformationForProject)
                 {
@@ -120,6 +107,16 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 DiocesePercent = generalInformation.DiocesesPercent,
                 DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq,
                 MP = generalInformation.MpAndParty
+            };
+
+            RationaleSummaryViewModel = new Pages.Projects.Rationale.Index(_getInformationForProject)
+            {
+                OutgoingAcademyName = Project.OutgoingAcademyName,
+                ProjectRationale = Project.Rationale.Project,
+                TrustRationale = Project.Rationale.Trust,
+                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                Urn = Project.Urn,
+                ReturnToPreview = true
             };
 
             PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
