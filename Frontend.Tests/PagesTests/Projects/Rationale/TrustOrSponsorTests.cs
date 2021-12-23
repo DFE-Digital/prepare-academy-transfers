@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoFixture;
 using Data;
 using Frontend.Models;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
+using Index = Frontend.Pages.Projects.AcademyAndTrustInformation.Index;
 
 namespace Frontend.Tests.PagesTests.Projects.Rationale
 {
@@ -168,7 +170,11 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
 
                 var result = await _subject.OnPostAsync();
 
-                ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
+                var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("Urn", ProjectUrn0001)
+                });
+                ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/Rationale/{nameof(Index)}", routeValues);
             }
         }
     }

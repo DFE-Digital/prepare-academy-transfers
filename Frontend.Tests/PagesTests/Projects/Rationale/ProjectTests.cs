@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using AutoFixture;
 using Data;
 using Frontend.Models;
 using Frontend.Models.Rationale;
+using Frontend.Pages.Projects.AcademyAndTrustInformation;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -168,7 +170,11 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
 
                 var result = await _subject.OnPostAsync();
 
-                ControllerTestHelpers.AssertResultRedirectsToAction(result, "Index");
+                var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("Urn", ProjectUrn0001)
+                });
+                ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/Rationale/{nameof(Index)}", routeValues);
             }
         }
     }
