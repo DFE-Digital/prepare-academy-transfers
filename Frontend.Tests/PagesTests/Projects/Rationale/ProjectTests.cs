@@ -45,7 +45,8 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
                 var fixture = new Fixture();
-                var foundProject = fixture.Create<Data.Models.Project>();
+                var foundProject = fixture.Build<Data.Models.Project>()
+                    .With(project => project.Urn, ProjectUrn0001).Create();
 
                 ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
                     new RepositoryResult<Data.Models.Project>

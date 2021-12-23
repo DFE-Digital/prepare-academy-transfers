@@ -29,9 +29,7 @@ namespace Frontend.Pages.Projects.Rationale
 
             var projectResult = project.Result;
 
-            Urn = projectResult.Urn;
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
-            ReturnToPreview = ReturnToPreview;
             ViewModel = new RationaleProjectViewModel
             {
                 ProjectRationale = projectResult.Rationale.Project
