@@ -1,3 +1,5 @@
+[![End to end tests](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml/badge.svg)](https://github.com/DFE-Digital/academy-transfers-api/actions/workflows/end_to_end_tests.yml)
+
 # academy-transfers-api
 
 The internal service for managing Academy Transfers.
