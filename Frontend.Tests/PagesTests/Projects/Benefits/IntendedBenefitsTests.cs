@@ -130,14 +130,14 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
 
                 var viewResult = Assert.IsType<ViewResult>(response);
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal(ErrorMessage, viewModel);
             }
 
             [Fact]
             public async void GivenUpdateReturnsError_DisplayErrorPage()
             {
-                var errorMessage = "Project not found";
+                var errorMessage = "Project update failed";
                 ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
                     .ReturnsAsync(new RepositoryResult<Project>
                     {
@@ -158,7 +158,7 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
 
                 var viewResult = Assert.IsType<ViewResult>(response);
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal(errorMessage, viewModel);
             }
 

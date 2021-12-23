@@ -46,8 +46,8 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
             var response =  await _subject.OnGetAsync(ProjectErrorUrn);
             var viewResult = Assert.IsType<ViewResult>(response);
         
-            Assert.Equal("ErrorPage", viewResult.ViewName);
-            Assert.Equal("Error", viewResult.Model);
+            Assert.Equal(ErrorPageName, viewResult.ViewName);
+            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
 }

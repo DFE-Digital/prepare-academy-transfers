@@ -1,13 +1,15 @@
+﻿@page "/project/{urn}/benefits/other-factors"
+@model Frontend.Pages.Projects.Benefits.OtherFactors
+
 @using Data.Models.Projects
 @using Helpers
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 @using Microsoft.AspNetCore.Mvc.Rendering
-@model Frontend.Models.Benefits.OtherFactorsViewModel
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Are there any other factors to consider during this transfer?";
     Layout = "_Layout";
-    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherFactorsVm)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherFactorsViewModel.OtherFactorsVm)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
 
 @section BeforeMain
@@ -21,7 +23,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="OtherFactors" method="post" novalidate="">
+        <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
@@ -40,27 +42,29 @@
                     </div>
 
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-                        @for (var i = 0; i < Model.OtherFactorsVm.Count; i++)
+                        @for (var i = 0; i < Model.OtherFactorsViewModel.OtherFactorsVm.Count; i++)
                         {
                             <div class="govuk-checkboxes__item">
-                                <input asp-for="@Model.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
-                                <label id="@Model.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsVm[i].Checked">
+                                <input asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
+                                <label id="@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked">
                                     @{
-                                        var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsVm[i].OtherFactor);
+                                        var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor);
                                         @displayName
                                     }
                                 </label>
                             </div>
-                            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@Model.OtherFactorsVm[i].OtherFactor.ToString()">
+                            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor.ToString()">
                                 <div class="govuk-form-group">
-                                    <label class="govuk-label" asp-for="@(Model.OtherFactorsVm[i].Description)">
+                                    <label class="govuk-label" asp-for="@(Model.OtherFactorsViewModel.OtherFactorsVm[i].Description)">
                                         Specify this concern further
                                     </label>
-                                    <span asp-gds-validation-for="OtherFactorsVm[i].Description"></span>
-                                    <input asp-for="@Model.OtherFactorsVm[i].Description" class="govuk-input govuk-!-width-two-thirds" type="text" spellcheck="false" value="@Model.OtherFactorsVm[i].Description">
+                                    <span asp-gds-validation-for="OtherFactorsViewModel.OtherFactorsVm[i].Description"></span>
+                                    <input asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Description" class="govuk-input govuk-!-width-two-thirds" type="text" spellcheck="false" value="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Description">
                                 </div>
                             </div>
-                            @Html.HiddenFor(m => m.OtherFactorsVm[i].OtherFactor)
+                            
+                            <input type="hidden" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor"/>
+                            
                         }
                     </div>
                 </fieldset>

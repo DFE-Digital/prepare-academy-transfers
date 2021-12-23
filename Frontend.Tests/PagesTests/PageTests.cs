@@ -15,6 +15,7 @@ namespace Frontend.Tests.PagesTests
         protected const string ProjectUrn0001 = "0001";
         protected const string AcademyUrn = "1234";
         protected const string ErrorMessage = "Error";
+        protected const string ErrorPageName = "ErrorPage";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
         protected GetInformationForProjectResponse FoundInformationForProject;
