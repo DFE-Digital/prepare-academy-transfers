@@ -52,7 +52,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-action="OtherFactors" asp-controller="Benefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)"  data-test="other-factors">
+            <a class="govuk-link" asp-page="/Projects/Benefits/OtherFactors" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)"  data-test="other-factors">
                 Change<span class="govuk-visually-hidden"> other factors to consider</span>
             </a>
         </dd>

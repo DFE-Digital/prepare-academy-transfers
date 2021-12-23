@@ -16,7 +16,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
     {
         private readonly Project _subject;
 
-        public ProjectTests()
+        protected ProjectTests()
         {
             _subject = new Project(ProjectRepository.Object) { Urn = ProjectUrn0001 };
         }
@@ -68,8 +68,8 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnGetAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ErrorMessage, viewResult.Model);
             }
         }
 
@@ -99,8 +99,8 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ErrorMessage, viewResult.Model);
             }
 
             [Fact]
@@ -140,7 +140,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
 
-                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal("Update error", viewResult.Model);
             }
 

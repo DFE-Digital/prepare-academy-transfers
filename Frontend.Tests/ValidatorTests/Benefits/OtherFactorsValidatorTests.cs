@@ -18,14 +18,9 @@ namespace Frontend.Tests.ValidatorTests.Benefits
         }
         
         [Fact]
-        public async void GivenUrnAndNoOtherFactors_Valid()
+        public async void GivenNoOtherFactors_Valid()
         {
-            var vm = new OtherFactorsViewModel()
-            {
-                Urn = "0001",
-            };
-
-            var result = await _otherFactorsValidator.TestValidateAsync(vm);
+            var result = await _otherFactorsValidator.TestValidateAsync(new OtherFactorsViewModel());
             result.ShouldNotHaveAnyValidationErrors();
         }
     }

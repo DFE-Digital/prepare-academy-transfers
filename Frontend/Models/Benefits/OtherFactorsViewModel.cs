@@ -6,8 +6,8 @@ using Helpers;
 
 namespace Frontend.Models.Benefits
 {
-    public class OtherFactorsViewModel : CommonViewModel
+    public class OtherFactorsViewModel
     {
-        public List<OtherFactorsItemViewModel> OtherFactorsVm { get; set; }
+        public List<OtherFactorsItemViewModel> OtherFactorsVm { get; set; } = new List<OtherFactorsItemViewModel>();
     }
 }

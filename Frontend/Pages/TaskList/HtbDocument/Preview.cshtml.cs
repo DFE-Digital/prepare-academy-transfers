@@ -56,7 +56,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 Project.Benefits.IntendedBenefits.ToList(),
                 Project.Benefits.OtherIntendedBenefit,
-                BenefitsController.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
+                Pages.Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
                     .ToList(),
                 Project.Urn,
                 Project.OutgoingAcademyUrn
