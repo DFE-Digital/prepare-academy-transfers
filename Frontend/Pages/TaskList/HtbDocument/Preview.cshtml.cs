@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
-using Frontend.Models.Features;
 using Frontend.Models.TransferDates;
 using Frontend.Pages.Projects.Features;
 using Frontend.Services.Interfaces;
@@ -17,7 +16,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
-        public Projects.Features.Index FeaturesSummaryViewModel { get; set; }
+        public Index FeaturesSummary { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
@@ -38,7 +37,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesSummaryViewModel = new Index(null)
+            FeaturesSummary = new Index(null)
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
@@ -53,7 +52,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 Project.Benefits.IntendedBenefits.ToList(),
                 Project.Benefits.OtherIntendedBenefit,
-                Pages.Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
+                Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
                     .ToList(),
                 Project.Urn,
                 Project.OutgoingAcademyUrn
