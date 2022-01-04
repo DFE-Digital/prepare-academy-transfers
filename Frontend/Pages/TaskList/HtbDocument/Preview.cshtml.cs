@@ -5,6 +5,7 @@ using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Models.TransferDates;
+using Frontend.Pages.Projects.Features;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
-        public FeaturesSummaryViewModel FeaturesSummaryViewModel { get; set; }
+        public Projects.Features.Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
@@ -37,7 +38,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesSummaryViewModel = new FeaturesSummaryViewModel
+            FeaturesSummaryViewModel = new Index(null)
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,

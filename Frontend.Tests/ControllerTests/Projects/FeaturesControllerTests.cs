@@ -57,28 +57,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                 .ReturnsAsync(new RepositoryResult<Project>());
         }
 
-        public class IndexTests : FeaturesControllerTests
-        {
-            [Fact]
-            public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
-            {
-                var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
-                await request();
-                _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var response = await _subject.Index("errorUrn");
-                var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Project not found", viewModel);
-            }
-        }
-
         public class InitiatedTests : FeaturesControllerTests
         {
             public class GetTests : InitiatedTests

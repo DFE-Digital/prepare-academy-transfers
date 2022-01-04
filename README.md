@@ -18,7 +18,7 @@ To get the Frontend project running you will require:
 - .NET
     - `dotnet restore`
 - Node
-    - `make build-frontend`
+    - `make build-frontend` or `npm run build`
 2. **Ensure Redis is running**
 3. **Set user secrets**
    - `dotnet user-secrets set "Key" "Value" --project Frontend`
@@ -52,6 +52,7 @@ To execute the tests locally and view the output, run the following:
 
 ```
 cd end-to-end-tests
+npm install (first time)
 npm run cypress:open -- --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
 ```
 

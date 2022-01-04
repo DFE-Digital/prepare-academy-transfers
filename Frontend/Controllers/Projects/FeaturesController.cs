@@ -21,29 +21,6 @@ namespace Frontend.Controllers.Projects
             _projectsRepository = projectsRepository;
         }
 
-        public async Task<IActionResult> Index(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
-            var projectResult = project.Result;
-            var model = new FeaturesSummaryViewModel
-            {
-                Urn = projectResult.Urn,
-                IsSubjectToRddOrEsfaIntervention = projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
-                TypeOfTransfer = projectResult.Features.TypeOfTransfer,
-                OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer,
-                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
-                WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer,
-                InterventionDetails = projectResult.Features.ReasonForTransfer.InterventionDetails
-
-            };
-            return View(model);
-        }
-
         [AcceptVerbs(WebRequestMethods.Http.Get)]
         [Route("initiated")]
         public async Task<IActionResult> Initiated(string urn, bool returnToPreview = false)
@@ -96,7 +73,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new { urn });
+            return RedirectToPage("/Projects/Features/Index", new { urn });
         }
 
         [Route("reason")]
@@ -152,7 +129,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new { urn });
+            return RedirectToPage("/Projects/Features/Index", new { urn });
         }
 
         [Route("type")]
@@ -209,7 +186,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = urn });
             }
 
-            return RedirectToAction("Index", new { urn });
+            return RedirectToPage("/Projects/Features/Index", new { urn });
         }
     }
 }
