@@ -37,10 +37,8 @@ namespace Frontend.Pages.Projects.Benefits
             }
 
             var projectResult = project.Result;
-
-            Urn = projectResult.Urn;
+            
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
-            ReturnToPreview = ReturnToPreview;
             IntendedBenefitsViewModel.SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits;
             IntendedBenefitsViewModel.OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)
                     ? projectResult.Benefits.OtherIntendedBenefit

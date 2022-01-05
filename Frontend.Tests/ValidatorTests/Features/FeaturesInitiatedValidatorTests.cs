@@ -23,9 +23,7 @@ namespace Frontend.Tests.ValidatorTests.Features
         {
             var vm = new FeaturesInitiatedViewModel
             {
-                Urn = "001",
                 WhoInitiated = projectInitiator,
-                OutgoingAcademyName = "Test"
             };
 
             var result = await _featuresInitiatedValidator.TestValidateAsync(vm);
@@ -38,9 +36,7 @@ namespace Frontend.Tests.ValidatorTests.Features
         {
             var vm = new FeaturesInitiatedViewModel
             {
-                Urn = "001",
-                WhoInitiated = projectInitiator,
-                OutgoingAcademyName = "Test"
+                WhoInitiated = projectInitiator
             };
 
             var result = await _featuresInitiatedValidator.TestValidateAsync(vm);
