@@ -37,7 +37,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesSummary = new Index(null)
+            FeaturesSummaryViewModel = new Index(null)
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
