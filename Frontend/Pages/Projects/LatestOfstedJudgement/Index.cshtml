@@ -1,0 +1,44 @@
+@page "/project/{urn}/latest-ofsted-judgement"
+@model Frontend.Pages.Projects.LatestOfstedJudgement.Index
+
+@{
+    ViewBag.Title = "Latest Ofsted judgement (reference)";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
+    </backtopreview>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            URN @Model.OutgoingAcademyUrn
+        </span>
+        <h1 class="govuk-heading-l">Latest Ofsted judgement</h1>
+        <div class="govuk-inset-text">
+            The information here can’t be changed but you will be able to edit the project template after it’s been created.
+        </div>
+        <p class="govuk-body">This information is taken from TRAMS.</p>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <partial name="_OfstedSummary" for="@Model"></partial>
+    </div>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
+    @if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
+    {
+        <div class="govuk-grid-column-two-thirds">
+            <form asp-controller="Project" asp-route-id="@Model.Urn">
+                <button class="govuk-button" data-module="govuk-button">
+                    Confirm and continue
+                </button>
+            </form>
+        </div>
+    }
+</div>
