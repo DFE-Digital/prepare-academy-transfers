@@ -57,28 +57,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                 .ReturnsAsync(new RepositoryResult<Project>());
         }
 
-        public class IndexTests : FeaturesControllerTests
-        {
-            [Fact]
-            public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
-            {
-                var request = new Func<Task<IActionResult>>(async () => await _subject.Index("0001"));
-                await request();
-                _projectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var response = await _subject.Index("errorUrn");
-                var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Project not found", viewModel);
-            }
-        }
-
         public class InitiatedTests : FeaturesControllerTests
         {
             public class GetTests : InitiatedTests
@@ -129,15 +107,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
                 {
+                    var urn = "0001";
                     FeaturesInitiatedViewModel vm = new FeaturesInitiatedViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         WhoInitiated = TransferFeatures.ProjectInitiators.Dfe
                     };
                     var request = await _subject.InitiatedPost(vm);
 
-                    var redirectResponse = Assert.IsType<RedirectToActionResult>(request);
-                    Assert.Equal("Index", redirectResponse.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Theory]
@@ -314,15 +293,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenSubjectToInterventionAndReason_RedirectsToSummaryPage()
                 {
+                    var urn = "0001";
                     var vm = new FeaturesReasonViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         IsSubjectToIntervention = true,
                         MoreDetail = "More detail"
                     };
                     var result = await _subject.ReasonPost(vm);
-                    var redirect = Assert.IsType<RedirectToActionResult>(result);
-                    Assert.Equal("Index", redirect.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Fact]
@@ -560,15 +540,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenTypeOfTransfer_RedirectsToIndex()
                 {
+                    var urn = "0001";
                     var vm = new FeaturesTypeViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
                     };
 
                     var result = await _subject.TypePost(vm);
-                    var redirect = Assert.IsType<RedirectToActionResult>(result);
-                    Assert.Equal("Index", redirect.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Fact]
