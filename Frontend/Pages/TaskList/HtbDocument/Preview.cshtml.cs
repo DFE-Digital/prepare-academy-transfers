@@ -16,7 +16,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
-        public Index FeaturesSummary { get; set; }
+        public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
@@ -37,7 +37,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             TransferringAcademy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
 
-            FeaturesSummary = new Index(null)
+            FeaturesSummaryViewModel = new Index(null)
             {
                 Urn = Project.Urn,
                 IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
