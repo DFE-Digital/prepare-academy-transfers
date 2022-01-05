@@ -107,15 +107,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
                 {
+                    var urn = "0001";
                     FeaturesInitiatedViewModel vm = new FeaturesInitiatedViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         WhoInitiated = TransferFeatures.ProjectInitiators.Dfe
                     };
                     var request = await _subject.InitiatedPost(vm);
 
-                    var redirectResponse = Assert.IsType<RedirectToActionResult>(request);
-                    Assert.Equal("Index", redirectResponse.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Theory]
@@ -292,15 +293,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenSubjectToInterventionAndReason_RedirectsToSummaryPage()
                 {
+                    var urn = "0001";
                     var vm = new FeaturesReasonViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         IsSubjectToIntervention = true,
                         MoreDetail = "More detail"
                     };
                     var result = await _subject.ReasonPost(vm);
-                    var redirect = Assert.IsType<RedirectToActionResult>(result);
-                    Assert.Equal("Index", redirect.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Fact]
@@ -538,15 +540,16 @@ namespace Frontend.Tests.ControllerTests.Projects
                 [Fact]
                 public async void GivenTypeOfTransfer_RedirectsToIndex()
                 {
+                    var urn = "0001";
                     var vm = new FeaturesTypeViewModel
                     {
-                        Urn = "0001",
+                        Urn = urn,
                         TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
                     };
 
                     var result = await _subject.TypePost(vm);
-                    var redirect = Assert.IsType<RedirectToActionResult>(result);
-                    Assert.Equal("Index", redirect.ActionName);
+                    ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
+                        new RouteValueDictionary(new {urn}));
                 }
 
                 [Fact]
