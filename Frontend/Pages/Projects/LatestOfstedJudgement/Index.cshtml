@@ -1,5 +1,5 @@
-@using Helpers
-@model Frontend.Models.LatestOfstedJudgementViewModel
+@page "/project/{urn}/latest-ofsted-judgement"
+@model Frontend.Pages.Projects.LatestOfstedJudgement.Index
 
 @{
     ViewBag.Title = "Latest Ofsted judgement (reference)";
@@ -30,11 +30,11 @@
     <div class="govuk-grid-column-full">
         <partial name="_OfstedSummary" for="@Model"></partial>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
-    @if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformationViewModel"/>
+    @if (!Model.AdditionalInformationViewModel.AddOrEditAdditionalInformation)
     {
         <div class="govuk-grid-column-two-thirds">
-            <form asp-controller="Project" asp-route-id="@Model.Urn">
+            <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">
                 <button class="govuk-button" data-module="govuk-button">
                     Confirm and continue
                 </button>
