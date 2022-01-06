@@ -1,5 +1,5 @@
 @using Helpers
-@model LatestOfstedJudgementViewModel
+@model Frontend.Pages.Projects.LatestOfstedJudgement.Index
 @{
     var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
 }
@@ -15,12 +15,12 @@
                 Additional information
             </dt>
             <dd class="govuk-summary-list__value">
-                <stringsummary value="@Model.AdditionalInformation.AdditionalInformation"></stringsummary>
+                <stringsummary value="@Model.AdditionalInformationViewModel.AdditionalInformation"></stringsummary>
             </dd>
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link"
-                   asp-controller="LatestOfstedJudgement" asp-action="Index"
-                   asp-route-id="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+                   asp-page="/Projects/LatestOfstedJudgement/Index"
+                   asp-route-urn="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
                    asp-route-returnToPreview="true">
                     Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
                 </a>

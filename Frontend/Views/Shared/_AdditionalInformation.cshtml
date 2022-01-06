@@ -13,7 +13,7 @@
             </div>
             <form method="post">
                 <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
-                <textarea class="govuk-textarea" asp-for="@Model.AdditionalInformation" id="additionalInformation" name="additionalInformation" rows="5" aria-describedby="additional-information-hint"></textarea>
+                <textarea class="govuk-textarea" asp-for="@Model.AdditionalInformation" rows="5" aria-describedby="additional-information-hint"></textarea>
                 <button class="govuk-button" data-module="govuk-button" type="submit">
                     Save and continue
                 </button>

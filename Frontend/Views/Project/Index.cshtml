@@ -72,12 +72,16 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Project.Urn" data-test="pupil-numbers">Pupil numbers</a>
+                            <a class="govuk-link" aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Project.Urn" data-test="pupil-numbers">
+                                Pupil numbers
+                            </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="ofsted-report" asp-controller="LatestOfstedJudgement" asp-action="Index" asp-route-id="@Model.Project.Urn" data-test="ofsted">Latest Ofsted report</a>
+                            <a class="govuk-link" aria-describedby="ofsted-report" asp-page="/Projects/LatestOfstedJudgement/Index" asp-route-urn="@Model.Project.Urn" data-test="ofsted">
+                                Latest Ofsted report
+                            </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
                     </li>
                     @if (Model.HasKeyStage2PerformanceInformation)
