@@ -76,7 +76,10 @@ namespace Frontend.Tests.PagesTests
                     Urn = ProjectUrn0001,
                     TransferringAcademies = new List<TransferringAcademies>
                     {
-                        new TransferringAcademies()
+                        new TransferringAcademies
+                        {
+                            OutgoingAcademyUrn = AcademyUrn
+                        }
                     }
                 },
                 OutgoingAcademy = new Academy
