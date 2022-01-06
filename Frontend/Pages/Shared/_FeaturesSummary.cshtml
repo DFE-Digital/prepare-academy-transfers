@@ -19,7 +19,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Initiated" asp-controller="Features" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="initiated">
+                    <a class="govuk-link" asp-page="/Projects/Features/Initiated" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="initiated">
                         Change<span class="govuk-visually-hidden"> who initiated the transfer</span>
                     </a>
                 </dd>
