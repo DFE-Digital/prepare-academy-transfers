@@ -135,35 +135,35 @@ describe("Creating and editing an academy transfer", function () {
         // Pupil numbers
         clickDataTest("pupil-numbers")
         clickDataTest("additional-information")
-        cy.fillInText("additionalInformation", "Additional information for pupil numbers");
+        cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
         submit();
         clickBackLink()
 
         // Ofsted
         clickDataTest("ofsted")
         clickDataTest("additional-information")
-        cy.fillInText("additionalInformation", "Additional information for ofsted");
+        cy.fillInText("AdditionalInformation", "Additional information for ofsted");
         submit();
         clickBackLink()
 
         // KS2
         clickDataTest("ks2-performance")
         clickDataTest("additional-information")
-        cy.fillInText("additionalInformation", "Additional information for ks2 performance");
+        cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
         submit();
         clickBackLink()
 
         // KS4
         clickDataTest("ks4-performance")
         clickDataTest("additional-information")
-        cy.fillInText("additionalInformation", "Additional information for ks4 performance");
+        cy.fillInText("AdditionalInformation", "Additional information for ks4 performance");
         submit();
         clickBackLink()
 
         // KS5
         clickDataTest("ks5-performance")
         clickDataTest("additional-information")
-        cy.fillInText("additionalInformation", "Additional information for ks5 performance");
+        cy.fillInText("AdditionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
         
