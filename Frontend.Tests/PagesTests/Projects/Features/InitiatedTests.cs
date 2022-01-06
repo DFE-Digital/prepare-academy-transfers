@@ -17,7 +17,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
     public class InitiatedTests : PageTests
     {
         private readonly Pages.Projects.Features.Initiated _subject;
-
+        private const string ProjectNotFound = "Project not found";
         public InitiatedTests()
         {
             _subject = new Pages.Projects.Features.Initiated(ProjectRepository.Object)
@@ -27,11 +27,10 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         }
 
         [Fact]
-        public async void GivenUrn_GetsProjectFromRepositoryAndAssignsToTheView()
+        public async void GivenUrn_GetsProjectFromRepository()
         {
-            var request = new Func<Task<IActionResult>>(async () => await _subject.OnGetAsync());
-            await request();
-            ProjectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+            await _subject.OnGetAsync();
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
 
         [Fact]
@@ -51,7 +50,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         {
             _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ProjectInitiators.Dfe;
             await _subject.OnPostAsync();
-            ProjectRepository.Verify(r => r.GetByUrn("0001"), Times.Once);
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
 
         [Fact]
@@ -114,7 +113,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                     Error = new RepositoryResultBase.RepositoryError
                     {
                         StatusCode = System.Net.HttpStatusCode.NotFound,
-                        ErrorMessage = "Project not found"
+                        ErrorMessage = ProjectNotFound
                     }
                 });
 
@@ -125,7 +124,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
             var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
 
             Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal("Project not found", viewModel);
+            Assert.Equal(ProjectNotFound, viewModel);
         }
 
         [Fact]
@@ -136,7 +135,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
 
             ControllerTestHelpers.AssertResultRedirectsToPage(
                 response, Links.HeadteacherBoard.Preview.PageName,
-                new RouteValueDictionary(new {id = "0001"})
+                new RouteValueDictionary(new {id = ProjectUrn0001})
             );
         }
     }
