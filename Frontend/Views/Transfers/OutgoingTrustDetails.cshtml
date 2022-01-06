@@ -36,7 +36,7 @@
                 <dd class="govuk-summary-list__value">
                     @foreach (var line in Model.Trust.Address)
                     {
-                        <p class="govuk-body">@line.Trim()</p>
+                        <p class="govuk-body">@line?.Trim()</p>
                     }
                 </dd>
             </div>
