@@ -2,30 +2,29 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Data.Models.Projects;
 using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Features;
 using Frontend.Models.Forms;
-using Helpers;
 using Microsoft.AspNetCore.Mvc;
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global (Set on model binding)
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Features
 {
-    public class Initiated : CommonPageModel
+    public class Reason : CommonPageModel
     {
         private readonly IProjects _projects;
-        [BindProperty]
-        public FeaturesInitiatedViewModel FeaturesInitiatedViewModel { get; set; } = new FeaturesInitiatedViewModel();
 
-        public Initiated(IProjects projects)
+        [BindProperty] public FeaturesReasonViewModel FeaturesReasonViewModel { get; set; } = new FeaturesReasonViewModel();
+
+        public Reason(IProjects projects)
         {
             _projects = projects;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
+
             var project = await _projects.GetByUrn(Urn);
             if (!project.IsValid)
             {
@@ -34,8 +33,24 @@ namespace Frontend.Pages.Projects.Features
 
             var projectResult = project.Result;
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
-            FeaturesInitiatedViewModel.WhoInitiated = projectResult.Features.WhoInitiatedTheTransfer;
+            FeaturesReasonViewModel.IsSubjectToIntervention =
+                projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention;
+            FeaturesReasonViewModel.MoreDetail = projectResult.Features.ReasonForTransfer.InterventionDetails;
+
             return Page();
+        }
+
+        public List<RadioButtonViewModel> ReasonRadioButtons()
+        {
+            var result = new[] {true, false}.Select(value => new RadioButtonViewModel
+            {
+                Value = value.ToString(),
+                Name = nameof(FeaturesReasonViewModel.IsSubjectToIntervention),
+                DisplayName = value ? "Yes" : "No",
+                Checked = FeaturesReasonViewModel.IsSubjectToIntervention == value
+            }).ToList();
+
+            return result;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -51,7 +66,8 @@ namespace Frontend.Pages.Projects.Features
                 return Page();
             }
             
-            project.Result.Features.WhoInitiatedTheTransfer = FeaturesInitiatedViewModel.WhoInitiated;
+            project.Result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = FeaturesReasonViewModel.IsSubjectToIntervention;
+            project.Result.Features.ReasonForTransfer.InterventionDetails = FeaturesReasonViewModel.MoreDetail ?? string.Empty;
             
             var result = await _projects.Update(project.Result);
             if (!result.IsValid)
@@ -65,24 +81,6 @@ namespace Frontend.Pages.Projects.Features
             }
             
             return RedirectToPage("/Projects/Features/Index", new { Urn });
-            
-        }
-
-        public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ProjectInitiators selected)
-        {
-            var values =
-                EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayableValues(TransferFeatures.ProjectInitiators
-                    .Empty);
-
-            var result = values.Select(value => new RadioButtonViewModel
-            {
-                Value = value.ToString(),
-                Name = "WhoInitiated",
-                DisplayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(value),
-                Checked = selected == value
-            }).ToList();
-
-            return result;
         }
     }
 }

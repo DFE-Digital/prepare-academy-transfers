@@ -1,5 +1,6 @@
+﻿@page "/project/{urn}/features/reason"
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model Frontend.Models.Features.FeaturesReasonViewModel
+@model Frontend.Pages.Projects.Features.Reason
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Reason for transfer";
@@ -9,9 +10,9 @@
 
 @section BeforeMain
 {
-<backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-    <a class="govuk-back-link" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn">Back</a>
-</backtopreview>
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
 }
 
 <div asp-gds-validation-summary></div>
@@ -24,22 +25,17 @@
         <h1 class="govuk-heading-l">
             Reason for transfer
         </h1>
-        <form asp-action="Reason" method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn" />
-            <input type="hidden" asp-for="@Model.ReturnToPreview" />
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName" />
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                         Has this transfer started because of an intervention with the academy or trust?
                     </legend>
 
-                     @if (ViewData.ModelState.GetFieldValidationState(nameof(Model.IsSubjectToIntervention)) == ModelValidationState.Invalid)
-                    {
-                        <span id="who-initiated-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @Html.ValidationMessageFor(m => m.IsSubjectToIntervention)
-                        </span>
-                    }
+                    <span asp-gds-validation-for="FeaturesReasonViewModel.IsSubjectToIntervention"></span>
 
                     @await Html.PartialAsync("_InlineRadioButtons", Model.ReasonRadioButtons())
                 </fieldset>
@@ -65,8 +61,8 @@
                 <div id="more-detail-hint" class="govuk-hint">
                     Give more information about the intention and reasons for RDD, RSC or ESFA intervention if neccessary.
                 </div>
-                
-                <textarea class="govuk-textarea" id="moreDetail" name="moreDetail" rows="6" aria-describedby="more-detail-hint">@Model.MoreDetail</textarea>
+
+                <textarea class="govuk-textarea" id="moreDetail" name="moreDetail" rows="6" aria-describedby="more-detail-hint">@Model.FeaturesReasonViewModel.MoreDetail</textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
                 Save and continue
