@@ -56,25 +56,25 @@ namespace Frontend.Tests.PagesTests.Projects.Features
             {
                 _subject.FeaturesReasonViewModel.IsSubjectToIntervention = true;
                 _subject.FeaturesReasonViewModel.MoreDetail = "More detail";
-            
+
                 await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(project =>
                     project.Urn == ProjectUrn0001 &&
                     project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true &&
                     project.Features.ReasonForTransfer.InterventionDetails == "More detail")), Times.Once);
             }
-            
+
             [Fact]
             public async void GivenSubjectToInterventionAndReason_RedirectsToSummaryPage()
             {
                 _subject.FeaturesReasonViewModel.IsSubjectToIntervention = true;
                 _subject.FeaturesReasonViewModel.MoreDetail = "More detail";
-            
+
                 var result = await _subject.OnPostAsync();
                 ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
                     new RouteValueDictionary(new {Urn = ProjectUrn0001}));
             }
-            
+
             [Fact]
             public async void GivenNotSubjectToInterventionAndNoReason_UpdatesTheProject()
             {
@@ -85,26 +85,28 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                     project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == false &&
                     project.Features.ReasonForTransfer.InterventionDetails == string.Empty)), Times.Once);
             }
-            
+
             [Fact]
             public async void GivenNothingSubmitted_DoesNotUpdateTheProject()
             {
-                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), _subject.FeaturesReasonViewModel, _subject.ModelState);
+                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(),
+                    _subject.FeaturesReasonViewModel, _subject.ModelState);
                 await _subject.OnPostAsync();
-            
+
                 ProjectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
             }
-            
+
             [Fact]
             public async void GivenNothingSubmitted_PageResultReturned()
             {
-                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(), _subject.FeaturesReasonViewModel, _subject.ModelState);
+                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(),
+                    _subject.FeaturesReasonViewModel, _subject.ModelState);
                 var resultPost = await _subject.OnPostAsync();
 
                 Assert.IsType<PageResult>(resultPost);
                 Assert.False(_subject.ModelState.IsValid);
             }
-            
+
             [Fact]
             public async void GivenGetByUrnReturnsError_DisplayErrorPage()
             {
@@ -112,11 +114,11 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-            
+
                 Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal(ErrorMessage, viewModel);
             }
-            
+
             [Fact]
             public async void GivenUpdateReturnsError_DisplayErrorPage()
             {
@@ -129,26 +131,27 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                             ErrorMessage = ProjectNotFound
                         }
                     });
-            
-              
+
+
                 var response = await _subject.OnPostAsync();
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-            
+
                 var viewResult = Assert.IsType<ViewResult>(response);
+
                 Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal(ProjectNotFound, viewModel);
             }
-            
+
             [Fact]
             public async void GivenReturnToPreview_RedirectsToPreviewPage()
             {
                 _subject.ReturnToPreview = true;
-                
+
                 var response = await _subject.OnPostAsync();
-            
+
                 ControllerTestHelpers.AssertResultRedirectsToPage(
                     response, Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new { id = "0001" })
+                    new RouteValueDictionary(new {id = "0001"})
                 );
             }
         }
