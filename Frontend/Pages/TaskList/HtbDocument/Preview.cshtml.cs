@@ -1,18 +1,23 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Data;
 using Frontend.Controllers.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
+using Frontend.Models.Features;
+using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Frontend.Pages.Projects.Features;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using LatestOfstedJudgementIndex = Frontend.Pages.Projects.LatestOfstedJudgement.Index;
 
 namespace Frontend.Pages.TaskList.HtbDocument
 {
     public class Preview : ProjectPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
+        private readonly IProjects _projects;
         public string ProjectUrn => Project.Urn;
         public object OutgoingAcademyUrn => TransferringAcademy.Urn;
 
@@ -22,12 +27,13 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
         public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
-        public LatestOfstedJudgementViewModel LatestOfstedJudgementViewModel { get; private set; }
+        public LatestOfstedJudgementIndex LatestOfstedJudgementViewModel { get; private set; }
         public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
         
-        public Preview(IGetInformationForProject getInformationForProject)
+        public Preview(IGetInformationForProject getInformationForProject, IProjects projects)
         {
             _getInformationForProject = getInformationForProject;
+            _projects = projects;
         }
 
         public async Task<IActionResult> OnGet(string id)
@@ -121,7 +127,26 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
 
-            LatestOfstedJudgementViewModel = LatestOfstedJudgementController.BuildViewModel(response, true, true);
+            LatestOfstedJudgementViewModel = new LatestOfstedJudgementIndex(_getInformationForProject, _projects)
+            {
+                Urn = Project.Urn,
+                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                OutgoingAcademyName = Project.OutgoingAcademyName,
+                SchoolName = TransferringAcademy.LatestOfstedJudgement.SchoolName,
+                InspectionDate = TransferringAcademy.LatestOfstedJudgement.InspectionDate,
+                OverallEffectiveness = TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness,
+                OfstedReport = TransferringAcademy.LatestOfstedJudgement.OfstedReport,
+                AdditionalInformationViewModel = new AdditionalInformationViewModel
+                {
+                    AdditionalInformation = Project.LatestOfstedJudgementAdditionalInformation,
+                    HintText =
+                        "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
+                    Urn = Project.Urn,
+                    AddOrEditAdditionalInformation = false,
+                    ReturnToPreview = true
+                },
+                IsPreview = true
+            };
 
             return Page();
         }
