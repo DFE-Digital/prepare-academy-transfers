@@ -42,8 +42,8 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                 var response = await _subject.OnGetAsync();
             
                 var viewResult = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ErrorMessage, viewResult.Model);
             }
        
             [Fact]
@@ -101,8 +101,8 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
             
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ErrorMessage, viewResult.Model);
             }
             
             [Fact]
@@ -114,15 +114,15 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                         Error = new RepositoryResultBase.RepositoryError
                         {
                             StatusCode = System.Net.HttpStatusCode.NotFound,
-                            ErrorMessage = "Project not found"
+                            ErrorMessage = ErrorMessage
                         }
                     });
                 
                 var response = await _subject.OnPostAsync();
                 var viewResult = Assert.IsType<ViewResult>(response);
             
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Project not found", viewResult.Model);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ErrorMessage, viewResult.Model);
             }
             
             [Fact]

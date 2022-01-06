@@ -36,8 +36,7 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
             {
                 return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
             }
-
-            Urn = projectInformation.Project.Urn;
+            
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             OutgoingAcademyName = projectInformation.Project.OutgoingAcademyName;
             SchoolName = projectInformation.OutgoingAcademy.LatestOfstedJudgement.SchoolName;
@@ -77,7 +76,7 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
             }
 
-            return RedirectToPage("/Projects/LatestOfstedJudgement/Index", nameof(this.OnGetAsync), new { Urn }, "additional-information-hint");
+            return RedirectToPage("/Projects/LatestOfstedJudgement/Index", null, new { Urn }, "additional-information-hint");
         }
     }
 }
