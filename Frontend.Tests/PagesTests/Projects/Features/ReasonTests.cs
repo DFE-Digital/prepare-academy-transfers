@@ -81,7 +81,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                 _subject.FeaturesReasonViewModel.IsSubjectToIntervention = false;
                 await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(project =>
-                    project.Urn == "0001" &&
+                    project.Urn == ProjectUrn0001 &&
                     project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == false &&
                     project.Features.ReasonForTransfer.InterventionDetails == string.Empty)), Times.Once);
             }
@@ -135,8 +135,8 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
             
                 var viewResult = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Project not found", viewModel);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
+                Assert.Equal(ProjectNotFound, viewModel);
             }
             
             [Fact]

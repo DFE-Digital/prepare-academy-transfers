@@ -50,8 +50,8 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             var response =  await Subject.OnGetAsync(ProjectErrorUrn);
             
             var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal("ErrorPage", viewResult.ViewName);
-            Assert.Equal("Error", viewResult.Model);
+            Assert.Equal(ErrorPageName, viewResult.ViewName);
+            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
     
@@ -101,8 +101,8 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             var response = await Subject.OnPostAsync(vmError);
             
             var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal("ErrorPage", viewResult.ViewName);
-            Assert.Equal("Error", viewResult.Model);
+            Assert.Equal(ErrorPageName, viewResult.ViewName);
+            Assert.Equal(ErrorMessage, viewResult.Model);
         }
         
         [Fact]
@@ -121,7 +121,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             var response = await Subject.OnPostAsync(_vm);
             
             var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal("ErrorPage", viewResult.ViewName);
+            Assert.Equal(ErrorPageName, viewResult.ViewName);
             Assert.Equal("Update error", viewResult.Model);
         }
         

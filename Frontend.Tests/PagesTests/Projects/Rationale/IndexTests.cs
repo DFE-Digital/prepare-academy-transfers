@@ -12,8 +12,10 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
 
         public IndexTests()
         {
-            _subject = new Index(GetInformationForProject.Object);
-            _subject.Urn = ProjectUrn0001;
+            _subject = new Index(GetInformationForProject.Object)
+            {
+                Urn = ProjectUrn0001
+            };
         }
 
         [Fact]
@@ -40,8 +42,8 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             var response = await _subject.OnGetAsync();
             var viewResult = Assert.IsType<ViewResult>(response);
 
-            Assert.Equal("ErrorPage", viewResult.ViewName);
-            Assert.Equal("Error", viewResult.Model);
+            Assert.Equal(ErrorPageName, viewResult.ViewName);
+            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
 }

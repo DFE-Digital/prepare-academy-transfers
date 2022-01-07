@@ -52,7 +52,7 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
 
                 var viewResult = Assert.IsType<ViewResult>(response);
                 var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
+                Assert.Equal(ErrorPageName, viewResult.ViewName);
                 Assert.Equal(ErrorMessage, viewModel);
             }
         }
