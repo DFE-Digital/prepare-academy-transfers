@@ -73,7 +73,7 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="Type" asp-controller="Features" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="type">
+                    <a class="govuk-link" asp-page="/Projects/Features/Type" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="type">
                         Change<span class="govuk-visually-hidden"> what type of transfer is it?</span>
                     </a>
                 </dd>
