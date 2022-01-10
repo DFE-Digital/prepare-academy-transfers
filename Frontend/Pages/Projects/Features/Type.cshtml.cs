@@ -38,6 +38,34 @@ namespace Frontend.Pages.Projects.Features
             return Page();
         }
 
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var project = await _projects.GetByUrn(Urn);
+            if (!project.IsValid)
+            {
+                return this.View("ErrorPage", project.Error.ErrorMessage);
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            
+            var projectResult = project.Result;
+            projectResult.Features.TypeOfTransfer = FeaturesTypeViewModel.TypeOfTransfer;
+            projectResult.Features.OtherTypeOfTransfer = FeaturesTypeViewModel.OtherType;
+            
+            var result = await _projects.Update(projectResult);
+            if (!result.IsValid)
+            {
+                return this.View("ErrorPage", result.Error.ErrorMessage);
+            }
+            
+            return ReturnToPreview ? 
+                RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn }) :
+                RedirectToPage("/Projects/Features/Index", new { Urn });
+        }
+
         public List<RadioButtonViewModel> TypeOfTransferRadioButtons()
         {
             var values =
