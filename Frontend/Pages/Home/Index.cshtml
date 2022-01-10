@@ -1,0 +1,88 @@
+@page
+@model Frontend.Pages.Home.Index
+
+
+@{
+    ViewData["Title"] = null;
+    var startingPage = 1;
+    if (Model.Page - 5 > 1) { startingPage = Model.Page - 5; }
+    var hasPreviousPage = Model.Page > 1;
+    var hasNextPage = Model.Projects.Count == 10;
+
+    var previousPage = Model.Page - 1;
+    var nextPage = Model.Page + 1;
+}
+
+<div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            Manage an academy transfer
+        </h1>
+        <p class="govuk-body-l">
+            Use this service to start a new academy transfer project or update an existing project.
+        </p>
+        <a asp-controller="Transfers" asp-action="TrustName" role="button" draggable="false" 
+           class="govuk-button govuk-button--start" data-module="govuk-button" data-test="create-transfer">
+            Start a new transfer project
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+            </svg>
+        </a>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-l">
+            Projects
+        </h2>
+        <h3 class="govuk-heading-m">
+            Pre-Advisory Board (formerly Headteacher Board)
+        </h3>
+        @foreach (var project in Model.Projects)
+        {
+            <div class="dfe-application-card">
+                <div class="dfe-application-card--project-info">
+                    <h3 class="govuk-heading-m">
+                        <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-controller="Project" asp-action="Index" asp-route-id="@project.Urn">
+                            @project.OutgoingAcademyName
+                        </a>
+                        <span class="govuk-caption-l govuk-!-display-inline">
+                            URN @project.OutgoingAcademyUrn
+                        </span>
+                    </h3>
+                    <p class="govuk-body">
+                        Application to transfer to: @project.IncomingTrustName
+                    </p>
+                </div>
+            </div>
+        }
+        <nav class="moj-pagination" id="pagination-label">
+            <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+            <ul class="moj-pagination__list">
+                @if (hasPreviousPage)
+                {
+                    <li class="moj-pagination__item  moj-pagination__item--prev">
+                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-page="@previousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                    </li>
+                    @for (var i = startingPage; i < Model.Page; i++)
+                    {
+                        <li class="moj-pagination__item">
+                            <a asp-page="/Home/Index" asp-route-page="@i" class="moj-pagination__link">@i</a>
+                        </li>
+                    }
+                }
+                <li class="moj-pagination__item moj-pagination__item--active">@Model.Page</li>
+                @if (hasNextPage)
+                {
+                    <li class="moj-pagination__item">
+                        <a asp-page="/Home/Index" asp-route-page="@nextPage" class="moj-pagination__link">@nextPage</a>
+                    </li>
+                    <li class="moj-pagination__item  moj-pagination__item--next">
+                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-page="@nextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                    </li>
+                }
+            </ul>
+            <p class="moj-pagination__results"></p>
+        </nav>
+    </div>
+</div>
