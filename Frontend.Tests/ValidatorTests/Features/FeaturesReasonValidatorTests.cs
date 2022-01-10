@@ -24,9 +24,7 @@ namespace Frontend.Tests.ValidatorTests.Features
         {
             var vm = new FeaturesReasonViewModel()
             {
-                Urn = "001",
                 IsSubjectToIntervention = subjectToIntervention,
-                OutgoingAcademyName = "Test",
                 MoreDetail = moreDetail
             };
             var result = await _featuresReasonValidator.TestValidateAsync(vm);
@@ -37,10 +35,7 @@ namespace Frontend.Tests.ValidatorTests.Features
         [Fact]
         public async void GivenNoSubjectToIntervention_FeaturesReasonValidator_InvalidWithErrorMessage()
         {
-            var vm = new FeaturesReasonViewModel
-            {
-                Urn = "001"
-            };
+            var vm = new FeaturesReasonViewModel();
             var result = await _featuresReasonValidator.TestValidateAsync(vm);
 
             result.ShouldHaveValidationErrorFor(x => x.IsSubjectToIntervention)

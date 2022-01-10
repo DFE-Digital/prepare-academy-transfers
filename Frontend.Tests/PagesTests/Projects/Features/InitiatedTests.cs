@@ -17,7 +17,6 @@ namespace Frontend.Tests.PagesTests.Projects.Features
     public class InitiatedTests : PageTests
     {
         private readonly Pages.Projects.Features.Initiated _subject;
-        private const string ProjectNotFound = "Project not found";
         public InitiatedTests()
         {
             _subject = new Pages.Projects.Features.Initiated(ProjectRepository.Object)
