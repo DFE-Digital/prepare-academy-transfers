@@ -44,5 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Benefits\OtherFactors.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Features\Type.cshtml" />
   </ItemGroup>
 </Project>
