@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
-using Frontend.Views.Home;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -27,19 +26,6 @@ namespace Frontend.Controllers
             _configuration = configuration;
             _projectsRepository = projectsRepository;
             _logger = logger;
-        }
-
-        public async Task<IActionResult> Index(int page = 1)
-        {
-            var projects = await _projectsRepository.GetProjects(page);
-            if (!projects.IsValid)
-            {
-                return View("ErrorPage", projects.Error.ErrorMessage);
-            }
-
-            _logger.LogInformation("Home page loaded");
-            var model = new Index {Projects = projects.Result, Page = page};
-            return View(model);
         }
 
         [AllowAnonymous]
@@ -87,7 +73,7 @@ namespace Frontend.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToPage("/Home/Index");
         }
 
         public async Task<IActionResult> SignOut()
