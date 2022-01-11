@@ -46,7 +46,7 @@ namespace Frontend.Tests.PagesTests.Home
                 {
                     Error = new RepositoryResultBase.RepositoryError
                     {
-                        ErrorMessage = "Error"
+                        ErrorMessage = ErrorMessage
                     }
                 });
         
