@@ -1,16 +1,10 @@
-@page
+@page "/"
 @model Frontend.Pages.Home.Index
 
 
 @{
-    ViewData["Title"] = null;
-    var startingPage = 1;
-    if (Model.Page - 5 > 1) { startingPage = Model.Page - 5; }
-    var hasPreviousPage = Model.Page > 1;
-    var hasNextPage = Model.Projects.Count == 10;
-
-    var previousPage = Model.Page - 1;
-    var nextPage = Model.Page + 1;
+    ViewBag.Title = "Home";
+    Layout = "_Layout";
 }
 
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
@@ -59,26 +53,26 @@
         <nav class="moj-pagination" id="pagination-label">
             <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
             <ul class="moj-pagination__list">
-                @if (hasPreviousPage)
+                @if (Model.HasPreviousPage)
                 {
                     <li class="moj-pagination__item  moj-pagination__item--prev">
-                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-page="@previousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
                     </li>
-                    @for (var i = startingPage; i < Model.Page; i++)
+                    @for (var i = Model.StartingPage; i < Model.CurrentPage; i++)
                     {
                         <li class="moj-pagination__item">
-                            <a asp-page="/Home/Index" asp-route-page="@i" class="moj-pagination__link">@i</a>
+                            <a asp-page="/Home/Index" asp-route-currentPage="@i" class="moj-pagination__link">@i</a>
                         </li>
                     }
                 }
-                <li class="moj-pagination__item moj-pagination__item--active">@Model.Page</li>
-                @if (hasNextPage)
+                <li class="moj-pagination__item moj-pagination__item--active">@Model.CurrentPage</li>
+                @if (Model.HasNextPage)
                 {
                     <li class="moj-pagination__item">
-                        <a asp-page="/Home/Index" asp-route-page="@nextPage" class="moj-pagination__link">@nextPage</a>
+                        <a asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" class="moj-pagination__link">@Model.NextPage</a>
                     </li>
                     <li class="moj-pagination__item  moj-pagination__item--next">
-                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-page="@nextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
                     </li>
                 }
             </ul>
