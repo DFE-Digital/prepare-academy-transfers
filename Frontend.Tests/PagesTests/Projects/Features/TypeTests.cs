@@ -131,7 +131,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
                         Error = new RepositoryResultBase.RepositoryError
                         {
                             StatusCode = System.Net.HttpStatusCode.NotFound,
-                            ErrorMessage = "Project not found"
+                            ErrorMessage = ProjectNotFound
                         }
                     });
 
