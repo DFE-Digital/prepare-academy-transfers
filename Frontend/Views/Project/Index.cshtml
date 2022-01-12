@@ -126,9 +126,10 @@
             <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Project.Urn" method="get">
                 <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
             </form>
-            <form asp-page="/Tasklist/HtbDocument/Download" asp-route-id="@Model.Project.Urn" method="get">
+            <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Project.Urn" method="get">
                 <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
             </form>
+            
         </div>
     </div>
 </div>

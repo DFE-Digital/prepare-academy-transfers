@@ -13,7 +13,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
     {
         private readonly Pages.TaskList.HtbDocument.Download _subject;
         private readonly Mock<ICreateHtbDocument> _createHtbDocument;
-        private readonly Academy _foundAcademy;
 
         protected DownloadTests()
         {
@@ -23,8 +22,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             {
                 Urn = ProjectUrn0001
             };
-
-            _foundAcademy = new Academy {Ukprn = "FoundNonDynamicsUkprn"};
 
             _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateHtbDocumentResponse
                 {Document = new byte[] {0, 1}});

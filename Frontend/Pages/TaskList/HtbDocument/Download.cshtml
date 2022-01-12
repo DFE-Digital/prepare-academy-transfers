@@ -1,4 +1,4 @@
-﻿@page "/project/{urn}/advisory-board/{handler?}"
+﻿@page "/project/{urn}/advisory-board/download/{handler?}"
 @model Frontend.Pages.TaskList.HtbDocument.Download
 
 @{
@@ -30,7 +30,7 @@
             </div>
             <div class="dfe-c-attachment__details">
                 <h2 class="dfe-c-attachment__title">
-                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-page-handler="GenerateDocument" asp-route-id="@Model.Urn" data-test="download-htb">
+                    <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-page-handler="GenerateDocument" asp-route-urn="@Model.Urn" data-test="download-htb">
                         @Model.OutgoingAcademyName - Project template
                     </a>
                 </h2>
