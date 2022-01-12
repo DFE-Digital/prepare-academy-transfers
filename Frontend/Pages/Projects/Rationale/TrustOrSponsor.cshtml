@@ -1,7 +1,6 @@
 @page "/project/{urn}/rationale/trust-or-sponsor"
 @model Frontend.Pages.Projects.Rationale.TrustOrSponsor
 
-
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Write the rationale for the trust or sponsor";
     Layout = "_Layout";
@@ -11,7 +10,7 @@
 @section BeforeMain
 {
     <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-action="Index" asp-route-urn="@Model.Urn">Back</a>
+        <a class="govuk-back-link" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
