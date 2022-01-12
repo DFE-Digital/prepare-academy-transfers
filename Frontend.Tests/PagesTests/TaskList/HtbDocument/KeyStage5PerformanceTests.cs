@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Pages.TaskList.KeyStage5Performance;
-using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests.TaskList
+namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 {
     public class KeyStage5PerformanceTests : PageTests
     {
@@ -36,7 +36,6 @@ namespace Frontend.Tests.PagesTests.TaskList
             public async void OnGet_GetInformationForProjectId(string id)
             {
                 await _subject.OnGetAsync(id);
-
                 GetInformationForProject.Verify(s => s.Execute(id));
             }
 

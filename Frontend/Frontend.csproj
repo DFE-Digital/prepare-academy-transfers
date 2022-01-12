@@ -45,5 +45,6 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Benefits\OtherFactors.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Features\Type.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\HeadteacherBoard\Download.cshtml" />
   </ItemGroup>
 </Project>
