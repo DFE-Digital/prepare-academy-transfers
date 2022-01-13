@@ -178,7 +178,7 @@
             Generate the project template into a Word document and download it.
         </p>
         <div class="govuk-button-group">
-            <form asp-controller="HeadteacherBoard" asp-action="Download" asp-route-id="@Model.Project.Urn" method="get">
+            <form asp-page="/Tasklist/HtbDocument/Download" asp-route-id="@Model.Project.Urn" method="get">
                 <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
             </form>
             <p class="govuk-body">
