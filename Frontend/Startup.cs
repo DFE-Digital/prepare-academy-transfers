@@ -47,6 +47,7 @@ namespace Frontend
                 {
                     options.Conventions.AuthorizeFolder("/");
                     options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
+                    options.Conventions.AllowAnonymousToPage("/Home/Login");
                 })
                 .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
 

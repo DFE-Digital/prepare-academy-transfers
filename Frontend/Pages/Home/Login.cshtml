@@ -1,12 +1,13 @@
+﻿@page "/home/login/{handler?}"
+@model Frontend.Pages.Home.Login
 @{
     ViewBag.Title = "Login";
     Layout = "_Layout";
 }
 
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <partial name="_Notification" />
+        <partial name="_Notification"/>
         <h1 class="govuk-heading-xl">Sign in to your DfE account</h1>
     </div>
 </div>
@@ -15,12 +16,11 @@
     <div class="govuk-grid-column-one-half">
         <h2 class="govuk-heading-l">Sign in</h2>
         @ViewData["Config"]
-        @if (!string.IsNullOrEmpty((string) TempData.Peek("Error.Message")))
-        {
-            <p class="govuk-body">Error: @TempData["Error.Message"]</p>
-        }
-        <form method="post" asp-action="SubmitLogin">
-            <input type="hidden" value="@ViewData["ReturnUrl"]" name="returnUrl"/>
+
+        <span asp-gds-validation-for="ErrorMessage"></span>
+
+        <form method="post">
+            <input type="hidden" value="@Model.ReturnUrl" name="returnUrl"/>
             <div class="govuk-form-group">
                 <label class="govuk-label" for="username">
                     Username

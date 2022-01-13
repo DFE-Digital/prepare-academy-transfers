@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Frontend.ExtensionMethods;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
