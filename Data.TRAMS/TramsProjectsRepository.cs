@@ -41,8 +41,8 @@ namespace Data.TRAMS
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse);
-
-
+            
+            
                 var mappedSummaries = summaries.Select(summary =>
                 {
                     summary.OutgoingTrust = new TrustSummary { Ukprn = summary.OutgoingTrustUkprn };
@@ -50,37 +50,37 @@ namespace Data.TRAMS
                     {
                         var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
                         var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-
+            
                         transferring.IncomingTrust = new TrustSummary
                         {
                             GroupName = incomingTrust.Result.Name,
                             GroupId = incomingTrust.Result.GiasGroupId,
                             Ukprn = transferring.IncomingTrustUkprn
                         };
-
+            
                         transferring.OutgoingAcademy = new AcademySummary
                         {
                             Name = outgoingAcademy.Result.Name,
                             Ukprn = transferring.OutgoingAcademyUkprn,
                             Urn = outgoingAcademy.Result.Urn
                         };
-
+            
                         return transferring;
                     })
                         .Select(t => t.Result)
                         .ToList();
-
+            
                     return _summaryToInternalProjectMapper.Map(summary);
                 })
                     .ToList();
-
+            
                 return new RepositoryResult<List<ProjectSearchResult>>
                 {
                     Result = mappedSummaries
                 };
             }
 
-            return CreateErrorResult<List<ProjectSearchResult>>(response);
+            throw new TramsApiException(response);
         }
 
         public async Task<RepositoryResult<Project>> GetByUrn(string urn)
@@ -128,7 +128,7 @@ namespace Data.TRAMS
                 };
             }
 
-            return CreateErrorResult<Project>(response);
+            throw new TramsApiException(response);
         }
 
         public async Task<RepositoryResult<Project>> Update(Project project)
@@ -170,7 +170,7 @@ namespace Data.TRAMS
                 };
             }
 
-            return CreateErrorResult<Project>(response);
+            throw new TramsApiException(response);
         }
 
         public async Task<RepositoryResult<Project>> Create(Project project)
@@ -212,23 +212,7 @@ namespace Data.TRAMS
                 };
             }
 
-            return CreateErrorResult<Project>(response);
-        }
-
-        private RepositoryResult<T> CreateErrorResult<T>(HttpResponseMessage response)
-        {
-            var errorMessage = response.StatusCode == HttpStatusCode.NotFound
-                                ? "Project not found"
-                                : "API encountered an error";
-
-            return new RepositoryResult<T>
-            {
-                Error = new RepositoryResultBase.RepositoryError
-                {
-                    StatusCode = response.StatusCode,
-                    ErrorMessage = errorMessage
-                }
-            };
+            throw new TramsApiException(response);
         }
     }
 }
