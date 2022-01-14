@@ -12,7 +12,6 @@ namespace Frontend.Tests.ValidatorTests
         private const string Username = "username";
         private const string Password = "password";
         
-        
         public LoginValidatorTests()
         {
             _validator = new LoginValidator();
