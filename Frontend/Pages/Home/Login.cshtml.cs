@@ -2,10 +2,17 @@
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 using Frontend.Models;
+using Frontend.Models.TransferDates;
+using Frontend.Validators;
+using Frontend.Validators.TransferDates;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Configuration;
 
 namespace Frontend.Pages.Home
@@ -14,9 +21,12 @@ namespace Frontend.Pages.Home
     {
         private readonly IConfiguration _configuration;
 
-        [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
-        [BindProperty] public string Username { get; set; }
-        [BindProperty] public string Password { get; set; }
+        [BindProperty(SupportsGet = true)] 
+        public string ReturnUrl { get; set; }
+        [BindProperty]
+        
+        [CustomizeValidator(Skip = true)]
+        public LoginViewModel LoginViewModel { get; set; }
 
         public string ErrorMessage { get; set; }
 
@@ -33,10 +43,11 @@ namespace Frontend.Pages.Home
         public async Task<IActionResult> OnPostAsync()
         {
             var decodedUrl = "";
+            
+            var validationResult = await ValidateUsernameAndPassword();
 
-            if (Username != _configuration["username"] || Password != _configuration["password"])
+            if (!validationResult.IsValid)
             {
-                ModelState.AddModelError("ErrorMessage", "Incorrect username and password");
                 return Page();
             }
 
@@ -62,7 +73,23 @@ namespace Frontend.Pages.Home
 
             return RedirectToPage("/Home/Index");
         }
-        
+
+        private async Task<ValidationResult> ValidateUsernameAndPassword()
+        {
+            var validationContext = new ValidationContext<LoginViewModel>(LoginViewModel)
+            {
+                RootContextData =
+                {
+                    ["ConfigUsername"] = _configuration["username"],
+                    ["ConfigPassword"] = _configuration["password"]
+                }
+            };
+            var validator = new LoginValidator();
+            var validationResult = await validator.ValidateAsync(validationContext);
+            validationResult.AddToModelState(ModelState, null);
+            return validationResult;
+        }
+
         public async Task<IActionResult> OnGetSignOut()
         {
             await HttpContext.SignOutAsync();
