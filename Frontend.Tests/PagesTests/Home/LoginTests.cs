@@ -1,5 +1,4 @@
 ﻿using System;
-using Castle.Core.Configuration;
 using Frontend.Models;
 using Frontend.Pages.Home;
 using Frontend.Tests.Helpers;
@@ -18,21 +17,16 @@ namespace Frontend.Tests.PagesTests.Home
         private readonly Login _subject;
         private const string Username = "username";
         private const string Password = "password";
+        private readonly Mock<IUrlHelper> _urlHelper = new Mock<IUrlHelper>();
         public LoginTests()
         {
-            
+            //Arrange
             var configuration = new Mock<IConfiguration>();
             configuration.SetupGet(x => x[It.Is<string>(s=>s == Username)]).Returns(Username);
             configuration.SetupGet(x => x[It.Is<string>(s => s == Password)]).Returns(Password);
             _subject = new Login(configuration.Object);
-        }
-        
-        [Fact]
-        public async void GivenCorrectLoginDetailsOnPostRedirectToIndex()
-        {
-            //Arrange
             var authenticationService = new Mock<IAuthenticationService>();
-             var sp = new Mock<IServiceProvider>();
+            var sp = new Mock<IServiceProvider>();
             sp.Setup(s => s.GetService(typeof(IAuthenticationService)))
                 .Returns(() => authenticationService.Object);
             _subject.PageContext = new PageContext
@@ -40,20 +34,42 @@ namespace Frontend.Tests.PagesTests.Home
                 HttpContext = new DefaultHttpContext(),
             };
             _subject.PageContext.HttpContext.RequestServices = sp.Object;
-            var urlHelper = new Mock<IUrlHelper>();
-            urlHelper.Setup(s => s.IsLocalUrl(It.IsAny<string>())).Returns(false);
-            _subject.Url = new Mock<IUrlHelper>().Object;
             _subject.LoginViewModel = new LoginViewModel()
             {
                 Username = Username,
                 Password = Password
             };
-                
-            //Action
+        }
+        
+        [Fact]
+        public async void GivenCorrectLoginDetailsOnPostRedirectToIndex()
+        {
+            //Arrange
+            _urlHelper.Setup(s => s.IsLocalUrl(It.IsAny<string>())).Returns(false);
+            _subject.Url = _urlHelper.Object;
+            
+            //Act
             var result = await _subject.OnPostAsync();
             
             //Assert
             ControllerTestHelpers.AssertResultRedirectsToPage(result,"/Home/Index");
+        }
+        
+        [Fact]
+        public async void GivenCorrectLoginDetailsOnPostRedirectToReturnUrl()
+        {
+            //Arrange
+            _subject.ReturnUrl =
+                $"/{nameof(Controllers.TransfersController).Replace(nameof(Controller),string.Empty)}/{nameof(Controllers.TransfersController.TrustName)}";
+            _urlHelper.Setup(s => s.IsLocalUrl(_subject.ReturnUrl)).Returns(true);
+            _subject.Url = _urlHelper.Object;
+            
+            //Act
+            var result = await _subject.OnPostAsync();
+            
+            //Assert
+            var redirectResult = Assert.IsType<RedirectResult>(result);
+            Assert.Equal(_subject.ReturnUrl, redirectResult.Url);
         }
     }
 }

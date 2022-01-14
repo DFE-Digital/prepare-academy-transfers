@@ -1,5 +1,4 @@
 const fs = require("fs");
-let getDataTest = (dataTest) => cy.get(`[data-test='${dataTest}']`)
 
 let selectFirstRadio = () => {
     cy.get("[type='radio']").then(options => {
@@ -12,17 +11,12 @@ let submit = () =>
     cy.get("[type='submit']")
         .click();
 
-function clickDataTest(dataTest) {
-    getDataTest(dataTest)
-        .click();
-}
-
 function login() {
-    cy.get("[name='username']")
+    cy.getDataTest("username")
         .type("username")
         .should("have.value", "username");
 
-    cy.get("[name='password']")
+    cy.getDataTest("password")
         .type("password")
         .should("have.value", "password");
 
@@ -30,8 +24,7 @@ function login() {
 }
 
 function createNewTransfer() {
-    cy.get("[data-test='create-transfer']")
-        .click()
+    cy.clickDataTest("create-transfer")     
 }
 
 function searchForTrustWithQuery(queryString) {
@@ -56,54 +49,52 @@ describe("Creating and editing an academy transfer", function () {
 	});
 
     it("Loads the page", function () {
-        // cy.visit("/")
-        // login();
         createNewTransfer();
         searchForTrustWithQuery("bishop fraser")
         selectFirstRadio();
         submit();
-        clickDataTest("confirm-outgoing-trust")
+        cy.clickDataTest("confirm-outgoing-trust")
         cy.selectRadio(2);
         submit();
         searchForTrustWithQuery("burnt");
         selectFirstRadio();
         submit();
-        clickDataTest("create-project")
+        cy.clickDataTest("create-project")
 
         // Features
-        clickDataTest("transfer-features")
-        clickDataTest("initiated")
+        cy.clickDataTest("transfer-features")
+        cy.clickDataTest("initiated")
         selectFirstRadio()
         submit();
-        clickDataTest("reason")
+        cy.clickDataTest("reason")
         selectFirstRadio();
         cy.fillInText("moreDetail", "Some more detail and reasons")
         submit()
-        clickDataTest("type")
+        cy.clickDataTest("type")
         selectFirstRadio();
         submit()
         cy.clickBackLink();
 
         // Dates
-        clickDataTest("transfer-dates")
-        clickDataTest("first-discussed")
+        cy.clickDataTest("transfer-dates")
+        cy.clickDataTest("first-discussed")
         cy.fillInDate(Cypress.dayjs().add(1,'M'))
         submit();
-        clickDataTest("target-date")
+        cy.clickDataTest("target-date")
         cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
-        clickDataTest("htb-date")
+        cy.clickDataTest("htb-date")
         cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
         clickBackLink()
 
         // Benefits
-        clickDataTest("transfer-benefits")
-        clickDataTest("intended-benefits")
+        cy.clickDataTest("transfer-benefits")
+        cy.clickDataTest("intended-benefits")
         cy.selectCheckbox(0);
         cy.selectCheckbox(1);
         submit();
-        clickDataTest("other-factors")
+        cy.clickDataTest("other-factors")
         cy.selectCheckbox(0);
         cy.fillInTextAtIndex(0, "First")
         cy.selectCheckbox(1);
@@ -112,66 +103,66 @@ describe("Creating and editing an academy transfer", function () {
         clickBackLink()
 
         //Rationale
-        clickDataTest("transfer-rationale")
-        clickDataTest("project-rationale")
+        cy.clickDataTest("transfer-rationale")
+        cy.clickDataTest("project-rationale")
         cy.fillInText("ViewModel.ProjectRationale", "this is the project rationale")
         submit();
-        clickDataTest("trust-rationale")
+        cy.clickDataTest("trust-rationale")
         cy.fillInText("ViewModel.TrustOrSponsorRationale", "this is the project rationale")
         submit();
         clickBackLink()
 
         // Academy trust information
-        clickDataTest("academy-trust-information")
-        clickDataTest("recommendation");
+        cy.clickDataTest("academy-trust-information")
+        cy.clickDataTest("recommendation");
         selectFirstRadio();
         cy.fillInText("author", "Author name")
         submit();
         clickBackLink()
 
-        clickDataTest("general-information")
+        cy.clickDataTest("general-information")
         clickBackLink()
 
         // Pupil numbers
-        clickDataTest("pupil-numbers")
-        clickDataTest("additional-information")
+        cy.clickDataTest("pupil-numbers")
+        cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
         submit();
         clickBackLink()
 
         // Ofsted
-        clickDataTest("ofsted")
-        clickDataTest("additional-information")
+        cy.clickDataTest("ofsted")
+        cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ofsted");
         submit();
         clickBackLink()
 
         // KS2
-        clickDataTest("ks2-performance")
-        clickDataTest("additional-information")
+        cy.clickDataTest("ks2-performance")
+        cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
         submit();
         clickBackLink()
 
         // KS4
-        clickDataTest("ks4-performance")
-        clickDataTest("additional-information")
+        cy.clickDataTest("ks4-performance")
+        cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks4 performance");
         submit();
         clickBackLink()
 
         // KS5
-        clickDataTest("ks5-performance")
-        clickDataTest("additional-information")
+        cy.clickDataTest("ks5-performance")
+        cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
         
         // Go to preview
-        clickDataTest("preview-htb")
+        cy.clickDataTest("preview-htb")
         clickBackLink()
 
-        clickDataTest("generate-htb")
+        cy.clickDataTest("generate-htb")
         cy.get("[data-test='download-htb']").should($a => {
             expect($a.attr('href'), 'href').to.include("/advisory-board")
             expect($a.attr('target'), 'target').to.equal('_blank')
@@ -180,7 +171,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.location().then(location => {
             let currentUrn = location.pathname.split('/')[2]
             console.log(currentUrn);
-            cy.request(`/project/${currentUrn}/advisory-board`).then(response => {
+            cy.request(`/project/${currentUrn}/advisory-board/download/generatedocument`).then(response => {
                 expect(response.status).to.equal(200)
                 expect(response.headers['content-type']).to.equal("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             })

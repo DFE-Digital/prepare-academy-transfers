@@ -8,13 +8,13 @@ describe('Tests to check target date error messages', () => {
     });
 
     it('Transfer date should be in the future', () => {
-        cy.get('[data-test="create-transfer"]').click();
+        cy.clickDataTest("create-transfer");
         cy.get('#query').clear();
         cy.get('#query').type('sd');
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
-        cy.get('[data-test="confirm-outgoing-trust"]').click();
+        cy.clickDataTest("confirm-outgoing-trust");
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
         cy.get('#query').clear();
@@ -22,9 +22,9 @@ describe('Tests to check target date error messages', () => {
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
-        cy.get('[data-test="create-project"]').click();
-        cy.get('[data-test="transfer-dates"]').click();
-        cy.get('[data-test="target-date"]').click();
+        cy.clickDataTest("create-project");
+        cy.clickDataTest("transfer-dates");
+        cy.clickDataTest("target-date");
         cy.fillInDate(Cypress.dayjs().subtract(1,'M'))
         cy.get('.govuk-button').click();
         cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', 'You must enter a future date').should('be.visible');
