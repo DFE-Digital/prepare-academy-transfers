@@ -9,7 +9,7 @@
 @section BeforeMain
 {
     <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">Back to task list</a>
+        <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
     </backtopreview>
 }
 
@@ -34,7 +34,7 @@
     @if (!Model.AdditionalInformationViewModel.AddOrEditAdditionalInformation)
     {
         <div class="govuk-grid-column-two-thirds">
-            <form asp-controller="Project" asp-action="Index" asp-route-id="@Model.Urn">
+            <form asp-page="/Projects/Index" asp-route-urn="@Model.Urn">
                 <button class="govuk-button" data-module="govuk-button">
                     Confirm and continue
                 </button>

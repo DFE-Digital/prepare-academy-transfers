@@ -9,7 +9,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Project" asp-action="Index" asp-route-id="@Model.ProjectUrn">Back to task list</a>
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.ProjectUrn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
