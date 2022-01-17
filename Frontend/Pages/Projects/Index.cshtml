@@ -1,4 +1,4 @@
-﻿@page "/project/{urn}
+﻿@page "/project/{urn}"
 @model Frontend.Pages.Projects.Index
 
 @{
@@ -40,29 +40,29 @@
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="features" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn" data-test="transfer-features">Features of the transfer</a>
-                        </span><projectstatus id="features" status="@Model.ProjectTaskListViewModel.FeatureTransferStatus"></projectstatus>
+                        </span><projectstatus id="features" status="@Model.FeatureTransferStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@Model.Urn" data-test="transfer-dates">Set transfer dates</a>
-                        </span><projectstatus id="dates" status="@Model.ProjectTaskListViewModel.TransferDatesStatus"></projectstatus>
+                        </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="benefits" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn" data-test="transfer-benefits">Benefits and other factors</a>
-                        </span><projectstatus id="benefits" status="@Model.ProjectTaskListViewModel.BenefitsAndOtherFactorsStatus"></projectstatus>
+                        </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="rationale" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn" data-test="transfer-rationale">Rationale</a>
-                        </span><projectstatus id="rationale" , status="@Model.ProjectTaskListViewModel.RationaleStatus"></projectstatus>
+                        </span><projectstatus id="rationale" , status="@Model.RationaleStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="academyandtrustinformation" asp-page="/Projects/AcademyAndTrustInformation/Index" asp-route-urn="@Model.Urn" data-test="academy-trust-information">
                                 Academy and trust information and project dates
                             </a>
-                        </span><projectstatus id="academyandtrustinformation" , status="@Model.ProjectTaskListViewModel.AcademyAndTrustInformationStatus"></projectstatus>
+                        </span><projectstatus id="academyandtrustinformation" , status="@Model.AcademyAndTrustInformationStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
@@ -85,7 +85,7 @@
                             </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
                     </li>
-                    @if (Model.ProjectTaskListViewModel.HasKeyStage2PerformanceInformation)
+                    @if (Model.HasKeyStage2PerformanceInformation)
                     {
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
@@ -93,7 +93,7 @@
                             </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
                         </li>
                     }
-                    @if (Model.ProjectTaskListViewModel.HasKeyStage4PerformanceInformation)
+                    @if (Model.HasKeyStage4PerformanceInformation)
                     {
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
@@ -102,7 +102,7 @@
                         </li>
                     }
 
-                    @if (Model.ProjectTaskListViewModel.HasKeyStage5PerformanceInformation)
+                    @if (Model.HasKeyStage5PerformanceInformation)
                     {
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">

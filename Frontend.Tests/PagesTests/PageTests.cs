@@ -22,7 +22,7 @@ namespace Frontend.Tests.PagesTests
         protected GetInformationForProjectResponse FoundInformationForProject;
         protected Project FoundProjectFromRepo;
         
-        private const string AcademyName = "Academy Name";
+        private const string OutgoingAcademyName = "Academy Name";
         private const string LAName = "LA Name";
 
         public PageTests()
@@ -42,7 +42,7 @@ namespace Frontend.Tests.PagesTests
                 {
                     new TransferringAcademies()
                     {
-                        OutgoingAcademyName = AcademyName
+                        OutgoingAcademyName = OutgoingAcademyName
                     }
                 }
             };
@@ -87,7 +87,7 @@ namespace Frontend.Tests.PagesTests
                 {
                     Urn = AcademyUrn,
                     LocalAuthorityName = LAName,
-                    Name = AcademyName
+                    Name = OutgoingAcademyName
                 }
             };
 

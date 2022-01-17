@@ -7,6 +7,7 @@ using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Frontend.Helpers;
 using Frontend.Models;
+using Frontend.Services.Interfaces;
 
 namespace Frontend.Services
 {
@@ -21,27 +22,28 @@ namespace Frontend.Services
             _projectRepository = projectRepository;
             _projectRepositoryEducationPerformance = projectRepositoryEducationPerformance;
         }
-        
-        public async Task<ProjectTaskListViewModel> BuildTaskListStatusesAsync(string urn)
-        {  
-            var project = await _projectRepository.GetByUrn(urn);
+
+        public void BuildTaskListStatuses(string urn, Frontend.Pages.Projects.Index indexPage)
+        {
+            var project = _projectRepository.GetByUrn(urn).Result;
             var educationPerformance =
-                await _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn);
-            
-            var vm = new ProjectTaskListViewModel
-            {
-                AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result),
-                FeatureTransferStatus = GetFeatureTransferStatus(project.Result),
-                TransferDatesStatus = GetTransferDatesStatus(project.Result),
-                BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result),
-                RationaleStatus = GetRationaleStatus(project.Result),
-                HasKeyStage2PerformanceInformation = PerformanceDataHelpers.HasKeyStage2PerformanceInformation(educationPerformance.Result.KeyStage2Performance),
-                HasKeyStage4PerformanceInformation = PerformanceDataHelpers.HasKeyStage4PerformanceInformation(educationPerformance.Result.KeyStage4Performance),
-                HasKeyStage5PerformanceInformation = PerformanceDataHelpers.HasKeyStage5PerformanceInformation(educationPerformance.Result.KeyStage5Performance)
-            };
-            return vm;
+                _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;
+            indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);
+            indexPage.FeatureTransferStatus = GetFeatureTransferStatus(project.Result);
+            indexPage.TransferDatesStatus = GetTransferDatesStatus(project.Result);
+            indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
+            indexPage.RationaleStatus = GetRationaleStatus(project.Result);
+            indexPage.HasKeyStage2PerformanceInformation =
+                PerformanceDataHelpers.HasKeyStage2PerformanceInformation(educationPerformance.Result
+                    .KeyStage2Performance);
+            indexPage.HasKeyStage4PerformanceInformation =
+                PerformanceDataHelpers.HasKeyStage4PerformanceInformation(educationPerformance.Result
+                    .KeyStage4Performance);
+            indexPage.HasKeyStage5PerformanceInformation =
+                PerformanceDataHelpers.HasKeyStage5PerformanceInformation(educationPerformance.Result
+                    .KeyStage5Performance);
         }
-        
+
         private ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)
         {
             var academyAndTrustInformation = project.AcademyAndTrustInformation;
@@ -109,10 +111,5 @@ namespace Frontend.Services
 
             return ProjectStatuses.InProgress;
         }
-    }
-
-    public interface ITaskListService
-    {
-        Task<ProjectTaskListViewModel> BuildTaskListStatusesAsync(string urn);
     }
 }
