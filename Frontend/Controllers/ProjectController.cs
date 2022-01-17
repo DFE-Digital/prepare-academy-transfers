@@ -15,12 +15,13 @@ namespace Frontend.Controllers
         private readonly IProjects _projectRepository;
         private readonly IEducationPerformance _projectRepositoryEducationPerformance;
 
-        public ProjectController(IProjects projectRepository, IEducationPerformance projectRepositoryEducationPerformance)
+        public ProjectController(IProjects projectRepository,
+            IEducationPerformance projectRepositoryEducationPerformance)
         {
             _projectRepository = projectRepository;
             _projectRepositoryEducationPerformance = projectRepositoryEducationPerformance;
         }
-        
+
         public async Task<IActionResult> Index([FromRoute] string id)
         {
             var project = await _projectRepository.GetByUrn(id);
@@ -28,20 +29,22 @@ namespace Frontend.Controllers
             {
                 return View("ErrorPage", project.Error.ErrorMessage);
             }
-
-            var viewModel = new ProjectTaskListViewModel
-            {
-                Project = project.Result
-            };
-
-            // TODO: Add error handling
+            
             var educationPerformance =
                 await _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn);
             if (educationPerformance.IsValid)
             {
-                viewModel.EducationPerformance = educationPerformance.Result;
+                var viewModel = new ProjectTaskListViewModel
+                {
+                    Project = project.Result,
+                    EducationPerformance = educationPerformance.Result
+                };
             }
-            
+            else
+            {
+                return View("ErrorPage", educationPerformance.Error.ErrorMessage);
+            }
+
             ViewData["ProjectId"] = id;
 
             return View(viewModel);
