@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Data.Models;
-using Data.Models.Projects;
-using Frontend.Services.Interfaces;
+﻿using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -36,17 +33,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
                 GetInformationForProject.Verify(s => s.Execute(ProjectUrn0001), Times.Once);
             }
-
-            [Fact]
-            public async void GivenGetInformationReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnGetAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
         }
 
         public class GetDownloadTests : DownloadTests
@@ -71,26 +57,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 var fileResponse = Assert.IsType<FileContentResult>(response);
 
                 Assert.Equal(fileContents, fileResponse.FileContents);
-            }
-            
-            [Fact]
-            public async void GivenExecuteReturnsError_GeneratesErrorResponse()
-            {
-                var createDocumentErrorResponse = new CreateHtbDocumentResponse
-                {
-                    ResponseError = new ServiceResponseError
-                    {
-                        ErrorCode = ErrorCode.ApiError,
-                        ErrorMessage = ErrorMessage
-                    }
-                };
-
-                _createHtbDocument.Setup(s => s.Execute(It.IsAny<string>())).ReturnsAsync(createDocumentErrorResponse);
-                var response = await _subject.OnGetGenerateDocumentAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
             }
         }
     }
