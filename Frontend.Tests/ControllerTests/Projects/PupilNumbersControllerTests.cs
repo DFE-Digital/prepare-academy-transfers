@@ -31,7 +31,6 @@ namespace Frontend.Tests.ControllerTests.Projects
 
         public class IndexTests : PupilNumbersControllerTests
         {
-            private const string _projectErrorUrn = "errorUrn";
             private readonly string _projectUrn;
             private readonly Project _foundProject;
             private readonly Academy _foundAcademy;
@@ -62,28 +61,10 @@ namespace Frontend.Tests.ControllerTests.Projects
                         OutgoingAcademy = _foundAcademy
                     });
 
-                _getInformationForProject.Setup(s => s.Execute(_projectErrorUrn)).ReturnsAsync(
-                    new GetInformationForProjectResponse()
-                    {
-                        ResponseError = new ServiceResponseError
-                        {
-                            ErrorMessage = "Error"
-                        }
-                    });
-
                 _projectsRepository.Setup(s => s.GetByUrn(_projectUrn)).ReturnsAsync(
                     new RepositoryResult<Project>
                     {
                         Result = _foundProject
-                    });
-
-                _projectsRepository.Setup(s => s.GetByUrn(_projectErrorUrn)).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Error"
-                        }
                     });
 
                 _projectsRepository.Setup(r => r.Update(It.IsAny<Project>()))
@@ -136,16 +117,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                 }
 
                 [Fact]
-                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-                {
-                    var response = await _subject.Index(_projectErrorUrn);
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
-                }
-
-                [Fact]
                 public async void GivenReturnToPreview_AssignToTheViewModel()
                 {
                     var response = await _subject.Index(_projectUrn, false, true);
@@ -180,35 +151,6 @@ namespace Frontend.Tests.ControllerTests.Projects
                     _projectsRepository.Verify(r => r.Update(It.Is<Project>(
                         project => project.PupilNumbersAdditionalInformation == additionalInfo
                     )));
-                }
-
-                [Fact]
-                public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-                {
-                    var response = await _subject.Index(_projectErrorUrn, "test info");
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
-                }
-
-                [Fact]
-                public async void GivenUpdateReturnsError_DisplayErrorPage()
-                {
-                    _projectsRepository.Setup(s => s.Update(It.IsAny<Project>())).ReturnsAsync(
-                        new RepositoryResult<Project>
-                        {
-                            Error = new RepositoryResultBase.RepositoryError
-                            {
-                                ErrorMessage = "Error"
-                            }
-                        });
-
-                    var response = await _subject.Index(_projectErrorUrn, "test info");
-                    var viewResult = Assert.IsType<ViewResult>(response);
-
-                    Assert.Equal("ErrorPage", viewResult.ViewName);
-                    Assert.Equal("Error", viewResult.Model);
                 }
 
                 [Fact]

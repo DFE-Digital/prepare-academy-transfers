@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,11 +30,7 @@ namespace Frontend.Pages.Projects.Features
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             IsSubjectToRddOrEsfaIntervention =
                 projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention;

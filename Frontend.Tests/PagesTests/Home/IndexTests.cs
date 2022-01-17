@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Data;
 using Data.Models;
-using Microsoft.AspNetCore.Mvc;
 using Frontend.Pages.Home;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -36,25 +35,6 @@ namespace Frontend.Tests.PagesTests.Home
             ProjectRepository.Verify(r => r.GetProjects(page), Times.Once());
             Assert.Equal(page, _subject.CurrentPage);
             Assert.Equal(foundProjects, _subject.Projects);
-        }
-
-        [Fact]
-        public async void GivenGetProjectsReturnsError_DisplayErrorPage()
-        {
-            ProjectRepository.Setup(r => r.GetProjects(It.IsAny<int>())).ReturnsAsync(
-                new RepositoryResult<List<ProjectSearchResult>>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        ErrorMessage = ErrorMessage
-                    }
-                });
-        
-            var response = await _subject.OnGetAsync();
-            var viewResult = Assert.IsType<ViewResult>(response);
-        
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
 }

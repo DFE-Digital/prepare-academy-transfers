@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Session;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using Xunit;
 
@@ -134,26 +133,6 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenRepositoryReturnsAnError_DisplayErrorPage()
-            {
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", "")).ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "TRAMS error message",
-                            StatusCode = HttpStatusCode.InternalServerError
-                        }
-                    }
-                );
-
-                var response = await _subject.TrustSearch("Trust name");
-                var viewResult = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("TRAMS error message", viewResult.Model);
-            }
-
-            [Fact]
             public async void GivenSearchingByString_SetsResponsesOnTheView()
             {
                 const string trustId = "1234";
@@ -268,23 +247,6 @@ namespace Frontend.Tests.ControllerTests
                 await _subject.OutgoingTrustDetails(_trustId, "Trust name", true);
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
-
-            [Fact]
-            public async void GivenRepositoryReturnsAnError_DisplayErrorPage()
-            {
-                _trustsRepository.Setup(r => r.GetByUkprn(It.IsAny<string>())).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                            {ErrorMessage = "Error", StatusCode = HttpStatusCode.NotFound}
-                    }
-                );
-
-                var response = await _subject.OutgoingTrustDetails(_trustId);
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResponse.ViewName);
-                Assert.Equal("Error", viewResponse.Model);
-            }
         }
 
         public class ConfirmOutgoingTrustTests : TransfersControllerTests
@@ -393,23 +355,6 @@ namespace Frontend.Tests.ControllerTests
                 var viewResponse = Assert.IsType<ViewResult>(response);
 
                 Assert.Equal(outgoingAcademyId, viewResponse.ViewData["OutgoingAcademyId"]);
-            }
-
-            [Fact]
-            public async void GivenRepositoryReturnsAnError_DisplayErrorPage()
-            {
-                _trustsRepository.Setup(r => r.GetByUkprn(It.IsAny<string>())).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                            {ErrorMessage = "Error", StatusCode = HttpStatusCode.NotFound}
-                    }
-                );
-
-                var response = await _subject.OutgoingTrustAcademies();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResponse.ViewName);
-                Assert.Equal("Error", viewResponse.Model);
             }
         }
 
@@ -576,26 +521,6 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenRepositoryReturnsAnError_RedirectToTrustNamePageWithAnError()
-            {
-                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", null)).ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "TRAMS error message",
-                            StatusCode = HttpStatusCode.InternalServerError
-                        }
-                    }
-                );
-
-                var response = await _subject.SearchIncomingTrust("Trust name");
-                var viewResult = Assert.IsType<ViewResult>(response);
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("TRAMS error message", viewResult.Model);
-            }
-
-            [Fact]
             public async void GivenSearchingByString_SetsMappedResponsesOnTheView()
             {
                 var trustId = "1234";
@@ -752,44 +677,6 @@ namespace Frontend.Tests.ControllerTests
 
                 Assert.Equal(expectedAcademyIds, viewAcademyIds);
             }
-
-            [Fact]
-            public async void GivenOutgoingTrustGetReturnsAnError_DisplaysErrorPage()
-            {
-                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                            {ErrorMessage = "Error", StatusCode = HttpStatusCode.NotFound}
-                    }
-                );
-
-
-                var response = await _subject.CheckYourAnswers();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResponse.ViewName);
-                Assert.Equal("Error", viewResponse.Model);
-            }
-
-            [Fact]
-            public async void GivenIncomingTrustGetReturnsAnError_DisplaysErrorPage()
-            {
-                _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                            {ErrorMessage = "Error", StatusCode = HttpStatusCode.NotFound}
-                    }
-                );
-
-
-                var response = await _subject.CheckYourAnswers();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResponse.ViewName);
-                Assert.Equal("Error", viewResponse.Model);
-            }
         }
 
         public class SubmitProjectTests : TransfersControllerTests
@@ -869,25 +756,6 @@ namespace Frontend.Tests.ControllerTests
                 Assert.Equal("Index", responseRedirect.ActionName);
                 Assert.Equal("Project", responseRedirect.ControllerName);
                 Assert.Equal(createdProjectUrn, responseRedirect.RouteValues["id"]);
-            }
-
-            [Fact]
-            public async void GivenCreateProjectReturnsError_DisplayErrorPage()
-            {
-                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>())).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Error"
-                        }
-                    });
-
-                var response = await _subject.SubmitProject();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
             }
         }
 

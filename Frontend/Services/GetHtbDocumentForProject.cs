@@ -24,11 +24,6 @@ namespace Frontend.Services
         public async Task<GetHtbDocumentForProjectResponse> Execute(string projectUrn)
         {
             var informationForProjectResult = await _getInformationForProject.Execute(projectUrn);
-            if (!informationForProjectResult.IsValid)
-            {
-                return CreateErrorResponse(informationForProjectResult.ResponseError);
-            }
-
             var project = informationForProjectResult.Project;
             var academy = informationForProjectResult.OutgoingAcademy;
             var educationPerformance = informationForProjectResult.EducationPerformance;
@@ -93,31 +88,6 @@ namespace Frontend.Services
             return new GetHtbDocumentForProjectResponse
             {
                 HtbDocument = htbDocument
-            };
-        }
-        
-        private static GetHtbDocumentForProjectResponse CreateErrorResponse(
-            ServiceResponseError serviceResponseError)
-        {
-            if (serviceResponseError.ErrorCode == ErrorCode.NotFound)
-            {
-                return new GetHtbDocumentForProjectResponse()
-                {
-                    ResponseError = new ServiceResponseError
-                    {
-                        ErrorCode = ErrorCode.NotFound,
-                        ErrorMessage = "Not found"
-                    }
-                };
-            }
-
-            return new GetHtbDocumentForProjectResponse
-            {
-                ResponseError = new ServiceResponseError
-                {
-                    ErrorCode = ErrorCode.ApiError,
-                    ErrorMessage = "API has encountered an error"
-                }
             };
         }
         

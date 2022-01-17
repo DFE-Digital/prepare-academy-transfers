@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Data;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
@@ -32,10 +31,6 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
         public async Task<IActionResult> OnGetAsync(bool addOrEditAdditionalInformation = false)
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
-            if (!projectInformation.IsValid)
-            {
-                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
             
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             OutgoingAcademyName = projectInformation.Project.OutgoingAcademyName;
@@ -59,18 +54,10 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
         public async Task<IActionResult> OnPostAsync()
         {
             var model = await _projectsRepository.GetByUrn(Urn);
-            if (!model.IsValid)
-            {
-                return this.View("ErrorPage", model.Error.ErrorMessage);
-            }
-
+            
             model.Result.LatestOfstedJudgementAdditionalInformation = AdditionalInformationViewModel?.AdditionalInformation;
-            var result = await _projectsRepository.Update(model.Result);
-            if (!result.IsValid)
-            {
-                return this.View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            await _projectsRepository.Update(model.Result);
+            
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});

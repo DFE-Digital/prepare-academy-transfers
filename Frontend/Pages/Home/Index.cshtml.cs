@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
-using Frontend.ExtensionMethods;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -31,10 +30,6 @@ namespace Frontend.Pages.Home
         public async Task<IActionResult> OnGetAsync()
         {
             var projects = await _projectsRepository.GetProjects(CurrentPage);
-            if (!projects.IsValid)
-            {
-                return this.View("ErrorPage", projects.Error.ErrorMessage);
-            }
 
             _logger.LogInformation("Home page loaded");
             Projects = projects.Result;

@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using Data;
-using Data.Models;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Pages.Projects.LatestOfstedJudgement;
 using Frontend.Tests.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -34,18 +31,7 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
             
                 GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
             }
-            
-            [Fact]
-            public async void GivenExecuteReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnGetAsync();
-            
-                var viewResult = Assert.IsType<ViewResult>(response);
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
-       
+
             [Fact]
             public async void GivenUrn_AssignsModelToThePage()
             {
@@ -93,38 +79,7 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                 ControllerTestHelpers.AssertResultRedirectsToPage(response, $"/Projects/LatestOfstedJudgement/{nameof(Index)}", routeValues);
                 Assert.Equal(additionalInformation, FoundProjectFromRepo.LatestOfstedJudgementAdditionalInformation);
             }
-            
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnPostAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-            
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
-            
-            [Fact]
-            public async void GivenUpdateReturnsError_DisplayErrorPage()
-            {
-                ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
-                    .ReturnsAsync(new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            StatusCode = System.Net.HttpStatusCode.NotFound,
-                            ErrorMessage = ErrorMessage
-                        }
-                    });
-                
-                var response = await _subject.OnPostAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-            
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
-            
+
             [Fact]
             public async void GivenReturnToPreview_RedirectsToPreviewPage()
             {

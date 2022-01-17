@@ -1,7 +1,4 @@
-﻿using Frontend.Models.Benefits;
-using Frontend.Pages.Projects.Benefits;
-using Frontend.Tests.Helpers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Frontend.Pages.Projects.Benefits;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
@@ -35,16 +32,5 @@ namespace Frontend.Tests.PagesTests.Projects.Features
             Assert.IsType<PageResult>(response);
             Assert.Equal(ProjectUrn0001,_subject.Urn);
         }
-        
-        [Fact]
-        public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-        {
-            _subject.Urn = ProjectErrorUrn;
-            var response = await _subject.OnGetAsync();
-            
-            var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal(ErrorMessage, viewResult.Model);
-         }
     }
 }

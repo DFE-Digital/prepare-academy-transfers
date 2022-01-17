@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Data.Models.KeyStagePerformance;
 using Frontend.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Controllers
@@ -24,23 +20,17 @@ namespace Frontend.Controllers
         public async Task<IActionResult> Index([FromRoute] string id)
         {
             var project = await _projectRepository.GetByUrn(id);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var viewModel = new ProjectTaskListViewModel
             {
                 Project = project.Result
             };
-
-            // TODO: Add error handling
+            
             var educationPerformance =
                 await _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn);
-            if (educationPerformance.IsValid)
-            {
-                viewModel.EducationPerformance = educationPerformance.Result;
-            }
+            
+            viewModel.EducationPerformance = educationPerformance.Result;
+            
             
             ViewData["ProjectId"] = id;
 

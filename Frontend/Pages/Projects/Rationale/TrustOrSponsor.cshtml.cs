@@ -1,10 +1,8 @@
 using System.Threading.Tasks;
 using Data;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Rationale;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Rationale
 {
@@ -23,10 +21,6 @@ namespace Frontend.Pages.Projects.Rationale
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
 
             var projectResult = project.Result;
 
@@ -42,10 +36,6 @@ namespace Frontend.Pages.Projects.Rationale
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
 
             if (!ModelState.IsValid)
             {
@@ -56,10 +46,6 @@ namespace Frontend.Pages.Projects.Rationale
             projectResult.Rationale.Trust = ViewModel.TrustOrSponsorRationale;
 
             var result = await _projectsRepository.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return this.View("ErrorPage", result.Error.ErrorMessage);
-            }
 
             if (ReturnToPreview)
             {
