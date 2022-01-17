@@ -34,7 +34,6 @@ namespace Frontend.Integration.Tests.Views.Rationale
             
             Document.QuerySelector("#rationale")?.TextContent.Trim().Should().Be("IN PROGRESS");
             Document.QuerySelector("#rationale")?.ClassName.Should().Contain("blue");
-            
             await NavigateAsync("Rationale");
             
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be("Empty");
