@@ -24,10 +24,6 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(string urn)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
 
             var projectResult = project.Result;
             var vm = new TransferDatesSummaryViewModel
@@ -48,11 +44,7 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> FirstDiscussed(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             var vm = new FirstDiscussedViewModel
             {
@@ -73,10 +65,6 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> FirstDiscussedPost(FirstDiscussedViewModel vm)
         {
             var project = await _projectsRepository.GetByUrn(vm.Urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
             
             if (!ModelState.IsValid)
             {
@@ -88,12 +76,8 @@ namespace Frontend.Controllers.Projects
             projectResult.Dates.FirstDiscussed =  vm.FirstDiscussed.DateInputAsString();
             projectResult.Dates.HasFirstDiscussedDate = !vm.FirstDiscussed.UnknownDate;
 
-            var result = await _projectsRepository.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            await _projectsRepository.Update(projectResult);
+            
             if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
@@ -106,11 +90,7 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> TargetDate(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
 
             var vm = new TargetDateViewModel
@@ -132,11 +112,7 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> TargetDatePost([CustomizeValidator(Skip=true)] TargetDateViewModel vm)
         {
             var project = await _projectsRepository.GetByUrn(vm.Urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             
             var validationContext = new ValidationContext<TargetDateViewModel>(vm)
@@ -160,12 +136,8 @@ namespace Frontend.Controllers.Projects
             projectResult.Dates.HasTargetDateForTransfer = !vm.TargetDate.UnknownDate;
             
 
-            var result = await _projectsRepository.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            await _projectsRepository.Update(projectResult);
+            
             if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
@@ -178,10 +150,6 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> HtbDate(string urn, bool returnToPreview = false)
         {
             var project = await _projectsRepository.GetByUrn(urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
             
             var projectResult = project.Result;
             var vm = new HtbDateViewModel
@@ -203,10 +171,6 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> HtbDatePost(HtbDateViewModel vm)
         {
             var project = await _projectsRepository.GetByUrn(vm.Urn);
-            if (!project.IsValid)
-            {
-                return View("ErrorPage", project.Error.ErrorMessage);
-            }
             
             var projectResult = project.Result;
 
@@ -234,12 +198,8 @@ namespace Frontend.Controllers.Projects
             projectResult.Dates.Htb = vm.HtbDate.DateInputAsString();
             projectResult.Dates.HasHtbDate = !vm.HtbDate.UnknownDate;
 
-            var result = await _projectsRepository.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            await _projectsRepository.Update(projectResult);
+            
             if (vm.ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});

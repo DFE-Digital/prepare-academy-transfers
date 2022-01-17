@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Data;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
@@ -28,12 +27,7 @@ namespace Frontend.Pages.TaskList.KeyStage5Performance
             bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
-
-            if (!projectInformation.IsValid)
-            {
-                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
+            
             PopulateModel(addOrEditAdditionalInformation, projectInformation, returnToPreview);
             return Page();
         }
@@ -41,12 +35,7 @@ namespace Frontend.Pages.TaskList.KeyStage5Performance
         public async Task<IActionResult> OnPostAsync(string id, string additionalInformation, bool returnToPreview)
         {
             var project = await _projects.GetByUrn(id);
-
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             project.Result.KeyStage5PerformanceAdditionalInformation = additionalInformation;
             await _projects.Update(project.Result);
 

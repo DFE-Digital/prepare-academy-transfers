@@ -4,7 +4,6 @@ using Data;
 using Frontend.Models;
 using Frontend.Models.Rationale;
 using Frontend.Tests.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -61,17 +60,6 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 Assert.Equal(foundProject.Urn, _subject.Urn);
                 Assert.Equal(foundProject.Rationale.Project, _subject.ViewModel.ProjectRationale);
             }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnGetAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
         }
 
         public class OnPostAsync : ProjectTests
@@ -94,17 +82,6 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnPostAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewResult.Model);
-            }
-
-            [Fact]
             public async void GivenErrorInModelState_ReturnsCorrectPage()
             {
                 _subject.ModelState.AddModelError(nameof(_subject.ViewModel.ProjectRationale), "error");
@@ -124,25 +101,6 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 ProjectRepository.Verify(r =>
                         r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
                     Times.Once);
-            }
-
-            [Fact]
-            public async void GivenUpdateReturnsError_DisplayErrorPage()
-            {
-                ProjectRepository.Setup(s => s.Update(It.IsAny<Data.Models.Project>())).ReturnsAsync(
-                    new RepositoryResult<Data.Models.Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Update error"
-                        }
-                    });
-
-                var response = await _subject.OnPostAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal("Update error", viewResult.Model);
             }
 
             [Fact]

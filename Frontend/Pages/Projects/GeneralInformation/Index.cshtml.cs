@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -32,11 +31,6 @@ namespace Frontend.Pages.Projects.GeneralInformation
         public async Task<IActionResult> OnGetAsync(string urn)
         {
             var getInformationForProjectResponse = await _getInformationForProject.Execute(urn);
-
-            if (!getInformationForProjectResponse.IsValid)
-            {
-                return this.View("ErrorPage", getInformationForProjectResponse.ResponseError.ErrorMessage);
-            }
 
             var generalInformation = getInformationForProjectResponse.OutgoingAcademy.GeneralInformation;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
@@ -11,12 +10,8 @@ namespace Frontend.Tests.PagesTests
 {
     public abstract class PageTests
     {
-        protected const string ProjectErrorUrn = "errorUrn";
         protected const string ProjectUrn0001 = "0001";
         protected const string AcademyUrn = "1234";
-        protected const string ErrorMessage = "Error";
-        protected const string ErrorPageName = "ErrorPage";
-        protected const string ProjectNotFound = "Project not found";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
         protected GetInformationForProjectResponse FoundInformationForProject;
@@ -52,17 +47,7 @@ namespace Frontend.Tests.PagesTests
                 {
                     Result = FoundProjectFromRepo
                 });
-            
-            ProjectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn)).ReturnsAsync(
-                new RepositoryResult<Project>
-                {
-                    Error = new RepositoryResultBase.RepositoryError()
-                    {
-                        ErrorMessage = ErrorMessage,
-                        StatusCode = HttpStatusCode.UnavailableForLegalReasons
-                    }
-                });
-            
+
             ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
             .ReturnsAsync(new RepositoryResult<Project>());
         }
@@ -95,16 +80,6 @@ namespace Frontend.Tests.PagesTests
                 .ReturnsAsync(
                     FoundInformationForProject
                 );
-
-            GetInformationForProject.Setup(s => s.Execute(ProjectErrorUrn))
-                .ReturnsAsync(
-                    new GetInformationForProjectResponse
-                    {
-                        ResponseError = new ServiceResponseError
-                        {
-                            ErrorMessage = ErrorMessage
-                        }
-                    });
         }
     }
 }

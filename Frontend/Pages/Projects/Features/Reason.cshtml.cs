@@ -2,12 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Features;
 using Frontend.Models.Forms;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Features
 {
@@ -26,11 +24,7 @@ namespace Frontend.Pages.Projects.Features
         {
 
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
             FeaturesReasonViewModel.IsSubjectToIntervention =
@@ -56,11 +50,7 @@ namespace Frontend.Pages.Projects.Features
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -69,11 +59,7 @@ namespace Frontend.Pages.Projects.Features
             project.Result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention = FeaturesReasonViewModel.IsSubjectToIntervention;
             project.Result.Features.ReasonForTransfer.InterventionDetails = FeaturesReasonViewModel.MoreDetail ?? string.Empty;
             
-            var result = await _projects.Update(project.Result);
-            if (!result.IsValid)
-            {
-                return this.View("ErrorPage", result.Error.ErrorMessage);
-            }
+            await _projects.Update(project.Result);
             
             if (ReturnToPreview)
             {

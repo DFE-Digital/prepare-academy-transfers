@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using Data.Models.KeyStagePerformance;
 using Data.TRAMS.Models.EducationPerformance;
 using Data.TRAMS.Tests.Helpers;
-using Data.TRAMS.Tests.TestFixtures;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -78,26 +76,14 @@ namespace Data.TRAMS.Tests
                 Assert.Equal($"Mapped {_foundEducationPerformance.KeyStage2[0].Year}", response.Result.KeyStage2Performance[0].Year);
             }
             
-            [Fact]
-            public async void Given404_ReturnsNotFound()
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                HttpClientTestHelpers.SetupGet<TramsEducationPerformance>(_client, null, HttpStatusCode.NotFound);
-
-                var response = await _subject.GetByAcademyUrn("Urn");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsServerError()
-            {
-                HttpClientTestHelpers.SetupGet<TramsEducationPerformance>(_client, null, HttpStatusCode.InternalServerError);
-
-                var response = await _subject.GetByAcademyUrn("Urn");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
+                HttpClientTestHelpers.SetupGet<TramsEducationPerformance>(_client, null, httpStatusCode);
+                
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetByAcademyUrn("12345"));
             }
         }
     }

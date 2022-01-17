@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Net;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Frontend.Services;
-using Frontend.Services.Responses;
 using Moq;
 using Xunit;
 
@@ -119,127 +117,6 @@ namespace Frontend.Tests.ServicesTests
             Assert.Equal(result.Project, _foundProject);
             Assert.Equal(result.OutgoingAcademy, _foundAcademy);
             Assert.Equal(result.EducationPerformance, _foundEducationPerformance);
-            Assert.True(result.IsValid);
-        }
-        
-        [Fact]
-        public async void GivenProjectRepositoryReturnsNotFound_ReturnsCorrectError()
-        {
-            _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Project>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.NotFound,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.NotFound, result.ResponseError.ErrorCode);
-            Assert.Equal("Not found", result.ResponseError.ErrorMessage);
-        }
-        
-        [Fact]
-        public async void GivenProjectRepositoryReturnsServiceError_ReturnsCorrectError()
-        {
-            _projectsRepository.Setup(r => r.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Project>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.InternalServerError,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
-            Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
-        }
-
-        [Fact]
-        public async void GivenAcademyRepositoryReturnsNotFound_ReturnsCorrectError()
-        {
-            _academiesRepository.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.NotFound,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.NotFound, result.ResponseError.ErrorCode);
-            Assert.Equal("Not found", result.ResponseError.ErrorMessage);
-        }
-        
-        [Fact]
-        public async void GivenAcademyRepositoryReturnsServiceError_ReturnsCorrectError()
-        {
-            _academiesRepository.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.InternalServerError,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
-            Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
-        }
-        
-        [Fact]
-        public async void GivenEducationPerformanceRepositoryReturnsNotFound_ReturnsCorrectError()
-        {
-            _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<EducationPerformance>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.NotFound,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.NotFound, result.ResponseError.ErrorCode);
-            Assert.Equal("Not found", result.ResponseError.ErrorMessage);
-        }
-        
-        [Fact]
-        public async void GivenEducationPerformanceRepositoryReturnsServiceError_ReturnsCorrectError()
-        {
-            _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(It.IsAny<string>())).ReturnsAsync(
-                new RepositoryResult<EducationPerformance>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = HttpStatusCode.InternalServerError,
-                        ErrorMessage = "Example error message"
-                    }
-                });
-
-            var result = await _subject.Execute(_projectUrn);
-
-            Assert.False(result.IsValid);
-            Assert.Equal(ErrorCode.ApiError, result.ResponseError.ErrorCode);
-            Assert.Equal("API has encountered an error", result.ResponseError.ErrorMessage);
         }
     }
 }

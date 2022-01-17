@@ -25,11 +25,7 @@ namespace Frontend.Pages.Projects.Benefits
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
 
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(

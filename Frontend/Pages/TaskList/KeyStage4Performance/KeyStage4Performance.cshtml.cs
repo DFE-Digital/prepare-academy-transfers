@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Data;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
@@ -28,12 +27,7 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
             bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
-
-            if (!projectInformation.IsValid)
-            {
-                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
+            
             BuildPageModel(projectInformation, addOrEditAdditionalInformation, returnToPreview);
 
             return Page();
@@ -42,12 +36,7 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
         public async Task<IActionResult> OnPostAsync(string id, string additionalInformation, bool returnToPreview)
         {
             var project = await _projectRepository.GetByUrn(id);
-
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             project.Result.KeyStage4PerformanceAdditionalInformation = additionalInformation;
             await _projectRepository.Update(project.Result);
             

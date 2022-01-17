@@ -1,13 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Data;
-using Data.Models;
-using Data.Models.Projects;
+﻿using Data.Models;
 using Frontend.Models;
-using Frontend.Models.Features;
 using Frontend.Tests.Helpers;
 using Frontend.Validators.Features;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -34,18 +28,6 @@ namespace Frontend.Tests.PagesTests.Projects.Features
             {
                 await _subject.OnGetAsync();
                 ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnGetAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewModel);
             }
         }
 
@@ -105,41 +87,6 @@ namespace Frontend.Tests.PagesTests.Projects.Features
 
                 Assert.IsType<PageResult>(resultPost);
                 Assert.False(_subject.ModelState.IsValid);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                _subject.Urn = ProjectErrorUrn;
-                var response = await _subject.OnPostAsync();
-                var viewResult = Assert.IsType<ViewResult>(response);
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ErrorMessage, viewModel);
-            }
-
-            [Fact]
-            public async void GivenUpdateReturnsError_DisplayErrorPage()
-            {
-                ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
-                    .ReturnsAsync(new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            StatusCode = System.Net.HttpStatusCode.NotFound,
-                            ErrorMessage = ProjectNotFound
-                        }
-                    });
-
-
-                var response = await _subject.OnPostAsync();
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<string>(response);
-
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(ErrorPageName, viewResult.ViewName);
-                Assert.Equal(ProjectNotFound, viewModel);
             }
 
             [Fact]

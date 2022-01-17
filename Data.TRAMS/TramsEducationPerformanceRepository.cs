@@ -1,7 +1,5 @@
-using System.Net;
 using System.Threading.Tasks;
 using Data.Models.KeyStagePerformance;
-using Data.TRAMS.Models;
 using Data.TRAMS.Models.EducationPerformance;
 using Newtonsoft.Json;
 
@@ -31,19 +29,8 @@ namespace Data.TRAMS
                     Result = _educationPerformanceMapper.Map(result)
                 };
             }
-            
-            var errorMessage = response.StatusCode == HttpStatusCode.NotFound
-                ? "Academy not found"
-                : "API encountered an error";
 
-            return new RepositoryResult<EducationPerformance>
-            {
-                Error = new RepositoryResultBase.RepositoryError
-                {
-                    StatusCode = response.StatusCode,
-                    ErrorMessage = errorMessage
-                }
-            };
+            throw new TramsApiException(response);
         }
     }
 }
