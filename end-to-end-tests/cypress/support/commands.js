@@ -34,10 +34,13 @@ Cypress.Commands.add('fillInTextAtIndex', (index, text) =>{
  });
 });
 
+Cypress.Commands.add('getDataTest', (dataTest) => cy.get(`[data-test='${dataTest}']`))
+Cypress.Commands.add('clickDataTest', (dataTest) => cy.getDataTest(dataTest).click())
+
 Cypress.Commands.add('fillInDate', (dayJs) => {
-    cy.get('[data-test="day"]').clear().type(dayJs.date())
-    cy.get('[data-test="month"]').clear().type(dayJs.month()+1)
-    cy.get('[data-test="year"]').clear().type(dayJs.year())
+    cy.getDataTest("day").clear().type(dayJs.date())
+    cy.getDataTest("month").clear().type(dayJs.month()+1)
+    cy.getDataTest("year").clear().type(dayJs.year())
 })
 
 Cypress.Commands.add('selectCheckbox', (index) => {
@@ -73,7 +76,7 @@ Cypress.Commands.add('storeSessionData',()=>{
 
 Cypress.Commands.add("login",()=> {
 	cy.visit(Cypress.env('url')+"/home/login");
-	cy.get("#username").type(Cypress.env('username'));
-	cy.get("#password").type(Cypress.env('password')+"{enter}");
+	cy.getDataTest("username").type(Cypress.env('username'));
+	cy.getDataTest("password").type(Cypress.env('password')+"{enter}");
 	cy.saveLocalStorage();
 })

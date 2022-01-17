@@ -24,11 +24,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public async Task<IActionResult> OnGetAsync()
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
-            if (!projectInformation.IsValid)
-            {
-                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
-
+           
             OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
 
             return Page();
@@ -37,11 +33,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public async Task<IActionResult> OnGetGenerateDocumentAsync()
         {
             var document = await _createHtbDocument.Execute(Urn);
-            if (!document.IsValid)
-            {
-                return this.View("ErrorPage", document.ResponseError.ErrorMessage);
-            }
-        
+
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 $"ProjectTemplateFor{Urn}_{System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture)}.docx");

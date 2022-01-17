@@ -3,13 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Features;
 using Frontend.Models.Forms;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Features
 {
@@ -26,11 +24,7 @@ namespace Frontend.Pages.Projects.Features
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             FeaturesTypeViewModel.TypeOfTransfer = projectResult.Features.TypeOfTransfer;
             FeaturesTypeViewModel.OtherType = projectResult.Features.OtherTypeOfTransfer;
@@ -41,10 +35,6 @@ namespace Frontend.Pages.Projects.Features
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
             
             if (!ModelState.IsValid)
             {
@@ -55,11 +45,7 @@ namespace Frontend.Pages.Projects.Features
             projectResult.Features.TypeOfTransfer = FeaturesTypeViewModel.TypeOfTransfer;
             projectResult.Features.OtherTypeOfTransfer = FeaturesTypeViewModel.OtherType;
             
-            var result = await _projects.Update(projectResult);
-            if (!result.IsValid)
-            {
-                return this.View("ErrorPage", result.Error.ErrorMessage);
-            }
+            await _projects.Update(projectResult);
             
             return ReturnToPreview ? 
                 RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn }) :

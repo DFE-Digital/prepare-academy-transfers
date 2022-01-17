@@ -7,11 +7,11 @@ namespace Frontend.Tests.ValidatorTests
 {
     public class RationaleProjectValidatorTests
     {
-        private RationaleProjectValidator validator;
+        private readonly RationaleProjectValidator _validator;
 
         public RationaleProjectValidatorTests()
         {
-            validator = new RationaleProjectValidator();
+            _validator = new RationaleProjectValidator();
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace Frontend.Tests.ValidatorTests
                 ProjectRationale = ""
             };
 
-            var result = await validator.TestValidateAsync(vm);
+            var result = await _validator.TestValidateAsync(vm);
             result.ShouldHaveValidationErrorFor(r => r.ProjectRationale)
                 .WithErrorMessage("Enter the rationale for the project");
         }
@@ -35,7 +35,7 @@ namespace Frontend.Tests.ValidatorTests
                 ProjectRationale = "test"
             };
 
-            var result = await validator.TestValidateAsync(vm);
+            var result = await _validator.TestValidateAsync(vm);
             result.ShouldNotHaveValidationErrorFor(r => r.ProjectRationale);
         }
     }

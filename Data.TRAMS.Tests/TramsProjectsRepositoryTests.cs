@@ -98,34 +98,17 @@ namespace Data.TRAMS.Tests
                 Assert.Equal($"Mapped {_foundProject.ProjectUrn}", response.Result.Urn);
             }
 
-            [Fact]
-            public async void Given404_ReturnsErrorFromRepository()
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 _httpClient.Setup(c => c.GetAsync("academyTransferProject/12345")).ReturnsAsync(new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = httpStatusCode
                 });
 
-                var response = await _subject.GetByUrn("12345");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-                Assert.Equal("Project not found", response.Error.ErrorMessage);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsErrorFromRepository()
-            {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject/12345")).ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
-
-                var response = await _subject.GetByUrn("12345");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
-                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetByUrn("12345"));
             }
         }
 
@@ -192,37 +175,20 @@ namespace Data.TRAMS.Tests
 
                 Assert.Equal($"Mapped {_updatedProject.ProjectUrn}", response.Result.Urn);
             }
-
-            [Fact]
-            public async void Given404_ReturnsErrorFromRepository()
+            
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
                     {
-                        StatusCode = HttpStatusCode.NotFound
+                        StatusCode = httpStatusCode
                     });
-
-                var response = await _subject.Update(_projectToUpdate);
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-                Assert.Equal("Project not found", response.Error.ErrorMessage);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsErrorFromRepository()
-            {
-                _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
-                    new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.InternalServerError
-                    });
-
-                var response = await _subject.Update(_projectToUpdate);
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
-                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
+                
+                var apiException = await Assert.ThrowsAsync<TramsApiException>(() => _subject.Update(_projectToUpdate));
+                Assert.Equal(httpStatusCode, apiException.StatusCode);
             }
         }
 
@@ -287,37 +253,19 @@ namespace Data.TRAMS.Tests
 
                 Assert.Equal($"Mapped {_createdProject.ProjectUrn}", response.Result.Urn);
             }
-
-            [Fact]
-            public async void Given404_ReturnsErrorFromRepository()
+            
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
                     {
-                        StatusCode = HttpStatusCode.NotFound
+                        StatusCode = httpStatusCode
                     });
-
-                var response = await _subject.Create(_projectToCreate);
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-                Assert.Equal("Project not found", response.Error.ErrorMessage);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsErrorFromRepository()
-            {
-                _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
-                    new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.InternalServerError
-                    });
-
-                var response = await _subject.Create(_projectToCreate);
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
-                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
+                
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.Create(_projectToCreate));
             }
         }
 
@@ -406,35 +354,18 @@ namespace Data.TRAMS.Tests
 
                 Assert.Equal("Mapped 123", result.Result[0].Urn);
             }
-
-            [Fact]
-            public async void Given404_ReturnsErrorFromRepository()
+            
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = httpStatusCode
                 });
-
-                var response = await _subject.GetProjects();
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-                Assert.Equal("Project not found", response.Error.ErrorMessage);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsErrorFromRepository()
-            {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
-
-                var response = await _subject.GetProjects();
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
-                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
+                
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetProjects());
             }
 
             [Theory]

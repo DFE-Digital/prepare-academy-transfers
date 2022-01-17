@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,11 +26,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public async Task<IActionResult> OnGetAsync(string urn)
         {
             var projectInformation = await _getInformationForProject.Execute(urn);
-
-            if (!projectInformation.IsValid)
-            {
-                return this.View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
 
             OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name;
             Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation;

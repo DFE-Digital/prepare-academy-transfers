@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +20,7 @@ namespace Frontend.Pages.Projects.Rationale
         public async Task<IActionResult> OnGetAsync()
         {
             var getInformationForProjectResponse = await _getInformationForProject.Execute(Urn);
-
-            if (!getInformationForProjectResponse.IsValid)
-            {
-                return this.View("ErrorPage", getInformationForProjectResponse.ResponseError.ErrorMessage);
-            }
-
+            
             ProjectRationale = getInformationForProjectResponse.Project.Rationale.Project;
             TrustRationale = getInformationForProjectResponse.Project.Rationale.Trust;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;

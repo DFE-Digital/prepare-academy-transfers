@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Pages.TaskList.KeyStage5Performance;
-using Frontend.Services.Responses;
-using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
@@ -36,6 +32,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             public async void OnGet_GetInformationForProjectId(string id)
             {
                 await _subject.OnGetAsync(id);
+
                 GetInformationForProject.Verify(s => s.Execute(id));
             }
 
@@ -69,28 +66,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
                 Assert.True(_subject.ReturnToPreview);
             }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var pageModel =
-                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage5Performance>(
-                        GetInformationForProject.Object, ProjectRepository.Object);
-
-                GetInformationForProject.Setup(s => s.Execute(FoundInformationForProject.Project.Urn)).ReturnsAsync(
-                    new GetInformationForProjectResponse
-                    {
-                        ResponseError = new ServiceResponseError
-                            {ErrorCode = ErrorCode.NotFound, ErrorMessage = "Error message"}
-                    }
-                );
-
-                var response = await pageModel.OnGetAsync(FoundInformationForProject.Project.Urn);
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error message", viewResult.Model);
-            }
         }
 
         public class OnPostAsyncTests : KeyStage5PerformanceTests
@@ -101,30 +76,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 await _subject.OnPostAsync("1234", string.Empty, false);
 
                 ProjectRepository.Verify(r => r.GetByUrn("1234"), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var pageModel =
-                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage5Performance>(
-                        GetInformationForProject.Object, ProjectRepository.Object);
-
-                ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Error"
-                        }
-                    });
-
-
-                var response = await pageModel.OnPostAsync("1234", string.Empty, false);
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
             }
 
             [Fact]

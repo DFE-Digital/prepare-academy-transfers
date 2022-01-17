@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects.Benefits
 {
@@ -31,11 +27,7 @@ namespace Frontend.Pages.Projects.Benefits
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
@@ -67,10 +59,6 @@ namespace Frontend.Pages.Projects.Benefits
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
             
             if (!ModelState.IsValid)
             {
@@ -83,11 +71,7 @@ namespace Frontend.Pages.Projects.Benefits
                 new List<TransferBenefits.IntendedBenefit>(IntendedBenefitsViewModel.SelectedIntendedBenefits);
             projectResult.Benefits.OtherIntendedBenefit = IntendedBenefitsViewModel.OtherBenefit;
             
-            var updateResult = await _projects.Update(projectResult);
-            if (!updateResult.IsValid)
-            {
-                return this.View("ErrorPage", updateResult.Error.ErrorMessage);
-            }
+            await _projects.Update(projectResult);
             
             if (ReturnToPreview)
             {

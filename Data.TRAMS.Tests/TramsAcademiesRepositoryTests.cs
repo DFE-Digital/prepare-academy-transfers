@@ -73,34 +73,17 @@ namespace Data.TRAMS.Tests
                 Assert.Equal("Mapped 12345", response.Result.Ukprn);
             }
 
-            [Fact]
-            public async void Given404_ReturnsErrorFromRepository()
+            [Theory]
+            [InlineData(HttpStatusCode.NotFound)]
+            [InlineData(HttpStatusCode.InternalServerError)]
+            public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound
+                    StatusCode = httpStatusCode
                 });
-
-                var response = await _subject.GetAcademyByUkprn("12345");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.NotFound, response.Error.StatusCode);
-                Assert.Equal("Academy not found", response.Error.ErrorMessage);
-            }
-
-            [Fact]
-            public async void Given500_ReturnsErrorFromRepository()
-            {
-                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.InternalServerError
-                });
-
-                var response = await _subject.GetAcademyByUkprn("12345");
-
-                Assert.False(response.IsValid);
-                Assert.Equal(HttpStatusCode.InternalServerError, response.Error.StatusCode);
-                Assert.Equal("API encountered an error", response.Error.ErrorMessage);
+                
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetAcademyByUkprn("12345"));
             }
         }
     }

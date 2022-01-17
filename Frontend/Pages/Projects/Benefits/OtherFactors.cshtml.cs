@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Microsoft.AspNetCore.Mvc;
@@ -28,11 +27,7 @@ namespace Frontend.Pages.Projects.Benefits
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-
+            
             var projectResult = project.Result;
             OutgoingAcademyName = projectResult.OutgoingAcademyName;
             OtherFactorsViewModel.OtherFactorsVm  = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
@@ -44,11 +39,6 @@ namespace Frontend.Pages.Projects.Benefits
         {
             var project = await _projects.GetByUrn(Urn);
             
-            if (!project.IsValid)
-            {
-                return this.View("ErrorPage", project.Error.ErrorMessage);
-            }
-            
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -58,11 +48,7 @@ namespace Frontend.Pages.Projects.Benefits
             projectResult.Benefits.OtherFactors = OtherFactorsViewModel.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
-            var updateResult = await _projects.Update(projectResult);
-            if (!updateResult.IsValid)
-            {
-                return this.View("ErrorPage", updateResult.Error.ErrorMessage);
-            }
+            await _projects.Update(projectResult);
             
             if (ReturnToPreview)
             {

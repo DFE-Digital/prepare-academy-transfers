@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Services.Interfaces;
@@ -23,58 +22,19 @@ namespace Frontend.Services
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
-
-            if (!projectResult.IsValid)
-            {
-                return CreateErrorResponse(projectResult);
-            }
-
+            
             var outgoingAcademyUkprn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUkprn;
             var academyResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyUkprn);
-
-            if (!academyResult.IsValid)
-            {
-                return CreateErrorResponse(academyResult);
-            }
 
             var outgoingAcademyUrn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUrn;
             var educationPerformanceResult =
                 await _educationPerformanceRepository.GetByAcademyUrn(outgoingAcademyUrn);
-
-            if (!educationPerformanceResult.IsValid)
-            {
-                return CreateErrorResponse(educationPerformanceResult);
-            }
 
             return new GetInformationForProjectResponse
             {
                 Project = projectResult.Result,
                 OutgoingAcademy = academyResult.Result,
                 EducationPerformance = educationPerformanceResult.Result
-            };
-        }
-
-        private static GetInformationForProjectResponse CreateErrorResponse<T>(RepositoryResult<T> repositoryResult)
-        {
-            if (repositoryResult.Error.StatusCode == HttpStatusCode.NotFound)
-            {
-                return new GetInformationForProjectResponse
-                {
-                    ResponseError = new ServiceResponseError
-                    {
-                        ErrorCode = ErrorCode.NotFound,
-                        ErrorMessage = "Not found"
-                    }
-                };
-            }
-
-            return new GetInformationForProjectResponse
-            {
-                ResponseError = new ServiceResponseError
-                {
-                    ErrorCode = ErrorCode.ApiError,
-                    ErrorMessage = "API has encountered an error"
-                }
             };
         }
     }

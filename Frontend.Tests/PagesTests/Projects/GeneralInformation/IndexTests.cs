@@ -1,7 +1,6 @@
 using AutoFixture;
 using Data.Models;
 using Frontend.Pages.Projects.GeneralInformation;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
@@ -38,16 +37,6 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
             Assert.IsType<PageResult>(response);
             Assert.Equal(ProjectUrn0001, _subject.Urn);
             Assert.Equal(expectedGeneralInformation.SchoolPhase, _subject.SchoolPhase);
-        }
-        
-        [Fact]
-        public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-        {
-            var response =  await _subject.OnGetAsync(ProjectErrorUrn);
-            var viewResult = Assert.IsType<ViewResult>(response);
-        
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
 }

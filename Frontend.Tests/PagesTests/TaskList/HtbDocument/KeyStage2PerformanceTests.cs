@@ -4,7 +4,6 @@ using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Pages.TaskList.KeyStage2Performance;
-using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
@@ -73,20 +72,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
                 Assert.True(_subject.ReturnToPreview);
             }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var pageModel =
-                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage2Performance>(
-                        GetInformationForProject.Object, ProjectRepository.Object);
-
-                var response = await pageModel.OnGetAsync(ProjectErrorUrn);
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
-            }
         }
 
         public class OnPostAsyncTests : KeyStage2PerformanceTests
@@ -105,15 +90,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                     {
                         Result = _foundProject
                     });
-
-                ProjectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn)).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Error"
-                        }
-                    });
             }
 
             [Fact]
@@ -122,20 +98,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 await _subject.OnPostAsync(ProjectUrn0001, string.Empty, false);
 
                 ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-            {
-                var pageModel =
-                    RazorPageTestHelpers.GetPageModelWithViewData<KeyStage2Performance>(
-                        GetInformationForProject.Object, ProjectRepository.Object);
-
-                var response = await pageModel.OnPostAsync(ProjectErrorUrn, string.Empty, false);
-                var viewResult = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal("ErrorPage", viewResult.ViewName);
-                Assert.Equal("Error", viewResult.Model);
             }
 
             [Fact]

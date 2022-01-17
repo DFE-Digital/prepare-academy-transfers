@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Frontend.Helpers;
 using Frontend.Validators.Transfers;
 using Frontend.Views.Transfers;
@@ -58,11 +57,6 @@ namespace Frontend.Controllers
 
             var result = await _trustsRepository.SearchTrusts(query);
 
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
             var validator = new OutgoingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
             if (!validationResult.IsValid)
@@ -79,7 +73,7 @@ namespace Frontend.Controllers
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-
+            
             return View(model);
         }
 
@@ -87,22 +81,17 @@ namespace Frontend.Controllers
         {
             ViewData["ChangeLink"] = change;
 
-            var validator = new OutgoingTrustConfirmValidator();
+            var validator= new OutgoingTrustConfirmValidator();
             var validationResult = await validator.ValidateAsync(trustId);
 
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustSearch", new {query, change});
+                return RedirectToAction("TrustSearch", new { query, change });
             }
-
+            
             var result = await _trustsRepository.GetByUkprn(trustId);
-
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -133,12 +122,7 @@ namespace Frontend.Controllers
             }
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
-
-            if (!trustRepoResult.IsValid)
-            {
-                return View("ErrorPage", trustRepoResult.Error.ErrorMessage);
-            }
-
+            
             var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
 
             ViewData["Error.Exists"] = false;
@@ -202,12 +186,7 @@ namespace Frontend.Controllers
 
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var result = await _trustsRepository.SearchTrusts(query, outgoingTrustId);
-
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            
             var validator = new IncomingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
 
@@ -218,13 +197,13 @@ namespace Frontend.Controllers
             }
 
             var model = new TrustSearch {Trusts = result.Result};
-
+            
             ViewData["Error.Exists"] = false;
             if (TempData.Peek("ErrorMessage") == null) return View(model);
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-
+            
             return View(model);
         }
 
@@ -236,9 +215,9 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("SearchIncomingTrust", new {query, change});
+                return RedirectToAction("SearchIncomingTrust", new { query, change });
             }
-
+            
             HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
 
             return RedirectToAction("CheckYourAnswers");
@@ -252,22 +231,12 @@ namespace Frontend.Controllers
 
             var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
-            if (!outgoingTrustResponse.IsValid)
-            {
-                return View("ErrorPage", outgoingTrustResponse.Error.ErrorMessage);
-            }
-
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
             if (incomingTrustIdString != null)
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
-
-                if (!incomingTrustResponse.IsValid)
-                {
-                    return View("ErrorPage", incomingTrustResponse.Error.ErrorMessage);
-                }
-
+                
                 incomingTrust = incomingTrustResponse.Result;
             }
 
@@ -302,16 +271,12 @@ namespace Frontend.Controllers
             };
 
             var result = await _projectsRepository.Create(project);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", result.Error.ErrorMessage);
-            }
-
+            
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToPage("/Projects/Index", new {urn = result.Result.Urn});
+            return RedirectToAction("Index", "Project", new {id = result.Result.Urn});
         }
     }
 }

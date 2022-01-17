@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using Data;
 using Data.Models;
 using Data.Models.Projects;
 using Frontend.Models;
 using Frontend.Models.AcademyAndTrustInformation;
 using Frontend.Pages.Projects.AcademyAndTrustInformation;
 using Frontend.Tests.Helpers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -42,16 +40,6 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             
             Assert.IsType<PageResult>(response);
             Assert.True(Subject.ReturnToPreview);
-        }
-        
-        [Fact]
-        public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-        {
-            var response =  await Subject.OnGetAsync(ProjectErrorUrn);
-            
-            var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal(ErrorMessage, viewResult.Model);
         }
     }
     
@@ -89,42 +77,7 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             });
             ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/AcademyAndTrustInformation/{nameof(Index)}", routeValues);
         }
-        
-        [Fact]
-        public async void GivenGetByUrnReturnsError_DisplayErrorPage()
-        {
-            var vmError = new RecommendationViewModel
-            {
-                Urn = ProjectErrorUrn,
-                Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Decline
-            };
-            var response = await Subject.OnPostAsync(vmError);
-            
-            var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal(ErrorMessage, viewResult.Model);
-        }
-        
-        [Fact]
-        public async void GivenUpdateReturnsError_DisplayErrorPage()
-        {
-            ProjectRepository.Setup(s => s.Update(It.IsAny<Project>()))
-                .ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Error = new RepositoryResultBase.RepositoryError
-                        {
-                            ErrorMessage = "Update error"
-                        }
-                    });
 
-            var response = await Subject.OnPostAsync(_vm);
-            
-            var viewResult = Assert.IsType<ViewResult>(response);
-            Assert.Equal(ErrorPageName, viewResult.ViewName);
-            Assert.Equal("Update error", viewResult.Model);
-        }
-        
         [Fact]
         public async void GivenReturnToPreview_ReturnToThePreviewPage()
         {

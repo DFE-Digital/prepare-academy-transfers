@@ -1,4 +1,3 @@
-using System.Net;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.TRAMS.Models;
@@ -22,30 +21,19 @@ namespace Data.TRAMS
         {
             using var response = await _httpClient.GetAsync($"establishment/{ukprn}");
 
-            Academy mappedResult;
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<TramsEstablishment>(apiResponse);
-                mappedResult = _academyMapper.Map(result);
+                throw new TramsApiException(response);
             }
-            else
+            
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<TramsEstablishment>(apiResponse);
+            var mappedResult = _academyMapper.Map(result);
+            return new RepositoryResult<Academy>
             {
-                var errorMessage = response.StatusCode == HttpStatusCode.NotFound
-                    ? "Academy not found"
-                    : "API encountered an error";
-                
-                return new RepositoryResult<Academy>
-                {
-                    Error = new RepositoryResultBase.RepositoryError
-                    {
-                        StatusCode = response.StatusCode,
-                        ErrorMessage = errorMessage
-                    }
-                };
-            }
+                Result = mappedResult
+            };
 
-            return new RepositoryResult<Academy> {Result = mappedResult};
         }
     }
 }

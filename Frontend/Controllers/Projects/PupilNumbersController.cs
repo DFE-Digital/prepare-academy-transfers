@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
@@ -28,10 +27,6 @@ namespace Frontend.Controllers.Projects
             bool returnToPreview = false)
         {
             var projectInformation = await _getInformationForProject.Execute(id);
-            if (!projectInformation.IsValid)
-            {
-                return View("ErrorPage", projectInformation.ResponseError.ErrorMessage);
-            }
 
             var model = BuildViewModel(projectInformation, returnToPreview, false, addOrEditAdditionalInformation);
 
@@ -71,18 +66,10 @@ namespace Frontend.Controllers.Projects
         public async Task<IActionResult> Index(string id, string additionalInformation, bool returnToPreview = false)
         {
             var model = await _projectsRepository.GetByUrn(id);
-            if (!model.IsValid)
-            {
-                return View("ErrorPage", model.Error.ErrorMessage);
-            }
 
             model.Result.PupilNumbersAdditionalInformation = additionalInformation;
-            var result = await _projectsRepository.Update(model.Result);
-            if (!result.IsValid)
-            {
-                return View("ErrorPage", model.Error.ErrorMessage);
-            }
-
+            await _projectsRepository.Update(model.Result);
+            
             if (returnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id});
