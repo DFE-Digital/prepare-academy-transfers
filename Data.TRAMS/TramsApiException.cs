@@ -13,7 +13,7 @@ namespace Data.TRAMS
         {
             StatusCode = httpResponseMessage.StatusCode;
             base.Data.Add("Sentry:Tag:StatusCode", StatusCode);
-            base.Data.Add("Content", httpResponseMessage.Content.ReadAsStringAsync().Result);
+            base.Data.Add("Content", httpResponseMessage.Content?.ReadAsStringAsync().Result);
         }
     }
 }
