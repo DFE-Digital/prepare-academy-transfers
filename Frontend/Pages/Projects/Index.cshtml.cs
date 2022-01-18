@@ -27,9 +27,9 @@ namespace Frontend.Pages.Projects
             _taskListService = taskListService;
         }
         
-        public  IActionResult OnGet()
+        public IActionResult OnGet()
         {
-            _taskListService.BuildTaskListStatuses(Urn, this);
+            _taskListService.BuildTaskListStatuses(this);
             return Page();
         }
     }

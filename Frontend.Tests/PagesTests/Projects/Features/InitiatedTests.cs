@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Features
 {
-    public class InitiatedTests : PageTests
+    public class InitiatedTests : BaseTests
     {
         private readonly Pages.Projects.Features.Initiated _subject;
         public InitiatedTests()

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Benefits
 {
-    public class IntendedBenefitsTests : PageTests
+    public class IntendedBenefitsTests : BaseTests
     {
         private readonly IntendedBenefits _subject;
 

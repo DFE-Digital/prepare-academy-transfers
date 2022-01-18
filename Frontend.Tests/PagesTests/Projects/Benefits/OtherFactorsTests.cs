@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Benefits
 {
-    public class OtherFactorsTests : PageTests
+    public class OtherFactorsTests : BaseTests
     {
         private readonly OtherFactors _subject;
 

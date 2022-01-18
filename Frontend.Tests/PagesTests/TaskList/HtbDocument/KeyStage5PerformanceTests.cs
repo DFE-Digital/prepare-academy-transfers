@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 {
-    public class KeyStage5PerformanceTests : PageTests
+    public class KeyStage5PerformanceTests : BaseTests
     {
         private readonly KeyStage5Performance _subject;
         public KeyStage5PerformanceTests()

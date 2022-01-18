@@ -6,6 +6,6 @@ namespace Frontend.Services.Interfaces
 {
     public interface ITaskListService
     {
-       void BuildTaskListStatuses(string urn, Index indexPage);
+       void BuildTaskListStatuses(Index indexPage);
     }
 }

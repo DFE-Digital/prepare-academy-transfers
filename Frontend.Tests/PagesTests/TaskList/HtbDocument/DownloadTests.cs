@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 {
-    public class DownloadTests : PageTests
+    public class DownloadTests : BaseTests
     {
         private readonly Pages.TaskList.HtbDocument.Download _subject;
         private readonly Mock<ICreateHtbDocument> _createHtbDocument;

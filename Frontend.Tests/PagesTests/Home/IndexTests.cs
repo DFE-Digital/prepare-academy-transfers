@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Home
 {
-    public class IndexTests : PageTests
+    public class IndexTests : BaseTests
     {
         private readonly Mock<ILogger<Index>> _logger = new Mock<ILogger<Index>>();
         private readonly Index _subject;

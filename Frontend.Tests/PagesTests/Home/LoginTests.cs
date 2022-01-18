@@ -12,7 +12,7 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Frontend.Tests.PagesTests.Home
 {
-    public class LoginTests : PageTests
+    public class LoginTests : BaseTests
     {
         private readonly Login _subject;
         private const string Username = "username";

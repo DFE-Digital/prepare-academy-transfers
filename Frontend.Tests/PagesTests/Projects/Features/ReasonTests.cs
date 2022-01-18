@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Features
 {
-    public class ReasonTests : PageTests
+    public class ReasonTests : BaseTests
     {
         private readonly Pages.Projects.Features.Reason _subject;
 

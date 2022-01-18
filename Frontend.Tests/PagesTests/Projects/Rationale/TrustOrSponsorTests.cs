@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Rationale
 {
-    public class TrustOrSponsorTests : PageTests
+    public class TrustOrSponsorTests : BaseTests
     {
         private readonly TrustOrSponsor _subject;
 

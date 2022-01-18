@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
 {
-    public class IndexTests : PageTests
+    public class IndexTests : BaseTests
     {
         private readonly Index _subject;
 
