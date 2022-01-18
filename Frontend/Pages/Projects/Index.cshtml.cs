@@ -1,12 +1,7 @@
-﻿using System.Threading.Tasks;
-using Data;
-using Data.Models;
-using Frontend.ExtensionMethods;
+﻿using Data.Models;
 using Frontend.Models;
-using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.Projects
 {
