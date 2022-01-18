@@ -276,7 +276,7 @@ namespace Frontend.Controllers
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToPage($"/Project/{nameof(Pages.Projects.Index)}", new {urn = result.Result.Urn});
+            return RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new {urn = result.Result.Urn});
         }
     }
 }
