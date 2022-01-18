@@ -752,9 +752,8 @@ namespace Frontend.Tests.ControllerTests
 
                 var response = await _subject.SubmitProject();
 
-                var responseRedirect = Assert.IsType<RedirectToActionResult>(response);
-                Assert.Equal("Index", responseRedirect.ActionName);
-                Assert.Equal("Project", responseRedirect.ControllerName);
+                var responseRedirect = Assert.IsType<RedirectToPageResult>(response);
+                Assert.Equal($"/Project/{nameof(Pages.Projects.Index)}", responseRedirect.PageName);
                 Assert.Equal(createdProjectUrn, responseRedirect.RouteValues["id"]);
             }
         }
