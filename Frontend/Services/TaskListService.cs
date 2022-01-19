@@ -26,7 +26,8 @@ namespace Frontend.Services
         public void BuildTaskListStatuses(Frontend.Pages.Projects.Index indexPage)
         {
             var project = _projectRepository.GetByUrn(indexPage.Urn).Result;
-            indexPage.OutgoingAcademyName = project.Result.OutgoingAcademyName; 
+            indexPage.OutgoingAcademyName = project.Result.OutgoingAcademyName;
+            indexPage.OutgoingAcademyUrn = project.Result.OutgoingAcademyUrn;
             var educationPerformance =
                 _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;
             indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);

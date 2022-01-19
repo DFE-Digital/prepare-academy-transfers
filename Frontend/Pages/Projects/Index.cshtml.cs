@@ -25,7 +25,7 @@ namespace Frontend.Pages.Projects
         public IActionResult OnGet()
         {
             _taskListService.BuildTaskListStatuses(this);
-            return Page();
+                   return Page();
         }
     }
 }

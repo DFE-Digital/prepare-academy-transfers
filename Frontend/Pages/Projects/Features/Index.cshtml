@@ -15,7 +15,7 @@
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
             URN @Model.OutgoingAcademyUrn
-        </span>
+         </span>
         <h1 class="govuk-heading-l">
             Features of the transfer
         </h1>
@@ -28,7 +28,7 @@
 
         <partial for="@Model" name="_FeaturesSummary" />
 
-        <form asp-page="/Projects/Index" asp-route-urn="@Model.Urn">
+        <form asp-page="/Projects/Index" asp-route-urn="@Model.Urn" method="get">
             <button class="govuk-button govuk-!-margin-top-6">Confirm and continue</button>
         </form>
     </div>

@@ -55,7 +55,7 @@
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="rationale" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn" data-test="transfer-rationale">Rationale</a>
-                        </span><projectstatus id="rationale" , status="@Model.RationaleStatus"></projectstatus>
+                        </span><projectstatus id="rationale" status="@Model.RationaleStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
@@ -69,28 +69,28 @@
                             <a class="govuk-link" aria-describedby="general-information" asp-page="/Projects/GeneralInformation/Index" asp-route-urn="@Model.Urn" data-test="general-information">
                                 General information
                             </a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information">Reference only</strong>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="general-information" data-test="general-information-status">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Urn" data-test="pupil-numbers">
                                 Pupil numbers
                             </a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers">Reference only</strong>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers" data-test="pupil-numbers-status">Reference only</strong>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="ofsted-report" asp-page="/Projects/LatestOfstedJudgement/Index" asp-route-urn="@Model.Urn" data-test="ofsted">
                                 Latest Ofsted report
                             </a>
-                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report">Reference only</strong>
+                        </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="ofsted-report" data-test="ofsted-report">Reference only</strong>
                     </li>
                     @if (Model.HasKeyStage2PerformanceInformation)
                     {
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
                                 <a class="govuk-link" asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-2-performance-tables" data-test="ks2-performance">Key stage 2 performance tables</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables">Reference only</strong>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-2-performance-tables" data-test="key-stage-2-performance-tables">Reference only</strong>
                         </li>
                     }
                     @if (Model.HasKeyStage4PerformanceInformation)
@@ -98,7 +98,7 @@
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
                                 <a class="govuk-link" asp-page="/TaskList/KeyStage4Performance/KeyStage4Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-4-performance-tables" data-test="ks4-performance">Key stage 4 performance tables</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-4-performance-tables">Reference only</strong>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-4-performance-tables" data-test="key-stage-4-performance-tables">Reference only</strong>
                         </li>
                     }
 
@@ -107,7 +107,7 @@
                         <li class="moj-task-list__item">
                             <span class="moj-task-list__task-name">
                                 <a class="govuk-link" asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-5-performance-tables" data-test="ks5-performance">Key stage 5 performance tables</a>
-                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-5-performance-tables">Reference only</strong>
+                            </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="key-stage-5-performance-tables" data-test="key-stage-5-performance-tables">Reference only</strong>
                         </li>
                     }
                 </ul>

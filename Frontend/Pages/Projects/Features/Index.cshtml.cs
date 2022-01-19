@@ -31,7 +31,7 @@ namespace Frontend.Pages.Projects.Features
         {
             var project = await _projects.GetByUrn(Urn);
             
-            var projectResult = project.Result;
+            var projectResult = project.Result; 
             IsSubjectToRddOrEsfaIntervention =
                 projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention;
             TypeOfTransfer = projectResult.Features.TypeOfTransfer;

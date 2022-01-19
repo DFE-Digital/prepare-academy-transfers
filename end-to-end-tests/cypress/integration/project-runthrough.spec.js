@@ -74,6 +74,7 @@ describe("Creating and editing an academy transfer", function () {
         selectFirstRadio();
         submit()
         cy.clickBackLink();
+        cy.getDataTest("features").should('have.text',"COMPLETED");
 
         // Dates
         cy.clickDataTest("transfer-dates")
@@ -87,7 +88,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
         clickBackLink()
-
+        cy.getDataTest("dates").should('have.text',"COMPLETED");
+        
         // Benefits
         cy.clickDataTest("transfer-benefits")
         cy.clickDataTest("intended-benefits")
@@ -101,7 +103,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInTextAtIndex(1, "second")
         submit();
         clickBackLink()
-
+        cy.getDataTest("benefits").should('have.text',"COMPLETED");
+        
         //Rationale
         cy.clickDataTest("transfer-rationale")
         cy.clickDataTest("project-rationale")
@@ -111,7 +114,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("ViewModel.TrustOrSponsorRationale", "this is the project rationale")
         submit();
         clickBackLink()
-
+        cy.getDataTest("rationale").should('have.text',"COMPLETED");
+        
         // Academy trust information
         cy.clickDataTest("academy-trust-information")
         cy.clickDataTest("recommendation");
@@ -119,44 +123,51 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("author", "Author name")
         submit();
         clickBackLink()
-
+        cy.getDataTest("academyandtrustinformation").should('have.text',"COMPLETED");
+        
         cy.clickDataTest("general-information")
         clickBackLink()
-
+        cy.getDataTest("general-information-status").should('have.text',"Reference only");
+        
         // Pupil numbers
         cy.clickDataTest("pupil-numbers")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
         submit();
         clickBackLink()
-
+        cy.getDataTest("pupil-numbers-status").should('have.text',"Reference only");
+        
         // Ofsted
         cy.clickDataTest("ofsted")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ofsted");
         submit();
         clickBackLink()
-
+        cy.getDataTest("ofsted-report").should('have.text',"Reference only");
+        
         // KS2
         cy.clickDataTest("ks2-performance")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
         submit();
         clickBackLink()
-
+        cy.getDataTest("key-stage-2-performance-tables").should('have.text',"Reference only");
+        
         // KS4
         cy.clickDataTest("ks4-performance")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks4 performance");
         submit();
         clickBackLink()
-
+        cy.getDataTest("key-stage-4-performance-tables").should('have.text',"Reference only");
+        
         // KS5
         cy.clickDataTest("ks5-performance")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
+        cy.getDataTest("key-stage-5-performance-tables").should('have.text',"Reference only");
         
         // Go to preview
         cy.clickDataTest("preview-htb")
