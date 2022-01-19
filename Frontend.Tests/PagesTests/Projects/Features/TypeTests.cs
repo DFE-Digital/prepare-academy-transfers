@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Features
 {
-    public class TypeTests : PageTests
+    public class TypeTests : BaseTests
     {
         private readonly Pages.Projects.Features.Type _subject;
 

@@ -12,7 +12,7 @@ using Frontend.Pages.Projects.Rationale;
 
 namespace Frontend.Tests.PagesTests.Projects.Rationale
 {
-    public class ProjectTests : PageTests
+    public class ProjectTests : BaseTests
     {
         private readonly Project _subject;
 

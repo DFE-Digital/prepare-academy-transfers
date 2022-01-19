@@ -194,21 +194,21 @@ namespace Frontend
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
             
-            services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
-            services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
             services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
             services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
             services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
             services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-            services
-                .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
-                    TramsEducationPerformanceMapper>();
+            services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
             services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
             services.AddTransient<ITrusts, TramsTrustsRepository>();
             services.AddTransient<IAcademies, TramsEstablishmentRepository>();
             services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
-            services.AddSingleton<IProjects, TramsProjectsRepository>();
+            services.AddTransient<ITaskListService, TaskListService>();
+            services.AddTransient<IProjects, TramsProjectsRepository>();
+            
+            services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
+            services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
         }
 
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)

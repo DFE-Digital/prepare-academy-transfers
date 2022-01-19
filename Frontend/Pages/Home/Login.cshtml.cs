@@ -28,8 +28,6 @@ namespace Frontend.Pages.Home
         [CustomizeValidator(Skip = true)]
         public LoginViewModel LoginViewModel { get; set; }
 
-        public string ErrorMessage { get; set; }
-
         public Login(IConfiguration configuration)
         {
             _configuration = configuration;

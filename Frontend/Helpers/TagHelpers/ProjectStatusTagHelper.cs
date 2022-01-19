@@ -23,6 +23,7 @@ namespace Frontend.Helpers.TagHelpers
             }
             
             output.Attributes.SetAttribute("class", $"govuk-tag {tagColourClass} moj-task-list__tag");
+            output.Attributes.SetAttribute("data-test", context.AllAttributes["id"].Value.ToString());
             output.TagName = "strong";
             output.Content.SetContent(EnumHelpers<ProjectStatuses>.GetDisplayValue(Status));
             base.Process(context, output);

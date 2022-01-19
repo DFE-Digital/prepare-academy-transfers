@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Benefits
 {
-    public class IndexTests : PageTests
+    public class IndexTests : BaseTests
     {
         private readonly Index _subject;
         public IndexTests()

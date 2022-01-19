@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
 {
-    public class RecommendationTests : PageTests
+    public class RecommendationTests : BaseTests
     {
         protected readonly Recommendation Subject;
 
