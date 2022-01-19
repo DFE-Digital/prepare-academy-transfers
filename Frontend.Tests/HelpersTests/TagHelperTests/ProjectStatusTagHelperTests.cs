@@ -16,7 +16,8 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
         [InlineData(ProjectStatuses.InProgress, "IN PROGRESS", "govuk-tag--blue")]
         [InlineData(ProjectStatuses.Completed, "COMPLETED", null)]
         [InlineData(ProjectStatuses.Empty, "", null)]
-        public void GivenNotStartedStatus_ReturnsRedNotStartedTag(ProjectStatuses projectStatus, string expectedStatusText, string expectedCssClass)
+        public void GivenNotStartedStatus_ReturnsRedNotStartedTag(ProjectStatuses projectStatus,
+            string expectedStatusText, string expectedCssClass)
         {
             // Arrange
             var projectStatusTagHelper = new ProjectStatusTagHelper
@@ -24,17 +25,17 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 Status = projectStatus
             };
             var tagHelperContext = new TagHelperContext(
-                            new TagHelperAttributeList(),
-                            new Dictionary<object, object>(),
-                            Guid.NewGuid().ToString("N"));
+                new TagHelperAttributeList() {{"id", "elementId"}},
+                new Dictionary<object, object>(),
+                Guid.NewGuid().ToString("N"));
             var tagHelperOutput = new TagHelperOutput("projectstatus",
                 new TagHelperAttributeList(),
                 (result, encoder) =>
-                    {
-                        var tagHelperContent = new DefaultTagHelperContent();
-                        tagHelperContent.SetHtmlContent(string.Empty);
-                        return Task.FromResult<TagHelperContent>(tagHelperContent);
-                    });
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent(string.Empty);
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
 
             // Act
             projectStatusTagHelper.Process(tagHelperContext, tagHelperOutput);
@@ -42,7 +43,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             // Assert
             Assert.Equal("strong", tagHelperOutput.TagName);
             Assert.Equal(expectedStatusText, tagHelperOutput.Content.GetContent());
-            Assert.Equal($"govuk-tag {expectedCssClass} moj-task-list__tag", tagHelperOutput.Attributes.Single().Value);
+            Assert.Equal($"govuk-tag {expectedCssClass} moj-task-list__tag", tagHelperOutput.Attributes["class"].Value);
         }
     }
 }
