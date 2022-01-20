@@ -47,5 +47,6 @@
     <_ContentIncludedByDefault Remove="Views\Features\Type.cshtml" />
     <_ContentIncludedByDefault Remove="Views\HeadteacherBoard\Download.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Home\Login.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\PupilNumbers\Index.cshtml" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-@model PupilNumbersViewModel
+@model Frontend.Pages.Projects.PupilNumbers
 
 <dl class="govuk-summary-list @(!Model.IsPreview ? "govuk-!-margin-bottom-9" : null)">
     <gds-key-value key="Girls on roll" value="@Model.GirlsOnRoll" show-action="@Model.IsPreview"/>
@@ -13,12 +13,12 @@
                 Additional information
             </dt>
             <dd class="govuk-summary-list__value">
-                <stringsummary value="@Model.AdditionalInformation.AdditionalInformation"></stringsummary>
+                <stringsummary value="@Model.AdditionalInformationViewModel.AdditionalInformation"></stringsummary>
             </dd>
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link"
-                   asp-controller="PupilNumbers" asp-action="Index"
-                   asp-route-id="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+                  asp-page="/Projects/PupilNumbers"
+                   asp-route-urn="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
                    asp-route-returnToPreview="true">
                     Change<span class="govuk-visually-hidden"> pupil numbers additional information</span>
                 </a>
