@@ -7,11 +7,11 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
     public class FirstDiscussedDateValidatorTests
     {
         [Fact]
-        public void ShouldHaveChildValidator()
+        public void ShouldHaveChildValidators()
         {
             var validator = new FirstDiscussedDateValidator();
-
             validator.ShouldHaveChildValidator(a => a.FirstDiscussed, typeof(DateValidator));
+            validator.ShouldHaveChildValidator(a => a.FirstDiscussed, typeof(PastDateValidator));
         }
     }
 }

@@ -7,8 +7,13 @@ namespace Frontend.Validators.TransferDates
     {
         public FirstDiscussedDateValidator()
         {
+            CascadeMode = CascadeMode.Stop;
+            
             RuleFor(x => x.FirstDiscussed)
                 .SetValidator(new DateValidator());
+            
+            RuleFor(x => x.FirstDiscussed)
+                .SetValidator(new PastDateValidator());
         }
     }
 }
