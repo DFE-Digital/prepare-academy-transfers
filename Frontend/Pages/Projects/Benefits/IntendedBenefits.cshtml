@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the benefits the transfer intended to bring?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the intended benefits of the transfer";
     Layout = "_Layout";
     var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.IntendedBenefitsViewModel)}.{nameof(Model.IntendedBenefitsViewModel.SelectedIntendedBenefits)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
     var otherBenefitFormClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.IntendedBenefitsViewModel)}.{nameof(Model.IntendedBenefitsViewModel.OtherBenefit)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
@@ -33,7 +33,7 @@
                             <span class="govuk-caption-l">
                                 @Model.OutgoingAcademyName
                             </span>
-                            What are the benefits the transfer intended to bring?
+                            What are the intended benefits of the transfer
                         </h1>
                     </legend>
                     <div id="intended-benefits-hint" class="govuk-hint">
