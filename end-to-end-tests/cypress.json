@@ -1,6 +1,5 @@
 {
   "chromeWebSecurity": false,
   "projectId": "jd9h7w",
-  "video": false,
-  "experimentalStudio": true
+  "video": false
 }
