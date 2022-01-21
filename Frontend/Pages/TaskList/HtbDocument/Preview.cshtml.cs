@@ -136,6 +136,9 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     .PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                 OutgoingAcademyUrn = response.OutgoingAcademy.Urn,
                 OutgoingAcademyName = response.OutgoingAcademy.Name,
+                IsPreview = true,
+                Urn = response.Project.Urn,
+                ReturnToPreview = true,
                 AdditionalInformationViewModel = new AdditionalInformationViewModel
                 {
                     AdditionalInformation = response.Project.PupilNumbersAdditionalInformation,
