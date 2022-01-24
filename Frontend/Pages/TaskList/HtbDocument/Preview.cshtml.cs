@@ -8,6 +8,7 @@ using Frontend.Models.Features;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Frontend.Pages.Projects;
+using Frontend.Pages.Projects.Features;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Index = Frontend.Pages.Projects.Features.Index;
@@ -24,7 +25,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
         public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
-        public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
+        public Projects.TransferDates.Index TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public Projects.PupilNumbers PupilNumbersViewModel { get; set; }
         public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
@@ -68,7 +69,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ReturnToPreview = true
             };
 
-            TransferDatesSummaryViewModel = new TransferDatesSummaryViewModel
+            TransferDatesSummaryViewModel = new Pages.Projects.TransferDates.Index(_projects)
             {
                 Urn = Project.Urn,
                 ReturnToPreview = true,
@@ -164,6 +165,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     HintText =
                         "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                     Urn = Project.Urn,
+                    AddOrEditAdditionalInformation = false,
                     ReturnToPreview = true
                 },
                 IsPreview = true
