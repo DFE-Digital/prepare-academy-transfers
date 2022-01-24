@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
+using AutoFixture;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
@@ -15,12 +15,14 @@ namespace Frontend.Tests
     {
         protected const string ProjectUrn0001 = "0001";
         protected const string ProjectErrorUrn = "errorUrn";
+        protected const string PopulatedProjectUrn = "01234";
         protected const string AcademyUrn = "1234";
         protected const string ErrorMessage = "Error";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
         protected GetInformationForProjectResponse FoundInformationForProject;
         protected Project FoundProjectFromRepo;
+        protected Project FoundPopulatedProjectFromRepo;
         
         protected const string OutgoingAcademyName = "Academy Name";
         private const string LAName = "LA Name";
@@ -56,6 +58,24 @@ namespace Frontend.Tests
 
             ProjectRepository.Setup(s => s.GetByUrn(ProjectErrorUrn))
                 .Throws(new TramsApiException(new HttpResponseMessage(), ErrorMessage));
+            
+            var fixture = new Fixture();
+            
+            var populatedTransferringAcademy = fixture.Build<TransferringAcademies>()
+                .With(a => a.OutgoingAcademyName, OutgoingAcademyName)
+                .With(a => a.OutgoingAcademyUrn, AcademyUrn)
+                .Create();
+            
+            FoundPopulatedProjectFromRepo = fixture.Build<Project>()
+                .With(p => p.Urn, PopulatedProjectUrn)
+                .With(p => p.TransferringAcademies, new List<TransferringAcademies> {populatedTransferringAcademy})
+                .Create();
+            
+            ProjectRepository.Setup(s => s.GetByUrn(PopulatedProjectUrn)).ReturnsAsync(
+                new RepositoryResult<Project>
+                {
+                    Result = FoundPopulatedProjectFromRepo
+                });
             
             ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
             .ReturnsAsync(new RepositoryResult<Project>());
