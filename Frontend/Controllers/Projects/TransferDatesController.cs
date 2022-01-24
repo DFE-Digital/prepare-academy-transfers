@@ -21,25 +21,6 @@ namespace Frontend.Controllers.Projects
             _projectsRepository = projectsRepository;
         }
 
-        public async Task<IActionResult> Index(string urn)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-
-            var projectResult = project.Result;
-            var vm = new TransferDatesSummaryViewModel
-            {
-                Urn = projectResult.Urn,
-                OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn,
-                FirstDiscussedDate = projectResult.Dates?.FirstDiscussed,
-                HasFirstDiscussedDate = projectResult.Dates?.HasFirstDiscussedDate,
-                HtbDate = projectResult.Dates?.Htb,
-                HasHtbDate = projectResult.Dates?.HasHtbDate,
-                TargetDate = projectResult.Dates?.Target,
-                HasTargetDate = projectResult.Dates?.HasTargetDateForTransfer
-            };
-            return View(vm);
-        }
-
         [HttpGet("first-discussed")]
         public async Task<IActionResult> FirstDiscussed(string urn, bool returnToPreview = false)
         {
@@ -83,7 +64,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {vm.Urn});
+            return RedirectToPage("/Projects/TransferDates/Index", new {vm.Urn});
         }
 
         [HttpGet("target-date")]
@@ -143,7 +124,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {vm.Urn});
+            return RedirectToPage("/Projects/TransferDates/Index", new {vm.Urn});
         }
 
         [HttpGet("htb-date")]
@@ -205,7 +186,7 @@ namespace Frontend.Controllers.Projects
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
             }
 
-            return RedirectToAction("Index", new {vm.Urn});
+            return RedirectToPage("/Projects/TransferDates/Index", new {vm.Urn});
         }
     }
 }
