@@ -16,7 +16,7 @@ namespace Helpers
         {
             if (string.IsNullOrEmpty(day) && string.IsNullOrEmpty(month) && string.IsNullOrEmpty(year))
                 return null;
-            
+
             day = string.IsNullOrEmpty(day) ? "" : day.PadLeft(2, '0');
             month = string.IsNullOrEmpty(month) ? "" : month.PadLeft(2, '0');
             year = string.IsNullOrEmpty(year) ? "" : year;
@@ -34,16 +34,17 @@ namespace Helpers
             return dateString.Split("/").ToList();
         }
 
-        public static string FormatDateString(string dateString, bool? hasDate, string unKnownDateText = "I do not know this")
+        public static string FormatDateString(string dateString, bool? hasDate,
+            string unKnownDateText = "I do not know this")
         {
             if (hasDate ?? true)
                 return DateStringToGovUkDate(dateString);
             return unKnownDateText;
         }
-        
+
         public static string DateStringToGovUkDate(string dateString)
         {
-            if (ParseDateTime(dateString) == null) return dateString;
+            if (dateString == null) return null;
             var splitDate = dateString.Split('-', '/');
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
@@ -118,24 +119,26 @@ namespace Helpers
             return date;
         }
 
-        public static bool? SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString, string targetDateString)
+        public static bool? SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString,
+            string targetDateString)
         {
+            if (sourceDateString == null)
+                return null;
             var sourceDate = ParseDateTime(sourceDateString);
-            if (sourceDate == null)
-                return null;
 
-            var targetDate = ParseDateTime(targetDateString);
-            if (targetDate == null)
+            if (targetDateString == null)
                 return null;
+            var targetDate = ParseDateTime(targetDateString);
+
 
             return sourceDate > targetDate;
         }
 
-        private static DateTime? ParseDateTime(string date)
+        public static DateTime ParseDateTime(string date)
         {
-            var tryParseDate = DateTime.TryParseExact(date, new[] {"dd/MM/yyyy", "dd-MM-yyyy"}, null,
+            DateTime.TryParseExact(date, new[] {"dd/MM/yyyy", "dd-MM-yyyy"}, null,
                 DateTimeStyles.None, out var parsedDate);
-            return tryParseDate ? parsedDate : (DateTime?)null;
+            return parsedDate;
         }
     }
 }
