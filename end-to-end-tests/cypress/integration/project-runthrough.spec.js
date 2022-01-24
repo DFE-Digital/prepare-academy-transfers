@@ -79,17 +79,16 @@ describe("Creating and editing an academy transfer", function () {
         // Dates
         cy.clickDataTest("transfer-dates")
         cy.clickDataTest("first-discussed")
-        cy.fillInDate(Cypress.dayjs().add(1,'M'))
+        cy.fillInDate(Cypress.dayjs().add(-1,'M'))
         submit();
         cy.clickDataTest("target-date")
-        cy.fillInDate(Cypress.dayjs().add(2,'M'))
+        cy.fillInDate(Cypress.dayjs().add(3,'M'))
         submit();
         cy.clickDataTest("htb-date")
         cy.fillInDate(Cypress.dayjs().add(2,'M'))
         submit();
         clickBackLink()
         cy.getDataTest("dates").should('have.text',"COMPLETED");
-        
         // Benefits
         cy.clickDataTest("transfer-benefits")
         cy.clickDataTest("intended-benefits")
