@@ -44,7 +44,11 @@ namespace Helpers
 
         public static string DateStringToGovUkDate(string dateString)
         {
-            if (dateString == null) return null;
+            if (string.IsNullOrWhiteSpace(dateString))
+            {
+                throw new ArgumentNullException(nameof(dateString));
+            }
+
             var splitDate = dateString.Split('-', '/');
             var date = new DateTime(int.Parse(splitDate[2]), int.Parse(splitDate[1]), int.Parse(splitDate[0]));
             return date.ToString("d MMMM yyyy");
@@ -122,15 +126,14 @@ namespace Helpers
         public static bool? SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString,
             string targetDateString)
         {
-            if (sourceDateString == null)
+            if (string.IsNullOrWhiteSpace(sourceDateString))
                 return null;
             var sourceDate = ParseDateTime(sourceDateString);
 
-            if (targetDateString == null)
+            if (string.IsNullOrWhiteSpace(targetDateString))
                 return null;
             var targetDate = ParseDateTime(targetDateString);
-
-
+            
             return sourceDate > targetDate;
         }
 

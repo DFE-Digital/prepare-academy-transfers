@@ -8,6 +8,7 @@ namespace Frontend.Validators.TransferDates
     public class PastDateValidator : AbstractValidator<DateViewModel>
     {
         public string ErrorMessage { get; set; }
+        
         public PastDateValidator()
         {
             RuleFor(x => x.Date.Day)
@@ -22,7 +23,7 @@ namespace Frontend.Validators.TransferDates
                     var dateTime = DatesHelper.ParseDateTime(dateVm.DateInputAsString());
                     if (dateTime.Date > DateTime.Today)
                     {
-                        context.AddFailure(ErrorMessage);
+                        context.AddFailure(ErrorMessage ?? "The date must be in the past");
                     }
                 });
         }

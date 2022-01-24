@@ -19,6 +19,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         [Fact]
         public async void WhenDateIsFuture_ShouldShowError()
         {
+            _validator.ErrorMessage = "The date the transfer was first discussed with a trust must be in the past";
             var pastDate = DateTime.Now.AddDays(+10);
             var dateVm = new DateViewModel
             {
@@ -34,8 +35,31 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("The date the transfer was first discussed with a trust must be in the past");
+                .WithErrorMessage( _validator.ErrorMessage);
+        }[Fact]
+        public async void WhenDateIsFuture_AndErrorMessageNotSet_ShouldShowDefaultErrorMessage()
+        {
+            _validator.ErrorMessage = null;
+            var pastDate = DateTime.Now.AddDays(+10);
+            var dateVm = new DateViewModel
+            {
+                Date = new DateInputViewModel
+                {
+                    Day = pastDate.Day.ToString(),
+                    Month = pastDate.Month.ToString(),
+                    Year = pastDate.Year.ToString()
+                },
+                UnknownDate = false
+            };
+
+            var result = await _validator.TestValidateAsync(dateVm);
+
+            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+                .WithErrorMessage("The date must be in the past");
         }
+
+        
+        
         
         [Fact]
         public async void WhenDateIsToday_ShouldNotShowError()
