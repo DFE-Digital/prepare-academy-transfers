@@ -22,7 +22,7 @@ namespace Frontend.Validators.TransferDates
                     DateTime.TryParseExact(dateVm.DateInputAsString(), "dd/MM/yyyy", null, DateTimeStyles.None, out var dateTime);
                     if (dateTime.Date > DateTime.Today)
                     {
-                        context.AddFailure("You must enter a past date");
+                        context.AddFailure("You must type a date in the past");
                     }
                 });
         }
