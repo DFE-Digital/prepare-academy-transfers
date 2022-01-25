@@ -1,12 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Data.Models;
-using Frontend.Helpers;
-using Frontend.Models;
 using Helpers;
 using Xunit;
 
-namespace Frontend.Tests.Helpers
+namespace Frontend.Tests.HelpersTests
 {
     public class DatesHelperTests
     {
@@ -45,15 +43,29 @@ namespace Frontend.Tests.Helpers
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData("", "")]
-        [InlineData("not a date", "not a date")]
         [InlineData("01/01/2010", "1 January 2010")]
         [InlineData("01-01-2010", "1 January 2010")]
         public void GivenDate_ShouldFormatAsGovUkDate(string unformattedDate, string expectedFormattedDate)
         {
             var result = DatesHelper.DateStringToGovUkDate(unformattedDate);
             Assert.Equal(expectedFormattedDate, result);
+        }
+        
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void GivenNullOrWhiteSpaceFormat_ShouldReturnNullOrWhiteSpace(string unformattedDate)
+        {
+            var result = DatesHelper.DateStringToGovUkDate(unformattedDate);
+            Assert.Equal(unformattedDate,result);
+        }
+        
+        [Theory]
+        [InlineData("not a date")]
+        [InlineData("40-40-1980")]
+        public void GivenIncorrectFormat_ShouldThrowException(string unformattedDate){
+            Assert.ThrowsAny<Exception>(() => DatesHelper.DateStringToGovUkDate(unformattedDate));
         }
     }
 }

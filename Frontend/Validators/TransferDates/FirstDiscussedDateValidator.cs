@@ -7,8 +7,14 @@ namespace Frontend.Validators.TransferDates
     {
         public FirstDiscussedDateValidator()
         {
+            CascadeMode = CascadeMode.Stop;
+
             RuleFor(x => x.FirstDiscussed)
                 .SetValidator(new DateValidator());
+
+            RuleFor(x => x.FirstDiscussed)
+                .SetValidator(new PastDateValidator()
+                    {ErrorMessage = "The date the transfer was first discussed with a trust must be in the past"});
         }
     }
 }
