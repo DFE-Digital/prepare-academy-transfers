@@ -44,7 +44,7 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="dates" asp-controller="TransferDates" asp-action="Index" asp-route-urn="@Model.Urn" data-test="transfer-dates">Set transfer dates</a>
+                            <a class="govuk-link" aria-describedby="dates" asp-page="/Projects/TransferDates/Index" asp-route-urn="@Model.Urn" data-test="transfer-dates">Set transfer dates</a>
                         </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
@@ -73,7 +73,7 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="pupil-numbers" asp-controller="PupilNumbers" asp-action="Index" asp-route-id="@Model.Urn" data-test="pupil-numbers">
+                            <a class="govuk-link" aria-describedby="pupil-numbers" asp-page="/Projects/PupilNumbers" asp-route-urn="@Model.Urn" data-test="pupil-numbers">
                                 Pupil numbers
                             </a>
                         </span><strong class="govuk-tag govuk-tag--grey moj-task-list__tag" id="pupil-numbers" data-test="pupil-numbers-status">Reference only</strong>

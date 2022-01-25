@@ -1,4 +1,5 @@
-@model Frontend.Models.PupilNumbersViewModel
+﻿@page "/project/{urn}/pupil-number"
+@model Frontend.Pages.Projects.PupilNumbers
 
 @{
     ViewBag.Title = "Pupil numbers (reference)";
@@ -24,11 +25,11 @@
         <p class="govuk-body">This information is taken from TRAMS</p>
     </div>
     <div class="govuk-grid-column-full">
-       <partial name="_PupilNumbers" for="@Model"/>
+        <partial name="_PupilNumbers" for="@Model"/>
     </div>
-    <partial name="_AdditionalInformation" model="Model.AdditionalInformation"/>
+    <partial name="_AdditionalInformation" model="Model.AdditionalInformationViewModel"/>
 </div>
-@if (!Model.AdditionalInformation.AddOrEditAdditionalInformation)
+@if (!Model.AdditionalInformationViewModel.AddOrEditAdditionalInformation)
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">

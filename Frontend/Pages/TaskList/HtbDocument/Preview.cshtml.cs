@@ -7,9 +7,11 @@ using Frontend.Models.Benefits;
 using Frontend.Models.Features;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
+using Frontend.Pages.Projects;
 using Frontend.Pages.Projects.Features;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Index = Frontend.Pages.Projects.Features.Index;
 using LatestOfstedJudgementIndex = Frontend.Pages.Projects.LatestOfstedJudgement.Index;
 
 namespace Frontend.Pages.TaskList.HtbDocument
@@ -23,9 +25,9 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
         public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
-        public TransferDatesSummaryViewModel TransferDatesSummaryViewModel { get; set; }
+        public Projects.TransferDates.Index TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
-        public PupilNumbersViewModel PupilNumbersViewModel { get; set; }
+        public Projects.PupilNumbers PupilNumbersViewModel { get; set; }
         public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementIndex LatestOfstedJudgementViewModel { get; private set; }
         public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
@@ -67,7 +69,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ReturnToPreview = true
             };
 
-            TransferDatesSummaryViewModel = new TransferDatesSummaryViewModel
+            TransferDatesSummaryViewModel = new Pages.Projects.TransferDates.Index(_projects)
             {
                 Urn = Project.Urn,
                 ReturnToPreview = true,
@@ -125,7 +127,28 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 ReturnToPreview = true
             };
 
-            PupilNumbersViewModel = PupilNumbersController.BuildViewModel(response,true, true);
+            PupilNumbersViewModel = new PupilNumbers(_getInformationForProject, _projects)
+            {
+                GirlsOnRoll = response.OutgoingAcademy.PupilNumbers.GirlsOnRoll,
+                BoysOnRoll = response.OutgoingAcademy.PupilNumbers.BoysOnRoll,
+                WithStatementOfSEN = response.OutgoingAcademy.PupilNumbers.WithStatementOfSen,
+                WithEAL = response.OutgoingAcademy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
+                FreeSchoolMealsLast6Years = response.OutgoingAcademy.PupilNumbers
+                    .PercentageEligibleForFreeSchoolMealsDuringLast6Years,
+                OutgoingAcademyUrn = response.OutgoingAcademy.Urn,
+                OutgoingAcademyName = response.OutgoingAcademy.Name,
+                IsPreview = true,
+                Urn = response.Project.Urn,
+                ReturnToPreview = true,
+                AdditionalInformationViewModel = new AdditionalInformationViewModel
+                {
+                    AdditionalInformation = response.Project.PupilNumbersAdditionalInformation,
+                    HintText =
+                        "If you add comments, they'll be included in the pupil numbers section of your project template.",
+                    Urn = response.Project.Urn,
+                    ReturnToPreview = true
+                }
+            };
 
             LatestOfstedJudgementViewModel = new LatestOfstedJudgementIndex(_getInformationForProject, _projects)
             {
@@ -142,7 +165,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     HintText =
                         "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                     Urn = Project.Urn,
-                    AddOrEditAdditionalInformation = false,
                     ReturnToPreview = true
                 },
                 IsPreview = true
