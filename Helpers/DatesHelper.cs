@@ -46,7 +46,7 @@ namespace Helpers
         {
             if (string.IsNullOrWhiteSpace(dateString))
             {
-                throw new ArgumentNullException(nameof(dateString));
+                return dateString;
             }
 
             var splitDate = dateString.Split('-', '/');

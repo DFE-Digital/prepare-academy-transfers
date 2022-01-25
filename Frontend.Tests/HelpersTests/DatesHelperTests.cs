@@ -55,8 +55,16 @@ namespace Frontend.Tests.HelpersTests
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
+        public void GivenNullOrWhiteSpaceFormat_ShouldReturnNullOrWhiteSpace(string unformattedDate)
+        {
+            var result = DatesHelper.DateStringToGovUkDate(unformattedDate);
+            Assert.Equal(unformattedDate,result);
+        }
+        
+        [Theory]
         [InlineData("not a date")]
-        public void GivenIncorrectDateFormat_ShouldThrowException(string unformattedDate){
+        [InlineData("40-40-1980")]
+        public void GivenIncorrectFormat_ShouldThrowException(string unformattedDate){
             Assert.ThrowsAny<Exception>(() => DatesHelper.DateStringToGovUkDate(unformattedDate));
         }
     }
