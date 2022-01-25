@@ -123,17 +123,19 @@ namespace Helpers
             return date;
         }
 
-        public static bool? SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString,
+        public static bool SourceDateStringIsGreaterThanToTargetDateString(string sourceDateString,
             string targetDateString)
         {
             if (string.IsNullOrWhiteSpace(sourceDateString))
-                return null;
+                throw new ArgumentNullException(nameof(sourceDateString));
+            
             var sourceDate = ParseDateTime(sourceDateString);
 
             if (string.IsNullOrWhiteSpace(targetDateString))
-                return null;
-            var targetDate = ParseDateTime(targetDateString);
+                throw new ArgumentNullException(nameof(targetDateString));
             
+            var targetDate = ParseDateTime(targetDateString);
+
             return sourceDate > targetDate;
         }
 
