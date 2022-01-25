@@ -9,7 +9,7 @@
             <datesummary value="@Model.FirstDiscussedDate" has-date="@Model.HasFirstDiscussedDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="FirstDiscussed" data-test="first-discussed"
+            <a class="govuk-link" asp-page="/Projects/TransferDates/FirstDiscussed" data-test="first-discussed"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> date first discussed</span>
             </a>
