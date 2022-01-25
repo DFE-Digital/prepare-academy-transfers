@@ -46,7 +46,7 @@ namespace Frontend.Pages.Projects.TransferDates
 
             var projectResult = project.Result;
             projectResult.Dates.FirstDiscussed = FirstDiscussedViewModel.FirstDiscussed.DateInputAsString();
-            projectResult.Dates.HasFirstDiscussedDate = FirstDiscussedViewModel.FirstDiscussed.UnknownDate;
+            projectResult.Dates.HasFirstDiscussedDate = !FirstDiscussedViewModel.FirstDiscussed.UnknownDate;
 
             await _projectsRepository.Update(projectResult);
 
