@@ -20,53 +20,7 @@ namespace Frontend.Controllers.Projects
         {
             _projectsRepository = projectsRepository;
         }
-
-        [HttpGet("first-discussed")]
-        public async Task<IActionResult> FirstDiscussed(string urn, bool returnToPreview = false)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            
-            var projectResult = project.Result;
-            var vm = new FirstDiscussedViewModel
-            {
-                Urn = urn,
-                ReturnToPreview = returnToPreview,
-                FirstDiscussed = new DateViewModel
-                {
-                    Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.FirstDiscussed),
-                    UnknownDate = projectResult.Dates.HasFirstDiscussedDate is false
-                }
-            };
-                
-            return View(vm);
-        }
-
-        [HttpPost("first-discussed")]
-        [ActionName("FirstDiscussed")]
-        public async Task<IActionResult> FirstDiscussedPost(FirstDiscussedViewModel vm)
-        {
-            var project = await _projectsRepository.GetByUrn(vm.Urn);
-            
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
-            var projectResult = project.Result;
-
-            projectResult.Dates.FirstDiscussed =  vm.FirstDiscussed.DateInputAsString();
-            projectResult.Dates.HasFirstDiscussedDate = !vm.FirstDiscussed.UnknownDate;
-
-            await _projectsRepository.Update(projectResult);
-            
-            if (vm.ReturnToPreview)
-            {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
-            }
-
-            return RedirectToPage("/Projects/TransferDates/Index", new {vm.Urn});
-        }
-
+        
         [HttpGet("target-date")]
         public async Task<IActionResult> TargetDate(string urn, bool returnToPreview = false)
         {
