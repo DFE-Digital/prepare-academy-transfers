@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
-using Index = Frontend.Pages.Projects.Rationale.Index;
 
 namespace Frontend.Tests.PagesTests.Projects.TransferDates
 {
