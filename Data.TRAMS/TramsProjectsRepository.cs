@@ -36,44 +36,45 @@ namespace Data.TRAMS
         public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1)
         {
             var response = await _httpClient.GetAsync($"academyTransferProject?page={page}");
-            
+
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse);
-            
-            
+                
                 var mappedSummaries = summaries.Select(summary =>
-                {
-                    summary.OutgoingTrust = new TrustSummary { Ukprn = summary.OutgoingTrustUkprn };
-                    summary.TransferringAcademies = summary.TransferringAcademies.Select(async transferring =>
                     {
-                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                        var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-            
-                        transferring.IncomingTrust = new TrustSummary
-                        {
-                            GroupName = incomingTrust.Result.Name,
-                            GroupId = incomingTrust.Result.GiasGroupId,
-                            Ukprn = transferring.IncomingTrustUkprn
-                        };
-            
-                        transferring.OutgoingAcademy = new AcademySummary
-                        {
-                            Name = outgoingAcademy.Result.Name,
-                            Ukprn = transferring.OutgoingAcademyUkprn,
-                            Urn = outgoingAcademy.Result.Urn
-                        };
-            
-                        return transferring;
+                        summary.OutgoingTrust = new TrustSummary
+                            {Ukprn = summary.OutgoingTrustUkprn};
+                        summary.TransferringAcademies = summary.TransferringAcademies.Select(async transferring =>
+                            {
+                                var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+                                var outgoingAcademy =
+                                    await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
+
+                                transferring.IncomingTrust = new TrustSummary
+                                {
+                                    GroupName = incomingTrust.Result.Name,
+                                    GroupId = incomingTrust.Result.GiasGroupId,
+                                    Ukprn = transferring.IncomingTrustUkprn
+                                };
+
+                                transferring.OutgoingAcademy = new AcademySummary
+                                {
+                                    Name = outgoingAcademy.Result.Name,
+                                    Ukprn = transferring.OutgoingAcademyUkprn,
+                                    Urn = outgoingAcademy.Result.Urn
+                                };
+
+                                return transferring;
+                            })
+                            .Select(t => t.Result)
+                            .ToList();
+
+                        return _summaryToInternalProjectMapper.Map(summary);
                     })
-                        .Select(t => t.Result)
-                        .ToList();
-            
-                    return _summaryToInternalProjectMapper.Map(summary);
-                })
                     .ToList();
-            
+
                 return new RepositoryResult<List<ProjectSearchResult>>
                 {
                     Result = mappedSummaries
@@ -94,7 +95,11 @@ namespace Data.TRAMS
                 #region API Interim
 
                 var outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
-                project.OutgoingTrust = new TrustSummary { Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name };
+                project.OutgoingTrust = new TrustSummary
+                {
+                    Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name,
+                    LeadRscRegion = outgoingTrust?.Result?.LeadRscRegion
+                };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                     {
                         var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
@@ -144,12 +149,12 @@ namespace Data.TRAMS
 
                 #region API Interim
 
-                createdProject.OutgoingTrust = new TrustSummary { Ukprn = createdProject.OutgoingTrustUkprn };
+                createdProject.OutgoingTrust = new TrustSummary {Ukprn = createdProject.OutgoingTrustUkprn};
                 createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
                     {
                         var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                        transferring.IncomingTrust = new TrustSummary() { Ukprn = transferring.IncomingTrustUkprn };
+                        transferring.IncomingTrust = new TrustSummary() {Ukprn = transferring.IncomingTrustUkprn};
                         transferring.OutgoingAcademy = new AcademySummary
                         {
                             Name = outgoingAcademy.Result.Name,
@@ -186,12 +191,12 @@ namespace Data.TRAMS
 
                 #region API Interim
 
-                createdProject.OutgoingTrust = new TrustSummary { Ukprn = createdProject.OutgoingTrustUkprn };
+                createdProject.OutgoingTrust = new TrustSummary {Ukprn = createdProject.OutgoingTrustUkprn};
                 createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
                     {
                         var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                        transferring.IncomingTrust = new TrustSummary { Ukprn = transferring.IncomingTrustUkprn };
+                        transferring.IncomingTrust = new TrustSummary {Ukprn = transferring.IncomingTrustUkprn};
                         transferring.OutgoingAcademy = new AcademySummary
                         {
                             Name = outgoingAcademy.Result.Name,

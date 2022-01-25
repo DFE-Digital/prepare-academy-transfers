@@ -6,6 +6,8 @@ namespace Data.Models
     {
         public string Name { get; set; }
         public string Ukprn { get; set; }
+        
+        public string LeadRscRegion { get; set; }
         public string CompaniesHouseNumber { get; set; }
         public string EstablishmentType { get; set; }
         public string GiasGroupId { get; set; }

@@ -19,6 +19,7 @@ namespace Data.Models
         public string Name { get; set; }
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
+        public string OutgoingTrustLeadRscRegion { get; set; }
         public string State { get; set; }
         public string Status { get; set; }
         public List<TransferringAcademies> TransferringAcademies { get; set; }
