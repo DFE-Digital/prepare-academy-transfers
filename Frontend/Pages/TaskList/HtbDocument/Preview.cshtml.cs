@@ -165,6 +165,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     HintText =
                         "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                     Urn = Project.Urn,
+                    AddOrEditAdditionalInformation = false,
                     ReturnToPreview = true
                 },
                 IsPreview = true
