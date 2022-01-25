@@ -10,12 +10,12 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
     public class PastDateValidatorTests
     {
         private readonly PastDateValidator _validator;
-        
+
         public PastDateValidatorTests()
         {
             _validator = new PastDateValidator();
         }
-        
+
         [Fact]
         public async void WhenDateIsFuture_ShouldShowError()
         {
@@ -35,8 +35,10 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage( _validator.ErrorMessage);
-        }[Fact]
+                .WithErrorMessage(_validator.ErrorMessage);
+        }
+
+        [Fact]
         public async void WhenDateIsFuture_AndErrorMessageNotSet_ShouldShowDefaultErrorMessage()
         {
             _validator.ErrorMessage = null;
@@ -58,9 +60,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
                 .WithErrorMessage("The date must be in the past");
         }
 
-        
-        
-        
+
         [Fact]
         public async void WhenDateIsToday_ShouldNotShowError()
         {
@@ -79,7 +79,5 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
             result.ShouldNotHaveAnyValidationErrors();
         }
-        
-        
     }
 }
