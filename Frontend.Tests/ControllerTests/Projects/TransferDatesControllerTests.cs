@@ -49,32 +49,6 @@ namespace Frontend.Tests.ControllerTests.Projects
             _subject = new TransferDatesController(_projectsRepository.Object);
         }
 
-        public class IndexTests : TransferDatesControllerTests
-        {
-            [Fact]
-            public async void GivenUrn_AssignsModelToTheView()
-            {
-                _foundProject.Dates = new TransferDates
-                {
-                    Htb = DateTime.Now.AddYears(-2).ToShortDate(),
-                    HasHtbDate = true,
-                    FirstDiscussed =  DateTime.Now.AddYears(-10).ToShortDate(),
-                    HasFirstDiscussedDate = true,
-                    Target =  DateTime.Now.AddYears(-1).ToShortDate(),
-                    HasTargetDateForTransfer = true
-                };
-                var result = await _subject.Index("0001");
-                var viewModel = ControllerTestHelpers.AssertViewModelFromResult<TransferDatesSummaryViewModel>(result);
-
-                Assert.Equal(_foundProject.Urn, viewModel.Urn);
-                Assert.Equal(_foundProject.TransferringAcademies[0].OutgoingAcademyUrn, viewModel.OutgoingAcademyUrn);
-                Assert.Equal(_foundProject.Dates.Htb, viewModel.HtbDate);
-                Assert.Equal(_foundProject.Dates.HasHtbDate, viewModel.HasHtbDate);
-                Assert.Equal(_foundProject.Dates.Target, viewModel.TargetDate);
-                Assert.Equal(_foundProject.Dates.HasTargetDateForTransfer, viewModel.HasTargetDate);
-            }
-        }
-
         public class FirstDiscussedTests : TransferDatesControllerTests
         {
             public class GetTests : FirstDiscussedTests
@@ -145,7 +119,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     
                     var response = await _subject.FirstDiscussedPost(vm);
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/TransferDates/Index", 
+                        new RouteValueDictionary(new { Urn = "0001" }));
                 }
             
                 [Fact]
@@ -289,7 +264,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                     };
                     
                     var response = await _subject.TargetDatePost(vm);
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/TransferDates/Index", 
+                        new RouteValueDictionary(new { Urn = "0001" }));
                 }
                 
                 [Fact]
@@ -474,7 +450,8 @@ namespace Frontend.Tests.ControllerTests.Projects
                         }
                     };
                     var response = await _subject.HtbDatePost(vm);
-                    ControllerTestHelpers.AssertResultRedirectsToAction(response, "Index");
+                    ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/TransferDates/Index", 
+                        new RouteValueDictionary(new { Urn = "0001" }));
                 }
 
                 [Fact]
