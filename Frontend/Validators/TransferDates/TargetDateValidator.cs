@@ -9,10 +9,10 @@ namespace Frontend.Validators.TransferDates
         public TargetDateValidator()
         {
             CascadeMode = CascadeMode.Stop;
-            
+
             RuleFor(x => x.TargetDate)
                 .SetValidator(new DateValidator());
-            
+
             RuleFor(x => x.TargetDate)
                 .SetValidator(new FutureDateValidator());
 
@@ -21,7 +21,7 @@ namespace Frontend.Validators.TransferDates
                 {
                     if (!context.RootContextData.TryGetValue("HtbDate", out var htbDate)) return;
                     if (string.IsNullOrWhiteSpace((string) htbDate)) return;
-                    
+
                     var dateVm = context.InstanceToValidate;
                     if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
                             (string) htbDate, dateVm.TargetDate.DateInputAsString()))

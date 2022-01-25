@@ -28,6 +28,6 @@
         cy.fillInDate(Cypress.dayjs().add(10,'M'))
         cy.get('.govuk-button').click();
         cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', 'The date the transfer was first discussed with a trust must be in the past').should('be.visible');
-        cy.get('#FirstDiscussed\\.Date\\.Day-error').should('have.text', 'Error:The date the transfer was first discussed with a trust must be in the past').should('be.visible');
+        cy.get('span.govuk-error-message').should('have.text', 'Error:The date the transfer was first discussed with a trust must be in the past').should('be.visible');
     });
 });
