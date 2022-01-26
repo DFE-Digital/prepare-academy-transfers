@@ -85,7 +85,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     OutgoingAcademyName = Project.OutgoingAcademyName,
                     Recommendation = Project.AcademyAndTrustInformation.Recommendation,
                     Author = Project.AcademyAndTrustInformation.Author,
-                    HtbDate = Project.Dates?.Htb,
+                    AdvisoryBoardDate = Project.Dates?.Htb,
                     ProjectName = Project.Name,
                     IncomingTrustName = Project.IncomingTrustName,
                     TargetDate = Project.Dates?.Target,

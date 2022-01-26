@@ -27,7 +27,7 @@
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-htb-date-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-ab-date-hint">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
                                 @Model.OutgoingAcademyName
@@ -35,13 +35,13 @@
                             Set Advisory Board date
                         </h1>
                     </legend>
-                    <div id="set-htb-date-hint" class="govuk-hint">
+                    <div id="set-ab-date-hint" class="govuk-hint">
                         For example, 12 11 2021. You can change this date later.
                     </div>
 
                    <span asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day"></span>
 
-                    <div class="govuk-date-input" id="htb-date">
+                    <div class="govuk-date-input" id="ab-date">
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day" class="govuk-label govuk-date-input__label">

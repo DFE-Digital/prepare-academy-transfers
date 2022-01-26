@@ -23,7 +23,7 @@
             <datesummary value="@Model.AdvisoryBoardDate" has-date="@Model.HasAdvisoryBoardDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/TransferDates/AdvisoryBoard" data-test="htb-date"
+            <a class="govuk-link" asp-page="/Projects/TransferDates/AdvisoryBoard" data-test="ab-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> Advisory Board date</span>
             </a>
