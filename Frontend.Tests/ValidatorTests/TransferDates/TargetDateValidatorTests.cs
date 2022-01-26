@@ -21,9 +21,9 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         }
 
         [Fact]
-        public async void GivenHtbDateAndTargetDateLessThanHtbDate_ShouldGiveError()
+        public async void GivenAdvisoryBoardDateAndTargetDateLessThanAdvisoryBoardDate_ShouldGiveError()
         {
-            var htbDate = DateTime.Now.AddMonths(2);
+            var advisoryBoardDate = DateTime.Now.AddMonths(2);
             var targetDate = DateTime.Now.AddMonths(1);
             var vm = new TargetDateViewModel
             {
@@ -42,7 +42,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = htbDate.ToShortDate()
+                    ["AdvisoryBoardDate"] = advisoryBoardDate.ToShortDate()
                 }
             };
             
@@ -52,9 +52,9 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void GivenHtbDateAndTargetDateGreaterThanHtbDate_ShouldNotGiveError()
+        public async void GivenAdvisoryBoardDateAndTargetDateGreaterThanAdvisoryBoardDate_ShouldNotGiveError()
         {
-            var htbDate = DateTime.Now.AddDays(3);
+            var advisoryBoardDate = DateTime.Now.AddDays(3);
             var targetDate = DateTime.Now.AddMonths(1);
             var vm = new TargetDateViewModel
             {
@@ -73,7 +73,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = htbDate.ToShortDate()
+                    ["AdvisoryBoardDate"] = advisoryBoardDate.ToShortDate()
                 }
             };
             
@@ -85,7 +85,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async void GivenTargetDateAndNoHtbDate_ShouldNotGiveError(string htbDate)
+        public async void GivenTargetDateAndNoAdvisoryBoardDate_ShouldNotGiveError(string advisoryBoardDate)
         {
             var targetDate = DateTime.Now.AddMonths(1);
             var vm = new TargetDateViewModel
@@ -105,7 +105,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = htbDate
+                    ["AdvisoryBoardDate"] = advisoryBoardDate
                 }
             };
             
