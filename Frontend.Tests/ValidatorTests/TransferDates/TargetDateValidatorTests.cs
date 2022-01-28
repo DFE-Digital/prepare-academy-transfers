@@ -14,9 +14,10 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         private readonly TargetDateValidator _validator = new TargetDateValidator();
 
         [Fact]
-        public void ShouldHaveChildValidator()
+        public void ShouldHaveChildValidators()
         {
             _validator.ShouldHaveChildValidator(a => a.TargetDate, typeof(DateValidator));
+            _validator.ShouldHaveChildValidator(a => a.TargetDate, typeof(FutureDateValidator));
         }
 
         [Fact]

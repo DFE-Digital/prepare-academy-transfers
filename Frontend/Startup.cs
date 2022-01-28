@@ -204,7 +204,6 @@ namespace Frontend
             services.AddTransient<ITrusts, TramsTrustsRepository>();
             services.AddTransient<IAcademies, TramsEstablishmentRepository>();
             services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
-            services.AddTransient<ITaskListService, TaskListService>();
             services.AddTransient<IProjects, TramsProjectsRepository>();
             
             services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
@@ -216,6 +215,8 @@ namespace Frontend
             serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
             serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
             serviceCollection.AddTransient<IGetHtbDocumentForProject, GetHtbDocumentForProject>();
+            serviceCollection.AddTransient<ITaskListService, TaskListService>();
+
         }
     }
 }

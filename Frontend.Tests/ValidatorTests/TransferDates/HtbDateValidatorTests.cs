@@ -16,9 +16,10 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         public HtbDateValidatorTests() => _validator = new HtbDateValidator();
         
         [Fact]
-        public void ShouldHaveChildValidator()
+        public void ShouldHaveChildValidators()
         {
             _validator.ShouldHaveChildValidator(a => a.HtbDate, typeof(DateValidator));
+            _validator.ShouldHaveChildValidator(a => a.HtbDate, typeof(FutureDateValidator));
         }
 
         [Fact]

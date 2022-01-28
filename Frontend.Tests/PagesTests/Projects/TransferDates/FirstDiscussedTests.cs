@@ -1,25 +1,29 @@
 using System.Collections.Generic;
 using Frontend.Models;
-using Frontend.Models.Rationale;
+using Frontend.Models.Forms;
+using Frontend.Models.TransferDates;
+using Frontend.Pages.Projects.TransferDates;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
-using Frontend.Pages.Projects.Rationale;
 
-namespace Frontend.Tests.PagesTests.Projects.Rationale
+namespace Frontend.Tests.PagesTests.Projects.TransferDates
 {
-    public class ProjectTests : BaseTests
+    public class FirstDiscussedTests : BaseTests
     {
-        private readonly Project _subject;
+        private readonly FirstDiscussed _subject;
 
-        protected ProjectTests()
+        protected FirstDiscussedTests()
         {
-            _subject = new Project(ProjectRepository.Object) { Urn = ProjectUrn0001 };
+            _subject = new FirstDiscussed(ProjectRepository.Object)
+            {
+                Urn = ProjectUrn0001
+            };
         }
 
-        public class OnGetAsync : ProjectTests
+        public class OnGetAsyncTests : FirstDiscussedTests
         {
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
@@ -30,38 +34,36 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenReturnToPreview_AssignItToThePage()
-            {
-                _subject.ReturnToPreview = true;
-                var response = await _subject.OnGetAsync();
-
-                Assert.IsType<PageResult>(response);
-                Assert.True(_subject.ReturnToPreview);
-            }
-
-            [Fact]
             public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
-                _subject.Urn = PopulatedProjectUrn;
+                FoundProjectFromRepo.Dates = new Data.Models.Projects.TransferDates
+                {
+                    FirstDiscussed = "15/01/2020",
+                    HasFirstDiscussedDate = true
+                };
                 var response = await _subject.OnGetAsync();
 
                 Assert.IsType<PageResult>(response);
-                Assert.Equal(FoundPopulatedProjectFromRepo.Urn, _subject.Urn);
-                Assert.Equal(FoundPopulatedProjectFromRepo.Rationale.Project, _subject.ViewModel.ProjectRationale);
+                Assert.Equal(FoundProjectFromRepo.Urn, _subject.Urn);
+                Assert.Equal(FoundProjectFromRepo.Dates.FirstDiscussed, _subject.FirstDiscussedViewModel.FirstDiscussed.DateInputAsString());
+                Assert.Equal(FoundProjectFromRepo.Dates.HasFirstDiscussedDate, !_subject.FirstDiscussedViewModel.FirstDiscussed.UnknownDate);
             }
         }
 
-        public class OnPostAsync : ProjectTests
+        public class OnPostAsyncTests : FirstDiscussedTests
         {
-            public OnPostAsync()
+            public OnPostAsyncTests()
             {
-                _subject.Urn = ProjectUrn0001;
-                _subject.ViewModel = new RationaleProjectViewModel
+                _subject.FirstDiscussedViewModel = new FirstDiscussedViewModel
                 {
-                    ProjectRationale = "This is the project rationale"
+                    FirstDiscussed = new DateViewModel
+                    {
+                        Date = new DateInputViewModel { Day = "15", Month = "10", Year = "2021" },
+                        UnknownDate = false
+                    }
                 };
             }
-
+            
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
@@ -71,9 +73,9 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
 
             [Fact]
-            public async void GivenErrorInModelState_ReturnsCorrectPage()
+            public async void GivenErrorOnModel_ShouldReturnPage()
             {
-                _subject.ModelState.AddModelError(nameof(_subject.ViewModel.ProjectRationale), "error");
+                _subject.ModelState.AddModelError(nameof(_subject.FirstDiscussedViewModel.FirstDiscussed.Date), "error");
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
@@ -81,17 +83,18 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
                 
                 Assert.IsType<PageResult>(result);
             }
-
+            
             [Fact]
-            public async void GivenUrnAndRationale_UpdatesTheProject()
+            public async void GivenUrnAndFirstDiscussedDate_UpdatesTheProject()
             {
                 await _subject.OnPostAsync();
-
+            
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
+                        r.Update(It.Is<Data.Models.Project>(project => project.Dates.FirstDiscussed == _subject.FirstDiscussedViewModel.FirstDiscussed.DateInputAsString()
+                        && project.Dates.HasFirstDiscussedDate == !_subject.FirstDiscussedViewModel.FirstDiscussed.UnknownDate)),
                     Times.Once);
             }
-
+            
             [Fact]
             public async void GivenReturnToPreview_RedirectsToPreviewPage()
             {
@@ -106,21 +109,15 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
             }
             
             [Fact]
-            public async void GivenUrnAndRationale_RedirectsBackToTheSummary()
+            public async void GivenUrnAndFirstDiscussed_RedirectsBackToTheSummary()
             {
-                const string rationale = "This is the project rationale";
-                _subject.ViewModel = new RationaleProjectViewModel
-                {
-                    ProjectRationale = rationale
-                };
-
                 var result = await _subject.OnPostAsync();
 
                 var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("Urn", ProjectUrn0001)
                 });
-                ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/Rationale/{nameof(Index)}", routeValues);
+                ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/TransferDates/{nameof(Index)}", routeValues);
             }
         }
     }

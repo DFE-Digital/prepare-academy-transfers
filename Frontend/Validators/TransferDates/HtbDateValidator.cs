@@ -9,27 +9,32 @@ namespace Frontend.Validators.TransferDates
         public HtbDateValidator()
         {
             CascadeMode = CascadeMode.Stop;
-            
+
             RuleFor(x => x.HtbDate)
                 .SetValidator(new DateValidator());
 
             RuleFor(x => x.HtbDate)
                 .SetValidator(new FutureDateValidator());
-            
+
             RuleFor(x => x.HtbDate.Date.Day)
                 .Custom((day, context) =>
                 {
                     if (!context.RootContextData.TryGetValue("TargetDate", out var targetDate)) return;
-                    
+
                     var dateVm = context.InstanceToValidate;
-                    if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
-                        dateVm.HtbDate.DateInputAsString(),
-                        targetDate as string) == true)
+                    if (string.IsNullOrWhiteSpace((string) targetDate))
                     {
-                        context.AddFailure("The Advisory Board date must be on or before the target date for the transfer");
+                        return;
+                    }
+
+                    if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
+                            dateVm.HtbDate.DateInputAsString(),
+                            (string) targetDate))
+                    {
+                        context.AddFailure(
+                            "The Advisory Board date must be on or before the target date for the transfer");
                     }
                 });
-
         }
     }
 }

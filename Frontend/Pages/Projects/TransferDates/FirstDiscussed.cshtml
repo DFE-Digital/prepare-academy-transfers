@@ -1,11 +1,13 @@
+@page "/project/{urn}/transfer-dates/first-discussed"
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model Frontend.Models.TransferDates.FirstDiscussedViewModel
+@model Frontend.Pages.Projects.TransferDates.FirstDiscussed
+
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When was the transfer first discussed with a trust?";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
-    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.FirstDiscussed.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
+    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.FirstDiscussedViewModel.FirstDiscussed.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
 }
 
 @section BeforeMain
@@ -19,7 +21,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="FirstDiscussed" asp-route-urn="@Model.Urn" method="post" novalidate="">
+        <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
@@ -40,31 +42,31 @@
                         For example, 23 03 2007
                     </div>
 
-                    <span asp-gds-validation-for="FirstDiscussed.Date.Day"></span>
+                    <span asp-gds-validation-for="FirstDiscussedViewModel.FirstDiscussed.Date.Day"></span>
 
                     <div class="govuk-date-input" id="transfer-first-discussed-date">
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="FirstDiscussed.Date.Day" class="govuk-label govuk-date-input__label">
+                                <label asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Day" class="govuk-label govuk-date-input__label">
                                     Day
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
+                                <input asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="FirstDiscussed.Date.Month" class="govuk-label govuk-date-input__label">
+                                <label asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Month" class="govuk-label govuk-date-input__label">
                                     Month
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
+                                <input asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="FirstDiscussed.Date.Year" class="govuk-label govuk-date-input__label">
+                                <label asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Year" class="govuk-label govuk-date-input__label">
                                     Year
                                 </label>
-                                <input asp-for="FirstDiscussed.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
+                                <input asp-for="FirstDiscussedViewModel.FirstDiscussed.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
                             </div>
                         </div>
                     </div>
@@ -73,8 +75,8 @@
 
                     <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input asp-for="FirstDiscussed.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
-                            <label asp-for="FirstDiscussed.UnknownDate" class="govuk-label govuk-checkboxes__label">
+                            <input asp-for="FirstDiscussedViewModel.FirstDiscussed.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
+                            <label asp-for="FirstDiscussedViewModel.FirstDiscussed.UnknownDate" class="govuk-label govuk-checkboxes__label">
                                 I do not know this
                             </label>
                         </div>
