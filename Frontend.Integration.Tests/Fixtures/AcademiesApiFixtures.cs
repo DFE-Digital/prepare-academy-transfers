@@ -31,7 +31,7 @@ namespace Frontend.Integration.Tests.Fixtures
                     Ukprn = OutgoingTrustUkprn,
                 },
                 OutgoingTrustUkprn = OutgoingTrustUkprn,
-                ProjectNumber = "Number",
+                ProjectReference = "REF-SW-123456789",
                 ProjectUrn = ProjectUrn,
                 TransferringAcademies = new List<TransferringAcademy>
                 {

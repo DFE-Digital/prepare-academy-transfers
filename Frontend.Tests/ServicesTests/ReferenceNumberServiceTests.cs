@@ -25,17 +25,17 @@ namespace Frontend.Tests.ServicesTests
         }
 
         [Fact]
-        public void GivenNoProject_GetReferenceNumber_ThrowsArgumentNullException()
+        public void GivenNoProject_GenerateReferenceNumber_ThrowsArgumentNullException()
         {
             var exception =
-                Assert.Throws<ArgumentNullException>(() => _referenceNumberService.GetReferenceNumber(null));
+                Assert.Throws<ArgumentNullException>(() => _referenceNumberService.GenerateReferenceNumber(null));
             Assert.Equal("project", exception.ParamName);
         }
         
         [Fact]
-        public void GivenProjectNullRegion_GetReferenceNumber_ReturnsWithoutRegion()
+        public void GivenProjectNullRegion_GenerateReferenceNumber_ReturnsWithoutRegion()
         {
-            var referenceNumber = _referenceNumberService.GetReferenceNumber(null);
+            var referenceNumber = _referenceNumberService.GenerateReferenceNumber(null);
             
         }
     }
