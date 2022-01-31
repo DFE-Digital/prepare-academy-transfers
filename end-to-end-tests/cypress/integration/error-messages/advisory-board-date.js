@@ -24,11 +24,11 @@ describe('Tests to check advisory board date error messages', () => {
         cy.get('.govuk-button').click();
         cy.clickDataTest("create-project");
         cy.clickDataTest("transfer-dates");
-        cy.clickDataTest("htb-date");
+        cy.clickDataTest("ab-date");
         cy.fillInDate(Cypress.dayjs().subtract(1,'M'))
         cy.get('.govuk-button').click();
         cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', 'You must enter a future date').should('be.visible');
-        cy.get('#HtbDate\\.Date\\.Day-error').should('have.text', 'Error:You must enter a future date').should('be.visible');
+        cy.get('#AdvisoryBoardViewModel\\.AdvisoryBoardDate\\.Date\\.Day-error').should('have.text', 'Error:You must enter a future date').should('be.visible');
     });
 
     after(function () {

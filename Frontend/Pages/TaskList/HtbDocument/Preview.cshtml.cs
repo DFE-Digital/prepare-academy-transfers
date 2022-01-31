@@ -72,8 +72,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
                 FirstDiscussedDate = Project.Dates.FirstDiscussed,
                 HasFirstDiscussedDate = Project.Dates.HasFirstDiscussedDate,
-                HtbDate = Project.Dates.Htb,
-                HasHtbDate = Project.Dates.HasHtbDate,
+                AdvisoryBoardDate = Project.Dates.Htb,
+                HasAdvisoryBoardDate = Project.Dates.HasHtbDate,
                 TargetDate = Project.Dates.Target,
                 HasTargetDate = Project.Dates.HasTargetDateForTransfer
             };
@@ -85,7 +85,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     OutgoingAcademyName = Project.OutgoingAcademyName,
                     Recommendation = Project.AcademyAndTrustInformation.Recommendation,
                     Author = Project.AcademyAndTrustInformation.Author,
-                    HtbDate = Project.Dates?.Htb,
+                    AdvisoryBoardDate = Project.Dates?.Htb,
                     ProjectName = Project.Name,
                     IncomingTrustName = Project.IncomingTrustName,
                     TargetDate = Project.Dates?.Target,

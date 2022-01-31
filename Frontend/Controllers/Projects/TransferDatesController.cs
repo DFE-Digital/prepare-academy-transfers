@@ -54,7 +54,7 @@ namespace Frontend.Controllers.Projects
             {
                 RootContextData =
                 {
-                    ["HtbDate"] = projectResult.Dates.Htb
+                    ["AdvisoryBoardDate"] = projectResult.Dates.Htb
                 }
             };
             var validator = new TargetDateValidator();
@@ -70,68 +70,6 @@ namespace Frontend.Controllers.Projects
             projectResult.Dates.Target = vm.TargetDate.DateInputAsString();
             projectResult.Dates.HasTargetDateForTransfer = !vm.TargetDate.UnknownDate;
             
-
-            await _projectsRepository.Update(projectResult);
-            
-            if (vm.ReturnToPreview)
-            {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
-            }
-
-            return RedirectToPage("/Projects/TransferDates/Index", new {vm.Urn});
-        }
-
-        [HttpGet("htb-date")]
-        public async Task<IActionResult> HtbDate(string urn, bool returnToPreview = false)
-        {
-            var project = await _projectsRepository.GetByUrn(urn);
-            
-            var projectResult = project.Result;
-            var vm = new HtbDateViewModel
-            {
-                Urn = urn,
-                ReturnToPreview = returnToPreview,
-                HtbDate = new DateViewModel
-                {
-                    Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.Htb),
-                    UnknownDate = projectResult.Dates.HasHtbDate is false
-                }
-            };
-            
-            return View(vm);
-        }
-
-        [HttpPost("htb-date")]
-        [ActionName("HtbDate")]
-        public async Task<IActionResult> HtbDatePost(HtbDateViewModel vm)
-        {
-            var project = await _projectsRepository.GetByUrn(vm.Urn);
-            
-            var projectResult = project.Result;
-
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-            
-            var validationContext = new ValidationContext<HtbDateViewModel>(vm)
-            {
-                RootContextData =
-                {
-                    ["TargetDate"] = projectResult.Dates.Target
-                }
-            };
-            var validator = new HtbDateValidator();
-            var validationResult = await validator.ValidateAsync(validationContext);
-            
-            if (!validationResult.IsValid)
-            {
-                validationResult.AddToModelState(ModelState, null);
-                return View(vm);
-            }
-
-            projectResult.Dates.Htb = vm.HtbDate.DateInputAsString();
-            projectResult.Dates.HasHtbDate = !vm.HtbDate.UnknownDate;
 
             await _projectsRepository.Update(projectResult);
             
