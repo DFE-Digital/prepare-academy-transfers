@@ -158,8 +158,11 @@ namespace Frontend.Tests.PagesTests.Projects.TransferDates
                     },
                     ReturnToPreview = true
                 };
-                Assert.True(await _subject.OnPostAsync() is PageResult && 
-                            _subject.ModelState["AdvisoryBoardDate.Date.Day"].Errors.Any());
+
+                var result = await _subject.OnPostAsync();
+                
+                Assert.IsType<PageResult>(result);
+                Assert.Single(_subject.ModelState[$"AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day"].Errors);
             }
         }
     }

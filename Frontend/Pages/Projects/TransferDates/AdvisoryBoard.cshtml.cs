@@ -61,7 +61,7 @@ namespace Frontend.Pages.Projects.TransferDates
             
             if (!validationResult.IsValid)
             {
-                validationResult.AddToModelState(ModelState, null);
+                validationResult.AddToModelState(ModelState, nameof(AdvisoryBoardViewModel));
                 return Page();
             }
             
