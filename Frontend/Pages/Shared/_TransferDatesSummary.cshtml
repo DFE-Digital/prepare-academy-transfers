@@ -37,7 +37,7 @@
             <datesummary value="@Model.TargetDate" has-date="@Model.HasTargetDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="TargetDate" data-test="target-date"
+            <a class="govuk-link" asp-page="/Projects/TransferDates/Target" data-test="target-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> target date for transfer</span>
             </a>

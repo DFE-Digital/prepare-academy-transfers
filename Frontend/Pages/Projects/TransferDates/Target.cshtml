@@ -1,0 +1,88 @@
+@page "/project/{urn}/transfer-dates/target-date"
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model Frontend.Pages.Projects.TransferDates.Target
+
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the target date for the transfer?";
+    Layout = "_Layout";
+    var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
+    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDateViewModel.TargetDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
+}
+
+@section BeforeMain
+{
+    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/TransferDates/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="target-date-for-transfer-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-l">
+                                @Model.OutgoingAcademyName
+                            </span>
+                            When is the target date for the transfer?
+                        </h1>
+                    </legend>
+                    <div id="target-date-for-transfer-hint" class="govuk-hint">
+                        For example, 23 03 2007
+                    </div>
+
+                    <span asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Day"></span>
+
+                    <div class="govuk-date-input" id="transfer-first-discussed-date">
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label asp-for="TargetDateViewModel.TargetDate.Date.Day" class="govuk-label govuk-date-input__label">
+                                    Day
+                                </label>
+                                <input asp-for="TargetDateViewModel.TargetDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label asp-for="TargetDateViewModel.TargetDate.Date.Month" class="govuk-label govuk-date-input__label">
+                                    Month
+                                </label>
+                                <input asp-for="TargetDateViewModel.TargetDate.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
+                            </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label asp-for="TargetDateViewModel.TargetDate.Date.Year" class="govuk-label govuk-date-input__label">
+                                    Year
+                                </label>
+                                <input asp-for="TargetDateViewModel.TargetDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-body govuk-!-margin-top-4">or</div>
+
+                    <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input asp-for="TargetDateViewModel.TargetDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
+                            <label asp-for="TargetDateViewModel.TargetDate.UnknownDate" class="govuk-label govuk-checkboxes__label">
+                                I do not know this
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>
