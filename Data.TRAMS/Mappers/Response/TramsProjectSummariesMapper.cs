@@ -14,13 +14,13 @@ namespace Data.TRAMS.Mappers.Response
             return new ProjectSearchResult
             {
                 Urn = input.ProjectUrn,
+                Reference = input.ProjectReference,
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
                 TransferringAcademies = input.TransferringAcademies.Select(
                     academy => new TransferringAcademies
                     {
                         IncomingTrustName = academy.IncomingTrust.GroupName,
                         IncomingTrustUkprn = academy.IncomingTrust.Ukprn,
-                        IncomingTrustLeadRscRegion = academy.IncomingTrust.LeadRscRegion,
                         OutgoingAcademyName = academy.OutgoingAcademy.Name,
                         OutgoingAcademyUkprn = academy.OutgoingAcademy.Ukprn,
                         OutgoingAcademyUrn = academy.OutgoingAcademy.Urn
