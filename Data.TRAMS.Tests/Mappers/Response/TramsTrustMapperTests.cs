@@ -42,7 +42,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 },
                 IfdData = new TramsTrustIfdData()
                 {
-                    LeadRscRegion = "Lead Rsc Region"
+                    LeadRscRegion = "London"
                 }
             };
 

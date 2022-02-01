@@ -52,6 +52,7 @@ namespace Data.TRAMS.Mappers.Response
                     {
                         IncomingTrustName = transfer.IncomingTrust.GroupName,
                         IncomingTrustUkprn = transfer.IncomingTrust.Ukprn,
+                        IncomingTrustLeadRscRegion = transfer.IncomingTrust.LeadRscRegion,
                         OutgoingAcademyName = transfer.OutgoingAcademy.Name,
                         OutgoingAcademyUkprn = transfer.OutgoingAcademy.Ukprn,
                         OutgoingAcademyUrn = transfer.OutgoingAcademy.Urn

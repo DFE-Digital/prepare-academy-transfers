@@ -27,10 +27,9 @@ namespace Frontend.Services
             }
 
             var fullRegion = project.TransferringAcademies.First().IncomingTrustLeadRscRegion?.Trim();
-            string regionCode = null;
             if (fullRegion != null)
             {
-                regionCode = _configuration.GetSection("LeadRscRegionCodes").GetChildren().First(c =>
+                var regionCode = _configuration.GetSection("LeadRscRegionCodes").GetChildren().First(c =>
                     c.Key.Equals(fullRegion, StringComparison.CurrentCultureIgnoreCase)).Value;
                 return $"{regionCode}-{referenceNumber}-{project.Urn}";
             }

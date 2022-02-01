@@ -41,7 +41,7 @@ namespace Data.TRAMS
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse);
-                
+
                 var mappedSummaries = summaries.Select(summary =>
                     {
                         summary.OutgoingTrust = new TrustSummary
@@ -192,11 +192,16 @@ namespace Data.TRAMS
                 #region API Interim
 
                 createdProject.OutgoingTrust = new TrustSummary {Ukprn = createdProject.OutgoingTrustUkprn};
+                
                 createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
                     {
                         var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-
-                        transferring.IncomingTrust = new TrustSummary {Ukprn = transferring.IncomingTrustUkprn};
+                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+                        transferring.IncomingTrust = new TrustSummary
+                        {
+                            Ukprn = transferring.IncomingTrustUkprn,
+                            LeadRscRegion = incomingTrust.Result.LeadRscRegion
+                        };
                         transferring.OutgoingAcademy = new AcademySummary
                         {
                             Name = outgoingAcademy.Result.Name,
