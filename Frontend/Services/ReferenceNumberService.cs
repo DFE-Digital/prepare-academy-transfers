@@ -26,10 +26,18 @@ namespace Frontend.Services
                 referenceNumber = "MAT";
             }
 
-            var regionCode =
-                _configuration.GetSection("LeadRscRegionCodes").GetChildren().
-                    First(c => c.Key.Equals(project.TransferringAcademies.First().IncomingTrustLeadRscRegion.Trim(), StringComparison.CurrentCultureIgnoreCase)).Value;
-            return $"{regionCode}-{referenceNumber}-{project.Urn}";
+            var fullRegion = project.TransferringAcademies.First().IncomingTrustLeadRscRegion?.Trim();
+            string regionCode = null;
+            if (fullRegion != null)
+            {
+                regionCode = _configuration.GetSection("LeadRscRegionCodes").GetChildren().First(c =>
+                    c.Key.Equals(fullRegion, StringComparison.CurrentCultureIgnoreCase)).Value;
+                return $"{regionCode}-{referenceNumber}-{project.Urn}";
+            }
+
+            return $"{referenceNumber}-{project.Urn}";
+
+
         }
     }
 }
