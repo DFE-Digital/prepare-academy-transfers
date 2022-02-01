@@ -9,38 +9,38 @@ using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.TransferDates
 {
-    public class HtbDateValidatorTests
+    public class AdvisoryBoardDateValidatorTests
     {
-        private readonly HtbDateValidator _validator;
+        private readonly AdvisoryBoardDateValidator _validator;
 
-        public HtbDateValidatorTests() => _validator = new HtbDateValidator();
+        public AdvisoryBoardDateValidatorTests() => _validator = new AdvisoryBoardDateValidator();
         
         [Fact]
         public void ShouldHaveChildValidators()
         {
-            _validator.ShouldHaveChildValidator(a => a.HtbDate, typeof(DateValidator));
-            _validator.ShouldHaveChildValidator(a => a.HtbDate, typeof(FutureDateValidator));
+            _validator.ShouldHaveChildValidator(a => a.AdvisoryBoardDate, typeof(DateValidator));
+            _validator.ShouldHaveChildValidator(a => a.AdvisoryBoardDate, typeof(FutureDateValidator));
         }
 
         [Fact]
-        public async void GivenHtbDateGreaterThanTargetDate_ShouldGiveError()
+        public async void GivenAdvisoryBoardDateGreaterThanTargetDate_ShouldGiveError()
         {
-            var htbDate = DateTime.Now.AddMonths(2);
+            var advisoryBoardDate = DateTime.Now.AddMonths(2);
             var targetDate = DateTime.Now.AddMonths(1);
-            var vm = new HtbDateViewModel
+            var vm = new AdvisoryBoardViewModel()
             {
-                HtbDate = new DateViewModel
+                AdvisoryBoardDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = htbDate.Day.ToString(),
-                        Month = htbDate.Month.ToString(),
-                        Year = htbDate.Year.ToString(),
+                        Day = advisoryBoardDate.Day.ToString(),
+                        Month = advisoryBoardDate.Month.ToString(),
+                        Year = advisoryBoardDate.Year.ToString(),
                     }
                 }
             };
             
-            var validationContext = new ValidationContext<HtbDateViewModel>(vm)
+            var validationContext = new ValidationContext<AdvisoryBoardViewModel>(vm)
             {
                 RootContextData =
                 {
@@ -54,24 +54,24 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void GivenTargetDateGreaterThanHtbDate_ShouldNotGiveError()
+        public async void GivenTargetDateGreaterThanAdvisoryBoardDate_ShouldNotGiveError()
         {
-            var htbDate = DateTime.Now.AddMonths(1);
+            var advisoryBoardDate = DateTime.Now.AddMonths(1);
             var targetDate = DateTime.Now.AddMonths(2);
-            var vm = new HtbDateViewModel
+            var vm = new AdvisoryBoardViewModel
             {
-                HtbDate = new DateViewModel
+                AdvisoryBoardDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = htbDate.Day.ToString(),
-                        Month = htbDate.Month.ToString(),
-                        Year = htbDate.Year.ToString(),
+                        Day = advisoryBoardDate.Day.ToString(),
+                        Month = advisoryBoardDate.Month.ToString(),
+                        Year = advisoryBoardDate.Year.ToString(),
                     }
                 }
             };
             
-            var validationContext = new ValidationContext<HtbDateViewModel>(vm)
+            var validationContext = new ValidationContext<AdvisoryBoardViewModel>(vm)
             {
                 RootContextData =
                 {
@@ -87,23 +87,23 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async void GivenHtbDateAndNoTargetDate_ShouldNotGiveError(string targetDate)
+        public async void GivenAdvisoryBoardDateAndNoTargetDate_ShouldNotGiveError(string targetDate)
         {
-            var htbDate = DateTime.Today;
-            var vm = new HtbDateViewModel
+            var advisoryBoardDate = DateTime.Today;
+            var vm = new AdvisoryBoardViewModel()
             {
-                HtbDate = new DateViewModel
+                AdvisoryBoardDate = new DateViewModel
                 {
                     Date = new DateInputViewModel
                     {
-                        Day = htbDate.Day.ToString(),
-                        Month = htbDate.Month.ToString(),
-                        Year = htbDate.Year.ToString(),
+                        Day = advisoryBoardDate.Day.ToString(),
+                        Month = advisoryBoardDate.Month.ToString(),
+                        Year = advisoryBoardDate.Year.ToString(),
                     }
                 }
             };
             
-            var validationContext = new ValidationContext<HtbDateViewModel>(vm)
+            var validationContext = new ValidationContext<AdvisoryBoardViewModel>(vm)
             {
                 RootContextData =
                 {

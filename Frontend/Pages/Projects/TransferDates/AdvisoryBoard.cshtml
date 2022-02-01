@@ -1,11 +1,13 @@
+@page "/project/{urn}/transfer-dates/advisory-board-date"
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@model Frontend.Models.TransferDates.TargetDateViewModel
+@model Frontend.Pages.Projects.TransferDates.AdvisoryBoard
+
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the target date for the transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Set Advisory Board date";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
-    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
+    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
 }
 
 @section BeforeMain
@@ -19,49 +21,49 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="TargetDate" asp-route-urn="@Model.Urn" method="post" novalidate="">
+        <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
             <div class="govuk-form-group @formClasses">
-                <fieldset class="govuk-fieldset" role="group" aria-describedby="target-date-for-transfer-hint">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-ab-date-hint">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
                                 @Model.OutgoingAcademyName
                             </span>
-                            When is the target date for the transfer?
+                            Set Advisory Board date
                         </h1>
                     </legend>
-                    <div id="target-date-for-transfer-hint" class="govuk-hint">
-                        For example, 23 03 2007
+                    <div id="set-ab-date-hint" class="govuk-hint">
+                        For example, 12 11 2021. You can change this date later.
                     </div>
 
-                    <span asp-gds-validation-for="TargetDate.Date.Day"></span>
+                   <span asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day"></span>
 
-                    <div class="govuk-date-input" id="transfer-first-discussed-date">
+                    <div class="govuk-date-input" id="ab-date">
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="TargetDate.Date.Day" class="govuk-label govuk-date-input__label">
+                                <label asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day" class="govuk-label govuk-date-input__label">
                                     Day
                                 </label>
-                                <input asp-for="TargetDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
+                                <input asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="TargetDate.Date.Month" class="govuk-label govuk-date-input__label">
+                                <label asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Month" class="govuk-label govuk-date-input__label">
                                     Month
                                 </label>
-                                <input asp-for="TargetDate.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
+                                <input asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Month" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="month">
                             </div>
                         </div>
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label asp-for="TargetDate.Date.Year" class="govuk-label govuk-date-input__label">
+                                <label asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Year" class="govuk-label govuk-date-input__label">
                                     Year
                                 </label>
-                                <input asp-for="TargetDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
+                                <input asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
                             </div>
                         </div>
                     </div>
@@ -70,8 +72,8 @@
 
                     <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
                         <div class="govuk-checkboxes__item">
-                            <input asp-for="TargetDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
-                            <label asp-for="TargetDate.UnknownDate" class="govuk-label govuk-checkboxes__label">
+                            <input asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
+                            <label asp-for="AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate" class="govuk-label govuk-checkboxes__label">
                                 I do not know this
                             </label>
                         </div>

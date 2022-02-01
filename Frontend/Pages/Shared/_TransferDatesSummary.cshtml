@@ -20,10 +20,10 @@
             Set Advisory Board date
         </dt>
         <dd class="govuk-summary-list__value">
-            <datesummary value="@Model.HtbDate" has-date="@Model.HasHtbDate"></datesummary>
+            <datesummary value="@Model.AdvisoryBoardDate" has-date="@Model.HasAdvisoryBoardDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="HtbDate" data-test="htb-date"
+            <a class="govuk-link" asp-page="/Projects/TransferDates/AdvisoryBoard" data-test="ab-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> Advisory Board date</span>
             </a>
@@ -37,7 +37,7 @@
             <datesummary value="@Model.TargetDate" has-date="@Model.HasTargetDate"></datesummary>
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-controller="TransferDates" asp-action="TargetDate" data-test="target-date"
+            <a class="govuk-link" asp-page="/Projects/TransferDates/Target" data-test="target-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> target date for transfer</span>
             </a>

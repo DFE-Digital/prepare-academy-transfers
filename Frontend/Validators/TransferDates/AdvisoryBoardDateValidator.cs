@@ -4,19 +4,19 @@ using Helpers;
 
 namespace Frontend.Validators.TransferDates
 {
-    public class HtbDateValidator : AbstractValidator<HtbDateViewModel>
+    public class AdvisoryBoardDateValidator : AbstractValidator<AdvisoryBoardViewModel>
     {
-        public HtbDateValidator()
+        public AdvisoryBoardDateValidator()
         {
             CascadeMode = CascadeMode.Stop;
 
-            RuleFor(x => x.HtbDate)
+            RuleFor(x => x.AdvisoryBoardDate)
                 .SetValidator(new DateValidator());
 
-            RuleFor(x => x.HtbDate)
+            RuleFor(x => x.AdvisoryBoardDate)
                 .SetValidator(new FutureDateValidator());
 
-            RuleFor(x => x.HtbDate.Date.Day)
+            RuleFor(x => x.AdvisoryBoardDate.Date.Day)
                 .Custom((day, context) =>
                 {
                     if (!context.RootContextData.TryGetValue("TargetDate", out var targetDate)) return;
@@ -28,7 +28,7 @@ namespace Frontend.Validators.TransferDates
                     }
 
                     if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
-                            dateVm.HtbDate.DateInputAsString(),
+                            dateVm.AdvisoryBoardDate.DateInputAsString(),
                             (string) targetDate))
                     {
                         context.AddFailure(
