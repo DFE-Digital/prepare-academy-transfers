@@ -19,7 +19,7 @@ namespace Data.TRAMS.Models
         public AcademyTransferProjectDates Dates { get; set; }
         public AcademyTransferProjectFeatures Features { get; set; }
         public string OutgoingTrustUkprn { get; set; }
-        public string ProjectNumber { get; set; }
+        public string ProjectReference { get; set; }
         public string ProjectUrn { get; set; }
         public AcademyTransferProjectRationale Rationale { get; set; }
         public AcademyTransferProjectAcademyAndTrustInformation GeneralInformation { get; set; }

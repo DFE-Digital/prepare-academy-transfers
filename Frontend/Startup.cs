@@ -216,7 +216,7 @@ namespace Frontend
             serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
             serviceCollection.AddTransient<IGetHtbDocumentForProject, GetHtbDocumentForProject>();
             serviceCollection.AddTransient<ITaskListService, TaskListService>();
-
+            serviceCollection.AddScoped<IReferenceNumberService, ReferenceNumberService>();
         }
     }
 }

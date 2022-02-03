@@ -73,6 +73,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     Ukprn = "123"
                 },
                 ProjectUrn = "Urn",
+                ProjectReference = "SW-SAT-12345678",
                 TransferringAcademies = new List<TransferringAcademy>
                 {
                     new TransferringAcademy
@@ -105,6 +106,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.State, result.State);
             Assert.Equal(toMap.Status, result.Status);
             Assert.Equal(toMap.ProjectUrn, result.Urn);
+            Assert.Equal(toMap.ProjectReference, result.Reference);
             Assert.Equal(toMap.OutgoingTrustUkprn, result.OutgoingTrustUkprn);
             Assert.Equal(toMap.OutgoingTrust.GroupName, result.OutgoingTrustName);
             Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.GeneralInformationAdditionalInformation);

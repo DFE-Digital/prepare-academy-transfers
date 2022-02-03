@@ -21,10 +21,11 @@ namespace Data.TRAMS.Mappers.Response
                 State = input.State,
                 Status = input.Status,
                 Urn = input.ProjectUrn,
+                Reference = input.ProjectReference,
                 TransferringAcademies = TransferringAcademies(input),
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
                 OutgoingTrustUkprn = input.OutgoingTrust.Ukprn,
-                Name = input.TransferringAcademies[0]?.OutgoingAcademy?.Name,
+                Name = input.TransferringAcademies[0]?.IncomingTrust?.GroupName,
                 GeneralInformationAdditionalInformation = input.AcademyPerformanceAdditionalInformation,
                 PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation,
                 LatestOfstedJudgementAdditionalInformation = input.LatestOfstedJudgementAdditionalInformation,
@@ -51,6 +52,7 @@ namespace Data.TRAMS.Mappers.Response
                     {
                         IncomingTrustName = transfer.IncomingTrust.GroupName,
                         IncomingTrustUkprn = transfer.IncomingTrust.Ukprn,
+                        IncomingTrustLeadRscRegion = transfer.IncomingTrust.LeadRscRegion,
                         OutgoingAcademyName = transfer.OutgoingAcademy.Name,
                         OutgoingAcademyUkprn = transfer.OutgoingAcademy.Ukprn,
                         OutgoingAcademyUrn = transfer.OutgoingAcademy.Urn

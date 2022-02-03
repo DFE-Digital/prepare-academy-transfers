@@ -30,7 +30,7 @@ namespace Data.Mock
             {
                 Result = _projects.Select(project => new ProjectSearchResult
                 {
-                    Urn = project.Urn, Number = project.Name, OutgoingTrustName = project.OutgoingTrustName,
+                    Urn = project.Urn, Name = project.Name, OutgoingTrustName = project.OutgoingTrustName,
                     TransferringAcademies = project.TransferringAcademies
                 }).ToList()
             };

@@ -11,6 +11,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Frontend.Services.Interfaces;
 using Xunit;
 
 namespace Frontend.Tests.ControllerTests
@@ -30,6 +31,7 @@ namespace Frontend.Tests.ControllerTests
             _projectsRepository = new Mock<IProjects>();
             _trustsRepository = new Mock<ITrusts>();
             _session = new Mock<ISession>();
+            var referenceNumberService = new Mock<IReferenceNumberService>();
 
             var tempDataProvider = new Mock<ITempDataProvider>();
             var httpContext = new DefaultHttpContext();
@@ -41,8 +43,7 @@ namespace Frontend.Tests.ControllerTests
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
             _subject = new TransfersController(_academiesRepository.Object, _projectsRepository.Object,
-                _trustsRepository.Object
-            ) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
+                _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
         public class TrustNameTests : TransfersControllerTests

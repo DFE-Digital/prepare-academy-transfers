@@ -59,6 +59,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 State = "State",
                 Status = "Status",
                 Urn = "12345",
+                Reference = "SW-MAT-12345678",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies {IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321"}
@@ -84,6 +85,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.State, result.State);
             Assert.Equal(toMap.Status, result.Status);
             Assert.Equal(toMap.Urn, result.ProjectUrn);
+            Assert.Equal(toMap.Reference, result.ProjectReference);
             Assert.Equal(toMap.GeneralInformationAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
             Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
             Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);

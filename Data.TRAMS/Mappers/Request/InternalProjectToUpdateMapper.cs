@@ -17,6 +17,7 @@ namespace Data.TRAMS.Mappers.Request
                 State = input.State,
                 Status = input.Status,
                 ProjectUrn = input.Urn,
+                ProjectReference = input.Reference,
                 TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
                 Dates = Dates(input),

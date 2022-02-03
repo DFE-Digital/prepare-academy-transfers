@@ -38,7 +38,11 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     },
                     GroupId = "0001",
                     GroupName = "Trust name",
-                    Ukprn = "1001"
+                    Ukprn = "1001",
+                },
+                IfdData = new TramsTrustIfdData()
+                {
+                    LeadRscRegion = "London"
                 }
             };
 
@@ -51,6 +55,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(trustToMap.GiasData.Ukprn, result.Ukprn);
             Assert.Equal("Not available", result.EstablishmentType);
             Assert.Equal(expectedAddress, result.Address);
+            Assert.Equal(trustToMap.IfdData.LeadRscRegion, result.LeadRscRegion);
         }
 
         [Fact]

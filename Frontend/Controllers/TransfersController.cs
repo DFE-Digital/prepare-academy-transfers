@@ -1,14 +1,17 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.Projects;
-using Frontend.Helpers;
+using Frontend.Services.Interfaces;
 using Frontend.Validators.Transfers;
 using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sentry;
+using Session = Frontend.Helpers.Session;
 
 namespace Frontend.Controllers
 {
@@ -21,13 +24,16 @@ namespace Frontend.Controllers
         private readonly IAcademies _academiesRepository;
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
+        private readonly IReferenceNumberService _referenceNumberService;
+
 
         public TransfersController(IAcademies academiesRepository, IProjects projectsRepository,
-            ITrusts trustsRepository)
+            ITrusts trustsRepository, IReferenceNumberService referenceNumberService)
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
+            _referenceNumberService = referenceNumberService;
         }
 
         public IActionResult TrustName(string query = "", bool change = false)
@@ -73,7 +79,7 @@ namespace Frontend.Controllers
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-            
+
             return View(model);
         }
 
@@ -81,17 +87,17 @@ namespace Frontend.Controllers
         {
             ViewData["ChangeLink"] = change;
 
-            var validator= new OutgoingTrustConfirmValidator();
+            var validator = new OutgoingTrustConfirmValidator();
             var validationResult = await validator.ValidateAsync(trustId);
 
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustSearch", new { query, change });
+                return RedirectToAction("TrustSearch", new {query, change});
             }
-            
+
             var result = await _trustsRepository.GetByUkprn(trustId);
-            
+
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -122,7 +128,7 @@ namespace Frontend.Controllers
             }
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
-            
+
             var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
 
             ViewData["Error.Exists"] = false;
@@ -186,7 +192,7 @@ namespace Frontend.Controllers
 
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var result = await _trustsRepository.SearchTrusts(query, outgoingTrustId);
-            
+
             var validator = new IncomingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
 
@@ -197,13 +203,13 @@ namespace Frontend.Controllers
             }
 
             var model = new TrustSearch {Trusts = result.Result};
-            
+
             ViewData["Error.Exists"] = false;
             if (TempData.Peek("ErrorMessage") == null) return View(model);
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-            
+
             return View(model);
         }
 
@@ -215,9 +221,9 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("SearchIncomingTrust", new { query, change });
+                return RedirectToAction("SearchIncomingTrust", new {query, change});
             }
-            
+
             HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
 
             return RedirectToAction("CheckYourAnswers");
@@ -236,7 +242,7 @@ namespace Frontend.Controllers
             if (incomingTrustIdString != null)
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
-                
+
                 incomingTrust = incomingTrustResponse.Result;
             }
 
@@ -270,13 +276,16 @@ namespace Frontend.Controllers
                 }).ToList()
             };
 
-            var result = await _projectsRepository.Create(project);
+            var createResponse = await _projectsRepository.Create(project);
+
+            createResponse.Result.Reference = _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
+            await _projectsRepository.Update(createResponse.Result);
             
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new {urn = result.Result.Urn});
+            return RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new {urn = createResponse.Result.Urn});
         }
     }
 }

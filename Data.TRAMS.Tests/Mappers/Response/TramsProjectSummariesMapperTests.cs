@@ -20,7 +20,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     Ukprn = "123",
                 },
                 OutgoingTrustUkprn = "123",
-                ProjectNumber = "Number",
+                ProjectReference = "SW-MAT-123456789",
                 ProjectUrn = "URN",
                 TransferringAcademies = new List<TransferringAcademy>
                 {

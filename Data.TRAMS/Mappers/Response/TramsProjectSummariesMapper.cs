@@ -14,6 +14,7 @@ namespace Data.TRAMS.Mappers.Response
             return new ProjectSearchResult
             {
                 Urn = input.ProjectUrn,
+                Reference = input.ProjectReference,
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
                 TransferringAcademies = input.TransferringAcademies.Select(
                     academy => new TransferringAcademies

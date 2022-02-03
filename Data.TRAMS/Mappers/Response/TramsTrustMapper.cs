@@ -31,7 +31,8 @@ namespace Data.TRAMS.Mappers.Response
                 EstablishmentType = "Not available",
                 GiasGroupId = input.GiasData.GroupId,
                 Name = input.GiasData.GroupName,
-                Ukprn = input.GiasData.Ukprn
+                Ukprn = input.GiasData.Ukprn,
+                LeadRscRegion = input.IfdData.LeadRscRegion
             };
         }
     }
