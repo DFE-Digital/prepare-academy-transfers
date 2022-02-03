@@ -114,5 +114,30 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.ValidateAsync(validationContext);
             Assert.Empty(result.Errors);
         }
+        
+        [Fact]
+        public async void GivenTargetDateAndUnknownAdvisoryBoardDate_ShouldNotGiveError()
+        {
+            var targetDate = DateTime.Now;
+            var vm = new AdvisoryBoardViewModel
+            {
+                AdvisoryBoardDate = new DateViewModel
+                {
+                    Date = new DateInputViewModel(),
+                    UnknownDate = true
+                }
+            };
+            
+            var validationContext = new ValidationContext<AdvisoryBoardViewModel>(vm)
+            {
+                RootContextData =
+                {
+                    ["TargetDate"] = targetDate.ToShortDate()
+                }
+            };
+            
+            var result = await _validator.ValidateAsync(validationContext);
+            Assert.Empty(result.Errors);
+        }
     }
 }
