@@ -25,8 +25,8 @@ namespace Frontend.Controllers
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
         private readonly IReferenceNumberService _referenceNumberService;
-        
-        
+
+
         public TransfersController(IAcademies academiesRepository, IProjects projectsRepository,
             ITrusts trustsRepository, IReferenceNumberService referenceNumberService)
         {
@@ -79,7 +79,7 @@ namespace Frontend.Controllers
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-            
+
             return View(model);
         }
 
@@ -87,17 +87,17 @@ namespace Frontend.Controllers
         {
             ViewData["ChangeLink"] = change;
 
-            var validator= new OutgoingTrustConfirmValidator();
+            var validator = new OutgoingTrustConfirmValidator();
             var validationResult = await validator.ValidateAsync(trustId);
 
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustSearch", new { query, change });
+                return RedirectToAction("TrustSearch", new {query, change});
             }
-            
+
             var result = await _trustsRepository.GetByUkprn(trustId);
-            
+
             var model = new OutgoingTrustDetails {Trust = result.Result};
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
@@ -128,7 +128,7 @@ namespace Frontend.Controllers
             }
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
-            
+
             var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
 
             ViewData["Error.Exists"] = false;
@@ -192,7 +192,7 @@ namespace Frontend.Controllers
 
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var result = await _trustsRepository.SearchTrusts(query, outgoingTrustId);
-            
+
             var validator = new IncomingTrustSearchValidator();
             var validationResult = await validator.ValidateAsync(result.Result);
 
@@ -203,13 +203,13 @@ namespace Frontend.Controllers
             }
 
             var model = new TrustSearch {Trusts = result.Result};
-            
+
             ViewData["Error.Exists"] = false;
             if (TempData.Peek("ErrorMessage") == null) return View(model);
 
             ViewData["Error.Exists"] = true;
             ViewData["Error.Message"] = TempData["ErrorMessage"];
-            
+
             return View(model);
         }
 
@@ -221,9 +221,9 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("SearchIncomingTrust", new { query, change });
+                return RedirectToAction("SearchIncomingTrust", new {query, change});
             }
-            
+
             HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
 
             return RedirectToAction("CheckYourAnswers");
@@ -242,7 +242,7 @@ namespace Frontend.Controllers
             if (incomingTrustIdString != null)
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
-                
+
                 incomingTrust = incomingTrustResponse.Result;
             }
 
@@ -277,17 +277,9 @@ namespace Frontend.Controllers
             };
 
             var createResponse = await _projectsRepository.Create(project);
-            
-            try //Todo: Remove try catch once Trams Api update is deployed
-            {
-                createResponse.Result.Reference = _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
-                await _projectsRepository.Update(createResponse.Result);
-            }
-            catch (Exception e)
-            {
-                SentrySdk.CaptureException(e);
-            }
 
+            createResponse.Result.Reference = _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
+            await _projectsRepository.Update(createResponse.Result);
             
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
