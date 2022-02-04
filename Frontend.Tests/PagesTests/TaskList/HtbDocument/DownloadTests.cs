@@ -29,6 +29,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenId_GetsProjectInformation()
             {
+                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
                 await _subject.OnGetAsync();
 
                 GetInformationForProject.Verify(s => s.Execute(ProjectUrn0001), Times.Once);
@@ -40,6 +41,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenId_GeneratesAnHtbDocumentForTheProject()
             {
+                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
                 await _subject.OnGetGenerateDocumentAsync();
                 _createHtbDocument.Verify(s => s.Execute(ProjectUrn0001), Times.Once);
             }
@@ -53,6 +55,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                     Document = fileContents
                 };
                 _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(createDocumentResponse);
+                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
                 var response = await _subject.OnGetGenerateDocumentAsync();
                 var fileResponse = Assert.IsType<FileContentResult>(response);
 
