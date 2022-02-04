@@ -27,7 +27,7 @@ namespace Frontend.Validators.TransferDates
                         return;
                     }
 
-                    if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
+                    if (!dateVm.AdvisoryBoardDate.UnknownDate && DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
                             dateVm.AdvisoryBoardDate.DateInputAsString(),
                             (string) targetDate))
                     {
