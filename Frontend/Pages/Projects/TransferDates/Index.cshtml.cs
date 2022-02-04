@@ -25,7 +25,7 @@ namespace Frontend.Pages.Projects.TransferDates
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-
+            ProjectReference = projectResult.Reference;
             FirstDiscussedDate = projectResult.Dates?.FirstDiscussed;
             HasFirstDiscussedDate = projectResult.Dates?.HasFirstDiscussedDate;
             AdvisoryBoardDate = projectResult.Dates?.Htb;

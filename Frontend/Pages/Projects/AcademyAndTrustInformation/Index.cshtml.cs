@@ -27,7 +27,7 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         {
             var projectInformation = await _getInformationForProject.Execute(urn);
 
-            OutgoingAcademyName = projectInformation.OutgoingAcademy?.Name;
+            ProjectReference = projectInformation.Project.Reference;
             Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation;
             Author = projectInformation.Project.AcademyAndTrustInformation.Author;
             AdvisoryBoardDate = projectInformation.Project.Dates?.Htb;

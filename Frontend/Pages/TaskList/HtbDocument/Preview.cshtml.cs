@@ -17,7 +17,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projects;
         public string ProjectUrn => Project.Urn;
-        public object OutgoingAcademyUrn => TransferringAcademy.Urn;
+        public string ProjectReference  => Project.Reference;
 
         public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Data.TRAMS;
 using Frontend.Services;
-using Frontend.Tests.PagesTests;
 using Moq;
 using Xunit;
 using Index = Frontend.Pages.Projects.Index;
@@ -46,10 +43,10 @@ namespace Frontend.Tests.ServicesTests
         }
 
         [Fact]
-        public void GivenAProjectID_PutsTheOutgoingAcademyNameInThePage()
+        public void GivenAProjectID_PutsTheProjectReferenceInThePage()
         {
             _subject.BuildTaskListStatuses(_index);
-            Assert.Equal(OutgoingAcademyName, _index.OutgoingAcademyName);
+            Assert.Equal(ProjectReference, _index.ProjectReference);
         }
 
         public class AcademyAndTrustInformationStatusTest : TaskListServiceTests

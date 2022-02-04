@@ -14,6 +14,7 @@ namespace Frontend.Tests
     public abstract class BaseTests
     {
         protected const string ProjectUrn0001 = "0001";
+        protected const string ProjectReference = "SW-MAT-12345678";
         protected const string ProjectErrorUrn = "errorUrn";
         protected const string PopulatedProjectUrn = "01234";
         protected const string AcademyUrn = "1234";
@@ -40,6 +41,7 @@ namespace Frontend.Tests
             FoundProjectFromRepo = new Project
             {
                 Urn = ProjectUrn0001,
+                Reference = ProjectReference,
                 TransferringAcademies = new List<TransferringAcademies>
                 {
                     new TransferringAcademies()
