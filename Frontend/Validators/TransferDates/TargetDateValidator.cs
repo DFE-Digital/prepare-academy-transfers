@@ -23,7 +23,7 @@ namespace Frontend.Validators.TransferDates
                     if (string.IsNullOrWhiteSpace((string) advisoryBoardDate)) return;
 
                     var dateVm = context.InstanceToValidate;
-                    if (DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
+                    if (!dateVm.TargetDate.UnknownDate && DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
                             (string) advisoryBoardDate, dateVm.TargetDate.DateInputAsString()))
                     {
                         context.AddFailure(
