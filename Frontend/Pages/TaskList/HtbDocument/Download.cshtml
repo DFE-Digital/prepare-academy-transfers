@@ -13,9 +13,9 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters govuk-!-margin-bottom-9">
-        <span class="govuk-caption-l">@Model.OutgoingAcademyName</span>
+        <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
         <h1 class="govuk-heading-xl">
-            Download project template
+            Download advisory board (AB) documents
         </h1>
         <div class="govuk-inset-text">
             Save these documents in the school's Sharepoint file.
@@ -31,7 +31,7 @@
             <div class="dfe-c-attachment__details">
                 <h2 class="dfe-c-attachment__title">
                     <a class="govuk-link govuk-link--no-visited-state" target="_blank" rel="noopener" download asp-page-handler="GenerateDocument" asp-route-urn="@Model.Urn" data-test="download-htb">
-                        @Model.OutgoingAcademyName - Project template
+                       @Model.IncomingTrustName – @Model.ProjectReference – AB template
                     </a>
                 </h2>
                 <p class="dfe-c-attachment__metadata">

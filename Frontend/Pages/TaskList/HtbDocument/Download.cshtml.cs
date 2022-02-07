@@ -13,7 +13,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
     {
         private readonly ICreateHtbDocument _createHtbDocument;
         private readonly IGetInformationForProject _getInformationForProject;
-
+        public string IncomingTrustName { get; set; }
         public Download(ICreateHtbDocument createHtbDocument,
             IGetInformationForProject getInformationForProject)
         {
@@ -24,19 +24,18 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public async Task<IActionResult> OnGetAsync()
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
-           
-            OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
-
+            ProjectReference = projectInformation.Project.Reference;
+            IncomingTrustName = projectInformation.Project.IncomingTrustName.ToTitleCase();
             return Page();
         }
         
         public async Task<IActionResult> OnGetGenerateDocumentAsync()
         {
+            var projectInformation = await _getInformationForProject.Execute(Urn);
             var document = await _createHtbDocument.Execute(Urn);
-
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                $"ProjectTemplateFor{Urn}_{System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture)}.docx");
+                $"ProjectTemplateFor{projectInformation.Project.IncomingTrustName.ToTitleCase().Replace(" ","-")}–{projectInformation.Project.Reference}.docx");
         }
     }
 }

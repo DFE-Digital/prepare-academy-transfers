@@ -20,7 +20,7 @@ namespace Frontend.Pages.Projects.Rationale
         public async Task<IActionResult> OnGetAsync()
         {
             var getInformationForProjectResponse = await _getInformationForProject.Execute(Urn);
-            
+            ProjectReference = getInformationForProjectResponse.Project.Reference;
             ProjectRationale = getInformationForProjectResponse.Project.Rationale.Project;
             TrustRationale = getInformationForProjectResponse.Project.Rationale.Trust;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;

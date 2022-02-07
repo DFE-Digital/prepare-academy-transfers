@@ -1,8 +1,9 @@
 ﻿@page "/project/{urn}"
+@using Frontend.ExtensionMethods
 @model Frontend.Pages.Projects.Index
 
 @{
-    ViewBag.Title = Model.OutgoingAcademyName;
+    ViewBag.Title = Model.IncomingTrustName;
     Layout = "_Layout";
 }
 
@@ -13,9 +14,9 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
-        <span class="govuk-caption-xl">URN @Model.OutgoingAcademyUrn</span>
+        <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
         <h1 class="govuk-heading-xl">
-            @Model.OutgoingAcademyName
+            @Model.IncomingTrustName
         </h1>
         <h2 class="govuk-heading-l">
             Create a project template
@@ -118,7 +119,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-m">
-            Preview or download your template
+            Preview or generate project template
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
             Download the template as a Word document or preview its contents.

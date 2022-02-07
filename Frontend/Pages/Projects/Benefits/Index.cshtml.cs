@@ -27,7 +27,7 @@ namespace Frontend.Pages.Projects.Benefits
             var project = await _projects.GetByUrn(Urn);
             
             var projectResult = project.Result;
-
+            ProjectReference = projectResult.Reference;
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 projectResult.Benefits.IntendedBenefits.ToList(),
                 projectResult.Benefits.OtherIntendedBenefit,

@@ -5,6 +5,7 @@ using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
+using Frontend.ExtensionMethods;
 using Frontend.Helpers;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
@@ -26,7 +27,8 @@ namespace Frontend.Services
         public void BuildTaskListStatuses(Frontend.Pages.Projects.Index indexPage)
         {
             var project = _projectRepository.GetByUrn(indexPage.Urn).Result;
-            indexPage.OutgoingAcademyName = project.Result.OutgoingAcademyName;
+            indexPage.ProjectReference = project.Result.Reference;
+            indexPage.IncomingTrustName = project.Result.IncomingTrustName.ToTitleCase();
             indexPage.OutgoingAcademyUrn = project.Result.OutgoingAcademyUrn;
             var educationPerformance =
                 _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;
