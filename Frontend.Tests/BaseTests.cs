@@ -47,7 +47,8 @@ namespace Frontend.Tests
                     new TransferringAcademies()
                     {
                         OutgoingAcademyName = OutgoingAcademyName,
-                        OutgoingAcademyUrn = AcademyUrn
+                        OutgoingAcademyUrn = AcademyUrn,
+                        IncomingTrustName = "TRUST NAME"
                     }
                 }
             };
