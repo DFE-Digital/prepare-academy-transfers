@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
+using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Features;
 using Frontend.Models.Forms;
@@ -16,6 +17,7 @@ namespace Frontend.Pages.Projects.Features
         private readonly IProjects _projects;
         [BindProperty] public FeaturesTypeViewModel FeaturesTypeViewModel { get; set; } = new FeaturesTypeViewModel();
 
+        
         public Type(IProjects projects)
         {
             _projects = projects;
@@ -28,6 +30,7 @@ namespace Frontend.Pages.Projects.Features
             var projectResult = project.Result;
             FeaturesTypeViewModel.TypeOfTransfer = projectResult.Features.TypeOfTransfer;
             FeaturesTypeViewModel.OtherType = projectResult.Features.OtherTypeOfTransfer;
+            IncomingTrustName = projectResult.IncomingTrustName;
 
             return Page();
         }

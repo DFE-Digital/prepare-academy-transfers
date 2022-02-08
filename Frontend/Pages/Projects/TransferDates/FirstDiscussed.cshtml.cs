@@ -31,7 +31,7 @@ namespace Frontend.Pages.Projects.TransferDates
                     UnknownDate = projectResult.Dates.HasFirstDiscussedDate is false
                 }
             };
-
+            IncomingTrustName = projectResult.IncomingTrustName;
             return Page();
         }
 

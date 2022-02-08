@@ -34,7 +34,7 @@ namespace Frontend.Pages.Projects.TransferDates
                     UnknownDate = projectResult.Dates.HasHtbDate is false
                 }
             };
-
+            IncomingTrustName = projectResult.IncomingTrustName;
             return Page();
         }
 
