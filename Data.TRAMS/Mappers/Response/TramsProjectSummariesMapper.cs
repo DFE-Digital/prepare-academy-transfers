@@ -14,6 +14,7 @@ namespace Data.TRAMS.Mappers.Response
                 Urn = input.ProjectUrn,
                 Reference = input.ProjectReference,
                 OutgoingTrustName = input.OutgoingTrustName,
+                OutgoingTrustUkprn = input.OutgoingTrustUkprn,
                 TransferringAcademies = input.TransferringAcademies.Select(
                     academy => new TransferringAcademies
                     {

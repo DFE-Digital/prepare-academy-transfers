@@ -383,36 +383,6 @@ namespace Data.TRAMS.Tests
                 
                 _httpClient.Verify(c => c.GetAsync($"academyTransferProject?page={page}"), Times.Once());
             }
-
-            #region ApiInterim
-
-            [Fact]
-            public async void GivenProjectSummary_FillInExtraInformationFromMultipleRequestsAndMap()
-            {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
-                });
-
-
-                await _subject.GetProjects();
-
-                _trusts.Verify(r => r.GetByUkprn("456"), Times.Once);
-                _academies.Verify(r => r.GetAcademyByUkprn("789"), Times.Once);
-                _summaryToInternalMapper.Verify(
-                    m => m.Map(It.Is<TramsProjectSummary>(
-                            toMap =>
-                                toMap.OutgoingTrust.Ukprn == _foundSummaries[0].OutgoingTrustUkprn &&
-                                toMap.TransferringAcademies[0].IncomingTrust.GroupName == _foundTrust.Name &&
-                                toMap.TransferringAcademies[0].IncomingTrust.GroupId == _foundTrust.GiasGroupId &&
-                                toMap.TransferringAcademies[0].OutgoingAcademy.Name == _foundAcademy.Name &&
-                                toMap.TransferringAcademies[0].OutgoingAcademy.Urn == _foundAcademy.Urn
-                        )
-                    )
-                );
-            }
-
-            #endregion
         }
 
         private static async Task<bool> AssertStringContentMatches(string expectedContent, StringContent actualContent)
