@@ -96,7 +96,8 @@ namespace Frontend.Tests
                     {
                         new TransferringAcademies
                         {
-                            OutgoingAcademyUrn = AcademyUrn
+                            OutgoingAcademyUrn = AcademyUrn,
+                            IncomingTrustName = "incoming trust name"
                         }
                     }
                 },
