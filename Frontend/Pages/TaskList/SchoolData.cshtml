@@ -4,6 +4,11 @@
 @{
     Layout = "_Layout";
 }
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back</a>
+}
 <h1 class="govuk-tag--red">Page To Develop</h1>
 <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
 <div class="govuk-grid-row">

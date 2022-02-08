@@ -166,6 +166,7 @@ describe("Creating and editing an academy transfer", function () {
         clickBackLink()
         
         // Go to preview
+        clickBackLink()
         cy.clickDataTest("preview-htb")
         clickBackLink()
 
