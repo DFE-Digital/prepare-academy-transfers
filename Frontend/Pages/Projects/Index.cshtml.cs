@@ -17,13 +17,7 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses BenefitsAndOtherFactorsStatus { get; set; }
         public ProjectStatuses RationaleStatus { get; set; }
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
-        public bool HasKeyStage2PerformanceInformation { get; set; }
-        public bool HasKeyStage4PerformanceInformation { get; set; }
-        public bool HasKeyStage5PerformanceInformation { get; set; }
-       
-        //Can move to base once outgoing academy name removed
-        public string IncomingTrustName { get; set; }
-        
+
         /// <summary>
         /// Item1 Academy Ukprn, Item2 Academy Name
         /// </summary>

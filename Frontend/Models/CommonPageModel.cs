@@ -14,5 +14,7 @@ namespace Frontend.Models
         public string OutgoingAcademyUrn { get; set; }
         [BindProperty]
         public string ProjectReference { get; set; }
+        [BindProperty]
+        public string IncomingTrustName { get; set; }
     }
 }

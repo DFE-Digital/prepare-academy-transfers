@@ -16,8 +16,7 @@ namespace Frontend.Services
     {
         private readonly IProjects _projectRepository;
 
-        public TaskListService(IProjects projectRepository,
-            IEducationPerformance projectRepositoryEducationPerformance)
+        public TaskListService(IProjects projectRepository)
         {
             _projectRepository = projectRepository;
         }
