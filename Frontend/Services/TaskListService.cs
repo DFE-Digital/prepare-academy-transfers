@@ -16,13 +16,10 @@ namespace Frontend.Services
     public class TaskListService : ITaskListService
     {
         private readonly IProjects _projectRepository;
-        private readonly IEducationPerformance _projectRepositoryEducationPerformance;
 
-        public TaskListService(IProjects projectRepository,
-            IEducationPerformance projectRepositoryEducationPerformance)
+        public TaskListService(IProjects projectRepository)
         {
             _projectRepository = projectRepository;
-            _projectRepositoryEducationPerformance = projectRepositoryEducationPerformance;
         }
 
         public void BuildTaskListStatuses(Frontend.Pages.Projects.Index indexPage)
@@ -30,23 +27,13 @@ namespace Frontend.Services
             var project = _projectRepository.GetByUrn(indexPage.Urn).Result;
             indexPage.ProjectReference = project.Result.Reference;
             indexPage.IncomingTrustName = project.Result.IncomingTrustName.ToTitleCase();
-            indexPage.OutgoingAcademyUrn = project.Result.OutgoingAcademyUrn;
-            var educationPerformance =
-                _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;
+            indexPage.Academies = project.Result.TransferringAcademies
+                .Select(a => new Tuple<string, string>(a.OutgoingAcademyUkprn,a.OutgoingAcademyName)).ToList();
             indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);
             indexPage.FeatureTransferStatus = GetFeatureTransferStatus(project.Result);
             indexPage.TransferDatesStatus = GetTransferDatesStatus(project.Result);
             indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
             indexPage.RationaleStatus = GetRationaleStatus(project.Result);
-            indexPage.HasKeyStage2PerformanceInformation =
-                PerformanceDataHelpers.HasKeyStage2PerformanceInformation(educationPerformance.Result
-                    .KeyStage2Performance);
-            indexPage.HasKeyStage4PerformanceInformation =
-                PerformanceDataHelpers.HasKeyStage4PerformanceInformation(educationPerformance.Result
-                    .KeyStage4Performance);
-            indexPage.HasKeyStage5PerformanceInformation =
-                PerformanceDataHelpers.HasKeyStage5PerformanceInformation(educationPerformance.Result
-                    .KeyStage5Performance);
         }
 
         private ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)

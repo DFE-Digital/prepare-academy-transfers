@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Frontend.Models;
@@ -15,12 +17,12 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses BenefitsAndOtherFactorsStatus { get; set; }
         public ProjectStatuses RationaleStatus { get; set; }
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
-        public bool HasKeyStage2PerformanceInformation { get; set; }
-        public bool HasKeyStage4PerformanceInformation { get; set; }
-        public bool HasKeyStage5PerformanceInformation { get; set; }
-       
-        //Can move to base once outgoing academy name removed
-        public string IncomingTrustName { get; set; }
+
+        /// <summary>
+        /// Item1 Academy Ukprn, Item2 Academy Name
+        /// </summary>
+        public List<Tuple<string,string>> Academies { get; set; }
+        
         public Index(ITaskListService taskListService)
         {
             _taskListService = taskListService;

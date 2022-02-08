@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
@@ -28,7 +29,7 @@ namespace Frontend.Tests.ServicesTests
                     }
                 });
 
-            _subject = new TaskListService(ProjectRepository.Object, educationPerformanceRepository.Object);
+            _subject = new TaskListService(ProjectRepository.Object);
             _index = new Index(_subject)
             {
                 Urn = ProjectUrn0001
@@ -40,6 +41,13 @@ namespace Frontend.Tests.ServicesTests
         {
             _index.Urn = ProjectErrorUrn;
             Assert.Throws<TramsApiException>(() => _subject.BuildTaskListStatuses(_index));
+        }
+
+        [Fact]
+        public void GivenNoTransferringAcademies_ThrowsOutOfRangeException()
+        {
+            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademies>();
+            Assert.Throws<ArgumentOutOfRangeException>(() => _subject.BuildTaskListStatuses(_index));
         }
 
         [Fact]
