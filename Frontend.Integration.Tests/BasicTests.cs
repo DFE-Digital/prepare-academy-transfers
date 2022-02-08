@@ -2,7 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Frontend.ExtensionMethods;
+using Helpers;
 using Xunit;
 
 namespace Frontend.Integration.Tests
