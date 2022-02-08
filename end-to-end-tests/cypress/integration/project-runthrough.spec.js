@@ -124,17 +124,18 @@ describe("Creating and editing an academy transfer", function () {
         clickBackLink()
         cy.getDataTest("academyandtrustinformation").should('have.text',"COMPLETED");
         
+        //School Data
+        cy.clickDataTest("sd-academy-1")
+        
         cy.clickDataTest("general-information")
-        clickBackLink()
-        cy.getDataTest("general-information-status").should('have.text',"Reference only");
+        clickBackLink();
         
         // Pupil numbers
         cy.clickDataTest("pupil-numbers")
         cy.clickDataTest("additional-information")
         cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
         submit();
-        clickBackLink()
-        cy.getDataTest("pupil-numbers-status").should('have.text',"Reference only");
+        clickBackLink();
         
         // Ofsted
         cy.clickDataTest("ofsted")
@@ -142,7 +143,6 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ofsted");
         submit();
         clickBackLink()
-        cy.getDataTest("ofsted-report").should('have.text',"Reference only");
         
         // KS2
         cy.clickDataTest("ks2-performance")
@@ -150,7 +150,6 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
         submit();
         clickBackLink()
-        cy.getDataTest("key-stage-2-performance-tables").should('have.text',"Reference only");
         
         // KS4
         cy.clickDataTest("ks4-performance")
@@ -158,7 +157,6 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks4 performance");
         submit();
         clickBackLink()
-        cy.getDataTest("key-stage-4-performance-tables").should('have.text',"Reference only");
         
         // KS5
         cy.clickDataTest("ks5-performance")
@@ -166,7 +164,6 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
-        cy.getDataTest("key-stage-5-performance-tables").should('have.text',"Reference only");
         
         // Go to preview
         cy.clickDataTest("preview-htb")
