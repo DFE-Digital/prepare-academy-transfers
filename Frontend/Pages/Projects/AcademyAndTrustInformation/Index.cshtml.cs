@@ -12,7 +12,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public string Author { get; set; }
         public string ProjectName { get; set; }
         public string AdvisoryBoardDate { get; set; }
-        public string IncomingTrustName { get; set; }
         public string TargetDate { get; set; }
         public string FirstDiscussedDate { get; set; }
 
