@@ -24,13 +24,13 @@
         <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" role="group" aria-describedby="target-date-for-transfer-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading">
                             <span class="govuk-caption-l">
-                                @Model.OutgoingAcademyName
+                                @Model.IncomingTrustName
                             </span>
                             When is the target date for the transfer?
                         </h1>

@@ -1,4 +1,5 @@
 using Frontend.ExtensionMethods;
+using Helpers;
 using Xunit;
 
 namespace Frontend.Tests.ExtensionMethodsTests

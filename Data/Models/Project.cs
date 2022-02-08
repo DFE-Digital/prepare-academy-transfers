@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.Projects;
+using Helpers;
 
 namespace Data.Models
 {
@@ -38,7 +39,7 @@ namespace Data.Models
         public string OutgoingAcademyName => TransferringAcademies[0].OutgoingAcademyName;
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
         public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
-        public string IncomingTrustName => TransferringAcademies[0].IncomingTrustName;
+        public string IncomingTrustName => TransferringAcademies[0].IncomingTrustName.ToTitleCase();
         
     }
 }

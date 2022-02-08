@@ -1,4 +1,6 @@
-﻿namespace Helpers
+﻿using System.Globalization;
+
+namespace Helpers
 {
     public static class StringHelper
     {
@@ -8,5 +10,11 @@
                 .Replace('[','_')
                 .Replace(']','_');
         } 
+        
+        public static string ToTitleCase(this string str)
+        {
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(str.ToLower());
+        }
     }
 }
