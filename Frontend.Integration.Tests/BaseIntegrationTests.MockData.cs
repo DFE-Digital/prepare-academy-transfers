@@ -16,13 +16,6 @@ namespace Frontend.Integration.Tests
                 postSetup(projects.First());
             }
             
-            foreach (var project in projects)
-            {
-                _factory.AddGetWithJsonResponse($"/trust/{project.TransferringAcademies[0].IncomingTrustUkprn}",  AcademiesApiFixtures.Trust());
-                _factory.AddGetWithJsonResponse(
-                    $"/establishment/{project.TransferringAcademies[0].OutgoingAcademyUkprn}", AcademiesApiFixtures.Establishment());
-            }
-
             _factory.AddGetWithJsonResponse("/academyTransferProject", projects);
             return projects;
         }

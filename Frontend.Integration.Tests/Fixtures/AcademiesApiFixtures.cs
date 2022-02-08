@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using AutoFixture;
 using Data.Models.Projects;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.AcademyTransferProject;
@@ -24,32 +23,17 @@ namespace Frontend.Integration.Tests.Fixtures
         {
             var tramsProjectSummary = new TramsProjectSummary
             {
-                OutgoingTrust = new TrustSummary
-                {
-                    GroupId = "123",
-                    GroupName = OutgoingTrustName,
-                    Ukprn = OutgoingTrustUkprn,
-                },
                 OutgoingTrustUkprn = OutgoingTrustUkprn,
+                OutgoingTrustName = OutgoingTrustName,
                 ProjectReference = "REF-SW-123456789",
                 ProjectUrn = ProjectUrn,
                 TransferringAcademies = new List<TransferringAcademy>
                 {
                     new TransferringAcademy
                     {
-                        OutgoingAcademy = new AcademySummary
-                        {
-                            Name = OutgoingAcademyName,
-                            Ukprn = OutgoingAcademyUkprn,
-                            Urn = OutgoingAcademyUrn
-                        },
-                        IncomingTrust = new TrustSummary
-                        {
-                            GroupId = "654",
-                            GroupName = IncomingTrustName,
-                            Ukprn = IncomingTrustUkprn
-                        },
-                        IncomingTrustUkprn = IncomingTrustUkprn, OutgoingAcademyUkprn = OutgoingAcademyUkprn
+                        IncomingTrustUkprn = IncomingTrustUkprn, 
+                        IncomingTrustName = IncomingTrustName, 
+                        OutgoingAcademyUkprn = OutgoingAcademyUkprn
                     }
                 }
             };
