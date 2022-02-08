@@ -1,4 +1,5 @@
 @page "/"
+@using Frontend.ExtensionMethods
 @model Frontend.Pages.Home.Index
 
 
@@ -46,6 +47,9 @@
                             UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
                         </span>
                     </h3>
+                    <p class="govuk-body govuk-!-margin-bottom-1">
+                        Project reference: @project.Reference
+                    </p>
                     <p class="govuk-body">
                         Outgoing trust: @project.OutgoingTrustName
                     </p>
