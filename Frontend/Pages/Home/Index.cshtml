@@ -35,14 +35,16 @@
         </h3>
         @foreach (var project in Model.Projects)
         {
+            var firstOutgoingAcademy = project.TransferringAcademies.First();
+            
             <div class="dfe-application-card">
                 <div class="dfe-application-card--project-info">
                     <h3 class="govuk-heading-m">
                         <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                            @project.IncomingTrustName.ToTitleCase()
+                            @firstOutgoingAcademy.IncomingTrustName.ToTitleCase()
                         </a>
                         <span class="govuk-caption-m govuk-!-display-inline">
-                            UKPRN @project.TransferringAcademies.First().IncomingTrustUkprn
+                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
                         </span>
                     </h3>
                     <p class="govuk-body govuk-!-margin-bottom-1">
