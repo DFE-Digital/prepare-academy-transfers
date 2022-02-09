@@ -7,33 +7,52 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back</a>
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
 }
-<h1 class="govuk-tag--red">Page To Develop</h1>
-<span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
+        <h1 class="govuk-heading-xl">@Model.OutgoingAcademyName</h1>
+        <hr class="govuk-section-break govuk-section-break--m">
         <ol class="moj-task-list">
             <li>
-                <h3 class="moj-task-list__section">
+                <h2 class="moj-task-list__section">
                     School characteristics
-                </h3>
-                <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                </h2>
+                <ul class="govuk-list govuk-list--spaced">
                     <li>
-                        <a class="govuk-link" aria-describedby="general-information" asp-page="/Projects/GeneralInformation/Index" asp-route-urn="@Model.Urn" data-test="general-information">General information</a>
+                        <a class="govuk-link" aria-describedby="general-information" asp-page="/Projects/GeneralInformation/Index" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" data-test="general-information">General information</a>
                     </li>
                     <li>
-                        <a class="govuk-link" aria-describedby="pupil-numbers" asp-page="/Projects/PupilNumbers" asp-route-urn="@Model.Urn" data-test="pupil-numbers">Pupil numbers</a>
+                        <a class="govuk-link" aria-describedby="pupil-numbers" asp-page="/Projects/PupilNumbers" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" data-test="pupil-numbers">Pupil numbers</a>
                     </li>
                 </ul>
-                <h3 class="moj-task-list__section">
+                <h2 class="moj-task-list__section">
                     School performance
-                </h3>
-                <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
-                    <li><a class="govuk-link" aria-describedby="ofsted-report" asp-page="/Projects/LatestOfstedJudgement/Index" asp-route-urn="@Model.Urn" data-test="ofsted">Latest Ofsted report </a></li>
-                    <li><a class="govuk-link" asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-2-performance-tables" data-test="ks2-performance">Key stage 2 performance tables</a></li>
-                    <li><a class="govuk-link" asp-page="/TaskList/KeyStage4Performance/KeyStage4Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-4-performance-tables" data-test="ks4-performance">Key stage 4 performance tables</a></li>
-                    <li><a class="govuk-link" asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-id="@Model.Urn" aria-describedby="key-stage-5-performance-tables" data-test="ks5-performance">Key stage 5 performance tables</a></li>
+                </h2>
+                <ul class="govuk-list govuk-list--spaced">
+                    <li>
+                        <a class="govuk-link" aria-describedby="ofsted-report" asp-page="/Projects/LatestOfstedJudgement/Index" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" data-test="ofsted">Latest Ofsted report </a>
+                    </li>
+                    @if (Model.HasKeyStage2PerformanceInformation)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" aria-describedby="key-stage-2-performance-tables" data-test="ks2-performance">Key stage 2 performance tables</a>
+                        </li>
+                    }
+                    @if (Model.HasKeyStage4PerformanceInformation)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-page="/TaskList/KeyStage4Performance/KeyStage4Performance" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" aria-describedby="key-stage-4-performance-tables" data-test="ks4-performance">Key stage 4 performance tables</a>
+                        </li>
+                    }
+                    @if (Model.HasKeyStage5PerformanceInformation)
+                    {
+                        <li>
+                            <a class="govuk-link" asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn" aria-describedby="key-stage-5-performance-tables" data-test="ks5-performance">Key stage 5 performance tables</a>
+                        </li>
+                    }
                 </ul>
             </li>
         </ol>

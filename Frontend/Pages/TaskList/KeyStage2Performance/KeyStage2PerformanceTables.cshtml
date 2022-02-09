@@ -1,7 +1,7 @@
 @using Frontend.Helpers
-@model ProjectPageModel
+@model Tuple<Data.Models.KeyStagePerformance.EducationPerformance, Data.Models.Academy>
 
-@foreach (var ks2Result in Model.EducationPerformance.KeyStage2Performance.OrderByDescending(o => o.Year))
+@foreach (var ks2Result in Model.Item1.KeyStage2Performance.OrderByDescending(o => o.Year))
 {
     <table class="govuk-table govuk-!-margin-bottom-9">
         <caption class="govuk-table__caption govuk-table__caption--m">@PerformanceDataHelpers.GetFormattedYear(ks2Result.Year) key stage 2</caption>
@@ -23,7 +23,7 @@
         </thead>
         <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.Name</th>
+            <th scope="row" class="govuk-table__header">@Model.Item2.Name</th>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageMeetingExpectedStdInRWM.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.PercentageAchievingHigherStdInRWM.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.ReadingProgressScore.NotDisadvantaged)</td>
@@ -31,7 +31,7 @@
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.MathsProgressScore.NotDisadvantaged)</td>
         </tr>
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.LocalAuthorityName LA average</th>
+            <th scope="row" class="govuk-table__header">@Model.Item2.LocalAuthorityName LA average</th>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageMeetingExpectedStdInRWM.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAveragePercentageAchievingHigherStdInRWM.NotDisadvantaged)</td>
             <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks2Result.LAAverageReadingProgressScore.NotDisadvantaged)</td>

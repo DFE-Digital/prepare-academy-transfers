@@ -1,4 +1,4 @@
-@page "/project/{urn}/general-information"
+@page "/project/{urn}/general-information/{academyUkprn}"
 @model Frontend.Pages.Projects.GeneralInformation.Index
 
 @{
@@ -8,7 +8,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="tochange">Back</a>
+    <a class="govuk-back-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
 }
 
 <div class="govuk-grid-row">

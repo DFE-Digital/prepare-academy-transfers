@@ -22,6 +22,9 @@ namespace Frontend.Pages.Projects.GeneralInformation
         public string DiocesePercent { get; set; }
         public string DistanceFromAcademyToTrustHq { get; set; }
         public string MP { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string AcademyUkprn { get; set; }
 
         public Index(IGetInformationForProject getInformationForProject)
         {
@@ -50,7 +53,6 @@ namespace Frontend.Pages.Projects.GeneralInformation
 
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
-
             return Page();
         }
     }

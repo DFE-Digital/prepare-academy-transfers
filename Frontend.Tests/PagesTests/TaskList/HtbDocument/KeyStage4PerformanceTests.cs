@@ -3,6 +3,7 @@ using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Frontend.Models;
+using Frontend.Models.Forms;
 using Frontend.Pages.TaskList.KeyStage4Performance;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -42,7 +43,11 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 }
             };
 
-            _subject = new KeyStage4Performance(GetInformationForProject.Object, ProjectRepository.Object);
+            _subject = new KeyStage4Performance(GetInformationForProject.Object, ProjectRepository.Object)
+            {
+                Urn = ProjectUrn0001,
+                AdditionalInformationViewModel = new AdditionalInformationViewModel()
+            };
         }
 
         public class OnGetAsyncTests : KeyStage4PerformanceTests
@@ -50,7 +55,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnGetAsync(ProjectUrn0001);
+                await _subject.OnGetAsync();
 
                 GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
             }
@@ -58,10 +63,10 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenExistingProject_AssignsItToThePageModel()
             {
-                var response = await _subject.OnGetAsync(ProjectUrn0001);
+                var response = await _subject.OnGetAsync();
 
                 Assert.IsType<PageResult>(response);
-                Assert.Equal(ProjectUrn0001, _subject.ProjectUrn);
+                Assert.Equal(ProjectUrn0001, _subject.Urn);
                 Assert.Equal(AcademyUrn, _subject.OutgoingAcademyUrn);
                 Assert.Equal(2, _subject.EducationPerformance.KeyStage4Performance.Count);
                 Assert.Equal("2019-2020", _subject.EducationPerformance.KeyStage4Performance[0].Year);
@@ -76,16 +81,17 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 GetInformationForProject.Setup(s => s.Execute(ProjectUrn0001))
                     .ReturnsAsync(FoundInformationForProject);
 
-                await _subject.OnGetAsync(ProjectUrn0001);
+                await _subject.OnGetAsync();
 
-                Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
-                Assert.Equal(ProjectUrn0001, _subject.AdditionalInformation.Urn);
+                Assert.Equal(additionalInformation, _subject.AdditionalInformationViewModel.AdditionalInformation);
+                Assert.Equal(ProjectUrn0001, _subject.AdditionalInformationViewModel.Urn);
             }
 
             [Fact]
             public async void GivenReturnToPreview_UpdatesTheViewModel()
             {
-                await _subject.OnGetAsync(ProjectUrn0001, false, true);
+                _subject.ReturnToPreview = true;
+                await _subject.OnGetAsync();
 
                 Assert.True(_subject.ReturnToPreview);
             }
@@ -112,7 +118,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync(ProjectUrn0001, string.Empty, false);
+                await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
             }
@@ -120,35 +126,34 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()
             {
-                const string additionalInformation = "some additional info";
-
-                var response = await _subject.OnPostAsync(ProjectUrn0001, additionalInformation, false);
+                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
+                var response = await _subject.OnPostAsync();
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage4Performance", redirectToPageResponse.PageName);
-                Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, _foundProject.KeyStage4PerformanceAdditionalInformation);
+                Assert.Null(redirectToPageResponse.PageHandler);
+                Assert.Equal( _subject.AdditionalInformationViewModel.AdditionalInformation, _foundProject.KeyStage4PerformanceAdditionalInformation);
             }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
             {
-                const string additionalInfo = "test info";
-
-                await _subject.OnPostAsync(ProjectUrn0001, additionalInfo, false);
+                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
+                await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.KeyStage4PerformanceAdditionalInformation == additionalInfo
+                    project => project.KeyStage4PerformanceAdditionalInformation ==  _subject.AdditionalInformationViewModel.AdditionalInformation
                 )));
             }
 
             [Fact]
             public async void GivenReturnToPreview_RedirectsToThePreviewPage()
             {
-                var response = await _subject.OnPostAsync(ProjectUrn0001, "", true);
+                _subject.ReturnToPreview = true;
+                var response = await _subject.OnPostAsync();
 
                 var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
-                Assert.Equal(ProjectUrn0001, redirectResponse.RouteValues["id"]);
+                Assert.Equal(ProjectUrn0001, redirectResponse.RouteValues["urn"]);
             }
         }
     }
