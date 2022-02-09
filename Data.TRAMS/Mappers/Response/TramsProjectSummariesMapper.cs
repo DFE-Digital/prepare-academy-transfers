@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Models.Projects;
@@ -15,15 +13,14 @@ namespace Data.TRAMS.Mappers.Response
             {
                 Urn = input.ProjectUrn,
                 Reference = input.ProjectReference,
-                OutgoingTrustName = input.OutgoingTrust.GroupName,
+                OutgoingTrustName = input.OutgoingTrustName,
+                OutgoingTrustUkprn = input.OutgoingTrustUkprn,
                 TransferringAcademies = input.TransferringAcademies.Select(
                     academy => new TransferringAcademies
                     {
-                        IncomingTrustName = academy.IncomingTrust.GroupName,
-                        IncomingTrustUkprn = academy.IncomingTrust.Ukprn,
-                        OutgoingAcademyName = academy.OutgoingAcademy.Name,
-                        OutgoingAcademyUkprn = academy.OutgoingAcademy.Ukprn,
-                        OutgoingAcademyUrn = academy.OutgoingAcademy.Urn
+                        OutgoingAcademyUkprn = academy.OutgoingAcademyUkprn,
+                        IncomingTrustUkprn = academy.IncomingTrustUkprn,
+                        IncomingTrustName = academy.IncomingTrustName
                     }).ToList()
             };
         }

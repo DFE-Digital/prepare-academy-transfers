@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,38 +41,8 @@ namespace Data.TRAMS
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse);
 
-                var mappedSummaries = summaries.Select(summary =>
-                    {
-                        summary.OutgoingTrust = new TrustSummary
-                            {Ukprn = summary.OutgoingTrustUkprn};
-                        summary.TransferringAcademies = summary.TransferringAcademies.Select(async transferring =>
-                            {
-                                var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                                var outgoingAcademy =
-                                    await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-
-                                transferring.IncomingTrust = new TrustSummary
-                                {
-                                    GroupName = incomingTrust.Result.Name,
-                                    GroupId = incomingTrust.Result.GiasGroupId,
-                                    Ukprn = transferring.IncomingTrustUkprn
-                                };
-
-                                transferring.OutgoingAcademy = new AcademySummary
-                                {
-                                    Name = outgoingAcademy.Result.Name,
-                                    Ukprn = transferring.OutgoingAcademyUkprn,
-                                    Urn = outgoingAcademy.Result.Urn
-                                };
-
-                                return transferring;
-                            })
-                            .Select(t => t.Result)
-                            .ToList();
-
-                        return _summaryToInternalProjectMapper.Map(summary);
-                    })
-                    .ToList();
+                var mappedSummaries = 
+                    summaries.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
 
                 return new RepositoryResult<List<ProjectSearchResult>>
                 {

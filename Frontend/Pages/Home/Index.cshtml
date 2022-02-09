@@ -34,18 +34,23 @@
         </h3>
         @foreach (var project in Model.Projects)
         {
+            var firstOutgoingAcademy = project.TransferringAcademies.First();
+            
             <div class="dfe-application-card">
                 <div class="dfe-application-card--project-info">
                     <h3 class="govuk-heading-m">
                         <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                            @project.OutgoingAcademyName
+                            @firstOutgoingAcademy.IncomingTrustNameInTitleCase
                         </a>
-                        <span class="govuk-caption-l govuk-!-display-inline">
-                            URN @project.OutgoingAcademyUrn
+                        <span class="govuk-caption-m govuk-!-display-inline">
+                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
                         </span>
                     </h3>
+                    <p class="govuk-body govuk-!-margin-bottom-1">
+                        Project reference: @project.Reference
+                    </p>
                     <p class="govuk-body">
-                        Application to transfer to: @project.IncomingTrustName
+                        Outgoing trust: @project.OutgoingTrustNameInTitleCase
                     </p>
                 </div>
             </div>

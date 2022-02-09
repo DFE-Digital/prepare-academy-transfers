@@ -14,7 +14,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
     {
         private readonly ICreateHtbDocument _createHtbDocument;
         private readonly IGetInformationForProject _getInformationForProject;
-        public string IncomingTrustName { get; set; }
         public Download(ICreateHtbDocument createHtbDocument,
             IGetInformationForProject getInformationForProject)
         {

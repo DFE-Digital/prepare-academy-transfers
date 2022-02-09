@@ -2,6 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Helpers;
 using Xunit;
 
 namespace Frontend.Integration.Tests
@@ -25,7 +26,7 @@ namespace Frontend.Integration.Tests
             Document.QuerySelector("h2.govuk-heading-l")?.TextContent.Trim().Should().Be("Projects");
             Document.QuerySelector("#main-content > div:nth-child(2) > div > div:nth-child(3) > div > h3 > a")
                 ?.TextContent
-                .Trim().Should().Be(projects.First().TransferringAcademies[0].OutgoingAcademy.Name);
+                .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName.ToTitleCase());
             Document.QuerySelector("a.dfe-sign-out")?.TextContent.Trim().Should().Be("Sign out");
         }
     }
