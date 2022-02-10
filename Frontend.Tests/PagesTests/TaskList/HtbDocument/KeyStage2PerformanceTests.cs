@@ -118,7 +118,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage2Performance", redirectToPageResponse.PageName);
-                Assert.Equal(null, redirectToPageResponse.PageHandler);
+                Assert.Null(redirectToPageResponse.PageHandler);
                 Assert.Equal(additionalInformation, _foundProject.KeyStage2PerformanceAdditionalInformation);
             }
 
