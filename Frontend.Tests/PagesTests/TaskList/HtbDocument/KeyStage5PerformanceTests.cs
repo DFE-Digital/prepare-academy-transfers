@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Frontend.Models;
+using Frontend.Models.Forms;
 using Frontend.Pages.TaskList.KeyStage5Performance;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,15 +14,19 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
     public class KeyStage5PerformanceTests : BaseTests
     {
         private readonly KeyStage5Performance _subject;
+
         public KeyStage5PerformanceTests()
         {
             FoundInformationForProject.EducationPerformance = new EducationPerformance
             {
                 KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2019"}},
-
             };
 
-            _subject = new KeyStage5Performance(GetInformationForProject.Object, ProjectRepository.Object);
+            _subject = new KeyStage5Performance(GetInformationForProject.Object, ProjectRepository.Object)
+            {
+                Urn = ProjectUrn0001,
+                AdditionalInformationViewModel = new AdditionalInformationViewModel()
+            };
         }
 
         public class OnGetAsyncTests : KeyStage5PerformanceTests
@@ -31,7 +36,8 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [InlineData("4321")]
             public async void OnGet_GetInformationForProjectId(string id)
             {
-                await _subject.OnGetAsync(id);
+                _subject.Urn = id;
+                await _subject.OnGetAsync();
 
                 GetInformationForProject.Verify(s => s.Execute(id));
             }
@@ -39,10 +45,10 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void OnGet_AssignsCorrectValuesToViewModel()
             {
-                var result = await _subject.OnGetAsync("1234");
+                var result = await _subject.OnGetAsync();
 
                 Assert.IsType<PageResult>(result);
-                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.ProjectUrn);
+                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.Urn);
                 Assert.Equal(FoundInformationForProject.EducationPerformance, _subject.EducationPerformance);
                 Assert.Equal(FoundInformationForProject.OutgoingAcademy.Urn, _subject.OutgoingAcademyUrn);
             }
@@ -53,16 +59,17 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 const string additionalInformation = "some additional info";
                 FoundInformationForProject.Project.KeyStage5PerformanceAdditionalInformation = additionalInformation;
 
-                await _subject.OnGetAsync("1234");
+                await _subject.OnGetAsync();
 
-                Assert.Equal(additionalInformation, _subject.AdditionalInformation.AdditionalInformation);
-                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.AdditionalInformation.Urn);
+                Assert.Equal(additionalInformation, _subject.AdditionalInformationViewModel.AdditionalInformation);
+                Assert.Equal(FoundInformationForProject.Project.Urn, _subject.AdditionalInformationViewModel.Urn);
             }
 
             [Fact]
             public async void GivenReturnToPreview_UpdatesTheViewModel()
             {
-                await _subject.OnGetAsync("123", false, true);
+                _subject.ReturnToPreview = true;
+                await _subject.OnGetAsync();
 
                 Assert.True(_subject.ReturnToPreview);
             }
@@ -73,43 +80,43 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
-                await _subject.OnPostAsync("1234", string.Empty, false);
-
-                ProjectRepository.Verify(r => r.GetByUrn("1234"), Times.Once);
+                await _subject.OnPostAsync();
+                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
             }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()
             {
-                const string additionalInformation = "some additional info";
-
-                var response = await _subject.OnPostAsync("1234", additionalInformation, false);
+                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
+                var response = await _subject.OnPostAsync();
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage5Performance", redirectToPageResponse.PageName);
-                Assert.Equal("OnGetAsync", redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, FoundProjectFromRepo.KeyStage5PerformanceAdditionalInformation);
+                Assert.Null(redirectToPageResponse.PageHandler);
+                Assert.Equal(_subject.AdditionalInformationViewModel.AdditionalInformation,
+                    FoundProjectFromRepo.KeyStage5PerformanceAdditionalInformation);
             }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
             {
-                const string additionalInfo = "test info";
+                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
 
-                await _subject.OnPostAsync("1234", additionalInfo, false);
+                await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.KeyStage5PerformanceAdditionalInformation == additionalInfo
+                    project => project.KeyStage5PerformanceAdditionalInformation ==    _subject.AdditionalInformationViewModel.AdditionalInformation
                 )));
             }
 
             [Fact]
             public async void GivenReturnToPreview_RedirectsToThePreviewPage()
             {
-                var response = await _subject.OnPostAsync("1234", "", true);
+                _subject.ReturnToPreview = true;
+                var response = await _subject.OnPostAsync();
 
                 var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal(Links.HeadteacherBoard.Preview.PageName, redirectResponse.PageName);
-                Assert.Equal("1234", redirectResponse.RouteValues["id"]);
+                Assert.Equal(_subject.Urn, redirectResponse.RouteValues["Urn"]);
             }
         }
     }

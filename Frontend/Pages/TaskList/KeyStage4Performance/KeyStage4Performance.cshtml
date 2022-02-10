@@ -44,7 +44,7 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <form asp-page="/Projects/Index" asp-route-urn="@Model.Urn" method="get">
+           <form asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyukprn="@Model.AcademyUkprn" method="get">
                 <button class="govuk-button" data-module="govuk-button" type="submit">
                     Confirm and continue
                 </button>

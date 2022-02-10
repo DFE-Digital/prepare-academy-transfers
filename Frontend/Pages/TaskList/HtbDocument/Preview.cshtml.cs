@@ -132,7 +132,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 FreeSchoolMealsLast6Years = response.OutgoingAcademy.PupilNumbers
                     .PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                 OutgoingAcademyUrn = response.OutgoingAcademy.Urn,
-                OutgoingAcademyName = response.OutgoingAcademy.Name,
+                AcademyUkprn = response.OutgoingAcademy.Ukprn,
                 IsPreview = true,
                 Urn = response.Project.Urn,
                 ReturnToPreview = true,
@@ -150,7 +150,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             {
                 Urn = Project.Urn,
                 OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                OutgoingAcademyName = Project.OutgoingAcademyName,
+                AcademyUkprn = response.OutgoingAcademy.Ukprn,
                 SchoolName = TransferringAcademy.LatestOfstedJudgement.SchoolName,
                 InspectionDate = TransferringAcademy.LatestOfstedJudgement.InspectionDate,
                 OverallEffectiveness = TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness,
