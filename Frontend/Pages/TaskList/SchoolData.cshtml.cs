@@ -28,7 +28,7 @@ namespace Frontend.Pages.TaskList
             _projectRepositoryEducationPerformance = projectRepositoryEducationPerformance;
         }
         
-        public async Task<PageResult> OnGet()
+        public async Task<PageResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn); 
             var academy = await _academies.GetAcademyByUkprn(AcademyUkprn);
