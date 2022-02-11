@@ -163,11 +163,6 @@ namespace Frontend.Controllers
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
 
-            // var outgoingAcademyId = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
-            // var outgoingAcademyRepoResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyId);
-            //
-            // ViewData["OutgoingAcademyName"] = outgoingAcademyRepoResult.Result.Name;
-
             if (TempData.Peek("ErrorMessage") == null) return View();
 
             ViewData["Error.Exists"] = true;
