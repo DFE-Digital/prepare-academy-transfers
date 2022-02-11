@@ -140,18 +140,17 @@ namespace Frontend.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> SubmitOutgoingTrustAcademies(string academyId, bool change = false)
+        public async Task<IActionResult> SubmitOutgoingTrustAcademies(string[] academyIds, bool change = false)
         {
             var validator = new OutgoingTrustAcademiesValidator();
-            var validationResult = await validator.ValidateAsync(academyId);
+            var validationResult = await validator.ValidateAsync(academyIds);
 
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("OutgoingTrustAcademies");
             }
-
-            var academyIds = new[] {academyId};
+            
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
@@ -164,10 +163,10 @@ namespace Frontend.Controllers
             ViewData["Query"] = query;
             ViewData["ChangeLink"] = change;
 
-            var outgoingAcademyId = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
-            var outgoingAcademyRepoResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyId);
-
-            ViewData["OutgoingAcademyName"] = outgoingAcademyRepoResult.Result.Name;
+            // var outgoingAcademyId = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
+            // var outgoingAcademyRepoResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyId);
+            //
+            // ViewData["OutgoingAcademyName"] = outgoingAcademyRepoResult.Result.Name;
 
             if (TempData.Peek("ErrorMessage") == null) return View();
 

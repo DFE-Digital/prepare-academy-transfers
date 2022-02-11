@@ -364,7 +364,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenAcademyId_StoresItInTheSessionAndRedirects()
             {
-                var idOne = "9a7be920-eaa0-e911-a83f-000d3a3852af";
+                var idOne = new[] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
 
                 var result = await _subject.SubmitOutgoingTrustAcademies(idOne);
 
@@ -374,7 +374,7 @@ namespace Frontend.Tests.ControllerTests
                 _session.Verify(s => s.Set(
                     "OutgoingAcademyIds",
                     It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == idOne
+                        Encoding.UTF8.GetString(input) == idOne[0]
                     )));
             }
 
@@ -391,7 +391,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
             {
-                var idOne = "9a7be920-eaa0-e911-a83f-000d3a3852af";
+                var idOne = new [] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
                 var result = await _subject.SubmitOutgoingTrustAcademies(idOne, true);
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
@@ -419,14 +419,6 @@ namespace Frontend.Tests.ControllerTests
                     {
                         Result = _outgoingAcademy
                     });
-            }
-
-            [Fact]
-            public async void GivenOutgoingAcademyIdInSession_ReturnsAcademyNameInViewData()
-            {
-                await _subject.IncomingTrust();
-
-                Assert.Equal(_outgoingAcademy.Name, _subject.ViewData["OutgoingAcademyName"]);
             }
 
             [Fact]
