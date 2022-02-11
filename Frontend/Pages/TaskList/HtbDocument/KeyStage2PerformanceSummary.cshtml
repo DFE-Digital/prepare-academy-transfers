@@ -1,6 +1,8 @@
+@using Data.Models
+@using Data.Models.KeyStagePerformance
 @model ProjectPageModel
 
-<partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@Model" />
+<partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@(new Tuple<EducationPerformance, Academy>(Model.EducationPerformance, Model.TransferringAcademy))"/>
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -11,8 +13,8 @@
         </dd>
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
-               asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-id="@Model.Project.Urn"
-               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true"
+               asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-urn="@Model.Project.Urn"
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true" asp-route-academyukprn="@Model.TransferringAcademy.Ukprn"
             >
                 Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
             </a>

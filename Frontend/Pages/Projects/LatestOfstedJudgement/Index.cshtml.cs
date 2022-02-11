@@ -20,6 +20,9 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
         public bool IsPreview { get; set; }
+        
+        [BindProperty(SupportsGet = true)]
+        public string AcademyUkprn { get; set; }
 
         public Index(IGetInformationForProject getInformationForProject,
             IProjects projectsRepository)

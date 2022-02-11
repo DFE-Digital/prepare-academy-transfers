@@ -1,13 +1,13 @@
 @using Frontend.Helpers
-@model ProjectPageModel
+@model Tuple<Data.Models.KeyStagePerformance.EducationPerformance, Data.Models.Academy>
 
-@foreach (var ks5Result in Model.EducationPerformance.KeyStage5Performance.OrderByDescending(o => o.Year))
+@foreach (var ks5Result in Model.Item1.KeyStage5Performance.OrderByDescending(o => o.Year))
 {
     <h2 class="govuk-heading-m">
         @PerformanceDataHelpers.GetFormattedYear(ks5Result.Year) scores for academic and applied general qualifications
     </h2>
     <table class="govuk-table govuk-!-margin-bottom-9">
-        <caption class="govuk-table__caption govuk-table__caption--s">Local authority: @Model.TransferringAcademy.LocalAuthorityName</caption>
+        <caption class="govuk-table__caption govuk-table__caption--s">Local authority: @Model.Item2.LocalAuthorityName</caption>
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header"></th>
@@ -19,18 +19,18 @@
         </thead>
         <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">@Model.TransferringAcademy.Name</th>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicProgress)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AcademicAverage)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralProgress)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.Academy.AppliedGeneralAverage)</td>
+            <th scope="row" class="govuk-table__header">@Model.Item2.Name</th>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicProgress)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AcademicAverage)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralProgress)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.Academy.AppliedGeneralAverage)</td>
         </tr>
         <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header">National average</th>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicProgress)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AcademicAverage)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralProgress)</td>
-            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(@ks5Result.National.AppliedGeneralAverage)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicProgress)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AcademicAverage)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralProgress)</td>
+            <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(ks5Result.National.AppliedGeneralAverage)</td>
         </tr>
         </tbody>
     </table>

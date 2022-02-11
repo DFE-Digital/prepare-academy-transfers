@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Data;
+using Data.Models;
+using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
@@ -8,66 +10,71 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages.TaskList.KeyStage5Performance
 {
-    public class KeyStage5Performance : ProjectPageModel
+    public class KeyStage5Performance : CommonPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projects;
-        public string ProjectUrn => Project.Urn;
-        public string OutgoingAcademyUrn => TransferringAcademy.Urn;
-        public AdditionalInformationViewModel AdditionalInformation { get; set; }
-        public bool ReturnToPreview { get; set; }
-
+        [BindProperty]
+        public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public bool AddOrEditAdditionalInformation { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string AcademyUkprn { get; set; }
+        
+        //todo: remove data models here
+        #region remove
+        public EducationPerformance EducationPerformance { get; set; }
+        public Academy TransferringAcademy { get; set; }
+        #endregion
+        
         public KeyStage5Performance(IGetInformationForProject getInformationForProject, IProjects projects)
         {
             _getInformationForProject = getInformationForProject;
             _projects = projects;
         }
 
-        public async Task<IActionResult> OnGetAsync(string id, bool addOrEditAdditionalInformation = false,
-            bool returnToPreview = false)
+        public async Task<IActionResult> OnGetAsync()
         {
-            var projectInformation = await _getInformationForProject.Execute(id);
+            var projectInformation = await _getInformationForProject.Execute(Urn);
             
-            PopulateModel(addOrEditAdditionalInformation, projectInformation, returnToPreview);
+            PopulateModel(projectInformation);
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string id, string additionalInformation, bool returnToPreview)
+        public async Task<IActionResult> OnPostAsync()
         {
-            var project = await _projects.GetByUrn(id);
+            var project = await _projects.GetByUrn(Urn);
             
-            project.Result.KeyStage5PerformanceAdditionalInformation = additionalInformation;
+            project.Result.KeyStage5PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
             await _projects.Update(project.Result);
 
-            if (returnToPreview)
+            if (ReturnToPreview)
             {
                 return new RedirectToPageResult(
                     Links.HeadteacherBoard.Preview.PageName,
-                    new {id}
+                    new {Urn}
                 );
             }
 
             return new RedirectToPageResult(nameof(KeyStage5Performance),
-                "OnGetAsync",
-                new {id},
+                null,
+                new {Urn},
                 "additional-information-hint");
         }
 
-        private void PopulateModel(bool addOrEditAdditionalInformation,
-            GetInformationForProjectResponse projectInformation, bool returnToPreview)
+        private void PopulateModel(GetInformationForProjectResponse projectInformation)
         {
-            Project = projectInformation.Project;
             TransferringAcademy = projectInformation.OutgoingAcademy;
             EducationPerformance = projectInformation.EducationPerformance;
-            ReturnToPreview = returnToPreview;
-            AdditionalInformation = new AdditionalInformationViewModel
+            OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
+            AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
                 AdditionalInformation = projectInformation.Project.KeyStage5PerformanceAdditionalInformation,
                 HintText =
                     "If you add comments, they'll be included in the key stage 5 performance tables section of your project template.",
                 Urn = projectInformation.Project.Urn,
-                AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
-                ReturnToPreview = returnToPreview
+                AddOrEditAdditionalInformation = AddOrEditAdditionalInformation,
+                ReturnToPreview = ReturnToPreview
             };
         }
     }

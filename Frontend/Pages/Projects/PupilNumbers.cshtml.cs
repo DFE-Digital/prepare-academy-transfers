@@ -23,6 +23,9 @@ namespace Frontend.Pages.Projects
         [BindProperty(SupportsGet = true)]
         public bool AddOrEditAdditionalInformation { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string AcademyUkprn { get; set; }
+        
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
