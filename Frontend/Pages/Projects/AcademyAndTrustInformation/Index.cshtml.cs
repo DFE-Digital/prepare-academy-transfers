@@ -10,7 +10,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
     {
         public TransferAcademyAndTrustInformation.RecommendationResult Recommendation { get; set; }
         public string Author { get; set; }
-        public string ProjectName { get; set; }
         public string AdvisoryBoardDate { get; set; }
         public string TargetDate { get; set; }
         public string FirstDiscussedDate { get; set; }
@@ -30,7 +29,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
             Recommendation = projectInformation.Project.AcademyAndTrustInformation.Recommendation;
             Author = projectInformation.Project.AcademyAndTrustInformation.Author;
             AdvisoryBoardDate = projectInformation.Project.Dates?.Htb;
-            ProjectName = projectInformation.Project.Name;
             IncomingTrustName = projectInformation.Project.IncomingTrustName;
             TargetDate = projectInformation.Project.Dates?.Target;
             FirstDiscussedDate = projectInformation.Project.Dates?.FirstDiscussed;

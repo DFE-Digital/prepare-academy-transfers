@@ -12,8 +12,7 @@ namespace Frontend.Models
         [DocumentText("TrustReferenceNumber")] public string TrustReferenceNumber { get; set; }
         [DocumentText("Recommendation")] public string Recommendation { get; set; }
         [DocumentText("Author")] public string Author { get; set; }
-        [DocumentText("ProjectName")] public string ProjectName { get; set; }
-        [DocumentText("SponsorName")] public string SponsorName { get; set; }
+        [DocumentText("ProjectName")] public string IncomingTrustName { get; set; }
         [DocumentText("AcademyTypeAndRoute")] public string AcademyTypeAndRoute { get; set; }
         [DocumentText("SchoolType")] public string SchoolType { get; set; }
         [DocumentText("SchoolPhase")] public string SchoolPhase { get; set; }

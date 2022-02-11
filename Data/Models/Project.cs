@@ -18,7 +18,6 @@ namespace Data.Models
 
         public string Urn { get; set; }
         public string Reference { get; set; }
-        public string Name { get; set; }
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
         
