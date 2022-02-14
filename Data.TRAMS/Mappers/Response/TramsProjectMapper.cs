@@ -25,7 +25,6 @@ namespace Data.TRAMS.Mappers.Response
                 TransferringAcademies = TransferringAcademies(input),
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
                 OutgoingTrustUkprn = input.OutgoingTrust.Ukprn,
-                Name = input.TransferringAcademies[0]?.IncomingTrust?.GroupName,
                 GeneralInformationAdditionalInformation = input.AcademyPerformanceAdditionalInformation,
                 PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation,
                 LatestOfstedJudgementAdditionalInformation = input.LatestOfstedJudgementAdditionalInformation,

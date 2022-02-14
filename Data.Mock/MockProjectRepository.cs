@@ -14,9 +14,7 @@ namespace Data.Mock
         private readonly ILogger<MockProjectRepository> _logger;
         private readonly List<Project> _projects;
         private const string PopulatedProjectUrn = "0001";
-        private const string PopulatedProjectNumber = "AT-0001-POPULATED";
         private const string EmptyProjectUrn = "0002";
-        private const string EmptyProjectNumber = "AT-0002-EMPTY";
 
         public MockProjectRepository(ILogger<MockProjectRepository> logger)
         {
@@ -30,7 +28,7 @@ namespace Data.Mock
             {
                 Result = _projects.Select(project => new ProjectSearchResult
                 {
-                    Urn = project.Urn, Name = project.Name, OutgoingTrustName = project.OutgoingTrustName,
+                    Urn = project.Urn, OutgoingTrustName = project.OutgoingTrustName,
                     TransferringAcademies = project.TransferringAcademies
                 }).ToList()
             };
@@ -58,11 +56,11 @@ namespace Data.Mock
         {
             var newProjectNumber = _projects.Max(p => int.Parse(p.Urn)) + 1;
             var newProjectUrn = newProjectNumber.ToString().PadLeft(4, '0');
-            var newProjectName = $"AT-{newProjectUrn}";
             var newProject = EmptyProject();
             newProject.Urn = newProjectUrn;
-            newProject.Name = newProjectName;
             newProject.OutgoingTrustUkprn = project.OutgoingTrustUkprn;
+            newProject.TransferringAcademies[0].IncomingTrustName =
+                project.TransferringAcademies[0].IncomingTrustName;
             newProject.TransferringAcademies[0].IncomingTrustUkprn =
                 project.TransferringAcademies[0].IncomingTrustUkprn;
             newProject.TransferringAcademies[0].OutgoingAcademyUkprn =
@@ -82,7 +80,6 @@ namespace Data.Mock
             return new Project
             {
                 Urn = EmptyProjectUrn,
-                Name = EmptyProjectNumber,
                 OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>
@@ -104,7 +101,6 @@ namespace Data.Mock
             return new Project
             {
                 Urn = PopulatedProjectUrn,
-                Name = PopulatedProjectNumber,
                 OutgoingTrustName = "The 1590 Trust",
                 OutgoingTrustUkprn = "10060295",
                 TransferringAcademies = new List<TransferringAcademies>

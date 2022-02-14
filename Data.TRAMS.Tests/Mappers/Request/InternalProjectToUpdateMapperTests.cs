@@ -50,7 +50,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     OtherTypeOfTransfer = "Other type of transfer",
                     WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe
                 },
-                Name = "Project name",
+                
                 Rationale = new TransferRationale
                 {
                     Project = "Project rationale",
@@ -62,7 +62,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 Reference = "SW-MAT-12345678",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
-                    new TransferringAcademies {IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321"}
+                    new TransferringAcademies {IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321", IncomingTrustName = "incoming trust"}
                 },
                 OutgoingTrustName = "Outgoing trust name",
                 OutgoingTrustUkprn = "Outgoing trust Ukprn",
