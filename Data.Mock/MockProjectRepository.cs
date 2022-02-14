@@ -14,9 +14,7 @@ namespace Data.Mock
         private readonly ILogger<MockProjectRepository> _logger;
         private readonly List<Project> _projects;
         private const string PopulatedProjectUrn = "0001";
-        private const string PopulatedProjectReference = "SW-MAT-10000001";
         private const string EmptyProjectUrn = "0002";
-        private const string EmptyProjectReference = "AT-0002-EMPTY";
 
         public MockProjectRepository(ILogger<MockProjectRepository> logger)
         {
@@ -58,7 +56,6 @@ namespace Data.Mock
         {
             var newProjectNumber = _projects.Max(p => int.Parse(p.Urn)) + 1;
             var newProjectUrn = newProjectNumber.ToString().PadLeft(4, '0');
-            var newProjectName = $"AT-{newProjectUrn}";
             var newProject = EmptyProject();
             newProject.Urn = newProjectUrn;
             newProject.OutgoingTrustUkprn = project.OutgoingTrustUkprn;
