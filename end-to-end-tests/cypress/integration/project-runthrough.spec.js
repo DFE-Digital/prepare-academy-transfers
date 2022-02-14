@@ -54,7 +54,7 @@ describe("Creating and editing an academy transfer", function () {
         selectFirstRadio();
         submit();
         cy.clickDataTest("confirm-outgoing-trust")
-        cy.selectRadio(2);
+        cy.selectCheckbox(2);
         submit();
         searchForTrustWithQuery("burnt");
         selectFirstRadio();

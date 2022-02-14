@@ -17,7 +17,7 @@ describe('Tests to check search incoming trust error message', () => {
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
         cy.get('[data-test="confirm-outgoing-trust"]').click();
-        cy.selectRadio(0);
+        cy.selectCheckbox(0);
         cy.get('.govuk-button').click();
         cy.get('#query').clear();
         cy.get('#query').type(trustId);

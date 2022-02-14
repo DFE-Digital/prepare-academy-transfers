@@ -43,15 +43,12 @@
         <form class="govuk-form" asp-action="SubmitOutgoingTrustAcademies" method="get">
             <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
             <div class="govuk-form-group @formClasses">
-                <fieldset class="govuk-fieldset" aria-describedby="add-academies-hint">
+                <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">
-                            Select the transferring academy
+                            Select the transferring academies
                         </h1>
                     </legend>
-                    <div id="add-academies-hint" class="govuk-hint">
-                        Select a single academy.
-                    </div>
 
                     @if (errorExists)
                     {
@@ -60,19 +57,12 @@
                         </span>
                     }
 
-                    <div class="govuk-radios govuk-radios">
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         @foreach (var academy in Model.Academies)
                         {
-                            <div class="govuk-radios__item">
-                                @if ((string) ViewData["OutgoingAcademyUkprn"] == academy.Ukprn)
-                                {
-                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn" checked>
-                                }
-                                else
-                                {
-                                    <input class="govuk-radios__input" id="@academy.Ukprn" name="academyId" type="radio" value="@academy.Ukprn">
-                                }
-                                <label class="govuk-label govuk-radios__label" for="@academy.Ukprn">
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" id="@academy.Ukprn" name="academyIds" type="checkbox" value="@academy.Ukprn">
+                                <label class="govuk-label govuk-checkboxes__label" for="@academy.Ukprn">
                                     @academy.Name
                                 </label>
                             </div>

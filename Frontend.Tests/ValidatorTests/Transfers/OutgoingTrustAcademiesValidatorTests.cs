@@ -15,13 +15,20 @@ namespace Frontend.Tests.ValidatorTests.Transfers
             _validator = new OutgoingTrustAcademiesValidator();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public async void WhenAcademyIdIsEmpty_ShouldSetError(string academyId)
+        [Fact]
+        public async void WhenAcademyIdIsEmpty_ShouldSetError()
         {
-            var result = await _validator.TestValidateAsync(academyId);
+            var academyIds = new string[] {};
+            var result = await _validator.TestValidateAsync(academyIds);
+            result.ShouldHaveValidationErrorFor(x => x)
+                .WithErrorMessage("Select an academy");
+        }
+        
+        [Fact]
+        public async void WhenAcademyIdIsNull_ShouldSetError()
+        {
+            string[] academyIds = null;
+            var result = await _validator.TestValidateAsync(academyIds);
             result.ShouldHaveValidationErrorFor(x => x)
                 .WithErrorMessage("Select an academy");
         }
@@ -29,7 +36,7 @@ namespace Frontend.Tests.ValidatorTests.Transfers
         [Fact]
         public async void WhenAcademyIdIsNotEmpty_ShouldNotSetError()
         {
-            string academyId = "academy id";
+            var academyId = new [] {"academy id"};
             var result = await _validator.TestValidateAsync(academyId);
             result.ShouldNotHaveValidationErrorFor(x => x);
         }

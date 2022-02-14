@@ -2,7 +2,7 @@
 
 namespace Frontend.Validators.Transfers
 {
-    public class OutgoingTrustAcademiesValidator : AbstractValidator<string>
+    public class OutgoingTrustAcademiesValidator : AbstractValidator<string[]>
     {
         public OutgoingTrustAcademiesValidator()
         {
