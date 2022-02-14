@@ -32,7 +32,7 @@ namespace Frontend.Services
             {
                 Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(project.AcademyAndTrustInformation.Recommendation),
                 Author = project.AcademyAndTrustInformation.Author,
-                IncomingTrustName = project.IncomingTrustName,
+                ProjectName = project.IncomingTrustName,
                 AcademyTypeAndRoute = academy.EstablishmentType,
                 SchoolName = academy.Name,
                 SchoolUrn =  academy.Urn,
