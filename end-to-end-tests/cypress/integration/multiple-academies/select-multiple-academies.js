@@ -17,7 +17,7 @@ describe('Select multiple academies', () => {
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
-        cy.get('[data-test="confirm-outgoing-trust"]').click();
+        cy.clickDataTest('confirm-outgoing-trust');
         cy.selectCheckbox(0);
         cy.selectCheckbox(1);
         cy.get('.govuk-button').click();
