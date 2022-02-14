@@ -19,7 +19,6 @@ namespace Frontend.Tests.TestFixtures
                     Author = "author",
                     Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve
                 },
-                Name = "test name",
                 OutgoingTrustName = "trust name",
                 OutgoingTrustUkprn = "trust ref number",
                 Rationale = new TransferRationale {Project = "project", Trust = "trust"},

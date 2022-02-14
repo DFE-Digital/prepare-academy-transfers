@@ -61,23 +61,7 @@
             Project name
         </dt>
         <dd class="govuk-summary-list__value ">
-            <displaynodataforemptystring value="@Model.Project.Name"></displaynodataforemptystring>
-        </dd>
-        <dd class="govuk-summary-list__value "/>
-    </div>
-    <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Proposed incoming transfer name
-        </dt>
-        <dd class="govuk-summary-list__value ">
-            @if (string.IsNullOrEmpty(Model.Project.Name))
-            {
-                <span>No data</span>
-            }
-            else
-            {
-                <span class="dfe-text-area-display">@Model.Project.IncomingTrustName.ToTitleCase()</span>
-            }
+            <displaynodataforemptystring value="@Model.Project.IncomingTrustName"></displaynodataforemptystring>
         </dd>
         <dd class="govuk-summary-list__value "/>
     </div>
