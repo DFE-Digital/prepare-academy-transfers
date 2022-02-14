@@ -1,8 +1,10 @@
 name: End to end tests
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: [ "Test, build, and deploy" ]
+    types:
+      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -10,6 +12,7 @@ env:
 
 jobs:
   run_tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       packages: read
@@ -23,21 +26,21 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
-      
+
       - name: setup node.js
         uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      
+
       - name: Npm install
         run: npm install
       
-#      - name: Verify logs
-#        run: docker logs "${{ job.services.web-app.id }}"
+      #      - name: Verify logs
+      #        run: docker logs "${{ job.services.web-app.id }}"
 
       - name: Run tests
         run: npm run cypress:run -- --record --key ${{ secrets.CYPRESS_KEY }} --env username='${{ secrets.USERNAME }}',password='${{ secrets.PASSWORD }}',url='${{ secrets.ENDPOINT }}'
-  
+
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
