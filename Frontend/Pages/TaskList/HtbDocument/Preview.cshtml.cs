@@ -29,8 +29,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public EducationPerformance EducationPerformance { get; set; }
         public Academy Academy { get; set; }
         public string KeyStage2AdditionalInformation { get; set; }
-        public string KeyStage4AdditionalInformation { get; set; }
-        public string KeyStage5AdditionalInformation { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject, IProjects projects)
         {
@@ -48,8 +46,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             // todo: refactor required (create viewmodel/viewcomponent)
             KeyStage2AdditionalInformation = response.Project.KeyStage2PerformanceAdditionalInformation;
-            KeyStage4AdditionalInformation = response.Project.KeyStage4PerformanceAdditionalInformation;
-            KeyStage5AdditionalInformation = response.Project.KeyStage5PerformanceAdditionalInformation;
 
             FeaturesSummaryViewModel = new Index(null)
             {
