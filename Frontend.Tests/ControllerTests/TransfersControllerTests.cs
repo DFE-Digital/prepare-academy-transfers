@@ -109,7 +109,7 @@ namespace Frontend.Tests.ControllerTests
                     .ReturnsAsync(
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>()});
                 var response = await _subject.TrustSearch("Meow");
-
+        
                 var redirectResponse = AssertRedirectToAction(response, "TrustName");
                 Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
                 Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
