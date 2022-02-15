@@ -425,7 +425,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenErrorMessageExists_SetErrorInViewData()
             {
                 _subject.TempData["ErrorMessage"] = "This is an error message";
-                await _subject.IncomingTrust();
+                _subject.IncomingTrust();
 
                 Assert.Equal(true, _subject.ViewData["Error.Exists"]);
                 Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
@@ -434,7 +434,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenExistingQuery_SetQueryInViewData()
             {
-                await _subject.IncomingTrust("Meow");
+                _subject.IncomingTrust("Meow");
 
                 Assert.Equal("Meow", _subject.ViewData["Query"]);
             }
@@ -442,7 +442,7 @@ namespace Frontend.Tests.ControllerTests
             [Fact]
             public async void GivenChangeLink_SetChangeLinkinViewData()
             {
-                await _subject.IncomingTrust("Meow", true);
+                _subject.IncomingTrust("Meow", true);
 
                 Assert.Equal(true, _subject.ViewData["ChangeLink"]);
             }
