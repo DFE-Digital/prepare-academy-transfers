@@ -12,7 +12,7 @@ namespace Frontend.Helpers.TagHelpers
     {
         private readonly LinkGenerator _linkGenerator;
         public bool ReturnToPreview { get; set; }
-        public string Id { get; set; }
+        public string Urn { get; set; }
 
         public BackToPreviewPageTagHelper(LinkGenerator linkGenerator)
         {
@@ -26,7 +26,7 @@ namespace Frontend.Helpers.TagHelpers
                 output.TagName = "a";
                 output.AddClass("govuk-back-link", HtmlEncoder.Default);
                 output.Attributes.Add("href",
-                    _linkGenerator.GetPathByPage(Links.HeadteacherBoard.Preview.PageName, null, new {id = Id}));
+                    _linkGenerator.GetPathByPage(Links.HeadteacherBoard.Preview.PageName, null, new {Urn}));
                 output.Content.SetContent(Links.HeadteacherBoard.Preview.BackText);
             }
             else

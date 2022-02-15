@@ -19,7 +19,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             var projectStatusTagHelper = new BackToPreviewPageTagHelper(linkGenerator.Object)
             {
                 ReturnToPreview = true,
-                Id = "1000"
+                Urn = "1000"
             };
             
             var tagHelperContext = new TagHelperContext(
@@ -49,7 +49,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             var projectStatusTagHelper = new BackToPreviewPageTagHelper(linkGenerator.Object)
             {
                 ReturnToPreview = false,
-                Id = "1000"
+                Urn = "1000"
             };
             
             var tagHelperContext = new TagHelperContext(
