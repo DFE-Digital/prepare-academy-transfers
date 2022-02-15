@@ -14,7 +14,7 @@
 
 @section BeforeMain
 {
-    <backtopreview id="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
         <a class="govuk-back-link" asp-page="/Projects/Benefits/Index" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }

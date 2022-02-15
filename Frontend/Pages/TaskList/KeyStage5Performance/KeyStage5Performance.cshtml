@@ -10,7 +10,7 @@
 
 @section BeforeMain
 {
-    <backtopreview return-to-preview="@Model.ReturnToPreview" id="@Model.Urn">
+    <backtopreview return-to-preview="@Model.ReturnToPreview" urn="@Model.Urn">
           <a class="govuk-back-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
     </backtopreview>
 }
