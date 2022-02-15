@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Data.Models;
+using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
@@ -12,13 +14,10 @@ using LatestOfstedJudgementIndex = Frontend.Pages.Projects.LatestOfstedJudgement
 
 namespace Frontend.Pages.TaskList.HtbDocument
 {
-    public class Preview : ProjectPageModel
+    public class Preview : CommonPageModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projects;
-        public string ProjectUrn => Project.Urn;
-        public string ProjectReference  => Project.Reference;
-
         public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
         public Projects.TransferDates.Index TransferDatesSummaryViewModel { get; set; }
@@ -27,39 +26,50 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public Projects.GeneralInformation.Index GeneralInformationViewModel { get; set; }
         public LatestOfstedJudgementIndex LatestOfstedJudgementViewModel { get; private set; }
         public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
-        
+        public EducationPerformance EducationPerformance { get; set; }
+        public Academy Academy { get; set; }
+        public string KeyStage2AdditionalInformation { get; set; }
+        public string KeyStage4AdditionalInformation { get; set; }
+        public string KeyStage5AdditionalInformation { get; set; }
+
         public Preview(IGetInformationForProject getInformationForProject, IProjects projects)
         {
             _getInformationForProject = getInformationForProject;
             _projects = projects;
         }
 
-        public async Task<IActionResult> OnGet(string id)
+        public async Task<IActionResult> OnGet()
         {
-            var response = await _getInformationForProject.Execute(id);
-            Project = response.Project;
-            TransferringAcademy = response.OutgoingAcademy;
+            var response = await _getInformationForProject.Execute(Urn);
+            
+            var project = response.Project;
+            Academy = response.OutgoingAcademy;
             EducationPerformance = response.EducationPerformance;
+
+            // todo: refactor required (create viewmodel/viewcomponent)
+            KeyStage2AdditionalInformation = response.Project.KeyStage2PerformanceAdditionalInformation;
+            KeyStage4AdditionalInformation = response.Project.KeyStage4PerformanceAdditionalInformation;
+            KeyStage5AdditionalInformation = response.Project.KeyStage5PerformanceAdditionalInformation;
 
             FeaturesSummaryViewModel = new Index(null)
             {
-                Urn = Project.Urn,
-                IsSubjectToRddOrEsfaIntervention = Project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
-                TypeOfTransfer = Project.Features.TypeOfTransfer,
-                OtherTypeOfTransfer = Project.Features.OtherTypeOfTransfer,
-                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                WhoInitiatedTheTransfer = Project.Features.WhoInitiatedTheTransfer,
-                InterventionDetails = Project.Features.ReasonForTransfer.InterventionDetails,
+                Urn = project.Urn,
+                IsSubjectToRddOrEsfaIntervention = project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
+                TypeOfTransfer = project.Features.TypeOfTransfer,
+                OtherTypeOfTransfer = project.Features.OtherTypeOfTransfer,
+                OutgoingAcademyUrn = project.OutgoingAcademyUrn,
+                WhoInitiatedTheTransfer = project.Features.WhoInitiatedTheTransfer,
+                InterventionDetails = project.Features.ReasonForTransfer.InterventionDetails,
                 ReturnToPreview = true
             };
 
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
-                Project.Benefits.IntendedBenefits.ToList(),
-                Project.Benefits.OtherIntendedBenefit,
-                Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(Project.Benefits.OtherFactors).Where(o => o.Checked)
+                project.Benefits.IntendedBenefits.ToList(),
+                project.Benefits.OtherIntendedBenefit,
+                Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(project.Benefits.OtherFactors).Where(o => o.Checked)
                     .ToList(),
-                Project.Urn,
-                Project.OutgoingAcademyUrn
+                project.Urn,
+                project.OutgoingAcademyUrn
             )
             {
                 ReturnToPreview = true
@@ -67,34 +77,32 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             TransferDatesSummaryViewModel = new Pages.Projects.TransferDates.Index(_projects)
             {
-                Urn = Project.Urn,
+                Urn = project.Urn,
                 ReturnToPreview = true,
-                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                FirstDiscussedDate = Project.Dates.FirstDiscussed,
-                HasFirstDiscussedDate = Project.Dates.HasFirstDiscussedDate,
-                AdvisoryBoardDate = Project.Dates.Htb,
-                HasAdvisoryBoardDate = Project.Dates.HasHtbDate,
-                TargetDate = Project.Dates.Target,
-                HasTargetDate = Project.Dates.HasTargetDateForTransfer
+                OutgoingAcademyUrn = project.OutgoingAcademyUrn,
+                FirstDiscussedDate = project.Dates.FirstDiscussed,
+                HasFirstDiscussedDate = project.Dates.HasFirstDiscussedDate,
+                AdvisoryBoardDate = project.Dates.Htb,
+                HasAdvisoryBoardDate = project.Dates.HasHtbDate,
+                TargetDate = project.Dates.Target,
+                HasTargetDate = project.Dates.HasTargetDateForTransfer
             };
             
             AcademyAndTrustInformationSummaryViewModel =
                 new Pages.Projects.AcademyAndTrustInformation.Index(_getInformationForProject)
                 {
-                    
-                    OutgoingAcademyName = Project.OutgoingAcademyName,
-                    Recommendation = Project.AcademyAndTrustInformation.Recommendation,
-                    Author = Project.AcademyAndTrustInformation.Author,
-                    AdvisoryBoardDate = Project.Dates?.Htb,
-                    IncomingTrustName = Project.IncomingTrustName,
-                    TargetDate = Project.Dates?.Target,
-                    FirstDiscussedDate = Project.Dates?.FirstDiscussed,
-                    OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                    Urn = Project.Urn,
+                    Recommendation = project.AcademyAndTrustInformation.Recommendation,
+                    Author = project.AcademyAndTrustInformation.Author,
+                    AdvisoryBoardDate = project.Dates?.Htb,
+                    IncomingTrustName = project.IncomingTrustName,
+                    TargetDate = project.Dates?.Target,
+                    FirstDiscussedDate = project.Dates?.FirstDiscussed,
+                    OutgoingAcademyUrn = project.OutgoingAcademyUrn,
+                    Urn = project.Urn,
                     ReturnToPreview = true
                 };
 
-            var generalInformation = TransferringAcademy.GeneralInformation;
+            var generalInformation = Academy.GeneralInformation;
             GeneralInformationViewModel = new Pages.Projects.GeneralInformation.Index(_getInformationForProject)
             {
                 SchoolPhase = generalInformation.SchoolPhase,
@@ -114,11 +122,10 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             RationaleSummaryViewModel = new Pages.Projects.Rationale.Index(_getInformationForProject)
             {
-                OutgoingAcademyName = Project.OutgoingAcademyName,
-                ProjectRationale = Project.Rationale.Project,
-                TrustRationale = Project.Rationale.Trust,
-                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
-                Urn = Project.Urn,
+                ProjectRationale = project.Rationale.Project,
+                TrustRationale = project.Rationale.Trust,
+                OutgoingAcademyUrn = project.OutgoingAcademyUrn,
+                Urn = project.Urn,
                 ReturnToPreview = true
             };
 
@@ -147,19 +154,19 @@ namespace Frontend.Pages.TaskList.HtbDocument
 
             LatestOfstedJudgementViewModel = new LatestOfstedJudgementIndex(_getInformationForProject, _projects)
             {
-                Urn = Project.Urn,
-                OutgoingAcademyUrn = Project.OutgoingAcademyUrn,
+                Urn = project.Urn,
+                OutgoingAcademyUrn = project.OutgoingAcademyUrn,
                 AcademyUkprn = response.OutgoingAcademy.Ukprn,
-                SchoolName = TransferringAcademy.LatestOfstedJudgement.SchoolName,
-                InspectionDate = TransferringAcademy.LatestOfstedJudgement.InspectionDate,
-                OverallEffectiveness = TransferringAcademy.LatestOfstedJudgement.OverallEffectiveness,
-                OfstedReport = TransferringAcademy.LatestOfstedJudgement.OfstedReport,
+                SchoolName = Academy.LatestOfstedJudgement.SchoolName,
+                InspectionDate = Academy.LatestOfstedJudgement.InspectionDate,
+                OverallEffectiveness = Academy.LatestOfstedJudgement.OverallEffectiveness,
+                OfstedReport = Academy.LatestOfstedJudgement.OfstedReport,
                 AdditionalInformationViewModel = new AdditionalInformationViewModel
                 {
-                    AdditionalInformation = Project.LatestOfstedJudgementAdditionalInformation,
+                    AdditionalInformation = project.LatestOfstedJudgementAdditionalInformation,
                     HintText =
                         "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
-                    Urn = Project.Urn,
+                    Urn = project.Urn,
                     ReturnToPreview = true
                 },
                 IsPreview = true

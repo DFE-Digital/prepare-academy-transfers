@@ -49,4 +49,7 @@
     <_ContentIncludedByDefault Remove="Views\Home\Login.cshtml" />
     <_ContentIncludedByDefault Remove="Views\PupilNumbers\Index.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\EducationPerformance" />
+  </ItemGroup>
 </Project>

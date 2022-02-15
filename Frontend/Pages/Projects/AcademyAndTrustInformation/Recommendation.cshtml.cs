@@ -48,7 +48,7 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
             var projectResult = project.Result;
 
             Urn = projectResult.Urn;
-            OutgoingAcademyName = projectResult.OutgoingAcademyName;
+            IncomingTrustName = projectResult.IncomingTrustName;
             ReturnToPreview = returnToPreview;
             Author = projectResult.AcademyAndTrustInformation.Author;
             RecommendationResult = projectResult.AcademyAndTrustInformation.Recommendation;

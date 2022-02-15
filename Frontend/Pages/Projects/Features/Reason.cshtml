@@ -19,7 +19,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-l">
-            @Model.OutgoingAcademyName
+            @Model.IncomingTrustName
         </span>
         <h1 class="govuk-heading-l">
             Reason for transfer
@@ -27,7 +27,7 @@
         <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">

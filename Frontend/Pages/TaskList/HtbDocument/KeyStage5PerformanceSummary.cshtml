@@ -1,8 +1,8 @@
 @using Data.Models
 @using Data.Models.KeyStagePerformance
-@model ProjectPageModel
+@model Tuple<EducationPerformance, Academy, string, string>
 
-<partial name="TaskList/KeyStage5Performance/KeyStage5PerformanceTables"model="@(new Tuple<EducationPerformance, Academy>(Model.EducationPerformance, Model.TransferringAcademy))"/>
+<partial name="TaskList/KeyStage5Performance/KeyStage5PerformanceTables" model="@(new Tuple<EducationPerformance, Academy>(Model.Item1, Model.Item2))"/>
 
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
@@ -10,12 +10,12 @@
             Additional information
         </dt>
         <dd class="govuk-summary-list__value">
-            <stringsummary value="@Model.Project.KeyStage5PerformanceAdditionalInformation"></stringsummary>
+            <stringsummary value="@Model.Item3"></stringsummary>
         </dd>
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
-               asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-urn="@Model.Project.Urn"
-               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true"  asp-route-academyukprn="@Model.TransferringAcademy.Ukprn">
+               asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-urn="@Model.Item4"
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true"  asp-route-academyukprn="@Model.Item2.Ukprn">
                 Change<span class="govuk-visually-hidden"> Key Stage 5 Performance additional information</span>
             </a>
         </dd>

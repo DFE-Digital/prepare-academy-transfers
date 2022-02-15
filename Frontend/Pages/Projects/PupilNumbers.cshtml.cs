@@ -15,6 +15,7 @@ namespace Frontend.Pages.Projects
         public string WithStatementOfSEN { get; set; }
         public string WithEAL { get; set; }
         public string FreeSchoolMealsLast6Years { get; set; }
+        public string AcademyName { get; set; }
         
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
@@ -45,7 +46,7 @@ namespace Frontend.Pages.Projects
             FreeSchoolMealsLast6Years = projectInformation.OutgoingAcademy.PupilNumbers
                 .PercentageEligibleForFreeSchoolMealsDuringLast6Years;
             OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
-            OutgoingAcademyName = projectInformation.OutgoingAcademy.Name;
+            AcademyName = projectInformation.OutgoingAcademy.Name;
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
                 AdditionalInformation = projectInformation.Project.PupilNumbersAdditionalInformation,

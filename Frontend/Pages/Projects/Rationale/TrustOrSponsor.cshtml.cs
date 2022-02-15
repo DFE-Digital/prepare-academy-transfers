@@ -24,7 +24,7 @@ namespace Frontend.Pages.Projects.Rationale
 
             var projectResult = project.Result;
 
-            OutgoingAcademyName = projectResult.OutgoingAcademyName;
+            IncomingTrustName = projectResult.IncomingTrustName;
             ViewModel = new RationaleTrustOrSponsorViewModel
             {
                 TrustOrSponsorRationale = projectResult.Rationale.Trust

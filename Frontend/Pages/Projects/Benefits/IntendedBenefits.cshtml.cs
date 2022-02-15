@@ -29,8 +29,8 @@ namespace Frontend.Pages.Projects.Benefits
             var project = await _projects.GetByUrn(Urn);
             
             var projectResult = project.Result;
-            
-            OutgoingAcademyName = projectResult.OutgoingAcademyName;
+
+            IncomingTrustName = projectResult.IncomingTrustName;
             IntendedBenefitsViewModel.SelectedIntendedBenefits = projectResult.Benefits.IntendedBenefits;
             IntendedBenefitsViewModel.OtherBenefit = projectResult.Benefits.IntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)
                     ? projectResult.Benefits.OtherIntendedBenefit

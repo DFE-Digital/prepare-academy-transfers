@@ -36,7 +36,7 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
             var projectInformation = await _getInformationForProject.Execute(Urn);
             
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
-            OutgoingAcademyName = projectInformation.Project.OutgoingAcademyName;
+            ProjectReference = projectInformation.Project.Reference;
             SchoolName = projectInformation.OutgoingAcademy.LatestOfstedJudgement.SchoolName;
             InspectionDate = projectInformation.OutgoingAcademy.LatestOfstedJudgement.InspectionDate;
             OverallEffectiveness = projectInformation.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness;
