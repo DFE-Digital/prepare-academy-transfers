@@ -157,7 +157,7 @@ namespace Frontend.Controllers
             return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust");
         }
 
-        public async Task<IActionResult> IncomingTrust(string query = "", bool change = false)
+        public IActionResult IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;
             ViewData["Query"] = query;

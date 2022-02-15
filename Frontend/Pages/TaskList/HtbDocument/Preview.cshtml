@@ -1,5 +1,7 @@
-@page "/project/{id}/advisory-board/preview"
+@page "/project/{urn}/advisory-board/preview"
 @using Frontend.Helpers
+@using Data.Models
+@using Data.Models.KeyStagePerformance
 @model Frontend.Pages.TaskList.HtbDocument.Preview
 
 @{
@@ -9,7 +11,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.ProjectUrn">Back to task list</a>
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
 }
 
 <div class="govuk-grid-row">
@@ -132,40 +134,40 @@
                     </h2>
                 </header>
                 <div class="app-summary-card__body">
-                    <partial name="KeyStage2PerformanceSummary" model="Model"></partial>
+                    <partial name="KeyStage2PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(Model.EducationPerformance, Model.Academy, Model.KeyStage2AdditionalInformation, Model.Urn))"></partial>
                 </div>
             </section>
         }
 
-        @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance))
-        {
-            <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
-            <section class="app-summary-card govuk-!-margin-bottom-7">
-                <header class="app-summary-card__header">
-                    <h2 class="app-summary-card__title">
-                        Key stage 4 performance tables details
-                    </h2>
-                </header>
-                <div class="app-summary-card__body">
-                    <partial name="KeyStage4PerformanceSummary" model="Model"></partial>
-                </div>
-            </section>
-        }
-
-        @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(Model.EducationPerformance.KeyStage5Performance))
-        {
-            <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
-            <section class="app-summary-card govuk-!-margin-bottom-7">
-                <header class="app-summary-card__header">
-                    <h2 class="app-summary-card__title">
-                        Key stage 5 performance tables details
-                    </h2>
-                </header>
-                <div class="app-summary-card__body">
-                    <partial name="KeyStage5PerformanceSummary" model="Model"></partial>
-                </div>
-            </section>
-        }
+        @* @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance)) *@
+        @* { *@
+        @*     <h2 class="govuk-heading-s">Key stage 4 performance tables</h2> *@
+        @*     <section class="app-summary-card govuk-!-margin-bottom-7"> *@
+        @*         <header class="app-summary-card__header"> *@
+        @*             <h2 class="app-summary-card__title"> *@
+        @*                 Key stage 4 performance tables details *@
+        @*             </h2> *@
+        @*         </header> *@
+        @*         <div class="app-summary-card__body"> *@
+        @*             <partial name="KeyStage4PerformanceSummary" model="Model.EducationPerformance"></partial> *@
+        @*         </div> *@
+        @*     </section> *@
+        @* } *@
+        @* *@
+        @* @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(Model.EducationPerformance.KeyStage5Performance)) *@
+        @* { *@
+        @*     <h2 class="govuk-heading-s">Key stage 5 performance tables</h2> *@
+        @*     <section class="app-summary-card govuk-!-margin-bottom-7"> *@
+        @*         <header class="app-summary-card__header"> *@
+        @*             <h2 class="app-summary-card__title"> *@
+        @*                 Key stage 5 performance tables details *@
+        @*             </h2> *@
+        @*         </header> *@
+        @*         <div class="app-summary-card__body"> *@
+        @*             <partial name="KeyStage5PerformanceSummary" model="Model.EducationPerformance"></partial> *@
+        @*         </div> *@
+        @*     </section> *@
+        @* } *@
     </div>
 </div>
 
@@ -178,7 +180,7 @@
             Generate the project template into a Word document and download it.
         </p>
         <div class="govuk-button-group">
-            <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Project.Urn" method="get">
+            <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
                 <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
             </form>
             <p class="govuk-body">

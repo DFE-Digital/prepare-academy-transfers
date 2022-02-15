@@ -88,7 +88,7 @@
             Download the template as a Word document or preview its contents.
         </p>
         <div class="govuk-button-group">
-            <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-id="@Model.Urn" method="get">
+            <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-urn="@Model.Urn" method="get">
                 <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
             </form>
             <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">

@@ -29,7 +29,7 @@ namespace Frontend.Pages.Projects.Benefits
             var project = await _projects.GetByUrn(Urn);
             
             var projectResult = project.Result;
-            OutgoingAcademyName = projectResult.OutgoingAcademyName;
+            IncomingTrustName = projectResult.IncomingTrustName;
             OtherFactorsViewModel.OtherFactorsVm  = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
                 
             return Page();

@@ -19,6 +19,7 @@ namespace Frontend.Pages.TaskList
         public bool HasKeyStage2PerformanceInformation { get; set; }
         public bool HasKeyStage4PerformanceInformation { get; set; }
         public bool HasKeyStage5PerformanceInformation { get; set; }
+        public string AcademyName { get; set; }
         
         
         public SchoolData(IAcademies academies, IProjects projects, IEducationPerformance projectRepositoryEducationPerformance)
@@ -32,7 +33,7 @@ namespace Frontend.Pages.TaskList
         {
             var project = await _projects.GetByUrn(Urn); 
             var academy = await _academies.GetAcademyByUkprn(AcademyUkprn);
-            OutgoingAcademyName = academy.Result.Name;
+            AcademyName = academy.Result.Name;
             ProjectReference = project.Result.Reference;
             var educationPerformance =
                 _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;

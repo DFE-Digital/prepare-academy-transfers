@@ -26,7 +26,7 @@ namespace Frontend.Pages.Projects.Features
             var project = await _projects.GetByUrn(Urn);
             
             var projectResult = project.Result;
-            OutgoingAcademyName = projectResult.OutgoingAcademyName;
+            IncomingTrustName = projectResult.IncomingTrustName;
             FeaturesReasonViewModel.IsSubjectToIntervention =
                 projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention;
             FeaturesReasonViewModel.MoreDetail = projectResult.Features.ReasonForTransfer.InterventionDetails;

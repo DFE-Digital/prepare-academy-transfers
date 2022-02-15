@@ -9,10 +9,6 @@ namespace Frontend.Models
         public string Urn { get; set; }
         [BindProperty(SupportsGet = true)]
         public bool ReturnToPreview { get; set; }
-        
-        //todo: remove from common page model - replaced with Incoming Trust name
-        [BindProperty]
-        public string OutgoingAcademyName { get; set; }
         public string OutgoingAcademyUrn { get; set; }
         [BindProperty]
         public string ProjectReference { get; set; }

@@ -21,11 +21,11 @@
         <form method="post" novalidate="">
             <input type="hidden" asp-for="@Model.Urn"/>
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
-            <input type="hidden" asp-for="@Model.OutgoingAcademyName"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
             <div class="govuk-form-group @formClasses">
                 <label class="govuk-label govuk-!-font-weight-bold" asp-for="ViewModel.TrustOrSponsorRationale">
                     <span class="govuk-caption-l">
-                        @Model.OutgoingAcademyName
+                        @Model.IncomingTrustName
                     </span>
                     <h1 class="govuk-heading-l">
                         Write the rationale for the incoming trust or sponsor
