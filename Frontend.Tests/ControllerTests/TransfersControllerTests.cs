@@ -422,7 +422,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenErrorMessageExists_SetErrorInViewData()
+            public void GivenErrorMessageExists_SetErrorInViewData()
             {
                 _subject.TempData["ErrorMessage"] = "This is an error message";
                 _subject.IncomingTrust();
@@ -432,7 +432,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenExistingQuery_SetQueryInViewData()
+            public void GivenExistingQuery_SetQueryInViewData()
             {
                 _subject.IncomingTrust("Meow");
 
@@ -440,7 +440,7 @@ namespace Frontend.Tests.ControllerTests
             }
 
             [Fact]
-            public async void GivenChangeLink_SetChangeLinkinViewData()
+            public void GivenChangeLink_SetChangeLinkinViewData()
             {
                 _subject.IncomingTrust("Meow", true);
 

@@ -39,13 +39,8 @@ namespace Frontend.Helpers.TagHelpers
             var dd = new TagBuilder("dd");
             dd.AddCssClass("dfe-summary-list__value--width-50");
             dd.AddCssClass("govuk-summary-list__value");
-            var noDataTagHelper = new DisplayNoDataForEmptyStringTagHelper
-            {
-                Value = Value
-            };
-            var renderedNoDataTagHelper = Common.RenderTagHelper(noDataTagHelper, "span", new TagHelperAttributeList(), _htmlEncoder);
-
-            dd.InnerHtml.SetHtmlContent(WebUtility.HtmlDecode(renderedNoDataTagHelper));
+            
+            dd.InnerHtml.SetHtmlContent(string.IsNullOrWhiteSpace(Value)?"No data" : Value);
             
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());

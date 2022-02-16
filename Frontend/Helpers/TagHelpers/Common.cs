@@ -9,14 +9,13 @@ namespace Frontend.Helpers.TagHelpers
 {
     public static class Common
     {
-        public static string RenderTagHelper(TagHelper tagHelper, string tagName,
-            TagHelperAttributeList tagHelperAttributeList, HtmlEncoder htmlEncoder)
+        public static async Task<string> RenderTagHelper(TagHelper tagHelper, string tagName,
+            TagHelperAttributeList tagHelperAttributeList, HtmlEncoder htmlEncoder, Func<bool,HtmlEncoder,Task<TagHelperContent>> getChildContent)
         {
             TagHelperOutput innerOutput = new TagHelperOutput(
                 tagName,
                 tagHelperAttributeList,
-                (useCachedResult, encoder) =>
-                    Task.Run<TagHelperContent>(() => new DefaultTagHelperContent())
+                getChildContent
             )
             {
                 TagMode = TagMode.StartTagAndEndTag
@@ -28,7 +27,7 @@ namespace Frontend.Helpers.TagHelpers
                 Guid.NewGuid().ToString()
             );
             
-            tagHelper.Process(innerContext, innerOutput);
+            await tagHelper.ProcessAsync(innerContext, innerOutput);
             
             using var writer = new StringWriter();
             innerOutput.WriteTo(writer, htmlEncoder);
