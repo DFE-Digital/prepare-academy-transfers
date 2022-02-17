@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Frontend.Helpers.TagHelpers
@@ -5,22 +6,16 @@ namespace Frontend.Helpers.TagHelpers
     [HtmlTargetElement("displaynodataforemptystring")]
     public class DisplayNoDataForEmptyStringTagHelper : TagHelper
     {
-        public string Value { get; set; }
-
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "span";
-            if (!string.IsNullOrEmpty(Value))
+            output.TagName = null;
+            var childContent = await output.GetChildContentAsync();
+            if (string.IsNullOrWhiteSpace(childContent?.GetContent()))
             {
-                output.Content.SetContent(Value);
-            }
-            else
-            {
-                output.TagName = "span";
                 output.Content.SetContent("No data");
             }
 
-            base.Process(context, output);
+            await base.ProcessAsync(context, output);
         }
     }
 }

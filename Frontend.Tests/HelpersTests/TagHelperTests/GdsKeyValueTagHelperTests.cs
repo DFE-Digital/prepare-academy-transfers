@@ -43,7 +43,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             tagHelper.Process(_tagHelperContext, _tagHelperOutput);
             
             var expectedContent =
-                "<dt class=\"govuk-summary-list__key\">My Key</dt><dd class=\"govuk-summary-list__value dfe-summary-list__value--width-50\"><span>My Value</span></dd>";
+                "<dt class=\"govuk-summary-list__key\">My Key</dt><dd class=\"govuk-summary-list__value dfe-summary-list__value--width-50\">My Value</dd>";
             
             Assert.Equal("div", _tagHelperOutput.TagName);
             Assert.Equal("govuk-summary-list__row", _tagHelperOutput.Attributes["class"].Value);
@@ -62,7 +62,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             tagHelper.Process(_tagHelperContext, _tagHelperOutput);
             
             var expectedContent =
-                "<dt class=\"govuk-summary-list__key\">My Key</dt><dd class=\"govuk-summary-list__value dfe-summary-list__value--width-50\"><span><a>test</a></span></dd>";
+                "<dt class=\"govuk-summary-list__key\">My Key</dt><dd class=\"govuk-summary-list__value dfe-summary-list__value--width-50\"><a>test</a></dd>";
             
             Assert.Equal("div", _tagHelperOutput.TagName);
             Assert.Equal("govuk-summary-list__row", _tagHelperOutput.Attributes["class"].Value);

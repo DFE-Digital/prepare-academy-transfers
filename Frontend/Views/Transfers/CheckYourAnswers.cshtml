@@ -50,27 +50,37 @@
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Local Authority</dt>
-                    <dd class="govuk-summary-list__value">@academy.LocalAuthorityName</dd>
+                    <dd class="govuk-summary-list__value">
+                        <displaynodataforemptystring>@academy.LocalAuthorityName</displaynodataforemptystring>
+                    </dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">School type</dt>
-                    <dd class="govuk-summary-list__value">@academy.EstablishmentType</dd>
+                    <dd class="govuk-summary-list__value">
+                        <displaynodataforemptystring>@academy.EstablishmentType</displaynodataforemptystring>
+                    </dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Faith School</dt>
-                    <dd class="govuk-summary-list__value">@academy.FaithSchool</dd>
+                    <dd class="govuk-summary-list__value">
+                        <displaynodataforemptystring>@academy.FaithSchool</displaynodataforemptystring>
+                    </dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Ofsted Rating</dt>
-                    <dd class="govuk-summary-list__value">@academy.LatestOfstedJudgement.OverallEffectiveness</dd>
+                    <dd class="govuk-summary-list__value">
+                        <displaynodataforemptystring>@academy.LatestOfstedJudgement.OverallEffectiveness</displaynodataforemptystring>
+                    </dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">
                     <dt class="govuk-summary-list__key">Last inspection</dt>
-                    <dd class="govuk-summary-list__value">@DatesHelper.DateStringToGovUkDate(@academy.LatestOfstedJudgement.InspectionDate)</dd>
+                    <dd class="govuk-summary-list__value">
+                        <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate)</displaynodataforemptystring>
+                    </dd>
                     <dd class="govuk-summary-list__actions"></dd>
                 </div>
                 <div class="govuk-summary-list__row">

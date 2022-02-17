@@ -16,16 +16,16 @@ namespace Frontend.Helpers.TagHelpers
     {
         public string Key { get; set; }
         public string Value { get; set; }
-        
+
         public bool ShowAction { get; set; }
-        
+
         private readonly HtmlEncoder _htmlEncoder;
 
         public GdsKeyValueTagHelper(HtmlEncoder htmlEncoder)
         {
             _htmlEncoder = htmlEncoder;
         }
-        
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -35,22 +35,17 @@ namespace Frontend.Helpers.TagHelpers
             var dt = new TagBuilder("dt");
             dt.AddCssClass("govuk-summary-list__key");
             dt.InnerHtml.SetContent(Key);
-            
+
             var dd = new TagBuilder("dd");
             dd.AddCssClass("dfe-summary-list__value--width-50");
             dd.AddCssClass("govuk-summary-list__value");
-            var noDataTagHelper = new DisplayNoDataForEmptyStringTagHelper
-            {
-                Value = Value
-            };
-            var renderedNoDataTagHelper = Common.RenderTagHelper(noDataTagHelper, "span", new TagHelperAttributeList(), _htmlEncoder);
 
-            dd.InnerHtml.SetHtmlContent(WebUtility.HtmlDecode(renderedNoDataTagHelper));
-            
+            dd.InnerHtml.SetHtmlContent(string.IsNullOrWhiteSpace(Value) ? "No data" : Value);
+
             output.Content.AppendHtml(dt.RenderStartTag());
             output.Content.AppendHtml(dt.RenderBody());
             output.Content.AppendHtml(dt.RenderEndTag());
-            
+
             output.Content.AppendHtml(dd.RenderStartTag());
             output.Content.AppendHtml(dd.RenderBody());
             output.Content.AppendHtml(dd.RenderEndTag());
