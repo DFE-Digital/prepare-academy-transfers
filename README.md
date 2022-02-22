@@ -18,10 +18,10 @@ To get the Frontend project running you will require:
 - .NET
     - `dotnet restore`
 - Node
-    - `make build-frontend` OR 
-    - `cd` to `Frontend/wwwroot`
-    - run `npm install`
-    - run `npm run build`
+    - `make build-frontend` or 
+      - `cd` to `Frontend/wwwroot`
+      - run `npm install`
+      - run `npm run build`
 2. **Ensure Redis is running**
 3. **Set user secrets**
    - `dotnet user-secrets set "Key" "Value" --project Frontend`
