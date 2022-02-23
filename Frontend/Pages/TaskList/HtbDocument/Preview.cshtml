@@ -17,7 +17,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-             Project reference: @Model.ProjectReference
+            Project reference: @Model.ProjectReference
         </span>
         <h1 class="govuk-heading-xl">
             Preview project template
@@ -27,12 +27,18 @@
 </div>
 
 <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
+        <h2 class="govuk-heading-l">
+            Transfer details
+        </h2>
+    </div>
+</div>
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-s">Features of the transfer</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
                 <h2 class="app-summary-card__title">
-                    Features of the transfer details
+                    Features of the transfer
                 </h2>
             </header>
             <div class="app-summary-card__body">
@@ -40,11 +46,10 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">Set transfer dates</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
                 <h2 class="app-summary-card__title">
-                    Set transfer dates details
+                    Set transfer dates
                 </h2>
             </header>
             <div class="app-summary-card__body">
@@ -52,7 +57,6 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">Benefits and risks</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
                 <h2 class="app-summary-card__title">
@@ -64,11 +68,10 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">Rationale</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
                 <h2 class="app-summary-card__title">
-                    Rationale details
+                    Rationale
                 </h2>
             </header>
             <div class="app-summary-card__body">
@@ -76,11 +79,10 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">Trust information and project dates</h2>
         <section class="app-summary-card govuk-!-margin-bottom-7">
             <header class="app-summary-card__header">
                 <h2 class="app-summary-card__title">
-                    Trust information and project dates
+                    Academy and trust information and project dates
                 </h2>
             </header>
             <div class="app-summary-card__body">
@@ -88,85 +90,85 @@
             </div>
         </section>
 
-        <h2 class="govuk-heading-s">General information</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    General information details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="Shared/_GeneralInformation" model="Model.GeneralInformationViewModel"></partial>
-            </div>
-        </section>
-
-        <h2 class="govuk-heading-s">Pupil numbers</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    Pupil numbers details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="Shared/_PupilNumbers" model="Model.PupilNumbersViewModel"></partial>
-            </div>
-        </section>
-
-        <h2 class="govuk-heading-s">Latest Ofsted judgement</h2>
-        <section class="app-summary-card govuk-!-margin-bottom-7">
-            <header class="app-summary-card__header">
-                <h2 class="app-summary-card__title">
-                    Latest Ofsted judgement details
-                </h2>
-            </header>
-            <div class="app-summary-card__body">
-                <partial name="_OfstedSummary" model="Model.LatestOfstedJudgementViewModel"></partial>
-            </div>
-        </section>
-
-        @if (PerformanceDataHelpers.HasKeyStage2PerformanceInformation(Model.EducationPerformance.KeyStage2Performance))
+        @foreach (var academy in Model.Academies)
         {
-            <h2 class="govuk-heading-s">Key stage 2 performance tables</h2>
+            <h2 class="govuk-heading-l">
+                @academy.Academy.Name
+            </h2>
             <section class="app-summary-card govuk-!-margin-bottom-7">
                 <header class="app-summary-card__header">
                     <h2 class="app-summary-card__title">
-                        Key stage 2 performance tables details
+                        General information
                     </h2>
                 </header>
                 <div class="app-summary-card__body">
-                    <partial name="KeyStage2PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(Model.EducationPerformance, Model.Academy, Model.KeyStage2AdditionalInformation, Model.Urn))"></partial>
+                    <partial name="Shared/_GeneralInformation" model="academy.GeneralInformationViewModel"></partial>
                 </div>
             </section>
-        }
 
-        @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(Model.EducationPerformance.KeyStage4Performance))
-        {
-            <h2 class="govuk-heading-s">Key stage 4 performance tables</h2>
             <section class="app-summary-card govuk-!-margin-bottom-7">
                 <header class="app-summary-card__header">
                     <h2 class="app-summary-card__title">
-                        Key stage 4 performance tables details
+                        Pupil numbers
                     </h2>
                 </header>
                 <div class="app-summary-card__body">
-                    <partial name="KeyStage4PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(Model.EducationPerformance, Model.Academy, Model.KeyStage4AdditionalInformation, Model.Urn))"></partial>
+                    <partial name="Shared/_PupilNumbers" model="academy.PupilNumbersViewModel"></partial>
                 </div>
             </section>
-        }
-        
-        @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(Model.EducationPerformance.KeyStage5Performance))
-        {
-            <h2 class="govuk-heading-s">Key stage 5 performance tables</h2>
+
             <section class="app-summary-card govuk-!-margin-bottom-7">
                 <header class="app-summary-card__header">
                     <h2 class="app-summary-card__title">
-                        Key stage 5 performance tables details
+                        Latest Ofsted judgement
                     </h2>
                 </header>
                 <div class="app-summary-card__body">
-                    <partial name="KeyStage5PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(Model.EducationPerformance, Model.Academy, Model.KeyStage5AdditionalInformation, Model.Urn))"></partial>
+                    <partial name="_OfstedSummary" model="academy.LatestOfstedJudgementViewModel"></partial>
                 </div>
             </section>
+
+            @if (PerformanceDataHelpers.HasKeyStage2PerformanceInformation(academy.EducationPerformance.KeyStage2Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 2 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage2PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage2AdditionalInformation, Model.Urn))"></partial>
+                    </div>
+                </section>
+            }
+
+            @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(academy.EducationPerformance.KeyStage4Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 4 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage4PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage4AdditionalInformation, Model.Urn))"></partial>
+                    </div>
+                </section>
+            }
+
+            @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(academy.EducationPerformance.KeyStage5Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 5 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage5PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage5AdditionalInformation, Model.Urn))"></partial>
+                    </div>
+                </section>
+            }
         }
     </div>
 </div>
@@ -179,15 +181,15 @@
         <p class="govuk-body govuk-!-margin-bottom-6">
             Generate the project template into a Word document and download it.
         </p>
-        <div class="govuk-button-group">
-            <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+        <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+            <div class="govuk-button-group">
                 <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
-            </form>
-            <p class="govuk-body">
-                <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
-                    Save and return to this project later
-                </a>
-            </p>
-        </div>
+                <p class="govuk-body">
+                    <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
+                        Save and return to this project later
+                    </a>
+                </p>
+            </div>
+        </form>
     </div>
 </div>

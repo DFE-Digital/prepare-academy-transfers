@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.Academies;
+using Data.Models.KeyStagePerformance;
 
 namespace Data.Models
 {
@@ -11,6 +12,7 @@ namespace Data.Models
             PupilNumbers = new PupilNumbers();
             LatestOfstedJudgement = new LatestOfstedJudgement();
             Address = new List<string>();
+            EducationPerformance = new EducationPerformance();
         }
         
         public string Ukprn { get; set; }
@@ -25,5 +27,6 @@ namespace Data.Models
 
         public LatestOfstedJudgement LatestOfstedJudgement { get; set; }
         public List<string> Address { get; set; }
+        public EducationPerformance EducationPerformance { get; set; }
     }
 }
