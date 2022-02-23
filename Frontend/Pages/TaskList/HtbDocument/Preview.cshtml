@@ -181,15 +181,15 @@
         <p class="govuk-body govuk-!-margin-bottom-6">
             Generate the project template into a Word document and download it.
         </p>
-        <div class="govuk-button-group">
-            <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+        <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+            <div class="govuk-button-group">
                 <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
-            </form>
-            <p class="govuk-body">
-                <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
-                    Save and return to this project later
-                </a>
-            </p>
-        </div>
+                <p class="govuk-body">
+                    <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
+                        Save and return to this project later
+                    </a>
+                </p>
+            </div>
+        </form>
     </div>
 </div>
