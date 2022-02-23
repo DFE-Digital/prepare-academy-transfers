@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Data.Models;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -23,18 +26,26 @@ namespace Frontend.Services
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
             
-            var outgoingAcademyUkprn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUkprn;
-            var academyResult = await _academiesRepository.GetAcademyByUkprn(outgoingAcademyUkprn);
-
-            var outgoingAcademyUrn = projectResult.Result.TransferringAcademies[0].OutgoingAcademyUrn;
-            var educationPerformanceResult =
-                await _educationPerformanceRepository.GetByAcademyUrn(outgoingAcademyUrn);
+            var outgoingAcademies = new List<Academy>();
+            
+            foreach (var academy in projectResult.Result.TransferringAcademies)
+            {
+                var academyResult = await _academiesRepository.GetAcademyByUkprn(academy.OutgoingAcademyUkprn);
+                var outgoingAcademyUrn = academy.OutgoingAcademyUrn;
+                var educationPerformanceResult =
+                    await _educationPerformanceRepository.GetByAcademyUrn(outgoingAcademyUrn);
+                var mappedAcademy = academyResult.Result;
+                mappedAcademy.EducationPerformance = educationPerformanceResult.Result;
+                outgoingAcademies.Add(academyResult.Result);
+            }
 
             return new GetInformationForProjectResponse
             {
                 Project = projectResult.Result,
-                OutgoingAcademy = academyResult.Result,
-                EducationPerformance = educationPerformanceResult.Result
+                OutgoingAcademies = outgoingAcademies,
+                // todo: remove this when other mat-mat work has been done
+                OutgoingAcademy = outgoingAcademies.First(),
+                EducationPerformance = outgoingAcademies.First().EducationPerformance
             };
         }
     }

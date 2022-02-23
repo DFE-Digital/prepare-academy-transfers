@@ -118,5 +118,88 @@ namespace Frontend.Tests.ServicesTests
             Assert.Equal(result.OutgoingAcademy, _foundAcademy);
             Assert.Equal(result.EducationPerformance, _foundEducationPerformance);
         }
+
+        [Fact]
+        public async void GivenProjectWithMultipleAcademies_LooksUpAcademies()
+        {
+            const string projectUrn = "TestProject";
+            var outgoingAcademy1 = new { ukprn = "A1Ukprn", urn = "A1Urn" };
+            var outgoingAcademy2 = new { ukprn = "A2Ukprn", urn = "A2Urn" };
+            var outgoingAcademy3 = new { ukprn = "A3Ukprn", urn = "A3Urn" };
+            var foundProjectWithMultipleAcademies = new Project
+            {
+                Urn = projectUrn,
+                TransferringAcademies = new List<TransferringAcademies>
+                {
+                    new TransferringAcademies
+                    {
+                        OutgoingAcademyUkprn = outgoingAcademy1.ukprn,
+                        OutgoingAcademyUrn = outgoingAcademy1.urn
+                    },
+                    new TransferringAcademies
+                    {
+                        OutgoingAcademyUkprn = outgoingAcademy2.ukprn,
+                        OutgoingAcademyUrn = outgoingAcademy2.urn
+                    },
+                    new TransferringAcademies
+                    {
+                        OutgoingAcademyUkprn = outgoingAcademy3.ukprn,
+                        OutgoingAcademyUrn = outgoingAcademy3.urn
+                    }
+                }
+            };
+
+            var foundAcademy1 = new Academy { Ukprn = outgoingAcademy1.ukprn, Urn = outgoingAcademy1.urn };
+            var foundAcademy2 = new Academy { Ukprn = outgoingAcademy2.ukprn, Urn = outgoingAcademy2.urn };
+            var foundAcademy3 = new Academy { Ukprn = outgoingAcademy3.ukprn, Urn = outgoingAcademy3.urn };
+
+            _foundEducationPerformance = new EducationPerformance
+            {
+                KeyStage2Performance = new List<KeyStage2>()
+            };
+
+            _projectsRepository.Setup(r => r.GetByUrn(projectUrn)).ReturnsAsync(
+                new RepositoryResult<Project>
+                {
+                    Result = foundProjectWithMultipleAcademies
+                });
+
+            _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy1.ukprn)).ReturnsAsync(
+                new RepositoryResult<Academy>
+                {
+                    Result = foundAcademy1
+                });
+            
+            _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy2.ukprn)).ReturnsAsync(
+                new RepositoryResult<Academy>
+                {
+                    Result = foundAcademy2
+                });
+            
+            _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy3.ukprn)).ReturnsAsync(
+                new RepositoryResult<Academy>
+                {
+                    Result = foundAcademy3
+                });
+
+            _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(It.IsAny<string>()))
+                .ReturnsAsync(
+                    new RepositoryResult<EducationPerformance>
+                    {
+                        Result = _foundEducationPerformance
+                    });
+            
+            var result = await _subject.Execute(projectUrn);
+
+            _academiesRepository.Verify(r => r.GetAcademyByUkprn(outgoingAcademy1.ukprn), Times.Once);
+            _academiesRepository.Verify(r => r.GetAcademyByUkprn(outgoingAcademy2.ukprn), Times.Once);
+            _academiesRepository.Verify(r => r.GetAcademyByUkprn(outgoingAcademy3.ukprn), Times.Once);
+            _educationPerformanceRepository.Verify(r => r.GetByAcademyUrn(outgoingAcademy1.urn), Times.Once);
+            _educationPerformanceRepository.Verify(r => r.GetByAcademyUrn(outgoingAcademy2.urn), Times.Once);
+            _educationPerformanceRepository.Verify(r => r.GetByAcademyUrn(outgoingAcademy3.urn), Times.Once);
+
+            Assert.Equal(foundProjectWithMultipleAcademies, result.Project);
+            Assert.Equal(3, result.OutgoingAcademies.Count);
+        }
     }
 }
