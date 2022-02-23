@@ -153,11 +153,6 @@ namespace Frontend.Tests.ServicesTests
             var foundAcademy2 = new Academy { Ukprn = outgoingAcademy2.ukprn, Urn = outgoingAcademy2.urn };
             var foundAcademy3 = new Academy { Ukprn = outgoingAcademy3.ukprn, Urn = outgoingAcademy3.urn };
 
-            _foundEducationPerformance = new EducationPerformance
-            {
-                KeyStage2Performance = new List<KeyStage2>()
-            };
-
             _projectsRepository.Setup(r => r.GetByUrn(projectUrn)).ReturnsAsync(
                 new RepositoryResult<Project>
                 {
