@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
@@ -5,7 +6,6 @@ using Data.Models.KeyStagePerformance;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
-using Frontend.Services.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages.TaskList.KeyStage2Performance
@@ -23,15 +23,12 @@ namespace Frontend.Pages.TaskList.KeyStage2Performance
         
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
+        public string AcademyName { get; set; }
         
-        //TODO: Remove these data.models from page
+        //todo: remove data models here
         #region remove
         public EducationPerformance EducationPerformance { get; set; }
-
-        public Academy TransferringAcademy { get; set; }
-        
         #endregion
-        
         public KeyStage2Performance(IGetInformationForProject getInformationForProject, IProjects projectRepository)
         {
             _getInformationForProject = getInformationForProject;
@@ -40,18 +37,15 @@ namespace Frontend.Pages.TaskList.KeyStage2Performance
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var projectInformation = await _getInformationForProject.Execute(Urn);
-            
-            BuildPageModel(projectInformation);
-
+            await BuildPageModel();
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectRepository.GetByUrn(Urn);
-            
-            project.Result.KeyStage2PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
+            var academy = project.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
+            academy.KeyStage2PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
             await _projectRepository.Update(project.Result);
 
             if (ReturnToPreview)
@@ -68,14 +62,16 @@ namespace Frontend.Pages.TaskList.KeyStage2Performance
                 "additional-information-hint");
         }
 
-        private void BuildPageModel(GetInformationForProjectResponse projectInformation)
+        private async Task BuildPageModel()
         {
-            TransferringAcademy = projectInformation.OutgoingAcademy;
-            EducationPerformance = projectInformation.EducationPerformance;
-            OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
+            var projectInformation = await _getInformationForProject.Execute(Urn);
+            var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
+            AcademyName = academy.Name;
+            OutgoingAcademyUrn = academy.Urn;
+            EducationPerformance = academy.EducationPerformance;
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
-                AdditionalInformation = projectInformation.Project.KeyStage2PerformanceAdditionalInformation,
+                AdditionalInformation = academy.EducationPerformance.KeyStage2AdditionalInformation,
                 HintText =
                     "If you add comments, they'll be included in the key stage 2 performance tables section of your project template.",
                 Urn = projectInformation.Project.Urn,

@@ -12,12 +12,14 @@
     <Content Remove="wwwroot\src\**" />
     <Content Remove="wwwroot\webpack.config.js" />
     <Content Remove="Views\Rationale\Project.cshtml" />
+    <Content Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\package-lock.json" />
     <None Include="wwwroot\package.json" />
     <None Include="wwwroot\src\**" />
     <None Include="wwwroot\webpack.config.js" />
+    <None Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data.Mock\Data.Mock.csproj" />
@@ -41,6 +43,7 @@
   <ItemGroup>
     <None Remove="Resources\htb-template.docx" />
     <EmbeddedResource Include="Resources\htb-template.docx" />
+    <EmbeddedResource Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Benefits\OtherFactors.cshtml" />
@@ -50,6 +53,6 @@
     <_ContentIncludedByDefault Remove="Views\PupilNumbers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\EducationPerformance" />
+    <Compile Remove="Models\EducationPerformance\**" />
   </ItemGroup>
 </Project>

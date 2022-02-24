@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
@@ -22,11 +23,10 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
         public bool AddOrEditAdditionalInformation { get; set; }
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
-        
+        public string AcademyName { get; set; }
         //todo: remove data models here
         #region remove
         public EducationPerformance EducationPerformance { get; set; }
-        public Academy TransferringAcademy { get; set; }
         #endregion
         
         public KeyStage4Performance(IGetInformationForProject getInformationForProject, IProjects projectRepository)
@@ -46,8 +46,8 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectRepository.GetByUrn(Urn);
-            
-            project.Result.KeyStage4PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
+            var academy = project.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
+            academy.KeyStage4PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
             await _projectRepository.Update(project.Result);
             
             if (ReturnToPreview)
@@ -66,12 +66,13 @@ namespace Frontend.Pages.TaskList.KeyStage4Performance
 
         private void BuildPageModel(GetInformationForProjectResponse projectInformation)
         {
-            TransferringAcademy = projectInformation.OutgoingAcademy;
-            EducationPerformance = projectInformation.EducationPerformance;
-            OutgoingAcademyUrn = projectInformation.OutgoingAcademy.Urn;
+            var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
+            EducationPerformance = academy.EducationPerformance;
+            OutgoingAcademyUrn = academy.Urn;
+            AcademyName = academy.Name;
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
-                AdditionalInformation = projectInformation.Project.KeyStage4PerformanceAdditionalInformation,
+                AdditionalInformation = academy.EducationPerformance.KeyStage4AdditionalInformation,
                 HintText =
                     "If you add comments, they'll be included in the key stage 4 performance tables section of your project template.",
                 Urn = projectInformation.Project.Urn,

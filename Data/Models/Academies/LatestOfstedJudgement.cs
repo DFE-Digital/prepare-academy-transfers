@@ -15,5 +15,7 @@ namespace Data.Models.Academies
         
         [DisplayName("Ofsted report")]
         public string OfstedReport { get; set; }
+        
+        public string AdditionalInformation { get; set; }
     }
 }

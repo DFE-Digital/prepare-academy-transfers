@@ -41,7 +41,8 @@ namespace Frontend.Pages.Projects
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
             var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
-            var pupilNumbers = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn).PupilNumbers;
+            var pupilNumbers = academy.PupilNumbers;
+            
             GirlsOnRoll = pupilNumbers.GirlsOnRoll;
             BoysOnRoll = pupilNumbers.BoysOnRoll;
             WithStatementOfSEN = pupilNumbers.WithStatementOfSen;

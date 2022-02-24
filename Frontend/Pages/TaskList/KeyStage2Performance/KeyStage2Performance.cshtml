@@ -1,6 +1,4 @@
 @page "/project/{urn}/key-stage-2-performance/{academyUkprn}"
-@using Data.Models.KeyStagePerformance
-@using Data.Models
 @model Frontend.Pages.TaskList.KeyStage2Performance.KeyStage2Performance
 
 @{
@@ -18,7 +16,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">
-            URN @Model.OutgoingAcademyUrn
+           Academy: @Model.AcademyName
         </span>
         <h1 class="govuk-heading-l">
             Key stage 2 performance tables
@@ -37,7 +35,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
-        <partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@(new Tuple<EducationPerformance, Academy>(Model.EducationPerformance, Model.TransferringAcademy))"/>
+        <partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@Model.EducationPerformance"/>
     </div>
 </div>
 
