@@ -54,7 +54,12 @@ namespace Data.TRAMS.Mappers.Response
                         IncomingTrustLeadRscRegion = transfer.IncomingTrust.LeadRscRegion,
                         OutgoingAcademyName = transfer.OutgoingAcademy.Name,
                         OutgoingAcademyUkprn = transfer.OutgoingAcademy.Ukprn,
-                        OutgoingAcademyUrn = transfer.OutgoingAcademy.Urn
+                        OutgoingAcademyUrn = transfer.OutgoingAcademy.Urn,
+                        PupilNumbersAdditionalInformation = transfer.PupilNumbersAdditionalInformation,
+                        LatestOfstedReportAdditionalInformation = transfer.LatestOfstedReportAdditionalInformation,
+                        KeyStage2PerformanceAdditionalInformation = transfer.KeyStage2PerformanceAdditionalInformation,
+                        KeyStage4PerformanceAdditionalInformation = transfer.KeyStage4PerformanceAdditionalInformation,
+                        KeyStage5PerformanceAdditionalInformation = transfer.KeyStage5PerformanceAdditionalInformation
                     }
                 )
                 .ToList();

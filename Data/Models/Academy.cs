@@ -24,9 +24,9 @@ namespace Data.Models
         public string Pfi { get; set; }
         public GeneralInformation GeneralInformation { get; set; }
         public PupilNumbers PupilNumbers { get; set; }
-
         public LatestOfstedJudgement LatestOfstedJudgement { get; set; }
         public List<string> Address { get; set; }
         public EducationPerformance EducationPerformance { get; set; }
+        
     }
 }

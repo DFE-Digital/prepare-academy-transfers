@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
+using Data.Models.Projects;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
 
@@ -31,6 +32,7 @@ namespace Frontend.Services
             foreach (var academy in projectResult.Result.TransferringAcademies)
             {
                 var academyResult = await _academiesRepository.GetAcademyByUkprn(academy.OutgoingAcademyUkprn);
+                SetAdditionalInformation(academyResult, academy);
                 var outgoingAcademyUrn = academy.OutgoingAcademyUrn;
                 var educationPerformanceResult =
                     await _educationPerformanceRepository.GetByAcademyUrn(outgoingAcademyUrn);
@@ -47,6 +49,11 @@ namespace Frontend.Services
                 OutgoingAcademy = outgoingAcademies.First(),
                 EducationPerformance = outgoingAcademies.First().EducationPerformance
             };
+        }
+
+        private void SetAdditionalInformation(RepositoryResult<Academy> academyResult, TransferringAcademies academy)
+        {
+            academyResult.Result.PupilNumbers.AdditionalInformation = academy.PupilNumbersAdditionalInformation;
         }
     }
 }

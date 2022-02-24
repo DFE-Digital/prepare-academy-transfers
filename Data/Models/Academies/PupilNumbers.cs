@@ -9,5 +9,7 @@ namespace Data.Models.Academies
         public string WithStatementOfSen { get; set; }
         public string WhoseFirstLanguageIsNotEnglish { get; set; }
         public string PercentageEligibleForFreeSchoolMealsDuringLast6Years { get; set; }
+        
+        public string AdditionalInformation { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
@@ -25,6 +26,8 @@ namespace Frontend.Pages.Projects.GeneralInformation
         
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
+        
+        public string AcademyName { get; set; }
 
         public Index(IGetInformationForProject getInformationForProject)
         {
@@ -34,9 +37,9 @@ namespace Frontend.Pages.Projects.GeneralInformation
         public async Task<IActionResult> OnGetAsync(string urn)
         {
             var getInformationForProjectResponse = await _getInformationForProject.Execute(urn);
-
-            var generalInformation = getInformationForProjectResponse.OutgoingAcademy.GeneralInformation;
-
+            var academy = getInformationForProjectResponse.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
+            var generalInformation = getInformationForProjectResponse.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn).GeneralInformation;
+            AcademyName = academy.Name;
             SchoolPhase = generalInformation.SchoolPhase;
             AgeRange = generalInformation.AgeRange;
             Capacity = generalInformation.Capacity;
