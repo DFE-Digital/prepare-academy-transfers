@@ -137,7 +137,7 @@
                         </h2>
                     </header>
                     <div class="app-summary-card__body">
-                        <partial name="KeyStage2PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage2AdditionalInformation, Model.Urn))"></partial>
+                        <partial name="KeyStage2PerformanceSummary" model="@academy.EducationPerformance"></partial>
                     </div>
                 </section>
             }
@@ -151,7 +151,7 @@
                         </h2>
                     </header>
                     <div class="app-summary-card__body">
-                        <partial name="KeyStage4PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage4AdditionalInformation, Model.Urn))"></partial>
+                        <partial name="KeyStage4PerformanceSummary" model="@academy.EducationPerformance"></partial>
                     </div>
                 </section>
             }
@@ -165,7 +165,7 @@
                         </h2>
                     </header>
                     <div class="app-summary-card__body">
-                        <partial name="KeyStage5PerformanceSummary" model="@(new Tuple<EducationPerformance, Academy, string, string>(academy.EducationPerformance, academy.Academy, Model.KeyStage5AdditionalInformation, Model.Urn))"></partial>
+                        <partial name="KeyStage5PerformanceSummary" model="@academy.EducationPerformance"></partial>
                     </div>
                 </section>
             }

@@ -30,8 +30,6 @@ namespace Data.TRAMS.Mappers.Request
                 KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation,
                 KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation,
                 KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation
-                
-                
             };
         }
 
@@ -84,7 +82,12 @@ namespace Data.TRAMS.Mappers.Request
                 new TransferringAcademyUpdate
                 {
                     IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
-                    OutgoingAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn
+                    OutgoingAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn,
+                    PupilNumbersAdditionalInformation = transferringAcademy.PupilNumbersAdditionalInformation,
+                    LatestOfstedReportAdditionalInformation = transferringAcademy.LatestOfstedReportAdditionalInformation,
+                    KeyStage2PerformanceAdditionalInformation = transferringAcademy.KeyStage2PerformanceAdditionalInformation,
+                    KeyStage4PerformanceAdditionalInformation = transferringAcademy.KeyStage4PerformanceAdditionalInformation,
+                    KeyStage5PerformanceAdditionalInformation = transferringAcademy.KeyStage5PerformanceAdditionalInformation
                 }).ToList();
         }
 

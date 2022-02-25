@@ -1,20 +1,20 @@
 @using Data.Models
 @using Data.Models.KeyStagePerformance
-@model Tuple<EducationPerformance, Academy, string, string>
+@model EducationPerformance
 
-<partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@(new Tuple<EducationPerformance, Academy>(Model.Item1, Model.Item2))"/>
+<partial name="TaskList/KeyStage2Performance/KeyStage2PerformanceTables" model="@Model"/>
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
             Additional information
         </dt>
         <dd class="govuk-summary-list__value">
-            <stringsummary value="@Model.Item3"></stringsummary>
+            <stringsummary value="@Model.KeyStage2AdditionalInformation"></stringsummary>
         </dd>
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link"
-               asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-urn="@Model.Item4"
-               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true" asp-route-academyukprn="@Model.Item2.Ukprn"
+               asp-page="/TaskList/KeyStage2Performance/KeyStage2Performance" asp-route-urn="@Model.ProjectUrn"
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true" asp-route-academyukprn="@Model.AcademyUkprn"
             >
                 Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
             </a>

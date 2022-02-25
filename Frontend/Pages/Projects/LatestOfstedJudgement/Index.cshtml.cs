@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
@@ -34,16 +35,18 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
         public async Task<IActionResult> OnGetAsync(bool addOrEditAdditionalInformation = false)
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
+            var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
+            var latestOfstedJudgement = academy.LatestOfstedJudgement;
             
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             ProjectReference = projectInformation.Project.Reference;
-            SchoolName = projectInformation.OutgoingAcademy.LatestOfstedJudgement.SchoolName;
-            InspectionDate = projectInformation.OutgoingAcademy.LatestOfstedJudgement.InspectionDate;
-            OverallEffectiveness = projectInformation.OutgoingAcademy.LatestOfstedJudgement.OverallEffectiveness;
-            OfstedReport = projectInformation.OutgoingAcademy.LatestOfstedJudgement.OfstedReport;
+            SchoolName = latestOfstedJudgement.SchoolName;
+            InspectionDate = latestOfstedJudgement.InspectionDate;
+            OverallEffectiveness = latestOfstedJudgement.OverallEffectiveness;
+            OfstedReport = latestOfstedJudgement.OfstedReport;
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
-                AdditionalInformation = projectInformation.Project.LatestOfstedJudgementAdditionalInformation,
+                AdditionalInformation = latestOfstedJudgement.AdditionalInformation,
                 HintText =
                     "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                 Urn = projectInformation.Project.Urn,
@@ -57,8 +60,8 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
         public async Task<IActionResult> OnPostAsync()
         {
             var model = await _projectsRepository.GetByUrn(Urn);
-            
-            model.Result.LatestOfstedJudgementAdditionalInformation = AdditionalInformationViewModel?.AdditionalInformation;
+            var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
+            academy.LatestOfstedReportAdditionalInformation = AdditionalInformationViewModel?.AdditionalInformation;
             await _projectsRepository.Update(model.Result);
             
             if (ReturnToPreview)

@@ -23,9 +23,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
         public List<PreviewPageAcademyModel> Academies { get; private set; }
-        public string KeyStage2AdditionalInformation { get; set; }
-        public string KeyStage4AdditionalInformation { get; set; }
-        public string KeyStage5AdditionalInformation { get; set; }
 
         public Preview(IGetInformationForProject getInformationForProject, IProjects projects)
         {
@@ -40,11 +37,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
             var project = response.Project;
 
             ProjectReference = project.Reference;
-
-            // todo: refactor required (create viewmodel/viewcomponent)
-            KeyStage2AdditionalInformation = response.Project.KeyStage2PerformanceAdditionalInformation;
-            KeyStage4AdditionalInformation = response.Project.KeyStage4PerformanceAdditionalInformation;
-            KeyStage5AdditionalInformation = response.Project.KeyStage5PerformanceAdditionalInformation;
 
             FeaturesSummaryViewModel = new Index(null)
             {
@@ -146,7 +138,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                          ReturnToPreview = true,
                          AdditionalInformationViewModel = new AdditionalInformationViewModel
                          {
-                             AdditionalInformation = response.Project.PupilNumbersAdditionalInformation,
+                             AdditionalInformation = academy.PupilNumbers.AdditionalInformation,
                              HintText =
                                  "If you add comments, they'll be included in the pupil numbers section of your project template.",
                              Urn = response.Project.Urn,
@@ -165,7 +157,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                              OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
                              AdditionalInformationViewModel = new AdditionalInformationViewModel
                              {
-                                 AdditionalInformation = project.LatestOfstedJudgementAdditionalInformation,
+                                 AdditionalInformation = academy.LatestOfstedJudgement.AdditionalInformation,
                                  HintText =
                                      "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                                  Urn = project.Urn,

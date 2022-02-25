@@ -27,6 +27,8 @@ namespace Data.TRAMS.Models
         public string Status { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }
         public TrustSummary OutgoingTrust { get; set; }
+        
+        //todo: remove additional information from project level
         public string AcademyPerformanceAdditionalInformation { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedJudgementAdditionalInformation { get; set; }
