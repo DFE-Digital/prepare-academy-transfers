@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Frontend.Tests.ServicesTests
 {
-    public class GetHtbDocumentForProjectTests : BaseTests
+    public class GetHtbDocumentForProjectTests
     {
         private readonly GetHtbDocumentForProject _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
