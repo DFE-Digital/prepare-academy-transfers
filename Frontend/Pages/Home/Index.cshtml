@@ -32,7 +32,7 @@
         <h3 class="govuk-heading-m">
             Pre-Advisory Board (formerly Headteacher Board)
         </h3>
-        @foreach (var project in Model.Projects)
+        @foreach (var project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
         {
             var firstOutgoingAcademy = project.TransferringAcademies.First();
             

@@ -35,7 +35,7 @@ namespace Frontend.Services
                 var academyResult = await _academiesRepository.GetAcademyByUkprn(transferringAcademy.OutgoingAcademyUkprn);
                 var academy = academyResult.Result;
                 SetAdditionalInformation(academy, transferringAcademy);
-                academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName);
+                academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName, projectResult.Result.Urn);
                 outgoingAcademies.Add(academy);
             }
 
@@ -49,7 +49,7 @@ namespace Frontend.Services
             };
         }
 
-        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademies transferringAcademy, string localAuthorityName)
+        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademies transferringAcademy, string localAuthorityName, string projectUrn)
         {
             var educationPerformanceResult = await _educationPerformanceRepository.GetByAcademyUrn(transferringAcademy.OutgoingAcademyUrn);
             var performance = educationPerformanceResult.Result;
@@ -57,6 +57,8 @@ namespace Frontend.Services
             performance.KeyStage4AdditionalInformation = transferringAcademy.KeyStage4PerformanceAdditionalInformation;
             performance.KeyStage5AdditionalInformation = transferringAcademy.KeyStage5PerformanceAdditionalInformation;
             performance.AcademyName = transferringAcademy.OutgoingAcademyName;
+            performance.AcademyUkprn = transferringAcademy.OutgoingAcademyUkprn;
+            performance.ProjectUrn = projectUrn;
             performance.LocalAuthorityName = localAuthorityName;
             return performance;
         }
