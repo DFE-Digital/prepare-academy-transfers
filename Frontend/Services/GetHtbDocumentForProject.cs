@@ -25,8 +25,10 @@ namespace Frontend.Services
         {
             var informationForProjectResult = await _getInformationForProject.Execute(projectUrn);
             var project = informationForProjectResult.Project;
-            var academy = informationForProjectResult.OutgoingAcademy;
-            var educationPerformance = informationForProjectResult.EducationPerformance;
+            
+            //todo: loop academies in word document
+            var academy = informationForProjectResult.OutgoingAcademies.First();
+            var educationPerformance = academy.EducationPerformance;
             
             var htbDocument = new HtbDocument
             {

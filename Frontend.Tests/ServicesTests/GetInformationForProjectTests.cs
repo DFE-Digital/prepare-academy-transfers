@@ -113,10 +113,7 @@ namespace Frontend.Tests.ServicesTests
         public async void GivenProjectId_ReturnsFoundProjectInformation()
         {
             var result = await _subject.Execute(_projectUrn);
-
             Assert.Equal(result.Project, _foundProject);
-            Assert.Equal(result.OutgoingAcademy, _foundAcademy);
-            Assert.Equal(result.EducationPerformance, _foundEducationPerformance);
         }
 
         [Fact]

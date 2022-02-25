@@ -91,21 +91,20 @@ namespace Frontend.Tests.TestFixtures
                     OverallEffectiveness = "overall effectiveness",
                     OfstedReport = "ofsted report"
                 },
+                EducationPerformance = new EducationPerformance
+                {
+                    KeyStage2Performance = new List<KeyStage2> {new KeyStage2 {Year = "2017-2018"}},
+                    KeyStage4Performance = new List<KeyStage4> {new KeyStage4 {Year = "2017-2018"}},
+                    KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2017-2018"}}
+                },
                 LocalAuthorityName = "LA Name"
             };
 
-            var foundEducationPerformance = new EducationPerformance
-            {
-                KeyStage2Performance = new List<KeyStage2> {new KeyStage2 {Year = "2017-2018"}},
-                KeyStage4Performance = new List<KeyStage4> {new KeyStage4 {Year = "2017-2018"}},
-                KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2017-2018"}}
-            };
 
             return new GetInformationForProjectResponse
             {
                 Project = foundProject,
-                OutgoingAcademy = foundAcademy,
-                EducationPerformance = foundEducationPerformance
+                OutgoingAcademy = foundAcademy
             };
         }
     }

@@ -12,8 +12,5 @@ namespace Frontend.Services.Responses
         public Academy OutgoingAcademy { get; set; }
         
         public List<Academy> OutgoingAcademies { get; set; }
-
-        // todo: remove this when other mat-mat work has been done (this is now in Academy model)
-        public EducationPerformance EducationPerformance { get; set; }
     }
 }

@@ -44,8 +44,7 @@ namespace Frontend.Services
                 Project = projectResult.Result,
                 OutgoingAcademies = outgoingAcademies,
                 // todo: remove this when other mat-mat work has been done
-                OutgoingAcademy = outgoingAcademies.First(),
-                EducationPerformance = outgoingAcademies.First().EducationPerformance
+                OutgoingAcademy = outgoingAcademies.First()
             };
         }
 
