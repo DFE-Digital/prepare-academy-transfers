@@ -25,7 +25,6 @@ namespace Data.TRAMS.Mappers.Response
                 TransferringAcademies = TransferringAcademies(input),
                 OutgoingTrustName = input.OutgoingTrust.GroupName,
                 OutgoingTrustUkprn = input.OutgoingTrust.Ukprn,
-                GeneralInformationAdditionalInformation = input.AcademyPerformanceAdditionalInformation
             };
         }
 

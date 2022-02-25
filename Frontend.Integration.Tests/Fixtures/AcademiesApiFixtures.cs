@@ -117,14 +117,14 @@ namespace Frontend.Integration.Tests.Fixtures
                             Ukprn = OutgoingAcademyUkprn
                         },
                         OutgoingAcademyUkprn = OutgoingAcademyUkprn,
+                        PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
+                        LatestOfstedReportAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
+                        KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
+                        KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
+                        KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation"
                     }
                 },
-                AcademyPerformanceAdditionalInformation = "GeneralInformationAdditionalInformation",
-                PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
-                LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
-                KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
-                KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
-                KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation",
+                
                 OutgoingTrustUkprn = OutgoingTrustUkprn,
                 
             };

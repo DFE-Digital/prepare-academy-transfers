@@ -88,15 +88,15 @@ namespace Data.TRAMS.Tests.Mappers.Response
                             Name = "Outgoing academy",
                             Urn = "789",
                             Ukprn = "987"
-                        }
+                        },
+                        PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
+                        LatestOfstedReportAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
+                        KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
+                        KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
+                        KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation"
                     }
                 },
-                AcademyPerformanceAdditionalInformation = "GeneralInformationAdditionalInformation",
-                PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
-                LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
-                KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
-                KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
-                KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation",
+                
                 OutgoingTrustUkprn = "123"
             };
 
@@ -109,8 +109,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.ProjectReference, result.Reference);
             Assert.Equal(toMap.OutgoingTrustUkprn, result.OutgoingTrustUkprn);
             Assert.Equal(toMap.OutgoingTrust.GroupName, result.OutgoingTrustName);
-            Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.GeneralInformationAdditionalInformation);
-            
+
             AssertBenefitsCorrect(toMap, result);
             AssertDatesCorrect(toMap, result);
             AssertFeaturesCorrect(toMap, result);
