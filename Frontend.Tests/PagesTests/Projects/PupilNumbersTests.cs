@@ -1,10 +1,9 @@
-﻿using Data.Models;
+﻿using System.Linq;
+using Data.Models;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Pages.Projects;
 using Frontend.Tests.Helpers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
@@ -24,7 +23,8 @@ namespace Frontend.Tests.PagesTests.Projects
                 AdditionalInformationViewModel = new AdditionalInformationViewModel()
                 {
                    AdditionalInformation = AdditionalInformation
-                }
+                },
+                AcademyUkprn = FoundInformationForProject.OutgoingAcademies.First().Ukprn
             };
         }
 
@@ -40,7 +40,7 @@ namespace Frontend.Tests.PagesTests.Projects
             [Fact]
             public async void GivenExistingAdditionalInformation_AssignsTheInformationToTheViewModel()
             {
-                FoundInformationForProject.Project.PupilNumbersAdditionalInformation =
+                FoundInformationForProject.OutgoingAcademies.First().PupilNumbers.AdditionalInformation =
                     AdditionalInformation;
                 var response = await _subject.OnGetAsync();
 
@@ -66,7 +66,7 @@ namespace Frontend.Tests.PagesTests.Projects
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.PupilNumbersAdditionalInformation == AdditionalInformation
+                    project => project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn).PupilNumbersAdditionalInformation == AdditionalInformation
                 )));
             }
 

@@ -18,6 +18,7 @@ namespace Frontend.Tests
         protected const string ProjectErrorUrn = "errorUrn";
         protected const string PopulatedProjectUrn = "01234";
         protected const string AcademyUrn = "1234";
+        protected const string AcademyUkprn = "12345";
         protected const string ErrorMessage = "Error";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
@@ -48,7 +49,8 @@ namespace Frontend.Tests
                     {
                         OutgoingAcademyName = OutgoingAcademyName,
                         OutgoingAcademyUrn = AcademyUrn,
-                        IncomingTrustName = "TRUST NAME"
+                        IncomingTrustName = "TRUST NAME",
+                        OutgoingAcademyUkprn = AcademyUkprn
                     }
                 }
             };
@@ -106,6 +108,17 @@ namespace Frontend.Tests
                     Urn = AcademyUrn,
                     LocalAuthorityName = LAName,
                     Name = OutgoingAcademyName
+                },
+                OutgoingAcademies = new List<Academy>()
+                {
+                    new Academy
+                    {
+                        Urn = AcademyUrn,
+                        LocalAuthorityName = LAName,
+                        Name = OutgoingAcademyName,
+                        Ukprn = AcademyUkprn
+                    }
+                    
                 }
             };
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using Data.Models;
 using Frontend.Pages.Projects.GeneralInformation;
@@ -13,7 +15,10 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
         
         public IndexTests()
         {
-            _subject = new Index(GetInformationForProject.Object);
+            _subject = new Index(GetInformationForProject.Object)
+            {
+                AcademyUkprn = AcademyUkprn
+            };
         }
         
         [Fact]
@@ -25,17 +30,23 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
         }
         
         [Fact]
-        public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
+        public async void GivenExistingAcademy_AssignsTheAcademyToTheViewModel()
         {
+            var ukprn = "7689";
             var fixture = new Fixture();
             var outgoingAcademy = fixture.Create<Academy>();
-            FoundInformationForProject.OutgoingAcademy = outgoingAcademy;
-                
+            outgoingAcademy.Ukprn = ukprn;
+            FoundInformationForProject.OutgoingAcademies = new List<Academy>
+            {
+                outgoingAcademy
+            };
+
+            _subject.AcademyUkprn = ukprn;
             var response = await _subject.OnGetAsync(ProjectUrn0001);
 
-            var expectedGeneralInformation = outgoingAcademy.GeneralInformation;
+            var expectedGeneralInformation = FoundInformationForProject.OutgoingAcademies.First().GeneralInformation;
             Assert.IsType<PageResult>(response);
-            Assert.Equal(ProjectUrn0001, _subject.Urn);
+            Assert.Equal(outgoingAcademy.Name, _subject.AcademyName);
             Assert.Equal(expectedGeneralInformation.SchoolPhase, _subject.SchoolPhase);
         }
     }

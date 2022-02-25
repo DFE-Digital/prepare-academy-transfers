@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
@@ -18,7 +19,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
         public KeyStage2PerformanceTests()
         {
-            FoundInformationForProject.EducationPerformance = new EducationPerformance
+            FoundInformationForProject.OutgoingAcademies.First().EducationPerformance = new EducationPerformance
             {
                 KeyStage2Performance = new List<KeyStage2>
                 {
@@ -26,11 +27,15 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                     {
                         Year = "test year"
                     }
-                }
+                },
+                KeyStage2AdditionalInformation = "some additional info"
             };
-            _subject = new KeyStage2Performance(GetInformationForProject.Object, ProjectRepository.Object);
-            _subject.Urn = ProjectUrn0001;
-            _subject.AdditionalInformationViewModel = new AdditionalInformationViewModel();
+            _subject = new KeyStage2Performance(GetInformationForProject.Object, ProjectRepository.Object)
+            {
+                Urn = ProjectUrn0001,
+                AcademyUkprn = AcademyUkprn,
+                AdditionalInformationViewModel = new AdditionalInformationViewModel()
+            };
         }
 
         public class OnGetAsyncTests : KeyStage2PerformanceTests
@@ -57,14 +62,12 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheViewModel()
             {
-                const string additionalInformation = "some additional info";
-                FoundInformationForProject.Project.KeyStage2PerformanceAdditionalInformation = additionalInformation;
                 GetInformationForProject.Setup(s => s.Execute(ProjectUrn0001))
                     .ReturnsAsync(FoundInformationForProject);
-
+                
                 await _subject.OnGetAsync();
 
-                Assert.Equal(additionalInformation, _subject.AdditionalInformationViewModel.AdditionalInformation);
+                Assert.Equal(FoundInformationForProject.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn).EducationPerformance.KeyStage2AdditionalInformation, _subject.AdditionalInformationViewModel.AdditionalInformation);
                 Assert.Equal(ProjectUrn0001, _subject.AdditionalInformationViewModel.Urn);
             }
             
@@ -80,24 +83,8 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
         public class OnPostAsyncTests : KeyStage2PerformanceTests
         {
-            private readonly Project _foundProject;
-
-            public OnPostAsyncTests()
-            {
-                _foundProject = new Project
-                {
-                    Urn = ProjectUrn0001
-                };
-
-                ProjectRepository.Setup(s => s.GetByUrn(ProjectUrn0001)).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Result = _foundProject
-                    });
-            }
-
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async void GivenAcademyUkprn_FetchesAcademyFromTheRepository()
             {
                 await _subject.OnPostAsync();
 
@@ -119,7 +106,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage2Performance", redirectToPageResponse.PageName);
                 Assert.Null(redirectToPageResponse.PageHandler);
-                Assert.Equal(additionalInformation, _foundProject.KeyStage2PerformanceAdditionalInformation);
+                Assert.Equal(additionalInformation, FoundProjectFromRepo.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn).KeyStage2PerformanceAdditionalInformation);
             }
 
             [Fact]
@@ -133,7 +120,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 };
                 await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.KeyStage2PerformanceAdditionalInformation == additionalInfo
+                    project => project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn).KeyStage2PerformanceAdditionalInformation == additionalInfo
                 )));
             }
             

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
@@ -18,7 +19,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
         public KeyStage4PerformanceTests()
         {
-            FoundInformationForProject.EducationPerformance = new EducationPerformance
+            FoundInformationForProject.OutgoingAcademies.First().EducationPerformance = new EducationPerformance
             {
                 KeyStage4Performance = new List<KeyStage4>
                 {
@@ -40,12 +41,14 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                             Disadvantaged = "30.4"
                         }
                     }
-                }
+                },
+                KeyStage4AdditionalInformation = "some additional info"
             };
 
             _subject = new KeyStage4Performance(GetInformationForProject.Object, ProjectRepository.Object)
             {
                 Urn = ProjectUrn0001,
+                AcademyUkprn = AcademyUkprn,
                 AdditionalInformationViewModel = new AdditionalInformationViewModel()
             };
         }
@@ -76,14 +79,12 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheViewModel()
             {
-                const string additionalInformation = "some additional info";
-                FoundInformationForProject.Project.KeyStage4PerformanceAdditionalInformation = additionalInformation;
-                GetInformationForProject.Setup(s => s.Execute(ProjectUrn0001))
-                    .ReturnsAsync(FoundInformationForProject);
-
                 await _subject.OnGetAsync();
 
-                Assert.Equal(additionalInformation, _subject.AdditionalInformationViewModel.AdditionalInformation);
+                Assert.Equal(
+                    FoundInformationForProject.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn)
+                        .EducationPerformance.KeyStage4AdditionalInformation,
+                    _subject.AdditionalInformationViewModel.AdditionalInformation);
                 Assert.Equal(ProjectUrn0001, _subject.AdditionalInformationViewModel.Urn);
             }
 
@@ -99,22 +100,6 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
 
         public class OnPostAsyncTests : KeyStage4PerformanceTests
         {
-            private readonly Project _foundProject;
-
-            public OnPostAsyncTests()
-            {
-                _foundProject = new Project
-                {
-                    Urn = ProjectUrn0001
-                };
-
-                ProjectRepository.Setup(s => s.GetByUrn(ProjectUrn0001)).ReturnsAsync(
-                    new RepositoryResult<Project>
-                    {
-                        Result = _foundProject
-                    });
-            }
-
             [Fact]
             public async void GivenUrn_FetchesProjectFromTheRepository()
             {
@@ -126,22 +111,27 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectModel()
             {
-                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
+                const string additionalInfo = "some additional info";
+                _subject.AdditionalInformationViewModel.AdditionalInformation = additionalInfo;
                 var response = await _subject.OnPostAsync();
 
                 var redirectToPageResponse = Assert.IsType<RedirectToPageResult>(response);
                 Assert.Equal("KeyStage4Performance", redirectToPageResponse.PageName);
                 Assert.Null(redirectToPageResponse.PageHandler);
-                Assert.Equal( _subject.AdditionalInformationViewModel.AdditionalInformation, _foundProject.KeyStage4PerformanceAdditionalInformation);
+                Assert.Equal(additionalInfo,
+                    FoundProjectFromRepo.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn)
+                        .KeyStage4PerformanceAdditionalInformation);
             }
 
             [Fact]
             public async void GivenAdditionalInformation_UpdatesTheProjectCorrectly()
             {
-                _subject.AdditionalInformationViewModel.AdditionalInformation = "some additional info";
+                const string additionalInfo = "some additional info";
+                _subject.AdditionalInformationViewModel.AdditionalInformation = additionalInfo;
                 await _subject.OnPostAsync();
                 ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.KeyStage4PerformanceAdditionalInformation ==  _subject.AdditionalInformationViewModel.AdditionalInformation
+                    project => project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn)
+                        .KeyStage4PerformanceAdditionalInformation == additionalInfo
                 )));
             }
 
