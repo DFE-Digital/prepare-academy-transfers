@@ -46,13 +46,18 @@ namespace Frontend.Tests.TestFixtures
                         {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"},
                     }
                 },
-                PupilNumbersAdditionalInformation = "pupil numbers additional info",
-                KeyStage2PerformanceAdditionalInformation = "ks2 additional info",
-                KeyStage4PerformanceAdditionalInformation = "ks4 additional info",
-                KeyStage5PerformanceAdditionalInformation = "ks5 additional info",
-                LatestOfstedJudgementAdditionalInformation = "ofsted additional info",
                 TransferringAcademies = new List<TransferringAcademies>
-                    {new TransferringAcademies {IncomingTrustName = "incoming trust name"}}
+                {
+                    new TransferringAcademies
+                    {
+                        IncomingTrustName = "incoming trust name",
+                        PupilNumbersAdditionalInformation = "pupil numbers additional info",
+                        KeyStage2PerformanceAdditionalInformation = "ks2 additional info",
+                        KeyStage4PerformanceAdditionalInformation = "ks4 additional info",
+                        KeyStage5PerformanceAdditionalInformation = "ks5 additional info",
+                        LatestOfstedReportAdditionalInformation = "ofsted additional info"
+                    }
+                }
             };
 
             var foundAcademy = new Academy
@@ -99,12 +104,14 @@ namespace Frontend.Tests.TestFixtures
                 },
                 LocalAuthorityName = "LA Name"
             };
-
-
+            
             return new GetInformationForProjectResponse
             {
                 Project = foundProject,
-                OutgoingAcademy = foundAcademy
+                OutgoingAcademies = new List<Academy>
+                {
+                    foundAcademy
+                }
             };
         }
     }

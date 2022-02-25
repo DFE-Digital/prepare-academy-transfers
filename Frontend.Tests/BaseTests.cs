@@ -103,12 +103,6 @@ namespace Frontend.Tests
                         }
                     }
                 },
-                OutgoingAcademy = new Academy
-                {
-                    Urn = AcademyUrn,
-                    LocalAuthorityName = LAName,
-                    Name = OutgoingAcademyName
-                },
                 OutgoingAcademies = new List<Academy>()
                 {
                     new Academy

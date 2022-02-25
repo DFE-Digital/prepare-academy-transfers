@@ -42,9 +42,7 @@ namespace Frontend.Services
             return new GetInformationForProjectResponse
             {
                 Project = projectResult.Result,
-                OutgoingAcademies = outgoingAcademies,
-                // todo: remove this when other mat-mat work has been done
-                OutgoingAcademy = outgoingAcademies.First()
+                OutgoingAcademies = outgoingAcademies
             };
         }
 
