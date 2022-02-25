@@ -79,9 +79,9 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(academy.PupilNumbers.WithStatementOfSen, htbDocumentResult.PupilsWithSen);
                 Assert.Equal(academy.PupilNumbers.WhoseFirstLanguageIsNotEnglish, htbDocumentResult.PupilsWithFirstLanguageNotEnglish);
                 Assert.Equal(academy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years, htbDocumentResult.PupilsFsm6Years);
-                Assert.Equal(getTestInformationForProject.Project.PupilNumbersAdditionalInformation, htbDocumentResult.PupilNumbersAdditionalInformation);
+                Assert.Equal(academy.PupilNumbers.AdditionalInformation, htbDocumentResult.PupilNumbersAdditionalInformation);
                 Assert.Equal(academy.LatestOfstedJudgement.OfstedReport, htbDocumentResult.OfstedReport);
-                Assert.Equal(getTestInformationForProject.Project.LatestOfstedJudgementAdditionalInformation, htbDocumentResult.OfstedAdditionalInformation);
+                Assert.Equal(academy.LatestOfstedJudgement.AdditionalInformation, htbDocumentResult.OfstedAdditionalInformation);
                 Assert.Equal("2017-2018", htbDocumentResult.KeyStage2Performance.First().Year);
                 Assert.Equal("2017-2018", htbDocumentResult.KeyStage4Performance.First().Year);
                 Assert.Equal("2017-2018", htbDocumentResult.KeyStage5Performance.First().Year);

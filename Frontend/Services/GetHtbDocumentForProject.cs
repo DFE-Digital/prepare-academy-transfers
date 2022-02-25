@@ -74,15 +74,15 @@ namespace Frontend.Services
                 PupilsWithSen = academy.PupilNumbers.WithStatementOfSen,
                 PupilsWithFirstLanguageNotEnglish = academy.PupilNumbers.WhoseFirstLanguageIsNotEnglish,
                 PupilsFsm6Years = academy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
-                PupilNumbersAdditionalInformation = project.PupilNumbersAdditionalInformation,
+                PupilNumbersAdditionalInformation = academy.PupilNumbers.AdditionalInformation,
                 OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
-                OfstedAdditionalInformation = project.LatestOfstedJudgementAdditionalInformation,
+                OfstedAdditionalInformation = academy.LatestOfstedJudgement.AdditionalInformation,
                 KeyStage2Performance = educationPerformance.KeyStage2Performance,
                 KeyStage4Performance = PerformanceDataHelpers.GetFormattedKeyStage4Results(educationPerformance.KeyStage4Performance),
                 KeyStage5Performance = educationPerformance.KeyStage5Performance,
-                KeyStage2AdditionalInformation = project.KeyStage2PerformanceAdditionalInformation,
-                KeyStage4AdditionalInformation = project.KeyStage4PerformanceAdditionalInformation,
-                KeyStage5AdditionalInformation = project.KeyStage5PerformanceAdditionalInformation,
+                KeyStage2AdditionalInformation = educationPerformance.KeyStage2AdditionalInformation,
+                KeyStage4AdditionalInformation = educationPerformance.KeyStage4AdditionalInformation,
+                KeyStage5AdditionalInformation = educationPerformance.KeyStage5AdditionalInformation,
                 LocalAuthorityName = academy.LocalAuthorityName
             };
 

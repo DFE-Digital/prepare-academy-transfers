@@ -110,12 +110,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.OutgoingTrustUkprn, result.OutgoingTrustUkprn);
             Assert.Equal(toMap.OutgoingTrust.GroupName, result.OutgoingTrustName);
             Assert.Equal(toMap.AcademyPerformanceAdditionalInformation, result.GeneralInformationAdditionalInformation);
-            Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
-            Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);
-            Assert.Equal(toMap.KeyStage2PerformanceAdditionalInformation, result.KeyStage2PerformanceAdditionalInformation);
-            Assert.Equal(toMap.KeyStage4PerformanceAdditionalInformation, result.KeyStage4PerformanceAdditionalInformation);
-            Assert.Equal(toMap.KeyStage5PerformanceAdditionalInformation, result.KeyStage5PerformanceAdditionalInformation);
-
+            
             AssertBenefitsCorrect(toMap, result);
             AssertDatesCorrect(toMap, result);
             AssertFeaturesCorrect(toMap, result);

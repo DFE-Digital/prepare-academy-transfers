@@ -62,7 +62,15 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 Reference = "SW-MAT-12345678",
                 TransferringAcademies = new List<TransferringAcademies>
                 {
-                    new TransferringAcademies {IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321", IncomingTrustName = "incoming trust"}
+                    new TransferringAcademies
+                    {
+                        IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321", IncomingTrustName = "incoming trust",
+                        PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
+                        LatestOfstedReportAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
+                        KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
+                        KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
+                        KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation"
+                    }
                 },
                 OutgoingTrustName = "Outgoing trust name",
                 OutgoingTrustUkprn = "Outgoing trust Ukprn",
@@ -72,11 +80,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                     Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Empty
                 },
                 GeneralInformationAdditionalInformation = "GeneralInformationAdditionalInformation",
-                PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",
-                LatestOfstedJudgementAdditionalInformation = "LatestOfstedJudgementAdditionalInformation",
-                KeyStage2PerformanceAdditionalInformation = "KeyStage2PerformanceAdditionalInformation",
-                KeyStage4PerformanceAdditionalInformation = "KeyStage4PerformanceAdditionalInformation",
-                KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation",
+              
             };
 
             var result = subject.Map(toMap);
@@ -86,12 +90,6 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.Status, result.Status);
             Assert.Equal(toMap.Urn, result.ProjectUrn);
             Assert.Equal(toMap.Reference, result.ProjectReference);
-            Assert.Equal(toMap.GeneralInformationAdditionalInformation, result.AcademyPerformanceAdditionalInformation);
-            Assert.Equal(toMap.PupilNumbersAdditionalInformation, result.PupilNumbersAdditionalInformation);
-            Assert.Equal(toMap.LatestOfstedJudgementAdditionalInformation, result.LatestOfstedJudgementAdditionalInformation);
-            Assert.Equal(toMap.KeyStage2PerformanceAdditionalInformation, result.KeyStage2PerformanceAdditionalInformation);
-            Assert.Equal(toMap.KeyStage4PerformanceAdditionalInformation, result.KeyStage4PerformanceAdditionalInformation);
-            Assert.Equal(toMap.KeyStage5PerformanceAdditionalInformation, result.KeyStage5PerformanceAdditionalInformation);
 
             AssertTransferringAcademiesCorrect(toMap, result);
             AssertBenefitsAreCorrect(toMap, result);
@@ -101,6 +99,8 @@ namespace Data.TRAMS.Tests.Mappers.Request
             AssertGeneralInformationIsCorrect(toMap, result);
         }
 
+        //todo: add test for multiple academies
+        
         [Fact]
         public void GivenHasDateIsFalse_ShouldSetHasDateToNull()
         {
@@ -205,6 +205,12 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 result.TransferringAcademies[0].IncomingTrustUkprn);
             Assert.Equal(toMap.TransferringAcademies[0].OutgoingAcademyUkprn,
                 result.TransferringAcademies[0].OutgoingAcademyUkprn);
+            Assert.Equal(toMap.TransferringAcademies[0].PupilNumbersAdditionalInformation, result.TransferringAcademies[0].PupilNumbersAdditionalInformation);
+            Assert.Equal(toMap.TransferringAcademies[0].LatestOfstedReportAdditionalInformation, result.TransferringAcademies[0].LatestOfstedReportAdditionalInformation);
+            Assert.Equal(toMap.TransferringAcademies[0].KeyStage2PerformanceAdditionalInformation, result.TransferringAcademies[0].KeyStage2PerformanceAdditionalInformation);
+            Assert.Equal(toMap.TransferringAcademies[0].KeyStage4PerformanceAdditionalInformation, result.TransferringAcademies[0].KeyStage4PerformanceAdditionalInformation);
+            Assert.Equal(toMap.TransferringAcademies[0].KeyStage5PerformanceAdditionalInformation, result.TransferringAcademies[0].KeyStage5PerformanceAdditionalInformation);
+
         }
     }
 }
