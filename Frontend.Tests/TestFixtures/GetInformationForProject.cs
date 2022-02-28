@@ -46,13 +46,18 @@ namespace Frontend.Tests.TestFixtures
                         {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"},
                     }
                 },
-                PupilNumbersAdditionalInformation = "pupil numbers additional info",
-                KeyStage2PerformanceAdditionalInformation = "ks2 additional info",
-                KeyStage4PerformanceAdditionalInformation = "ks4 additional info",
-                KeyStage5PerformanceAdditionalInformation = "ks5 additional info",
-                LatestOfstedJudgementAdditionalInformation = "ofsted additional info",
                 TransferringAcademies = new List<TransferringAcademies>
-                    {new TransferringAcademies {IncomingTrustName = "incoming trust name"}}
+                {
+                    new TransferringAcademies
+                    {
+                        IncomingTrustName = "incoming trust name",
+                        PupilNumbersAdditionalInformation = "pupil numbers additional info",
+                        KeyStage2PerformanceAdditionalInformation = "ks2 additional info",
+                        KeyStage4PerformanceAdditionalInformation = "ks4 additional info",
+                        KeyStage5PerformanceAdditionalInformation = "ks5 additional info",
+                        LatestOfstedReportAdditionalInformation = "ofsted additional info"
+                    }
+                }
             };
 
             var foundAcademy = new Academy
@@ -91,21 +96,22 @@ namespace Frontend.Tests.TestFixtures
                     OverallEffectiveness = "overall effectiveness",
                     OfstedReport = "ofsted report"
                 },
+                EducationPerformance = new EducationPerformance
+                {
+                    KeyStage2Performance = new List<KeyStage2> {new KeyStage2 {Year = "2017-2018"}},
+                    KeyStage4Performance = new List<KeyStage4> {new KeyStage4 {Year = "2017-2018"}},
+                    KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2017-2018"}}
+                },
                 LocalAuthorityName = "LA Name"
             };
-
-            var foundEducationPerformance = new EducationPerformance
-            {
-                KeyStage2Performance = new List<KeyStage2> {new KeyStage2 {Year = "2017-2018"}},
-                KeyStage4Performance = new List<KeyStage4> {new KeyStage4 {Year = "2017-2018"}},
-                KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2017-2018"}}
-            };
-
+            
             return new GetInformationForProjectResponse
             {
                 Project = foundProject,
-                OutgoingAcademy = foundAcademy,
-                EducationPerformance = foundEducationPerformance
+                OutgoingAcademies = new List<Academy>
+                {
+                    foundAcademy
+                }
             };
         }
     }

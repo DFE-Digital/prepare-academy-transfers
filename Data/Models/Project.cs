@@ -31,17 +31,6 @@ namespace Data.Models
         public TransferAcademyAndTrustInformation AcademyAndTrustInformation { get; set; }
         public string GeneralInformationAdditionalInformation { get; set; }
 
-        //todo: Remove project level properties
-        #region Remove
-
-        public string PupilNumbersAdditionalInformation { get; set; }
-        public string LatestOfstedJudgementAdditionalInformation { get; set; }
-        public string KeyStage2PerformanceAdditionalInformation { get; set; }
-        public string KeyStage4PerformanceAdditionalInformation { get; set; }
-        public string KeyStage5PerformanceAdditionalInformation { get; set; }
-
-        #endregion
-
         public string OutgoingAcademyName => TransferringAcademies[0].OutgoingAcademyName;
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
         public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
