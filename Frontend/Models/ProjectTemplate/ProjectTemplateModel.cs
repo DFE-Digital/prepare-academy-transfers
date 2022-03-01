@@ -40,7 +40,5 @@ namespace Frontend.Models.ProjectTemplate
         [DocumentText("OtherFactors")] public string OtherFactors { get; set; }
 
         public List<ProjectTemplateAcademyModel> Academies { get; set; }
-
-        //public string LocalAuthorityName { get; set; }
     }
 }

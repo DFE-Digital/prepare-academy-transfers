@@ -9,7 +9,6 @@ namespace Frontend.Models.ProjectTemplate
         public string SchoolName { get; set; }
         public string SchoolUrn { get; set; }
         public string AcademyTypeAndRoute { get; set; }
-        [DisplayName("School Type")]
         public string SchoolType { get; set; }
         public string SchoolPhase { get; set; }
         public string AgeRange { get; set; }
