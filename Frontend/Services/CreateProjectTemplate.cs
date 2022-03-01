@@ -51,10 +51,6 @@ namespace Frontend.Services
 
             BuildAcademyData(builder, projectTemplateModel.Academies);
 
-            // BuildKeyStage2PerformanceInformation(builder, projectTemplateModel);
-            // BuildKeyStage4PerformanceInformation(builder, projectTemplateModel);
-            // BuildKeyStage5PerformanceInformation(builder, projectTemplateModel);
-
             return new CreateProjectTemplateResponse
             {
                 Document = builder.Build()
@@ -79,8 +75,7 @@ namespace Frontend.Services
                     BuildKeyStage2PerformanceInformation(builder, academy);
                     BuildKeyStage4PerformanceInformation(builder, academy);
                     BuildKeyStage5PerformanceInformation(builder, academy);
-                    
-                    builder.AddParagraph(pBuilder => pBuilder.AddNewLine());
+                    builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
                 }
             });
         }
@@ -231,6 +226,8 @@ namespace Frontend.Services
 
         private static void BuildLatestOfsted(IDocumentBodyBuilder builder, ProjectTemplateAcademyModel academy)
         {
+            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
+            
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
@@ -274,6 +271,8 @@ namespace Frontend.Services
             {
                 return;
             }
+            
+            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
 
             builder.AddHeading(hBuilder =>
             {
@@ -418,6 +417,8 @@ namespace Frontend.Services
             {
                 return;
             }
+            
+            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
 
             var ks4Results = academy.KeyStage4Performance.Select(c =>
             {
@@ -1238,6 +1239,7 @@ namespace Frontend.Services
                 return;
             }
 
+            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
 
             builder.AddHeading(hBuilder =>
             {
