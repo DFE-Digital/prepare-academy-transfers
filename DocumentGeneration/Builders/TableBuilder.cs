@@ -48,10 +48,10 @@ namespace DocumentGeneration.Builders
             _tableProperties.TableBorders = SolidTableBorders();
             _tableProperties.TableCellMarginDefault = new TableCellMarginDefault
             {
-                TopMargin = new TopMargin {Width = "40"},
-                BottomMargin = new BottomMargin {Width = "40"},
-                TableCellRightMargin = new TableCellRightMargin {Width = 40},
-                TableCellLeftMargin = new TableCellLeftMargin {Width = 40}
+                TopMargin = new TopMargin {Width = "130"},
+                BottomMargin = new BottomMargin {Width = "130"},
+                TableCellRightMargin = new TableCellRightMargin {Width = 80},
+                TableCellLeftMargin = new TableCellLeftMargin {Width = 80}
             };
             _tableProperties.TableLayout = new TableLayout {Type = TableLayoutValues.Fixed,};
             _tableProperties.TableWidth = new TableWidth {Type = TableWidthUnitValues.Dxa, Width = "10000"};

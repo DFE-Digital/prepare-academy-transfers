@@ -175,12 +175,12 @@ namespace Frontend.Services
                     new TextElement { Value = $"{academy.MpAndParty}" },
                 }
             });
-            
-            
         }
 
         private static void BuildPupilNumbers(IDocumentBodyBuilder builder, ProjectTemplateAcademyModel academy)
         {
+            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
+            
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
@@ -226,8 +226,6 @@ namespace Frontend.Services
 
         private static void BuildLatestOfsted(IDocumentBodyBuilder builder, ProjectTemplateAcademyModel academy)
         {
-            builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
-            
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
