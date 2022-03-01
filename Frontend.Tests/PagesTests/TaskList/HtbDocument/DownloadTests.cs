@@ -20,7 +20,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
                 Urn = ProjectUrn0001
             };
 
-            _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateHtbDocumentResponse
+            _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateProjectTemplateResponse
                 {Document = new byte[] {0, 1}});
         }
 
@@ -50,7 +50,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             public async void GivenId_ReturnsAFileWithTheGeneratedDocument()
             {
                 var fileContents = new byte[] {1, 2, 3, 4};
-                var createDocumentResponse = new CreateHtbDocumentResponse
+                var createDocumentResponse = new CreateProjectTemplateResponse
                 {
                     Document = fileContents
                 };

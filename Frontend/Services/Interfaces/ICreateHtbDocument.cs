@@ -5,6 +5,6 @@ namespace Frontend.Services.Interfaces
 {
     public interface ICreateHtbDocument
     {
-        public Task<CreateHtbDocumentResponse> Execute(string projectUrn);
+        public Task<CreateProjectTemplateResponse> Execute(string projectUrn);
     }
 }

@@ -24,7 +24,7 @@ namespace Frontend.Tests.ServicesTests
             public async void GivenGetHtbDocumentForProjectReturnsNotFound_ReturnsCorrectError()
             {
                 _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetHtbDocumentForProjectResponse()
+                    new GetProjectTemplateResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {
@@ -44,7 +44,7 @@ namespace Frontend.Tests.ServicesTests
             public async void GivenGetHtbDocumentForProjectReturnsServiceError_ReturnsCorrectError()
             {
                 _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetHtbDocumentForProjectResponse()
+                    new GetProjectTemplateResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {

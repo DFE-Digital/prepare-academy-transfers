@@ -6,6 +6,6 @@ namespace Frontend.Services.Interfaces
 {
     public interface IGetHtbDocumentForProject
     {
-        public Task<GetHtbDocumentForProjectResponse> Execute(string projectUrn);
+        public Task<GetProjectTemplateResponse> Execute(string projectUrn);
     }
 }
