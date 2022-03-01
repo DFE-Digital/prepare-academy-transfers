@@ -14,13 +14,13 @@ using Frontend.Services.Responses;
 
 namespace Frontend.Services
 {
-    public class CreateHtbDocument : ICreateHtbDocument
+    public class CreateProjectTemplate : ICreateProjectTemplate
     {
-        private readonly IGetHtbDocumentForProject _getHtbDocumentForProject;
+        private readonly IGetProjectTemplateModel _getProjectTemplateModel;
 
-        public CreateHtbDocument(IGetHtbDocumentForProject getHtbDocumentForProject)
+        public CreateProjectTemplate(IGetProjectTemplateModel getProjectTemplateModel)
         {
-            _getHtbDocumentForProject = getHtbDocumentForProject;
+            _getProjectTemplateModel = getProjectTemplateModel;
         }
 
         private MemoryStream CreateMemoryStream(string template)
@@ -36,7 +36,7 @@ namespace Frontend.Services
 
         public async Task<CreateProjectTemplateResponse> Execute(string projectUrn)
         {
-            var getHtbDocumentForProject = await _getHtbDocumentForProject.Execute(projectUrn);
+            var getHtbDocumentForProject = await _getProjectTemplateModel.Execute(projectUrn);
             if (!getHtbDocumentForProject.IsValid)
             {
                 return CreateErrorResponse(getHtbDocumentForProject.ResponseError);
@@ -79,6 +79,8 @@ namespace Frontend.Services
                     BuildKeyStage2PerformanceInformation(builder, academy);
                     BuildKeyStage4PerformanceInformation(builder, academy);
                     BuildKeyStage5PerformanceInformation(builder, academy);
+                    
+                    builder.AddParagraph(pBuilder => pBuilder.AddNewLine());
                 }
             });
         }

@@ -9,11 +9,11 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
     public class DownloadTests : BaseTests
     {
         private readonly Pages.TaskList.HtbDocument.Download _subject;
-        private readonly Mock<ICreateHtbDocument> _createHtbDocument;
+        private readonly Mock<ICreateProjectTemplate> _createHtbDocument;
 
         protected DownloadTests()
         {
-            _createHtbDocument = new Mock<ICreateHtbDocument>();
+            _createHtbDocument = new Mock<ICreateProjectTemplate>();
             _subject = new Pages.TaskList.HtbDocument.Download(_createHtbDocument.Object,
                 GetInformationForProject.Object)
             {

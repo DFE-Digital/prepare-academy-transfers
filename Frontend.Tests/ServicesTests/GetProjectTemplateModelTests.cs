@@ -1,26 +1,28 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Data.Models;
+using Data.Models.KeyStagePerformance;
 using Frontend.Services;
 using Frontend.Services.Interfaces;
-using Frontend.Services.Responses;
 using Moq;
 using Xunit;
 
 namespace Frontend.Tests.ServicesTests
 {
-    public class GetHtbDocumentForProjectTests
+    public class GetProjectTemplateModelTests
     {
-        private readonly GetProjectTemplateData _subject;
+        private readonly GetProjectTemplateModel _subject;
         private readonly Mock<IGetInformationForProject> _getInformationForProject;
         private readonly string _projectUrn = "projectId";
 
-        public GetHtbDocumentForProjectTests()
+        public GetProjectTemplateModelTests()
         {
             _getInformationForProject = new Mock<IGetInformationForProject>();
-            _subject = new GetProjectTemplateData(_getInformationForProject.Object);
+            _subject = new GetProjectTemplateModel(_getInformationForProject.Object);
         }
         
-        public class ExecuteTests : GetHtbDocumentForProjectTests
+        public class ExecuteTemplateModelTests : GetProjectTemplateModelTests
         {
             [Fact]
             public async void GivenExistingProject_AssignsTheProjectToTheViewModel()
@@ -34,8 +36,7 @@ namespace Frontend.Tests.ServicesTests
                 var result = await _subject.Execute(_projectUrn);
                 var projectTemplateModel = result.ProjectTemplateModel;
                 var projectTemplateAcademyModel = projectTemplateModel.Academies.First();
-
-                //todo: Loop through academies
+                
                 var academy = getTestInformationForProject.OutgoingAcademies.First();
                 
                 Assert.Equal("Approve", projectTemplateModel.Recommendation);
@@ -86,6 +87,39 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage2Performance.First().Year);
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage4Performance.First().Year);
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage5Performance.First().Year);
+            }
+            
+            [Fact]
+            public async void GivenExistingProjectWithMultipleAcademies_AssignsTheProjectToTheViewModel()
+            {
+                const string academyUrn = "urn 2";
+                
+                var getTestInformationForProject =
+                    TestFixtures.GetInformationForProject.GetTestInformationForProject(_projectUrn);
+
+                getTestInformationForProject.OutgoingAcademies.Add(
+                    new Academy()
+                    {
+                        Ukprn = "ukprn2",
+                        Urn = academyUrn,
+                        EducationPerformance = new EducationPerformance
+                        {
+                            KeyStage2Performance = new List<KeyStage2> {new KeyStage2 {Year = "2017-2018"}},
+                            KeyStage4Performance = new List<KeyStage4> {new KeyStage4 {Year = "2017-2018"}},
+                            KeyStage5Performance = new List<KeyStage5> {new KeyStage5 {Year = "2017-2018"}}
+                        }
+                    });
+                
+                _getInformationForProject.Setup(s => s.Execute(_projectUrn)).ReturnsAsync(
+                    getTestInformationForProject);
+
+                var result = await _subject.Execute(_projectUrn);
+                var projectTemplateModel = result.ProjectTemplateModel;
+                var projectTemplateAcademyModels = projectTemplateModel.Academies;
+
+                Assert.Equal(2, projectTemplateAcademyModels.Count);
+                Assert.Equal(academyUrn, projectTemplateAcademyModels[1].SchoolUrn);
+                
             }
         }
     }

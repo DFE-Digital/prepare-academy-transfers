@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Helpers;
-using Frontend.Models;
 using Frontend.Models.ProjectTemplate;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
@@ -15,25 +13,20 @@ using Helpers;
 
 namespace Frontend.Services
 {
-    public class GetProjectTemplateData : IGetHtbDocumentForProject
+    public class GetProjectTemplateModel : IGetProjectTemplateModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
         
-        public GetProjectTemplateData(IGetInformationForProject getInformationForProject )
+        public GetProjectTemplateModel(IGetInformationForProject getInformationForProject )
         {
             _getInformationForProject = getInformationForProject;
         }
         
-        public async Task<GetProjectTemplateResponse> Execute(string projectUrn)
+        public async Task<GetProjectTemplateModelResponse> Execute(string projectUrn)
         {
             var informationForProjectResult = await _getInformationForProject.Execute(projectUrn);
             var project = informationForProjectResult.Project;
-            
-            //todo: loop academies in word document
             var academies = informationForProjectResult.OutgoingAcademies;
-            //var academy = informationForProjectResult.OutgoingAcademies.First();
-            //var educationPerformance = academy.EducationPerformance;
-            
             var projectTemplateModel = new ProjectTemplateModel()
             {
                 Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(project.AcademyAndTrustInformation.Recommendation),
@@ -61,7 +54,7 @@ namespace Frontend.Services
                 Academies = GetAcademyData(academies)
             };
 
-            return new GetProjectTemplateResponse
+            return new GetProjectTemplateModelResponse
             {
                 ProjectTemplateModel = projectTemplateModel
             };

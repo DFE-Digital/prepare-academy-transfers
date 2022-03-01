@@ -1,11 +1,10 @@
-using Frontend.Models;
 using Frontend.Models.ProjectTemplate;
 
 namespace Frontend.Services.Responses
 {
-    public class GetProjectTemplateResponse
+    public class GetProjectTemplateModelResponse
     {
-        public GetProjectTemplateResponse()
+        public GetProjectTemplateModelResponse()
         {
             ResponseError = new ServiceResponseError();
         }
