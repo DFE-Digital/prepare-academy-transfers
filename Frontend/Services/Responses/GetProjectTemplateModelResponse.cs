@@ -1,15 +1,15 @@
-using Frontend.Models;
+using Frontend.Models.ProjectTemplate;
 
 namespace Frontend.Services.Responses
 {
-    public class GetHtbDocumentForProjectResponse
+    public class GetProjectTemplateModelResponse
     {
-        public GetHtbDocumentForProjectResponse()
+        public GetProjectTemplateModelResponse()
         {
             ResponseError = new ServiceResponseError();
         }
         
-        public HtbDocument HtbDocument { get; set; }
+        public ProjectTemplateModel ProjectTemplateModel { get; set; }
         public ServiceResponseError ResponseError { get; set; }
         public bool IsValid => string.IsNullOrEmpty(ResponseError.ErrorMessage);
     }

@@ -9,18 +9,18 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
     public class DownloadTests : BaseTests
     {
         private readonly Pages.TaskList.HtbDocument.Download _subject;
-        private readonly Mock<ICreateHtbDocument> _createHtbDocument;
+        private readonly Mock<ICreateProjectTemplate> _createHtbDocument;
 
         protected DownloadTests()
         {
-            _createHtbDocument = new Mock<ICreateHtbDocument>();
+            _createHtbDocument = new Mock<ICreateProjectTemplate>();
             _subject = new Pages.TaskList.HtbDocument.Download(_createHtbDocument.Object,
                 GetInformationForProject.Object)
             {
                 Urn = ProjectUrn0001
             };
 
-            _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateHtbDocumentResponse
+            _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateProjectTemplateResponse
                 {Document = new byte[] {0, 1}});
         }
 
@@ -50,7 +50,7 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             public async void GivenId_ReturnsAFileWithTheGeneratedDocument()
             {
                 var fileContents = new byte[] {1, 2, 3, 4};
-                var createDocumentResponse = new CreateHtbDocumentResponse
+                var createDocumentResponse = new CreateProjectTemplateResponse
                 {
                     Document = fileContents
                 };

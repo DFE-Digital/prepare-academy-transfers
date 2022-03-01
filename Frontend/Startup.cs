@@ -212,9 +212,9 @@ namespace Frontend
 
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<ICreateHtbDocument, CreateHtbDocument>();
+            serviceCollection.AddTransient<ICreateProjectTemplate, CreateProjectTemplate>();
             serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
-            serviceCollection.AddTransient<IGetHtbDocumentForProject, GetHtbDocumentForProject>();
+            serviceCollection.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
             serviceCollection.AddTransient<ITaskListService, TaskListService>();
             serviceCollection.AddScoped<IReferenceNumberService, ReferenceNumberService>();
         }

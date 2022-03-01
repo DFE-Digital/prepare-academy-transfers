@@ -6,25 +6,25 @@ using Xunit;
 
 namespace Frontend.Tests.ServicesTests
 {
-    public class CreateHtbDocumentTests
+    public class CreateProjectTemplateTests
     {
-        private readonly CreateHtbDocument _subject;
-        private readonly Mock<IGetHtbDocumentForProject> _getHtbDocumentForProject;
+        private readonly CreateProjectTemplate _subject;
+        private readonly Mock<IGetProjectTemplateModel> _getHtbDocumentForProject;
         private readonly string _projectUrn = "projectId";
 
-        public CreateHtbDocumentTests()
+        public CreateProjectTemplateTests()
         {
-            _getHtbDocumentForProject = new Mock<IGetHtbDocumentForProject>();
-            _subject = new CreateHtbDocument(_getHtbDocumentForProject.Object);
+            _getHtbDocumentForProject = new Mock<IGetProjectTemplateModel>();
+            _subject = new CreateProjectTemplate(_getHtbDocumentForProject.Object);
         }
 
-        public class ExecuteTests : CreateHtbDocumentTests
+        public class ExecuteTests : CreateProjectTemplateTests
         {
             [Fact]
             public async void GivenGetHtbDocumentForProjectReturnsNotFound_ReturnsCorrectError()
             {
                 _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetHtbDocumentForProjectResponse()
+                    new GetProjectTemplateModelResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {
@@ -44,7 +44,7 @@ namespace Frontend.Tests.ServicesTests
             public async void GivenGetHtbDocumentForProjectReturnsServiceError_ReturnsCorrectError()
             {
                 _getHtbDocumentForProject.Setup(r => r.Execute(It.IsAny<string>())).ReturnsAsync(
-                    new GetHtbDocumentForProjectResponse()
+                    new GetProjectTemplateModelResponse()
                     {
                         ResponseError = new ServiceResponseError
                         {

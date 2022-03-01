@@ -1,8 +1,8 @@
 ﻿namespace Frontend.Services.Responses
 {
-    public class CreateHtbDocumentResponse
+    public class CreateProjectTemplateResponse
     {
-        public CreateHtbDocumentResponse()
+        public CreateProjectTemplateResponse()
         {
             ResponseError = new ServiceResponseError();
         }

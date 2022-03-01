@@ -101,6 +101,14 @@ namespace DocumentGeneration.Builders
             _runs.Add(run);
         }
 
+        public void AddPageBreak()
+        {
+            _parent.ParagraphProperties = new ParagraphProperties()
+            {
+                PageBreakBefore = new PageBreakBefore()
+            };
+        }
+
         public void Justify(ParagraphJustification paragraphJustification)
         {
             var justification = new Justification();

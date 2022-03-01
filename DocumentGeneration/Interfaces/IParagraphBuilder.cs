@@ -7,5 +7,6 @@ namespace DocumentGeneration.Interfaces
     {
         public void AddNewLine();
         public void Justify(ParagraphJustification paragraphJustification);
+        public void AddPageBreak();
     }
 }

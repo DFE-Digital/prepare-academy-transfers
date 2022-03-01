@@ -1,23 +1,20 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Frontend.Pages.TaskList.HtbDocument
 {
     public class Download : CommonPageModel
     {
-        private readonly ICreateHtbDocument _createHtbDocument;
+        private readonly ICreateProjectTemplate _createProjectTemplate;
         private readonly IGetInformationForProject _getInformationForProject;
-        public Download(ICreateHtbDocument createHtbDocument,
+        public Download(ICreateProjectTemplate createProjectTemplate,
             IGetInformationForProject getInformationForProject)
         {
-            _createHtbDocument = createHtbDocument;
+            _createProjectTemplate = createProjectTemplate;
             _getInformationForProject = getInformationForProject;
         }
       
@@ -32,7 +29,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         public async Task<IActionResult> OnGetGenerateDocumentAsync()
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
-            var document = await _createHtbDocument.Execute(Urn);
+            var document = await _createProjectTemplate.Execute(Urn);
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 $"ProjectTemplateFor{projectInformation.Project.IncomingTrustName.ToTitleCase().Replace(" ","-")}–{projectInformation.Project.Reference}.docx");

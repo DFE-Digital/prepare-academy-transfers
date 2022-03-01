@@ -312,6 +312,11 @@ namespace DocumentGeneration.Tests.Helpers
             AddedItems.Add(new TextElement("\n"));
         }
 
+        public void AddPageBreak()
+        {
+            AddedItems.Add(new TextElement());
+        }
+
         public void Justify(ParagraphJustification paragraphJustification)
         {
             throw new NotImplementedException();
