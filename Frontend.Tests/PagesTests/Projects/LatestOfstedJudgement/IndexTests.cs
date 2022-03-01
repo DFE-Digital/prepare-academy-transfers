@@ -58,9 +58,9 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
 
                 ProjectRepository.Verify(r =>
                         r.Update(It.Is<Data.Models.Project>(project =>
-                            project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn).LatestOfstedReportAdditionalInformation 
+                            project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn)
+                                .LatestOfstedReportAdditionalInformation
                             == _subject.AdditionalInformationViewModel.AdditionalInformation)),
-                    
                     Times.Once);
             }
 
@@ -75,8 +75,10 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                 });
                 ControllerTestHelpers.AssertResultRedirectsToPage(response,
                     $"/Projects/LatestOfstedJudgement/{nameof(Index)}", routeValues);
-                Assert.Equal(_subject.AdditionalInformationViewModel.AdditionalInformation, FoundProjectFromRepo.TransferringAcademies
-                    .First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn).LatestOfstedReportAdditionalInformation);
+                Assert.Equal(_subject.AdditionalInformationViewModel.AdditionalInformation, FoundProjectFromRepo
+                    .TransferringAcademies
+                    .First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn)
+                    .LatestOfstedReportAdditionalInformation);
             }
 
             [Fact]
@@ -88,7 +90,7 @@ namespace Frontend.Tests.PagesTests.Projects.LatestOfstedJudgement
                 ControllerTestHelpers.AssertResultRedirectsToPage(
                     response,
                     Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new {id = ProjectUrn0001})
+                    new RouteValueDictionary(new {Urn = ProjectUrn0001})
                 );
             }
         }
