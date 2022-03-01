@@ -66,7 +66,7 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
             
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
             return RedirectToPage("/Projects/LatestOfstedJudgement/Index", null, new { Urn }, "additional-information-hint");
