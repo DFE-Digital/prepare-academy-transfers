@@ -42,7 +42,7 @@ namespace DocumentGeneration.Builders
                 HeadingLevel.One => "36",
                 HeadingLevel.Two => "32",
                 HeadingLevel.Three => "28",
-                _ => "28"
+                _ => "24"
             };
         }
 
