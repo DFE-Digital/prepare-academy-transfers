@@ -30,6 +30,7 @@ function createNewTransfer() {
 function searchForTrustWithQuery(queryString) {
     cy.get("[name='query']")
         .type(queryString)
+    cy.pause();
     submit();
 }
 
@@ -44,66 +45,75 @@ describe("Creating and editing an academy transfer", function () {
 		cy.storeSessionData();
 	});
 
-	before(function () {
+	beforeEach(function () {
 		cy.login();
 	});
 
-    it("Loads the page", function () {
-        createNewTransfer();
+    
+    it.skip("Create an Academy Transfer", function () {
+        cy.clickDataTest("create-transfer")
         searchForTrustWithQuery("bishop fraser")
-        selectFirstRadio();
-        submit();
+        selectFirstRadio()
+        submit()
         cy.clickDataTest("confirm-outgoing-trust")
-        cy.selectCheckbox(2);
-        submit();
+        cy.selectCheckbox(2)
+        submit()
         searchForTrustWithQuery("burnt");
-        selectFirstRadio();
-        submit();
-        cy.clickDataTest("create-project")
+        selectFirstRadio()
+        submit()
+        cy.clickDataTest("create-transfer") 
+    });
 
-        // Features
+    it("Edit an Academy Transfer", function () {
+
+        cy.get(`.govuk-link--no-visited-state`).then(projects => {
+            for(let i = 0; i < projects.length; i++){
+                if(projects[i].text.includes("Burnt Ash Primary School")){
+                    projects[i].click();
+                    break;
+                }
+            }
+        });
         cy.clickDataTest("transfer-features")
         cy.clickDataTest("initiated")
         selectFirstRadio()
-        submit();
+        submit()
         cy.clickDataTest("reason")
-        selectFirstRadio();
+        selectFirstRadio()
         cy.fillInText("moreDetail", "Some more detail and reasons")
         submit()
         cy.clickDataTest("type")
-        selectFirstRadio();
+        selectFirstRadio()
         submit()
-        cy.clickBackLink();
+        cy.clickBackLink()
         cy.getDataTest("features").should('have.text',"COMPLETED");
-
         // Dates
         cy.clickDataTest("transfer-dates")
         cy.clickDataTest("first-discussed")
         cy.fillInDate(Cypress.dayjs().add(-1,'M'))
-        submit();
+        submit()
         cy.clickDataTest("target-date")
         cy.fillInDate(Cypress.dayjs().add(3,'M'))
-        submit();
+        submit()
         cy.clickDataTest("ab-date")
         cy.fillInDate(Cypress.dayjs().add(2,'M'))
-        submit();
+        submit()
         clickBackLink()
         cy.getDataTest("dates").should('have.text',"COMPLETED");
         // Benefits
         cy.clickDataTest("transfer-benefits")
         cy.clickDataTest("intended-benefits")
-        cy.selectCheckbox(0);
-        cy.selectCheckbox(1);
-        submit();
+        cy.selectCheckbox(0)
+        cy.selectCheckbox(1)
+        submit()
         cy.clickDataTest("other-factors")
-        cy.selectCheckbox(0);
+        cy.selectCheckbox(0)
         cy.fillInTextAtIndex(0, "First")
         cy.selectCheckbox(1);
         cy.fillInTextAtIndex(1, "second")
-        submit();
+        submit()
         clickBackLink()
-        cy.getDataTest("benefits").should('have.text',"COMPLETED");
-        
+        cy.getDataTest("benefits").should('have.text',"COMPLETED");    
         //Rationale
         cy.clickDataTest("transfer-rationale")
         cy.clickDataTest("project-rationale")
@@ -186,6 +196,7 @@ describe("Creating and editing an academy transfer", function () {
         })
 
     });
+
     after(function () {
         cy.clearLocalStorage();
     });
