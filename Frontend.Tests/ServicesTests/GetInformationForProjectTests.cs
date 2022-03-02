@@ -4,6 +4,9 @@ using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Frontend.Services;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -21,6 +24,7 @@ namespace Frontend.Tests.ServicesTests
         private Project _foundProject;
         private Academy _foundAcademy;
         private EducationPerformance _foundEducationPerformance;
+        private Mock<IDistributedCache> _distributedCache;
 
         public GetInformationForProjectTests()
         {
@@ -30,11 +34,13 @@ namespace Frontend.Tests.ServicesTests
             _projectsRepository = new Mock<IProjects>();
             _academiesRepository = new Mock<IAcademies>();
             _educationPerformanceRepository = new Mock<IEducationPerformance>();
+            _distributedCache = new Mock<IDistributedCache>();
 
             _subject = new GetInformationForProject(
                 _academiesRepository.Object, 
                 _projectsRepository.Object, 
-                _educationPerformanceRepository.Object);
+                _educationPerformanceRepository.Object,
+                _distributedCache.Object);
 
             SetupRepositories();
         }
@@ -49,7 +55,8 @@ namespace Frontend.Tests.ServicesTests
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = _academyUkprn, 
-                        OutgoingAcademyUrn = _academyUrn
+                        OutgoingAcademyUrn = _academyUrn,
+                        IncomingTrustName = "incoming trust name"
                     }
                 }
             };
@@ -120,6 +127,7 @@ namespace Frontend.Tests.ServicesTests
         public async void GivenProjectWithMultipleAcademies_LooksUpAcademies()
         {
             const string projectUrn = "TestProject";
+            const string incomingTrustName = "Incoming Trust Name";
             var outgoingAcademy1 = new { ukprn = "A1Ukprn", urn = "A1Urn" };
             var outgoingAcademy2 = new { ukprn = "A2Ukprn", urn = "A2Urn" };
             var outgoingAcademy3 = new { ukprn = "A3Ukprn", urn = "A3Urn" };
@@ -131,17 +139,20 @@ namespace Frontend.Tests.ServicesTests
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = outgoingAcademy1.ukprn,
-                        OutgoingAcademyUrn = outgoingAcademy1.urn
+                        OutgoingAcademyUrn = outgoingAcademy1.urn,
+                        IncomingTrustName = incomingTrustName
                     },
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = outgoingAcademy2.ukprn,
-                        OutgoingAcademyUrn = outgoingAcademy2.urn
+                        OutgoingAcademyUrn = outgoingAcademy2.urn,
+                        IncomingTrustName = incomingTrustName
                     },
                     new TransferringAcademies
                     {
                         OutgoingAcademyUkprn = outgoingAcademy3.ukprn,
-                        OutgoingAcademyUrn = outgoingAcademy3.urn
+                        OutgoingAcademyUrn = outgoingAcademy3.urn,
+                        IncomingTrustName = incomingTrustName
                     }
                 }
             };
