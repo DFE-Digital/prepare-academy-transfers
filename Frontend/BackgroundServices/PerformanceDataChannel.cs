@@ -27,13 +27,13 @@ namespace Frontend.BackgroundServices
             _logger = logger;
         }
         
-        public async Task<bool> AddProjectUrnAsync(string projectUrn, CancellationToken ct = default)
+        public async Task<bool> AddAcademyUrnAsync(string academyUrn, CancellationToken ct = default)
         {
             while (await _channel.Writer.WaitToWriteAsync(ct) && !ct.IsCancellationRequested)
             {
-                if (_channel.Writer.TryWrite(projectUrn))
+                if (_channel.Writer.TryWrite(academyUrn))
                 {
-                    Log.ChannelMessageWritten(_logger, projectUrn);
+                    Log.ChannelMessageWritten(_logger, academyUrn);
 
                     return true;
                 }
@@ -55,11 +55,11 @@ namespace Frontend.BackgroundServices
             private static readonly Action<ILogger, string, Exception> _channelMessageWritten = LoggerMessage.Define<string>(
                 LogLevel.Information,
                 EventIds.ChannelMessageWritten,
-                "Project Urn {ProjectUrn} was written to the channel.");
+                "Academy Urn {AcademyUrn} was written to the channel.");
 
-            public static void ChannelMessageWritten(ILogger logger, string fileName)
+            public static void ChannelMessageWritten(ILogger logger, string academyUrn)
             {
-                _channelMessageWritten(logger, fileName, null);
+                _channelMessageWritten(logger, academyUrn, null);
             }
         }
     }

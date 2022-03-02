@@ -28,7 +28,7 @@ namespace Frontend.Services
             indexPage.ProjectReference = project.Result.Reference;
             indexPage.IncomingTrustName = project.Result.IncomingTrustName.ToTitleCase();
             indexPage.Academies = project.Result.TransferringAcademies
-                .Select(a => new Tuple<string, string>(a.OutgoingAcademyUkprn,a.OutgoingAcademyName)).ToList();
+                .Select(a => new Tuple<string, string, string>(a.OutgoingAcademyUkprn,a.OutgoingAcademyName, a.OutgoingAcademyUrn)).ToList();
             indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);
             indexPage.FeatureTransferStatus = GetFeatureTransferStatus(project.Result);
             indexPage.TransferDatesStatus = GetTransferDatesStatus(project.Result);

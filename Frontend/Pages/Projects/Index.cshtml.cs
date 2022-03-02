@@ -22,9 +22,9 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
 
         /// <summary>
-        /// Item1 Academy Ukprn, Item2 Academy Name
+        /// Item1 Academy Ukprn, Item2 Academy Name, Item3 Academy Urn
         /// </summary>
-        public List<Tuple<string, string>> Academies { get; set; }
+        public List<Tuple<string, string, string>> Academies { get; set; }
 
         public Index(ITaskListService taskListService, PerformanceDataChannel performanceDataChannel)
         {
@@ -34,9 +34,8 @@ namespace Frontend.Pages.Projects
 
         public async Task<IActionResult> OnGet(CancellationToken cancellationToken)
         {
-            await RetrievePerformanceData(cancellationToken);
-
             _taskListService.BuildTaskListStatuses(this);
+            await RetrievePerformanceData(cancellationToken);
             return Page();
         }
 
@@ -44,7 +43,12 @@ namespace Frontend.Pages.Projects
         {
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             cts.CancelAfter(TimeSpan.FromSeconds(30)); // wait max 30 seconds
-            await _performanceDataChannel.AddProjectUrnAsync(Urn, cts.Token);
+
+            foreach (var academy in Academies)
+            {
+                await _performanceDataChannel.AddAcademyUrnAsync(academy.Item3, cts.Token);
+            }
+         
         }
     }
 }

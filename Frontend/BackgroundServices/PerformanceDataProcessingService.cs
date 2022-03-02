@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Frontend.Services.Interfaces;
-using Frontend.Services.Responses;
+using Data;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace Frontend.BackgroundServices
 {
@@ -30,11 +27,11 @@ namespace Frontend.BackgroundServices
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await foreach (var projectUrn in _performanceDataChannel.ReadAllAsync())
+            await foreach (var academyUrn in _performanceDataChannel.ReadAllAsync())
             {
                 using var scope = _serviceProvider.CreateScope();
-                var processor = scope.ServiceProvider.GetRequiredService<IGetInformationForProject>();
-                await processor.Execute(projectUrn);
+                var processor = scope.ServiceProvider.GetRequiredService<IEducationPerformance>();
+                await processor.GetByAcademyUrn(academyUrn);
             }
         }
         

@@ -19,28 +19,18 @@ namespace Frontend.Services
         private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
         private readonly IEducationPerformance _educationPerformanceRepository;
-        private readonly IDistributedCache _distributedCache;
 
         public GetInformationForProject(IAcademies academiesRepository,
-            IProjects projectsRepository, IEducationPerformance educationPerformanceRepository,
-            IDistributedCache distributedCache)
+            IProjects projectsRepository, IEducationPerformance educationPerformanceRepository)
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _educationPerformanceRepository = educationPerformanceRepository;
-            _distributedCache = distributedCache;
+  
         }
 
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
         {
-            var cacheKey = $"GetInformation_{projectUrn}";
-            var cachedString = await _distributedCache.GetStringAsync(cacheKey);
-            //Check for information in cache
-            if (!string.IsNullOrWhiteSpace(cachedString))
-            {
-                return JsonConvert.DeserializeObject<GetInformationForProjectResponse>(cachedString);
-            }
-
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
 
             var outgoingAcademies = new List<Academy>();
@@ -61,11 +51,6 @@ namespace Frontend.Services
                 Project = projectResult.Result,
                 OutgoingAcademies = outgoingAcademies
             };
-            var cacheOptions = new DistributedCacheEntryOptions
-            {
-                AbsoluteExpiration = DateTimeOffset.Now.AddDays(1)
-            };
-            await _distributedCache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(response), cacheOptions);
 
             return response;
         }
