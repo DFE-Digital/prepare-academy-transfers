@@ -45,15 +45,15 @@ Cypress.Commands.add('fillInDate', (dayJs) => {
 
 Cypress.Commands.add('selectCheckbox', (index) => {
     cy.get("[type='checkbox']").then(options => {
-        let option = options[index];
-        option.click();
+        let option = options[index]
+        option.click()
     });
 })
 
 Cypress.Commands.add('selectRadio', (index) => {
     cy.get("[type='radio']").then(options => {
-        let option = options[index];
-        option.click();
+        let option = options[index]
+        option.click()
     });
 })
 
