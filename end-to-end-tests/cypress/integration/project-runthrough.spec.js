@@ -65,7 +65,6 @@ describe("Creating and editing an academy transfer", function () {
     });
 
     it("Edit an Academy Transfer", function () {
-
         cy.get(`.govuk-link--no-visited-state`).then(projects => {
             for(let i = 0; i < projects.length; i++){
                 if(projects[i].text.includes("Burnt Ash Primary School")){
@@ -73,7 +72,7 @@ describe("Creating and editing an academy transfer", function () {
                     break;
                 }
             }
-        });
+        });u
         cy.clickDataTest("transfer-features")
         cy.clickDataTest("initiated")
         selectFirstRadio()
@@ -87,7 +86,8 @@ describe("Creating and editing an academy transfer", function () {
         submit()
         cy.clickBackLink()
         cy.getDataTest("features").should('have.text',"COMPLETED");
-        // Dates
+        
+        //Dates
         cy.clickDataTest("transfer-dates")
         cy.clickDataTest("first-discussed")
         cy.fillInDate(Cypress.dayjs().add(-1,'M'))
@@ -100,16 +100,19 @@ describe("Creating and editing an academy transfer", function () {
         submit()
         clickBackLink()
         cy.getDataTest("dates").should('have.text',"COMPLETED");
+
         // Benefits
         cy.clickDataTest("transfer-benefits")
         cy.clickDataTest("intended-benefits")
-        cy.selectCheckbox(0)
-        cy.selectCheckbox(1)
+        cy.get('[type="checkbox"]').check('StrengtheningGovernance')
+        cy.get('[type="checkbox"]').check('ImprovingSafeguarding')
         submit()
         cy.clickDataTest("other-factors")
-        cy.selectCheckbox(0)
+        cy.get('#HighProfile').parent().get("[type='checkbox']").uncheck()
+        cy.get('#HighProfile').parent().get("[type='checkbox']").check()
         cy.fillInTextAtIndex(0, "First")
-        cy.selectCheckbox(1);
+        cy.get('#ComplexLandAndBuildingIssues').parent().get("[type='checkbox']").uncheck()
+        cy.get('#ComplexLandAndBuildingIssues').parent().get("[type='checkbox']").check()
         cy.fillInTextAtIndex(1, "second")
         submit()
         clickBackLink()
