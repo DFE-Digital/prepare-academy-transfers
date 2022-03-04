@@ -30,7 +30,6 @@ function createNewTransfer() {
 function searchForTrustWithQuery(queryString) {
     cy.get("[name='query']")
         .type(queryString)
-    cy.pause();
     submit();
 }
 
@@ -61,7 +60,7 @@ describe("Creating and editing an academy transfer", function () {
         searchForTrustWithQuery("burnt");
         selectFirstRadio()
         submit()
-        cy.clickDataTest("create-transfer") 
+        cy.get('button[data-test="create-project"]').click()
     });
 
     it("Edit an Academy Transfer", function () {
@@ -72,7 +71,7 @@ describe("Creating and editing an academy transfer", function () {
                     break;
                 }
             }
-        });u
+        });
         cy.clickDataTest("transfer-features")
         cy.clickDataTest("initiated")
         selectFirstRadio()
