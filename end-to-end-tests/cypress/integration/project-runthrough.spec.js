@@ -60,7 +60,7 @@ describe("Creating and editing an academy transfer", function () {
         searchForTrustWithQuery("burnt");
         selectFirstRadio()
         submit()
-        cy.clickDataTest("create-transfer") 
+        cy.get('button[data-test="create-project"]').click()
     });
 
     it("Edit an Academy Transfer", function () {
