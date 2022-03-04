@@ -19,5 +19,4 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 const dayjs = require('dayjs')
-
 Cypress.dayjs = dayjs
