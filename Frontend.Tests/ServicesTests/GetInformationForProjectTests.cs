@@ -39,8 +39,7 @@ namespace Frontend.Tests.ServicesTests
             _subject = new GetInformationForProject(
                 _academiesRepository.Object, 
                 _projectsRepository.Object, 
-                _educationPerformanceRepository.Object,
-                _distributedCache.Object);
+                _educationPerformanceRepository.Object);
 
             SetupRepositories();
         }

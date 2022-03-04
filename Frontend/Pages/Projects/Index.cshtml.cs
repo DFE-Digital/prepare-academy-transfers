@@ -24,7 +24,7 @@ namespace Frontend.Pages.Projects
         /// <summary>
         /// Item1 Academy Ukprn, Item2 Academy Name, Item3 Academy Urn
         /// </summary>
-        public List<Tuple<string, string, string>> Academies { get; set; }
+        public List<Tuple<string, string>> Academies { get; set; }
 
         public Index(ITaskListService taskListService, PerformanceDataChannel performanceDataChannel)
         {
@@ -44,9 +44,14 @@ namespace Frontend.Pages.Projects
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             cts.CancelAfter(TimeSpan.FromSeconds(30)); // wait max 30 seconds
 
-            foreach (var academy in Academies)
+            foreach (var academyUkprnAndUrn in Academies)
             {
-                await _performanceDataChannel.AddAcademyUrnAsync(academy.Item3, cts.Token);
+                var academy = new Academy()
+                {
+                    Ukprn = academyUkprnAndUrn.Item1,
+                    Urn = academyUkprnAndUrn.Item2
+                };
+                await _performanceDataChannel.AddAcademyAsync(academy, cts.Token);
             }
          
         }

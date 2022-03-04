@@ -27,11 +27,13 @@ namespace Frontend.BackgroundServices
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await foreach (var academyUrn in _performanceDataChannel.ReadAllAsync())
+            await foreach (var academy in _performanceDataChannel.ReadAllAsync())
             {
                 using var scope = _serviceProvider.CreateScope();
-                var processor = scope.ServiceProvider.GetRequiredService<IEducationPerformance>();
-                await processor.GetByAcademyUrn(academyUrn);
+                var educationPerformance = scope.ServiceProvider.GetRequiredService<IEducationPerformance>();
+                var academies = scope.ServiceProvider.GetRequiredService<IAcademies>();
+                await educationPerformance.GetByAcademyUrn(academy.Urn);
+                await academies.GetAcademyByUkprn(academy.Ukprn);
             }
         }
         

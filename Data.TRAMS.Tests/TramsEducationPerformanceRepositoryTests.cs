@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using Data.TRAMS.Models.EducationPerformance;
 using Data.TRAMS.Tests.Helpers;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -21,7 +22,7 @@ namespace Data.TRAMS.Tests
         {
             _client = new Mock<ITramsHttpClient>();
             _mapper = new Mock<IMapper<TramsEducationPerformance, EducationPerformance>>();
-            _subject = new TramsEducationPerformanceRepository(_client.Object, _mapper.Object);
+            _subject = new TramsEducationPerformanceRepository(_client.Object, _mapper.Object, new Mock<IDistributedCache>().Object);
         }
 
         public class GetByAcademyUrn : TramsEducationPerformanceRepositoryTests

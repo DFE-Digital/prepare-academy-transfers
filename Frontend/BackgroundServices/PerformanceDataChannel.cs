@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Data.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Frontend.BackgroundServices
@@ -11,7 +12,7 @@ namespace Frontend.BackgroundServices
     {
         private const int MaxMessagesInChannel = 100;
 
-        private readonly Channel<string> _channel;
+        private readonly Channel<Academy> _channel;
         private readonly ILogger<PerformanceDataChannel> _logger;
 
         public PerformanceDataChannel(ILogger<PerformanceDataChannel> logger)
@@ -22,18 +23,18 @@ namespace Frontend.BackgroundServices
                 SingleReader = true                
             };
 
-            _channel = Channel.CreateBounded<string>(options);
+            _channel = Channel.CreateBounded<Academy>(options);
 
             _logger = logger;
         }
         
-        public async Task<bool> AddAcademyUrnAsync(string academyUrn, CancellationToken ct = default)
+        public async Task<bool> AddAcademyAsync(Academy academy, CancellationToken ct = default)
         {
             while (await _channel.Writer.WaitToWriteAsync(ct) && !ct.IsCancellationRequested)
             {
-                if (_channel.Writer.TryWrite(academyUrn))
+                if (_channel.Writer.TryWrite(academy))
                 {
-                    Log.ChannelMessageWritten(_logger, academyUrn);
+                    Log.ChannelMessageWritten(_logger, academy);
 
                     return true;
                 }
@@ -42,7 +43,7 @@ namespace Frontend.BackgroundServices
             return false;
         }
         
-        public IAsyncEnumerable<string> ReadAllAsync(CancellationToken ct = default) =>
+        public IAsyncEnumerable<Academy> ReadAllAsync(CancellationToken ct = default) =>
             _channel.Reader.ReadAllAsync(ct);
 
         public bool TryCompleteWriter(Exception ex = null) => _channel.Writer.TryComplete(ex);
@@ -55,11 +56,11 @@ namespace Frontend.BackgroundServices
             private static readonly Action<ILogger, string, Exception> _channelMessageWritten = LoggerMessage.Define<string>(
                 LogLevel.Information,
                 EventIds.ChannelMessageWritten,
-                "Academy Urn {AcademyUrn} was written to the channel.");
+                "Academy Ukprn {ukprn} was written to the channel.");
 
-            public static void ChannelMessageWritten(ILogger logger, string academyUrn)
+            public static void ChannelMessageWritten(ILogger logger, Academy academy)
             {
-                _channelMessageWritten(logger, academyUrn, null);
+                _channelMessageWritten(logger, academy.Ukprn, null);
             }
         }
     }
