@@ -72,7 +72,7 @@ describe("Creating and editing an academy transfer", function () {
                     break;
                 }
             }
-        });u
+        });
         cy.clickDataTest("transfer-features")
         cy.clickDataTest("initiated")
         selectFirstRadio()
