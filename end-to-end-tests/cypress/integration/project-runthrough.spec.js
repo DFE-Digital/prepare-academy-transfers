@@ -50,7 +50,7 @@ describe("Creating and editing an academy transfer", function () {
 	});
 
     
-    it.skip("Create an Academy Transfer", function () {
+    it("Create an Academy Transfer", function () {
         cy.clickDataTest("create-transfer")
         searchForTrustWithQuery("bishop fraser")
         selectFirstRadio()
