@@ -32,7 +32,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             var document = await _createProjectTemplate.Execute(Urn);
             return File(document.Document.ToArray(),
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                $"ProjectTemplateFor{projectInformation.Project.IncomingTrustName.ToTitleCase().Replace(" ","-")}–{projectInformation.Project.Reference}.docx");
+                $"ProjectTemplateFor{projectInformation.Project.IncomingTrustName.ToTitleCase().Replace(" ","")}–{projectInformation.Project.Reference}.docx");
         }
     }
 }
