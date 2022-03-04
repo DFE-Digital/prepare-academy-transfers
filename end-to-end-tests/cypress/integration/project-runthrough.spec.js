@@ -30,7 +30,6 @@ function createNewTransfer() {
 function searchForTrustWithQuery(queryString) {
     cy.get("[name='query']")
         .type(queryString)
-    cy.pause();
     submit();
 }
 
