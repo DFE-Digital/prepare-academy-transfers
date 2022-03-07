@@ -12,7 +12,7 @@ namespace Frontend.BackgroundServices
     {
         private const int MaxMessagesInChannel = 100;
 
-        private readonly Channel<Academy> _channel;
+        private readonly Channel<string> _channel;
         private readonly ILogger<PerformanceDataChannel> _logger;
 
         public PerformanceDataChannel(ILogger<PerformanceDataChannel> logger)
@@ -23,18 +23,18 @@ namespace Frontend.BackgroundServices
                 SingleReader = true                
             };
 
-            _channel = Channel.CreateBounded<Academy>(options);
+            _channel = Channel.CreateBounded<string>(options);
 
             _logger = logger;
         }
         
-        public async Task<bool> AddAcademyAsync(Academy academy, CancellationToken ct = default)
+        public async Task<bool> AddAcademyAsync(string academyUkprn, CancellationToken ct = default)
         {
             while (await _channel.Writer.WaitToWriteAsync(ct) && !ct.IsCancellationRequested)
             {
-                if (_channel.Writer.TryWrite(academy))
+                if (_channel.Writer.TryWrite(academyUkprn))
                 {
-                    Log.ChannelMessageWritten(_logger, academy);
+                    Log.ChannelMessageWritten(_logger, academyUkprn);
 
                     return true;
                 }
@@ -43,7 +43,7 @@ namespace Frontend.BackgroundServices
             return false;
         }
         
-        public IAsyncEnumerable<Academy> ReadAllAsync(CancellationToken ct = default) =>
+        public IAsyncEnumerable<string> ReadAllAsync(CancellationToken ct = default) =>
             _channel.Reader.ReadAllAsync(ct);
 
         public bool TryCompleteWriter(Exception ex = null) => _channel.Writer.TryComplete(ex);
@@ -58,9 +58,9 @@ namespace Frontend.BackgroundServices
                 EventIds.ChannelMessageWritten,
                 "Academy Ukprn {ukprn} was written to the channel.");
 
-            public static void ChannelMessageWritten(ILogger logger, Academy academy)
+            public static void ChannelMessageWritten(ILogger logger, string academyUkprn)
             {
-                _channelMessageWritten(logger, academy.Ukprn, null);
+                _channelMessageWritten(logger, academyUkprn, null);
             }
         }
     }

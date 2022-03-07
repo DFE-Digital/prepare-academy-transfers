@@ -1,9 +1,12 @@
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using Data.Models;
 using Data.TRAMS.Models;
 using Data.TRAMS.Tests.TestFixtures;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -15,12 +18,15 @@ namespace Data.TRAMS.Tests
         private readonly Mock<ITramsHttpClient> _client;
         private readonly Mock<IMapper<TramsEstablishment, Academy>> _mapper;
         private readonly TramsEstablishmentRepository _subject;
+        private readonly IDistributedCache _distributedCache;
 
         public TramsAcademiesRepositoryTests()
         {
             _client = new Mock<ITramsHttpClient>();
             _mapper = new Mock<IMapper<TramsEstablishment, Academy>>();
-            _subject = new TramsEstablishmentRepository(_client.Object, _mapper.Object, new Mock<IDistributedCache>().Object);
+            var opts = Options.Create(new MemoryDistributedCacheOptions());
+            _distributedCache = new MemoryDistributedCache(opts);
+            _subject = new TramsEstablishmentRepository(_client.Object, _mapper.Object, _distributedCache);
         }
 
         public class GetAcademyByUkprnTests : TramsAcademiesRepositoryTests
@@ -36,6 +42,43 @@ namespace Data.TRAMS.Tests
                 await _subject.GetAcademyByUkprn("12345");
 
                 _client.Verify(c => c.GetAsync("establishment/12345"), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenUkprn_GetsAcademyFromCache()
+            {
+                var cacheKey = "GetAcademyByUkprn_12345";
+                var academy = new RepositoryResult<Academy>
+                {
+                    Result = new Academy
+                    {
+                        Urn = "toJson"
+                    }
+                };
+                await _distributedCache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(academy));
+
+                var result = await _subject.GetAcademyByUkprn("12345");
+                Assert.Equal(JsonConvert.SerializeObject(academy), JsonConvert.SerializeObject(result));
+            }
+            
+            [Fact]
+            public async void GivenUrn_GetsAcademy_SetsCache()
+            {
+                var academy = Establishments.SingleEstablishment();
+                _client.Setup(c => c.GetAsync(It.IsAny<string>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(academy))
+                });
+
+                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input =>
+                    new Academy
+                    {
+                        Ukprn = $"Mapped {academy.Ukprn}"
+                    });
+
+                var result = await _subject.GetAcademyByUkprn("12345");
+                var cached = await _distributedCache.GetStringAsync("GetAcademyByUkprn_12345");
+                Assert.Equal(JsonConvert.SerializeObject(result),cached);
             }
 
             [Fact]
@@ -83,7 +126,7 @@ namespace Data.TRAMS.Tests
                 {
                     StatusCode = httpStatusCode
                 });
-                
+
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetAcademyByUkprn("12345"));
             }
         }

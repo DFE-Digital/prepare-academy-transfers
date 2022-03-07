@@ -22,7 +22,7 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
 
         /// <summary>
-        /// Item1 Academy Ukprn, Item2 Academy Name, Item3 Academy Urn
+        /// Item1 Academy Ukprn, Item2 Academy Name
         /// </summary>
         public List<Tuple<string, string>> Academies { get; set; }
 
@@ -46,12 +46,7 @@ namespace Frontend.Pages.Projects
 
             foreach (var academyUkprnAndUrn in Academies)
             {
-                var academy = new Academy()
-                {
-                    Ukprn = academyUkprnAndUrn.Item1,
-                    Urn = academyUkprnAndUrn.Item2
-                };
-                await _performanceDataChannel.AddAcademyAsync(academy, cts.Token);
+                await _performanceDataChannel.AddAcademyAsync(academyUkprnAndUrn.Item1, cts.Token);
             }
          
         }
