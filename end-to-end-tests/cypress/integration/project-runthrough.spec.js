@@ -30,7 +30,6 @@ function createNewTransfer() {
 function searchForTrustWithQuery(queryString) {
     cy.get("[name='query']")
         .type(queryString)
-    cy.pause();
     submit();
 }
 
@@ -50,7 +49,7 @@ describe("Creating and editing an academy transfer", function () {
 	});
 
     
-    it.skip("Create an Academy Transfer", function () {
+    it("Create an Academy Transfer", function () {
         cy.clickDataTest("create-transfer")
         searchForTrustWithQuery("bishop fraser")
         selectFirstRadio()
@@ -61,7 +60,7 @@ describe("Creating and editing an academy transfer", function () {
         searchForTrustWithQuery("burnt");
         selectFirstRadio()
         submit()
-        cy.clickDataTest("create-transfer") 
+        cy.get('button[data-test="create-project"]').click()
     });
 
     it("Edit an Academy Transfer", function () {
