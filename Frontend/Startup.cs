@@ -26,6 +26,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
+using Frontend.BackgroundServices;
 
 
 namespace Frontend
@@ -74,7 +75,7 @@ namespace Frontend
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-            ConfigureTramsRepositories(services, Configuration);
+            AddServices(services, Configuration);
 
             ConfigureServiceClasses(services);
 
@@ -189,7 +190,7 @@ namespace Frontend
             });
         }
 
-        private static void ConfigureTramsRepositories(IServiceCollection services, IConfiguration configuration)
+        private static void AddServices(IServiceCollection services, IConfiguration configuration)
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
@@ -208,6 +209,8 @@ namespace Frontend
             
             services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
+            services.AddSingleton<PerformanceDataChannel>();
+            services.AddHostedService<PerformanceDataProcessingService>();
         }
 
         private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
