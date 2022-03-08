@@ -26,7 +26,6 @@ namespace DocumentGeneration.Builders
                 }
             };
             _runs = new List<Run>();
-
         }
 
         public ParagraphBuilder(Paragraph parent)
@@ -43,7 +42,8 @@ namespace DocumentGeneration.Builders
 
         public void AddText(TextElement text)
         {
-            var run = new Run() {RunProperties = new RunProperties()};
+            const string defaultFontSize = "24";
+            var run = new Run() { RunProperties = new RunProperties() };
             run.RunProperties.RunFonts = new RunFonts()
             {
                 Ascii = "Arial",
@@ -66,17 +66,14 @@ namespace DocumentGeneration.Builders
             if (text.Underline)
             {
                 run.RunProperties.Underline = new Underline
-                    {Val = new EnumValue<UnderlineValues>(UnderlineValues.Single), Color = "000000"};
+                    { Val = new EnumValue<UnderlineValues>(UnderlineValues.Single), Color = "000000" };
             }
 
-            if (!string.IsNullOrEmpty(text.FontSize))
-            {
-                run.RunProperties.FontSize = new FontSize {Val = text.FontSize};
-            }
+            run.RunProperties.FontSize = new FontSize { Val = text.FontSize ?? defaultFontSize };
 
             if (!string.IsNullOrEmpty(text.Colour))
             {
-                run.RunProperties.Color = new Color {Val = text.Colour};
+                run.RunProperties.Color = new Color { Val = text.Colour };
             }
 
             _runs.Add(run);
@@ -84,7 +81,7 @@ namespace DocumentGeneration.Builders
 
         public void AddText(string text)
         {
-            AddText(new TextElement {Value = text});
+            AddText(new TextElement { Value = text });
         }
 
         public void AddText(TextElement[] text)
