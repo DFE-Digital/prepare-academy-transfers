@@ -27,6 +27,7 @@ namespace Frontend.Pages.Home
             _logger = logger;
         }
 
+        
         public async Task<IActionResult> OnGetAsync()
         {
             var projects = await _projectsRepository.GetProjects(CurrentPage);

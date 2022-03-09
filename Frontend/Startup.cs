@@ -48,6 +48,7 @@ namespace Frontend
                 {
                     options.Conventions.AuthorizeFolder("/");
                     options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
+                    options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
                     options.Conventions.AllowAnonymousToPage("/Home/Login");
                 })
                 .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
@@ -89,7 +90,7 @@ namespace Frontend
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                options.LoginPath = "/home/login";
+                options.LoginPath = "/session-timed-out";
                 options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
