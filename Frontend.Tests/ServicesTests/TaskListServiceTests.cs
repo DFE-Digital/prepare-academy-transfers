@@ -5,7 +5,9 @@ using Data.Models;
 using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Data.TRAMS;
+using Frontend.BackgroundServices;
 using Frontend.Services;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Index = Frontend.Pages.Projects.Index;
@@ -30,7 +32,7 @@ namespace Frontend.Tests.ServicesTests
                 });
 
             _subject = new TaskListService(ProjectRepository.Object);
-            _index = new Index(_subject)
+            _index = new Index(_subject, new PerformanceDataChannel(new Mock<ILogger<PerformanceDataChannel>>().Object))
             {
                 Urn = ProjectUrn0001
             };

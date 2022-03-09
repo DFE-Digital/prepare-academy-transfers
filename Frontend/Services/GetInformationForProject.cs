@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
@@ -7,6 +9,8 @@ using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
 using Frontend.Services.Interfaces;
 using Frontend.Services.Responses;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Frontend.Services
 {
@@ -22,33 +26,40 @@ namespace Frontend.Services
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _educationPerformanceRepository = educationPerformanceRepository;
+  
         }
 
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
         {
             var projectResult = await _projectsRepository.GetByUrn(projectUrn);
-            
+
             var outgoingAcademies = new List<Academy>();
-            
+
             foreach (var transferringAcademy in projectResult.Result.TransferringAcademies)
             {
-                var academyResult = await _academiesRepository.GetAcademyByUkprn(transferringAcademy.OutgoingAcademyUkprn);
+                var academyResult =
+                    await _academiesRepository.GetAcademyByUkprn(transferringAcademy.OutgoingAcademyUkprn);
                 var academy = academyResult.Result;
                 SetAdditionalInformation(academy, transferringAcademy);
-                academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName, projectResult.Result.Urn);
+                academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName,
+                    projectResult.Result.Urn);
                 outgoingAcademies.Add(academy);
             }
 
-            return new GetInformationForProjectResponse
+            var response = new GetInformationForProjectResponse
             {
                 Project = projectResult.Result,
                 OutgoingAcademies = outgoingAcademies
             };
+
+            return response;
         }
 
-        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademies transferringAcademy, string localAuthorityName, string projectUrn)
+        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademies transferringAcademy,
+            string localAuthorityName, string projectUrn)
         {
-            var educationPerformanceResult = await _educationPerformanceRepository.GetByAcademyUrn(transferringAcademy.OutgoingAcademyUrn);
+            var educationPerformanceResult =
+                await _educationPerformanceRepository.GetByAcademyUrn(transferringAcademy.OutgoingAcademyUrn);
             var performance = educationPerformanceResult.Result;
             performance.KeyStage2AdditionalInformation = transferringAcademy.KeyStage2PerformanceAdditionalInformation;
             performance.KeyStage4AdditionalInformation = transferringAcademy.KeyStage4PerformanceAdditionalInformation;
