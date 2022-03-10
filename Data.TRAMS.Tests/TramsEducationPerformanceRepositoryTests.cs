@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Xunit;
 using EducationPerformance = Data.Models.KeyStagePerformance.EducationPerformance;
 using KeyStage2 = Data.Models.KeyStagePerformance.KeyStage2;
+using FluentAssertions;
 
 namespace Data.TRAMS.Tests
 {
@@ -108,13 +109,25 @@ namespace Data.TRAMS.Tests
             }
             
             [Theory]
-            [InlineData(HttpStatusCode.NotFound)]
             [InlineData(HttpStatusCode.InternalServerError)]
+            [InlineData(HttpStatusCode.Unauthorized)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
                 HttpClientTestHelpers.SetupGet<TramsEducationPerformance>(_client, null, httpStatusCode);
                 
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetByAcademyUrn("12345"));
+            }
+            
+            [Fact]
+            public async void GivenApiReturnsNotFound_ShouldReturnEmptyEducationPerformance()
+            {
+                HttpClientTestHelpers.SetupGet<TramsEducationPerformance>(_client, null, HttpStatusCode.NotFound);
+                var result = await _subject.GetByAcademyUrn("12345");
+
+                var blankEducationPerformance = new EducationPerformance();
+                
+                Assert.IsType<EducationPerformance>(result.Result);
+                blankEducationPerformance.Should().BeEquivalentTo(result.Result);
             }
         }
     }
