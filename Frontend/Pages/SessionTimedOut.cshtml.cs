@@ -8,7 +8,7 @@ namespace Frontend.Pages
     {
         public string ReturnUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             Request.Query.TryGetValue("returnurl", out var value);
             ReturnUrl = value;
