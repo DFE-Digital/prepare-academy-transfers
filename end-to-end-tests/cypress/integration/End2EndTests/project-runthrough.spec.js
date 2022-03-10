@@ -126,7 +126,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickBackLink()
         cy.get("h1").should('contain.text',"Manage an academy transfer");
         selectExistingAcademyTransfer("Burnt Ash Primary School");
-
+      
         //  *** Transfer details ***
         // Features of the transfer
         cy.clickDataTest("transfer-features")
@@ -228,7 +228,7 @@ describe("Creating and editing an academy transfer", function () {
         submit();
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("academyandtrustinformation").should('have.text',"COMPLETED");
-           
+
         // *** School Data ***
         cy.clickDataTest("sd-academy-1")
         cy.clickBackLink()
