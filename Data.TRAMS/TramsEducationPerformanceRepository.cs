@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Data.Models.KeyStagePerformance;
 using Data.TRAMS.Models.EducationPerformance;
@@ -47,6 +48,14 @@ namespace Data.TRAMS
                 };
                 await _distributedCache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(mappedResult), cacheOptions);
                 return mappedResult;
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new RepositoryResult<EducationPerformance>()
+                {
+                    Result = new EducationPerformance()
+                };
             }
 
             throw new TramsApiException(response);
