@@ -94,7 +94,7 @@ namespace Frontend
                 options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
                 if (string.IsNullOrEmpty(Configuration["CI"]))
                 {
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;

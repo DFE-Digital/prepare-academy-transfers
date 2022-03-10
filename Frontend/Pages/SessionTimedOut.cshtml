@@ -1,5 +1,6 @@
 ﻿@page "/session-timed-out"
 @model Frontend.Pages.SessionTimedOut
+
 @{
     ViewData["Title"] = "For your security we signed you out";
     Layout = "_Layout";
@@ -9,7 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">For your security, we signed you out</h1>
         <p class="govuk-body">
-            This is because you have not saved your answers in 60 minutes.
+            This is because you have not saved your answers in @Model.MinutesTimeOut minutes.
         </p>
         <p class="govuk-body">
             We did not save your answers
