@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
+using Frontend.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace Frontend.Pages.Home
 {
+    [NotAuthorizedRedirectToLoginPage]
     public class Index : PageModel
     {
         private readonly IProjects _projectsRepository;
@@ -26,6 +28,7 @@ namespace Frontend.Pages.Home
             _projectsRepository = projectsRepository;
             _logger = logger;
         }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
