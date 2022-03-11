@@ -53,7 +53,7 @@
                         <div class="govuk-checkboxes__item">
                             <input class="govuk-checkboxes__input" id="@otherBenefit" name='@($"{nameof(Model.IntendedBenefitsViewModel)}.{nameof(Model.IntendedBenefitsViewModel.SelectedIntendedBenefits)}")' type="checkbox" value="@otherBenefit" aria-controls="conditional-other-benefit" aria-expanded="false" checked="@Model.IntendedBenefitsViewModel.SelectedIntendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other)">
                             <label class="govuk-label govuk-checkboxes__label" for="@otherBenefit">
-                                Add an other benefit
+                                Add another benefit
                             </label>
                         </div>
                         <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-other-benefit">
