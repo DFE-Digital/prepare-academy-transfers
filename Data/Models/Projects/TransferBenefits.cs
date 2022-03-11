@@ -15,23 +15,30 @@ namespace Data.Models.Projects
         {
             Empty = 0,
 
+            [Display(Name = "Stronger leadership")]
+            StrongerLeadership,
+
             [Display(Name = "Strengthening governance")]
             StrengtheningGovernance,
 
             [Display(Name = "Improving safeguarding")]
             ImprovingSafeguarding,
 
-            [Display(Name = "Stronger leadership")]
-            StrongerLeadership,
-
-            [Display(Name = "Securing financial recovery")]
+            [Display(Name = "Secure financial position")]
             SecurityFinancialRecovery,
-
-            [Display(Name = "Improving Ofsted rating")]
-            ImprovingOfstedRating,
 
             [Display(Name = "A central financial team and central support")]
             CentralFinanceTeamAndSupport,
+
+            [Display(Name = "Improved pupil performance")]
+            ImprovedPupilPerformance,
+
+            [Display(Name = "Improved ofsted rating")]
+            ImprovingOfstedRating,
+
+            [Display(Name = "Long term stability")]
+            LongTermStability,
+
             Other
         }
 
