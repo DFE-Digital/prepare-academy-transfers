@@ -8,11 +8,11 @@ namespace Frontend.Pages
     {
         public SessionTimedOut(IConfiguration configuration)
         {
-            MinutesTimeOut = configuration["AuthenticationExpirationInMinutes"];
+            MinutesTimeOut = int.Parse(configuration["AuthenticationExpirationInMinutes"]);
         }
         [FromQuery]
         public string ReturnUrl { get; set; }
-        public string MinutesTimeOut { get; }
+        public int MinutesTimeOut { get; }
         public IActionResult OnGet()
         {
             return Page();
