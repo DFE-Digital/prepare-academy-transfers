@@ -7,22 +7,6 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import "cypress-localstorage-commands";
 
 Cypress.Commands.add('clickBackLink', () => cy.get('.govuk-back-link').click())
@@ -80,3 +64,41 @@ Cypress.Commands.add("login",()=> {
 	cy.getDataTest("password").type(Cypress.env('password')+"{enter}");
 	cy.saveLocalStorage();
 })
+
+
+// ***********************************************
+/*  by Asif Ali
+
+    This file is going to be a collection of buttons and links for each page of the transfer journey.
+    The idea is using the benefits of the pageObject model used in various JAVA/C# testing frameworks.
+    functions will be named according to how they look on the page, and we can identify very easily the error
+    should one ocur. Also if code changes, we only have to change in one place instead of every instance.
+*/
+
+/*
+    Create Journey
+*/
+// Shared Identifiers
+let backLink = '.govuk-back-link'
+// PAGE: Manage an academy transfer 
+Cypress.Commands.add('HomePage_Button_StartNewProject', () => cy.get('.govuk-button--start'))
+Cypress.Commands.add('HomePage_Link_Back', () => cy.get(`${backLink}`))
+// PAGE: What is the outgoing trust name?
+Cypress.Commands.add('OutGoingSearch_Button_Search', () => cy.get('.govuk-button')) 
+Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`)) 
+// PAGE: Select the outgoing trust
+// PAGE: Outgoing trust details
+// PAGE: Select the transferring academies 
+// PAGE: What is the incoming trust name?
+// PAGE: Select an incoming trust
+// PAGE: Check trust and academy details
+
+/*
+    Edit Journey
+*/
+// PAGE: Transfer Project Main
+// PAGE: Feature of Transfer
+// PAGE: Set transfer dates
+// PAGE: Benefits and risks
+// PAGE: Rationale
+// PAGE: Trust information and project dates

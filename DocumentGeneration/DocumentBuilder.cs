@@ -197,6 +197,7 @@ namespace DocumentGeneration
 
         private void PopulateTemplateWithDocument<TDocument>(TDocument document)
         {
+            const string placeholderDefaultFontSize = "24";
             var allParagraphs = GetAllParagraphs();
             var properties = GetProperties<TDocument>();
 
@@ -219,7 +220,13 @@ namespace DocumentGeneration
                 }
                 
                 var val = property.GetValue(document)?.ToString();
-                var run = new Run();
+                var run = new Run
+                {
+                    RunProperties = new RunProperties
+                    {
+                        FontSize = new FontSize { Val = placeholderDefaultFontSize }
+                    }
+                };
                 DocumentBuilderHelpers.AddTextToElement(run, val);
                 paragraph.AppendChild(run);
             }

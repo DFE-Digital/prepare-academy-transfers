@@ -5,6 +5,13 @@ namespace Data.Models.KeyStagePerformance
 {
     public class EducationPerformance
     {
+        public EducationPerformance()
+        {
+            KeyStage2Performance = new List<KeyStage2>();
+            KeyStage4Performance = new List<KeyStage4>();
+            KeyStage5Performance = new List<KeyStage5>();
+        }
+        
         //todo: remove this when view models/view component
         #region remove
         public string ProjectUrn { get;set; }
