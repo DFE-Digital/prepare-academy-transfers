@@ -10,7 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">For your security, we signed you out</h1>
         <p class="govuk-body">
-            This is because you have not saved your answers in @Model.MinutesTimeOut minutes.
+            This is because you have not saved your answers in @(Model.MinutesTimeOut == "60" ? "the last hour" : Model.MinutesTimeOut + " minutes").
         </p>
         <p class="govuk-body">
             We did not save your answers
