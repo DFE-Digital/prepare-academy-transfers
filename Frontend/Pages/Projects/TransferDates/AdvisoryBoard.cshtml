@@ -4,7 +4,7 @@
 
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Set Advisory Board date";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Expected Advisory Board date";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
     var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
@@ -32,7 +32,7 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            Set Advisory Board date
+                            Expected Advisory Board date
                         </h1>
                     </legend>
                     <div id="set-ab-date-hint" class="govuk-hint">
