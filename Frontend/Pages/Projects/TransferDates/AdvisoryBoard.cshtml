@@ -4,7 +4,7 @@
 
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Expected Advisory Board date";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Advisory Board date";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
     var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
