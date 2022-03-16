@@ -33,7 +33,7 @@ namespace Data.Models.Projects
             [Display(Name = "Improved pupil performance")]
             ImprovedPupilPerformance,
 
-            [Display(Name = "Improved ofsted rating")]
+            [Display(Name = "Improved Ofsted rating")]
             ImprovingOfstedRating,
 
             [Display(Name = "Long term stability")]
