@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable UnusedMember.Global - properties bound using [BindProperty]
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class OtherFactors : CommonPageModel
     {

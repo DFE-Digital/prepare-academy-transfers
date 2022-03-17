@@ -3,7 +3,7 @@ using System.Linq;
 using Data.Models;
 using Data.Models.Projects;
 using Frontend.Models;
-using Frontend.Pages.Projects.Benefits;
+using Frontend.Pages.Projects.BenefitsAndRisks;
 using Frontend.Tests.Helpers;
 using Microsoft.AspNetCore.Routing;
 using Moq;

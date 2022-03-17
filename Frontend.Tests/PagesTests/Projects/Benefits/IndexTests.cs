@@ -1,4 +1,4 @@
-﻿using Frontend.Pages.Projects.Benefits;
+﻿using Frontend.Pages.Projects.BenefitsAndRisks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;

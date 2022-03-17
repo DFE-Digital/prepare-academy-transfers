@@ -8,7 +8,7 @@ using Frontend.Models.Forms;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class IntendedBenefits : CommonPageModel
     {
