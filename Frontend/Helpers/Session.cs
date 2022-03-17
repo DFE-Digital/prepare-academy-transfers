@@ -15,7 +15,7 @@ namespace Frontend.Helpers
         public static List<string> GetStringListFromSession(ISession session, string key)
         {
             var sessionString = session.GetString(key);
-            return sessionString.Split(",").ToList();
+            return sessionString?.Split(",").ToList();
         }
     }
 }

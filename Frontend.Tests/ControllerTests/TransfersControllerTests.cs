@@ -42,7 +42,7 @@ namespace Frontend.Tests.ControllerTests
                 new TempDataDictionaryFactory(tempDataProvider.Object);
             var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
 
-            _subject = new TransfersController(_academiesRepository.Object, _projectsRepository.Object,
+            _subject = new TransfersController(_projectsRepository.Object,
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
