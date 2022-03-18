@@ -6,18 +6,18 @@ namespace Frontend.Models.Benefits
     public class RisksViewModel
     {
         public List<RadioButtonViewModel> RadioButtonsYesNo
-            => new List<RadioButtonViewModel>()
+            => new List<RadioButtonViewModel>
             {
                 new RadioButtonViewModel
                 {
                     DisplayName = "Yes",
-                    Name = "Yes",
+                    Name = "YesNo",
                     Value = "Yes"
                 },
                 new RadioButtonViewModel
                 {
                     DisplayName = "No",
-                    Name = "No",
+                    Name = "YesNo",
                     Value = "No"
                 }
             };
