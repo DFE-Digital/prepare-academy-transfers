@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using Frontend.Models.Benefits;
 
-namespace Frontend.Validators.Benefits
+namespace Frontend.Validators.BenefitsAndRisks
 {
     public class OtherFactorsValidator : AbstractValidator<OtherFactorsViewModel>
     {

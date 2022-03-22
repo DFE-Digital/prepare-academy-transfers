@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Frontend.Models.Benefits;
 
-namespace Frontend.Validators.Benefits
+namespace Frontend.Validators.BenefitsAndRisks
 {
     public class OtherFactorsItemValidator : AbstractValidator<OtherFactorsItemViewModel>
     {

@@ -2,9 +2,9 @@
 using FluentValidation.TestHelper;
 using Frontend.Models.Benefits;
 using Frontend.Models.Features;
-using Frontend.Validators.Benefits;
 using Frontend.Validators.Features;
 using System.Collections.Generic;
+using Frontend.Validators.BenefitsAndRisks;
 using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.Benefits

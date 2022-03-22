@@ -1,25 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Frontend.Models.Forms;
 
 namespace Frontend.Models.Benefits
 {
     public class RisksViewModel
     {
-        public List<RadioButtonViewModel> RadioButtonsYesNo
-            => new List<RadioButtonViewModel>
-            {
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Yes",
-                    Name = "YesNo",
-                    Value = "Yes"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "No",
-                    Name = "YesNo",
-                    Value = "No"
-                }
-            };
+        public string RisksInvolved { get; set; }
     }
 }

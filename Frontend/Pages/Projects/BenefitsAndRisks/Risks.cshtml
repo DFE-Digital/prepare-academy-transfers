@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Are there any risks to consider for this transfer?";
     Layout = "_Layout";
-    var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.RisksViewModel)}.{nameof(Model.RisksViewModel.RadioButtonsYesNo)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.RisksViewModel)}.{nameof(Model.RisksViewModel.RisksInvolved)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
 
 @section BeforeMain
@@ -34,8 +34,8 @@
                         </h1>
                     </legend>
 
-                    <span asp-gds-validation-for="RisksViewModel.RadioButtonsYesNo"></span>
-                    <partial for="RisksViewModel.RadioButtonsYesNo" name="Shared/_InlineRadioButtons"/>
+                    <span asp-gds-validation-for="RisksViewModel.RisksInvolved"></span>
+                    <partial for="RadioButtonsYesNo" name="Shared/_InlineRadioButtons"/>
                     
                 </fieldset>
             </div>
