@@ -3,7 +3,7 @@
 */
 describe('Example to Demonstrate SQL Database Testing in Cypress', () => {
 
-    it.skip('Create a Table', function () {
+    it('Create a Table', function () {
         cy.task('queryDb', "CREATE TABLE Persons (PersonID int, FirstName varchar(255), Address varchar(255), City varchar(255))")
     })
 
