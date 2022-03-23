@@ -6,6 +6,8 @@ namespace Data.TRAMS.Models.AcademyTransferProject
     {
         public IntendedTransferBenefits IntendedTransferBenefits { get; set; }
         public OtherFactorsToConsider OtherFactorsToConsider { get; set; }
+        
+        public bool? AnyRisks { get; set; }
     }
 
     public class OtherFactorsToConsider
@@ -13,6 +15,8 @@ namespace Data.TRAMS.Models.AcademyTransferProject
         public OtherFactor HighProfile { get; set; }
         public OtherFactor ComplexLandAndBuilding { get; set; }
         public OtherFactor FinanceAndDebt { get; set; }
+        public OtherFactor OtherRisks { get; set; }
+        
     }
 
     public class OtherFactor

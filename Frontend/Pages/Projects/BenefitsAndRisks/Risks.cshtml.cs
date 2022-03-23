@@ -41,8 +41,9 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
 
             if (RisksViewModel.RisksInvolved == "Yes")
             {
-                
-            }
+              
+            }  
+            return Page();
         }
 
         private IList<RadioButtonViewModel> GetRadioButtons()
