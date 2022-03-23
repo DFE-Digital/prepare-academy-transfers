@@ -1,5 +1,13 @@
 {
   "chromeWebSecurity": false,
   "projectId": "jd9h7w",
-  "video": false
+  "video": false,
+  "env": {
+    "db": {
+      "host": "db4free.net",
+      "user": "admin",
+      "password": "password",
+      "database": "db_name"
+    }
+  }
 }
