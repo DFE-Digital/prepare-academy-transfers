@@ -6,6 +6,6 @@ namespace Frontend.Models.Benefits
 {
     public class RisksViewModel
     {
-        public string RisksInvolved { get; set; }
+        public bool? RisksInvolved { get; set; }
     }
 }

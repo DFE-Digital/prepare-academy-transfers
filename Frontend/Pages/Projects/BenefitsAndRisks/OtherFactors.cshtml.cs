@@ -55,7 +55,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
             }
             
-            return RedirectToPage("/Projects/Benefits/Index", new {Urn});
+            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }
         
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(

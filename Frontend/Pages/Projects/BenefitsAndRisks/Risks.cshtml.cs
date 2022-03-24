@@ -23,9 +23,10 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public IList<RadioButtonViewModel> RadioButtonsYesNo { get; set; }
 
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            RadioButtonsYesNo = GetRadioButtons();
+            var project = await _projects.GetByUrn(Urn);
+            RadioButtonsYesNo = GetRadioButtons(project.Result.Benefits.AnyRisks);
             return Page();
         }
 
@@ -35,18 +36,22 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
 
             if (!ModelState.IsValid)
             {
-                RadioButtonsYesNo = GetRadioButtons();
+                RadioButtonsYesNo = GetRadioButtons(project.Result.Benefits.AnyRisks);
                 return Page();
             }
-
-            if (RisksViewModel.RisksInvolved == "Yes")
-            {
+            
+            project.Result.Benefits.AnyRisks = RisksViewModel.RisksInvolved;
+            await _projects.Update(project.Result);
               
-            }  
-            return Page();
+            if (ReturnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
+            }
+            
+            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }
 
-        private IList<RadioButtonViewModel> GetRadioButtons()
+        private IList<RadioButtonViewModel> GetRadioButtons(bool? valueSelected)
         {
             var list = new List<RadioButtonViewModel>
             {
@@ -54,18 +59,20 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 {
                     DisplayName = "Yes",
                     Name = $"{nameof(RisksViewModel.RisksInvolved)}",
-                    Value = "Yes"
+                    Value = "true",
+                    Checked = valueSelected is true
                 },
                 new RadioButtonViewModel
                 {
                     DisplayName = "No",
                     Name = $"{nameof(RisksViewModel.RisksInvolved)}",
-                    Value = "No"
+                    Value = "false",
+                    Checked = valueSelected is false
                 }
             };
 
             var selectedRadio =
-                list.FirstOrDefault(c => c.Value == RisksViewModel.RisksInvolved);
+                list.FirstOrDefault(c => c.Value == RisksViewModel.RisksInvolved.ToString());
             if (selectedRadio != null)
             {
                 selectedRadio.Checked = true;

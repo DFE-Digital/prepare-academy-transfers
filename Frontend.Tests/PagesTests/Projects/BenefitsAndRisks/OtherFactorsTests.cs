@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests.Projects.Benefits
+namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
 {
     public class OtherFactorsTests : BaseTests
     {
@@ -101,7 +101,7 @@ namespace Frontend.Tests.PagesTests.Projects.Benefits
 
                 var response = await _subject.OnPostAsync();
 
-                ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/Benefits/Index",
+                ControllerTestHelpers.AssertResultRedirectsToPage(response, "/Projects/BenefitsAndRisks/Index",
                     new RouteValueDictionary(new {Urn = ProjectUrn0001}));
             }
 

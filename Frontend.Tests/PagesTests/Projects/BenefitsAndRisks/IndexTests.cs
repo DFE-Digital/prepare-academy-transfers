@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
 
-namespace Frontend.Tests.PagesTests.Projects.Benefits
+namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
 {
     public class IndexTests : BaseTests
     {

@@ -10,8 +10,8 @@ namespace Frontend.Validators.BenefitsAndRisks
         {
             CascadeMode = CascadeMode.Stop;
             RuleFor(x => x.RisksInvolved)
-                .NotEmpty()
-                .WithMessage("Select Yes or No");
+                .NotNull()
+                .WithMessage("Select yes if there are risks to consider");
         }
     }
 }

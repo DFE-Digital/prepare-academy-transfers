@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Frontend.Validators.BenefitsAndRisks;
 using Xunit;
 
-namespace Frontend.Tests.ValidatorTests.Benefits
+namespace Frontend.Tests.ValidatorTests.BenefitsAndRisks
 {
     public class IntendedBenefitsValidatorTests
     {

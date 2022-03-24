@@ -132,7 +132,8 @@ namespace Data.TRAMS.Mappers.Request
                             input.Benefits.OtherFactors.GetValueOrDefault(
                                 TransferBenefits.OtherFactor.OtherRisks, "")
                     }
-                }
+                },
+                AnyRisks = input.Benefits.AnyRisks
             };
         }
     }
