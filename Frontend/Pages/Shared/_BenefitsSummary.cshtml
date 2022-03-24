@@ -23,7 +23,7 @@
             </dd>
         }
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/Benefits/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="intended-benefits">
+            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="intended-benefits">
                 Change<span class="govuk-visually-hidden"> the intended benefits of the transfer</span>
             </a>
         </dd>
@@ -52,7 +52,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/Benefits/OtherFactors" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)"  data-test="other-factors">
+            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/OtherFactors" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)"  data-test="other-factors">
                 Change<span class="govuk-visually-hidden"> risks to consider</span>
             </a>
         </dd>

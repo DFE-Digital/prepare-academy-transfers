@@ -2,7 +2,7 @@
 using FluentValidation;
 using Frontend.Models.Benefits;
 
-namespace Frontend.Validators.Benefits
+namespace Frontend.Validators.BenefitsAndRisks
 {
     public class IntendedBenefitsValidator : AbstractValidator<IntendedBenefitsViewModel>
     {

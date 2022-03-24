@@ -8,7 +8,7 @@ using Frontend.Models.Forms;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class IntendedBenefits : CommonPageModel
     {
@@ -78,7 +78,7 @@ namespace Frontend.Pages.Projects.Benefits
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
             }
             
-            return RedirectToPage("/Projects/Benefits/Index", new {Urn});
+            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }
     }
 }

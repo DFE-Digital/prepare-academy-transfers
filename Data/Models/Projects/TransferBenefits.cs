@@ -53,11 +53,16 @@ namespace Data.Models.Projects
             ComplexLandAndBuildingIssues,
 
             [Display(Name = "There are finance and debt concerns")]
-            FinanceAndDebtConcerns
+            FinanceAndDebtConcerns,
+            
+            [Display(Name = "Other risks")]
+            OtherRisks
         }
 
         public List<IntendedBenefit> IntendedBenefits { get; set; }
         public string OtherIntendedBenefit { get; set; }
         public Dictionary<OtherFactor, string> OtherFactors { get; set; }
+        
+        public bool? AnyRisks { get; set; }
     }
 }

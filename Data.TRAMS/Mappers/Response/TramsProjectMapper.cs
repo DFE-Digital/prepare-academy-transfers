@@ -120,6 +120,13 @@ namespace Data.TRAMS.Mappers.Response
                 otherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] =
                     inputFactors.ComplexLandAndBuilding.FurtherSpecification;
             }
+            
+            if (inputFactors.OtherRisks.ShouldBeConsidered != null &&
+                (bool) inputFactors.OtherRisks.ShouldBeConsidered)
+            {
+                otherFactors[TransferBenefits.OtherFactor.OtherRisks] =
+                    inputFactors.OtherRisks.FurtherSpecification;
+            }
 
             return new TransferBenefits
             {
@@ -127,7 +134,8 @@ namespace Data.TRAMS.Mappers.Response
                     .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.Parse)
                     .ToList(),
                 OtherIntendedBenefit = input.Benefits.IntendedTransferBenefits.OtherBenefitValue,
-                OtherFactors = otherFactors
+                OtherFactors = otherFactors,
+                AnyRisks = input.Benefits.AnyRisks
             };
         }
     }
