@@ -6,6 +6,7 @@ using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
 using Frontend.Pages.Projects;
+using Frontend.Pages.Projects.BenefitsAndRisks;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Index = Frontend.Pages.Projects.Features.Index;
@@ -53,7 +54,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
                 project.Benefits.IntendedBenefits.ToList(),
                 project.Benefits.OtherIntendedBenefit,
-                Projects.Benefits.OtherFactors.BuildOtherFactorsItemViewModel(project.Benefits.OtherFactors)
+                OtherFactors.BuildOtherFactorsItemViewModel(project.Benefits.OtherFactors)
                     .Where(o => o.Checked)
                     .ToList(),
                 project.Urn,

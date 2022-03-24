@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class Index : CommonPageModel
     {

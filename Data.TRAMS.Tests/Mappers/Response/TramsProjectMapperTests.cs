@@ -35,7 +35,11 @@ namespace Data.TRAMS.Tests.Mappers.Response
                         FinanceAndDebt = new OtherFactor
                             {FurtherSpecification = "Finance", ShouldBeConsidered = true},
                         ComplexLandAndBuilding = new OtherFactor
-                            {FurtherSpecification = "Complex land and building", ShouldBeConsidered = true}
+                            {FurtherSpecification = "Complex land and building", ShouldBeConsidered = true},
+                        OtherRisks = new OtherFactor
+                        {
+                            FurtherSpecification = "Other risks", ShouldBeConsidered = true
+                        }
                     }
                 },
                 Dates = new AcademyTransferProjectDates

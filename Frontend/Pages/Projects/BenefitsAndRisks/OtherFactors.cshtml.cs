@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable UnusedMember.Global - properties bound using [BindProperty]
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class OtherFactors : CommonPageModel
     {
@@ -55,7 +55,7 @@ namespace Frontend.Pages.Projects.Benefits
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
             }
             
-            return RedirectToPage("/Projects/Benefits/Index", new {Urn});
+            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }
         
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
