@@ -10,7 +10,6 @@ using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sentry;
 using Session = Frontend.Helpers.Session;
 
 namespace Frontend.Controllers
@@ -21,16 +20,14 @@ namespace Frontend.Controllers
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";
         private const string IncomingTrustIdSessionKey = "IncomingTrustId";
         private const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
-        private readonly IAcademies _academiesRepository;
+        private const string ProjectCreatedSessionKey = "ProjectCreated";
         private readonly IProjects _projectsRepository;
         private readonly ITrusts _trustsRepository;
         private readonly IReferenceNumberService _referenceNumberService;
 
-
-        public TransfersController(IAcademies academiesRepository, IProjects projectsRepository,
+        public TransfersController(IProjects projectsRepository,
             ITrusts trustsRepository, IReferenceNumberService referenceNumberService)
         {
-            _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
             _trustsRepository = trustsRepository;
             _referenceNumberService = referenceNumberService;
@@ -150,7 +147,7 @@ namespace Frontend.Controllers
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
                 return RedirectToAction("OutgoingTrustAcademies");
             }
-            
+
             var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
             HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
@@ -253,12 +250,25 @@ namespace Frontend.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> SubmitProject()
         {
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var incomingTrustId = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
-
+            
+            //Redirect any duplicate requests (Session has been cleared)
+            if (string.IsNullOrWhiteSpace(outgoingTrustId) || string.IsNullOrWhiteSpace(incomingTrustId) ||
+                !academyIds.Any())
+            {
+                var urnCreated = HttpContext.Session.GetString(ProjectCreatedSessionKey);
+                return !string.IsNullOrWhiteSpace(urnCreated)
+                    ? RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new
+                    {
+                        urn = urnCreated
+                    })
+                    : throw new Exception("Cannot create project");
+            }
 
             var project = new Project
             {
@@ -271,15 +281,20 @@ namespace Frontend.Controllers
             };
 
             var createResponse = await _projectsRepository.Create(project);
+            HttpContext.Session.SetString(ProjectCreatedSessionKey, createResponse.Result.Urn);
 
-            createResponse.Result.Reference = _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
+            createResponse.Result.Reference =
+                _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
             await _projectsRepository.Update(createResponse.Result);
-            
+
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new {urn = createResponse.Result.Urn});
+            return RedirectToPage($"/Projects/{nameof(Pages.Projects.Index)}", new
+            {
+                urn = createResponse.Result.Urn
+            });
         }
     }
 }
