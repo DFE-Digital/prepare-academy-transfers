@@ -188,13 +188,10 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("other-factors")
         cy.get('#HighProfile').parent().get("[type='checkbox']").uncheck()
         cy.get('#HighProfile').parent().get("[type='checkbox']").check()
-        cy.fillInTextAtIndex(0, "First")
         cy.get('#ComplexLandAndBuildingIssues').parent().get("[type='checkbox']").uncheck()
         cy.get('#ComplexLandAndBuildingIssues').parent().get("[type='checkbox']").check()
-        cy.fillInTextAtIndex(1, "Second")
         cy.get('#FinanceAndDebtConcerns').parent().get("[type='checkbox']").uncheck()
         cy.get('#FinanceAndDebtConcerns').parent().get("[type='checkbox']").check()
-        cy.fillInTextAtIndex(2, "Third")
         submit()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("benefits").should('have.text',"COMPLETED");    

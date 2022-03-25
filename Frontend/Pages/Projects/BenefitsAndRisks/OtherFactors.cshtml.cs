@@ -21,43 +21,71 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             _projects = projects;
         }
 
-        [BindProperty]
-        public OtherFactorsViewModel OtherFactorsViewModel { get; set; } = new OtherFactorsViewModel();
-        
+        [BindProperty] public OtherFactorsViewModel OtherFactorsViewModel { get; set; } = new OtherFactorsViewModel();
+
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
-            OtherFactorsViewModel.OtherFactorsVm  = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
-                
+            OtherFactorsViewModel.OtherFactorsVm = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            
+
             var projectResult = project.Result;
             projectResult.Benefits.OtherFactors = OtherFactorsViewModel.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
             await _projects.Update(projectResult);
-            
+
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
             }
-            
-            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
+
+            var available = new List<TransferBenefits.OtherFactor>
+            {
+                TransferBenefits.OtherFactor.HighProfile,
+                TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
+                TransferBenefits.OtherFactor.OtherRisks
+            };
+            return RedirectToPage(GetNextPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
-        
+
+        public static string GetNextPage(List<TransferBenefits.OtherFactor> available,
+            Dictionary<TransferBenefits.OtherFactor, string> otherFactors)
+        {
+            var foundOtherFactor =
+                available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
+
+            switch (foundOtherFactor)
+            {
+                case TransferBenefits.OtherFactor.HighProfile:
+                    return "/Projects/BenefitsAndRisks/HighProfileTransfer";
+                case TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues:
+                    return "/Projects/BenefitsAndRisks/ComplexLandAndBuilding";
+                case TransferBenefits.OtherFactor.FinanceAndDebtConcerns:
+                    return "/Projects/BenefitsAndRisks/FinanceAndDebt";
+                case TransferBenefits.OtherFactor.OtherRisks:
+                    return "/Projects/BenefitsAndRisks/OtherRisks";
+            }
+
+            return "/Projects/BenefitsAndRisks/Index";
+        }
+
+
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
             Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
@@ -71,8 +99,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                     items.Add(new OtherFactorsItemViewModel()
                     {
                         OtherFactor = otherFactor,
-                        Checked = isChecked,
-                        Description = isChecked ? otherFactorsToSet[otherFactor] : string.Empty
+                        Checked = isChecked
                     });
                 }
             }
