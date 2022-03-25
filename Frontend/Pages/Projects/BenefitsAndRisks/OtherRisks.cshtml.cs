@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
+using Data.Models.Projects;
 using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +13,9 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
 
         [BindProperty]
         public string Answer { get; set; }
-        
+
+        public string PreviousPage { get; set; }
+
         public OtherRisks(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
@@ -22,10 +26,17 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
             
             var projectResult = project.Result;
-
             IncomingTrustName = projectResult.IncomingTrustName;
-         
-
+            Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks];
+            PreviousPage =
+                OtherFactors.GetPage(
+                    new List<TransferBenefits.OtherFactor>
+                    {
+                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                        TransferBenefits.OtherFactor.HighProfile,
+                        TransferBenefits.OtherFactor.FinanceAndDebtConcerns
+                    },
+                    projectResult.Benefits.OtherFactors, true);
             return Page();
         }
 
@@ -39,8 +50,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             }
 
             var projectResult = project.Result;
-            //projectResult.Rationale.Project = ViewModel.ProjectRationale;
-
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks] = Answer;
             await _projectsRepository.Update(projectResult);
             
             if (ReturnToPreview)

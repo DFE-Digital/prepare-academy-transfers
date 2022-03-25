@@ -61,11 +61,18 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
                 TransferBenefits.OtherFactor.OtherRisks
             };
-            return RedirectToPage(GetNextPage(available, projectResult.Benefits.OtherFactors), new {Urn});
+            return RedirectToPage(GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
 
-        public static string GetNextPage(List<TransferBenefits.OtherFactor> available,
-            Dictionary<TransferBenefits.OtherFactor, string> otherFactors)
+        /// <summary>
+        /// Get next or previous page for other factors dynamic navigation
+        /// </summary>
+        /// <param name="available">List of other factors to navigate to</param>
+        /// <param name="otherFactors">Other factors currently selected</param>
+        /// <param name="backLink">true if navigating backwards, back link</param>
+        /// <returns>Page name</returns>
+        public static string GetPage(List<TransferBenefits.OtherFactor> available,
+            Dictionary<TransferBenefits.OtherFactor, string> otherFactors, bool backLink = false)
         {
             var foundOtherFactor =
                 available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
@@ -82,7 +89,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                     return "/Projects/BenefitsAndRisks/OtherRisks";
             }
 
-            return "/Projects/BenefitsAndRisks/Index";
+            return backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index";
         }
 
 

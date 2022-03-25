@@ -2,13 +2,13 @@
 @model Frontend.Pages.Projects.BenefitsAndRisks.FinanceAndDebt
 
 @{
-    Layout = "_Layout";    
+    Layout = "_Layout";
 }
 
 @section BeforeMain
 {
     <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
-        <a class="govuk-back-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn">Back</a>
+        <a class="govuk-back-link" asp-page="@Model.PreviousPage" asp-route-urn="@Model.Urn">Back</a>
     </backtopreview>
 }
 
@@ -17,19 +17,18 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn" />
-            <input type="hidden" asp-for="@Model.ReturnToPreview" />
-            <input type="hidden" asp-for="@Model.IncomingTrustName" />
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
             <div class="govuk-form-group">
-                <label class="govuk-label govuk-!-font-weight-bold" asp-for="Answer">
-                    <span class="govuk-caption-l">
-                        @Model.IncomingTrustName
-                    </span>
-                    <h1 class="govuk-heading-l">
-                      finance
-                    </h1>
-                </label>
-
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--l" asp-for="Answer">
+                        <span class="govuk-caption-l">
+                            @Model.IncomingTrustName
+                        </span>
+                        What are the finance and debt concerns? (optional)
+                    </label>
+                </h1>
                 <textarea asp-for="Answer" class="govuk-textarea" rows="5" data-test="high-profile-transfer"></textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">

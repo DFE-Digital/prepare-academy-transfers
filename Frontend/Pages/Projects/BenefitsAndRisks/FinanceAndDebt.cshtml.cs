@@ -12,6 +12,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         private readonly IProjects _projectsRepository;
 
         [BindProperty] public string Answer { get; set; }
+        public string PreviousPage { get; set; }
 
         public FinanceAndDebt(IProjects projectsRepository)
         {
@@ -23,25 +24,25 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-
+            Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns];
             IncomingTrustName = projectResult.IncomingTrustName;
-
-
+            PreviousPage =
+                OtherFactors.GetPage(
+                    new List<TransferBenefits.OtherFactor>
+                    {
+                        TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
+                        TransferBenefits.OtherFactor.HighProfile,
+                    },
+                    projectResult.Benefits.OtherFactors, true);
             return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             var projectResult = project.Result;
-            //projectResult.Rationale.Project = ViewModel.ProjectRationale;
-
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] = Answer;
             await _projectsRepository.Update(projectResult);
 
             if (ReturnToPreview)
@@ -53,7 +54,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             {
                 TransferBenefits.OtherFactor.OtherRisks
             };
-            return RedirectToPage(OtherFactors.GetNextPage(available, projectResult.Benefits.OtherFactors), new {Urn});
+            return RedirectToPage(OtherFactors.GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
     }
 }

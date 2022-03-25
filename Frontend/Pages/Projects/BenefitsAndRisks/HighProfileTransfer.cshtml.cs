@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
 using Frontend.Models;
-using Frontend.Models.Benefits;
-using Frontend.Models.Rationale;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages.Projects.BenefitsAndRisks
@@ -27,10 +23,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-
             IncomingTrustName = projectResult.IncomingTrustName;
-
-
+            Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile];
             return Page();
         }
 
@@ -38,14 +32,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         {
             var project = await _projectsRepository.GetByUrn(Urn);
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             var projectResult = project.Result;
-            //projectResult.Rationale.Project = ViewModel.ProjectRationale;
-
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] = Answer;
             await _projectsRepository.Update(projectResult);
 
             if (ReturnToPreview)
@@ -59,7 +47,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
                 TransferBenefits.OtherFactor.OtherRisks
             };
-            return RedirectToPage(OtherFactors.GetNextPage(available, projectResult.Benefits.OtherFactors), new {Urn});
+            return RedirectToPage(OtherFactors.GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
 
        

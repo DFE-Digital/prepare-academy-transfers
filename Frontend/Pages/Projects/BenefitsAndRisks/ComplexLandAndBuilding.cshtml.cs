@@ -14,6 +14,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         [BindProperty]
         public string Answer { get; set; }
         
+        public string PreviousPage { get; set; }
+        
         public ComplexLandAndBuilding(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
@@ -22,26 +24,22 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            
             var projectResult = project.Result;
-
+            Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues];
             IncomingTrustName = projectResult.IncomingTrustName;
-         
-
+            PreviousPage =
+                OtherFactors.GetPage(
+                    new List<TransferBenefits.OtherFactor> {TransferBenefits.OtherFactor.HighProfile},
+                    projectResult.Benefits.OtherFactors, true);
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             var projectResult = project.Result;
-            //projectResult.Rationale.Project = ViewModel.ProjectRationale;
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer;
 
             await _projectsRepository.Update(projectResult);
             
@@ -56,7 +54,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 TransferBenefits.OtherFactor.OtherRisks
             };
 
-            return RedirectToPage(OtherFactors.GetNextPage(available, projectResult.Benefits.OtherFactors), new {Urn});
+            return RedirectToPage(OtherFactors.GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
     }
 }
