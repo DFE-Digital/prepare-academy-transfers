@@ -155,6 +155,22 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
                  ControllerTestHelpers.AssertResultRedirectsToPage(result, Links.HeadteacherBoard.Preview.PageName,
                      new RouteValueDictionary(new {id = ProjectUrn0001}));
              }
+             
+             [Fact]
+             public void GivenNoAvailablePagesGetPageGoToIndex()
+             {
+                 var otherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
+                 var page = OtherFactors.GetPage(new List<TransferBenefits.OtherFactor>(0), otherFactors);
+                 Assert.Equal("/Projects/BenefitsAndRisks/Index",page);
+             }
+             
+             [Fact]
+             public void GivenNoAvailableWithBackPagesGetPageGoToIndex()
+             {
+                 var otherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
+                 var page = OtherFactors.GetPage(new List<TransferBenefits.OtherFactor>(0), otherFactors, true);
+                 Assert.Equal("/Projects/BenefitsAndRisks/OtherFactors",page);
+             }
         }
     }
 }
