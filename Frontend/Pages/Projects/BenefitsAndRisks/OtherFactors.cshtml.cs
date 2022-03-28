@@ -41,7 +41,6 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             
             if (!ModelState.IsValid)
             {
-               // OtherFactorsViewModel.OtherFactorsVm = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
                 return Page();
             }
             
