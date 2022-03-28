@@ -4,10 +4,14 @@
   "video": false,
   "env": {
     "db": {
-      "host": "db4free.net",
-      "user": "asifali3111",
-      "password": "muhammed",
-      "database": "asifalitesting"
+      "userName": "",
+      "password": "",
+      "server": "",
+      "options": {
+          "database": "",
+          "encrypt": true,
+          "rowCollectionOnRequestCompletion" : true
+      }
     }
   }
 }
