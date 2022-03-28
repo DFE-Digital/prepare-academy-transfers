@@ -4,10 +4,9 @@
 @using Data.Models.Projects
 @using Helpers
 @using Microsoft.AspNetCore.Mvc.ModelBinding
-@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Are there any risks to consider?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the risks with this transfer?";
     Layout = "_Layout";
     var formClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.OtherFactorsViewModel.OtherFactorsVm)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
 }
@@ -34,7 +33,7 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            Are there any risks to consider
+                            What are the risks with this transfer?
                         </h1>
                     </legend>
                     <div id="waste-hint" class="govuk-hint">
@@ -44,27 +43,18 @@
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         @for (var i = 0; i < Model.OtherFactorsViewModel.OtherFactorsVm.Count; i++)
                         {
+                            var checkBox = Model.OtherFactorsViewModel.OtherFactorsVm[i];
+                            var nameOrValue = (i == 0 ? checkBox.OtherFactor.ToString().ToHtmlName() : checkBox.OtherFactor.ToString());
                             <div class="govuk-checkboxes__item">
                                 <input asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
-                                <label id="@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked">
+                                <label id="@nameOrValue" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked">
                                     @{
                                         var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor);
                                         @displayName
                                     }
-                                </label>  
+                                </label>
                             </div>
-                            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor.ToString()">
-                                <div class="govuk-form-group">
-                                    <label class="govuk-label" asp-for="@(Model.OtherFactorsViewModel.OtherFactorsVm[i].Description)">
-                                        Specify this concern further
-                                    </label>
-                                    <span asp-gds-validation-for="OtherFactorsViewModel.OtherFactorsVm[i].Description"></span>
-                                    <input asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Description" class="govuk-input govuk-!-width-two-thirds" type="text" value="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Description">
-                                </div>
-                            </div>
-                            
                             <input type="hidden" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor"/>
-                            
                         }
                     </div>
                 </fieldset>
