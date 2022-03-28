@@ -3,7 +3,7 @@
 */
 describe('Example to Demonstrate SQL Database Testing in Cypress', () => {
 
-    it('TEST CONNECTION with Pre-Prod', function () {
+    it.skip('TEST CONNECTION with Pre-Prod', function () {
         cy.sqlServer("SELECT TOP (2) * FROM [cdm].[contact]").then((result) => {
             cy.log(result[0][0] + " | " + result[0][1]);
             cy.log(result[1][0] + " | " + result[1][1]);
