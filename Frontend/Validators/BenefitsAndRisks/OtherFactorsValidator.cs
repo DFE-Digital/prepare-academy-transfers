@@ -9,9 +9,14 @@ namespace Frontend.Validators.BenefitsAndRisks
         public OtherFactorsValidator()
         {
             CascadeMode = CascadeMode.Stop;
-            RuleFor(x => x.OtherFactorsVm.Where(o => o.Checked))
-                .NotEmpty()
-                .WithMessage("Select the risks with this transfer");
+            RuleFor(x => x.OtherFactorsVm)
+                .Custom((list, context) =>
+                {
+                    if (!list.Any(o => o.Checked))
+                    {
+                        context.AddFailure("Select the risks with this transfer");
+                    }
+                });
         }
     }
 }
