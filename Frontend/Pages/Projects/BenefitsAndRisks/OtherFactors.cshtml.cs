@@ -37,13 +37,14 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-
+            var projectResult = project.Result;
+            
             if (!ModelState.IsValid)
             {
+               // OtherFactorsViewModel.OtherFactorsVm = BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors);
                 return Page();
             }
-
-            var projectResult = project.Result;
+            
             projectResult.Benefits.OtherFactors = OtherFactorsViewModel.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
