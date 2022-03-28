@@ -3,8 +3,11 @@
 */
 describe('Example to Demonstrate SQL Database Testing in Cypress', () => {
 
-    it('Create a Table', function () {
-        cy.task('queryDb', "CREATE TABLE Persons (PersonID int, FirstName varchar(255), Address varchar(255), City varchar(255))")
+    it('TEST CONNECTION with Pre-Prod', function () {
+        cy.sqlServer("SELECT TOP (2) * FROM [cdm].[contact]").then((result) => {
+            cy.log(result[0][0] + " | " + result[0][1]);
+            cy.log(result[1][0] + " | " + result[1][1]);
+        })
     })
 
     it.skip('Input Entries into the table', function () {
