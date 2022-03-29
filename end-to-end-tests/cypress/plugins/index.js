@@ -27,31 +27,3 @@ module.exports = (on, config) => {
         }
     });
 }
-/* 
-  We will be using the mysql plugin to connect to our database. 
-*/
-//For connecting to SQL Server
-const mysql = require('mysql')
-function queryTestDb(query, config) {
-  // creates a new mysql connection using credentials from cypress.json env's
-  const connection = mysql.createConnection(config.env.db)
-  // start connection to db
-  connection.connect()
-  // exec query + disconnect to db as a Promise
-  return new Promise((resolve, reject) => {
-    connection.query(query, (error, results) => {
-      if (error) reject(error)
-      else {
-        connection.end()
-        return resolve(results)
-      }
-    })
-  })
-}
-
-/*
-   Now, we will be using cy.task() to enable cypress to run SQL queries.
-*/
-module.exports = (on, config) => {
-    on('task', { queryDb: query => { return queryTestDb(query, config) }, }); //For running sql query
-  }
