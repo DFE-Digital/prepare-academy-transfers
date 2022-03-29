@@ -12,19 +12,21 @@ namespace Frontend.Models.Benefits
         private readonly string _otherIntendedBenefit;
         private readonly IList<OtherFactorsItemViewModel> _otherFactorsItems;
         public readonly string OutgoingAcademyUrn;
+        public readonly bool? AnyRisks;
 
         public BenefitsSummaryViewModel(IList<TransferBenefits.IntendedBenefit> intendedBenefits, 
             string otherIntendedBenefit, 
             IList<OtherFactorsItemViewModel> otherFactorsItems,
             string projectUrn,
-            string outgoingAcademyUrn
-            )
+            string outgoingAcademyUrn,
+            bool? anyRisks = null)
         {
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
             _otherFactorsItems = otherFactorsItems;
             Urn = projectUrn;
             OutgoingAcademyUrn = outgoingAcademyUrn;
+            AnyRisks = anyRisks;
         }
 
         public List<string> IntendedBenefitsSummary()
@@ -50,5 +52,6 @@ namespace Frontend.Models.Benefits
                 otherFactor.Description
             }).ToList();
         }
+        
     }
 }

@@ -31,7 +31,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 projectResult.Benefits.OtherIntendedBenefit,
                 BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
                 projectResult.Urn,
-                projectResult.OutgoingAcademyUrn
+                projectResult.OutgoingAcademyUrn,
+                projectResult.Benefits.AnyRisks
             );
 
             return Page();

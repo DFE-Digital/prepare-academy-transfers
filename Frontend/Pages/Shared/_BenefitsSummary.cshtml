@@ -23,38 +23,43 @@
             </dd>
         }
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)" data-test="intended-benefits">
+            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="intended-benefits">
                 Change<span class="govuk-visually-hidden"> the intended benefits of the transfer</span>
             </a>
         </dd>
     </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Are there any risks to consider
+            Are there any risks to consider for this transfer?
         </dt>
         <dd class="govuk-summary-list__value">
-            @if (!Model.OtherFactorsSummary().Any())
+            @if (!Model.AnyRisks.HasValue)
             {
                 <span class="dfe-empty-tag">Empty</span>
             }
             else
             {
-                foreach (var otherFactor in Model.OtherFactorsSummary())
-                {
-                    <p class="govuk-body">
-                        @otherFactor[0]
-                        @if (!string.IsNullOrEmpty(otherFactor[1]))
-                        {
-                            <span>: @otherFactor[1]</span>
-                        }
-                    </p>
-                }
+                <p class="govuk-body">@(Model.AnyRisks == true ? "Yes" : "No")</p>
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/OtherFactors" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)"  data-test="other-factors">
+            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="other-factors">
                 Change<span class="govuk-visually-hidden"> risks to consider</span>
             </a>
         </dd>
     </div>
+    @foreach (var otherFactor in Model.OtherFactorsSummary())
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @otherFactor[0]
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @otherFactor[1]
+            </dd>
+            <dd class="govuk-summary-list__actions">
+
+            </dd>
+        </div>
+    }
 </dl>
