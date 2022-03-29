@@ -83,7 +83,7 @@ afterEach(() => {
 ```
 
 ##### Writing global commands
-The cypress.json file in the `support` folder contains functions which can be used globally throughout your tests. Below is an example of a custom login command
+The cypress.json file in the `support` folder contains functions which can be used globally throughout your tests. Below is an example of a custom login command.
 
 ```
 Cypress.Commands.add("login",()=> {
