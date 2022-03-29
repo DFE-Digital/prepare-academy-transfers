@@ -46,7 +46,7 @@
                             var checkBox = Model.OtherFactorsViewModel.OtherFactorsVm[i];
                             var nameOrValue = i == 0 ? nameof(Model.OtherFactorsViewModel) : checkBox.OtherFactor.ToString();
                             <div class="govuk-checkboxes__item">
-                                <input asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
+                                <input data-test="@checkBox.OtherFactor" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked" class="govuk-checkboxes__input" aria-controls="conditional-@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor" aria-expanded="false">
                                 <label id="@nameOrValue" class="govuk-label govuk-checkboxes__label" asp-for="@Model.OtherFactorsViewModel.OtherFactorsVm[i].Checked">
                                     @{
                                         var displayName = EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(@Model.OtherFactorsViewModel.OtherFactorsVm[i].OtherFactor);
