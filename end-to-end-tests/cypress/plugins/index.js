@@ -25,5 +25,5 @@ module.exports = (on, config) => {
             let files = fs.readdirSync(path);
             return files.find((fileName) => fileName.includes(".docx"))
         }
-    })
+    });
 }
