@@ -38,7 +38,7 @@ namespace Frontend.Integration.Tests.Fixtures
                 }
             };
 
-            return new List<TramsProjectSummary> {tramsProjectSummary};
+            return new List<TramsProjectSummary> { tramsProjectSummary };
         }
 
         public static TramsProject Project()
@@ -69,6 +69,7 @@ namespace Frontend.Integration.Tests.Fixtures
                             FurtherSpecification = "Other risks", ShouldBeConsidered = true
                         }
                     },
+                    IsCompleted = true,
                     AnyRisks = true
                 },
                 Dates = new AcademyTransferProjectDates
@@ -86,12 +87,14 @@ namespace Frontend.Integration.Tests.Fixtures
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
                     WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe.ToString(),
-                    RddOrEsfaInterventionDetail = "Intervention details"
+                    RddOrEsfaInterventionDetail = "Intervention details",
+                    IsCompleted = true
                 },
                 Rationale = new AcademyTransferProjectRationale
                 {
                     ProjectRationale = "Project rationale",
-                    TrustSponsorRationale = "Trust rationale"
+                    TrustSponsorRationale = "Trust rationale",
+                    IsCompleted = true
                 },
                 GeneralInformation = new AcademyTransferProjectAcademyAndTrustInformation
                 {
@@ -129,10 +132,11 @@ namespace Frontend.Integration.Tests.Fixtures
                         KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation"
                     }
                 },
-
+                
                 OutgoingTrustUkprn = OutgoingTrustUkprn,
+                
             };
-
+            
             return tramsProject;
         }
 
@@ -283,7 +287,7 @@ namespace Frontend.Integration.Tests.Fixtures
                         LAEnteringEbacc = new decimal(RandomGenerator.NextDouble()),
                         NationalEnteringEbacc = new decimal(RandomGenerator.NextDouble())
                     }
-                },
+                }, 
                 KeyStage5 = new List<KeyStage5>()
                 {
                     new KeyStage5

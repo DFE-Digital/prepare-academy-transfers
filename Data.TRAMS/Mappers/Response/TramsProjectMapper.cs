@@ -64,7 +64,8 @@ namespace Data.TRAMS.Mappers.Response
             return new TransferRationale
             {
                 Project = input.Rationale.ProjectRationale,
-                Trust = input.Rationale.TrustSponsorRationale
+                Trust = input.Rationale.TrustSponsorRationale,
+                IsCompleted = input.Rationale.IsCompleted
             };
         }
 
@@ -80,7 +81,8 @@ namespace Data.TRAMS.Mappers.Response
                 TypeOfTransfer = EnumHelpers<TransferFeatures.TransferTypes>.Parse(input.Features.TypeOfTransfer),
                 OtherTypeOfTransfer = input.Features.OtherTransferTypeDescription,
                 WhoInitiatedTheTransfer =
-                    EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(input.Features.WhoInitiatedTheTransfer)
+                    EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(input.Features.WhoInitiatedTheTransfer),
+                IsCompleted = input.Features.IsCompleted
             };
         }
 
@@ -135,7 +137,8 @@ namespace Data.TRAMS.Mappers.Response
                     .ToList(),
                 OtherIntendedBenefit = input.Benefits.IntendedTransferBenefits.OtherBenefitValue,
                 OtherFactors = otherFactors,
-                AnyRisks = input.Benefits.AnyRisks
+                AnyRisks = input.Benefits.AnyRisks,
+                IsCompleted = input.Benefits.IsCompleted
             };
         }
     }
