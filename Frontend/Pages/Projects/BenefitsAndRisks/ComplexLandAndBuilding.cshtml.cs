@@ -11,11 +11,10 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     {
         private readonly IProjects _projectsRepository;
 
-        [BindProperty]
-        public string Answer { get; set; }
-        
+        [BindProperty] public string Answer { get; set; }
+
         public string PreviousPage { get; set; }
-        
+
         public ComplexLandAndBuilding(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
@@ -42,12 +41,12 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer;
 
             await _projectsRepository.Update(projectResult);
-            
+
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
-            
+
             var available = new List<TransferBenefits.OtherFactor>
             {
                 TransferBenefits.OtherFactor.FinanceAndDebtConcerns,

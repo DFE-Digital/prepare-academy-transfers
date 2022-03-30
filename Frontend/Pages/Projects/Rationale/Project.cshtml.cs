@@ -49,7 +49,7 @@ namespace Frontend.Pages.Projects.Rationale
             
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
             return RedirectToPage("/Projects/Rationale/Index", new {Urn});

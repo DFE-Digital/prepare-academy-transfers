@@ -38,21 +38,16 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         {
             var project = await _projects.GetByUrn(Urn);
             var projectResult = project.Result;
-            
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            
+
             projectResult.Benefits.OtherFactors = OtherFactorsViewModel.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
             await _projects.Update(projectResult);
-
-            if (ReturnToPreview)
-            {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
-            }
 
             var available = new List<TransferBenefits.OtherFactor>
             {

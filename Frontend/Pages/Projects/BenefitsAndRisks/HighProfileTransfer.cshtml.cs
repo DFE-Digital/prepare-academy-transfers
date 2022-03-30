@@ -38,7 +38,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
             var available = new List<TransferBenefits.OtherFactor>
@@ -49,7 +49,5 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             };
             return RedirectToPage(OtherFactors.GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
-
-       
     }
 }

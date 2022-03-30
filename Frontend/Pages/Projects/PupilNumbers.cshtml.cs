@@ -17,17 +17,14 @@ namespace Frontend.Pages.Projects
         public string WithEAL { get; set; }
         public string FreeSchoolMealsLast6Years { get; set; }
         public string AcademyName { get; set; }
-        
-        [BindProperty]
-        public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
-        public bool IsPreview { get; set; }
-        
-        [BindProperty(SupportsGet = true)]
-        public bool AddOrEditAdditionalInformation { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public string AcademyUkprn { get; set; }
-        
+        [BindProperty] public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
+        public bool IsPreview { get; set; }
+
+        [BindProperty(SupportsGet = true)] public bool AddOrEditAdditionalInformation { get; set; }
+
+        [BindProperty(SupportsGet = true)] public string AcademyUkprn { get; set; }
+
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
@@ -42,7 +39,7 @@ namespace Frontend.Pages.Projects
             var projectInformation = await _getInformationForProject.Execute(Urn);
             var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
             var pupilNumbers = academy.PupilNumbers;
-            
+
             GirlsOnRoll = pupilNumbers.GirlsOnRoll;
             BoysOnRoll = pupilNumbers.BoysOnRoll;
             WithStatementOfSEN = pupilNumbers.WithStatementOfSen;
@@ -53,7 +50,7 @@ namespace Frontend.Pages.Projects
             AcademyName = academy.Name;
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
-                AdditionalInformation =academy.PupilNumbers.AdditionalInformation,
+                AdditionalInformation = academy.PupilNumbers.AdditionalInformation,
                 HintText =
                     "If you add comments, they'll be included in the pupil numbers section of your project template.",
                 Urn = projectInformation.Project.Urn,
@@ -67,7 +64,8 @@ namespace Frontend.Pages.Projects
         {
             var model = await _projectsRepository.GetByUrn(Urn);
 
-            model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn).PupilNumbersAdditionalInformation 
+            model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn)
+                    .PupilNumbersAdditionalInformation
                 = AdditionalInformationViewModel.AdditionalInformation;
             await _projectsRepository.Update(model.Result);
 

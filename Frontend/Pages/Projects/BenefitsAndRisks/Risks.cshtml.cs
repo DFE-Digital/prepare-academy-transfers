@@ -45,7 +45,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
             return RisksViewModel.RisksInvolved == true

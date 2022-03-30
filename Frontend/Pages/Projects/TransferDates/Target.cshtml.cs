@@ -72,7 +72,7 @@ namespace Frontend.Pages.Projects.TransferDates
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
             return RedirectToPage("/Projects/TransferDates/Index", new { Urn });

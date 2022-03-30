@@ -11,8 +11,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     {
         private readonly IProjects _projectsRepository;
 
-        [BindProperty]
-        public string Answer { get; set; }
+        [BindProperty] public string Answer { get; set; }
 
         public string PreviousPage { get; set; }
 
@@ -24,7 +23,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
             Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks];
@@ -43,7 +42,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-            
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -52,10 +51,10 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var projectResult = project.Result;
             projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks] = Answer;
             await _projectsRepository.Update(projectResult);
-            
+
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
             return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
