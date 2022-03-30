@@ -98,7 +98,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
 
                 ControllerTestHelpers.AssertResultRedirectsToPage(
                     response, Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new {id = "0001"})
+                    new RouteValueDictionary(new {Urn = "0001"})
                 );
             }
         }

@@ -69,7 +69,7 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
 
             if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {vm.Urn});
             }
 
             return RedirectToPage("/Projects/AcademyAndTrustInformation/Index", new {vm.Urn});
