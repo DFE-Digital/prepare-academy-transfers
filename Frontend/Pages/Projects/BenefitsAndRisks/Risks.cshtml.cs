@@ -48,6 +48,12 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             }
             await _projects.Update(project.Result);
 
+            //Only go back to preview if No, Yes will take them through the options
+            if (ReturnToPreview && RisksViewModel.RisksInvolved == false)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
+            }
+
             return RisksViewModel.RisksInvolved == true
                 ? RedirectToPage("/Projects/BenefitsAndRisks/OtherFactors", new {Urn})
                 : RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
