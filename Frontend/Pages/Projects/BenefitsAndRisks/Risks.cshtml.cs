@@ -39,16 +39,18 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 RadioButtonsYesNo = GetRadioButtons(project.Result.Benefits.AnyRisks);
                 return Page();
             }
-            
+
             project.Result.Benefits.AnyRisks = RisksViewModel.RisksInvolved;
             await _projects.Update(project.Result);
-              
+
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
-            
-            return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
+
+            return RisksViewModel.RisksInvolved == true
+                ? RedirectToPage("/Projects/BenefitsAndRisks/OtherFactors", new {Urn})
+                : RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }
 
         private IList<RadioButtonViewModel> GetRadioButtons(bool? valueSelected)

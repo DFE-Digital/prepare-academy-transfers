@@ -46,13 +46,13 @@ namespace Data.Models.Projects
         {
             Empty = 0,
 
-            [Display(Name = "This is a high profile transfer (ministers and media could be involved)")]
+            [Display(Name = "High profile transfer (ministers and media could be involved)")]
             HighProfile,
 
-            [Display(Name = "There are complex land and building issues")]
+            [Display(Name = "Complex land and building issues")]
             ComplexLandAndBuildingIssues,
 
-            [Display(Name = "There are finance and debt concerns")]
+            [Display(Name = "Finance and debt concerns")]
             FinanceAndDebtConcerns,
             
             [Display(Name = "Other risks")]
@@ -64,5 +64,6 @@ namespace Data.Models.Projects
         public Dictionary<OtherFactor, string> OtherFactors { get; set; }
         
         public bool? AnyRisks { get; set; }
+        public bool? IsCompleted { get; set; }
     }
 }

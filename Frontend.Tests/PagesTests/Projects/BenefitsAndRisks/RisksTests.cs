@@ -17,7 +17,7 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
     {
         private readonly Risks _subject;
 
-        protected RisksTests()
+        public RisksTests()
         {
             _subject = new Risks(ProjectRepository.Object);
         }
@@ -39,17 +39,28 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
                 );
             }
 
-            [Theory]
-            [InlineData(true)]
-            [InlineData(false)]
-            public async void GivenUrnANdYesOrNo_RedirectsToTheSummaryPage(bool yesNo)
+            [Fact]
+            public async void GivenUrnAndNo_RedirectsToTheSummaryPage()
             {
-                _subject.RisksViewModel.RisksInvolved = yesNo;
+                _subject.RisksViewModel.RisksInvolved = false;
                 _subject.Urn = ProjectUrn0001;
 
                 var resp = await _subject.OnPostAsync();
 
                 ControllerTestHelpers.AssertResultRedirectsToPage(resp, "/Projects/BenefitsAndRisks/Index",
+                    new RouteValueDictionary(new {Urn = ProjectUrn0001}));
+            }
+            
+            
+            [Fact]
+            public async void GivenUrnAndYes_RedirectsToOtherFactorsPage()
+            {
+                _subject.RisksViewModel.RisksInvolved = true;
+                _subject.Urn = ProjectUrn0001;
+
+                var resp = await _subject.OnPostAsync();
+
+                ControllerTestHelpers.AssertResultRedirectsToPage(resp, "/Projects/BenefitsAndRisks/OtherFactors",
                     new RouteValueDictionary(new {Urn = ProjectUrn0001}));
             }
 
@@ -63,7 +74,7 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
 
                 var result = await _subject.OnPostAsync();
                 ControllerTestHelpers.AssertResultRedirectsToPage(resp, Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new {id = ProjectUrn0001}));
+                    new RouteValueDictionary(new {Urn = ProjectUrn0001}));
             }
         }
     }

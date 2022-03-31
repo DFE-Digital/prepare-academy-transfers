@@ -18,16 +18,14 @@ const fs = require('fs');
  */
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+    // `on` is used to hook into various events Cypress emits
+    // `config` is the resolved Cypress config
     on('task', {
-        getDownloadedDoc({ path }) {
+        getDownloadedDoc({path}) {
             let files = fs.readdirSync(path);
             return files.find((fileName) => fileName.includes(".docx"))
         }
     });
-}
-
 /*
   Using Cypress-SQL-Server to connect to the database
 */
@@ -35,4 +33,5 @@ const sqlServer = require('cypress-sql-server');
 module.exports = (on, config) => {
   tasks = sqlServer.loadDBPlugin(config.env.db);
   on('task', tasks);
-} 
+}
+

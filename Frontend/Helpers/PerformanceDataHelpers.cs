@@ -106,7 +106,7 @@ namespace Frontend.Helpers
 
         public static List<KeyStage4> GetFormattedKeyStage4Results(IEnumerable<KeyStage4> keyStage4Results)
         {
-            var formattedKeyStage4Results = keyStage4Results.Take(3).OrderByDescending(a => a.Year)
+            var formattedKeyStage4Results = keyStage4Results.OrderByDescending(a => a.Year)
                 .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
             
             return GetResultsWithNextLatestYearPopulatedForMissingYearData(formattedKeyStage4Results).ToList();

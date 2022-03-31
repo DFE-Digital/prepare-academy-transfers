@@ -51,7 +51,7 @@ namespace Frontend.Pages.Projects.Features
             await _projects.Update(projectResult);
             
             return ReturnToPreview ? 
-                RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn }) :
+                RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn }) :
                 RedirectToPage("/Projects/Features/Index", new { Urn });
         }
 

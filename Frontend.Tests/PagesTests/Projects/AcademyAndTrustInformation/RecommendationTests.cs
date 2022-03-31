@@ -22,30 +22,31 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
             Subject = new Recommendation(ProjectRepository.Object);
         }
     }
-    
+
     public class RecommendationGetTests : RecommendationTests
     {
         [Fact]
         public async void GivenUrn_FetchesProjectFromTheRepository()
         {
             await Subject.OnGetAsync(ProjectUrn0001);
-        
+
             ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
-        
+
         [Fact]
         public async void GivenReturnToPreview_AssignItToTheView()
         {
             var response = await Subject.OnGetAsync(ProjectUrn0001, true);
-            
+
             Assert.IsType<PageResult>(response);
             Assert.True(Subject.ReturnToPreview);
         }
     }
-    
+
     public class RecommendationPostTests : RecommendationTests
     {
         private readonly RecommendationViewModel _vm;
+
         public RecommendationPostTests()
         {
             _vm = new RecommendationViewModel
@@ -55,38 +56,40 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
                 Author = "Author"
             };
         }
+
         [Fact]
         public async void GivenUrnAndRecommendationAndAuthor_UpdatesTheProject()
         {
             await Subject.OnPostAsync(_vm);
-        
+
             ProjectRepository.Verify(r =>
                 r.Update(It.Is<Project>(project =>
                     project.AcademyAndTrustInformation.Recommendation == _vm.Recommendation &&
                     project.AcademyAndTrustInformation.Author == _vm.Author)), Times.Once);
         }
-        
+
         [Fact]
         public async void GivenUrnAndRecommendationAndAuthor_RedirectsBackToTheSummary()
         {
             var result = await Subject.OnPostAsync(_vm);
-        
+
             var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("Urn", ProjectUrn0001)
             });
-            ControllerTestHelpers.AssertResultRedirectsToPage(result, $"/Projects/AcademyAndTrustInformation/{nameof(Index)}", routeValues);
+            ControllerTestHelpers.AssertResultRedirectsToPage(result,
+                $"/Projects/AcademyAndTrustInformation/{nameof(Index)}", routeValues);
         }
 
         [Fact]
         public async void GivenReturnToPreview_ReturnToThePreviewPage()
         {
             _vm.ReturnToPreview = true;
-            
+
             var response = await Subject.OnPostAsync(_vm);
-            
+
             ControllerTestHelpers.AssertResultRedirectsToPage(response,
-                Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {id = ProjectUrn0001}));
+                Links.HeadteacherBoard.Preview.PageName, new RouteValueDictionary(new {Urn = ProjectUrn0001}));
         }
     }
 
@@ -95,18 +98,18 @@ namespace Frontend.Tests.PagesTests.Projects.AcademyAndTrustInformation
         [Fact]
         public void GivenEmptySelectedValue_GeneratesListWithNoItemsChecked()
         {
-            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
+            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult =
                 TransferAcademyAndTrustInformation.RecommendationResult.Empty;
 
             var result = Recommendation.RecommendedRadioButtons(recommendationResult);
 
             Assert.All(result, item => Assert.False(item.Checked));
         }
-            
+
         [Fact]
         public void GivenASelectedValue_GeneratesListWithRelevantItemChecked()
         {
-            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult = 
+            const TransferAcademyAndTrustInformation.RecommendationResult recommendationResult =
                 TransferAcademyAndTrustInformation.RecommendationResult.Approve;
 
             var result = Recommendation.RecommendedRadioButtons(recommendationResult);
