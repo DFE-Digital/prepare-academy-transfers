@@ -74,7 +74,7 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
 
                 var result = await _subject.OnPostAsync();
                 ControllerTestHelpers.AssertResultRedirectsToPage(resp, Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new {id = ProjectUrn0001}));
+                    new RouteValueDictionary(new {Urn = ProjectUrn0001}));
             }
         }
     }

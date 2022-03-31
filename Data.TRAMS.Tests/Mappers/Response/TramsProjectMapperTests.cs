@@ -40,7 +40,8 @@ namespace Data.TRAMS.Tests.Mappers.Response
                         {
                             FurtherSpecification = "Other risks", ShouldBeConsidered = true
                         }
-                    }
+                    },
+                    IsCompleted = true
                 },
                 Dates = new AcademyTransferProjectDates
                 {
@@ -57,12 +58,14 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
                     WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe.ToString(),
-                    RddOrEsfaInterventionDetail = "Intervention details"
+                    RddOrEsfaInterventionDetail = "Intervention details",
+                    IsCompleted = true
                 },
                 Rationale = new AcademyTransferProjectRationale
                 {
                     ProjectRationale = "Project rationale",
-                    TrustSponsorRationale = "Trust rationale"
+                    TrustSponsorRationale = "Trust rationale",
+                    IsCompleted = true
                 },
                 GeneralInformation = new AcademyTransferProjectAcademyAndTrustInformation
                 {
@@ -144,6 +147,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
         {
             Assert.Equal(toMap.Rationale.ProjectRationale, result.Rationale.Project);
             Assert.Equal(toMap.Rationale.TrustSponsorRationale, result.Rationale.Trust);
+            Assert.Equal(toMap.Rationale.IsCompleted, result.Rationale.IsCompleted);
         }
 
         private static void AssertFeaturesCorrect(TramsProject toMap, Project result)
@@ -158,6 +162,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention);
             Assert.Equal(toMap.Features.RddOrEsfaInterventionDetail,
                 result.Features.ReasonForTransfer.InterventionDetails);
+            Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 
         private static void AssertDatesCorrect(TramsProject toMap, Project result)
@@ -184,6 +189,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 result.Benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns]);
             Assert.Equal(toMap.Benefits.OtherFactorsToConsider.ComplexLandAndBuilding.FurtherSpecification,
                 result.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues]);
+            Assert.Equal(toMap.Benefits.IsCompleted, result.Benefits.IsCompleted);
         }
     }
 }

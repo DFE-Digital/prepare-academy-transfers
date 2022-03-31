@@ -7,5 +7,6 @@ namespace Data.TRAMS.Models.AcademyTransferProject
         public string RddOrEsfaInterventionDetail { get; set; }
         public string TypeOfTransfer { get; set; }
         public string WhoInitiatedTheTransfer { get; set; }
+        public bool? IsCompleted { get; set; }
     }
 }

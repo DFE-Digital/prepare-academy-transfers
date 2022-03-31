@@ -14,7 +14,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     {
         private readonly IProjects _projects;
         public BenefitsSummaryViewModel BenefitsSummaryViewModel;
-        
+
         public Index(IProjects projects)
         {
             _projects = projects;
@@ -23,7 +23,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
@@ -38,7 +38,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             return Page();
         }
 
-        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
+        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
+            Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
             List<OtherFactorsItemViewModel> items = new List<OtherFactorsItemViewModel>();
             foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))

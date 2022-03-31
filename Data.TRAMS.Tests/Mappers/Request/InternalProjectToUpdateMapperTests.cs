@@ -163,6 +163,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
         {
             Assert.Equal(toMap.Rationale.Project, result.Rationale.ProjectRationale);
             Assert.Equal(toMap.Rationale.Trust, result.Rationale.TrustSponsorRationale);
+            Assert.Equal(toMap.Rationale.IsCompleted, result.Rationale.IsCompleted);
         }
 
         private static void AssertFeaturesAreCorrect(Project toMap, TramsProjectUpdate result)
@@ -174,6 +175,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.Features.TypeOfTransfer.ToString(), result.Features.TypeOfTransfer);
             Assert.Equal(toMap.Features.OtherTypeOfTransfer, result.Features.OtherTransferTypeDescription);
             Assert.Equal(toMap.Features.WhoInitiatedTheTransfer.ToString(), result.Features.WhoInitiatedTheTransfer);
+            Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 
         private static void AssertDatesAreCorrect(Project toMap, TramsProjectUpdate result)
@@ -197,6 +199,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.Equal("Finance", result.Benefits.OtherFactorsToConsider.FinanceAndDebt.FurtherSpecification);
             Assert.True(result.Benefits.OtherFactorsToConsider.ComplexLandAndBuilding.ShouldBeConsidered);
             Assert.Equal("Land", result.Benefits.OtherFactorsToConsider.ComplexLandAndBuilding.FurtherSpecification);
+            Assert.Equal(toMap.Benefits.IsCompleted, result.Benefits.IsCompleted);
         }
 
         private static void AssertTransferringAcademiesCorrect(Project toMap, TramsProjectUpdate result)
