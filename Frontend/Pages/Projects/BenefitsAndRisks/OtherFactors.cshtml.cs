@@ -48,7 +48,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
             await _projects.Update(projectResult);
-            
+
             var available = new List<TransferBenefits.OtherFactor>
 
             {
@@ -59,7 +59,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             };
             return RedirectToPage(GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
-        
+
         /// <summary>
         /// Get next or previous page for other factors dynamic navigation
         /// </summary>
@@ -73,20 +73,36 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var foundOtherFactor =
                 available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
 
+            var pageUrl = GetPageUrlFromOtherFactor(foundOtherFactor);
+            return string.IsNullOrEmpty(pageUrl)
+                ? backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index"
+                : pageUrl;
+        }
+
+        public static string GetPageUrlFromOtherFactor(TransferBenefits.OtherFactor foundOtherFactor)
+        {
             switch (foundOtherFactor)
             {
                 case TransferBenefits.OtherFactor.HighProfile:
+                {
                     return "/Projects/BenefitsAndRisks/HighProfileTransfer";
+                }
                 case TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues:
+                {
                     return "/Projects/BenefitsAndRisks/ComplexLandAndBuilding";
+                }
                 case TransferBenefits.OtherFactor.FinanceAndDebtConcerns:
+                {
                     return "/Projects/BenefitsAndRisks/FinanceAndDebt";
+                }
                 case TransferBenefits.OtherFactor.OtherRisks:
+                {
                     return "/Projects/BenefitsAndRisks/OtherRisks";
+                }
             }
-            return backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index";
-        }
 
+            return null;
+        }
 
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
             Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)

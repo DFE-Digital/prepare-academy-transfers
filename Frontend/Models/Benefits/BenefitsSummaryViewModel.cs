@@ -10,7 +10,7 @@ namespace Frontend.Models.Benefits
     {
         private readonly IList<TransferBenefits.IntendedBenefit> _intendedBenefits;
         private readonly string _otherIntendedBenefit;
-        private readonly IList<OtherFactorsItemViewModel> _otherFactorsItems;
+        public readonly IList<OtherFactorsItemViewModel> OtherFactorsItems;
         public readonly string OutgoingAcademyUrn;
         public readonly bool? AnyRisks;
 
@@ -23,7 +23,7 @@ namespace Frontend.Models.Benefits
         {
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
-            _otherFactorsItems = otherFactorsItems;
+            OtherFactorsItems = otherFactorsItems;
             Urn = projectUrn;
             OutgoingAcademyUrn = outgoingAcademyUrn;
             AnyRisks = anyRisks;
@@ -43,15 +43,5 @@ namespace Frontend.Models.Benefits
 
             return summary;
         }
-
-        public List<string[]> OtherFactorsSummary()
-        {
-            return _otherFactorsItems.OrderBy(o => (int)o.OtherFactor).Select(otherFactor => new[]
-            {
-                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.OtherFactor),
-                otherFactor.Description
-            }).ToList();
-        }
-        
     }
 }

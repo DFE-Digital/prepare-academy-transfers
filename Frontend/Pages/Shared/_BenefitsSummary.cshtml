@@ -1,5 +1,7 @@
 @model Frontend.Models.Benefits.BenefitsSummaryViewModel
-
+@using Helpers
+@using Data.Models.Projects
+.
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -48,16 +50,20 @@
             </a>
         </dd>
     </div>
-    @foreach (var otherFactor in Model.OtherFactorsSummary())
+    @foreach (var otherFactor in Model.OtherFactorsItems)
     {
+        var label = (EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.OtherFactor));
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-                @otherFactor[0]
+                @label
             </dt>
             <dd class="govuk-summary-list__value">
-                @otherFactor[1]
+                @otherFactor.Description
             </dd>
             <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="@Frontend.Pages.Projects.BenefitsAndRisks.OtherFactors.GetPageUrlFromOtherFactor(otherFactor.OtherFactor)" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="@label">
+                    Change<span class="govuk-visually-hidden"> @label</span>
+                </a>
 
             </dd>
         </div>
