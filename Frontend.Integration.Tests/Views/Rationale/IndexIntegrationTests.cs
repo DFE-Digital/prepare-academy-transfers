@@ -28,7 +28,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
         [Fact]
         public async Task GivenPartRationale_ShouldBeInProgress()
         {
-            var project = GetProject(p => p.Rationale.ProjectRationale = null);
+            var project = GetProject(p => p.Rationale.IsCompleted = false);
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}");
             
@@ -36,7 +36,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
             Document.QuerySelector("#rationale")?.ClassName.Should().Contain("blue");
             await NavigateAsync("Rationale");
             
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be("Empty");
+            Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(1) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.ProjectRationale);
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         

@@ -11,7 +11,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
 
         public IndexTests()
         {
-            _subject = new Index(GetInformationForProject.Object)
+            _subject = new Index(ProjectRepository.Object)
             {
                 Urn = ProjectUrn0001
             };
@@ -22,7 +22,7 @@ namespace Frontend.Tests.PagesTests.Projects.Rationale
         {
             await _subject.OnGetAsync();
 
-            GetInformationForProject.Verify(r => r.Execute(ProjectUrn0001), Times.Once);
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
 
         [Fact]
