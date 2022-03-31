@@ -1,5 +1,17 @@
 {
   "chromeWebSecurity": false,
   "projectId": "jd9h7w",
-  "video": false
+  "video": false,
+  "env": {
+    "db": {
+      "userName": "",
+      "password": "",
+      "server": "",
+      "options": {
+          "database": "",
+          "encrypt": true,
+          "rowCollectionOnRequestCompletion" : true
+      }
+    }
+  }  
 }
