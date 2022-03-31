@@ -1,0 +1,40 @@
+@page "/project/{urn}/benefits/high-profile-transfer"
+@model Frontend.Pages.Projects.BenefitsAndRisks.HighProfileTransfer
+
+@{
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+            <div class="govuk-form-group">
+
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--l" asp-for="Answer">
+                        <span class="govuk-caption-l">
+                            @Model.IncomingTrustName
+                        </span>
+                        Why is this a high profile transfer? (optional)
+                    </label>
+                </h1>
+                <textarea asp-for="Answer" class="govuk-textarea" rows="5" data-test="high-profile-transfer"></textarea>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>

@@ -4,19 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Frontend.Pages.Projects.Benefits
+namespace Frontend.Pages.Projects.BenefitsAndRisks
 {
     public class Index : CommonPageModel
     {
         private readonly IProjects _projects;
         public BenefitsSummaryViewModel BenefitsSummaryViewModel;
-        
+
         public Index(IProjects projects)
         {
             _projects = projects;
@@ -25,7 +23,7 @@ namespace Frontend.Pages.Projects.Benefits
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
             BenefitsSummaryViewModel = new BenefitsSummaryViewModel(
@@ -39,7 +37,8 @@ namespace Frontend.Pages.Projects.Benefits
             return Page();
         }
 
-        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
+        public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
+            Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
         {
             List<OtherFactorsItemViewModel> items = new List<OtherFactorsItemViewModel>();
             foreach (TransferBenefits.OtherFactor otherFactor in Enum.GetValues(typeof(TransferBenefits.OtherFactor)))

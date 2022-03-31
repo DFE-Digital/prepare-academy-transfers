@@ -44,7 +44,7 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public async Task<IActionResult> OnGetAsync(string urn, bool returnToPreview = false)
         {
             var project = await _projectRepository.GetByUrn(urn);
-            
+
             var projectResult = project.Result;
 
             Urn = projectResult.Urn;
@@ -53,23 +53,23 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
             Author = projectResult.AcademyAndTrustInformation.Author;
             RecommendationResult = projectResult.AcademyAndTrustInformation.Recommendation;
             OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn;
-            
+
             return Page();
         }
-        
+
         public async Task<IActionResult> OnPostAsync(RecommendationViewModel vm)
         {
             var project = await _projectRepository.GetByUrn(vm.Urn);
-            
+
             var projectResult = project.Result;
             projectResult.AcademyAndTrustInformation.Recommendation = vm.Recommendation;
             projectResult.AcademyAndTrustInformation.Author = vm.Author;
 
             await _projectRepository.Update(projectResult);
-            
+
             if (vm.ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {id = vm.Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {vm.Urn});
             }
 
             return RedirectToPage("/Projects/AcademyAndTrustInformation/Index", new {vm.Urn});

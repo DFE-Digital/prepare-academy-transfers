@@ -1,0 +1,39 @@
+@page "/project/{urn}/benefits/other-risks"
+@model Frontend.Pages.Projects.BenefitsAndRisks.OtherRisks
+
+@{
+    Layout = "_Layout";    
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="@Model.PreviousPage" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.IncomingTrustName" />
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-!-font-weight-bold" asp-for="Answer">
+                    <span class="govuk-caption-l">
+                        @Model.IncomingTrustName
+                    </span>
+                    <h1 class="govuk-heading-l">
+                    What other risks are there? (optional)
+                    </h1>
+                </label>
+                <textarea asp-for="Answer" class="govuk-textarea" rows="5" data-test="high-profile-transfer"></textarea>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>

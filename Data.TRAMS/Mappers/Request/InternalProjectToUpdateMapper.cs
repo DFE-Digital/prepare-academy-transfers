@@ -123,8 +123,17 @@ namespace Data.TRAMS.Mappers.Request
                         FurtherSpecification =
                             input.Benefits.OtherFactors.GetValueOrDefault(
                                 TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "")
+                    },
+                    OtherRisks = new OtherFactor
+                    {
+                        ShouldBeConsidered = input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor
+                            .OtherRisks),
+                        FurtherSpecification =
+                            input.Benefits.OtherFactors.GetValueOrDefault(
+                                TransferBenefits.OtherFactor.OtherRisks, "")
                     }
-                }
+                },
+                AnyRisks = input.Benefits.AnyRisks
             };
         }
     }

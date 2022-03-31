@@ -75,7 +75,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("intervention", projectTemplateModel.MoreDetailsAboutTheTransfer);
                 Assert.Equal("Closure of a SAT and the academy joining a MAT", projectTemplateModel.TypeOfTransfer);
                 Assert.Equal("Strengthening governance\nStronger leadership\n", projectTemplateModel.TransferBenefits);
-                Assert.Equal("This is a high profile transfer (ministers and media could be involved)\ntestHighProfile\nThere are finance and debt concerns\ndebtConcerns\n", projectTemplateModel.OtherFactors);
+                Assert.Equal("High profile transfer (ministers and media could be involved)\ntestHighProfile\nFinance and debt concerns\ndebtConcerns\n", projectTemplateModel.OtherFactors);
                 Assert.Equal(academy.PupilNumbers.GirlsOnRoll, projectTemplateAcademyModel.GirlsOnRoll);
                 Assert.Equal(academy.PupilNumbers.BoysOnRoll, projectTemplateAcademyModel.BoysOnRoll);
                 Assert.Equal(academy.PupilNumbers.WithStatementOfSen, projectTemplateAcademyModel.PupilsWithSen);
