@@ -15,8 +15,10 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import sqlServer from 'cypress-sql-server';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 const dayjs = require('dayjs')
 Cypress.dayjs = dayjs
+sqlServer.loadDBCommands();
