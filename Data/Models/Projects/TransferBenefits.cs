@@ -64,5 +64,6 @@ namespace Data.Models.Projects
         public Dictionary<OtherFactor, string> OtherFactors { get; set; }
         
         public bool? AnyRisks { get; set; }
+        public bool? IsCompleted { get; set; }
     }
 }

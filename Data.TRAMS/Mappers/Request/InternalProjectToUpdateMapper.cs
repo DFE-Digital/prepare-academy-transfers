@@ -41,7 +41,8 @@ namespace Data.TRAMS.Mappers.Request
             return new AcademyTransferProjectRationale
             {
                 ProjectRationale = input.Rationale.Project,
-                TrustSponsorRationale = input.Rationale.Trust
+                TrustSponsorRationale = input.Rationale.Trust,
+                IsCompleted = input.Rationale.IsCompleted
             };
         }
 
@@ -53,7 +54,8 @@ namespace Data.TRAMS.Mappers.Request
                 OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
                 RddOrEsfaIntervention = input.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
                 WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
-                RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails
+                RddOrEsfaInterventionDetail = input.Features.ReasonForTransfer.InterventionDetails,
+                IsCompleted = input.Features.IsCompleted
             };
         }
 
@@ -133,6 +135,7 @@ namespace Data.TRAMS.Mappers.Request
                                 TransferBenefits.OtherFactor.OtherRisks, "")
                     }
                 },
+                IsCompleted = input.Benefits.IsCompleted,
                 AnyRisks = input.Benefits.AnyRisks
             };
         }
