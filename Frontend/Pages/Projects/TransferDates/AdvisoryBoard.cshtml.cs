@@ -46,9 +46,9 @@ namespace Frontend.Pages.Projects.TransferDates
             {
                 return Page();
             }
-            
+
             var projectResult = project.Result;
-            
+
             var validationContext = new ValidationContext<AdvisoryBoardViewModel>(AdvisoryBoardViewModel)
             {
                 RootContextData =
@@ -58,13 +58,13 @@ namespace Frontend.Pages.Projects.TransferDates
             };
             var validator = new AdvisoryBoardDateValidator();
             var validationResult = await validator.ValidateAsync(validationContext);
-            
+
             if (!validationResult.IsValid)
             {
                 validationResult.AddToModelState(ModelState, nameof(AdvisoryBoardViewModel));
                 return Page();
             }
-            
+
             projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
 
@@ -72,10 +72,10 @@ namespace Frontend.Pages.Projects.TransferDates
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
-            return RedirectToPage("/Projects/TransferDates/Index", new { Urn });
+            return RedirectToPage("/Projects/TransferDates/Index", new {Urn});
         }
     }
 }

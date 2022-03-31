@@ -10,14 +10,13 @@ namespace Frontend.Pages.Projects.Rationale
     {
         private readonly IProjects _projectsRepository;
 
-        [BindProperty]
-        public RationaleTrustOrSponsorViewModel ViewModel { get; set; }
+        [BindProperty] public RationaleTrustOrSponsorViewModel ViewModel { get; set; }
 
         public TrustOrSponsor(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
         }
-        
+
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
@@ -32,7 +31,7 @@ namespace Frontend.Pages.Projects.Rationale
 
             return Page();
         }
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
@@ -49,7 +48,7 @@ namespace Frontend.Pages.Projects.Rationale
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { id = Urn });
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
 
             return RedirectToPage("/Projects/Rationale/Index", new {Urn});

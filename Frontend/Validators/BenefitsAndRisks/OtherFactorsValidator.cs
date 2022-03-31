@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Linq;
+using FluentValidation;
 using Frontend.Models.Benefits;
 
 namespace Frontend.Validators.BenefitsAndRisks
@@ -7,9 +8,15 @@ namespace Frontend.Validators.BenefitsAndRisks
     {
         public OtherFactorsValidator()
         {
-            RuleForEach(x => x.OtherFactorsVm)
-                .SetValidator(new OtherFactorsItemValidator());
+            CascadeMode = CascadeMode.Stop;
+            RuleFor(x => x.OtherFactorsVm)
+                .Custom((list, context) =>
+                {
+                    if (!list.Any(o => o.Checked))
+                    {
+                        context.AddFailure("Select the risks with this transfer");
+                    }
+                });
         }
-      
     }
 }
