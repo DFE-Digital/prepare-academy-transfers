@@ -59,7 +59,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             };
             return RedirectToPage(GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
         }
-
+        
         /// <summary>
         /// Get next or previous page for other factors dynamic navigation
         /// </summary>
@@ -84,49 +84,6 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 case TransferBenefits.OtherFactor.OtherRisks:
                     return "/Projects/BenefitsAndRisks/OtherRisks";
             }
-
-            <<<<<<<
-
-            HEAD
-            var available = new List<TransferBenefits.OtherFactor>
-            {
-                TransferBenefits.OtherFactor.HighProfile,
-                TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
-                TransferBenefits.OtherFactor.FinanceAndDebtConcerns,
-                TransferBenefits.OtherFactor.OtherRisks
-            };
-            return RedirectToPage(GetPage(available, projectResult.Benefits.OtherFactors), new {Urn});
-        }
-
-        /// <summary>
-        /// Get next or previous page for other factors dynamic navigation
-        /// </summary>
-        /// <param name="available">List of other factors to navigate to</param>
-        /// <param name="otherFactors">Other factors currently selected</param>
-        /// <param name="backLink">true if navigating backwards, back link</param>
-        /// <returns>Page name</returns>
-        public static string GetPage(List<TransferBenefits.OtherFactor> available,
-            Dictionary<TransferBenefits.OtherFactor, string> otherFactors, bool backLink = false)
-        {
-            var foundOtherFactor =
-                available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
-
-            switch (foundOtherFactor)
-            {
-                case TransferBenefits.OtherFactor.HighProfile:
-                    return "/Projects/BenefitsAndRisks/HighProfileTransfer";
-                case TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues:
-                    return "/Projects/BenefitsAndRisks/ComplexLandAndBuilding";
-                case TransferBenefits.OtherFactor.FinanceAndDebtConcerns:
-                    return "/Projects/BenefitsAndRisks/FinanceAndDebt";
-                case TransferBenefits.OtherFactor.OtherRisks:
-                    return "/Projects/BenefitsAndRisks/OtherRisks";
-            }
-
-            ====== =
-            >>>>>>>
-
-            main
             return backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index";
         }
 
