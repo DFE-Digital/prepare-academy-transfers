@@ -25,8 +25,21 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <partial for="@Model.BenefitsSummaryViewModel" name="_BenefitsSummary" />
-        <form asp-page="/Projects/Index" asp-route-urn="@Model.Urn" method="get">
+        <partial for="@Model.BenefitsSummaryViewModel" name="_BenefitsSummary"/>
+        <form method="post">
+            @if (Model.ShowIsCompleted)
+            {
+                <div class="govuk-form-group">
+                    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                        <div class="govuk-checkboxes__item">
+                            <input asp-for="IsCompleted" class="govuk-checkboxes__input" type="checkbox" data-test="benefits-completed">
+                            <label asp-for="IsCompleted" class="govuk-label govuk-checkboxes__label">
+                                Mark this section as complete, you can still make changes later
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
             <button class="govuk-button govuk-!-margin-top-6" type="submit">Confirm and continue</button>
         </form>
     </div>
