@@ -148,6 +148,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("type")
         selectFirstRadio()
         submit()
+        cy.clickDataTest("features-completed")
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("features").should('have.text',"COMPLETED");
         
@@ -203,6 +204,7 @@ describe("Creating and editing an academy transfer", function () {
         submit()
         cy.fillInText("Answer","Other risks Answer")
         submit()
+        cy.clickDataTest("benefits-completed")
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click()
         cy.getDataTest("benefits").should('have.text',"COMPLETED");    
        
@@ -220,6 +222,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("trust-rationale")
         cy.fillInText("ViewModel.TrustOrSponsorRationale", "this is the project rationale")
         submit();
+        cy.clickDataTest("rationale-completed")
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("rationale").should('have.text',"COMPLETED");
 
