@@ -10,7 +10,6 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     public class OtherRisks : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
-
         [BindProperty] public string Answer { get; set; }
 
         public string PreviousPage { get; set; }
@@ -23,7 +22,6 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
             Answer = projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks];

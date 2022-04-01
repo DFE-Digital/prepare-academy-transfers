@@ -10,10 +10,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     public class ComplexLandAndBuilding : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
-
-        [BindProperty] public string Answer { get; set; }
-
         public string PreviousPage { get; set; }
+        [BindProperty] public string Answer { get; set; }
 
         public ComplexLandAndBuilding(IProjects projectsRepository)
         {
@@ -46,7 +44,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
-
+            
             var available = new List<TransferBenefits.OtherFactor>
             {
                 TransferBenefits.OtherFactor.FinanceAndDebtConcerns,

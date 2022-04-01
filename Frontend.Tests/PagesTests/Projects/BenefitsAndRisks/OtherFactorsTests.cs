@@ -152,6 +152,7 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
             _subject.ReturnToPreview = true;
 
             var result = await _subject.OnPostAsync();
+
             ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/BenefitsAndRisks/HighProfileTransfer",
                 new RouteValueDictionary(new {Urn = ProjectUrn0001}));
         }

@@ -50,6 +50,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             await _projects.Update(projectResult);
 
             var available = new List<TransferBenefits.OtherFactor>
+
             {
                 TransferBenefits.OtherFactor.HighProfile,
                 TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues,
@@ -72,21 +73,36 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var foundOtherFactor =
                 available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
 
+            var pageUrl = GetPageUrlFromOtherFactor(foundOtherFactor);
+            return string.IsNullOrEmpty(pageUrl)
+                ? backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index"
+                : pageUrl;
+        }
+
+        public static string GetPageUrlFromOtherFactor(TransferBenefits.OtherFactor foundOtherFactor)
+        {
             switch (foundOtherFactor)
             {
                 case TransferBenefits.OtherFactor.HighProfile:
+                {
                     return "/Projects/BenefitsAndRisks/HighProfileTransfer";
+                }
                 case TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues:
+                {
                     return "/Projects/BenefitsAndRisks/ComplexLandAndBuilding";
+                }
                 case TransferBenefits.OtherFactor.FinanceAndDebtConcerns:
+                {
                     return "/Projects/BenefitsAndRisks/FinanceAndDebt";
+                }
                 case TransferBenefits.OtherFactor.OtherRisks:
+                {
                     return "/Projects/BenefitsAndRisks/OtherRisks";
+                }
             }
 
-            return backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index";
+            return null;
         }
-
 
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
             Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
