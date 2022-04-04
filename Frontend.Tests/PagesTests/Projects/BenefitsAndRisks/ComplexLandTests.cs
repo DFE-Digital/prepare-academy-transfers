@@ -24,16 +24,18 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
 
         public class PostTests : ComplexLandTests
         {
-            [Fact]
-            public async void GivenUrnAndDescription_UpdateTheProject()
+            [Theory]
+            [InlineData(null)]
+            [InlineData("Complex Land")]
+            public async void GivenUrnAndDescription_UpdateTheProject(string answer)
             {
-                _subject.Answer = "Complex Land";
+                _subject.Answer = answer;
                 _subject.Urn = ProjectUrn0001;
 
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer)
+                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer ?? string.Empty)
                                                        && project.Benefits.OtherFactors.ContainsKey(TransferBenefits
                                                            .OtherFactor.ComplexLandAndBuildingIssues)))
                 );
