@@ -41,15 +41,18 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 return Page();
             }
 
+            var originalAnswer = project.Result.Benefits.AnyRisks;
             project.Result.Benefits.AnyRisks = RisksViewModel.RisksInvolved;
             if (RisksViewModel.RisksInvolved == false)
             {
                 project.Result.Benefits.OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
             }
+
             await _projects.Update(project.Result);
 
-            //Only go back to preview if No, Yes will take them through the options
-            if (ReturnToPreview && RisksViewModel.RisksInvolved == false)
+            //Only go back to preview if No,or no change. Changing to Yes will take them through the options
+            if (ReturnToPreview && RisksViewModel.RisksInvolved == false ||
+                ReturnToPreview && RisksViewModel.RisksInvolved == true && originalAnswer == true)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }

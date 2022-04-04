@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
@@ -33,7 +34,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] = Answer;
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.HighProfile] = Answer ?? string.Empty;
             await _projectsRepository.Update(projectResult);
 
             if (ReturnToPreview)
