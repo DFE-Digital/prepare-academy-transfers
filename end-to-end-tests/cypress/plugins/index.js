@@ -26,6 +26,7 @@ module.exports = (on, config) => {
             return files.find((fileName) => fileName.includes(".docx"))
         }
     });
+}
 /*
   Using Cypress-SQL-Server to connect to the database
 */
@@ -34,4 +35,3 @@ module.exports = (on, config) => {
   tasks = sqlServer.loadDBPlugin(config.env.db);
   on('task', tasks);
 }
-
