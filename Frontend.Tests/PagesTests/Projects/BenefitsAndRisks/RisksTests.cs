@@ -7,6 +7,7 @@ using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Pages.Projects.BenefitsAndRisks;
 using Frontend.Tests.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
@@ -65,10 +66,12 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
             }
 
             [Fact]
-            public async void GivenReturnToPreview_RedirectToThePreviewPage()
+            //Only go back to preview if No, Yes will take them through the options
+            public async void GivenReturnToPreviewAndNo_RedirectToThePreviewPage()
             {
                 _subject.RisksViewModel.RisksInvolved = true;
                 _subject.Urn = ProjectUrn0001;
+                _subject.RisksViewModel.RisksInvolved = false;
                 _subject.ReturnToPreview = true;
                 var resp = await _subject.OnPostAsync();
 

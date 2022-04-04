@@ -58,7 +58,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     .Where(o => o.Checked)
                     .ToList(),
                 project.Urn,
-                project.OutgoingAcademyUrn
+                project.OutgoingAcademyUrn,
+                project.Benefits.AnyRisks
             )
             {
                 ReturnToPreview = true

@@ -13,8 +13,7 @@ namespace Frontend.Tests.ModelTests.BenefitsSummaryTests
         public void GivenNoOtherFactors_ReturnEmptyList()
         {
             var vm = new BenefitsSummaryViewModel(null, null, new List<OtherFactorsItemViewModel>(), null, null);
-            var summary = vm.OtherFactorsSummary();
-            Assert.Empty(summary);
+            Assert.Empty(vm.OtherFactorsItems);
         }
 
         [Fact]
@@ -37,18 +36,18 @@ namespace Frontend.Tests.ModelTests.BenefitsSummaryTests
             };
             var vm = new BenefitsSummaryViewModel(null, null, otherFactors, null, null);
 
-            var summary = vm.OtherFactorsSummary();
+            var summary = vm.OtherFactorsItems;
 
             Assert.Equal(3, summary.Count);
             Assert.Equal(EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactors[0].OtherFactor),
-                summary[0][0]);
-            Assert.Null(summary[0][1]);
+                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(summary[0].OtherFactor));
+            Assert.Null(summary[0].Description);
             Assert.Equal(EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactors[1].OtherFactor),
-                summary[1][0]);
-            Assert.Null(summary[1][1]);
+                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(summary[1].OtherFactor));
+            Assert.Null(summary[1].Description);
             Assert.Equal(EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactors[2].OtherFactor),
-                summary[2][0]);
-            Assert.Null(summary[2][1]);
+                EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(summary[2].OtherFactor));
+            Assert.Null(summary[2].Description);
         }
     }
 }

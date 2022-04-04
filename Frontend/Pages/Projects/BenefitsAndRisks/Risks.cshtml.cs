@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Data.Models.Projects;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
@@ -41,9 +42,14 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             }
 
             project.Result.Benefits.AnyRisks = RisksViewModel.RisksInvolved;
+            if (RisksViewModel.RisksInvolved == false)
+            {
+                project.Result.Benefits.OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
+            }
             await _projects.Update(project.Result);
 
-            if (ReturnToPreview)
+            //Only go back to preview if No, Yes will take them through the options
+            if (ReturnToPreview && RisksViewModel.RisksInvolved == false)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
             }
