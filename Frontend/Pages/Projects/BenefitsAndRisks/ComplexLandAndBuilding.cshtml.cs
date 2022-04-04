@@ -36,7 +36,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer;
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer ?? string.Empty;;
 
             await _projectsRepository.Update(projectResult);
 
