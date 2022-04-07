@@ -92,7 +92,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     ReturnToPreview = true
                 };
 
-            RationaleSummaryViewModel = new Pages.Projects.Rationale.Index(_getInformationForProject)
+            RationaleSummaryViewModel = new Pages.Projects.Rationale.Index(_projects)
             {
                 ProjectRationale = project.Rationale.Project,
                 TrustRationale = project.Rationale.Trust,

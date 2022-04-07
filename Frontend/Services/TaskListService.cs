@@ -51,16 +51,11 @@ namespace Frontend.Services
         private ProjectStatuses GetFeatureTransferStatus(Project project)
         {
             if (project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty &&
-                project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == null &&
-                project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+                                                         project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == null &&
+                                                         project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                 return ProjectStatuses.NotStarted;
 
-            if (project.Features.WhoInitiatedTheTransfer != TransferFeatures.ProjectInitiators.Empty &&
-                project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
-                project.Features.TypeOfTransfer != TransferFeatures.TransferTypes.Empty)
-                return ProjectStatuses.Completed;
-
-            return ProjectStatuses.InProgress;
+            return project.Features.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
 
         private ProjectStatuses GetTransferDatesStatus(Project project)
@@ -84,11 +79,7 @@ namespace Frontend.Services
                 (project.Benefits.OtherFactors == null || !project.Benefits.OtherFactors.Any()))
                 return ProjectStatuses.NotStarted;
 
-            if ((project.Benefits.IntendedBenefits != null && project.Benefits.IntendedBenefits.Any()) &&
-                (project.Benefits.OtherFactors != null && project.Benefits.OtherFactors.Any()))
-                return ProjectStatuses.Completed;
-
-            return ProjectStatuses.InProgress;
+            return project.Benefits.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
 
         private ProjectStatuses GetRationaleStatus(Project project)
@@ -97,11 +88,7 @@ namespace Frontend.Services
                 string.IsNullOrEmpty(project.Rationale.Trust))
                 return ProjectStatuses.NotStarted;
 
-            if (!string.IsNullOrEmpty(project.Rationale.Project) &&
-                !string.IsNullOrEmpty(project.Rationale.Trust))
-                return ProjectStatuses.Completed;
-
-            return ProjectStatuses.InProgress;
+            return project.Rationale.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
     }
 }

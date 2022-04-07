@@ -175,6 +175,16 @@ namespace Frontend.Tests.ServicesTests
                         TypeOfTransfer = TransferFeatures.TransferTypes.Other
                     }
                 };
+                yield return new object[]
+                {
+                    new TransferFeatures
+                    {
+                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
+                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
+                        TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
+                        IsCompleted = false
+                    }
+                };
             }
 
             public static IEnumerable<object[]> FeatureTransferCompleted()
@@ -185,7 +195,8 @@ namespace Frontend.Tests.ServicesTests
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
                         ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
-                        TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure
+                        TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
+                        IsCompleted = true
                     }
                 };
                 yield return new object[]
@@ -194,7 +205,8 @@ namespace Frontend.Tests.ServicesTests
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
                         ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
-                        TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
+                        TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure,
+                        IsCompleted = true
                     }
                 };
                 yield return new object[]
@@ -203,7 +215,17 @@ namespace Frontend.Tests.ServicesTests
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
                         ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = false},
-                        TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat
+                        TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat,
+                        IsCompleted = true
+                    }
+                };
+                yield return new object[]
+                {
+                    new TransferFeatures
+                    {
+                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
+                        TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat,
+                        IsCompleted = true
                     }
                 };
             }
@@ -369,6 +391,21 @@ namespace Frontend.Tests.ServicesTests
                             {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}}
                     }
                 };
+                
+                yield return new object[]
+                {
+                    new TransferBenefits
+                    {
+                        IntendedBenefits = new List<TransferBenefits.IntendedBenefit>
+                        {
+                            TransferBenefits.IntendedBenefit.StrengtheningGovernance
+                        },
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
+                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}},
+                        IsCompleted = false
+                    }
+                };
+                
             }
 
             public static IEnumerable<object[]> BenefitsComplete()
@@ -382,7 +419,8 @@ namespace Frontend.Tests.ServicesTests
                             TransferBenefits.IntendedBenefit.StrengtheningGovernance
                         },
                         OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
-                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}}
+                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}},
+                        IsCompleted = true
                     }
                 };
 
@@ -398,7 +436,18 @@ namespace Frontend.Tests.ServicesTests
                             TransferBenefits.IntendedBenefit.CentralFinanceTeamAndSupport
                         },
                         OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
-                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}}
+                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}},
+                        IsCompleted = true
+                    }
+                };
+                
+                yield return new object[]
+                {
+                    new TransferBenefits
+                    {
+                        OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
+                            {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}},
+                        IsCompleted = true
                     }
                 };
             }
@@ -448,6 +497,16 @@ namespace Frontend.Tests.ServicesTests
                         Trust = "Trust rationale"
                     }
                 };
+                
+                yield return new object[]
+                {
+                    new TransferRationale
+                    {
+                        Trust = "Trust rationale",
+                        Project = "Project rationale",
+                        IsCompleted = false
+                    }
+                };
             }
 
             [Theory]
@@ -465,7 +524,8 @@ namespace Frontend.Tests.ServicesTests
                 FoundProjectFromRepo.Rationale = new TransferRationale
                 {
                     Project = "Project Rationale",
-                    Trust = "Trust Rationale"
+                    Trust = "Trust Rationale",
+                    IsCompleted = true
                 };
                 _subject.BuildTaskListStatuses(_index);
                 Assert.Equal(ProjectStatuses.Completed, _index.RationaleStatus);

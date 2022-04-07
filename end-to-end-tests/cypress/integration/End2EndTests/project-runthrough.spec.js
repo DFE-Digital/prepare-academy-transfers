@@ -148,6 +148,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("type")
         selectFirstRadio()
         submit()
+        cy.getDataTest("mark-section-complete").uncheck()
+        cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("features").should('have.text',"COMPLETED");
         
@@ -205,6 +207,8 @@ describe("Creating and editing an academy transfer", function () {
         submit()
         cy.fillInText("Answer","Other risks Answer")
         submit()
+        cy.getDataTest("mark-section-complete").uncheck()
+        cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click()
         cy.getDataTest("benefits").should('have.text',"COMPLETED");    
        
@@ -222,6 +226,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("trust-rationale")
         cy.fillInText("ViewModel.TrustOrSponsorRationale", "this is the project rationale")
         submit();
+        cy.getDataTest("mark-section-complete").uncheck()
+        cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("rationale").should('have.text',"COMPLETED");
 
@@ -251,10 +257,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.get(`[data-test='pupil-numbers']`).click()
         cy.clickBackLink()
         cy.get(`[data-test='pupil-numbers']`).click()
-        //cy.clickDataTest("additional-information")
         cy.get(`[data-test='additional-information']`).click()
         cy.clickBackLink()
-        //cy.clickDataTest("additional-information")
         cy.get(`[data-test='pupil-numbers']`).click()
         cy.get(`[data-test='additional-information']`).click()
         cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
