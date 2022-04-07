@@ -114,8 +114,9 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 {
                     var isChecked = otherFactorsToSet.ContainsKey(otherFactor);
 
-                    items.Add(new OtherFactorsItemViewModel()
+                    items.Add(new OtherFactorsItemViewModel
                     {
+                        Description = isChecked ? otherFactorsToSet[otherFactor] : null,
                         OtherFactor = otherFactor,
                         Checked = isChecked
                     });

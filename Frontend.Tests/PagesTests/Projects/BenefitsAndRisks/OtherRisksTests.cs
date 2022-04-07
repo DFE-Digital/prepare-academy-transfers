@@ -22,20 +22,24 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
             _subject = new OtherRisks(ProjectRepository.Object);
         }
 
+
         public class PostTests : OtherRisksTests
         {
-            [Fact]
-            public async void GivenUrnAndDescription_UpdateTheProject()
+            [Theory]
+            [InlineData(null)]
+            [InlineData("Finance Risk")]
+            public async void GivenUrnAndDescription_UpdateTheProject(string answer)
             {
-                _subject.Answer = "Other risks";
+                _subject.Answer = answer;
                 _subject.Urn = ProjectUrn0001;
 
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer)
-                                                       && project.Benefits.OtherFactors.ContainsKey(TransferBenefits
-                                                           .OtherFactor.OtherRisks)))
+                    r.Update(It.Is<Project>(project =>
+                        project.Benefits.OtherFactors.ContainsValue(_subject.Answer ?? string.Empty)
+                        && project.Benefits.OtherFactors.ContainsKey(TransferBenefits
+                            .OtherFactor.OtherRisks)))
                 );
             }
         }

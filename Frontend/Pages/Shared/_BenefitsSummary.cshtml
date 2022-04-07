@@ -1,7 +1,6 @@
 @model Frontend.Models.Benefits.BenefitsSummaryViewModel
 @using Helpers
 @using Data.Models.Projects
-.
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -45,7 +44,7 @@
             }
         </dd>
         <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="other-factors">
+            <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="any-risks">
                 Change<span class="govuk-visually-hidden"> risks to consider</span>
             </a>
         </dd>
@@ -58,7 +57,14 @@
                 @label
             </dt>
             <dd class="govuk-summary-list__value">
-                @otherFactor.Description
+                @if (string.IsNullOrWhiteSpace(otherFactor.Description))
+                {
+                    <span class="dfe-empty-tag">Empty</span>
+                }
+                else
+                {
+                    <p class="govuk-body">@otherFactor.Description</p>
+                }
             </dd>
             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" asp-page="@Frontend.Pages.Projects.BenefitsAndRisks.OtherFactors.GetPageUrlFromOtherFactor(otherFactor.OtherFactor)" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="@label">

@@ -21,19 +21,21 @@ namespace Frontend.Tests.PagesTests.Projects.BenefitsAndRisks
         {
             _subject = new FinanceAndDebt(ProjectRepository.Object);
         }
-
+        
         public class PostTests : FinanceAndDebtTests
         {
-            [Fact]
-            public async void GivenUrnAndDescription_UpdateTheProject()
+            [Theory]
+            [InlineData(null)]
+            [InlineData("Finance Risk")]
+            public async void GivenUrnAndDescription_UpdateTheProject(string answer)
             {
-                _subject.Answer = "Finance and Debt";
+                _subject.Answer = answer;
                 _subject.Urn = ProjectUrn0001;
 
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer)
+                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer ?? string.Empty)
                                                        && project.Benefits.OtherFactors.ContainsKey(TransferBenefits
                                                            .OtherFactor.FinanceAndDebtConcerns)))
                 );

@@ -54,7 +54,7 @@ namespace DocumentGeneration.Builders
                 TableCellLeftMargin = new TableCellLeftMargin {Width = 80}
             };
             _tableProperties.TableLayout = new TableLayout {Type = TableLayoutValues.Fixed,};
-            _tableProperties.TableWidth = new TableWidth {Type = TableWidthUnitValues.Dxa, Width = "10000"};
+            _tableProperties.TableWidth = new TableWidth {Type = TableWidthUnitValues.Dxa, Width = "9740"};
         }
 
         private static TableBorders SolidTableBorders()

@@ -42,7 +42,7 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
         {
             var project = await _projectsRepository.GetByUrn(Urn);
             var projectResult = project.Result;
-            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] = Answer;
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] = Answer ?? string.Empty;;
             await _projectsRepository.Update(projectResult);
 
             if (ReturnToPreview)

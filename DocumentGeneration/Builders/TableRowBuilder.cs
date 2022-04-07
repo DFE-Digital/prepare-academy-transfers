@@ -18,9 +18,12 @@ namespace DocumentGeneration.Builders
             AddCell(new TextElement {Value = text});
         }
 
-        public void AddCell(TextElement textElement)
+        public void AddCell(TextElement textElement, TableCellProperties properties = null)
         {
-            var tableCell = new TableCell();
+            var tableCell = new TableCell
+            {
+                TableCellProperties = properties
+            };
             var paragraphBuilder = new ParagraphBuilder();
             paragraphBuilder.AddText(textElement);
             tableCell.AppendChild(paragraphBuilder.Build());

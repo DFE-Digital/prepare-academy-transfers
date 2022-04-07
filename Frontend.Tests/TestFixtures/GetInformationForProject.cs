@@ -44,7 +44,8 @@ namespace Frontend.Tests.TestFixtures
                     {
                         {TransferBenefits.OtherFactor.HighProfile, "testHighProfile"},
                         {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"},
-                    }
+                    },
+                    AnyRisks = true
                 },
                 TransferringAcademies = new List<TransferringAcademies>
                 {

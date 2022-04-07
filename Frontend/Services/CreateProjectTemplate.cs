@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
@@ -48,13 +50,51 @@ namespace Frontend.Services
             var builder = DocumentBuilder.CreateFromTemplate(ms, projectTemplateModel);
 
             BuildTitle(builder, projectTemplateModel);
-
+            BuildOtherFactors(builder, projectTemplateModel);
             BuildAcademyData(builder, projectTemplateModel.Academies);
 
             return new CreateProjectTemplateResponse
             {
                 Document = builder.Build()
             };
+        }
+
+        private void BuildOtherFactors(DocumentBuilder documentBuilder, ProjectTemplateModel projectTemplateModel)
+        {
+            documentBuilder.ReplacePlaceholderWithContent("Risks", builder =>
+            {
+                builder.AddTable(tableBuilder =>
+                {
+                    foreach (var otherFactor in projectTemplateModel.OtherFactors)
+                    {
+                        //Full Table Width = dxa 9740
+                        tableBuilder.AddRow(rowBuilder =>
+                        {
+                            rowBuilder.AddCell(new TextElement(otherFactor.Item1)
+                                    {Bold = true},
+                                new TableCellProperties
+                                {
+                                    TableCellWidth = new TableCellWidth
+                                        {Width = "5235", Type = TableWidthUnitValues.Dxa},
+                                    TableCellBorders = new TableCellBorders
+                                    {
+                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
+                                    }
+                                });
+                            rowBuilder.AddCell(new TextElement(otherFactor.Item2),
+                                new TableCellProperties
+                                {
+                                    TableCellWidth = new TableCellWidth
+                                        {Width = "4505", Type = TableWidthUnitValues.Dxa},
+                                    TableCellBorders = new TableCellBorders
+                                    {
+                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
+                                    }
+                                });
+                        });
+                    }
+                });
+            });
         }
 
         private void BuildAcademyData(DocumentBuilder documentBuilder, List<ProjectTemplateAcademyModel> academies)
@@ -66,7 +106,7 @@ namespace Frontend.Services
                     builder.AddHeading(hBuilder =>
                     {
                         hBuilder.SetHeadingLevel(HeadingLevel.One);
-                        hBuilder.AddText(new TextElement { Value = academy.SchoolName, Bold = true });
+                        hBuilder.AddText(new TextElement {Value = academy.SchoolName, Bold = true});
                     });
 
                     BuildGeneralInformation(builder, academy);
@@ -103,76 +143,76 @@ namespace Frontend.Services
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
-                hBuilder.AddText(new TextElement { Value = "General information", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "General information", Bold = true});
             });
 
             builder.AddTable(new[]
             {
                 new[]
                 {
-                    new TextElement { Value = "School type", Bold = true },
-                    new TextElement { Value = academy.SchoolType },
+                    new TextElement {Value = "School type", Bold = true},
+                    new TextElement {Value = academy.SchoolType},
                 },
                 new[]
                 {
-                    new TextElement { Value = "School phase", Bold = true },
-                    new TextElement { Value = academy.SchoolPhase },
+                    new TextElement {Value = "School phase", Bold = true},
+                    new TextElement {Value = academy.SchoolPhase},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Age range", Bold = true },
-                    new TextElement { Value = academy.AgeRange },
+                    new TextElement {Value = "Age range", Bold = true},
+                    new TextElement {Value = academy.AgeRange},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Capacity", Bold = true },
-                    new TextElement { Value = academy.SchoolCapacity },
+                    new TextElement {Value = "Capacity", Bold = true},
+                    new TextElement {Value = academy.SchoolCapacity},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Published admission number (PAN)", Bold = true },
-                    new TextElement { Value = academy.PublishedAdmissionNumber },
+                    new TextElement {Value = "Published admission number (PAN)", Bold = true},
+                    new TextElement {Value = academy.PublishedAdmissionNumber},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Number on roll (percentage the school is full)", Bold = true },
-                    new TextElement { Value = $"{academy.NumberOnRoll}" },
+                    new TextElement {Value = "Number on roll (percentage the school is full)", Bold = true},
+                    new TextElement {Value = $"{academy.NumberOnRoll}"},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Percentage of free school meals (%FSM)", Bold = true },
-                    new TextElement { Value = $"{academy.PercentageFreeSchoolMeals}" },
+                    new TextElement {Value = "Percentage of free school meals (%FSM)", Bold = true},
+                    new TextElement {Value = $"{academy.PercentageFreeSchoolMeals}"},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Viability issues", Bold = true },
-                    new TextElement { Value = academy.ViabilityIssues },
+                    new TextElement {Value = "Viability issues", Bold = true},
+                    new TextElement {Value = academy.ViabilityIssues},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Financial deficit", Bold = true },
-                    new TextElement { Value = academy.FinancialDeficit },
+                    new TextElement {Value = "Financial deficit", Bold = true},
+                    new TextElement {Value = academy.FinancialDeficit},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Private finance initiative (PFI) scheme", Bold = true },
-                    new TextElement { Value = $"{academy.Pfi}" },
+                    new TextElement {Value = "Private finance initiative (PFI) scheme", Bold = true},
+                    new TextElement {Value = $"{academy.Pfi}"},
                 },
                 new[]
                 {
                     new TextElement
-                        { Value = "Percentage of good or outstanding schools in the diocesan trust", Bold = true },
-                    new TextElement { Value = academy.PercentageGoodOrOutstandingInDiocesanTrust },
+                        {Value = "Percentage of good or outstanding schools in the diocesan trust", Bold = true},
+                    new TextElement {Value = academy.PercentageGoodOrOutstandingInDiocesanTrust},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Distance from the academy to the trust headquarters", Bold = true },
-                    new TextElement { Value = academy.DistanceFromTheAcademyToTheTrustHeadquarters },
+                    new TextElement {Value = "Distance from the academy to the trust headquarters", Bold = true},
+                    new TextElement {Value = academy.DistanceFromTheAcademyToTheTrustHeadquarters},
                 },
                 new[]
                 {
-                    new TextElement { Value = "MP (party)", Bold = true },
-                    new TextElement { Value = $"{academy.MpAndParty}" },
+                    new TextElement {Value = "MP (party)", Bold = true},
+                    new TextElement {Value = $"{academy.MpAndParty}"},
                 }
             });
         }
@@ -180,46 +220,46 @@ namespace Frontend.Services
         private static void BuildPupilNumbers(IDocumentBodyBuilder builder, ProjectTemplateAcademyModel academy)
         {
             builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
-            
+
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
-                hBuilder.AddText(new TextElement { Value = "Pupil numbers", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "Pupil numbers", Bold = true});
             });
 
             builder.AddTable(new[]
             {
                 new[]
                 {
-                    new TextElement { Value = "Girls on roll", Bold = true },
-                    new TextElement { Value = academy.GirlsOnRoll },
+                    new TextElement {Value = "Girls on roll", Bold = true},
+                    new TextElement {Value = academy.GirlsOnRoll},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Boys on roll", Bold = true },
-                    new TextElement { Value = academy.BoysOnRoll },
-                },
-                new[]
-                {
-                    new TextElement
-                        { Value = "Pupils with a statement of special educational needs (SEN)", Bold = true },
-                    new TextElement { Value = academy.PupilsWithSen },
-                },
-                new[]
-                {
-                    new TextElement { Value = "Pupils whose first language is not English", Bold = true },
-                    new TextElement { Value = academy.PupilsWithFirstLanguageNotEnglish },
+                    new TextElement {Value = "Boys on roll", Bold = true},
+                    new TextElement {Value = academy.BoysOnRoll},
                 },
                 new[]
                 {
                     new TextElement
-                        { Value = "Pupils eligible for free school meals during the past 6 years", Bold = true },
-                    new TextElement { Value = academy.PupilsFsm6Years },
+                        {Value = "Pupils with a statement of special educational needs (SEN)", Bold = true},
+                    new TextElement {Value = academy.PupilsWithSen},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Additional information", Bold = true },
-                    new TextElement { Value = academy.PupilNumbersAdditionalInformation },
+                    new TextElement {Value = "Pupils whose first language is not English", Bold = true},
+                    new TextElement {Value = academy.PupilsWithFirstLanguageNotEnglish},
+                },
+                new[]
+                {
+                    new TextElement
+                        {Value = "Pupils eligible for free school meals during the past 6 years", Bold = true},
+                    new TextElement {Value = academy.PupilsFsm6Years},
+                },
+                new[]
+                {
+                    new TextElement {Value = "Additional information", Bold = true},
+                    new TextElement {Value = academy.PupilNumbersAdditionalInformation},
                 }
             });
         }
@@ -229,35 +269,35 @@ namespace Frontend.Services
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
-                hBuilder.AddText(new TextElement { Value = "Latest Ofsted judgement", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "Latest Ofsted judgement", Bold = true});
             });
 
             builder.AddTable(new[]
             {
                 new[]
                 {
-                    new TextElement { Value = "School name", Bold = true },
-                    new TextElement { Value = academy.SchoolName },
+                    new TextElement {Value = "School name", Bold = true},
+                    new TextElement {Value = academy.SchoolName},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Ofsted inspection date", Bold = true },
-                    new TextElement { Value = academy.OfstedLastInspection },
+                    new TextElement {Value = "Ofsted inspection date", Bold = true},
+                    new TextElement {Value = academy.OfstedLastInspection},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Overall effectiveness", Bold = true },
-                    new TextElement { Value = academy.OverallEffectiveness },
+                    new TextElement {Value = "Overall effectiveness", Bold = true},
+                    new TextElement {Value = academy.OverallEffectiveness},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Ofsted report", Bold = true },
-                    new TextElement { Value = academy.OfstedReport },
+                    new TextElement {Value = "Ofsted report", Bold = true},
+                    new TextElement {Value = academy.OfstedReport},
                 },
                 new[]
                 {
-                    new TextElement { Value = "Additional information", Bold = true },
-                    new TextElement { Value = academy.OfstedAdditionalInformation },
+                    new TextElement {Value = "Additional information", Bold = true},
+                    new TextElement {Value = academy.OfstedAdditionalInformation},
                 }
             });
         }
@@ -269,13 +309,13 @@ namespace Frontend.Services
             {
                 return;
             }
-            
+
             builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
 
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
-                hBuilder.AddText(new TextElement { Value = "Key stage 2 performance tables (KS2)", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "Key stage 2 performance tables (KS2)", Bold = true});
             });
 
             foreach (var ks2Result in academy.KeyStage2Performance.OrderByDescending(k => k.Year))
@@ -290,7 +330,7 @@ namespace Frontend.Services
                 {
                     new[]
                     {
-                        new TextElement { Value = "", Bold = true },
+                        new TextElement {Value = "", Bold = true},
                         new TextElement
                         {
                             Value = "Percentage meeting expecting standard in reading, writing and maths",
@@ -301,14 +341,14 @@ namespace Frontend.Services
                             Value = "Percentage achieving a higher standard in reading, writing and maths",
                             Bold = true
                         },
-                        new TextElement { Value = "Reading progress scores", Bold = true },
-                        new TextElement { Value = "Writing progress scores", Bold = true },
-                        new TextElement { Value = "Maths progress scores", Bold = true }
+                        new TextElement {Value = "Reading progress scores", Bold = true},
+                        new TextElement {Value = "Writing progress scores", Bold = true},
+                        new TextElement {Value = "Maths progress scores", Bold = true}
                     },
 
                     new[]
                     {
-                        new TextElement { Value = academy.SchoolName, Bold = true },
+                        new TextElement {Value = academy.SchoolName, Bold = true},
                         new TextElement
                         {
                             Value =
@@ -337,7 +377,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = $"{academy.LocalAuthorityName} LA average", Bold = true },
+                        new TextElement {Value = $"{academy.LocalAuthorityName} LA average", Bold = true},
                         new TextElement
                         {
                             Value =
@@ -366,7 +406,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = "National average", Bold = true },
+                        new TextElement {Value = "National average", Bold = true},
                         new TextElement
                         {
                             Value =
@@ -402,8 +442,8 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "Additional information", Bold = true },
-                    new TextElement { Value = academy.KeyStage2AdditionalInformation }
+                    new TextElement {Value = "Additional information", Bold = true},
+                    new TextElement {Value = academy.KeyStage2AdditionalInformation}
                 }
             });
         }
@@ -415,7 +455,7 @@ namespace Frontend.Services
             {
                 return;
             }
-            
+
             builder.AddParagraph(pBuilder => pBuilder.AddPageBreak());
 
             var ks4Results = academy.KeyStage4Performance.Select(c =>
@@ -431,7 +471,7 @@ namespace Frontend.Services
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.Two);
-                hBuilder.AddText(new TextElement { Value = "Key stage 4 performance tables (KS4)", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "Key stage 4 performance tables (KS4)", Bold = true});
             });
 
             builder.AddHeading(hBuilder =>
@@ -450,14 +490,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -476,7 +516,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score)
@@ -492,7 +532,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -521,14 +561,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -547,7 +587,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -566,7 +606,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -595,14 +635,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -621,7 +661,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths)
@@ -637,7 +677,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -666,14 +706,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -692,7 +732,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc)
@@ -708,7 +748,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -743,14 +783,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -769,7 +809,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -788,7 +828,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -817,14 +857,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8Score)
@@ -840,7 +880,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "School confidence interval", Bold = true },
+                    new TextElement {Value = "School confidence interval", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
@@ -862,7 +902,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score)
@@ -879,7 +919,7 @@ namespace Frontend.Services
                 new[]
                 {
                     new TextElement
-                        { Value = $"{academy.LocalAuthorityName} LA confidence interval", Bold = true },
+                        {Value = $"{academy.LocalAuthorityName} LA confidence interval", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
@@ -898,7 +938,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -917,7 +957,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National confidence interval", Bold = true },
+                    new TextElement {Value = "National confidence interval", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
@@ -949,14 +989,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -975,7 +1015,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -994,7 +1034,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -1023,14 +1063,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8maths)
@@ -1046,7 +1086,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
@@ -1062,7 +1102,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1091,14 +1131,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].SipProgress8ebacc)
@@ -1114,7 +1154,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc)
@@ -1130,7 +1170,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1159,14 +1199,14 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "", Bold = true },
-                    new TextElement { Value = ks4Results[0].Year, Bold = true },
-                    new TextElement { Value = ks4Results[1].Year, Bold = true },
-                    new TextElement { Value = ks4Results[2].Year, Bold = true }
+                    new TextElement {Value = "", Bold = true},
+                    new TextElement {Value = ks4Results[0].Year, Bold = true},
+                    new TextElement {Value = ks4Results[1].Year, Bold = true},
+                    new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
                 new[]
                 {
-                    new TextElement { Value = academy.SchoolName, Bold = true },
+                    new TextElement {Value = academy.SchoolName, Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].Enteringebacc.ToString())
@@ -1182,7 +1222,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = $"{academy.LocalAuthorityName} LA Average", Bold = true },
+                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].LAEnteringEbacc.ToString())
@@ -1198,7 +1238,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement { Value = "National Average", Bold = true },
+                    new TextElement {Value = "National Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(
@@ -1223,8 +1263,8 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "Additional information", Bold = true },
-                    new TextElement { Value = academy.KeyStage4AdditionalInformation }
+                    new TextElement {Value = "Additional information", Bold = true},
+                    new TextElement {Value = academy.KeyStage4AdditionalInformation}
                 }
             });
         }
@@ -1242,7 +1282,7 @@ namespace Frontend.Services
             builder.AddHeading(hBuilder =>
             {
                 hBuilder.SetHeadingLevel(HeadingLevel.One);
-                hBuilder.AddText(new TextElement { Value = "Key stage 5 performance tables (KS5)", Bold = true });
+                hBuilder.AddText(new TextElement {Value = "Key stage 5 performance tables (KS5)", Bold = true});
             });
 
             foreach (var ks5Result in academy.KeyStage5Performance
@@ -1258,15 +1298,15 @@ namespace Frontend.Services
                 {
                     new[]
                     {
-                        new TextElement { Value = "", Bold = true },
-                        new TextElement { Value = "Academic progress", Bold = true },
-                        new TextElement { Value = "Academic average", Bold = true },
-                        new TextElement { Value = "Applied general progress", Bold = true },
-                        new TextElement { Value = "Applied general average", Bold = true }
+                        new TextElement {Value = "", Bold = true},
+                        new TextElement {Value = "Academic progress", Bold = true},
+                        new TextElement {Value = "Academic average", Bold = true},
+                        new TextElement {Value = "Applied general progress", Bold = true},
+                        new TextElement {Value = "Applied general average", Bold = true}
                     },
                     new[]
                     {
-                        new TextElement { Value = academy.SchoolName, Bold = true },
+                        new TextElement {Value = academy.SchoolName, Bold = true},
                         new TextElement
                         {
                             Value =
@@ -1290,7 +1330,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement { Value = "National average", Bold = true },
+                        new TextElement {Value = "National average", Bold = true},
                         new TextElement
                         {
                             Value =
@@ -1321,8 +1361,8 @@ namespace Frontend.Services
             {
                 new[]
                 {
-                    new TextElement { Value = "Additional information", Bold = true },
-                    new TextElement { Value = academy.KeyStage5AdditionalInformation }
+                    new TextElement {Value = "Additional information", Bold = true},
+                    new TextElement {Value = academy.KeyStage5AdditionalInformation}
                 }
             });
         }

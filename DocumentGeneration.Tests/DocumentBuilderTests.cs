@@ -242,11 +242,21 @@ namespace DocumentGeneration.Tests
             [Fact]
             public void GivenAddingATableWithSingleTextCell_GeneratesTable()
             {
+                var cellWidth = "2000";
+                var value = "test";
                 var documentBody = GenerateDocumentBody(builder =>
                 {
                     builder.AddTable(tBuilder =>
                     {
-                        tBuilder.AddRow(rBuilder => { rBuilder.AddCell(new TextElement {Value = "test"}); });
+                        tBuilder.AddRow(rBuilder =>
+                        {
+                            rBuilder.AddCell(new TextElement {Value = value},
+                                new TableCellProperties
+                                {
+                                    TableCellWidth = new TableCellWidth
+                                        {Width = cellWidth, Type = TableWidthUnitValues.Dxa}
+                                });
+                        });
                     });
                 });
 
@@ -255,7 +265,9 @@ namespace DocumentGeneration.Tests
                 Assert.Single(documentBody.Descendants<TableProperties>());
                 Assert.Single(documentBody.Descendants<TableRow>());
                 Assert.Single(documentBody.Descendants<TableCell>());
-                Assert.Equal("test", table[0].InnerText);
+                Assert.Equal(value, table[0].InnerText);
+                Assert.Equal(cellWidth,
+                    table[0].Descendants<TableCell>().First().TableCellProperties.TableCellWidth.Width);
             }
 
             [Fact]
