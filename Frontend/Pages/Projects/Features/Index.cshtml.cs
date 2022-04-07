@@ -22,8 +22,8 @@ namespace Frontend.Pages.Projects.Features
         public string InterventionDetails { get; set; }
         public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
-        [BindProperty(SupportsGet = true)] public bool IsCompleted { get; set; }
-        public bool ShowIsCompleted { get; private set; }
+        [BindProperty]
+        public MarkSectionCompletedViewModel MarkSectionCompletedViewModel { get; set; }
 
         public Index(IProjects projects)
         {
@@ -43,8 +43,11 @@ namespace Frontend.Pages.Projects.Features
             OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn;
             WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer;
             InterventionDetails = projectResult.Features.ReasonForTransfer.InterventionDetails;
-            IsCompleted = projectResult.Features.IsCompleted ?? false;
-            ShowIsCompleted = FeaturesSectionDataIsPopulated(projectResult);
+            MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
+            {
+                IsCompleted = projectResult.Features.IsCompleted ?? false,
+                ShowIsCompleted = FeaturesSectionDataIsPopulated(projectResult)
+            };
             return Page();
         }
         
@@ -54,7 +57,7 @@ namespace Frontend.Pages.Projects.Features
             
             var projectResult = project.Result;
             
-            projectResult.Features.IsCompleted = IsCompleted;
+            projectResult.Features.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
             await _projects.Update(projectResult);
 

@@ -15,8 +15,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
     {
         private readonly IProjects _projects;
         public BenefitsSummaryViewModel BenefitsSummaryViewModel;
-        [BindProperty(SupportsGet = true)] public bool IsCompleted { get; set; }
-        public bool ShowIsCompleted { get; private set; }
+        [BindProperty]
+        public MarkSectionCompletedViewModel MarkSectionCompletedViewModel { get; set; }
 
         public Index(IProjects projects)
         {
@@ -37,28 +37,33 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 projectResult.OutgoingAcademyUrn,
                 projectResult.Benefits.AnyRisks
             );
-            IsCompleted = projectResult.Benefits.IsCompleted ?? false;
-            ShowIsCompleted = BenefitsSectionDataIsPopulated(projectResult);
+            MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
+            {
+                IsCompleted = projectResult.Benefits.IsCompleted ?? false,
+                ShowIsCompleted = BenefitsSectionDataIsPopulated(projectResult)
+            };
 
             return Page();
         }
-        
+
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
-            
-            projectResult.Benefits.IsCompleted = IsCompleted;
+
+            projectResult.Benefits.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
             await _projects.Update(projectResult);
 
-            return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index", new {Urn});
+            return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index",
+                new {Urn});
         }
 
         private bool BenefitsSectionDataIsPopulated(Project project) =>
-            (project.Benefits.IntendedBenefits != null && project.Benefits.IntendedBenefits.Any()) &&
-            (project.Benefits.OtherFactors != null && project.Benefits.OtherFactors.Any());
+            project.Benefits.IntendedBenefits != null 
+            && project.Benefits.IntendedBenefits.Any() 
+            && (project.Benefits.OtherFactors != null && project.Benefits.OtherFactors.Any() || project.Benefits.AnyRisks == false);
 
         public static List<OtherFactorsItemViewModel> BuildOtherFactorsItemViewModel(
             Dictionary<TransferBenefits.OtherFactor, string> otherFactorsToSet)
