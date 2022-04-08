@@ -25,7 +25,7 @@ namespace Data.Models.Projects
             [Display(Name = "Closure of a SAT and the academy joining a MAT")]
             SatClosure,
 
-            [Display(Name = "Closure of a MAT and academies joining a MAT(s)")]
+            [Display(Name = "Closure of a MAT and academies joining a MAT")]
             MatClosure,
 
             [Display(Name = "Academy moving out of a MAT and joining another MAT")]
