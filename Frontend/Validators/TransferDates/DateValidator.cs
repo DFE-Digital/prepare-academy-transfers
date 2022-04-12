@@ -19,7 +19,7 @@ namespace Frontend.Validators.TransferDates
                     var dateVm = context.InstanceToValidate;
                     if (!dateVm.UnknownDate && DateIsEmpty(dateVm.Date))
                     {
-                        context.AddFailure("You must enter the date or confirm that you don't know it");
+                        context.AddFailure("You must enter the date or confirm that you don't know it " + dateVm.DisplayName);
                     }
                 });
 

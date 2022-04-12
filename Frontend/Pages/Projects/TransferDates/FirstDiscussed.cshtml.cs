@@ -28,7 +28,8 @@ namespace Frontend.Pages.Projects.TransferDates
                 FirstDiscussed = new DateViewModel
                 {
                     Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.FirstDiscussed),
-                    UnknownDate = projectResult.Dates.HasFirstDiscussedDate is false
+                    UnknownDate = projectResult.Dates.HasFirstDiscussedDate is false,
+                    DisplayName = "First Discussed"
                 }
             };
             IncomingTrustName = projectResult.IncomingTrustName;

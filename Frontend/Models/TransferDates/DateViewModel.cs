@@ -24,5 +24,7 @@ namespace Frontend.Models.TransferDates
             var splitDate = DatesHelper.DateStringToDayMonthYear(dateAsString);
             return new DateInputViewModel {Day = splitDate[0], Month = splitDate[1], Year = splitDate[2]};
         }
+
+        public string DisplayName { get; set; }
     }
 }
