@@ -3,8 +3,11 @@ var path = require('path');
 
 module.exports = {
     mode: 'production',
-    entry: ['./src/js/site.js', './src/css/site.scss'],
-    plugins: [new MiniCssExtractPlugin({filename: 'site.css'})],
+    entry: {
+        main: ['./src/js/site.js', './src/css/site.scss'],
+        'google-analytics-events': './src/js/google-analytics-events.js',
+    },
+    plugins: [new MiniCssExtractPlugin({ filename: 'site.css' })],
     module: {
         rules: [
             {
@@ -18,13 +21,13 @@ module.exports = {
                     "sass-loader",
                 ],
             },
-            {test: /\.css$/, use: ['style-loader', 'css-loader']},
-            {test: /\.(jpe?g|png|gif|svg)$/i, use: 'file-loader'},
-            {test: /\.(woff2?)$/i, use: 'file-loader'}
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+            { test: /\.(jpe?g|png|gif|svg)$/i, use: 'file-loader' },
+            { test: /\.(woff2?)$/i, use: 'file-loader' }
         ]
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'index.bundle.js',
+        filename: "[name].bundle.js",
     }
 };
