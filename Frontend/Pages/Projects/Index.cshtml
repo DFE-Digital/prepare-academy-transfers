@@ -92,9 +92,11 @@
                 <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
             </form>
             <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
-                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
+                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb" data-google-analytics-project-generate>Generate project template</button>
             </form>
 
         </div>
     </div>
 </div>
+
+<script src="~/dist/google-analytics-events.bundle.js" asp-add-nonce></script>

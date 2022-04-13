@@ -21,9 +21,12 @@ namespace Frontend.Helpers.TagHelpers
                     tagColourClass = "govuk-tag--blue";
                     break;
             }
-            
+
+            var section = context.AllAttributes["id"].Value;
+
             output.Attributes.SetAttribute("class", $"govuk-tag {tagColourClass} moj-task-list__tag");
-            output.Attributes.SetAttribute("data-test", context.AllAttributes["id"].Value.ToString());
+            output.Attributes.SetAttribute("data-test", section);
+            output.Attributes.SetAttribute($"data-google-analytics-project-status", $"{section},{Status == ProjectStatuses.Completed}".ToLower());
             output.TagName = "strong";
             output.Content.SetContent(EnumHelpers<ProjectStatuses>.GetDisplayValue(Status));
             base.Process(context, output);
