@@ -1087,7 +1087,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} local authority Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
