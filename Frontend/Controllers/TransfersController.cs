@@ -110,33 +110,6 @@ namespace Frontend.Controllers
             return RedirectToAction("OutgoingTrustAcademies");
         }
 
-        public async Task<IActionResult> OutgoingTrustAcademies(bool change = false)
-        {
-            var sessionAcademyIds = HttpContext.Session.GetString(OutgoingAcademyIdSessionKey);
-            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
-            ViewData["OutgoingTrustId"] = outgoingTrustId;
-            ViewData["ChangeLink"] = change;
-            ViewData["OutgoingAcademyId"] = null;
-
-            if (!string.IsNullOrEmpty(sessionAcademyIds))
-            {
-                var academyId = sessionAcademyIds.Split(",")[0];
-                ViewData["OutgoingAcademyId"] = academyId;
-            }
-
-            var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
-
-            var model = new OutgoingTrustAcademies {Academies = trustRepoResult.Result.Academies};
-
-            ViewData["Error.Exists"] = false;
-            if (TempData.Peek("ErrorMessage") == null) return View(model);
-
-            ViewData["Error.Exists"] = true;
-            ViewData["Error.Message"] = TempData["ErrorMessage"];
-
-            return View(model);
-        }
-
         public async Task<IActionResult> SubmitOutgoingTrustAcademies(string[] academyIds, bool change = false)
         {
             var validator = new OutgoingTrustAcademiesValidator();
