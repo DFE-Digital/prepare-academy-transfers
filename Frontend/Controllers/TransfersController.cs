@@ -110,23 +110,6 @@ namespace Frontend.Controllers
             return RedirectToAction("OutgoingTrustAcademies");
         }
 
-        public async Task<IActionResult> SubmitOutgoingTrustAcademies(string[] academyIds, bool change = false)
-        {
-            var validator = new OutgoingTrustAcademiesValidator();
-            var validationResult = await validator.ValidateAsync(academyIds);
-
-            if (!validationResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("OutgoingTrustAcademies");
-            }
-
-            var academyIdsString = string.Join(",", academyIds.Select(id => id.ToString()).ToList());
-            HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
-
-            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust");
-        }
-
         public IActionResult IncomingTrust(string query = "", bool change = false)
         {
             ViewData["Error.Exists"] = false;

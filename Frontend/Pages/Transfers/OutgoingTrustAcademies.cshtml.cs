@@ -1,5 +1,7 @@
 using Data;
 using Data.Models;
+using FluentValidation.AspNetCore;
+using Frontend.Validators.Transfers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,7 +11,10 @@ namespace Frontend.Pages.Transfers
 {
     public class OutgoingTrustAcademiesModel : TransfersPageModel
     {
-        public List<Academy> Academies;
+        public List<Academy> Academies { get; set; }
+
+        [BindProperty]
+        public List<string> SelectedAcademyIds { get; set; }
 
         protected readonly ITrusts _trustsRepository;
 
@@ -36,17 +41,24 @@ namespace Frontend.Pages.Transfers
 
             Academies = trustRepoResult.Result.Academies;
 
-            if (TempData.Peek("ErrorMessage") == null)
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(bool change = false)
+        {
+            var validator = new OutgoingTrustAcademiesValidator();
+            var validationResults = await validator.ValidateAsync(this);
+            validationResults.AddToModelState(ModelState, null);
+
+            if (!ModelState.IsValid)
             {
-                ViewData["Error.Exists"] = false;
-            }
-            else
-            {
-                ViewData["Error.Exists"] = true;
-                ViewData["Error.Message"] = TempData["ErrorMessage"];
+                return await OnGetAsync();
             }
 
-            return Page();
+            var academyIdsString = string.Join(",", SelectedAcademyIds);
+            HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
+
+            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust", controllerName: "Transfers");
         }
     }
 }

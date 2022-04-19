@@ -3,10 +3,8 @@
 
 @{
     Layout = "_Layout";
-    var errorExists = (bool) ViewData["Error.Exists"];
-    const string pageTitle = "Select the transferring academy";
-    ViewBag.Title = errorExists ? $"Error: {pageTitle}" : pageTitle;
-    var formClasses = errorExists ? "govuk-form-group--error" : "";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Select the transferring academy";
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
 }
 
 @section BeforeMain
@@ -21,48 +19,27 @@
     }
 }
 
+<div asp-gds-validation-summary></div>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if (errorExists)
-        {
-            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
-                <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
-                    There is a problem
-                </h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
-                        <li>
-                            <a href="#@Model.Academies.First().Ukprn" data-qa="error__text">
-                                @ViewData["Error.Message"]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        }
-
-        <form class="govuk-form" asp-action="SubmitOutgoingTrustAcademies" method="get">
-            <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()"/>
+        <form class="govuk-form" method="post">
+            <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()" />
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl" id=@nameof(Model.Academies)>
                         <h1 class="govuk-fieldset__heading">
                             Select the transferring academies
                         </h1>
                     </legend>
 
-                    @if (errorExists)
-                    {
-                        <span id="academyId-error" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error:</span> @ViewData["Error.Message"]
-                        </span>
-                    }
+                    <span asp-gds-validation-for="Academies"></span>
 
                     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                         @foreach (var academy in Model.Academies)
                         {
                             <div class="govuk-checkboxes__item">
-                                <input class="govuk-checkboxes__input" id="@academy.Ukprn" name="academyIds" type="checkbox" value="@academy.Ukprn">
+                                <input class="govuk-checkboxes__input" id="@academy.Ukprn" name="SelectedAcademyIds" type="checkbox" value="@academy.Ukprn">
                                 <label class="govuk-label govuk-checkboxes__label" for="@academy.Ukprn">
                                     @academy.Name
                                 </label>

@@ -1,7 +1,6 @@
 ﻿using Data;
 using Data.Models;
 using Frontend.Pages.Transfers;
-using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +17,13 @@ namespace Frontend.Tests.PagesTests.Transfers
 {
     public class OutgoingTrustAcademiesTests
     {
+        protected readonly PageContext pageContext;
+
         private const string AcademyName = "Academy 001";
         private const string AcademyNameTwo = "Academy 002";
 
         private readonly Mock<ISession> _session;
         private readonly Mock<ITrusts> _trustsRepository;
-        private readonly OutgoingTrustAcademiesModel _subject;
 
         public OutgoingTrustAcademiesTests()
         {
@@ -48,82 +48,126 @@ namespace Frontend.Tests.PagesTests.Transfers
                     }
                 });
 
-            var tempDataProvider = new Mock<ITempDataProvider>();
             var httpContext = new DefaultHttpContext();
             var sessionFeature = new SessionFeature { Session = _session.Object };
             httpContext.Features.Set<ISessionFeature>(sessionFeature);
 
-            var tempDataDictionaryFactory =
-                new TempDataDictionaryFactory(tempDataProvider.Object);
-            var tempData = tempDataDictionaryFactory.GetTempData(httpContext);
             var modelState = new ModelStateDictionary();
             var modelMetadataProvider = new EmptyModelMetadataProvider();
             var viewData = new ViewDataDictionary(modelMetadataProvider, modelState);
-            var pageContext = new PageContext()
+            pageContext = new PageContext()
             {
                 ViewData = viewData,
                 HttpContext = httpContext
             };
+        }
 
-            _subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+        public class OnGetAsync : OutgoingTrustAcademiesTests
+        {
+            private readonly OutgoingTrustAcademiesModel _subject;
+
+            public OnGetAsync()
             {
-                TempData = tempData,
-                PageContext = pageContext,
-            };
+                _subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                {
+                    PageContext = pageContext
+                };
+            }
+
+            [Fact]
+            public async void GivenTrustIdInSession_FetchesTheAcademiesForThatTrust()
+            {
+                var response = await _subject.OnGetAsync();
+
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(AcademyName, _subject.Academies[0].Name);
+                Assert.Equal(AcademyNameTwo, _subject.Academies[1].Name);
+            }
+
+            [Fact]
+            public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
+            {
+                var response = await _subject.OnGetAsync(change: true);
+
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
+            }
+
+            [Fact]
+            public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
+            {
+                const string outgoingAcademyId = "AcademyId";
+                var outgoingAcademyIds = new List<string> { outgoingAcademyId };
+                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
+                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
+
+                var response = await _subject.OnGetAsync();
+
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(outgoingAcademyId, _subject.ViewData["OutgoingAcademyId"]);
+            }
         }
 
-        [Fact]
-        public async void GivenTrustIdInSession_FetchesTheAcademiesForThatTrust()
+        public class OnPostAsync : OutgoingTrustAcademiesTests
         {
-            var response = await _subject.OnGetAsync();
-            
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(AcademyName, _subject.Academies[0].Name);
-            Assert.Equal(AcademyNameTwo, _subject.Academies[1].Name);
-        }
+            [Fact]
+            public async void WhenSelectedAcademyIdsIsNull_UpdatesTheModelStateAndReturnPageResult()
+            {
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                {
+                    SelectedAcademyIds = null,
+                    PageContext = pageContext
+                };
 
-        [Fact]
-        public async void GivenNoErrorMessage_SetsErrorExistsToFalse()
-        {
-            var response = await _subject.OnGetAsync();
+                var result = await subject.OnPostAsync();
 
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(false, _subject.ViewData["Error.Exists"]);
-        }
+                Assert.IsType<PageResult>(result);
+                Assert.False(subject.ModelState.IsValid);
+            }
 
-        [Fact]
-        public async void GivenErrorMessage_PutsTheErrorIntoTheViewData()
-        {
-            _subject.TempData["ErrorMessage"] = "Error message";
+            [Fact]
+            public async void GivenAcademyId_StoresItInTheSessionAndRedirectsToIncomingTrust()
+            {
+                const string academyId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                {
+                    SelectedAcademyIds = new List<string> { academyId },
+                    PageContext = pageContext
+                };
 
-            var response = await _subject.OnGetAsync();
-            
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(true, _subject.ViewData["Error.Exists"]);
-            Assert.Equal("Error message", _subject.ViewData["Error.Message"]);
-        }
+                var result = await subject.OnPostAsync();
 
-        [Fact]
-        public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
-        {
-            var response = await _subject.OnGetAsync(change: true);
-            
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(true, _subject.ViewData["ChangeLink"]);
-        }
+                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+                Assert.Equal("IncomingTrust", resultRedirect.ActionName);
+                Assert.Equal("Transfers", resultRedirect.ControllerName);
+                _session.Verify(s => s.Set(
+                    "OutgoingAcademyIds",
+                    It.Is<byte[]>(input =>
+                        Encoding.UTF8.GetString(input) == academyId
+                )));
+            }
 
-        [Fact]
-        public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
-        {
-            const string outgoingAcademyId = "AcademyId";
-            var outgoingAcademyIds = new List<string> { outgoingAcademyId };
-            var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
-            _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
+            [Fact]
+            public async void GivenChangeLink_StoresItInTheSessionAndRedirectsToCheckYourAnswers()
+            {
+                const string academyId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                {
+                    SelectedAcademyIds = new List<string> { academyId },
+                    PageContext = pageContext
+                };
 
-            var response = await _subject.OnGetAsync();
+                var result = await subject.OnPostAsync(change: true);
 
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(outgoingAcademyId, _subject.ViewData["OutgoingAcademyId"]);
+                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
+                Assert.Equal("CheckYourAnswers", resultRedirect.ActionName);
+                Assert.Equal("Transfers", resultRedirect.ControllerName);
+                _session.Verify(s => s.Set(
+                    "OutgoingAcademyIds",
+                    It.Is<byte[]>(input =>
+                        Encoding.UTF8.GetString(input) == academyId
+                )));
+            }
         }
     }
 }

@@ -276,46 +276,6 @@ namespace Frontend.Tests.ControllerTests
                 _session.Verify(s => s.Remove("IncomingTrustId"));
                 _session.Verify(s => s.Remove("OutgoingAcademyIds"));
             }
-        } 
-
-        public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
-        {
-            [Fact]
-            public async void GivenAcademyId_StoresItInTheSessionAndRedirects()
-            {
-                var idOne = new[] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
-
-                var result = await _subject.SubmitOutgoingTrustAcademies(idOne);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("IncomingTrust", resultRedirect.ActionName);
-
-                _session.Verify(s => s.Set(
-                    "OutgoingAcademyIds",
-                    It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == idOne[0]
-                    )));
-            }
-
-            [Fact]
-            public async void GivenNoAcademyId_RedirectBackToOutgoingTrustAcademiesWithError()
-            {
-                var result = await _subject.SubmitOutgoingTrustAcademies(null);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
-                Assert.Equal("Select an academy", _subject.TempData["ErrorMessage"]);
-            }
-
-            [Fact]
-            public async void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
-            {
-                var idOne = new [] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
-                var result = await _subject.SubmitOutgoingTrustAcademies(idOne, true);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("CheckYourAnswers", resultRedirect.ActionName);
-            }
         }
 
         public class IncomingTrust : TransfersControllerTests
