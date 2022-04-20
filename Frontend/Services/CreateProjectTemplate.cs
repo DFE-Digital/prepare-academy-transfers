@@ -19,7 +19,8 @@ namespace Frontend.Services
     public class CreateProjectTemplate : ICreateProjectTemplate
     {
         private readonly IGetProjectTemplateModel _getProjectTemplateModel;
-
+        private const string LocalAuthority = "local authority";
+        
         public CreateProjectTemplate(IGetProjectTemplateModel getProjectTemplateModel)
         {
             _getProjectTemplateModel = getProjectTemplateModel;
@@ -377,7 +378,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement {Value = $"{academy.LocalAuthorityName} LA average", Bold = true},
+                        new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                         new TextElement
                         {
                             Value =
@@ -516,7 +517,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score)
@@ -587,7 +588,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -661,7 +662,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths)
@@ -732,7 +733,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc)
@@ -809,7 +810,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -902,7 +903,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score)
@@ -919,7 +920,7 @@ namespace Frontend.Services
                 new[]
                 {
                     new TextElement
-                        {Value = $"{academy.LocalAuthorityName} LA confidence interval", Bold = true},
+                        {Value = $"{academy.LocalAuthorityName} {LocalAuthority} confidence interval", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedConfidenceInterval(
@@ -1015,7 +1016,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1086,7 +1087,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
@@ -1154,7 +1155,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc)
@@ -1222,7 +1223,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} LA Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].LAEnteringEbacc.ToString())
@@ -1330,7 +1331,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement {Value = "National average", Bold = true},
+                        new TextElement {Value = "National Average", Bold = true},
                         new TextElement
                         {
                             Value =
