@@ -264,7 +264,7 @@ namespace Frontend.Tests.ControllerTests
                         Encoding.UTF8.GetString(input) == trustId
                     )));
 
-                AssertRedirectToAction(response, "OutgoingTrustAcademies");
+                AssertRedirectToPage(response, "/Transfers/OutgoingTrustAcademies");
             }
 
             [Fact]
@@ -275,127 +275,6 @@ namespace Frontend.Tests.ControllerTests
 
                 _session.Verify(s => s.Remove("IncomingTrustId"));
                 _session.Verify(s => s.Remove("OutgoingAcademyIds"));
-            }
-        }
-
-        public class OutgoingTrustAcademiesTests : TransfersControllerTests
-        {
-            private const string AcademyName = "Academy 001";
-            private const string AcademyNameTwo = "Academy 002";
-
-            public OutgoingTrustAcademiesTests()
-            {
-                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var trustIdByteArray = Encoding.UTF8.GetBytes(trustId);
-
-                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
-
-                _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Result = new Trust
-                        {
-                            Academies = new List<Academy>
-                            {
-                                new Academy {Name = AcademyName},
-                                new Academy {Name = AcademyNameTwo}
-                            }
-                        }
-                    });
-            }
-
-            [Fact]
-            public async void GivenTrustIdInSession_FetchesTheAcademiesForThatTrust()
-            {
-                var response = await _subject.OutgoingTrustAcademies();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<OutgoingTrustAcademies>(viewResponse.Model);
-
-                Assert.Equal(AcademyName, viewModel.Academies[0].Name);
-                Assert.Equal(AcademyNameTwo, viewModel.Academies[1].Name);
-            }
-
-            [Fact]
-            public async void GivenNoErrorMessage_SetsErrorExistsToFalse()
-            {
-                var response = await _subject.OutgoingTrustAcademies();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                Assert.Equal(false, viewResponse.ViewData["Error.Exists"]);
-            }
-
-            [Fact]
-            public async void GivenErrorMessage_PutsTheErrorIntoTheViewData()
-            {
-                _subject.TempData["ErrorMessage"] = "Error message";
-
-                var response = await _subject.OutgoingTrustAcademies();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(true, viewResponse.ViewData["Error.Exists"]);
-                Assert.Equal("Error message", viewResponse.ViewData["Error.Message"]);
-            }
-
-            [Fact]
-            public async void GivenChangeLink_PutsChangeLinkIntoTheViewData()
-            {
-                var response = await _subject.OutgoingTrustAcademies(true);
-                var viewResponse = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(true, viewResponse.ViewData["ChangeLink"]);
-            }
-
-            [Fact]
-            public async void GivenOutgoingAcademiesExistInSession_PutsOutgoingAcademyIdIntoTheViewData()
-            {
-                const string outgoingAcademyId = "AcademyId";
-                var outgoingAcademyIds = new List<string> {outgoingAcademyId};
-                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
-                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
-
-                var response = await _subject.OutgoingTrustAcademies();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-
-                Assert.Equal(outgoingAcademyId, viewResponse.ViewData["OutgoingAcademyId"]);
-            }
-        }
-
-        public class SubmitOutgoingTrustAcademiesTests : TransfersControllerTests
-        {
-            [Fact]
-            public async void GivenAcademyId_StoresItInTheSessionAndRedirects()
-            {
-                var idOne = new[] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
-
-                var result = await _subject.SubmitOutgoingTrustAcademies(idOne);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("IncomingTrust", resultRedirect.ActionName);
-
-                _session.Verify(s => s.Set(
-                    "OutgoingAcademyIds",
-                    It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == idOne[0]
-                    )));
-            }
-
-            [Fact]
-            public async void GivenNoAcademyId_RedirectBackToOutgoingTrustAcademiesWithError()
-            {
-                var result = await _subject.SubmitOutgoingTrustAcademies(null);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("OutgoingTrustAcademies", resultRedirect.ActionName);
-                Assert.Equal("Select an academy", _subject.TempData["ErrorMessage"]);
-            }
-
-            [Fact]
-            public async void GivenChangeLink_RedirectBackToOutgoingTrustAcademiesWithError()
-            {
-                var idOne = new [] { "9a7be920-eaa0-e911-a83f-000d3a3852af" };
-                var result = await _subject.SubmitOutgoingTrustAcademies(idOne, true);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("CheckYourAnswers", resultRedirect.ActionName);
             }
         }
 
@@ -766,6 +645,13 @@ namespace Frontend.Tests.ControllerTests
         {
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal(actionName, redirectResponse.ActionName);
+            return redirectResponse;
+        }
+        
+        private static RedirectToPageResult AssertRedirectToPage(IActionResult response, string pageName)
+        {
+            var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
+            Assert.Equal(pageName, redirectResponse.PageName);
             return redirectResponse;
         }
 
