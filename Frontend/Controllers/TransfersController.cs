@@ -33,19 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public IActionResult TrustName(string query = "", bool change = false)
-        {
-            ViewData["Error.Exists"] = false;
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
-
-            if (TempData.Peek("ErrorMessage") == null) return View();
-
-            ViewData["Error.Exists"] = true;
-            ViewData["Error.Message"] = TempData["ErrorMessage"];
-            return View();
-        }
-
         public async Task<IActionResult> TrustSearch(string query, bool change = false)
         {
             ViewData["ChangeLink"] = change;
@@ -55,7 +42,7 @@ namespace Frontend.Controllers
             if (!validationQueryResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustName");
+                return RedirectToPage("/Transfers/TrustName");
             }
 
             var result = await _trustsRepository.SearchTrusts(query);
@@ -65,7 +52,7 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustName", new {query});
+                return RedirectToPage("/Transfers/TrustName", new {query});
             }
 
             var model = new TrustSearch {Trusts = result.Result.Where(t => t.Academies.Any()).ToList()};

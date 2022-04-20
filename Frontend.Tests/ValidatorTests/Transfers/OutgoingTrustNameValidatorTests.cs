@@ -1,4 +1,5 @@
 ﻿using FluentValidation.TestHelper;
+using Frontend.Pages.Transfers;
 using Frontend.Validators.Transfers;
 using Xunit;
 
@@ -30,7 +31,5 @@ namespace Frontend.Tests.ValidatorTests.Transfers
             var result = await _validator.TestValidateAsync(trustName);
             result.ShouldNotHaveValidationErrorFor(x => x);
         }
-
-
     }
 }
