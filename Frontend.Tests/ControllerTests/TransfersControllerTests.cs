@@ -264,7 +264,7 @@ namespace Frontend.Tests.ControllerTests
                         Encoding.UTF8.GetString(input) == trustId
                     )));
 
-                AssertRedirectToAction(response, "OutgoingTrustAcademies");
+                AssertRedirectToPage(response, "/Transfers/OutgoingTrustAcademies");
             }
 
             [Fact]
@@ -645,6 +645,13 @@ namespace Frontend.Tests.ControllerTests
         {
             var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
             Assert.Equal(actionName, redirectResponse.ActionName);
+            return redirectResponse;
+        }
+        
+        private static RedirectToPageResult AssertRedirectToPage(IActionResult response, string pageName)
+        {
+            var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
+            Assert.Equal(pageName, redirectResponse.PageName);
             return redirectResponse;
         }
 

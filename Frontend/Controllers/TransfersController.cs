@@ -107,7 +107,7 @@ namespace Frontend.Controllers
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
 
-            return RedirectToAction("OutgoingTrustAcademies");
+            return RedirectToPage("/Transfers/OutgoingTrustAcademies");
         }
 
         public IActionResult IncomingTrust(string query = "", bool change = false)
