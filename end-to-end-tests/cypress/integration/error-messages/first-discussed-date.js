@@ -17,8 +17,8 @@
         cy.clickDataTest("confirm-outgoing-trust");
         cy.selectCheckbox(0);
         cy.get('.govuk-button').click();
-        cy.get('#query').clear();
-        cy.get('#query').type('ts');
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type('ts');
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();

@@ -21,8 +21,8 @@ describe('Select multiple academies', () => {
         cy.selectCheckbox(0);
         cy.selectCheckbox(1);
         cy.get('.govuk-button').click();
-        cy.get('#query').clear();
-        cy.get('#query').type(incomingTrustId);
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type(incomingTrustId);
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
