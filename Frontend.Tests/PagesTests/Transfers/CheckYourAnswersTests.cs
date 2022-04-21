@@ -1,8 +1,10 @@
 ﻿using Data;
 using Data.Models;
 using Frontend.Pages.Transfers;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -20,6 +22,7 @@ namespace Frontend.Tests.PagesTests.Transfers
         private readonly PageContext _pageContext;
         private readonly TempDataDictionary _tempData;
         private readonly Mock<ITrusts> _trustsRepository;
+        private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ISession> _session;
         private readonly CheckYourAnswersModel _subject;
 
@@ -41,6 +44,8 @@ namespace Frontend.Tests.PagesTests.Transfers
         {
             _session = new Mock<ISession>();
             _trustsRepository = new Mock<ITrusts>();
+            _projectsRepository = new Mock<IProjects>();
+            var referenceNumberService = new Mock<IReferenceNumberService>();
 
             var httpContext = new DefaultHttpContext();
             var modelState = new ModelStateDictionary();
@@ -57,7 +62,8 @@ namespace Frontend.Tests.PagesTests.Transfers
                 HttpContext = httpContext
             };
 
-            _subject = new CheckYourAnswersModel(_trustsRepository.Object)
+            _subject = new CheckYourAnswersModel(_trustsRepository.Object, _projectsRepository.Object,
+                referenceNumberService.Object)
             {
                 PageContext = _pageContext,
                 TempData = _tempData
@@ -94,38 +100,101 @@ namespace Frontend.Tests.PagesTests.Transfers
                 });
         }
 
-        [Fact]
-        public async void GivenIncomingTrustNotSelected_RendersTheViewCorrectly()
+        public class OnGetAsync : CheckYourAnswersTests
         {
-            byte[] incomingTrustIdByteArray = null;
-            _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
+            [Fact]
+            public async void GivenIncomingTrustNotSelected_RendersTheViewCorrectly()
+            {
+                byte[] incomingTrustIdByteArray = null;
+                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
 
-            var response = await _subject.OnGetAsync();
+                var response = await _subject.OnGetAsync();
 
-            var viewResponse = Assert.IsType<PageResult>(response);
-            Assert.Null(_subject.IncomingTrust);
+                var viewResponse = Assert.IsType<PageResult>(response);
+                Assert.Null(_subject.IncomingTrust);
+            }
+
+            [Fact]
+            public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
+            {
+                await _subject.OnGetAsync();
+
+                _trustsRepository.Verify(r => r.GetByUkprn(_outgoingTrust.Ukprn), Times.Once);
+                _trustsRepository.Verify(r => r.GetByUkprn(_incomingTrust.Ukprn), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenAllInformationInSession_SetsPropertiesCorrectly()
+            {
+                var response = await _subject.OnGetAsync();
+                var expectedAcademyIds = new List<string> { _academyOne.Ukprn, _academyTwo.Ukprn };
+                var AcademyIds = _subject.OutgoingAcademies.Select(academy => academy.Ukprn);
+
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(_outgoingTrust.Ukprn, _subject.OutgoingTrust.Ukprn);
+                Assert.Equal(_incomingTrust.Ukprn, _subject.IncomingTrust.Ukprn);
+                Assert.Equal(expectedAcademyIds, AcademyIds);
+            }
         }
 
-        [Fact]
-        public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
+        public class OnPostAsync : CheckYourAnswersTests
         {
-            await _subject.OnGetAsync();
+            public OnPostAsync()
+            {
+                var createdProject = new Project
+                {
+                    Urn = "Created URN"
+                };
 
-            _trustsRepository.Verify(r => r.GetByUkprn(_outgoingTrust.Ukprn), Times.Once);
-            _trustsRepository.Verify(r => r.GetByUkprn(_incomingTrust.Ukprn), Times.Once);
-        }
+                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>()))
+                    .ReturnsAsync(new RepositoryResult<Project>
+                    {
+                        Result = createdProject
+                    });
+            }
 
-        [Fact]
-        public async void GivenAllInformationInSession_SetsPropertiesCorrectly()
-        {
-            var response = await _subject.OnGetAsync();
-            var expectedAcademyIds = new List<string> { _academyOne.Ukprn, _academyTwo.Ukprn };
-            var AcademyIds = _subject.OutgoingAcademies.Select(academy => academy.Ukprn);
+            [Fact]
+            public async void GivenSubmittingProject_FetchesProjectInformationFromSession()
+            {
+                await _subject.OnPostAsync();
 
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(_outgoingTrust.Ukprn, _subject.OutgoingTrust.Ukprn);
-            Assert.Equal(_incomingTrust.Ukprn, _subject.IncomingTrust.Ukprn);
-            Assert.Equal(expectedAcademyIds, AcademyIds);
+                var foundByteArray = It.IsAny<byte[]>();
+                _session.Verify(s => s.TryGetValue("OutgoingTrustId", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("IncomingTrustId", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("OutgoingAcademyIds", out foundByteArray), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenSubmittingProjectWithAllValues_InsertsMappedProject()
+            {
+                await _subject.OnPostAsync();
+
+                _projectsRepository.Verify(
+                    r => r.Create(It.Is<Project>(input =>
+                        input.TransferringAcademies[0].OutgoingAcademyUkprn == _academyOne.Ukprn &&
+                        input.TransferringAcademies[0].IncomingTrustUkprn == _incomingTrust.Ukprn &&
+                        input.TransferringAcademies[1].OutgoingAcademyUkprn == _academyTwo.Ukprn &&
+                        input.TransferringAcademies[1].IncomingTrustUkprn == _incomingTrust.Ukprn &&
+                        input.OutgoingTrustUkprn == _outgoingTrust.Ukprn)),
+                    Times.Once);
+            }
+
+            [Fact]
+            public async void GivenProjectIsInserted_RedirectsToProjectFeaturesWithCreatedId()
+            {
+                var createdProjectUrn = "12345";
+                _projectsRepository.Setup(r => r.Create(It.IsAny<Project>())).ReturnsAsync(
+                    new RepositoryResult<Project>
+                    {
+                        Result = new Project { Urn = "12345" }
+                    });
+
+                var response = await _subject.OnPostAsync();
+
+                var responseRedirect = Assert.IsType<RedirectToPageResult>(response);
+                Assert.Equal($"/Projects/{nameof(Pages.Projects.Index)}", responseRedirect.PageName);
+                Assert.Equal(createdProjectUrn, responseRedirect.RouteValues["urn"]);
+            }
         }
     }
 }
