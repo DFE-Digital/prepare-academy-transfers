@@ -54,101 +54,133 @@ namespace Frontend.Tests.PagesTests.Transfers
             };
         }
 
-        [Fact]
-        public async void GivenSearchingByEmptyString_RedirectToTrustNamePageWithAnError()
+        public class OnGetAsync : SearchIncomingTrustTests
         {
-            _subject.SearchQuery = "";
-
-            var response = await _subject.OnGetAsync();
-
-            AssertRedirectToPage(response, "/Transfers/IncomingTrust");
-            Assert.Equal("Enter the incoming trust name", _subject.TempData["ErrorMessage"]);
-        }
-
-        [Fact]
-        public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
-        {
-            _trustsRepository.Setup(r => r.SearchTrusts("Trust name", TrustId)).ReturnsAsync(
-                new RepositoryResult<List<TrustSearchResult>>
-                {
-                    Result = new List<TrustSearchResult>()
-                });
-            _subject.SearchQuery = "Trust name";
-
-            var response = await _subject.OnGetAsync();
-
-            var redirectResponse = AssertRedirectToPage(response, "/Transfers/IncomingTrust");
-            Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
-            Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
-        }
-
-        [Fact]
-        public async Task GivenErrorMessage_AddsErrorToModelState()
-        {
-            _trustsRepository.Setup(r => r.SearchTrusts("Trust name", TrustId)).ReturnsAsync(
-                new RepositoryResult<List<TrustSearchResult>>
-                {
-                    Result = new List<TrustSearchResult>
-                    {
-                        new TrustSearchResult { Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
-                    }
-                });
-            _subject.TempData["ErrorMessage"] = "This is an error message";
-            _subject.SearchQuery = "Trust name";
-
-            await _subject.OnGetAsync();
-
-            Assert.Equal("This is an error message", _subject.ModelState["Trusts"].Errors.First().ErrorMessage);
-        }
-
-        [Fact]
-        // Ensure query string gets bound to model when in the format ?query=search-term
-        public void BindsPropertyIsPresentWithCorrectOptions()
-        {
-            var trustSearchModel = new SearchIncomingTrustModel(_trustsRepository.Object);
-            var attribute = (BindPropertyAttribute)trustSearchModel.GetType()
-                .GetProperty("SearchQuery").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
-
-            Assert.NotNull(attribute);
-            Assert.Equal("query", attribute.Name);
-            Assert.True(attribute.SupportsGet);
-        }
-
-        [Fact]
-        public async Task GivenChangeLink_SetChangeLinkinViewData()
-        {
-            await _subject.OnGetAsync(change: true);
-
-            Assert.True((bool)_subject.ViewData["ChangeLink"]);
-        }
-
-        [Fact]
-        public async Task GivenSearchingByString_SearchesForTrustsAndAssignsToModel()
-        {
-            const string searchQuery = "Trust name";
-            var trusts = new List<TrustSearchResult>
+            [Fact]
+            public async void GivenSearchingByEmptyString_RedirectToTrustNamePageWithAnError()
             {
-                new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
-                new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
-            };
-            _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(
-                new RepositoryResult<List<TrustSearchResult>>
+                _subject.SearchQuery = "";
+
+                var response = await _subject.OnGetAsync();
+
+                AssertRedirectToPage(response, "/Transfers/IncomingTrust");
+                Assert.Equal("Enter the incoming trust name", _subject.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
+            {
+                _trustsRepository.Setup(r => r.SearchTrusts("Trust name", TrustId)).ReturnsAsync(
+                    new RepositoryResult<List<TrustSearchResult>>
+                    {
+                        Result = new List<TrustSearchResult>()
+                    });
+                _subject.SearchQuery = "Trust name";
+
+                var response = await _subject.OnGetAsync();
+
+                var redirectResponse = AssertRedirectToPage(response, "/Transfers/IncomingTrust");
+                Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
+                Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            // Ensure query string gets bound to model when in the format ?query=search-term
+            public void BindsPropertyIsPresentWithCorrectOptions()
+            {
+                var trustSearchModel = new SearchIncomingTrustModel(_trustsRepository.Object);
+                var attribute = (BindPropertyAttribute)trustSearchModel.GetType()
+                    .GetProperty("SearchQuery").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
+
+                Assert.NotNull(attribute);
+                Assert.Equal("query", attribute.Name);
+                Assert.True(attribute.SupportsGet);
+            }
+
+            [Fact]
+            public async Task GivenChangeLink_SetChangeLinkinViewData()
+            {
+                await _subject.OnGetAsync(change: true);
+
+                Assert.True((bool)_subject.ViewData["ChangeLink"]);
+            }
+
+            [Fact]
+            public async Task GivenSearchingByString_SearchesForTrustsAndAssignsToModel()
+            {
+                const string searchQuery = "Trust name";
+                var trusts = new List<TrustSearchResult>
                 {
-                    Result = trusts
-                }
-            );
-            _subject.SearchQuery = searchQuery;
+                    new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
+                    new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
+                };
+                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(
+                    new RepositoryResult<List<TrustSearchResult>>
+                    {
+                        Result = trusts
+                    }
+                );
+                _subject.SearchQuery = searchQuery;
 
-            var result = await _subject.OnGetAsync();
+                var result = await _subject.OnGetAsync();
 
-            _trustsRepository.Verify(r => r.SearchTrusts(searchQuery, TrustId));
-            Assert.Equal(trusts, _subject.Trusts);
+                _trustsRepository.Verify(r => r.SearchTrusts(searchQuery, TrustId));
+                Assert.Equal(trusts, _subject.Trusts);
+            }
+        }
+
+        public class OnPostAsync : SearchIncomingTrustTests
+        {
+            [Fact]
+            public async void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
+            {
+                _subject.SelectedTrustId = TrustId;
+
+                var response = await _subject.OnPostAsync();
+
+                _session.Verify(s => s.Set(
+                    "IncomingTrustId",
+                    It.Is<byte[]>(input =>
+                        Encoding.UTF8.GetString(input) == TrustId
+                    )));
+                AssertRedirectToAction(response, "CheckYourAnswers");
+            }
+
+            [Fact]
+            public async void WhenSelectedAcademyIdsIsNull_UpdatesTheModelStateAndReturnsPageResult()
+            {
+                const string searchQuery = "Trust name";
+                var trusts = new List<TrustSearchResult>
+                {
+                    new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
+                    new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
+                };
+                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(
+                    new RepositoryResult<List<TrustSearchResult>>
+                    {
+                        Result = trusts
+                    }
+                );
+                await _subject.OnGetAsync();
+                _subject.SelectedTrustId = null;
+
+                var result = await _subject.OnPostAsync();
+
+                Assert.False(_subject.ModelState.IsValid);
+            }
         }
 
         private static RedirectToPageResult AssertRedirectToPage(IActionResult response, string pageName)
         {
             var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
             Assert.Equal(pageName, redirectResponse.PageName);
+            return redirectResponse;
+        }
+
+        private static RedirectToActionResult AssertRedirectToAction(IActionResult response, string actionName)
+        {
+            var redirectResponse = Assert.IsType<RedirectToActionResult>(response);
+            Assert.Equal(actionName, redirectResponse.ActionName);
             return redirectResponse;
         }
     }

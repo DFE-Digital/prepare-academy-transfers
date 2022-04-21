@@ -16,7 +16,7 @@
     
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form class="govuk-form" asp-action="ConfirmIncomingTrust" asp-controller="Transfers" method="get">
+        <form class="govuk-form" method="post">
             <input type="text" name="query" value="@Model.SearchQuery" hidden/>
             <input type="text" name="change" value="@ViewData["ChangeLink"].ToString()" hidden/>
             <div class="govuk-form-group @formClasses">
@@ -33,7 +33,7 @@
                         @foreach (var trust in Model.Trusts)
                         {
                             <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="@trust.Ukprn" name="trustId" type="radio" value="@trust.Ukprn" aria-describedby="@trust.Ukprn-hint"/>
+                                <input class="govuk-radios__input" id="@trust.Ukprn" name="SelectedTrustId" type="radio" value="@trust.Ukprn" aria-describedby="@trust.Ukprn-hint"/>
                                 <label class="govuk-label govuk-radios__label" for="@trust.Ukprn">
                                     @trust.TrustName.ToTitleCase() (@trust.Ukprn)
                                 </label>
