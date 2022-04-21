@@ -11,8 +11,8 @@ describe('Tests to check search incoming trust error message', () => {
 
     it('Should not show the outgoing trust in search results', () => {
         cy.get('[data-test="create-transfer"]').click();
-        cy.get('#query').clear();
-        cy.get('#query').type(trustId);
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type(trustId);
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();

@@ -44,7 +44,7 @@ describe("Performance test for preview and download template with multiple acade
             cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click()
 
         cy.get("h1").should('contain.text',"What is the outgoing trust name?");
-            cy.get("#query").clear().type("bishop fraser")
+            cy.get("#SearchQuery").clear().type("bishop fraser")
             cy.get('.govuk-button').should('contain.text', 'Search').click();
         
         cy.get("h1").should('contain.text',"Select the outgoing trust");

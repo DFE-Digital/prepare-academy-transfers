@@ -46,35 +46,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
-        public class TrustNameTests : TransfersControllerTests
-        {
-            [Fact]
-            public void GivenErrorMessageExists_SetErrorInViewData()
-            {
-                _subject.TempData["ErrorMessage"] = "This is an error message";
-                _subject.TrustName();
-
-                Assert.Equal(true, _subject.ViewData["Error.Exists"]);
-                Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
-            }
-
-            [Fact]
-            public void GivenExistingQuery_SetQueryInViewData()
-            {
-                _subject.TrustName("Meow");
-
-                Assert.Equal("Meow", _subject.ViewData["Query"]);
-            }
-
-            [Fact]
-            public void GivenChangeLink_SetChangeLinkinViewData()
-            {
-                _subject.TrustName("Meow", true);
-
-                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
-            }
-        }
-
         public class TrustSearchTests : TransfersControllerTests
         {
             [Fact]
@@ -98,7 +69,7 @@ namespace Frontend.Tests.ControllerTests
             public async void GivenSearchingByEmptyString_RedirectToTrustNamePageWithAnError()
             {
                 var response = await _subject.TrustSearch("");
-                AssertRedirectToAction(response, "TrustName");
+                AssertRedirectToPage(response, "/Transfers/TrustName");
                 Assert.Equal("Enter the outgoing trust name", _subject.TempData["ErrorMessage"]);
             }
 
@@ -110,7 +81,7 @@ namespace Frontend.Tests.ControllerTests
                         new RepositoryResult<List<TrustSearchResult>> {Result = new List<TrustSearchResult>()});
                 var response = await _subject.TrustSearch("Meow");
         
-                var redirectResponse = AssertRedirectToAction(response, "TrustName");
+                var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustName");
                 Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
                 Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
             }
@@ -128,7 +99,7 @@ namespace Frontend.Tests.ControllerTests
                         } }});
                 var response = await _subject.TrustSearch("Meow");
 
-                var redirectResponse = AssertRedirectToAction(response, "TrustName");
+                var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustName");
                 Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
                 Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
             }

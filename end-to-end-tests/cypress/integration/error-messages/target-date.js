@@ -9,8 +9,8 @@ describe('Tests to check target date error messages', () => {
 
     it('Transfer date should be in the future', () => {
         cy.clickDataTest("create-transfer");
-        cy.get('#query').clear();
-        cy.get('#query').type('sd');
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type('sd');
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
