@@ -33,15 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public IActionResult ConfirmOutgoingTrust(string trustId)
-        {
-            HttpContext.Session.SetString(OutgoingTrustIdSessionKey, trustId);
-            HttpContext.Session.Remove(IncomingTrustIdSessionKey);
-            HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
-
-            return RedirectToPage("/Transfers/OutgoingTrustAcademies");
-        }
-
         public async Task<IActionResult> SearchIncomingTrust(string query, bool change = false)
         {
             ViewData["Query"] = query;

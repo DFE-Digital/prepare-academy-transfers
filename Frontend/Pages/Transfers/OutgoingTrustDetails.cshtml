@@ -41,7 +41,7 @@
                 </dd>
             </div>
         </dl>
-        <form asp-action="ConfirmOutgoingTrust" asp-controller="Transfers" asp-route-trustId="@Model.Trust.Ukprn">
+        <form method="post">
             <button class="govuk-button" data-test="confirm-outgoing-trust">Continue</button>
         </form>
     </div>

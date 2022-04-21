@@ -1,14 +1,14 @@
 using Data;
 using Data.Models;
 using Frontend.Validators.Transfers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Frontend.Pages.Transfers
 {
-    public class OutgoingTrustDetailsModel : PageModel
+    public class OutgoingTrustDetailsModel : TransfersPageModel
     {
         private readonly ITrusts _trustsRepository;
 
@@ -40,6 +40,15 @@ namespace Frontend.Pages.Transfers
             Trust = result.Result;
 
             return Page();
+        }
+
+        public IActionResult OnPost()
+        {
+            HttpContext.Session.SetString(OutgoingTrustIdSessionKey, TrustId);
+            HttpContext.Session.Remove(IncomingTrustIdSessionKey);
+            HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
+
+            return RedirectToPage("/Transfers/OutgoingTrustAcademies");
         }
     }
 }
