@@ -42,20 +42,6 @@ namespace Frontend.Controllers
             return RedirectToPage("/Transfers/OutgoingTrustAcademies");
         }
 
-        public IActionResult IncomingTrust(string query = "", bool change = false)
-        {
-            ViewData["Error.Exists"] = false;
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
-
-            if (TempData.Peek("ErrorMessage") == null) return View();
-
-            ViewData["Error.Exists"] = true;
-            ViewData["Error.Message"] = TempData["ErrorMessage"];
-
-            return View();
-        }
-
         public async Task<IActionResult> SearchIncomingTrust(string query, bool change = false)
         {
             ViewData["Query"] = query;
@@ -66,7 +52,7 @@ namespace Frontend.Controllers
             if (!validationQueryResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
-                return RedirectToAction("IncomingTrust");
+                return RedirectToPage("/Transfers/IncomingTrust");
             }
 
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
@@ -78,7 +64,7 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("IncomingTrust", new {query});
+                return RedirectToPage("/Transfers/IncomingTrust", new {query});
             }
 
             var model = new TrustSearch {Trusts = result.Result};
