@@ -33,6 +33,7 @@ namespace Frontend
                     {
                         options.AddServerHeader = false;
                     });
+                    webBuilder.UseUrls("https://0.0.0.0:5001");
                 });
     }
 }

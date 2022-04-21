@@ -27,6 +27,8 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using Frontend.BackgroundServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 
 
 namespace Frontend
@@ -64,12 +66,12 @@ namespace Frontend
                 fv.DisableDataAnnotationsValidation = true;
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-            });
+            // services.AddAuthorization(options =>
+            // {
+            //     options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            //         .RequireAuthenticatedUser()
+            //         .Build();
+            // });
 
             ConfigureRedisConnection(services);
 
@@ -92,18 +94,21 @@ namespace Frontend
                 }
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-            {
-                options.LoginPath = "/session-timed-out";
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                if (string.IsNullOrEmpty(Configuration["CI"]))
-                {
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                }
-            });
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            // {
+            //     options.LoginPath = "/session-timed-out";
+            //     options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
+            //     options.Cookie.HttpOnly = true;
+            //     options.Cookie.IsEssential = true;
+            //     options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
+            //     if (string.IsNullOrEmpty(Configuration["CI"]))
+            //     {
+            //         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            //     }
+            // });
 
             services.AddHealthChecks();
         }
