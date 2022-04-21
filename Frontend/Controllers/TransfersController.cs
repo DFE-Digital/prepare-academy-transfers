@@ -33,42 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public async Task<IActionResult> SearchIncomingTrust(string query, bool change = false)
-        {
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
-
-            var validatorQuery = new IncomingTrustNameValidator();
-            var validationQueryResult = await validatorQuery.ValidateAsync(query);
-            if (!validationQueryResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
-                return RedirectToPage("/Transfers/IncomingTrust");
-            }
-
-            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
-            var result = await _trustsRepository.SearchTrusts(query, outgoingTrustId);
-
-            var validator = new IncomingTrustSearchValidator();
-            var validationResult = await validator.ValidateAsync(result.Result);
-
-            if (!validationResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToPage("/Transfers/IncomingTrust", new {query});
-            }
-
-            var model = new TrustSearch {Trusts = result.Result};
-
-            ViewData["Error.Exists"] = false;
-            if (TempData.Peek("ErrorMessage") == null) return View(model);
-
-            ViewData["Error.Exists"] = true;
-            ViewData["Error.Message"] = TempData["ErrorMessage"];
-
-            return View(model);
-        }
-
         public async Task<IActionResult> ConfirmIncomingTrust(string trustId, string query = "", bool change = false)
         {
             var validator = new IncomingTrustConfirmValidator();
