@@ -9,7 +9,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-controller="Transfers" asp-action="IncomingTrust">Back</a>
+    <a class="govuk-back-link" asp-page="/Transfers/IncomingTrust">Back</a>
 }
 
 <h1 class="govuk-heading-xl">Check trust and academy details</h1>
@@ -110,7 +110,7 @@
                     <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name.ToTitleCase()</dd>
                 }
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-action="IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden"> incoming trust</span></a>
+                    <a class="govuk-link" asp-page="/Transfers/IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden"> incoming trust</span></a>
                 </dd>
             </div>
             <div class="govuk-summary-list__row">
