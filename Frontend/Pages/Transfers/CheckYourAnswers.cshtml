@@ -1,7 +1,6 @@
-@using Frontend.ExtensionMethods
+﻿@page
 @using Helpers
-@model Frontend.Views.Transfers.CheckYourAnswers
-
+@model Frontend.Pages.Transfers.CheckYourAnswersModel
 @{
     ViewBag.Title = "Check trust and academy details";
     Layout = "_Layout";
@@ -119,7 +118,7 @@
                 <dd class="govuk-summary-list__actions"></dd>
             </div>
         </dl>
-        <form method="post" asp-action="SubmitProject">
+        <form method="post" asp-action="SubmitProject" asp-controller="Transfers">
             <button type="submit" data-module="govuk-button" data-prevent-double-click="true" class="govuk-button govuk-button-primary" data-test="create-project">Continue</button>
         </form>
     </div>

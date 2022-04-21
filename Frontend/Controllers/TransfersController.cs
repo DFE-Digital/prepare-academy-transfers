@@ -33,36 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public async Task<IActionResult> CheckYourAnswers()
-        {
-            var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
-            Trust incomingTrust = null;
-            var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
-
-            var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
-
-            var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
-
-            if (incomingTrustIdString != null)
-            {
-                var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
-
-                incomingTrust = incomingTrustResponse.Result;
-            }
-
-            var selectedAcademies = outgoingTrustResponse.Result.Academies
-                .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
-
-            var model = new CheckYourAnswers
-            {
-                IncomingTrust = incomingTrust,
-                OutgoingTrust = outgoingTrustResponse.Result,
-                OutgoingAcademies = selectedAcademies
-            };
-
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> SubmitProject()
         {

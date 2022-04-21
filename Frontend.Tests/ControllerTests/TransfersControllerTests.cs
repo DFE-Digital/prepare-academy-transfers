@@ -46,93 +46,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
-        public class CheckYourAnswersTests : TransfersControllerTests
-        {
-            private readonly Trust _outgoingTrust;
-
-            private readonly Trust _incomingTrust = new Trust
-                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210"};
-
-            private readonly Academy _academyOne = new Academy
-                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385211"};
-
-            private readonly Academy _academyTwo = new Academy
-                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385212"};
-
-            private readonly Academy _academyThree = new Academy
-                {Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385213"};
-
-            public CheckYourAnswersTests()
-            {
-                _outgoingTrust = new Trust
-                {
-                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af", Academies = new List<Academy>
-                    {
-                        _academyOne, _academyTwo, _academyThree
-                    }
-                };
-
-                var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
-                _session.Setup(s => s.TryGetValue("OutgoingTrustId", out outgoingTrustIdByteArray)).Returns(true);
-
-                var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Ukprn);
-                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
-
-                var outgoingAcademyIds = new List<string> {_academyOne.Ukprn, _academyTwo.Ukprn};
-                var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
-                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
-
-                _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Result = _outgoingTrust
-                    });
-
-                _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Result = _incomingTrust
-                    });
-            }
-
-            [Fact]
-            public async void GivenIncomingTrustNotSelected_RendersTheViewCorrectly()
-            {
-                byte[] incomingTrustIdByteArray = null;
-                _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
-
-                var response = await _subject.CheckYourAnswers();
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
-                Assert.Null(viewModel.IncomingTrust);
-            }
-
-            [Fact]
-            public async void GivenAllInformationInSession_CallsTheAPIsWithTheStoredIDs()
-            {
-                await _subject.CheckYourAnswers();
-                _trustsRepository.Verify(r => r.GetByUkprn(_outgoingTrust.Ukprn), Times.Once);
-                _trustsRepository.Verify(r => r.GetByUkprn(_incomingTrust.Ukprn), Times.Once);
-            }
-
-            [Fact]
-            public async void GivenAllInformationInSession_CreatesTheViewModelCorrectly()
-            {
-                var response = await _subject.CheckYourAnswers();
-
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<CheckYourAnswers>(viewResponse.Model);
-
-                Assert.Equal(_outgoingTrust.Ukprn, viewModel.OutgoingTrust.Ukprn);
-                Assert.Equal(_incomingTrust.Ukprn, viewModel.IncomingTrust.Ukprn);
-
-                var expectedAcademyIds = new List<string> {_academyOne.Ukprn, _academyTwo.Ukprn};
-                var viewAcademyIds = viewModel.OutgoingAcademies.Select(academy => academy.Ukprn);
-
-                Assert.Equal(expectedAcademyIds, viewAcademyIds);
-            }
-        }
-
         public class SubmitProjectTests : TransfersControllerTests
         {
             private readonly Trust _outgoingTrust = new Trust
@@ -213,15 +126,6 @@ namespace Frontend.Tests.ControllerTests
         }
 
         #region HelperMethods
-
-        private static void AssertTrustsAreAssignedToTheView(IActionResult result, string trustId, string trustTwoId)
-        {
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var viewModel = Assert.IsType<TrustSearch>(viewResult.ViewData.Model);
-
-            Assert.Equal(trustId, viewModel.Trusts[0].Ukprn);
-            Assert.Equal(trustTwoId, viewModel.Trusts[1].Ukprn);
-        }
 
         private static RedirectToActionResult AssertRedirectToAction(IActionResult response, string actionName)
         {
