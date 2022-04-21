@@ -74,62 +74,13 @@ namespace Frontend.Tests.ControllerTests
             }
         }
 
-        public class IncomingTrust : TransfersControllerTests
-        {
-            private readonly Academy _outgoingAcademy;
-
-            public IncomingTrust()
-            {
-                _outgoingAcademy = new Academy
-                {
-                    Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
-                    Name = "test name"
-                };
-
-                var outgoingAcademyIdByteArray = Encoding.UTF8.GetBytes(_outgoingAcademy.Ukprn);
-                _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdByteArray)).Returns(true);
-
-                _academiesRepository.Setup(r => r.GetAcademyByUkprn(_outgoingAcademy.Ukprn)).ReturnsAsync(
-                    new RepositoryResult<Academy>
-                    {
-                        Result = _outgoingAcademy
-                    });
-            }
-
-            [Fact]
-            public void GivenErrorMessageExists_SetErrorInViewData()
-            {
-                _subject.TempData["ErrorMessage"] = "This is an error message";
-                _subject.IncomingTrust();
-
-                Assert.Equal(true, _subject.ViewData["Error.Exists"]);
-                Assert.Equal("This is an error message", _subject.ViewData["Error.Message"]);
-            }
-
-            [Fact]
-            public void GivenExistingQuery_SetQueryInViewData()
-            {
-                _subject.IncomingTrust("Meow");
-
-                Assert.Equal("Meow", _subject.ViewData["Query"]);
-            }
-
-            [Fact]
-            public void GivenChangeLink_SetChangeLinkinViewData()
-            {
-                _subject.IncomingTrust("Meow", true);
-
-                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
-            }
-        }
-
         public class SearchIncomingTrusts : TransfersControllerTests
         {
             [Fact]
             public async void GivenSearchingByEmptyString_RedirectToTrustNamePageWithAnError()
             {
                 var response = await _subject.SearchIncomingTrust("");
-                AssertRedirectToAction(response, "IncomingTrust");
+                AssertRedirectToPage(response, "/Transfers/IncomingTrust");
                 Assert.Equal("Enter the incoming trust name", _subject.TempData["ErrorMessage"]);
             }
 
@@ -143,7 +94,7 @@ namespace Frontend.Tests.ControllerTests
                     });
 
                 var response = await _subject.SearchIncomingTrust("Trust name");
-                var redirectResponse = AssertRedirectToAction(response, "IncomingTrust");
+                var redirectResponse = AssertRedirectToPage(response, "/Transfers/IncomingTrust");
                 Assert.Equal("Trust name", redirectResponse.RouteValues["query"]);
                 Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
             }
