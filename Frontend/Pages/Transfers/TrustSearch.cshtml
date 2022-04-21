@@ -16,7 +16,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form asp-action="OutgoingTrustDetails" asp-controller="Transfers" method="get" novalidate="">
+        <form asp-page="/Transfers/OutgoingTrustDetails" method="get" novalidate="">
             <input type="text" name="query" value="@Model.SearchQuery" hidden/>
             <input type="text" name="change" value="@ViewData["ChangeLink"].ToString()" hidden/>
             <div class="govuk-form-group @formClasses">
