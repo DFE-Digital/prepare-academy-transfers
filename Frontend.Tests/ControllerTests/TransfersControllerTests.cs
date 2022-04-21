@@ -46,33 +46,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
-        public class ConfirmIncomingTrustTests : TransfersControllerTests
-        {
-            [Fact]
-            public async void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
-            {
-                const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var response = await _subject.ConfirmIncomingTrust(trustId);
-
-                _session.Verify(s => s.Set(
-                    "IncomingTrustId",
-                    It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == trustId
-                    )));
-                AssertRedirectToAction(response, "CheckYourAnswers");
-            }
-            
-            [Fact]
-            public async void GivenNoTrustId_RedirectBackToSearchIncomingTrustPageWithError()
-            {
-                var result = await _subject.ConfirmIncomingTrust(null);
-
-                var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("SearchIncomingTrust", resultRedirect.ActionName);
-                Assert.Equal("Select an incoming trust", _subject.TempData["ErrorMessage"]);
-            }
-        }
-
         public class CheckYourAnswersTests : TransfersControllerTests
         {
             private readonly Trust _outgoingTrust;

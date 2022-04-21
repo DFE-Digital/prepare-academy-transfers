@@ -1,5 +1,6 @@
 using Data;
 using Data.Models;
+using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using Frontend.Validators.Transfers;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,8 @@ namespace Frontend.Pages.Transfers
         public List<TrustSearchResult> Trusts;
         [BindProperty(Name = "query", SupportsGet = true)]
         public string SearchQuery { get; set; } = "";
+        [BindProperty]
+        public string SelectedTrustId { get; set; }
 
         public async Task<IActionResult> OnGetAsync(bool change = false)
         {
@@ -45,15 +48,23 @@ namespace Frontend.Pages.Transfers
                 return SetErrorMessageAndRedirectToTrustName(searchValidationResult);
             }
 
-            // We redirect here with any error messages from the subsequent
-            // steps. This allows us handle errors when we visit the
-            // next step via query.
-            if (TempData.Peek("ErrorMessage") != null)
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var validator = new IncomingTrustConfirmValidator();
+            var validationResults = await validator.ValidateAsync(this);
+            validationResults.AddToModelState(ModelState, null);
+
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(Trusts), (string)TempData["ErrorMessage"]);
+                return await OnGetAsync();
             }
 
-            return Page();
+            HttpContext.Session.SetString(IncomingTrustIdSessionKey, SelectedTrustId);
+
+            return RedirectToAction("CheckYourAnswers", "Transfers");
         }
 
         private IActionResult SetErrorMessageAndRedirectToTrustName(ValidationResult validationResult)

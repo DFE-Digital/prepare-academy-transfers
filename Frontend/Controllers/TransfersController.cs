@@ -33,22 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public async Task<IActionResult> ConfirmIncomingTrust(string trustId, string query = "", bool change = false)
-        {
-            var validator = new IncomingTrustConfirmValidator();
-            var validationResult = await validator.ValidateAsync(trustId);
-
-            if (!validationResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("SearchIncomingTrust", new {query, change});
-            }
-
-            HttpContext.Session.SetString(IncomingTrustIdSessionKey, trustId);
-
-            return RedirectToAction("CheckYourAnswers");
-        }
-
         public async Task<IActionResult> CheckYourAnswers()
         {
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
