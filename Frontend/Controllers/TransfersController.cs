@@ -33,40 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public async Task<IActionResult> TrustSearch(string query, bool change = false)
-        {
-            ViewData["ChangeLink"] = change;
-
-            var validatorQuery = new OutgoingTrustNameValidator();
-            var validationQueryResult = await validatorQuery.ValidateAsync(query);
-            if (!validationQueryResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationQueryResult.Errors.First().ErrorMessage;
-                return RedirectToPage("/Transfers/TrustName");
-            }
-
-            var result = await _trustsRepository.SearchTrusts(query);
-
-            var validator = new OutgoingTrustSearchValidator();
-            var validationResult = await validator.ValidateAsync(result.Result);
-            if (!validationResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToPage("/Transfers/TrustName", new {query});
-            }
-
-            var model = new TrustSearch {Trusts = result.Result.Where(t => t.Academies.Any()).ToList()};
-            ViewData["Query"] = query;
-
-            ViewData["Error.Exists"] = false;
-            if (TempData.Peek("ErrorMessage") == null) return View(model);
-
-            ViewData["Error.Exists"] = true;
-            ViewData["Error.Message"] = TempData["ErrorMessage"];
-
-            return View(model);
-        }
-
         public async Task<IActionResult> OutgoingTrustDetails(string trustId, string query = "", bool change = false)
         {
             ViewData["ChangeLink"] = change;
@@ -77,7 +43,7 @@ namespace Frontend.Controllers
             if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToAction("TrustSearch", new {query, change});
+                return RedirectToPage("/Transfers/TrustSearch", new { query, change });
             }
 
             var result = await _trustsRepository.GetByUkprn(trustId);
