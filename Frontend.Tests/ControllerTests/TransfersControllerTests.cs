@@ -46,34 +46,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
-        public class ConfirmOutgoingTrustTests : TransfersControllerTests
-        {
-            [Fact]
-            public void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
-            {
-                const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var response = _subject.ConfirmOutgoingTrust(trustId);
-
-                _session.Verify(s => s.Set(
-                    "OutgoingTrustId",
-                    It.Is<byte[]>(input =>
-                        Encoding.UTF8.GetString(input) == trustId
-                    )));
-
-                AssertRedirectToPage(response, "/Transfers/OutgoingTrustAcademies");
-            }
-
-            [Fact]
-            public void GivenTrustId_ClearExistingInformationInTheSession()
-            {
-                var trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                _subject.ConfirmOutgoingTrust(trustId);
-
-                _session.Verify(s => s.Remove("IncomingTrustId"));
-                _session.Verify(s => s.Remove("OutgoingAcademyIds"));
-            }
-        }
-
         public class SearchIncomingTrusts : TransfersControllerTests
         {
             [Fact]

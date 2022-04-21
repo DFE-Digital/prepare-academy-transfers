@@ -3,110 +3,160 @@ using Data;
 using Data.Models;
 using Frontend.Pages.Transfers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Session;
 using Moq;
 using System.Linq;
+using System.Text;
 using Xunit;
 
 namespace Frontend.Tests.PagesTests.Transfers
 {
     public class OutgoingTrustDetailsTests
     {
-        private readonly string _trustId;
-        private readonly Trust _foundTrust;
-        private readonly Mock<ITrusts> _trustsRepository;
-        private readonly OutgoingTrustDetailsModel _subject;
+        protected const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
+        protected readonly Mock<ITrusts> trustsRepository;
+        protected readonly Mock<ISession> session;
+        protected readonly OutgoingTrustDetailsModel subject;
 
         public OutgoingTrustDetailsTests()
         {
-            _trustsRepository = new Mock<ITrusts>();
+            trustsRepository = new Mock<ITrusts>();
 
-            _trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-            _foundTrust = new Trust
-            {
-                Ukprn = _trustId,
-                Name = "Example trust"
-            };
+            session = new Mock<ISession>();
 
-            _trustsRepository.Setup(r => r.GetByUkprn(_trustId)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = _foundTrust
-                }
-            );
+            var trustIdByteArray = Encoding.UTF8.GetBytes(trustId);
+            session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
 
+            var sessionFeature = new SessionFeature { Session = session.Object };
             var httpContext = new DefaultHttpContext();
+            httpContext.Features.Set<ISessionFeature>(sessionFeature);
+
             var modelState = new ModelStateDictionary();
             var modelMetadataProvider = new EmptyModelMetadataProvider();
             var viewData = new ViewDataDictionary(modelMetadataProvider, modelState);
             var tempData = new TempDataDictionary(httpContext, Mock.Of<ITempDataProvider>());
+
             var pageContext = new PageContext()
             {
-                ViewData = viewData
+                ViewData = viewData,
+                HttpContext = httpContext
             };
 
-            _subject = new OutgoingTrustDetailsModel(_trustsRepository.Object)
+            subject = new OutgoingTrustDetailsModel(trustsRepository.Object)
             {
                 PageContext = pageContext,
                 TempData = tempData
             };
         }
 
-        [Fact]
-        public async void GivenId_RetrievesTrustAndAssignsToTrustProperty()
+        public class Onget : OutgoingTrustDetailsTests
         {
-            _subject.TrustId = _trustId;
+            private readonly Trust _foundTrust;
 
-            var response = await _subject.OnGetAsync();
+            public Onget()
+            {
+                _foundTrust = new Trust
+                {
+                    Ukprn = trustId,
+                    Name = "Example trust"
+                };
 
-            _trustsRepository.Verify(r => r.GetByUkprn(_trustId), Times.Once);
-            Assert.IsType<PageResult>(response);
-            Assert.Equal(_foundTrust, _subject.Trust);
+                trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
+                    new RepositoryResult<Trust>
+                    {
+                        Result = _foundTrust
+                    }
+                );
+
+            }
+
+            [Fact]
+            public async void GivenId_RetrievesTrustAndAssignsToTrustProperty()
+            {
+                subject.TrustId = trustId;
+
+                var response = await subject.OnGetAsync();
+
+                trustsRepository.Verify(r => r.GetByUkprn(trustId), Times.Once);
+                Assert.IsType<PageResult>(response);
+                Assert.Equal(_foundTrust, subject.Trust);
+            }
+
+            [Fact]
+            // Ensure query string gets bound to model when in the format ?query=trust&trustId=1001
+            public void BindsPropertyIsPresentWithCorrectOptions()
+            {
+                var trustSearchModel = new OutgoingTrustDetailsModel(trustsRepository.Object);
+                var queryAttribute = (BindPropertyAttribute)trustSearchModel.GetType()
+                    .GetProperty("SearchQuery").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
+                var trustIdAttribute = (BindPropertyAttribute)trustSearchModel.GetType()
+                    .GetProperty("TrustId").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
+
+                Assert.NotNull(queryAttribute);
+                Assert.Equal("query", queryAttribute.Name);
+                Assert.True(queryAttribute.SupportsGet);
+
+                Assert.NotNull(trustIdAttribute);
+                Assert.Equal("trustId", trustIdAttribute.Name);
+                Assert.True(trustIdAttribute.SupportsGet);
+            }
+
+            [Fact]
+            public async void GivenChangeLink_AssignChangeLinkToTheView()
+            {
+                await subject.OnGetAsync(change: true);
+
+                Assert.True((bool)subject.ViewData["ChangeLink"]);
+            }
+
+            [Fact]
+            public async void GivenTrustIdIsNotPresent_RedirectToTrustSearchPageWithAnError()
+            {
+                subject.SearchQuery = "";
+
+                var response = await subject.OnGetAsync();
+
+                var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustSearch");
+                Assert.Equal("", redirectResponse.RouteValues["query"]);
+                Assert.Equal("Select the outgoing trust", subject.TempData["ErrorMessage"]);
+            }
         }
 
-        [Fact]
-        // Ensure query string gets bound to model when in the format ?query=trust&trustId=1001
-        public void BindsPropertyIsPresentWithCorrectOptions()
+        public class OnPost : OutgoingTrustDetailsTests
         {
-            var trustSearchModel = new OutgoingTrustDetailsModel(_trustsRepository.Object);
-            var queryAttribute = (BindPropertyAttribute)trustSearchModel.GetType()
-                .GetProperty("SearchQuery").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
-            var trustIdAttribute = (BindPropertyAttribute)trustSearchModel.GetType()
-                .GetProperty("TrustId").GetCustomAttributes(typeof(BindPropertyAttribute), false).First();
+            [Fact]
+            public void GivenTrustId_StoresTheTrustInTheSessionAndRedirects()
+            {
+                subject.TrustId = trustId;
 
-            Assert.NotNull(queryAttribute);
-            Assert.Equal("query", queryAttribute.Name);
-            Assert.True(queryAttribute.SupportsGet);
+                var response = subject.OnPost();
 
-            Assert.NotNull(trustIdAttribute);
-            Assert.Equal("trustId", trustIdAttribute.Name);
-            Assert.True(trustIdAttribute.SupportsGet);
+                session.Verify(s => s.Set(
+                    "OutgoingTrustId",
+                    It.Is<byte[]>(input =>
+                        Encoding.UTF8.GetString(input) == trustId
+                    )));
+                AssertRedirectToPage(response, "/Transfers/OutgoingTrustAcademies");
+            }
+
+            [Fact]
+            public void GivenTrustId_ClearExistingInformationInTheSession()
+            {
+                subject.TrustId = trustId;
+
+                var response = subject.OnPost();
+
+                session.Verify(s => s.Remove("IncomingTrustId"));
+                session.Verify(s => s.Remove("OutgoingAcademyIds"));
+            }
         }
 
-        [Fact]
-        public async void GivenChangeLink_AssignChangeLinkToTheView()
-        {
-            await _subject.OnGetAsync(change: true);
-
-            Assert.True((bool)_subject.ViewData["ChangeLink"]);
-        }
-
-        [Fact]
-        public async void GivenTrustIdIsNotPresent_RedirectToTrustSearchPageWithAnError()
-        {
-            _subject.SearchQuery = "";
-
-            var response = await _subject.OnGetAsync();
-
-            var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustSearch");
-            Assert.Equal("", redirectResponse.RouteValues["query"]);
-            Assert.Equal("Select the outgoing trust", _subject.TempData["ErrorMessage"]);
-        }
-
-        private static RedirectToPageResult AssertRedirectToPage(IActionResult response, string pageName)
+        protected static RedirectToPageResult AssertRedirectToPage(IActionResult response, string pageName)
         {
             var redirectResponse = Assert.IsType<RedirectToPageResult>(response);
             Assert.Equal(pageName, redirectResponse.PageName);
