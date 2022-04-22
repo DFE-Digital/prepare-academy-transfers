@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,10 @@ namespace Frontend.Pages.Home
         public bool HasNextPage => Projects.Count == 10;
         public int PreviousPage => CurrentPage - 1;
         public int NextPage => CurrentPage + 1;
-
+        
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
+        
         [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
 
         public Index(IProjects projectsRepository, ILogger<Index> logger)
@@ -70,7 +74,6 @@ namespace Frontend.Pages.Home
 
             return false;
         }
-
-        public string? ReturnUrl { get; set; }
+        
     }
 }
