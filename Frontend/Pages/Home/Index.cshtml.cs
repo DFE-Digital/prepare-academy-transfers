@@ -66,10 +66,8 @@ namespace Frontend.Pages.Home
 
             if (Url.IsLocalUrl(decodedUrl))
             {
-                {
-                    actionResult = Redirect(ReturnUrl);
-                    return true;
-                }
+                actionResult = Redirect(ReturnUrl);
+                return true;
             }
 
             return false;

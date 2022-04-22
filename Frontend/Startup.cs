@@ -12,7 +12,6 @@ using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Frontend.Validators.Features;
 using Helpers;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -27,8 +26,8 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using Frontend.BackgroundServices;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Identity.Web;
 
 
 namespace Frontend
@@ -92,21 +91,19 @@ namespace Frontend
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
             });
-
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options))
-                .AddCookie(options =>
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "ManageAnAcademyTransfer.Login";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
+                options.SlidingExpiration = true;
+                if (string.IsNullOrEmpty(Configuration["CI"]))
                 {
-                    options.LoginPath = "/session-timed-out";
-                    options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.IsEssential = true;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                    if (string.IsNullOrEmpty(Configuration["CI"]))
-                    {
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    }
-                });
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                }
+            });
             services.AddHealthChecks();
         }
 
