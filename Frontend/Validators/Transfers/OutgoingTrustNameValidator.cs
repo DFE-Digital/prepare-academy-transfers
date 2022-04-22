@@ -1,15 +1,13 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
+using Frontend.Pages.Transfers;
 
 namespace Frontend.Validators.Transfers
 {
-    public class OutgoingTrustNameValidator : AbstractValidator<string>
+    public class OutgoingTrustNameValidator : AbstractValidator<TrustSearchModel>
     {
         public OutgoingTrustNameValidator()
         {
-            RuleFor(x => x)
+            RuleFor(request => request.SearchQuery)
                 .NotEmpty()
                 .WithMessage("Enter the outgoing trust name");
         }

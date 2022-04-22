@@ -52,8 +52,7 @@ namespace Frontend.Tests.PagesTests.Home
         public void OnceLoggedInRedirectToReturnUrl()
         {
             //Arrange
-            _subject.ReturnUrl =
-                $"/{nameof(Controllers.TransfersController).Replace(nameof(Controller),string.Empty)}/{nameof(Controllers.TransfersController.TrustName)}";
+            _subject.ReturnUrl = "path/to/return/to";
             _urlHelper.Setup(s => s.IsLocalUrl(_subject.ReturnUrl)).Returns(true);
             _subject.Url = _urlHelper.Object;
             

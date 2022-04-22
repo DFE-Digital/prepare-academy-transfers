@@ -1,16 +1,15 @@
-﻿using Data.Models;
-using FluentValidation;
-using System.Collections.Generic;
+﻿using FluentValidation;
+using Frontend.Pages.Transfers;
 using System.Linq;
 
 namespace Frontend.Validators.Transfers
 {
-    public class OutgoingTrustSearchValidator : AbstractValidator<List<TrustSearchResult>>
+    public class OutgoingTrustSearchValidator : AbstractValidator<TrustSearchModel>
     {
         public OutgoingTrustSearchValidator()
         {
-            RuleFor(x => x)
-                .Must(x => x.Count > 0 && x.All(r => r.Academies.Count > 0))
+            RuleFor(model => model.Trusts)
+                .Must(x => x.Any())
                 .WithMessage("We could not find any trusts matching your search criteria");
         }
     }

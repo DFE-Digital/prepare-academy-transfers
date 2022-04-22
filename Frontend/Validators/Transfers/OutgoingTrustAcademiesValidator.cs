@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
+using Frontend.Pages.Transfers;
 
 namespace Frontend.Validators.Transfers
 {
-    public class OutgoingTrustAcademiesValidator : AbstractValidator<string[]>
+    public class OutgoingTrustAcademiesValidator : AbstractValidator<OutgoingTrustAcademiesModel>
     {
         public OutgoingTrustAcademiesValidator()
         {
-            RuleFor(x => x)
+            RuleFor(request => request.SelectedAcademyIds)
                 .NotEmpty()
                 .WithMessage("Select an academy");
         }

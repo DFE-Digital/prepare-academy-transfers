@@ -1,7 +1,6 @@
-@using Frontend.ExtensionMethods
+﻿@page
 @using Helpers
-@model Frontend.Views.Transfers.OutgoingTrustDetails
-
+@model Frontend.Pages.Transfers.OutgoingTrustDetailsModel
 @{
     ViewBag.Title = "Outgoing trust details";
     Layout = "_Layout";
@@ -9,7 +8,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-action="TrustName" asp-route-query="@ViewData["Query"]" asp-route-change="@ViewData["ChangeLink"].ToString()">Back</a>
+    <a class="govuk-back-link" asp-page="/Transfers/TrustName" asp-route-query="@Model.SearchQuery" asp-route-change="@ViewData["ChangeLink"].ToString()">Back</a>
 }
 
 <div class="govuk-grid-row">
@@ -42,7 +41,7 @@
                 </dd>
             </div>
         </dl>
-        <form asp-action="ConfirmOutgoingTrust" asp-route-trustId="@Model.Trust.Ukprn">
+        <form method="post">
             <button class="govuk-button" data-test="confirm-outgoing-trust">Continue</button>
         </form>
     </div>

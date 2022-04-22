@@ -12,8 +12,8 @@ describe('Select multiple academies', () => {
     
     it('Check your answers page should have both academies listed', function() {
         cy.clickDataTest("create-transfer");
-        cy.get('#query').clear();
-        cy.get('#query').type(outgoingTrustId);
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type(outgoingTrustId);
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();
@@ -21,8 +21,8 @@ describe('Select multiple academies', () => {
         cy.selectCheckbox(0);
         cy.selectCheckbox(1);
         cy.get('.govuk-button').click();
-        cy.get('#query').clear();
-        cy.get('#query').type(incomingTrustId);
+        cy.get('#SearchQuery').clear();
+        cy.get('#SearchQuery').type(incomingTrustId);
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
         cy.get('.govuk-button').click();

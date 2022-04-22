@@ -1,15 +1,13 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
+using Frontend.Pages.Transfers;
 
 namespace Frontend.Validators.Transfers
 {
-    public class OutgoingTrustConfirmValidator : AbstractValidator<string>
+    public class OutgoingTrustConfirmValidator : AbstractValidator<OutgoingTrustDetailsModel>
     {
         public OutgoingTrustConfirmValidator()
         {
-            RuleFor(x => x)
+            RuleFor(x => x.TrustId)
                 .NotEmpty()
                 .WithMessage("Select the outgoing trust");
         }

@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Data;
 using FluentValidation.TestHelper;
+using Frontend.Pages.Transfers;
 using Frontend.Validators.Transfers;
+using Moq;
 using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.Transfers
 {
     public class IncomingTrustNameValidatorTests
     {
+        private readonly Mock<ITrusts> _trustsRepository;
         private readonly IncomingTrustNameValidator _validator;
+
         public IncomingTrustNameValidatorTests()
         {
             _validator = new IncomingTrustNameValidator();
+            _trustsRepository = new Mock<ITrusts>();
         }
 
         [Theory]
@@ -21,19 +24,27 @@ namespace Frontend.Tests.ValidatorTests.Transfers
         [InlineData(" ")]
         public async void WhenIncomingTrustNameIsEmpty_ShouldSetError(string trustName)
         {
-            var result = await _validator.TestValidateAsync(trustName);
-            result.ShouldHaveValidationErrorFor(x => x)
+            var incomingTrustSearch = new SearchIncomingTrustModel(_trustsRepository.Object)
+            {
+                SearchQuery = trustName
+            };
+            var result = await _validator.TestValidateAsync(incomingTrustSearch);
+
+            result.ShouldHaveValidationErrorFor(x => x.SearchQuery)
                 .WithErrorMessage("Enter the incoming trust name");
         }
 
         [Fact]
         public async void WhenIncomingTrustIdIsNotEmpty_ShouldNotSetError()
         {
-            string trustName = "trust name";
-            var result = await _validator.TestValidateAsync(trustName);
+            var incomingTrustSearch = new SearchIncomingTrustModel(_trustsRepository.Object)
+            {
+                SearchQuery = "trust name"
+            };
+
+            var result = await _validator.TestValidateAsync(incomingTrustSearch);
+
             result.ShouldNotHaveValidationErrorFor(x => x);
         }
-
-
     }
 }
