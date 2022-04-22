@@ -40,7 +40,7 @@
                         </h1>
                     </legend>
 
-                    <span asp-gds-validation-for="FeaturesTypeViewModel.TypeOfTransfer"></span>
+                    <p asp-gds-validation-for="FeaturesTypeViewModel.TypeOfTransfer"></p>
 
                     <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
                         @await Html.PartialAsync("_RadioButtons", Model.TypeOfTransferRadioButtons())
@@ -57,7 +57,7 @@
                                     Enter the type of transfer
                                 </label>
 
-                                <span asp-gds-validation-for="FeaturesTypeViewModel.OtherType"></span>
+                                <p asp-gds-validation-for="FeaturesTypeViewModel.OtherType"></p>
 
                                 <input class="govuk-input govuk-!-width-two-thirds" name='@($"{nameof(Model.FeaturesTypeViewModel)}.{nameof(Model.FeaturesTypeViewModel.OtherType)}")' asp-for="FeaturesTypeViewModel.OtherType">
                             </div>
