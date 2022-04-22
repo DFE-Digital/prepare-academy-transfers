@@ -1,7 +1,6 @@
 ﻿using Data;
 using Data.Models;
 using Frontend.Pages.Transfers;
-using Frontend.Views.Transfers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

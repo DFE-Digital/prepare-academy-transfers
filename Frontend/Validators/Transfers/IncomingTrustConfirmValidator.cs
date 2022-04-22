@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
+using Frontend.Pages.Transfers;
 
 namespace Frontend.Validators.Transfers
 {
-    public class IncomingTrustConfirmValidator : AbstractValidator<string>
+    public class IncomingTrustConfirmValidator : AbstractValidator<SearchIncomingTrustModel>
     {
         public IncomingTrustConfirmValidator()
         {
-            RuleFor(x => x)
+            RuleFor(x => x.SelectedTrustId)
                 .NotEmpty()
                 .WithMessage("Select an incoming trust");
         }
