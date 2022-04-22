@@ -109,7 +109,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 var expectedOutput = 
                     "<div class='govuk-grid-row'>" +
                         "<div class='govuk-grid-column-full'>" +
-                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' tabindex='-1' " +
+                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' " +
                                 "data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>" +
                                 "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
                                 "</h2>" +
@@ -162,7 +162,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 var expectedOutput = 
                     "<div class='govuk-grid-row'>" +
                         "<div class='govuk-grid-column-full'>" +
-                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' tabindex='-1' " +
+                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' " +
                                 "data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>" +
                                 "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
                                 "</h2>" +
