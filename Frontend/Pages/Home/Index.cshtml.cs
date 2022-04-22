@@ -2,15 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
-using Frontend.Filters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace Frontend.Pages.Home
 {
-    [Authorize]
     public class Index : PageModel
     {
         private readonly IProjects _projectsRepository;
