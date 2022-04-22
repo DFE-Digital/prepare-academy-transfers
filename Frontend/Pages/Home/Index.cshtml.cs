@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
@@ -30,6 +31,8 @@ namespace Frontend.Pages.Home
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (RedirectToReturnUrl(out var actionResult)) return actionResult;
+
             var projects = await _projectsRepository.GetProjects(CurrentPage);
 
             _logger.LogInformation("Home page loaded");
@@ -42,5 +45,32 @@ namespace Frontend.Pages.Home
 
             return Page();
         }
+
+        /// <summary>
+        /// If there is a return url, redirects the user to that page after logging in
+        /// </summary>
+        /// <param name="actionResult">action result to redirect to</param>
+        /// <returns>true if redirecting</returns>
+        private bool RedirectToReturnUrl(out IActionResult actionResult)
+        {
+            actionResult = null;
+            var decodedUrl = "";
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {
+                decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+            }
+
+            if (Url.IsLocalUrl(decodedUrl))
+            {
+                {
+                    actionResult = Redirect(ReturnUrl);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public string? ReturnUrl { get; set; }
     }
 }

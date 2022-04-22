@@ -52,6 +52,7 @@
     <_ContentIncludedByDefault Remove="Views\HeadteacherBoard\Download.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Home\Login.cshtml" />
     <_ContentIncludedByDefault Remove="Views\PupilNumbers\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\MicrosoftIdentity\Pages\Account\SignedOut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\EducationPerformance\**" />
