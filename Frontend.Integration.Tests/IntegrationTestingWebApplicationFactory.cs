@@ -44,6 +44,7 @@ namespace Frontend.Integration.Tests
                 config.Sources.Clear();
                 config
                     .AddJsonFile(configPath)
+                    .AddUserSecrets<Program>()
                     .AddInMemoryCollection(new Dictionary<string, string>
                         { { "TRAMS_API_BASE", $"http://localhost:{_port}" } })
                     .AddEnvironmentVariables();
@@ -51,8 +52,8 @@ namespace Frontend.Integration.Tests
 
             builder.ConfigureServices(services =>
             {
-                services.AddAuthentication("Test");
-                services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
+                 services.AddAuthentication("Test");
+                 services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
             });
         }
 

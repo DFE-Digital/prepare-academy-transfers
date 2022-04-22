@@ -14,7 +14,6 @@ using Session = Frontend.Helpers.Session;
 
 namespace Frontend.Controllers
 {
-    [Authorize]
     public class TransfersController : Controller
     {
         private const string OutgoingAcademyIdSessionKey = "OutgoingAcademyIds";

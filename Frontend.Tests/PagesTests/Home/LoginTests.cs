@@ -22,8 +22,6 @@ namespace Frontend.Tests.PagesTests.Home
         {
             //Arrange
             var configuration = new Mock<IConfiguration>();
-            configuration.SetupGet(x => x[It.Is<string>(s=>s == Username)]).Returns(Username);
-            configuration.SetupGet(x => x[It.Is<string>(s => s == Password)]).Returns(Password);
             _subject = new Login(configuration.Object);
             var authenticationService = new Mock<IAuthenticationService>();
             var sp = new Mock<IServiceProvider>();
@@ -34,11 +32,6 @@ namespace Frontend.Tests.PagesTests.Home
                 HttpContext = new DefaultHttpContext(),
             };
             _subject.PageContext.HttpContext.RequestServices = sp.Object;
-            _subject.LoginViewModel = new LoginViewModel()
-            {
-                Username = Username,
-                Password = Password
-            };
         }
         
         [Fact]
@@ -49,14 +42,14 @@ namespace Frontend.Tests.PagesTests.Home
             _subject.Url = _urlHelper.Object;
             
             //Act
-            var result = await _subject.OnPostAsync();
+            var result = _subject.OnGet();
             
             //Assert
             ControllerTestHelpers.AssertResultRedirectsToPage(result,"/Home/Index");
         }
         
         [Fact]
-        public async void GivenCorrectLoginDetailsOnPostRedirectToReturnUrl()
+        public void OnceLoggedInRedirectToReturnUrl()
         {
             //Arrange
             _subject.ReturnUrl =
@@ -65,7 +58,7 @@ namespace Frontend.Tests.PagesTests.Home
             _subject.Url = _urlHelper.Object;
             
             //Act
-            var result = await _subject.OnPostAsync();
+            var result = _subject.OnGet();
             
             //Assert
             var redirectResult = Assert.IsType<RedirectResult>(result);
