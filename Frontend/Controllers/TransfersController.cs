@@ -33,27 +33,6 @@ namespace Frontend.Controllers
             _referenceNumberService = referenceNumberService;
         }
 
-        public async Task<IActionResult> OutgoingTrustDetails(string trustId, string query = "", bool change = false)
-        {
-            ViewData["ChangeLink"] = change;
-
-            var validator = new OutgoingTrustConfirmValidator();
-            var validationResult = await validator.ValidateAsync(trustId);
-
-            if (!validationResult.IsValid)
-            {
-                TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
-                return RedirectToPage("/Transfers/TrustSearch", new { query, change });
-            }
-
-            var result = await _trustsRepository.GetByUkprn(trustId);
-
-            var model = new OutgoingTrustDetails {Trust = result.Result};
-            ViewData["Query"] = query;
-            ViewData["ChangeLink"] = change;
-            return View(model);
-        }
-
         public IActionResult ConfirmOutgoingTrust(string trustId)
         {
             HttpContext.Session.SetString(OutgoingTrustIdSessionKey, trustId);

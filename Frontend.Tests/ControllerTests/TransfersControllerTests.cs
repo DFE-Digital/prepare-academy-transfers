@@ -46,56 +46,6 @@ namespace Frontend.Tests.ControllerTests
                 _trustsRepository.Object, referenceNumberService.Object) {TempData = tempData, ControllerContext = {HttpContext = httpContext}};
         }
 
-        public class OutgoingTrustDetailsTests : TransfersControllerTests
-        {
-            private readonly string _trustId;
-            private readonly Trust _foundTrust;
-
-            public OutgoingTrustDetailsTests()
-            {
-                _trustId = "9a7be920-eaa0-e911-a83f-000d3a3855a3";
-                _foundTrust = new Trust
-                {
-                    Ukprn = _trustId,
-                    Name = "Example trust"
-                };
-
-                _trustsRepository.Setup(r => r.GetByUkprn(_trustId)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Result = _foundTrust
-                    }
-                );
-            }
-
-            [Fact]
-            public async void GivenId_LookupTrustFromAPIAndAssignToView()
-            {
-                var response = await _subject.OutgoingTrustDetails(_trustId);
-
-                _trustsRepository.Verify(r => r.GetByUkprn(_trustId), Times.Once);
-
-                var viewResponse = Assert.IsType<ViewResult>(response);
-                var viewModel = Assert.IsType<OutgoingTrustDetails>(viewResponse.Model);
-
-                Assert.Equal(_foundTrust, viewModel.Trust);
-            }
-
-            [Fact]
-            public async void GivenIdAndQuery_AssignQueryToTheView()
-            {
-                await _subject.OutgoingTrustDetails(_trustId, "Trust name");
-                Assert.Equal("Trust name", _subject.ViewData["Query"]);
-            }
-
-            [Fact]
-            public async void GivenChangeLink_AssignChangeLinkToTheView()
-            {
-                await _subject.OutgoingTrustDetails(_trustId, "Trust name", true);
-                Assert.Equal(true, _subject.ViewData["ChangeLink"]);
-            }
-        }
-
         public class ConfirmOutgoingTrustTests : TransfersControllerTests
         {
             [Fact]
