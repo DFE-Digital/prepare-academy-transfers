@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -31,6 +26,10 @@ namespace Frontend.Helpers.TagHelpers
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             output.AddClass("govuk-summary-list__row", _htmlEncoder);
+            if (ShowAction)
+            {
+                output.AddClass("govuk-summary-list__row--no-actions", _htmlEncoder);
+            }
 
             var dt = new TagBuilder("dt");
             dt.AddCssClass("govuk-summary-list__key");
@@ -49,14 +48,6 @@ namespace Frontend.Helpers.TagHelpers
             output.Content.AppendHtml(dd.RenderStartTag());
             output.Content.AppendHtml(dd.RenderBody());
             output.Content.AppendHtml(dd.RenderEndTag());
-
-            if (ShowAction)
-            {
-                var ddAction = new TagBuilder("dd");
-                ddAction.AddCssClass("govuk-summary-list__actions");
-                output.Content.AppendHtml(ddAction.RenderStartTag());
-                output.Content.AppendHtml(ddAction.RenderEndTag());
-            }
         }
     }
 }

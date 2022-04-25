@@ -44,40 +44,36 @@
             </a>
         </dd>
     </div>
-    <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">
             Advisory Board
         </dt>
         <dd class="govuk-summary-list__value ">
             <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.AdvisoryBoardDate)</displaynodataforemptystring>
         </dd>
-        <dd class="govuk-summary-list__value "/>
     </div>
-    <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">
             Project name
         </dt>
         <dd class="govuk-summary-list__value ">
             <displaynodataforemptystring>@Model.IncomingTrustName</displaynodataforemptystring>
         </dd>
-        <dd class="govuk-summary-list__value "/>
     </div>
-    <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">
             Proposed academy transfer
         </dt>
         <dd class="govuk-summary-list__value ">
             <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.TargetDate)</displaynodataforemptystring>
         </dd>
-        <dd class="govuk-summary-list__value "/>
     </div>
-    <div class="govuk-summary-list__row">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">
             Date the transfer was discussed with outgoing trust
         </dt>
         <dd class="govuk-summary-list__value ">
             <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.FirstDiscussedDate)</displaynodataforemptystring>
         </dd>
-        <dd class="govuk-summary-list__value "/>
     </div>
 </dl>

@@ -25,10 +25,9 @@
                     </a>
                 </dd>
             </div>
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                 <dt class="govuk-summary-list__key">UKPRN</dt>
                 <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Ukprn</dd>
-                <dd class="govuk-summary-list__actions"></dd>
             </div>
         </dl>
         @foreach (var academy in Model.OutgoingAcademies)
@@ -42,47 +41,41 @@
                         <a class="govuk-link" asp-page="/Transfers/OutgoingTrustAcademies" asp-route-change="true">Change <span class="govuk-visually-hidden"> Academy</span></a>
                     </dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">URN</dt>
                     <dd class="govuk-summary-list__value">@academy.Urn</dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">Local Authority</dt>
                     <dd class="govuk-summary-list__value">
                         <displaynodataforemptystring>@academy.LocalAuthorityName</displaynodataforemptystring>
                     </dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">School type</dt>
                     <dd class="govuk-summary-list__value">
                         <displaynodataforemptystring>@academy.EstablishmentType</displaynodataforemptystring>
                     </dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">Faith School</dt>
                     <dd class="govuk-summary-list__value">
                         <displaynodataforemptystring>@academy.FaithSchool</displaynodataforemptystring>
                     </dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">Ofsted Rating</dt>
                     <dd class="govuk-summary-list__value">
                         <displaynodataforemptystring>@academy.LatestOfstedJudgement.OverallEffectiveness</displaynodataforemptystring>
                     </dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">Last inspection</dt>
                     <dd class="govuk-summary-list__value">
                         <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate)</displaynodataforemptystring>
                     </dd>
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">PFI (private finance initiative)</dt>
                     @if (string.IsNullOrEmpty(academy.Pfi))
                     {
@@ -92,7 +85,6 @@
                     {
                         <dd class="govuk-summary-list__value">@academy.Pfi</dd>
                     }
-                    <dd class="govuk-summary-list__actions"></dd>
                 </div>
             </dl>
         }
@@ -112,10 +104,9 @@
                     <a class="govuk-link" asp-page="/Transfers/IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden"> incoming trust</span></a>
                 </dd>
             </div>
-            <div class="govuk-summary-list__row">
+            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                 <dt class="govuk-summary-list__key">UKPRN</dt>
                 <dd class="govuk-summary-list__value">@Model.IncomingTrust?.Ukprn</dd>
-                <dd class="govuk-summary-list__actions"></dd>
             </div>
         </dl>
         <form method="post">
