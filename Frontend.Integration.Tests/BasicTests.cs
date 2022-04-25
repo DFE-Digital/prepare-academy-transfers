@@ -11,7 +11,7 @@ namespace Frontend.Integration.Tests
     {
         public BasicTests(IntegrationTestingWebApplicationFactory factory) : base(factory) { }
 
-        [Theory(Skip = "Requires Azure AD authentication")]
+        [Theory]
         [InlineData("/")]
         public async Task Should_be_success_result_on_get(string url)
         {

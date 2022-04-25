@@ -40,7 +40,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
-        [Fact(Skip = "Requires Azure AD authentication")]
+        [Fact]
         public async Task GivenNoRationale_ShouldBeNotStarted()
         {
             var project = GetProject(p =>
