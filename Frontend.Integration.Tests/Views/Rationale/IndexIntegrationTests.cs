@@ -10,7 +10,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
         {
         }
 
-        [Fact]
+        [Fact(Skip = "Requires Azure AD authentication")]
         public async Task GivenRationale_ShouldBeCompleted()
         {
             var project = GetProject();
@@ -25,7 +25,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
-        [Fact]
+        [Fact(Skip = "Requires Azure AD authentication")]
         public async Task GivenPartRationale_ShouldBeInProgress()
         {
             var project = GetProject(p => p.Rationale.IsCompleted = false);
@@ -40,7 +40,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
-        [Fact]
+        [Fact(Skip = "Requires Azure AD authentication")]
         public async Task GivenNoRationale_ShouldBeNotStarted()
         {
             var project = GetProject(p =>
