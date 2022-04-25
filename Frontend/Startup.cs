@@ -27,6 +27,7 @@ using StackExchange.Redis;
 using System;
 using Frontend.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 
 
@@ -174,6 +175,12 @@ namespace Frontend
             {
                 app.UseHttpsRedirection();
             }
+            
+            //For Azure AD redirect uri to remain https
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
             app.UseStaticFiles();
 
