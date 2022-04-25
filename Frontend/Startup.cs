@@ -175,12 +175,16 @@ namespace Frontend
             {
                 app.UseHttpsRedirection();
             }
-            
+
             //For Azure AD redirect uri to remain https
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            var forwardOptions = new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
+                ForwardedHeaders = ForwardedHeaders.All,
+                RequireHeaderSymmetry = false
+            };
+            forwardOptions.KnownNetworks.Clear();
+            forwardOptions.KnownProxies.Clear();
+            app.UseForwardedHeaders(forwardOptions);
 
             app.UseStaticFiles();
 
