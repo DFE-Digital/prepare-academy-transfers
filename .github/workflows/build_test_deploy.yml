@@ -7,7 +7,8 @@ env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE: dfe-digital/academy-transfers-api
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-
+  AZUREAD__CLIENTID: ${{ secrets.AZUREAD_CLIENTID }}
+  AZUREAD__TENANTID: ${{ secrets.AZUREAD_TENANTID }}
 jobs:
   test:
     runs-on: ubuntu-latest
