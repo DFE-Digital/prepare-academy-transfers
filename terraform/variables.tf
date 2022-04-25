@@ -54,6 +54,16 @@ variable app_trams_api_key {
 	description = "Application variable for the TRAMS API Key"
 }
 
+variable app_azuread_clientid {
+  type = string
+  description = "Application variable for Azure AD client id"
+}
+
+variable app_azuread_tenantid {
+  type = string
+  description = "Application variable for Azure AD tenant id"
+}
+
 variable app_username {
 	type = string
 	description = "Application variable for the username for the service"

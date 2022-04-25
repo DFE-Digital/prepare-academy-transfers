@@ -1,15 +1,15 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Data;
 using Data.Models;
-using Frontend.Filters;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace Frontend.Pages.Home
 {
-    [NotAuthorizedRedirectToLoginPage]
     public class Index : PageModel
     {
         private readonly IProjects _projectsRepository;
@@ -20,7 +20,10 @@ namespace Frontend.Pages.Home
         public bool HasNextPage => Projects.Count == 10;
         public int PreviousPage => CurrentPage - 1;
         public int NextPage => CurrentPage + 1;
-
+        
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
+        
         [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
 
         public Index(IProjects projectsRepository, ILogger<Index> logger)
@@ -32,6 +35,8 @@ namespace Frontend.Pages.Home
 
         public async Task<IActionResult> OnGetAsync()
         {
+            if (RedirectToReturnUrl(out var actionResult)) return actionResult;
+
             var projects = await _projectsRepository.GetProjects(CurrentPage);
 
             _logger.LogInformation("Home page loaded");
@@ -44,5 +49,29 @@ namespace Frontend.Pages.Home
 
             return Page();
         }
+
+        /// <summary>
+        /// If there is a return url, redirects the user to that page after logging in
+        /// </summary>
+        /// <param name="actionResult">action result to redirect to</param>
+        /// <returns>true if redirecting</returns>
+        private bool RedirectToReturnUrl(out IActionResult actionResult)
+        {
+            actionResult = null;
+            var decodedUrl = "";
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {
+                decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+            }
+
+            if (Url.IsLocalUrl(decodedUrl))
+            {
+                actionResult = Redirect(ReturnUrl);
+                return true;
+            }
+
+            return false;
+        }
+        
     }
 }

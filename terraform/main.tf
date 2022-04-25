@@ -21,6 +21,8 @@ resource cloudfoundry_app worker_app {
 		"ASPNETCORE_URLS"        = "http://+:8080"
 		"TRAMS_API_BASE"         = var.app_trams_api_base
 		"TRAMS_API_KEY"          = var.app_trams_api_key
+		"AZUREAD__CLIENTID"	 = var.app_azuread_clientid
+		"AZUREAD__TENANTID"	 = var.app_azuread_tenantid
 		"USERNAME"               = var.app_username
 		"PASSWORD"               = var.app_password
 		"SENTRY_RELEASE"         = "academy-transfers-api:${var.cf_app_image_tag}"

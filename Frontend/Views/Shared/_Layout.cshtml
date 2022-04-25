@@ -66,7 +66,7 @@
         @if (Context.User.Identity.IsAuthenticated)
         {
             <div class="govuk-grid-column-one-third">
-                <a asp-page="/Home/Login" asp-page-handler="SignOut" class="govuk-header__link dfe-sign-out">Sign out</a>
+                <a href="https://login.microsoftonline.com/common/oauth2/v2.0/logout" class="govuk-header__link dfe-sign-out">Sign out</a>
             </div>
         }
     </div>

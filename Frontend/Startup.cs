@@ -12,7 +12,6 @@ using Frontend.Services;
 using Frontend.Services.Interfaces;
 using Frontend.Validators.Features;
 using Helpers;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -27,6 +26,8 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using Frontend.BackgroundServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Identity.Web;
 
 
 namespace Frontend
@@ -49,7 +50,6 @@ namespace Frontend
                     options.Conventions.AuthorizeFolder("/");
                     options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
                     options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
-                    options.Conventions.AllowAnonymousToPage("/Home/Login");
                 })
                 .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
 
@@ -91,20 +91,19 @@ namespace Frontend
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
             });
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
+            services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/session-timed-out";
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
+                options.Cookie.Name = "ManageAnAcademyTransfer.Login";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
+                options.SlidingExpiration = true;
                 if (string.IsNullOrEmpty(Configuration["CI"]))
                 {
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 }
             });
-
             services.AddHealthChecks();
         }
 
@@ -127,10 +126,10 @@ namespace Frontend
             {
                 var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
                 var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
-                redisPass = (string)redisCredentials?["password"];
-                redisHost = (string)redisCredentials?["host"];
-                redisPort = (string)redisCredentials?["port"];
-                redisTls = (bool)redisCredentials?["tls_enabled"];
+                redisPass = (string) redisCredentials?["password"];
+                redisHost = (string) redisCredentials?["host"];
+                redisPort = (string) redisCredentials?["port"];
+                redisTls = (bool) redisCredentials?["tls_enabled"];
             }
             else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
             {
@@ -143,7 +142,7 @@ namespace Frontend
             var redisConfigurationOptions = new ConfigurationOptions()
             {
                 Password = redisPass,
-                EndPoints = { $"{redisHost}:{redisPort}" },
+                EndPoints = {$"{redisHost}:{redisPort}"},
                 Ssl = redisTls
             };
 
@@ -199,19 +198,21 @@ namespace Frontend
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
-            
+
             services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
             services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
             services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
             services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
             services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-            services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
+            services
+                .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
+                    TramsEducationPerformanceMapper>();
             services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
             services.AddTransient<ITrusts, TramsTrustsRepository>();
             services.AddTransient<IAcademies, TramsEstablishmentRepository>();
             services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
             services.AddTransient<IProjects, TramsProjectsRepository>();
-            
+
             services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<PerformanceDataChannel>();
