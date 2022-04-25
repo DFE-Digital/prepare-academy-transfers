@@ -36,7 +36,7 @@ namespace Frontend.Helpers.TagHelpers
             var sb = new StringBuilder();
             sb.Append("<div class='govuk-grid-row'>");
             sb.Append("<div class='govuk-grid-column-full'>");
-            sb.Append("<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' tabindex='-1' data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>");
+            sb.Append("<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>");
             sb.Append("<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>");
             sb.Append("There is a problem");
             sb.Append("</h2>");

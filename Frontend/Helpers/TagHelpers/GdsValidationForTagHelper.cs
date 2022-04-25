@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Frontend.Helpers.TagHelpers
 {
-    [HtmlTargetElement("span", Attributes = GdsValidationForAttributeName)]
+    [HtmlTargetElement("p", Attributes = GdsValidationForAttributeName)]
     public class GdsValidationForTagHelper : TagHelper
     {
         private const string GdsValidationForAttributeName = "asp-gds-validation-for";
@@ -30,7 +30,7 @@ namespace Frontend.Helpers.TagHelpers
             ViewContext.ViewData.ModelState.TryGetValue(For.Name, out var modelStateEntry);
             if (modelStateEntry != null && modelStateEntry.Errors.Count > 0)
             {
-                var builder = new TagBuilder("span");
+                var builder = new TagBuilder("p");
                 builder.Attributes.Add("id", For.Name+"-error");
                 builder.AddCssClass("govuk-error-message");
                 output.MergeAttributes(builder);
