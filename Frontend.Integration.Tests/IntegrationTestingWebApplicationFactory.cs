@@ -44,7 +44,6 @@ namespace Frontend.Integration.Tests
                 config.Sources.Clear();
                 config
                     .AddJsonFile(configPath)
-                    .AddUserSecrets<Program>()
                     .AddInMemoryCollection(new Dictionary<string, string>
                         { { "TRAMS_API_BASE", $"http://localhost:{_port}" } })
                     .AddEnvironmentVariables();
