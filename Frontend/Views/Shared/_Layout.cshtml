@@ -1,5 +1,7 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration _configuration
+@using System.Security.Principal
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
 <head>
@@ -63,12 +65,12 @@
                 </span>
             </a>
         </div>
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-            <div class="govuk-grid-column-one-third">
-                <a href="https://login.microsoftonline.com/common/oauth2/v2.0/logout" class="govuk-header__link dfe-sign-out">Sign out</a>
-            </div>
-        }
+     @if (User.Identity.IsAuthenticated)
+     {
+         <div class="govuk-grid-column-one-third">
+             <a class="govuk-header__link dfe-sign-out" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
+         </div>
+     }
     </div>
 </header>
 

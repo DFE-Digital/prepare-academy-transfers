@@ -26,9 +26,9 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using Frontend.BackgroundServices;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 
 namespace Frontend
@@ -56,7 +56,8 @@ namespace Frontend
 
             services.AddControllersWithViews(options => options.Filters.Add(
                     new AutoValidateAntiforgeryTokenAttribute()))
-                .AddSessionStateTempDataProvider();
+                .AddSessionStateTempDataProvider()
+                .AddMicrosoftIdentityUI();
 
 
             services.AddFluentValidation(fv =>
