@@ -3,9 +3,6 @@ name: .NET
 on:
   pull_request:
     branches: [ main ]
-env:
-  AZUREAD__CLIENTID: ${{ secrets.AZUREAD_CLIENTID }}
-  AZUREAD__TENANTID: ${{ secrets.AZUREAD_TENANTID }}
 jobs:
   build:
 

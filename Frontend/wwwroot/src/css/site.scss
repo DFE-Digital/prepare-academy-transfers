@@ -1,5 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+$govuk-new-link-styles: true;
 @import "../../node_modules/govuk-frontend/govuk/all.scss";
 @import "../../node_modules/@ministryofjustice/frontend/moj/all.scss";
 @import "summary-card";
