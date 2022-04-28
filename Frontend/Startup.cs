@@ -92,7 +92,7 @@ namespace Frontend
                 }
             });
             
-            services.AddMicrosoftIdentityWebAppAuthentication(Configuration, "AzureAd", cookieScheme: "Authentication");
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
 
             services.AddHealthChecks();
         }
