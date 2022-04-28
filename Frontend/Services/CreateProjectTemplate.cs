@@ -378,7 +378,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                        new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                         new TextElement
                         {
                             Value =
@@ -517,7 +517,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Score)
@@ -533,7 +533,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -588,7 +588,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -607,7 +607,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -662,7 +662,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8Maths)
@@ -678,7 +678,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -733,7 +733,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageA8EBacc)
@@ -749,7 +749,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -810,7 +810,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -829,7 +829,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -903,7 +903,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Score)
@@ -939,7 +939,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1016,7 +1016,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1035,7 +1035,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0]
@@ -1087,7 +1087,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Maths)
@@ -1103,7 +1103,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1155,7 +1155,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(ks4Results[0].LAAverageP8Ebacc)
@@ -1171,7 +1171,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedStringResult(
@@ -1223,7 +1223,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} Average", Bold = true},
+                    new TextElement {Value = $"{academy.LocalAuthorityName} {LocalAuthority} average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(ks4Results[0].LAEnteringEbacc.ToString())
@@ -1239,7 +1239,7 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "National Average", Bold = true},
+                    new TextElement {Value = "National average", Bold = true},
                     new TextElement
                     {
                         Value = PerformanceDataHelpers.GetFormattedResult(
@@ -1331,7 +1331,7 @@ namespace Frontend.Services
                     },
                     new[]
                     {
-                        new TextElement {Value = "National Average", Bold = true},
+                        new TextElement {Value = "National average", Bold = true},
                         new TextElement
                         {
                             Value =
