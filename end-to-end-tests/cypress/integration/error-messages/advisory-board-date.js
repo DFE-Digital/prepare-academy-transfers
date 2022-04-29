@@ -8,6 +8,7 @@ describe('Tests to check advisory board date error messages', () => {
     });
 
     it('Advisory board date should be in the future', () => {
+        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type('sd');

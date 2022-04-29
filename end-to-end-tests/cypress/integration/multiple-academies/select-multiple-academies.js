@@ -11,6 +11,7 @@ describe('Select multiple academies', () => {
     });
     
     it('Check your answers page should have both academies listed', function() {
+        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type(outgoingTrustId);

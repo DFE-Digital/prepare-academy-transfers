@@ -8,6 +8,8 @@
     });
 
     it('First discussed date should be in the past', () => {
+        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
+
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type('sd');
