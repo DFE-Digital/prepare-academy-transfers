@@ -17,6 +17,5 @@
 "clientId": "8b708989-014c-451c-a564-b2bed382f61f",
 "experimentalSessionAndOrigin": true,
 "modifyObstructiveCode":true,
-"chromeWebSecurity" : false,
-"pageLoadTimeout" : 180000
+"chromeWebSecurity" : false
 }
