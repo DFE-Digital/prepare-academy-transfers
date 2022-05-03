@@ -84,7 +84,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("Closure of a SAT and the academy joining a MAT", projectTemplateModel.TypeOfTransfer);
                 Assert.Equal("Strengthening governance\nStronger leadership\n", projectTemplateModel.TransferBenefits);
                 Assert.Equal("Yes", projectTemplateModel.AnyRisks);
-                Assert.Equal(getTestInformationForProject.Project.Benefits.OtherFactors.Select(o => o.Value),
+                Assert.Equal(getTestInformationForProject.Project.Benefits.OtherFactors.OrderBy(o => o.Key).Select(o => o.Value),
                     projectTemplateModel.OtherFactors.Select(o => o.Item2));
                 Assert.Equal(academy.PupilNumbers.GirlsOnRoll, projectTemplateAcademyModel.GirlsOnRoll);
                 Assert.Equal(academy.PupilNumbers.BoysOnRoll, projectTemplateAcademyModel.BoysOnRoll);
