@@ -44,7 +44,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.visit("https://academy-transfers-dev.london.cloudapps.digital");
 
         cy.get("h1").should('contain.text',"Manage an academy transfer");
-        /*
+        
             cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
         
         cy.get("h1").should('contain.text',"What is the outgoing trust name?");
@@ -123,7 +123,6 @@ describe("Creating and editing an academy transfer", function () {
             cy.get('button[data-test="create-project"]').click()
 
         cy.get("h1").should('contain.text',"Burnt Ash Primary School");
-        */
     });
 
     it.skip("Edit an Academy Transfer", function () {     
