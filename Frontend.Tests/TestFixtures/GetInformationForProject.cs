@@ -43,7 +43,7 @@ namespace Frontend.Tests.TestFixtures
                     OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>
                     {
                         {TransferBenefits.OtherFactor.HighProfile, "testHighProfile"},
-                        {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"},
+                        {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"}
                     },
                     AnyRisks = true
                 },
