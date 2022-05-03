@@ -67,7 +67,7 @@ Cypress.Commands.add("login",()=> {
         body: {
          grant_type: "client_credentials",
           client_id: Cypress.config("clientId"),
-          client_secret: Cypress.config("clientSecret"),
+          client_secret: Cypress.env("clientSecret"),
         },
       }).then(response => {
         const ADALToken = response.body.access_token;
