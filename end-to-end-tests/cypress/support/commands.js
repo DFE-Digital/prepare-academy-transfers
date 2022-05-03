@@ -62,7 +62,7 @@ Cypress.Commands.add("login",()=> {
 
     cy.request({
         method: "POST",
-        url: `https://login.microsoftonline.com/${Cypress.env("tenantId")}/oauth2/token`,
+        url: `https://login.microsoftonline.com/${Cypress.config("tenantId")}/oauth2/token`,
         form: true,
         body: {
          grant_type: "client_credentials",
@@ -73,9 +73,9 @@ Cypress.Commands.add("login",()=> {
         const ADALToken = response.body.access_token;
         const expiresOn = response.body.expires_on;
     
-        localStorage.setItem("adal.token.keys", `${Cypress.env("clientId")}|`);
-        localStorage.setItem(`adal.access.token.key${Cypress.env("clientId")}`, ADALToken);
-        localStorage.setItem(`adal.expiration.key${Cypress.env("clientId")}`, expiresOn);
+        localStorage.setItem("adal.token.keys", `${Cypress.config("clientId")}|`);
+        localStorage.setItem(`adal.access.token.key${Cypress.config("clientId")}`, ADALToken);
+        localStorage.setItem(`adal.expiration.key${Cypress.config("clientId")}`, expiresOn);
         localStorage.setItem("adal.idtoken", ADALToken);
       });
 

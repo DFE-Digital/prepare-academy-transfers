@@ -8,8 +8,8 @@ describe('Tests to check search incoming trust error message', () => {
 
     it('Logs into AD', () => {
         cy.login();
-        //cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
     });
+    
     it('Should not show the outgoing trust in search results', () => {
         cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
         cy.get('[data-test="create-transfer"]').click();
