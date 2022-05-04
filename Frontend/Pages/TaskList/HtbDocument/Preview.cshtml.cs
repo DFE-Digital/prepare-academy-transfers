@@ -42,12 +42,10 @@ namespace Frontend.Pages.TaskList.HtbDocument
             FeaturesSummaryViewModel = new Index(null)
             {
                 Urn = project.Urn,
-                IsSubjectToRddOrEsfaIntervention = project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention,
                 TypeOfTransfer = project.Features.TypeOfTransfer,
                 OtherTypeOfTransfer = project.Features.OtherTypeOfTransfer,
                 OutgoingAcademyUrn = project.OutgoingAcademyUrn,
                 WhoInitiatedTheTransfer = project.Features.WhoInitiatedTheTransfer,
-                InterventionDetails = project.Features.ReasonForTransfer.InterventionDetails,
                 ReturnToPreview = true
             };
 

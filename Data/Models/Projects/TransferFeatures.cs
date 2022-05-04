@@ -4,11 +4,6 @@ namespace Data.Models.Projects
 {
     public class TransferFeatures
     {
-        public TransferFeatures()
-        {
-            ReasonForTransfer = new ReasonForTransfer();
-        }
-
         public enum ProjectInitiators
         {
             Empty = 0,
@@ -41,12 +36,8 @@ namespace Data.Models.Projects
         }
 
         public ProjectInitiators WhoInitiatedTheTransfer { get; set; }
-        public ReasonForTransfer ReasonForTransfer { get; set; }
         public TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         public bool? IsCompleted { get; set; }
-
-        public bool HasTransferReasonBeenSet => ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null;
-        public bool IsTransferSubjectToIntervention => ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true;
     }
 }

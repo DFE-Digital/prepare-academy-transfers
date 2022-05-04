@@ -51,8 +51,6 @@ namespace Frontend.Services
                 WhoInitiatedTheTransfer =
                     EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features
                         .WhoInitiatedTheTransfer),
-                ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Yes" : "No",
-                MoreDetailsAboutTheTransfer = project.Features.ReasonForTransfer.InterventionDetails,
                 TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),

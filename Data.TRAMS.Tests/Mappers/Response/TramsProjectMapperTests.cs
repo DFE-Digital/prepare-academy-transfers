@@ -158,10 +158,6 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedType, result.Features.TypeOfTransfer);
             Assert.Equal(toMap.Features.OtherTransferTypeDescription, result.Features.OtherTypeOfTransfer);
             Assert.Equal(expectedInitiator, result.Features.WhoInitiatedTheTransfer);
-            Assert.Equal(toMap.Features.RddOrEsfaIntervention,
-                result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention);
-            Assert.Equal(toMap.Features.RddOrEsfaInterventionDetail,
-                result.Features.ReasonForTransfer.InterventionDetails);
             Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 

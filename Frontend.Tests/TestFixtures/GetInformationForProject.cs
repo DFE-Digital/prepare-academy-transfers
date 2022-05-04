@@ -26,11 +26,6 @@ namespace Frontend.Tests.TestFixtures
                 Features = new TransferFeatures
                 {
                     WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
-                    ReasonForTransfer = new ReasonForTransfer
-                    {
-                        IsSubjectToRddOrEsfaIntervention = true,
-                        InterventionDetails = "intervention"
-                    },
                     TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
                 },
                 Benefits = new TransferBenefits

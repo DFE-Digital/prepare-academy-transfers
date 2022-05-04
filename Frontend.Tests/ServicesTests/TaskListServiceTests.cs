@@ -163,8 +163,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true}
+                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust
                     }
                 };
                 yield return new object[]
@@ -180,7 +179,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferFeatures
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
                         IsCompleted = false
                     }
@@ -194,7 +192,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferFeatures
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
                         IsCompleted = true
                     }
@@ -204,7 +201,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferFeatures
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
                         TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure,
                         IsCompleted = true
                     }
@@ -214,7 +210,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferFeatures
                     {
                         WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = false},
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat,
                         IsCompleted = true
                     }
