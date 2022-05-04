@@ -50,7 +50,7 @@ namespace Frontend.Services
 
         private ProjectStatuses GetFeatureTransferStatus(Project project)
         {
-            if (project.Features.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty &&
+            if (project.Features.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty &&
                                                          project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
                 return ProjectStatuses.NotStarted;
 

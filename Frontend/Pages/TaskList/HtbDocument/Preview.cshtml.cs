@@ -45,7 +45,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 TypeOfTransfer = project.Features.TypeOfTransfer,
                 OtherTypeOfTransfer = project.Features.OtherTypeOfTransfer,
                 OutgoingAcademyUrn = project.OutgoingAcademyUrn,
-                WhoInitiatedTheTransfer = project.Features.WhoInitiatedTheTransfer,
+                ReasonForTheTransfer = project.Features.ReasonForTheTransfer,
                 ReturnToPreview = true
             };
 

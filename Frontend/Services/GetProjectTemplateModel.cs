@@ -49,8 +49,8 @@ namespace Frontend.Services
                     project.Dates.HasFirstDiscussedDate),
 
                 WhoInitiatedTheTransfer =
-                    EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features
-                        .WhoInitiatedTheTransfer),
+                    EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features
+                        .ReasonForTheTransfer),
                 TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),

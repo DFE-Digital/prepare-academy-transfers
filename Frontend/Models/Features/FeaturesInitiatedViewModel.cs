@@ -8,6 +8,6 @@ namespace Frontend.Models.Features
 {
     public class FeaturesInitiatedViewModel
     {
-        public TransferFeatures.ProjectInitiators WhoInitiated { get; set; }
+        public TransferFeatures.ReasonForTheTransferTypes WhoInitiated { get; set; }
     }
 }

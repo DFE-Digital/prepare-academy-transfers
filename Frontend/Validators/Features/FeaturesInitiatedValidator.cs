@@ -9,7 +9,7 @@ namespace Frontend.Validators.Features
         public FeaturesInitiatedValidator()
         {
             RuleFor(x => x.WhoInitiated)
-                .NotEqual(TransferFeatures.ProjectInitiators.Empty)
+                .NotEqual(TransferFeatures.ReasonForTheTransferTypes.Empty)
                 .WithMessage("Select who initiated the project");
         }
     }

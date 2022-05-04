@@ -75,8 +75,8 @@ namespace Data.TRAMS.Mappers.Response
             {
                 TypeOfTransfer = EnumHelpers<TransferFeatures.TransferTypes>.Parse(input.Features.TypeOfTransfer),
                 OtherTypeOfTransfer = input.Features.OtherTransferTypeDescription,
-                WhoInitiatedTheTransfer =
-                    EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(input.Features.WhoInitiatedTheTransfer),
+                ReasonForTheTransfer =
+                    EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.Parse(input.Features.WhoInitiatedTheTransfer),
                 IsCompleted = input.Features.IsCompleted
             };
         }

@@ -25,7 +25,7 @@ namespace Frontend.Tests.TestFixtures
                 Dates = new TransferDates {Htb = "01/01/2020", FirstDiscussed = "01/01/2020", Target = "01/01/2020"},
                 Features = new TransferFeatures
                 {
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
+                    ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
                     TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
                 },
                 Benefits = new TransferBenefits

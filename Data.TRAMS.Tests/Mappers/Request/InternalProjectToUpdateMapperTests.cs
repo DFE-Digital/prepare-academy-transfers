@@ -43,7 +43,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     TypeOfTransfer = TransferFeatures.TransferTypes.Other,
                     OtherTypeOfTransfer = "Other type of transfer",
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe
+                    ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe
                 },
                 
                 Rationale = new TransferRationale
@@ -165,7 +165,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
         {
             Assert.Equal(toMap.Features.TypeOfTransfer.ToString(), result.Features.TypeOfTransfer);
             Assert.Equal(toMap.Features.OtherTypeOfTransfer, result.Features.OtherTransferTypeDescription);
-            Assert.Equal(toMap.Features.WhoInitiatedTheTransfer.ToString(), result.Features.WhoInitiatedTheTransfer);
+            Assert.Equal(toMap.Features.ReasonForTheTransfer.ToString(), result.Features.WhoInitiatedTheTransfer);
             Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 

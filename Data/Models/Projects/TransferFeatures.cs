@@ -4,13 +4,14 @@ namespace Data.Models.Projects
 {
     public class TransferFeatures
     {
-        public enum ProjectInitiators
+        public enum ReasonForTheTransferTypes
         {
             Empty = 0,
 
             [Display(Name = "Department for Education")]
             Dfe,
-            [Display(Name = "Outgoing trust")] OutgoingTrust
+            [Display(Name = "Outgoing trust")]
+            OutgoingTrust
         }
 
         public enum TransferTypes
@@ -35,7 +36,7 @@ namespace Data.Models.Projects
             Other
         }
 
-        public ProjectInitiators WhoInitiatedTheTransfer { get; set; }
+        public ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
         public TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         public bool? IsCompleted { get; set; }

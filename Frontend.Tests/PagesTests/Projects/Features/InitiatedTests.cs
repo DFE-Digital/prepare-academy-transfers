@@ -30,7 +30,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         [Fact]
         public async void GivenUrnAndInitiator_GetsProjectFromRepository()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ProjectInitiators.Dfe;
+            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Dfe;
             await _subject.OnPostAsync();
             ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
@@ -38,7 +38,7 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         [Fact]
         public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ProjectInitiators.Dfe;
+            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Dfe;
             var request = await _subject.OnPostAsync();
 
             ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
@@ -46,23 +46,23 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         }
 
         [Theory]
-        [InlineData(TransferFeatures.ProjectInitiators.Dfe)]
-        [InlineData(TransferFeatures.ProjectInitiators.OutgoingTrust)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Dfe)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust)]
         public async void GivenUrnAndWhoInitiated_AssignsTheCorrectEnumAndUpdatesTheProject(
-            TransferFeatures.ProjectInitiators whoInitiated)
+            TransferFeatures.ReasonForTheTransferTypes whoInitiated)
         {
             _subject.FeaturesInitiatedViewModel.WhoInitiated = whoInitiated;
             await _subject.OnPostAsync();
             ProjectRepository.Verify(
                 r => r.Update(
-                    It.Is<Project>(project => project.Features.WhoInitiatedTheTransfer == whoInitiated))
+                    It.Is<Project>(project => project.Features.ReasonForTheTransfer == whoInitiated))
             );
         }
 
         [Fact]
         public async void GivenEmptyInitiator_DoNotUpdateTheModel()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ProjectInitiators.Empty;
+            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Empty;
 
             await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(),
                 _subject.FeaturesInitiatedViewModel,

@@ -8,13 +8,13 @@
                     Who initiated this academy transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
-                    @if (Model.WhoInitiatedTheTransfer == TransferFeatures.ProjectInitiators.Empty)
+                    @if (Model.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty)
                     {
                         <span class="dfe-empty-tag">Empty</span>
                     }
                     else
                     {
-                        var displayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(Model.WhoInitiatedTheTransfer);
+                        var displayName = EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(Model.ReasonForTheTransfer);
                         @displayName
                     }
                 </dd>

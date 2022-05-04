@@ -17,9 +17,9 @@ namespace Frontend.Tests.ValidatorTests.Features
         }
 
         [Theory]
-        [InlineData(TransferFeatures.ProjectInitiators.Dfe)]
-        [InlineData(TransferFeatures.ProjectInitiators.OutgoingTrust)]
-        public async void GivenValidWhoInitiated_FeaturesInitiated_IsValid(TransferFeatures.ProjectInitiators projectInitiator)
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Dfe)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust)]
+        public async void GivenValidWhoInitiated_FeaturesInitiated_IsValid(TransferFeatures.ReasonForTheTransferTypes projectInitiator)
         {
             var vm = new FeaturesInitiatedViewModel
             {
@@ -31,8 +31,8 @@ namespace Frontend.Tests.ValidatorTests.Features
         }
 
         [Theory]
-        [InlineData(TransferFeatures.ProjectInitiators.Empty)]
-        public async void GivenInvalidWhoInitiated_FeaturesInitiated_InvalidWithErrorMessage(TransferFeatures.ProjectInitiators projectInitiator)
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Empty)]
+        public async void GivenInvalidWhoInitiated_FeaturesInitiated_InvalidWithErrorMessage(TransferFeatures.ReasonForTheTransferTypes projectInitiator)
         {
             var vm = new FeaturesInitiatedViewModel
             {

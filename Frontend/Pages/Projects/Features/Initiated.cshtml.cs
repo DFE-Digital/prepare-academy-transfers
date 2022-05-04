@@ -29,7 +29,7 @@ namespace Frontend.Pages.Projects.Features
             
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
-            FeaturesInitiatedViewModel.WhoInitiated = projectResult.Features.WhoInitiatedTheTransfer;
+            FeaturesInitiatedViewModel.WhoInitiated = projectResult.Features.ReasonForTheTransfer;
             return Page();
         }
 
@@ -42,7 +42,7 @@ namespace Frontend.Pages.Projects.Features
                 return Page();
             }
             
-            project.Result.Features.WhoInitiatedTheTransfer = FeaturesInitiatedViewModel.WhoInitiated;
+            project.Result.Features.ReasonForTheTransfer = FeaturesInitiatedViewModel.WhoInitiated;
             
             await _projects.Update(project.Result);
             
@@ -55,17 +55,17 @@ namespace Frontend.Pages.Projects.Features
             
         }
 
-        public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ProjectInitiators selected)
+        public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ReasonForTheTransferTypes selected)
         {
             var values =
-                EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayableValues(TransferFeatures.ProjectInitiators
+                EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayableValues(TransferFeatures.ReasonForTheTransferTypes
                     .Empty);
 
             var result = values.Select(value => new RadioButtonViewModel
             {
                 Value = value.ToString(),
                 Name = "WhoInitiated",
-                DisplayName = EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(value),
+                DisplayName = EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(value),
                 Checked = selected == value
             }).ToList();
 

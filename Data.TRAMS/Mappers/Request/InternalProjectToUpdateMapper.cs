@@ -52,7 +52,7 @@ namespace Data.TRAMS.Mappers.Request
             {
                 TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
                 OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
-                WhoInitiatedTheTransfer = input.Features.WhoInitiatedTheTransfer.ToString(),
+                WhoInitiatedTheTransfer = input.Features.ReasonForTheTransfer.ToString(),
                 IsCompleted = input.Features.IsCompleted
             };
         }

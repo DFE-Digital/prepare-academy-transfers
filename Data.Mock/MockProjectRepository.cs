@@ -116,7 +116,7 @@ namespace Data.Mock
                 },
                 Features = new TransferFeatures
                 {
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
+                    ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
                     TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
                 },
                 Dates = new TransferDates

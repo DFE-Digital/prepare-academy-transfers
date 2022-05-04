@@ -11,7 +11,7 @@ namespace Frontend.Pages.Projects.Features
     {
         private readonly IProjects _projects;
 
-        public TransferFeatures.ProjectInitiators WhoInitiatedTheTransfer { get; set; }
+        public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
         public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         [BindProperty]
@@ -31,7 +31,7 @@ namespace Frontend.Pages.Projects.Features
             TypeOfTransfer = projectResult.Features.TypeOfTransfer;
             OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer;
             OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn;
-            WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer;
+            ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
             {
                 IsCompleted = projectResult.Features.IsCompleted ?? false,
@@ -54,7 +54,7 @@ namespace Frontend.Pages.Projects.Features
         }
 
         private static bool FeaturesSectionDataIsPopulated(Project project) =>
-            project.Features.WhoInitiatedTheTransfer != TransferFeatures.ProjectInitiators.Empty &&
+            project.Features.ReasonForTheTransfer != TransferFeatures.ReasonForTheTransferTypes.Empty &&
             project.Features.TypeOfTransfer != TransferFeatures.TransferTypes.Empty;
     }
 }
