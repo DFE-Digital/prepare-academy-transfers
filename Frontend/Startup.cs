@@ -71,7 +71,7 @@ namespace Frontend
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .RequireClaim(ClaimTypes.Role,"transfers.create")
+                    .RequireClaim(ClaimTypes.Role,Configuration.GetSection("AzureAd")["AllowedRoles"].Split(','))
                     .Build();
             });
 
