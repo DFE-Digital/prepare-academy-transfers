@@ -25,6 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
+using System.Security.Claims;
 using Frontend.BackgroundServices;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
@@ -68,8 +69,9 @@ namespace Frontend
 
             services.AddAuthorization(options =>
             {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
+                    .RequireClaim(ClaimTypes.Role,"transfers.create")
                     .Build();
             });
 
