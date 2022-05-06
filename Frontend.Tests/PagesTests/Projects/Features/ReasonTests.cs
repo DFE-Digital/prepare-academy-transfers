@@ -1,8 +1,8 @@
 ﻿using Data.Models;
+using Data.Models.Projects;
 using Frontend.Models;
 using Frontend.Tests.Helpers;
 using Frontend.Validators.Features;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
@@ -12,7 +12,6 @@ namespace Frontend.Tests.PagesTests.Projects.Features
     public class ReasonTests : BaseTests
     {
         private readonly Pages.Projects.Features.Reason _subject;
-
         public ReasonTests()
         {
             _subject = new Pages.Projects.Features.Reason(ProjectRepository.Object)
@@ -21,86 +20,68 @@ namespace Frontend.Tests.PagesTests.Projects.Features
             };
         }
 
-        public class ReasonGetTests : ReasonTests
+        [Fact]
+        public async void GivenUrn_GetsProjectFromRepository()
         {
-            [Fact]
-            public async void GivenUrn_GetsProject()
-            {
-                await _subject.OnGetAsync();
-                ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
-            }
+            await _subject.OnGetAsync();
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
 
-        public class ReasonPostTests : ReasonTests
+        [Fact]
+        public async void GivenUrnAndReason_GetsProjectFromRepository()
         {
-            [Fact]
-            public async void GivenSubjectToInterventionAndReason_UpdatesTheProject()
-            {
-                _subject.FeaturesReasonViewModel.IsSubjectToIntervention = true;
-                _subject.FeaturesReasonViewModel.MoreDetail = "More detail";
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
+            await _subject.OnPostAsync();
+            ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
+        }
 
-                await _subject.OnPostAsync();
-                ProjectRepository.Verify(r => r.Update(It.Is<Project>(project =>
-                    project.Urn == ProjectUrn0001 &&
-                    project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == true &&
-                    project.Features.ReasonForTransfer.InterventionDetails == "More detail")), Times.Once);
-            }
+        [Fact]
+        public async void GivenUrnAndReason_RedirectsProjectToFeaturesSummary()
+        {
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
+            var request = await _subject.OnPostAsync();
 
-            [Fact]
-            public async void GivenSubjectToInterventionAndReason_RedirectsToSummaryPage()
-            {
-                _subject.FeaturesReasonViewModel.IsSubjectToIntervention = true;
-                _subject.FeaturesReasonViewModel.MoreDetail = "More detail";
+            ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
+                new RouteValueDictionary(new {Urn = ProjectUrn0001}));
+        }
 
-                var result = await _subject.OnPostAsync();
-                ControllerTestHelpers.AssertResultRedirectsToPage(result, "/Projects/Features/Index",
-                    new RouteValueDictionary(new {Urn = ProjectUrn0001}));
-            }
+        [Theory]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Dfe)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust)]
+        public async void GivenUrnAndReason_AssignsTheCorrectEnumAndUpdatesTheProject(
+            TransferFeatures.ReasonForTheTransferTypes reason)
+        {
+            _subject.ReasonForTheTransfer = reason;
+            await _subject.OnPostAsync();
+            ProjectRepository.Verify(
+                r => r.Update(
+                    It.Is<Project>(project => project.Features.ReasonForTheTransfer == reason))
+            );
+        }
 
-            [Fact]
-            public async void GivenNotSubjectToInterventionAndNoReason_UpdatesTheProject()
-            {
-                _subject.FeaturesReasonViewModel.IsSubjectToIntervention = false;
-                await _subject.OnPostAsync();
-                ProjectRepository.Verify(r => r.Update(It.Is<Project>(project =>
-                    project.Urn == ProjectUrn0001 &&
-                    project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention == false &&
-                    project.Features.ReasonForTransfer.InterventionDetails == string.Empty)), Times.Once);
-            }
+        [Fact]
+        public async void GivenEmptyReason_DoNotUpdateTheModel()
+        {
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Empty;
 
-            [Fact]
-            public async void GivenNothingSubmitted_DoesNotUpdateTheProject()
-            {
-                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(),
-                    _subject.FeaturesReasonViewModel, _subject.ModelState);
-                await _subject.OnPostAsync();
+            await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
-            }
+            //Assert
+            ProjectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
+        }
 
-            [Fact]
-            public async void GivenNothingSubmitted_PageResultReturned()
-            {
-                await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesReasonValidator(),
-                    _subject.FeaturesReasonViewModel, _subject.ModelState);
-                var resultPost = await _subject.OnPostAsync();
+        [Fact]
+        public async void GivenReturnToPreview_RedirectsToPreviewPage()
+        {
+            _subject.ReturnToPreview = true;
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
 
-                Assert.IsType<PageResult>(resultPost);
-                Assert.False(_subject.ModelState.IsValid);
-            }
+            var response = await _subject.OnPostAsync();
 
-            [Fact]
-            public async void GivenReturnToPreview_RedirectsToPreviewPage()
-            {
-                _subject.ReturnToPreview = true;
-
-                var response = await _subject.OnPostAsync();
-
-                ControllerTestHelpers.AssertResultRedirectsToPage(
-                    response, Links.HeadteacherBoard.Preview.PageName,
-                    new RouteValueDictionary(new {Urn = "0001"})
-                );
-            }
+            ControllerTestHelpers.AssertResultRedirectsToPage(
+                response, Links.HeadteacherBoard.Preview.PageName,
+                new RouteValueDictionary(new {Urn = ProjectUrn0001})
+            );
         }
     }
 }

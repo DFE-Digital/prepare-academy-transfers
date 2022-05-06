@@ -63,7 +63,7 @@ namespace Frontend
 
             services.AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<FeaturesInitiatedValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
                 fv.DisableDataAnnotationsValidation = true;
             });
 

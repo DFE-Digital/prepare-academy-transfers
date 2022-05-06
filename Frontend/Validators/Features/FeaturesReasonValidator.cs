@@ -1,15 +1,17 @@
-﻿using FluentValidation;
-using Frontend.Models.Features;
+﻿using Data.Models.Projects;
+using FluentValidation;
+using Frontend.Pages.Projects.Features;
 
 namespace Frontend.Validators.Features
 {
-    public class FeaturesReasonValidator : AbstractValidator<FeaturesReasonViewModel>
+    public class FeaturesReasonValidator : AbstractValidator<Reason>
     {
         public FeaturesReasonValidator()
         {
-            RuleFor(x => x.IsSubjectToIntervention)
+            RuleFor(x => x.ReasonForTheTransfer)
                 .NotNull()
-                .WithMessage("Select whether or not the transfer is subject to intervention");
+                .NotEqual(TransferFeatures.ReasonForTheTransferTypes.Empty)
+                .WithMessage("Select a reason for the transfer");
         }
     }
 }

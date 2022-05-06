@@ -149,29 +149,28 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe
                     }
                 };
                 yield return new object[]
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust
                     }
                 };
                 yield return new object[]
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true}
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust
                     }
                 };
                 yield return new object[]
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust,
                         TypeOfTransfer = TransferFeatures.TransferTypes.Other
                     }
                 };
@@ -179,8 +178,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust,
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
                         IsCompleted = false
                     }
@@ -193,8 +191,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust,
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
                         IsCompleted = true
                     }
@@ -203,8 +200,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.OutgoingTrust,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = true},
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust,
                         TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure,
                         IsCompleted = true
                     }
@@ -213,8 +209,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
-                        ReasonForTransfer = new ReasonForTransfer {IsSubjectToRddOrEsfaIntervention = false},
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat,
                         IsCompleted = true
                     }
@@ -223,7 +218,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferFeatures
                     {
-                        WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
+                        ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
                         TypeOfTransfer = TransferFeatures.TransferTypes.MatToMat,
                         IsCompleted = true
                     }
@@ -244,7 +239,7 @@ namespace Frontend.Tests.ServicesTests
             {
                 FoundProjectFromRepo.Features = new TransferFeatures()
                 {
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Empty
+                    ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Empty
                 };
                 _subject.BuildTaskListStatuses(_index);
                 Assert.Equal(ProjectStatuses.NotStarted, _index.FeatureTransferStatus);

@@ -86,7 +86,7 @@ namespace Frontend.Integration.Tests.Fixtures
                     TypeOfTransfer = TransferFeatures.TransferTypes.TrustsMerging.ToString(),
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe.ToString(),
+                    WhoInitiatedTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe.ToString(),
                     RddOrEsfaInterventionDetail = "Intervention details",
                     IsCompleted = true
                 },
