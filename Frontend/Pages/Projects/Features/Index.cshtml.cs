@@ -10,16 +10,8 @@ namespace Frontend.Pages.Projects.Features
     public class Index : CommonPageModel
     {
         private readonly IProjects _projects;
-        public bool? IsSubjectToRddOrEsfaIntervention { get; set; }
 
-        public bool HasTransferReasonBeenSet =>
-            IsSubjectToRddOrEsfaIntervention != null;
-
-        public bool IsTransferSubjectToIntervention =>
-            IsSubjectToRddOrEsfaIntervention == true;
-
-        public TransferFeatures.ProjectInitiators WhoInitiatedTheTransfer { get; set; }
-        public string InterventionDetails { get; set; }
+        public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
         public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         [BindProperty]
@@ -36,13 +28,10 @@ namespace Frontend.Pages.Projects.Features
             
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
-            IsSubjectToRddOrEsfaIntervention =
-                projectResult.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention;
             TypeOfTransfer = projectResult.Features.TypeOfTransfer;
             OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer;
             OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn;
-            WhoInitiatedTheTransfer = projectResult.Features.WhoInitiatedTheTransfer;
-            InterventionDetails = projectResult.Features.ReasonForTransfer.InterventionDetails;
+            ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
             {
                 IsCompleted = projectResult.Features.IsCompleted ?? false,
@@ -65,8 +54,7 @@ namespace Frontend.Pages.Projects.Features
         }
 
         private static bool FeaturesSectionDataIsPopulated(Project project) =>
-            project.Features.WhoInitiatedTheTransfer != TransferFeatures.ProjectInitiators.Empty &&
-            project.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention != null &&
+            project.Features.ReasonForTheTransfer != TransferFeatures.ReasonForTheTransferTypes.Empty &&
             project.Features.TypeOfTransfer != TransferFeatures.TransferTypes.Empty;
     }
 }

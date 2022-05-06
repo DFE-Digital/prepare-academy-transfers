@@ -116,13 +116,8 @@ namespace Data.Mock
                 },
                 Features = new TransferFeatures
                 {
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe,
+                    ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
                     TypeOfTransfer = TransferFeatures.TransferTypes.MatClosure,
-                    ReasonForTransfer = new ReasonForTransfer
-                    {
-                        IsSubjectToRddOrEsfaIntervention = true,
-                        InterventionDetails = "Intervention details",
-                    }
                 },
                 Dates = new TransferDates
                 {

@@ -78,9 +78,6 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal(academy.GeneralInformation.DistanceToSponsorHq,
                     projectTemplateAcademyModel.DistanceFromTheAcademyToTheTrustHeadquarters);
                 Assert.Equal(academy.GeneralInformation.MpAndParty, projectTemplateAcademyModel.MpAndParty);
-                Assert.Equal("Department for Education", projectTemplateModel.WhoInitiatedTheTransfer);
-                Assert.Equal("Yes", projectTemplateModel.ReasonForTransfer);
-                Assert.Equal("intervention", projectTemplateModel.MoreDetailsAboutTheTransfer);
                 Assert.Equal("Closure of a SAT and the academy joining a MAT", projectTemplateModel.TypeOfTransfer);
                 Assert.Equal("Strengthening governance\nStronger leadership\n", projectTemplateModel.TransferBenefits);
                 Assert.Equal("Yes", projectTemplateModel.AnyRisks);
