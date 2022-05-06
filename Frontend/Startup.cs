@@ -70,12 +70,11 @@ namespace Frontend
                 fv.DisableDataAnnotationsValidation = true;
             });
 
+            var policyBuilder = SetupAuthorizationPolicyBuilder();
+
             services.AddAuthorization(options =>
             {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .RequireClaim(ClaimTypes.Role, Configuration.GetSection("AzureAd")["AllowedRoles"].Split(','))
-                    .Build();
+                options.DefaultPolicy = policyBuilder.Build();
             });
 
             ConfigureRedisConnection(services);
@@ -117,6 +116,24 @@ namespace Frontend
                     }
                 });
             services.AddHealthChecks();
+        }
+
+        /// <summary>
+        /// Builds Authorization policy
+        /// Ensure authenticated user and restrict roles if they are provided in configuration
+        /// </summary>
+        /// <returns>AuthorizationPolicyBuilder</returns>
+        private AuthorizationPolicyBuilder SetupAuthorizationPolicyBuilder()
+        {
+            var policyBuilder = new AuthorizationPolicyBuilder();
+            policyBuilder.RequireAuthenticatedUser();
+            var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
+            if (!string.IsNullOrWhiteSpace(allowedRoles))
+            {
+                policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
+            }
+
+            return policyBuilder;
         }
 
         private void ConfigureRedisConnection(IServiceCollection services)
