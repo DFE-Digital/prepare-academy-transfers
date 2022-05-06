@@ -9,12 +9,12 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.Features
 {
-    public class InitiatedTests : BaseTests
+    public class ReasonTests : BaseTests
     {
-        private readonly Pages.Projects.Features.Initiated _subject;
-        public InitiatedTests()
+        private readonly Pages.Projects.Features.Reason _subject;
+        public ReasonTests()
         {
-            _subject = new Pages.Projects.Features.Initiated(ProjectRepository.Object)
+            _subject = new Pages.Projects.Features.Reason(ProjectRepository.Object)
             {
                 Urn = ProjectUrn0001
             };
@@ -28,17 +28,17 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         }
 
         [Fact]
-        public async void GivenUrnAndInitiator_GetsProjectFromRepository()
+        public async void GivenUrnAndReason_GetsProjectFromRepository()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Dfe;
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
             await _subject.OnPostAsync();
             ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
         }
 
         [Fact]
-        public async void GivenUrnAndInitiator_RedirectsProjectToFeaturesSummary()
+        public async void GivenUrnAndReason_RedirectsProjectToFeaturesSummary()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Dfe;
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
             var request = await _subject.OnPostAsync();
 
             ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
@@ -48,25 +48,22 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         [Theory]
         [InlineData(TransferFeatures.ReasonForTheTransferTypes.Dfe)]
         [InlineData(TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust)]
-        public async void GivenUrnAndWhoInitiated_AssignsTheCorrectEnumAndUpdatesTheProject(
-            TransferFeatures.ReasonForTheTransferTypes whoInitiated)
+        public async void GivenUrnAndReason_AssignsTheCorrectEnumAndUpdatesTheProject(
+            TransferFeatures.ReasonForTheTransferTypes reason)
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = whoInitiated;
+            _subject.ReasonForTheTransfer = reason;
             await _subject.OnPostAsync();
             ProjectRepository.Verify(
                 r => r.Update(
-                    It.Is<Project>(project => project.Features.ReasonForTheTransfer == whoInitiated))
+                    It.Is<Project>(project => project.Features.ReasonForTheTransfer == reason))
             );
         }
 
         [Fact]
-        public async void GivenEmptyInitiator_DoNotUpdateTheModel()
+        public async void GivenEmptyReason_DoNotUpdateTheModel()
         {
-            _subject.FeaturesInitiatedViewModel.WhoInitiated = TransferFeatures.ReasonForTheTransferTypes.Empty;
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Empty;
 
-            await ControllerTestHelpers.ValidateAndAddToModelState(new FeaturesInitiatedValidator(),
-                _subject.FeaturesInitiatedViewModel,
-                _subject.ModelState);
             await _subject.OnPostAsync();
 
             //Assert
@@ -77,6 +74,8 @@ namespace Frontend.Tests.PagesTests.Projects.Features
         public async void GivenReturnToPreview_RedirectsToPreviewPage()
         {
             _subject.ReturnToPreview = true;
+            _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
+
             var response = await _subject.OnPostAsync();
 
             ControllerTestHelpers.AssertResultRedirectsToPage(

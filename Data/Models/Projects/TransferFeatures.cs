@@ -6,12 +6,17 @@ namespace Data.Models.Projects
     {
         public enum ReasonForTheTransferTypes
         {
+            // We store the enum name as a string in the API. This data was previously
+            // used for a "Who initatied the transfer?" question, which is why some of the
+            // member names relate to that. We may want to update these at a later date.
             Empty = 0,
 
-            [Display(Name = "Department for Education")]
+            [Display(Name = "Intervention")]
             Dfe,
-            [Display(Name = "Outgoing trust")]
-            OutgoingTrust
+            [Display(Name = "Initiated by trust")]
+            OutgoingTrust,
+            [Display(Name = "Sponsor or trust closure")]
+            SponsorOrTrustClosure
         }
 
         public enum TransferTypes

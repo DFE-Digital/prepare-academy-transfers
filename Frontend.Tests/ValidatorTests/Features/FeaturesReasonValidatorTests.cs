@@ -1,8 +1,10 @@
-﻿using FluentValidation.TestHelper;
+﻿using Data;
+using Data.Models.Projects;
+using FluentValidation.TestHelper;
 using Frontend.Models.Features;
-using Frontend.Tests.Helpers;
+using Frontend.Pages.Projects.Features;
 using Frontend.Validators.Features;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Moq;
 using Xunit;
 
 namespace Frontend.Tests.ValidatorTests.Features
@@ -10,36 +12,41 @@ namespace Frontend.Tests.ValidatorTests.Features
     public class FeaturesReasonValidatorTests
     {
         private readonly FeaturesReasonValidator _featuresReasonValidator;
+        private readonly Mock<IProjects> _mockProjects;
+
         public FeaturesReasonValidatorTests()
         {
             _featuresReasonValidator = new FeaturesReasonValidator();
+            _mockProjects = new Mock<IProjects>();
         }
 
         [Theory]
-        [InlineData(false, "More Detail")]
-        [InlineData(true, "More Detail")]
-        [InlineData(false, null)]
-        [InlineData(true, null)]
-        public async void GivenSubjectToIntervention_FeaturesReasonValidator_IsValid(bool subjectToIntervention, string moreDetail)
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Dfe)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.OutgoingTrust)]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.SponsorOrTrustClosure)]
+        public async void GivenValidWhoInitiated_FeaturesInitiated_IsValid(TransferFeatures.ReasonForTheTransferTypes reason)
         {
-            var vm = new FeaturesReasonViewModel()
+            var model = new Reason(_mockProjects.Object)
             {
-                IsSubjectToIntervention = subjectToIntervention,
-                MoreDetail = moreDetail
+                ReasonForTheTransfer = reason,
             };
-            var result = await _featuresReasonValidator.TestValidateAsync(vm);
-            result.ShouldNotHaveValidationErrorFor(x => x.IsSubjectToIntervention);
 
+            var result = await _featuresReasonValidator.TestValidateAsync(model);
+            result.ShouldNotHaveValidationErrorFor(x => x.ReasonForTheTransfer);
         }
 
-        [Fact]
-        public async void GivenNoSubjectToIntervention_FeaturesReasonValidator_InvalidWithErrorMessage()
+        [Theory]
+        [InlineData(TransferFeatures.ReasonForTheTransferTypes.Empty)]
+        public async void GivenInvalidWhoInitiated_FeaturesInitiated_InvalidWithErrorMessage(TransferFeatures.ReasonForTheTransferTypes reason)
         {
-            var vm = new FeaturesReasonViewModel();
-            var result = await _featuresReasonValidator.TestValidateAsync(vm);
+            var model = new Reason(_mockProjects.Object)
+            {
+                ReasonForTheTransfer = reason,
+            };
 
-            result.ShouldHaveValidationErrorFor(x => x.IsSubjectToIntervention)
-                .WithErrorMessage("Select whether or not the transfer is subject to intervention");
+            var result = await _featuresReasonValidator.TestValidateAsync(model);
+            result.ShouldHaveValidationErrorFor(x => x.ReasonForTheTransfer)
+                .WithErrorMessage("Select a reason for the transfer");
         }
     }
 }

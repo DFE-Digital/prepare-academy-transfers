@@ -1,9 +1,9 @@
-﻿@page "/project/{urn}/features/initiated"
+﻿@page "/project/{urn}/features/reason"
 @using Frontend.Pages.Projects.Features
-@model Frontend.Pages.Projects.Features.Initiated
+@model Frontend.Pages.Projects.Features.Reason
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Who initiated the academy transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Reason for the transfer";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
 }
@@ -31,13 +31,13 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            Who initiated the academy transfer?
+                            What is the reason for this transfer?
                         </h1>
                     </legend>
 
-                    <p asp-gds-validation-for="FeaturesInitiatedViewModel.WhoInitiated"></p>
+                    <p asp-gds-validation-for="@Model.ReasonForTheTransfer"></p>
 
-                    @await Html.PartialAsync("_RadioButtons", Initiated.InitiatedRadioButtons(Model.FeaturesInitiatedViewModel.WhoInitiated))
+                    @await Html.PartialAsync("_RadioButtons", Reason.ReasonRadioButtons(@Model.ReasonForTheTransfer))
                 </fieldset>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">

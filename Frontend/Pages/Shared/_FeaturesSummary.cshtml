@@ -5,7 +5,7 @@
  <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    Who initiated this academy transfer?
+                    What is the reason for this Transfer?
                 </dt>
                 <dd class="govuk-summary-list__value">
                     @if (Model.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty)
@@ -19,8 +19,8 @@
                     }
                 </dd>
                 <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-page="/Projects/Features/Initiated" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="initiated">
-                        Change<span class="govuk-visually-hidden"> who initiated the transfer</span>
+                    <a class="govuk-link" asp-page="/Projects/Features/Reason" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="initiated">
+                        Change<span class="govuk-visually-hidden"> the reason for the transfer</span>
                     </a>
                 </dd>
             </div>

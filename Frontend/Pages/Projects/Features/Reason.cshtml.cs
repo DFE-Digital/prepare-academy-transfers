@@ -3,59 +3,64 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data;
 using Data.Models.Projects;
+using FluentValidation.AspNetCore;
 using Frontend.Models;
-using Frontend.Models.Features;
 using Frontend.Models.Forms;
+using Frontend.Validators.Features;
 using Helpers;
 using Microsoft.AspNetCore.Mvc;
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global (Set on model binding)
 
 namespace Frontend.Pages.Projects.Features
 {
-    public class Initiated : CommonPageModel
+    public class Reason : CommonPageModel
     {
         private readonly IProjects _projects;
-        [BindProperty]
-        public FeaturesInitiatedViewModel FeaturesInitiatedViewModel { get; set; } = new FeaturesInitiatedViewModel();
 
-        public Initiated(IProjects projects)
+        public Reason(IProjects projects)
         {
             _projects = projects;
         }
 
+        [BindProperty]
+        public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
-            FeaturesInitiatedViewModel.WhoInitiated = projectResult.Features.ReasonForTheTransfer;
+            ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var project = await _projects.GetByUrn(Urn);
-            
+
+            var validator = new FeaturesReasonValidator();
+            var validationResults = await validator.ValidateAsync(this);
+            validationResults.AddToModelState(ModelState, null);
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            
-            project.Result.Features.ReasonForTheTransfer = FeaturesInitiatedViewModel.WhoInitiated;
-            
+
+            project.Result.Features.ReasonForTheTransfer = ReasonForTheTransfer;
+
             await _projects.Update(project.Result);
-            
+
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
-            
+
             return RedirectToPage("/Projects/Features/Index", new { Urn });
-            
+
         }
 
-        public static List<RadioButtonViewModel> InitiatedRadioButtons(TransferFeatures.ReasonForTheTransferTypes selected)
+        public static List<RadioButtonViewModel> ReasonRadioButtons(TransferFeatures.ReasonForTheTransferTypes selected)
         {
             var values =
                 EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayableValues(TransferFeatures.ReasonForTheTransferTypes
@@ -64,7 +69,7 @@ namespace Frontend.Pages.Projects.Features
             var result = values.Select(value => new RadioButtonViewModel
             {
                 Value = value.ToString(),
-                Name = "WhoInitiated",
+                Name = nameof(ReasonForTheTransfer),
                 DisplayName = EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(value),
                 Checked = selected == value
             }).ToList();
