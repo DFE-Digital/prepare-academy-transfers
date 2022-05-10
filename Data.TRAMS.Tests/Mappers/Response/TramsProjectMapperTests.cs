@@ -57,7 +57,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     TypeOfTransfer = TransferFeatures.TransferTypes.TrustsMerging.ToString(),
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
-                    WhoInitiatedTheTransfer = TransferFeatures.ProjectInitiators.Dfe.ToString(),
+                    WhoInitiatedTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe.ToString(),
                     RddOrEsfaInterventionDetail = "Intervention details",
                     IsCompleted = true
                 },
@@ -154,14 +154,10 @@ namespace Data.TRAMS.Tests.Mappers.Response
         {
             var expectedType = EnumHelpers<TransferFeatures.TransferTypes>.Parse(toMap.Features.TypeOfTransfer);
             var expectedInitiator =
-                EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(toMap.Features.WhoInitiatedTheTransfer);
+                EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.Parse(toMap.Features.WhoInitiatedTheTransfer);
             Assert.Equal(expectedType, result.Features.TypeOfTransfer);
             Assert.Equal(toMap.Features.OtherTransferTypeDescription, result.Features.OtherTypeOfTransfer);
-            Assert.Equal(expectedInitiator, result.Features.WhoInitiatedTheTransfer);
-            Assert.Equal(toMap.Features.RddOrEsfaIntervention,
-                result.Features.ReasonForTransfer.IsSubjectToRddOrEsfaIntervention);
-            Assert.Equal(toMap.Features.RddOrEsfaInterventionDetail,
-                result.Features.ReasonForTransfer.InterventionDetails);
+            Assert.Equal(expectedInitiator, result.Features.ReasonForTheTransfer);
             Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 

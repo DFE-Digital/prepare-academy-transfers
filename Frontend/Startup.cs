@@ -25,7 +25,11 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Frontend.BackgroundServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -62,15 +66,15 @@ namespace Frontend
 
             services.AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<FeaturesInitiatedValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
                 fv.DisableDataAnnotationsValidation = true;
             });
 
+            var policyBuilder = SetupAuthorizationPolicyBuilder();
+
             services.AddAuthorization(options =>
             {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
+                options.DefaultPolicy = policyBuilder.Build();
             });
 
             ConfigureRedisConnection(services);
@@ -84,7 +88,8 @@ namespace Frontend
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.IdleTimeout =
+                    TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
                 options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
@@ -94,19 +99,41 @@ namespace Frontend
                 }
             });
             services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Name = "ManageAnAcademyTransfer.Login";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                options.SlidingExpiration = true;
-                if (string.IsNullOrEmpty(Configuration["CI"]))
+            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+                options =>
                 {
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                }
-            });
+                    options.AccessDeniedPath = "/access-denied";
+                    options.LogoutPath = "/signed-out";
+                    options.Cookie.Name = "ManageAnAcademyTransfer.Login";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
+                    options.ExpireTimeSpan =
+                        TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
+                    options.SlidingExpiration = true;
+                    if (string.IsNullOrEmpty(Configuration["CI"]))
+                    {
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    }
+                });
             services.AddHealthChecks();
+        }
+
+        /// <summary>
+        /// Builds Authorization policy
+        /// Ensure authenticated user and restrict roles if they are provided in configuration
+        /// </summary>
+        /// <returns>AuthorizationPolicyBuilder</returns>
+        private AuthorizationPolicyBuilder SetupAuthorizationPolicyBuilder()
+        {
+            var policyBuilder = new AuthorizationPolicyBuilder();
+            policyBuilder.RequireAuthenticatedUser();
+            var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
+            if (!string.IsNullOrWhiteSpace(allowedRoles))
+            {
+                policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
+            }
+
+            return policyBuilder;
         }
 
         private void ConfigureRedisConnection(IServiceCollection services)

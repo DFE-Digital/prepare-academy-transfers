@@ -3,6 +3,7 @@
 
 @{
     Layout = "_Layout";
+    ViewBag.Title = "High profile transfer";
 }
 
 @section BeforeMain
@@ -30,6 +31,9 @@
                         Why is this a high profile transfer? (optional)
                     </label>
                 </h1>
+                <div id="hp-hint" class="govuk-hint">
+                    For example, ministers and media could be involved.
+                </div>
                 <textarea asp-for="Answer" class="govuk-textarea" rows="5" data-test="high-profile-transfer"></textarea>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">

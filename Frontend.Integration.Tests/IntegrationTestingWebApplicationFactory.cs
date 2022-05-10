@@ -31,7 +31,6 @@ namespace Frontend.Integration.Tests
         {
             _port = AllocateNext();
             _server = WireMockServer.Start(_port);
-            
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -45,14 +44,17 @@ namespace Frontend.Integration.Tests
                 config
                     .AddJsonFile(configPath)
                     .AddInMemoryCollection(new Dictionary<string, string>
-                        { { "TRAMS_API_BASE", $"http://localhost:{_port}" } })
+                    {
+                        {"TRAMS_API_BASE", $"http://localhost:{_port}"},
+                        {"AzureAd:AllowedRoles", string.Empty} // Do not restrict access for integration tests
+                    })
                     .AddEnvironmentVariables();
             });
 
             builder.ConfigureServices(services =>
             {
-                 services.AddAuthentication("Test");
-                 services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
+                services.AddAuthentication("Test");
+                services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
             });
         }
 
@@ -101,7 +103,7 @@ namespace Frontend.Integration.Tests
 
             protected override Task<AuthenticateResult> HandleAuthenticateAsync()
             {
-                var claims = new List<Claim> { new Claim(ClaimTypes.Name, "Name") };
+                var claims = new List<Claim> {new Claim(ClaimTypes.Name, "Name")};
                 var identity = new ClaimsIdentity(claims, "Test");
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, "Test");

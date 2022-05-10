@@ -46,6 +46,25 @@ When running Redis locally, you may find it easier to run inside docker, this ca
 By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server 
 (without SSL) hosted on `localhost:6379` with an optional password of `password`.
 
+## Authentication and Authorisation
+Authentication is provided by Azure AD. The settings are stored in the application configuration and built on startup.
+Users can login using their usual DfE account. Allowed roles are `transfers.create`.
+Full setup details can be found here: https://docs.microsoft.com/en-us/azure/active-directory/develop/web-app-quickstart?pivots=devlang-aspnet-core
+
+### To add an Azure AD application within Azure
+1. Navigate to the appropriate Azure AD within https://portal.azure.com
+2. Select App registration and provide a name
+3. Add Redirect URI(s), this will end with `/signin-oidc`
+4. Select ID tokens
+5. Create the required app roles
+6. Assign the necessary AD groups or users to the correct app roles within enterprise applications
+
+### To setup receiving a users list of groups within claims
+1. Navigate to Token configuration
+2. Select "add groups claim"
+3. Select "security groups"
+4. Group ids will be available in the `HttpContext.User.Claims`
+
 ## Cypress testing
 
 ### Test execution

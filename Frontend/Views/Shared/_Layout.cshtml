@@ -1,6 +1,5 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration _configuration
-@using System.Security.Principal
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
@@ -81,7 +80,7 @@
                 beta
             </strong>
             <span class="govuk-phase-banner__text">
-                This is a new service – your <a class="govuk-link" href="mailto:@_configuration["BetaFeedbackEmailAddress"]">feedback</a> will help us to improve it.
+                This is a new service – your <a class="govuk-link" target="_blank" href="@_configuration["BetaFeedbackLink"]">feedback</a> will help us to improve it.
             </span>
         </p>
     </div>
@@ -109,7 +108,7 @@
         <h2 class="govuk-footer__heading govuk-heading-m">Give feedback</h2>
         <ul class="govuk-footer__list ">
           <li class="govuk-footer__list-item">
-            <a class="govuk-footer__link" target="_blank" href="https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=yXfS-grGoU2187O4s0qC-d2CvT4DIP1JvSu1_jhCZ1xURE4zWktYMjNBM1RNWFcxRElCSVJYMTREUS4u">
+            <a class="govuk-footer__link" target="_blank" href="@_configuration["BetaFeedbackLink"]">
               Give feedback on Manage an academy transfer (opens in a new tab)
             </a>
           </li>
