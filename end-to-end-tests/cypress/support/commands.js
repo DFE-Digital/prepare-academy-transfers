@@ -79,8 +79,8 @@ Cypress.Commands.add("login", () => {
         localStorage.setItem("adal.idtoken", ADALToken);
     });
 
-    cy.storeSessionData()
-    cy.visit("/")
+    cy.storeSessionData();
+    cy.visit(Cypress.env('url'));
 })
 
 
