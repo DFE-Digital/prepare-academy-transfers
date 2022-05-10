@@ -8,7 +8,6 @@ describe('Tests to check target date error messages', () => {
     });
 
     it('Transfer date should be in the future', () => {
-        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type('sd');

@@ -11,11 +11,11 @@ import "cypress-localstorage-commands";
 
 Cypress.Commands.add('clickBackLink', () => cy.get('.govuk-back-link').click())
 Cypress.Commands.add('fillInText', (name, text) => cy.get(`[name="${name}"]`).clear().type(text))
-Cypress.Commands.add('fillInTextAtIndex', (index, text) =>{
- cy.get('input[type="text"]:visible').then(options => {
-     let option = options[index];
-     cy.wrap(option).clear().type(text);
- });
+Cypress.Commands.add('fillInTextAtIndex', (index, text) => {
+    cy.get('input[type="text"]:visible').then(options => {
+        let option = options[index];
+        cy.wrap(option).clear().type(text);
+    });
 });
 
 Cypress.Commands.add('getDataTest', (dataTest) => cy.get(`[data-test='${dataTest}']`))
@@ -23,7 +23,7 @@ Cypress.Commands.add('clickDataTest', (dataTest) => cy.getDataTest(dataTest).cli
 
 Cypress.Commands.add('fillInDate', (dayJs) => {
     cy.getDataTest("day").clear().type(dayJs.date())
-    cy.getDataTest("month").clear().type(dayJs.month()+1)
+    cy.getDataTest("month").clear().type(dayJs.month() + 1)
     cy.getDataTest("year").clear().type(dayJs.year())
 })
 
@@ -41,7 +41,7 @@ Cypress.Commands.add('selectRadio', (index) => {
     });
 })
 
-Cypress.Commands.add('storeSessionData',()=>{
+Cypress.Commands.add('storeSessionData', () => {
     Cypress.Cookies.preserveOnce('.ManageAnAcademyConversion.Login')
     let str = [];
     cy.getCookies().then((cookie) => {
@@ -58,28 +58,29 @@ Cypress.Commands.add('storeSessionData',()=>{
     });
 })
 
-Cypress.Commands.add("login",()=> {
+Cypress.Commands.add("login", () => {
 
     cy.request({
         method: "POST",
         url: `https://login.microsoftonline.com/${Cypress.config("tenantId")}/oauth2/token`,
         form: true,
         body: {
-         grant_type: "client_credentials",
-          client_id: Cypress.config("clientId"),
-          client_secret: Cypress.env("clientSecret"),
+            grant_type: "client_credentials",
+            client_id: Cypress.config("clientId"),
+            client_secret: Cypress.env("clientSecret"),
         },
-      }).then(response => {
+    }).then(response => {
         const ADALToken = response.body.access_token;
         const expiresOn = response.body.expires_on;
-    
+
         localStorage.setItem("adal.token.keys", `${Cypress.config("clientId")}|`);
         localStorage.setItem(`adal.access.token.key${Cypress.config("clientId")}`, ADALToken);
         localStorage.setItem(`adal.expiration.key${Cypress.config("clientId")}`, expiresOn);
         localStorage.setItem("adal.idtoken", ADALToken);
-      });
+    });
 
-      cy.storeSessionData()
+    cy.storeSessionData()
+    cy.visit("/")
 })
 
 
@@ -101,8 +102,8 @@ let backLink = '.govuk-back-link'
 Cypress.Commands.add('HomePage_Button_StartNewProject', () => cy.get('.govuk-button--start'))
 Cypress.Commands.add('HomePage_Link_Back', () => cy.get(`${backLink}`))
 // PAGE: What is the outgoing trust name?
-Cypress.Commands.add('OutGoingSearch_Button_Search', () => cy.get('.govuk-button')) 
-Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`)) 
+Cypress.Commands.add('OutGoingSearch_Button_Search', () => cy.get('.govuk-button'))
+Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`))
 // PAGE: Select the outgoing trust
 // PAGE: Outgoing trust details
 // PAGE: Select the transferring academies 

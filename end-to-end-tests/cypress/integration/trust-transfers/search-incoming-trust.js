@@ -11,7 +11,6 @@ describe('Tests to check search incoming trust error message', () => {
     });
     
     it('Should not show the outgoing trust in search results', () => {
-        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");
         cy.get('[data-test="create-transfer"]').click();
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type(trustId);

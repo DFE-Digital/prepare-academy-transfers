@@ -1,4 +1,4 @@
-const { clear } = require("console");
+const {clear} = require("console");
 const fs = require("fs");
 
 let selectFirstRadio = () => {
@@ -10,8 +10,8 @@ let selectFirstRadio = () => {
 
 let selectExistingAcademyTransfer = (projectName) =>
     cy.get(`.govuk-link--no-visited-state`).then(projects => {
-        for(let i = 0; i < projects.length; i++){
-            if(projects[i].text.includes("Burnt Ash Primary School")){
+        for (let i = 0; i < projects.length; i++) {
+            if (projects[i].text.includes("Burnt Ash Primary School")) {
                 projects[i].click();
                 break;
             }
@@ -30,109 +30,106 @@ function clickBackLink() {
 describe("Creating and editing an academy transfer", function () {
 
     afterEach(() => {
-		cy.storeSessionData();
-	});
-
-	beforeEach(function () {
-		cy.login();
-	});
-
-    let projectUrl = "";
-    
-    it("Create an Academy Transfer", function () {
-        cy.login
-        cy.visit("https://academy-transfers-dev.london.cloudapps.digital");
-
-        cy.get("h1").should('contain.text',"Manage an academy transfer");
-        
-            cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
-        
-        cy.get("h1").should('contain.text',"What is the outgoing trust name?");
-            cy.clickBackLink();
-
-        cy.get("h1").should('contain.text',"Manage an academy transfer");
-            cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
-
-        cy.get("h1").should('contain.text',"What is the outgoing trust name?");
-            cy.get("#SearchQuery").clear().type("bishop fraser")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-
-        cy.get("h1").should('contain.text',"Select the outgoing trust");
-            cy.clickBackLink();
-
-        cy.get("h1").should('contain.text',"What is the outgoing trust name?");
-            cy.get("#SearchQuery").clear().type("bishop fraser")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-
-        cy.get("h1").should('contain.text',"Select the outgoing trust");
-            selectFirstRadio()
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"Outgoing trust details");
-            cy.clickBackLink();
-
-        cy.get("h1").should('contain.text',"What is the outgoing trust name?");
-            cy.get("#SearchQuery").clear().type("bishop fraser")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-
-        cy.get("h1").should('contain.text',"Select the outgoing trust");
-            selectFirstRadio()
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"Outgoing trust details");
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"Select the transferring academies");
-            cy.selectCheckbox(0)
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"What is the incoming trust name?");
-            cy.clickBackLink()
-
-        cy.get("h1").should('contain.text',"Select the transferring academies");
-            cy.selectCheckbox(0)
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"What is the incoming trust name?");
-            cy.get("[name='query']").clear().type("burnt")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-
-        cy.get("h1").should('contain.text',"Select an incoming trust");
-            cy.clickBackLink()
-
-        cy.get("h1").should('contain.text',"What is the incoming trust name?");
-            cy.get("[name='query']").clear().type("burnt")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-        
-        cy.get("h1").should('contain.text',"Select an incoming trust");
-            selectFirstRadio()
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();
-
-        cy.get("h1").should('contain.text',"Check trust and academy details");
-            cy.clickBackLink()
-        
-        cy.get("h1").should('contain.text',"What is the incoming trust name?");
-            cy.get("[name='query']").clear().type("burnt")
-            cy.get('.govuk-button').should('contain.text', 'Search').click();
-
-        cy.get("h1").should('contain.text',"Select an incoming trust");
-            selectFirstRadio()
-            cy.get('.govuk-button').should('contain.text', 'Continue').click();   
-    
-        cy.get("h1").should('contain.text',"Check trust and academy details");
-            cy.get('button[data-test="create-project"]').click()
-
-        cy.get("h1").should('contain.text',"Burnt Ash Primary School");
+        cy.storeSessionData();
     });
 
-    it.skip("Edit an Academy Transfer", function () {     
-        cy.visit("https://academy-transfers-dev.london.cloudapps.digital/");   
-        selectExistingAcademyTransfer("Burnt Ash Primary School");
-        cy.get("h1").should('contain.text',"Burnt Ash Primary School");
+    beforeEach(function () {
+        cy.login();
+    });
+
+    let projectUrl = "";
+
+    it("Create an Academy Transfer", function () {
+        cy.login
+        cy.get("h1").should('contain.text', "Manage an academy transfer");
+
+        cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
+
+        cy.get("h1").should('contain.text', "What is the outgoing trust name?");
+        cy.clickBackLink();
+
+        cy.get("h1").should('contain.text', "Manage an academy transfer");
+        cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
+
+        cy.get("h1").should('contain.text', "What is the outgoing trust name?");
+        cy.get("#SearchQuery").clear().type("bishop fraser")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select the outgoing trust");
+        cy.clickBackLink();
+
+        cy.get("h1").should('contain.text', "What is the outgoing trust name?");
+        cy.get("#SearchQuery").clear().type("bishop fraser")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select the outgoing trust");
+        selectFirstRadio()
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "Outgoing trust details");
+        cy.clickBackLink();
+
+        cy.get("h1").should('contain.text', "What is the outgoing trust name?");
+        cy.get("#SearchQuery").clear().type("bishop fraser")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select the outgoing trust");
+        selectFirstRadio()
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "Outgoing trust details");
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "Select the transferring academies");
+        cy.selectCheckbox(0)
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "What is the incoming trust name?");
         cy.clickBackLink()
-        cy.get("h1").should('contain.text',"Manage an academy transfer");
+
+        cy.get("h1").should('contain.text', "Select the transferring academies");
+        cy.selectCheckbox(0)
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "What is the incoming trust name?");
+        cy.get("[name='query']").clear().type("burnt")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select an incoming trust");
+        cy.clickBackLink()
+
+        cy.get("h1").should('contain.text', "What is the incoming trust name?");
+        cy.get("[name='query']").clear().type("burnt")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select an incoming trust");
+        selectFirstRadio()
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "Check trust and academy details");
+        cy.clickBackLink()
+
+        cy.get("h1").should('contain.text', "What is the incoming trust name?");
+        cy.get("[name='query']").clear().type("burnt")
+        cy.get('.govuk-button').should('contain.text', 'Search').click();
+
+        cy.get("h1").should('contain.text', "Select an incoming trust");
+        selectFirstRadio()
+        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+
+        cy.get("h1").should('contain.text', "Check trust and academy details");
+        cy.get('button[data-test="create-project"]').click()
+
+        cy.get("h1").should('contain.text', "Burnt Ash Primary School");
+    });
+
+    it("Edit an Academy Transfer", function () {
         selectExistingAcademyTransfer("Burnt Ash Primary School");
-      
+        cy.get("h1").should('contain.text', "Burnt Ash Primary School");
+        cy.clickBackLink()
+        cy.get("h1").should('contain.text', "Manage an academy transfer");
+        selectExistingAcademyTransfer("Burnt Ash Primary School");
+
         //  *** Transfer details ***
         // Features of the transfer
         cy.clickDataTest("transfer-features")
@@ -157,8 +154,8 @@ describe("Creating and editing an academy transfer", function () {
         cy.getDataTest("mark-section-complete").uncheck()
         cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
-        cy.getDataTest("features").should('have.text',"COMPLETED");
-        
+        cy.getDataTest("features").should('have.text', "COMPLETED");
+
         // Set transfer dates
         cy.clickDataTest("transfer-dates")
         cy.clickBackLink()
@@ -166,20 +163,20 @@ describe("Creating and editing an academy transfer", function () {
         cy.clickDataTest("first-discussed")
         cy.clickBackLink()
         cy.clickDataTest("first-discussed")
-        cy.fillInDate(Cypress.dayjs().add(-1,'M'))
+        cy.fillInDate(Cypress.dayjs().add(-1, 'M'))
         submit()
         cy.clickDataTest("target-date")
         cy.clickBackLink()
         cy.clickDataTest("target-date")
-        cy.fillInDate(Cypress.dayjs().add(3,'M'))
+        cy.fillInDate(Cypress.dayjs().add(3, 'M'))
         submit()
         cy.clickDataTest("ab-date")
         cy.clickBackLink()
         cy.clickDataTest("ab-date")
-        cy.fillInDate(Cypress.dayjs().add(2,'M'))
+        cy.fillInDate(Cypress.dayjs().add(2, 'M'))
         submit()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
-        cy.getDataTest("dates").should('have.text',"COMPLETED");
+        cy.getDataTest("dates").should('have.text', "COMPLETED");
 
         // Benefits and risks
         cy.clickDataTest("transfer-benefits")
@@ -205,19 +202,19 @@ describe("Creating and editing an academy transfer", function () {
         cy.getDataTest("OtherRisks").parent().get("[type='checkbox']").uncheck()
         cy.getDataTest("OtherRisks").parent().get("[type='checkbox']").check()
         submit()
-        cy.fillInText("Answer","High Profile Answer")
+        cy.fillInText("Answer", "High Profile Answer")
         submit()
-        cy.fillInText("Answer","Land Answer")
+        cy.fillInText("Answer", "Land Answer")
         submit()
-        cy.fillInText("Answer","Finance Answer")
+        cy.fillInText("Answer", "Finance Answer")
         submit()
-        cy.fillInText("Answer","Other risks Answer")
+        cy.fillInText("Answer", "Other risks Answer")
         submit()
         cy.getDataTest("mark-section-complete").uncheck()
         cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click()
-        cy.getDataTest("benefits").should('have.text',"COMPLETED");    
-       
+        cy.getDataTest("benefits").should('have.text', "COMPLETED");
+
         //Rationale
         cy.clickDataTest("transfer-rationale")
         cy.clickBackLink()
@@ -235,7 +232,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.getDataTest("mark-section-complete").uncheck()
         cy.getDataTest("mark-section-complete").check()
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
-        cy.getDataTest("rationale").should('have.text',"COMPLETED");
+        cy.getDataTest("rationale").should('have.text', "COMPLETED");
 
         // Trust information and project dates
         cy.clickDataTest("academy-trust-information")
@@ -248,17 +245,17 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("author", "Author name")
         submit();
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
-        cy.getDataTest("academyandtrustinformation").should('have.text',"COMPLETED");
+        cy.getDataTest("academyandtrustinformation").should('have.text', "COMPLETED");
 
         // *** School Data ***
         cy.clickDataTest("sd-academy-1")
         cy.clickBackLink()
         cy.clickDataTest("sd-academy-1")
         // General infomation
-        
+
         cy.clickDataTest("general-information")
         clickBackLink();
-        
+
         // Pupil numbers
         cy.get(`[data-test='pupil-numbers']`).click()
         cy.clickBackLink()
@@ -270,7 +267,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for pupil numbers");
         submit();
         clickBackLink();
-        
+
         // *** School characteristics ***        
         // Latest Ofsted report
         cy.get(`[data-test='ofsted']`).click()
@@ -296,7 +293,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
         submit();
         clickBackLink()
-        
+
         // Key stage 4 performance tables
         cy.get(`[data-test='ks4-performance']`).click()
         clickBackLink()
@@ -308,7 +305,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks4 performance");
         submit();
         clickBackLink()
-        
+
         // Key stage 5 performance tables
         cy.get(`[data-test='ks5-performance']`).click()
         clickBackLink()
@@ -320,7 +317,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.fillInText("AdditionalInformation", "Additional information for ks5 performance");
         submit();
         clickBackLink()
-        
+
         // Go to preview
         clickBackLink()
         cy.clickDataTest("preview-htb")
