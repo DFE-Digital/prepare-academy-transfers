@@ -27,13 +27,8 @@ namespace Frontend.Models.ProjectTemplate
         [DocumentText("DateOfProposedTransfer")]
         public string DateOfProposedTransfer { get; set; }
 
-        [DocumentText("WhoInitiatedTheTransfer")]
-        public string WhoInitiatedTheTransfer { get; set; }
-
-        [DocumentText("ReasonForTransfer")] public string ReasonForTransfer { get; set; }
-
-        [DocumentText("MoreDetailsAboutTheTransfer")]
-        public string MoreDetailsAboutTheTransfer { get; set; }
+        [DocumentText("ReasonForTransfer")]
+        public string ReasonForTheTransfer { get; set; }
 
         [DocumentText("TypeOfTransfer")] public string TypeOfTransfer { get; set; }
 

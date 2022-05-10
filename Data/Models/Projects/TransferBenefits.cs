@@ -46,15 +46,15 @@ namespace Data.Models.Projects
         {
             Empty = 0,
 
-            [Display(Name = "High profile transfer (ministers and media could be involved)")]
-            HighProfile,
-
             [Display(Name = "Complex land and building issues")]
             ComplexLandAndBuildingIssues,
-
+            
             [Display(Name = "Finance and debt concerns")]
             FinanceAndDebtConcerns,
             
+            [Display(Name = "High profile transfer")]
+            HighProfile,
+
             [Display(Name = "Other risks")]
             OtherRisks
         }

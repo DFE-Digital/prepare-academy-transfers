@@ -48,11 +48,9 @@ namespace Frontend.Services
                 DateTransferWasFirstDiscussed = DatesHelper.FormatDateString(project.Dates.FirstDiscussed,
                     project.Dates.HasFirstDiscussedDate),
 
-                WhoInitiatedTheTransfer =
-                    EnumHelpers<TransferFeatures.ProjectInitiators>.GetDisplayValue(project.Features
-                        .WhoInitiatedTheTransfer),
-                ReasonForTransfer = project.Features.IsTransferSubjectToIntervention ? "Yes" : "No",
-                MoreDetailsAboutTheTransfer = project.Features.ReasonForTransfer.InterventionDetails,
+                ReasonForTheTransfer =
+                    EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features
+                        .ReasonForTheTransfer),
                 TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),

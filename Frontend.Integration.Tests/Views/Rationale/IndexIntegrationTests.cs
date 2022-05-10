@@ -9,8 +9,8 @@ namespace Frontend.Integration.Tests.Views.Rationale
         public IndexIntegrationTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
         }
-
-        [Fact(Skip = "Requires Azure AD authentication")]
+        
+        [Fact]
         public async Task GivenRationale_ShouldBeCompleted()
         {
             var project = GetProject();
@@ -25,7 +25,7 @@ namespace Frontend.Integration.Tests.Views.Rationale
             Document.QuerySelector("#main-content > div:nth-child(2) > div > dl > div:nth-child(2) > dd.govuk-summary-list__value > span")?.TextContent.Should().Be(project.Rationale.TrustSponsorRationale);
         }
         
-        [Fact(Skip = "Requires Azure AD authentication")]
+        [Fact]
         public async Task GivenPartRationale_ShouldBeInProgress()
         {
             var project = GetProject(p => p.Rationale.IsCompleted = false);

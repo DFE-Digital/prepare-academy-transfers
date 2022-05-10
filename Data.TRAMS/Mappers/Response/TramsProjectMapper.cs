@@ -73,15 +73,10 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new TransferFeatures
             {
-                ReasonForTransfer = new ReasonForTransfer()
-                {
-                    IsSubjectToRddOrEsfaIntervention = input.Features.RddOrEsfaIntervention,
-                    InterventionDetails = input.Features.RddOrEsfaInterventionDetail
-                },
                 TypeOfTransfer = EnumHelpers<TransferFeatures.TransferTypes>.Parse(input.Features.TypeOfTransfer),
                 OtherTypeOfTransfer = input.Features.OtherTransferTypeDescription,
-                WhoInitiatedTheTransfer =
-                    EnumHelpers<TransferFeatures.ProjectInitiators>.Parse(input.Features.WhoInitiatedTheTransfer),
+                ReasonForTheTransfer =
+                    EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.Parse(input.Features.WhoInitiatedTheTransfer),
                 IsCompleted = input.Features.IsCompleted
             };
         }
