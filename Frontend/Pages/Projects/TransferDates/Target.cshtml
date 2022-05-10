@@ -4,7 +4,7 @@
 
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the target date for the transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the expected date for the transfer?";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
     var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDateViewModel.TargetDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
@@ -32,24 +32,18 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            When is the target date for the transfer?
+                            When is the expected date for the transfer?
                         </h1>
                     </legend>
                     <div id="target-date-for-transfer-hint" class="govuk-hint">
                         For example, 9 2007. You can change this date later.
                     </div>
 
-                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Day"></p>
+                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date"></p>
 
                     <div class="govuk-date-input" id="transfer-first-discussed-date">
-                        <div class="govuk-date-input__item">
-                            <div class="govuk-form-group">
-                                <label asp-for="TargetDateViewModel.TargetDate.Date.Day" class="govuk-label govuk-date-input__label">
-                                    Day
-                                </label>
-                                <input asp-for="TargetDateViewModel.TargetDate.Date.Day" class="govuk-input govuk-date-input__input govuk-input--width-2 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="day">
-                            </div>
-                        </div>
+                       <input asp-for="TargetDateViewModel.TargetDate.Date.Day" type="hidden" pattern="[0-9]*" inputmode="numeric" value=01 />
+
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
                                 <label asp-for="TargetDateViewModel.TargetDate.Date.Month" class="govuk-label govuk-date-input__label">
