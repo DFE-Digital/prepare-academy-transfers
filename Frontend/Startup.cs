@@ -63,8 +63,7 @@ namespace Frontend
             
             services.AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>(discoveredType =>
-                    discoveredType.ValidatorType != typeof(TargetDateValidator));
+                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
                 fv.DisableDataAnnotationsValidation = true;
             });
                 

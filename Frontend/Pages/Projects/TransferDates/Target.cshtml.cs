@@ -13,7 +13,9 @@ namespace Frontend.Pages.Projects.TransferDates
     {
         private readonly IProjects _projectsRepository;
 
-        [BindProperty] public TargetDateViewModel TargetDateViewModel { get; set; }
+        [BindProperty] 
+        [CustomizeValidator(Skip = true)]
+        public TargetDateViewModel TargetDateViewModel { get; set; }
 
         public Target(IProjects projectsRepository)
         {

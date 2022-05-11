@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.AspNetCore;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
@@ -73,6 +75,17 @@ namespace Frontend.Tests.PagesTests.Projects.TransferDates
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
+            }
+            
+            [Fact]
+            public void TargetDateViewModel_SkipsAutomaticValidation()
+            {
+                var attribute = (CustomizeValidatorAttribute)typeof(Target)
+                    .GetProperty("TargetDateViewModel")
+                    ?.GetCustomAttributes(typeof(CustomizeValidatorAttribute), false).First();
+
+                Assert.NotNull(attribute);
+                Assert.True(attribute.Skip);
             }
 
             [Theory]
