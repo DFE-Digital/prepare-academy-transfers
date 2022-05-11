@@ -26,14 +26,12 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Frontend.BackgroundServices;
+using Frontend.Validators.TransferDates;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-
 
 namespace Frontend
 {
@@ -62,14 +60,13 @@ namespace Frontend
                     new AutoValidateAntiforgeryTokenAttribute()))
                 .AddSessionStateTempDataProvider()
                 .AddMicrosoftIdentityUI();
-
-
+            
             services.AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
                 fv.DisableDataAnnotationsValidation = true;
             });
-
+                
             var policyBuilder = SetupAuthorizationPolicyBuilder();
 
             services.AddAuthorization(options =>

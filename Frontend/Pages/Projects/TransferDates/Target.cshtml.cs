@@ -13,7 +13,9 @@ namespace Frontend.Pages.Projects.TransferDates
     {
         private readonly IProjects _projectsRepository;
 
-        [BindProperty] public TargetDateViewModel TargetDateViewModel { get; set; }
+        [BindProperty] 
+        [CustomizeValidator(Skip = true)]
+        public TargetDateViewModel TargetDateViewModel { get; set; }
 
         public Target(IProjects projectsRepository)
         {
@@ -40,15 +42,16 @@ namespace Frontend.Pages.Projects.TransferDates
         
         public async Task<IActionResult> OnPostAsync()
         {
-            var project = await _projectsRepository.GetByUrn(Urn);
-
-            if (!ModelState.IsValid)
+            if (TargetDateViewModel.TargetDate.Date.Month != null && TargetDateViewModel.TargetDate.Date.Year != null)
             {
-                return Page();
+                // Transfers always happen on the 1st of the month.
+                TargetDateViewModel.TargetDate.Date.Day = "01";
             }
             
+            var project = await _projectsRepository.GetByUrn(Urn);
+
             var projectResult = project.Result;
-            
+
             var validationContext = new ValidationContext<TargetDateViewModel>(TargetDateViewModel)
             {
                 RootContextData =
