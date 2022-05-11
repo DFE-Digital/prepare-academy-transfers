@@ -40,6 +40,12 @@ namespace Frontend.Pages.Projects.TransferDates
         
         public async Task<IActionResult> OnPostAsync()
         {
+            if (TargetDateViewModel.TargetDate.Date.Month != null && TargetDateViewModel.TargetDate.Date.Year != null)
+            {
+                // Transfers always happen on the 1st of the month.
+                TargetDateViewModel.TargetDate.Date.Day = "01";
+            }
+            
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
