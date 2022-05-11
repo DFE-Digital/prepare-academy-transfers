@@ -42,13 +42,8 @@ namespace Frontend.Pages.Projects.TransferDates
         {
             var project = await _projectsRepository.GetByUrn(Urn);
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            
             var projectResult = project.Result;
-            
+
             var validationContext = new ValidationContext<TargetDateViewModel>(TargetDateViewModel)
             {
                 RootContextData =
