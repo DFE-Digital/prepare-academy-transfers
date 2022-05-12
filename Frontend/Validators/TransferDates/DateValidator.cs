@@ -9,9 +9,12 @@ namespace Frontend.Validators.TransferDates
 {
     public class DateValidator : AbstractValidator<DateViewModel>
     {
+
+        public string ErrorDisplayName { get; set; }
         public DateValidator()
         {
             CascadeMode = CascadeMode.Stop;
+            var dateName = "date";
 
             RuleFor(x => x.Date.Day)
                 .Custom((day, context) =>
@@ -19,9 +22,30 @@ namespace Frontend.Validators.TransferDates
                     var dateVm = context.InstanceToValidate;
                     if (!dateVm.UnknownDate && DateIsEmpty(dateVm.Date))
                     {
-                        context.AddFailure("You must enter the date or confirm that you don't know it");
+                        context.AddFailure($"Enter {ErrorDisplayName} or select I do not know this");
+                        return;
                     }
                 });
+            
+            RuleFor(x => x.Date.Day)
+              .Custom((day, context) =>
+              {
+                  var dateVm = context.InstanceToValidate;
+                  if (!dateVm.UnknownDate && string.IsNullOrEmpty(dateVm.Date.Day))
+                  {
+                      context.AddFailure(nameof(dateVm.Date.Day),($"The {ErrorDisplayName} must include a day"));
+                  }
+                  if (!dateVm.UnknownDate && string.IsNullOrEmpty(dateVm.Date.Month))
+                  {
+                      context.AddFailure(nameof(dateVm.Date.Month), ($"The {ErrorDisplayName} must include a month"));
+                  }
+                  if (!dateVm.UnknownDate && string.IsNullOrEmpty(dateVm.Date.Year))
+                  {
+                      context.AddFailure(nameof(dateVm.Date.Year), ($"The {ErrorDisplayName} must include a year"));
+                  }
+
+              });
+
 
             RuleFor(x => x.Date.Day)
                 .Custom((day, context) =>
@@ -29,7 +53,7 @@ namespace Frontend.Validators.TransferDates
                     var dateVm = context.InstanceToValidate;
                     if (dateVm.UnknownDate && !DateIsEmpty(dateVm.Date))
                     {
-                        context.AddFailure("You must either enter the date or select 'I do not know this'");
+                        context.AddFailure($"Either enter {ErrorDisplayName} or select I do not know this");
                     }
                 });
             
