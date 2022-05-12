@@ -21,7 +21,13 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             };
 
             _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(new CreateProjectTemplateResponse
-                {Document = new byte[] {0, 1}});
+            {
+                Document = new byte[] { 0, 1 }
+            });
+
+            FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
+            FoundInformationForProject.Project.OutgoingTrustName = "Outgoing Trust";
+            FoundInformationForProject.Project.Reference = "SW-MAT-10000001";
         }
 
         public class GetTests : DownloadTests
@@ -29,10 +35,17 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenId_GetsProjectInformation()
             {
-                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
                 await _subject.OnGetAsync();
 
                 GetInformationForProject.Verify(s => s.Execute(ProjectUrn0001), Times.Once);
+            }
+
+            [Fact]
+            public async void GivenId_SetsFileName()
+            {
+                await _subject.OnGetAsync();
+
+                Assert.Equal("SW-MAT-10000001_Outgoing-Trust_Incoming-Trust_project-template", _subject.FileName);
             }
         }
 
@@ -41,25 +54,26 @@ namespace Frontend.Tests.PagesTests.TaskList.HtbDocument
             [Fact]
             public async void GivenId_GeneratesAnHtbDocumentForTheProject()
             {
-                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
                 await _subject.OnGetGenerateDocumentAsync();
+
                 _createHtbDocument.Verify(s => s.Execute(ProjectUrn0001), Times.Once);
             }
 
             [Fact]
             public async void GivenId_ReturnsAFileWithTheGeneratedDocument()
             {
-                var fileContents = new byte[] {1, 2, 3, 4};
+                var fileContents = new byte[] { 1, 2, 3, 4 };
                 var createDocumentResponse = new CreateProjectTemplateResponse
                 {
                     Document = fileContents
                 };
                 _createHtbDocument.Setup(s => s.Execute(ProjectUrn0001)).ReturnsAsync(createDocumentResponse);
-                FoundInformationForProject.Project.TransferringAcademies[0].IncomingTrustName = "Incoming Trust";
-                var response = await _subject.OnGetGenerateDocumentAsync();
-                var fileResponse = Assert.IsType<FileContentResult>(response);
 
+                var response = await _subject.OnGetGenerateDocumentAsync();
+
+                var fileResponse = Assert.IsType<FileContentResult>(response);
                 Assert.Equal(fileContents, fileResponse.FileContents);
+                Assert.Equal("SW-MAT-10000001_Outgoing-Trust_Incoming-Trust_project-template.docx", fileResponse.FileDownloadName);
             }
         }
     }
