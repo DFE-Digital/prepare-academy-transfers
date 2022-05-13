@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.AspNetCore;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
@@ -74,18 +76,42 @@ namespace Frontend.Tests.PagesTests.Projects.TransferDates
 
                 ProjectRepository.Verify(r => r.GetByUrn(ProjectUrn0001), Times.Once);
             }
-
+            
             [Fact]
-            public async void GivenErrorOnModel_ShouldReturnPage()
+            public void TargetDateViewModel_SkipsAutomaticValidation()
             {
-                _subject.ModelState.AddModelError(nameof(_subject.TargetDateViewModel.TargetDate.Date),
-                    "error");
-                var result = await _subject.OnPostAsync();
+                var attribute = (CustomizeValidatorAttribute)typeof(Target)
+                    .GetProperty("TargetDateViewModel")
+                    ?.GetCustomAttributes(typeof(CustomizeValidatorAttribute), false).First();
 
-                ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                Assert.NotNull(attribute);
+                Assert.True(attribute.Skip);
+            }
 
-                Assert.IsType<PageResult>(result);
+            [Theory]
+            [InlineData(null, null)]
+            [InlineData("01", null)]
+            [InlineData(null, "2099")]
+            public async void WhenMonthAndYearAreNotSet_DoesNotSetDay(string monthValue, string yearValue)
+            {
+                _subject.TargetDateViewModel.TargetDate.Date.Day = null;
+                _subject.TargetDateViewModel.TargetDate.Date.Month = monthValue;
+                _subject.TargetDateViewModel.TargetDate.Date.Year = yearValue;
+
+                await _subject.OnPostAsync();
+
+                Assert.Null(_subject.TargetDateViewModel.TargetDate.Date.Day);
+            }
+            
+            [Fact]
+            public async void WhenMonthAndYearAreSet_SetsDayToFirstOfMonth()
+            {
+                _subject.TargetDateViewModel.TargetDate.Date.Month = "01";
+                _subject.TargetDateViewModel.TargetDate.Date.Year = "2099";
+
+                await _subject.OnPostAsync();
+
+                Assert.Equal("01", _subject.TargetDateViewModel.TargetDate.Date.Day);
             }
 
             [Fact]
