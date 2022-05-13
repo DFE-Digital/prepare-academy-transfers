@@ -28,8 +28,10 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Frontend.BackgroundServices;
+using Frontend.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -39,8 +41,11 @@ namespace Frontend
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostEnvironment _hostEnvironment;
+
+        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
         {
+            _hostEnvironment = hostEnvironment;
             Configuration = configuration;
         }
 
@@ -70,22 +75,14 @@ namespace Frontend
                 fv.DisableDataAnnotationsValidation = true;
             });
 
-            var policyBuilder = SetupAuthorizationPolicyBuilder();
-
-            services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = policyBuilder.Build();
-            });
-
             ConfigureRedisConnection(services);
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
             AddServices(services, Configuration);
-
-            ConfigureServiceClasses(services);
-
+        
+            var policyBuilder = SetupAuthorizationPolicyBuilder();
+            services.AddAuthorization(options => { options.DefaultPolicy = policyBuilder.Build(); });
             services.AddSession(options =>
             {
                 options.IdleTimeout =
@@ -132,7 +129,6 @@ namespace Frontend
             {
                 policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
             }
-
             return policyBuilder;
         }
 
@@ -238,33 +234,31 @@ namespace Frontend
             var tramsApiBase = configuration["TRAMS_API_BASE"];
             var tramsApiKey = configuration["TRAMS_API_KEY"];
 
+            services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
+           
             services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
             services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
             services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
             services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
             services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-            services
-                .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>,
-                    TramsEducationPerformanceMapper>();
+            services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
             services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
             services.AddTransient<ITrusts, TramsTrustsRepository>();
             services.AddTransient<IAcademies, TramsEstablishmentRepository>();
             services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
             services.AddTransient<IProjects, TramsProjectsRepository>();
-
+            services.AddTransient<ICreateProjectTemplate, CreateProjectTemplate>();
+            services.AddTransient<IGetInformationForProject, GetInformationForProject>();
+            services.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
+            services.AddTransient<ITaskListService, TaskListService>();
+            
             services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<PerformanceDataChannel>();
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+            services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();
             services.AddHostedService<PerformanceDataProcessingService>();
         }
-
-        private static void ConfigureServiceClasses(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddTransient<ICreateProjectTemplate, CreateProjectTemplate>();
-            serviceCollection.AddTransient<IGetInformationForProject, GetInformationForProject>();
-            serviceCollection.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
-            serviceCollection.AddTransient<ITaskListService, TaskListService>();
-            serviceCollection.AddScoped<IReferenceNumberService, ReferenceNumberService>();
-        }
+        
     }
 }
