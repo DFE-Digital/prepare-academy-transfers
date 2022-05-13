@@ -25,7 +25,7 @@ sqlServer.loadDBCommands();
 
 beforeEach(() => {
     cy.intercept(
-        { url: 'http://localhost:5001/**', middleware: true },
+        { url: 'https://localhost:5001/**', middleware: true },
         //Add authorization to all Cypress requests
         (req) => req.headers['Authorization'] = 'Bearer blah'
     )

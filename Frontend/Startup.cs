@@ -27,8 +27,8 @@ using StackExchange.Redis;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Frontend.Authorization;
 using Frontend.BackgroundServices;
-using Frontend.Validation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -123,8 +123,8 @@ namespace Frontend
         private AuthorizationPolicyBuilder SetupAuthorizationPolicyBuilder()
         {
             var policyBuilder = new AuthorizationPolicyBuilder();
-            policyBuilder.RequireAuthenticatedUser();
             var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
+            policyBuilder.RequireAuthenticatedUser();
             if (!string.IsNullOrWhiteSpace(allowedRoles))
             {
                 policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
@@ -257,6 +257,8 @@ namespace Frontend
             services.AddSingleton<PerformanceDataChannel>();
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
             services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
+            
             services.AddHostedService<PerformanceDataProcessingService>();
         }
         
