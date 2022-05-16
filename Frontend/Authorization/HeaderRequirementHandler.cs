@@ -64,8 +64,15 @@ namespace Frontend.Authorization
             if (ClientSecretHeaderValid(_environment, _httpContextAccessor, _configuration))
             {
                 context.Succeed(requirement);
-                //todo: move this to header param
-                context.User.Identities.FirstOrDefault()?.AddClaim(new Claim(ClaimTypes.Role, "transfers.create"));
+                var headerRole = _httpContextAccessor.HttpContext.Request.Headers["AuthorizationRole"].ToString();
+                if (!string.IsNullOrWhiteSpace(headerRole))
+                {
+                    var claims = headerRole.Split(',');
+                    foreach (var claim in claims)
+                    {
+                        context.User.Identities.FirstOrDefault()?.AddClaim(new Claim(ClaimTypes.Role, claim));
+                    }
+                }
             }
 
             return Task.CompletedTask;

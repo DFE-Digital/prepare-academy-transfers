@@ -25,8 +25,9 @@ sqlServer.loadDBCommands();
 
 beforeEach(() => {
     cy.intercept(
-        { url: 'https://localhost:5001/**', middleware: true },
+        { url: Cypress.env('url') + '**', middleware: true },
         //Add authorization to all Cypress requests
-        (req) => req.headers['Authorization'] = 'Bearer blah'
+        (req) => req.headers['Authorization'] = 'Bearer ' + Cypress.env('authorizationHeader'),
+        (req) => req.headers['AuthorizationRole'] = 'transfers.create'
     )
 })
