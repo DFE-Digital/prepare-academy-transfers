@@ -121,7 +121,6 @@ namespace Data.Mock
                 },
                 Dates = new TransferDates
                 {
-                    FirstDiscussed = "01/03/2021",
                     Target = "01/09/2021",
                     Htb = "01/06/2021"
                 },

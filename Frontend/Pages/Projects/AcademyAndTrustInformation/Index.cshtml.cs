@@ -12,7 +12,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
         public string Author { get; set; }
         public string AdvisoryBoardDate { get; set; }
         public string TargetDate { get; set; }
-        public string FirstDiscussedDate { get; set; }
 
         private readonly IGetInformationForProject _getInformationForProject;
 
@@ -31,7 +30,6 @@ namespace Frontend.Pages.Projects.AcademyAndTrustInformation
             AdvisoryBoardDate = projectInformation.Project.Dates?.Htb;
             IncomingTrustName = projectInformation.Project.IncomingTrustName;
             TargetDate = projectInformation.Project.Dates?.Target;
-            FirstDiscussedDate = projectInformation.Project.Dates?.FirstDiscussed;
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             Urn = projectInformation.Project.Urn;
 

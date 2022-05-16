@@ -69,7 +69,6 @@ namespace Frontend.Tests.ServicesTests
                     projectTemplateModel.Version);
                 Assert.Equal("1 January 2020", projectTemplateModel.DateOfHtb);
                 Assert.Equal("1 January 2020", projectTemplateModel.DateOfProposedTransfer);
-                Assert.Equal("1 January 2020", projectTemplateModel.DateTransferWasFirstDiscussed);
                 Assert.Equal(academy.GeneralInformation.ViabilityIssue, projectTemplateAcademyModel.ViabilityIssues);
                 Assert.Equal(academy.GeneralInformation.Deficit, projectTemplateAcademyModel.FinancialDeficit);
                 Assert.Equal(academy.GeneralInformation.Pfi, projectTemplateAcademyModel.Pfi);

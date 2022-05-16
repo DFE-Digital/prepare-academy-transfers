@@ -75,11 +75,7 @@ namespace Frontend.Integration.Tests.Fixtures
                 Dates = new AcademyTransferProjectDates
                 {
                     HtbDate = "01/01/2023",
-                    TargetDateForTransfer = "02/01/2023",
-                    TransferFirstDiscussed = "03/01/2020",
-                    HasHtbDate = true,
-                    HasTargetDateForTransfer = true,
-                    HasTransferFirstDiscussedDate = true
+                    HasHtbDate = true
                 },
                 Features = new AcademyTransferProjectFeatures
                 {
