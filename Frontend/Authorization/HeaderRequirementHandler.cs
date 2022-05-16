@@ -39,15 +39,23 @@ namespace Frontend.Authorization
             IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             //Header authorisation not applicable for production
-            string authHeader = null;
-            if (hostEnvironment.IsStaging() || hostEnvironment.IsDevelopment())
+            if (!hostEnvironment.IsStaging() && !hostEnvironment.IsDevelopment())
             {
-                //Allow client secret in header
-                authHeader = httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString()?
-                    .Replace("Bearer ", string.Empty);
+                return false;
             }
 
-            return authHeader == configuration.GetSection("AzureAd")["ClientSecret"];
+            //Allow client secret in header
+            var authHeader = httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString()?
+                .Replace("Bearer ", string.Empty);
+
+            var secret = configuration.GetSection("AzureAd")["ClientSecret"];
+
+            if (string.IsNullOrWhiteSpace(authHeader) || string.IsNullOrWhiteSpace(secret))
+            {
+                return false;
+            }
+
+            return authHeader == secret;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
@@ -59,6 +67,7 @@ namespace Frontend.Authorization
                 //todo: move this to header param
                 context.User.Identities.FirstOrDefault()?.AddClaim(new Claim(ClaimTypes.Role, "transfers.create"));
             }
+
             return Task.CompletedTask;
         }
     }
