@@ -27,6 +27,12 @@ Cypress.Commands.add('fillInDate', (dayJs) => {
     cy.getDataTest("year").clear().type(dayJs.year())
 })
 
+Cypress.Commands.add('fillInDateMonthYear', (dayJs) => {
+    cy.getDataTest("month").clear().type(dayJs.month() + 1)
+    cy.getDataTest("year").clear().type(dayJs.year())
+})
+
+
 Cypress.Commands.add('selectCheckbox', (index) => {
     cy.get("[type='checkbox']").then(options => {
         let option = options[index]
