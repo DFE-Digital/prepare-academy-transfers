@@ -11,7 +11,7 @@ namespace Frontend.Validators.TransferDates
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.AdvisoryBoardDate)
-                .SetValidator(new DateValidator());
+                .SetValidator(new DateValidator() {ErrorDisplayName= "advisory board date"});
 
             RuleFor(x => x.AdvisoryBoardDate)
                 .SetValidator(new FutureDateValidator());
