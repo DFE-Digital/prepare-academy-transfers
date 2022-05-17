@@ -54,6 +54,11 @@ variable app_trams_api_key {
 	description = "Application variable for the TRAMS API Key"
 }
 
+variable app_azuread__clientsecret {
+  type = string
+  description = "Application variable for the Azure AD Authorization header"
+} 
+
 variable logit_sink_url {
 	type = string
 	description = "Target URL (HTTPS) for logs to be streamed to"
