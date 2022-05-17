@@ -8,8 +8,6 @@ namespace Frontend.Pages.Projects.TransferDates
     public class Index : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
-        public string FirstDiscussedDate { get; set; } 
-        public bool? HasFirstDiscussedDate { get; set; } 
         public string AdvisoryBoardDate { get; set; } 
         public bool? HasAdvisoryBoardDate { get; set; } 
         public string TargetDate { get; set; } 
@@ -26,8 +24,6 @@ namespace Frontend.Pages.Projects.TransferDates
 
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
-            FirstDiscussedDate = projectResult.Dates?.FirstDiscussed;
-            HasFirstDiscussedDate = projectResult.Dates?.HasFirstDiscussedDate;
             AdvisoryBoardDate = projectResult.Dates?.Htb;
             HasAdvisoryBoardDate = projectResult.Dates?.HasHtbDate;
             TargetDate = projectResult.Dates?.Target;

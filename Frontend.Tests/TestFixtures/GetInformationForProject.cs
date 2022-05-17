@@ -22,7 +22,7 @@ namespace Frontend.Tests.TestFixtures
                 OutgoingTrustName = "trust name",
                 OutgoingTrustUkprn = "trust ref number",
                 Rationale = new TransferRationale {Project = "project", Trust = "trust"},
-                Dates = new TransferDates {Htb = "01/01/2020", FirstDiscussed = "01/01/2020", Target = "01/01/2020"},
+                Dates = new TransferDates {Htb = "01/01/2020", Target = "01/01/2020"},
                 Features = new TransferFeatures
                 {
                     ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
