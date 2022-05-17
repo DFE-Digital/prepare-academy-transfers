@@ -277,30 +277,7 @@ namespace Frontend.Tests.ServicesTests
                 {
                     new TransferDates
                     {
-                        FirstDiscussed = "23/09/2004"
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferDates
-                    {
                         Htb = "23/12/2034"
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferDates
-                    {
-                        Htb = "23/12/2034",
-                        Target = "23/01/2050"
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferDates
-                    {
-                        Htb = "23/12/2034",
-                        HasFirstDiscussedDate = true
                     }
                 };
             }
@@ -312,8 +289,7 @@ namespace Frontend.Tests.ServicesTests
                     new TransferDates
                     {
                         Target = "12/03/2051",
-                        Htb = "23/12/2034",
-                        FirstDiscussed = "01/01/2001"
+                        Htb = "23/12/2034"
                     }
                 };
                 yield return new object[]
@@ -321,7 +297,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferDates
                     {
                         Htb = "23/12/2034",
-                        HasFirstDiscussedDate = false,
                         Target = "12/01/2021"
                     }
                 };
@@ -330,7 +305,6 @@ namespace Frontend.Tests.ServicesTests
                     new TransferDates
                     {
                         HasHtbDate = false,
-                        HasFirstDiscussedDate = false,
                         HasTargetDateForTransfer = false
                     }
                 };

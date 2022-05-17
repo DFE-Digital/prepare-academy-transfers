@@ -32,11 +32,9 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 },
                 Dates = new TransferDates
                 {
-                    FirstDiscussed = "01/01/2020",
                     Htb = "02/01/2020",
                     Target = "03/01/2020",
                     HasHtbDate = true,
-                    HasFirstDiscussedDate = true,
                     HasTargetDateForTransfer = true
                 },
                 Features = new TransferFeatures
@@ -106,20 +104,16 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     Htb = "Date1",
                     Target = "Date2",
-                    FirstDiscussed = "Date3",
                     HasHtbDate = false,
                     HasTargetDateForTransfer = false,
-                    HasFirstDiscussedDate = false
                 },
             };
 
             var result = subject.Map(toMap);
             Assert.False(result.Dates.HasHtbDate);
             Assert.False(result.Dates.HasTargetDateForTransfer);
-            Assert.False(result.Dates.HasTransferFirstDiscussedDate);
             Assert.Null(result.Dates.HtbDate);
             Assert.Null(result.Dates.TargetDateForTransfer);
-            Assert.Null(result.Dates.TransferFirstDiscussed);
         }
         
         [Fact]
@@ -132,20 +126,16 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     Htb = "Date1",
                     Target = "Date2",
-                    FirstDiscussed = "Date3",
                     HasHtbDate = null,
                     HasTargetDateForTransfer = null,
-                    HasFirstDiscussedDate = null
                 },
             };
 
             var result = subject.Map(toMap);
             Assert.Null(result.Dates.HasHtbDate);
             Assert.Null(result.Dates.HasTargetDateForTransfer);
-            Assert.Null(result.Dates.HasTransferFirstDiscussedDate);
             Assert.Equal(result.Dates.HtbDate, toMap.Dates.Htb);
             Assert.Equal(result.Dates.TargetDateForTransfer, toMap.Dates.Target);
-            Assert.Equal(result.Dates.TransferFirstDiscussed, toMap.Dates.FirstDiscussed);
         }
 
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
@@ -171,12 +161,10 @@ namespace Data.TRAMS.Tests.Mappers.Request
 
         private static void AssertDatesAreCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal(toMap.Dates.FirstDiscussed, result.Dates.TransferFirstDiscussed);
             Assert.Equal(toMap.Dates.Htb, result.Dates.HtbDate);
             Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
             Assert.True(result.Dates.HasHtbDate);
             Assert.True(result.Dates.HasTargetDateForTransfer);
-            Assert.True(result.Dates.HasTransferFirstDiscussedDate);
         }
 
         private static void AssertBenefitsAreCorrect(Project toMap, TramsProjectUpdate result)

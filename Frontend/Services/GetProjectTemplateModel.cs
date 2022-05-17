@@ -45,8 +45,6 @@ namespace Frontend.Services
                 DateOfHtb = DatesHelper.FormatDateString(project.Dates.Htb, project.Dates.HasHtbDate),
                 DateOfProposedTransfer =
                     DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer),
-                DateTransferWasFirstDiscussed = DatesHelper.FormatDateString(project.Dates.FirstDiscussed,
-                    project.Dates.HasFirstDiscussedDate),
 
                 ReasonForTheTransfer =
                     EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features

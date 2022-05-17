@@ -68,8 +68,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 Urn = project.Urn,
                 ReturnToPreview = true,
                 OutgoingAcademyUrn = project.OutgoingAcademyUrn,
-                FirstDiscussedDate = project.Dates.FirstDiscussed,
-                HasFirstDiscussedDate = project.Dates.HasFirstDiscussedDate,
                 AdvisoryBoardDate = project.Dates.Htb,
                 HasAdvisoryBoardDate = project.Dates.HasHtbDate,
                 TargetDate = project.Dates.Target,
@@ -77,14 +75,13 @@ namespace Frontend.Pages.TaskList.HtbDocument
             };
 
             AcademyAndTrustInformationSummaryViewModel =
-                new Pages.Projects.AcademyAndTrustInformation.Index(_getInformationForProject)
+                new Projects.AcademyAndTrustInformation.Index(_getInformationForProject)
                 {
                     Recommendation = project.AcademyAndTrustInformation.Recommendation,
                     Author = project.AcademyAndTrustInformation.Author,
                     AdvisoryBoardDate = project.Dates?.Htb,
                     IncomingTrustName = project.IncomingTrustName,
                     TargetDate = project.Dates?.Target,
-                    FirstDiscussedDate = project.Dates?.FirstDiscussed,
                     OutgoingAcademyUrn = project.OutgoingAcademyUrn,
                     Urn = project.Urn,
                     ReturnToPreview = true
