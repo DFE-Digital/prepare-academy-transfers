@@ -22,3 +22,12 @@ import sqlServer from 'cypress-sql-server';
 const dayjs = require('dayjs')
 Cypress.dayjs = dayjs
 sqlServer.loadDBCommands();
+
+beforeEach(() => {
+    cy.intercept(
+        { url: Cypress.env('url') + '**', middleware: true },
+        //Add authorization to all Cypress requests
+        (req) => req.headers['Authorization'] = 'Bearer ' + Cypress.env('authorizationHeader'),
+        (req) => req.headers['AuthorizationRole'] = 'transfers.create'
+    )
+})

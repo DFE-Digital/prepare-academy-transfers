@@ -5,10 +5,11 @@ describe('Tests to check search incoming trust error message', () => {
         cy.storeSessionData();
     });
 
-    before(function () {
+
+    it('Logs into AD', () => {
         cy.login();
     });
-
+    
     it('Should not show the outgoing trust in search results', () => {
         cy.get('[data-test="create-transfer"]').click();
         cy.get('#SearchQuery').clear();
