@@ -75,19 +75,19 @@ To execute the tests locally and view the output, run the following:
 ```
 cd end-to-end-tests
 npm install (first time)
-npm run cypress:open -- --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
+npm run cypress:open -- --env url="BASE_URL_OF_APP",authorizationHeader="secret"
 ```
 
 To execute the tests in headless mode, run the following (the output will log to the console):
 
 ```
-npm run cypress:run -- --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
+npm run cypress:run -- --env url="BASE_URL_OF_APP",authorizationHeader="secret"
 ```
 
 To execute the tests and push the results to the cypress dashboard:
 
 ```
-npm run cypress:run -- --record --key 'KEY' --env username='USERNAME',password='PASSWORD',url="BASE_URL_OF_APP"
+npm run cypress:run -- --record --key 'KEY' url="BASE_URL_OF_APP",authorizationHeader="secret"
 ```
 
 ### Useful tips
@@ -121,5 +121,9 @@ before(function () {
 	cy.login();
 });
 ```
+##### AD Sign in
+AuthorizationHeader secret passed into the cypress tests needs to match the application configuration
+See support/index.js for the cy.intercept command.
+
 
 Further details about Cypress can be found here: https://docs.cypress.io/api/table-of-contents

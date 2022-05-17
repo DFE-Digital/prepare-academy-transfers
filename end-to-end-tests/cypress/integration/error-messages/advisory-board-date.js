@@ -3,11 +3,12 @@ describe('Tests to check advisory board date error messages', () => {
         cy.storeSessionData();
     });
 
-    before(function () {
+    beforeEach(function () {
         cy.login();
     });
 
     it('Advisory board date should be in the future', () => {
+        cy.login();
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type('sd');

@@ -5,8 +5,7 @@ describe('Tests to check search incoming trust error message', () => {
         cy.storeSessionData();
     });
 
-
-    it('Logs into AD', () => {
+    beforeEach(function () {
         cy.login();
     });
     

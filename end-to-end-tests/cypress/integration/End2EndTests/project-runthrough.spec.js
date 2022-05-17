@@ -40,7 +40,6 @@ describe("Creating and editing an academy transfer", function () {
     let projectUrl = "";
 
     it("Create an Academy Transfer", function () {
-        cy.login();
         cy.get("h1").should('contain.text', "Manage an academy transfer");
 
         cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();

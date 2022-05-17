@@ -6,7 +6,7 @@ describe('Select multiple academies', () => {
         cy.storeSessionData();
     });
 
-    before(function () {
+    beforeEach(function () {
         cy.login();
     });
     
