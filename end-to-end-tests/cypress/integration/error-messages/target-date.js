@@ -28,6 +28,7 @@ describe('Tests to check target date error messages', () => {
         cy.fillInDateMonthYear(Cypress.dayjs().subtract(1,'M'))
         cy.get('.govuk-button').click();
         cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', 'You must enter a future date').should('be.visible');
+        //cy.get('#TargetDateViewModel\\.TargetDate\\.Date\\.Day-error').should('have.text', 'Error:You must enter a future date').should('be.visible');
     });
 
     after(function () {
