@@ -63,8 +63,6 @@ namespace Data.TRAMS.Mappers.Request
             {
                 HtbDate = input.Dates.HasHtbDate != false ? input.Dates.Htb : null,
                 HasHtbDate = input.Dates.HasHtbDate,
-                TransferFirstDiscussed = input.Dates.HasFirstDiscussedDate != false ? input.Dates.FirstDiscussed : null,
-                HasTransferFirstDiscussedDate = input.Dates.HasFirstDiscussedDate,
                 TargetDateForTransfer = input.Dates.HasTargetDateForTransfer != false ? input.Dates.Target : null,
                 HasTargetDateForTransfer = input.Dates.HasTargetDateForTransfer
             };
