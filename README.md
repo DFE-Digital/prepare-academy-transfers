@@ -90,6 +90,8 @@ To execute the tests and push the results to the cypress dashboard:
 npm run cypress:run -- --record --key 'KEY' url="BASE_URL_OF_APP",authorizationHeader="secret"
 ```
 
+We append a wildcard (\*\*) to the URL argument (see `cypress.json`), so it must have a trailing slash (e.g., `url="https://localhost:5001/"`).
+
 ### Useful tips
 
 #### Maintaining sessions
