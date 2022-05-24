@@ -321,7 +321,7 @@ namespace Frontend.Services
             {
                 ofstedInformation.Add(new[]
                 {
-                    new TextElement {Value = "Latest section 8 inspection", Bold = true},
+                    new TextElement {Value = "Latest short inspection", Bold = true},
                     new TextElement {Value = academy.DateOfLatestSection8Inspection},
                 });
             }
