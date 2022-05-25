@@ -319,7 +319,7 @@ namespace Frontend.Services
 
             if (academy.LatestInspectionIsSection8)
             {
-                ofstedInformation.Add(new[]
+                ofstedInformation.Insert(1, new[]
                 {
                     new TextElement {Value = "Latest short inspection date", Bold = true},
                     new TextElement {Value = academy.DateOfLatestSection8Inspection},
