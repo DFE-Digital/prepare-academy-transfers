@@ -40,7 +40,7 @@ namespace Data.Mock
                 LatestOfstedJudgement = new LatestOfstedJudgement
                 {
                     OverallEffectiveness = "Placeholder",
-                    InspectionDate = "Placeholder",
+                    InspectionEndDate = "Placeholder",
                     SchoolName = "Placeholder",
                     OfstedReport = "Placeholder"
                 }

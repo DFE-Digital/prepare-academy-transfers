@@ -16,7 +16,6 @@ namespace Frontend.Models.ProjectTemplate
         public string PublishedAdmissionNumber { get; set; }
         public string NumberOnRoll { get; set; }
         public string PercentageFreeSchoolMeals { get; set; }
-        public string OfstedLastInspection { get; set; }
         public string OverallEffectiveness { get; set; }
         public string ViabilityIssues { get; set; }
         public string FinancialDeficit { get; set; }

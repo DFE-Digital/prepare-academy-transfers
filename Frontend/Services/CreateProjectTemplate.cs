@@ -282,8 +282,8 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "Ofsted inspection date", Bold = true},
-                    new TextElement {Value = academy.OfstedLastInspection},
+                    new TextElement {Value = "Latest full inspection date", Bold = true},
+                    new TextElement {Value = academy.InspectionEndDate},
                 },
                 new[]
                 {
@@ -321,7 +321,7 @@ namespace Frontend.Services
             {
                 ofstedInformation.Add(new[]
                 {
-                    new TextElement {Value = "Latest short inspection", Bold = true},
+                    new TextElement {Value = "Latest short inspection date", Bold = true},
                     new TextElement {Value = academy.DateOfLatestSection8Inspection},
                 });
             }

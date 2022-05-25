@@ -36,7 +36,6 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new LatestOfstedJudgement
             {
-                InspectionDate = input.OfstedLastInspection,
                 InspectionEndDate = input.MisEstablishment?.InspectionEndDate,
                 OverallEffectiveness = ParseOfstedRating(input.MisEstablishment?.OverallEffectiveness),
                 SchoolName = input.EstablishmentName,

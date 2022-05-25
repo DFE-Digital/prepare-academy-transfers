@@ -4,7 +4,7 @@
     var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.LatestOfstedJudgement.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
 }
 
-<gds-key-value key="Latest full inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.LatestOfstedJudgement.DateOfLatestInspection)" show-action=@Model.IsPreview />
+<gds-key-value key="Latest full inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.LatestOfstedJudgement.InspectionEndDate)" show-action=@Model.IsPreview />
 
 <gds-key-value key="Quality of education" value="@Model.LatestOfstedJudgement.QualityOfEducation" show-action="@Model.IsPreview" />
 <gds-key-value key="Behaviour and attitudes" value="@Model.LatestOfstedJudgement.BehaviourAndAttitudes" show-action="@Model.IsPreview" />

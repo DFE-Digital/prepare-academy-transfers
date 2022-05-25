@@ -37,7 +37,7 @@ namespace Data.Tests.Models
         [Theory]
         [InlineData(null, null, false)]
         [InlineData(null, "12/05/2016", false)]
-        [InlineData("12/05/2016", null, false)]
+        [InlineData("12/05/2016", null, true)]
         [InlineData("12/05/2016", "12/05/2016", false)]
         [InlineData("11/05/2016", "12/05/2016", false)]
         [InlineData("12/05/2016", "11/05/2016", true)]
@@ -46,26 +46,10 @@ namespace Data.Tests.Models
             var latestOfstedJudgement = new LatestOfstedJudgement
             {
                 DateOfLatestSection8Inspection = latestSection8,
-                InspectionDate = latestFull
+                InspectionEndDate = latestFull
             };
 
             latestOfstedJudgement.LatestInspectionIsSection8.Should().Be(expectedValue);
-        }
-
-        [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, "12/05/2016", "12/05/2016")]
-        [InlineData("12/05/2016", null, "12/05/2016")]
-        [InlineData("12/05/2016", "11/05/2016", "12/05/2016")]
-        public void DateOfLatestInspection_ReturnsCorrectly(string inspectionDate, string inspectionEndDate, string expectedValue)
-        {
-            var latestOfstedJudgement = new LatestOfstedJudgement
-            {
-                InspectionDate = inspectionDate,
-                InspectionEndDate = inspectionEndDate
-            };
-
-            latestOfstedJudgement.DateOfLatestInspection.Should().Be(expectedValue);
         }
     }
 }

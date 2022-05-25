@@ -41,7 +41,7 @@ namespace Frontend.Services
                 RationaleForProject = project.Rationale.Project,
                 RationaleForTrust = project.Rationale.Trust,
                 ClearedBy = "",
-                Version = System.DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
+                Version = DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
                 DateOfHtb = DatesHelper.FormatDateString(project.Dates.Htb, project.Dates.HasHtbDate),
                 DateOfProposedTransfer =
                     DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer),
@@ -85,8 +85,6 @@ namespace Frontend.Services
                 academyModel.NumberOnRoll =
                     $"{academy.GeneralInformation.NumberOnRoll} ({academy.GeneralInformation.PercentageFull})";
                 academyModel.PercentageFreeSchoolMeals = academy.GeneralInformation.PercentageFsm;
-                academyModel.OfstedLastInspection =
-                    DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.DateOfLatestInspection);
                 academyModel.OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness;
                 academyModel.ViabilityIssues = academy.GeneralInformation.ViabilityIssue;
                 academyModel.FinancialDeficit = academy.GeneralInformation.Deficit;
@@ -126,6 +124,7 @@ namespace Frontend.Services
                 academyModel.SixthFormProvisionApplicable = academy.LatestOfstedJudgement.SixthFormProvisionApplicable;
                 academyModel.DateOfLatestSection8Inspection = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.DateOfLatestSection8Inspection);
                 academyModel.LatestInspectionIsSection8 = academy.LatestOfstedJudgement.LatestInspectionIsSection8;
+                academyModel.InspectionEndDate = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionEndDate);
 
                 academyModels.Add(academyModel);
             }

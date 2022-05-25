@@ -57,7 +57,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("100 (100%)", projectTemplateAcademyModel.NumberOnRoll);
                 Assert.Equal(academy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                     projectTemplateAcademyModel.PupilsFsm6Years);
-                Assert.Equal("1 January 2020", projectTemplateAcademyModel.OfstedLastInspection);
+                Assert.Equal("1 January 2020", projectTemplateAcademyModel.InspectionEndDate);
                 Assert.Equal(academy.LatestOfstedJudgement.OverallEffectiveness,
                     projectTemplateAcademyModel.OverallEffectiveness);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Project,

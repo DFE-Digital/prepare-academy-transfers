@@ -142,7 +142,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             var latestOfstedJudgement = result.LatestOfstedJudgement;
             Assert.Equal("Fake Academy", latestOfstedJudgement.SchoolName);
             Assert.Equal("Outstanding", latestOfstedJudgement.OverallEffectiveness);
-            Assert.Equal("01-01-2020", latestOfstedJudgement.InspectionDate);
+            Assert.Equal("01-01-2020", latestOfstedJudgement.InspectionEndDate);
             Assert.Equal("http://example.com", latestOfstedJudgement.OfstedReport);
             Assert.Equal("01-01-2020", latestOfstedJudgement.InspectionEndDate);
             Assert.Equal("Inadequate", latestOfstedJudgement.QualityOfEducation);
