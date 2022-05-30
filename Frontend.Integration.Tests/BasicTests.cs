@@ -27,7 +27,6 @@ namespace Frontend.Integration.Tests
             Document.QuerySelector("#main-content > div:nth-child(2) > div > div:nth-child(3) > div > h3 > a")
                 ?.TextContent
                 .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName.ToTitleCase());
-            Document.QuerySelector("a.dfe-sign-out")?.TextContent.Trim().Should().Be("Sign out");
         }
     }
 }
