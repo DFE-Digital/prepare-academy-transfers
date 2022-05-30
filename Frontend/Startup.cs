@@ -26,16 +26,12 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Frontend.Authorization;
 using Frontend.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-
 
 namespace Frontend
 {
@@ -100,12 +96,11 @@ namespace Frontend
                 options =>
                 {
                     options.AccessDeniedPath = "/access-denied";
-                    options.LogoutPath = "/signed-out";
                     options.Cookie.Name = "ManageAnAcademyTransfer.Login";
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
                     options.ExpireTimeSpan =
-                        TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
+                        TimeSpan.FromMinutes(int.Parse(Configuration["AuthenticationExpirationInMinutes"]));
                     options.SlidingExpiration = true;
                     if (string.IsNullOrEmpty(Configuration["CI"]))
                     {
