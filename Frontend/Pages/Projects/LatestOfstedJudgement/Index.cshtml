@@ -2,7 +2,7 @@
 @model Frontend.Pages.Projects.LatestOfstedJudgement.Index
 
 @{
-    ViewBag.Title = "Latest Ofsted judgement (reference)";
+    ViewBag.Title = "Latest Ofsted report (reference)";
     Layout = "_Layout";
 }
 
@@ -18,11 +18,9 @@
         <span class="govuk-caption-l">
             Academy: @Model.LatestOfstedJudgement.SchoolName
         </span>
-        <h1 class="govuk-heading-l">Latest Ofsted judgement</h1>
-        <div class="govuk-inset-text">
-            The information here can’t be changed but you will be able to edit the project template after it’s been created.
-        </div>
-        <p class="govuk-body">This information is taken from TRAMS.</p>
+        <h1 class="govuk-heading-l">Latest Ofsted report</h1>
+        <p class="govuk-body">This information comes from Ofsted and the data in this page will go into your project template.</p>
+        <p class="govuk-body">You can add <a class="govuk-link" href=@($"#{Model.AdditionalInformationViewModel.TitleId}")>additional information</a> if you need to, this will also go into your project template.</p>
         <hr class="govuk-section-break govuk-section-break--l">
     </div>
 </div>
