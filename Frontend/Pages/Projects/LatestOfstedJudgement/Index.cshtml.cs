@@ -4,6 +4,7 @@ using Data;
 using Frontend.Models;
 using Frontend.Models.Forms;
 using Frontend.Services.Interfaces;
+using Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Frontend.Pages.Projects.LatestOfstedJudgement
@@ -12,16 +13,13 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
-        
-        public string SchoolName { get; set; }
-        public string InspectionDate { get; set; }
-        public string OverallEffectiveness { get; set; }
-        public string OfstedReport { get; set; }
-        
+
+        public Data.Models.Academies.LatestOfstedJudgement LatestOfstedJudgement { get; set; }
+
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
         public bool IsPreview { get; set; }
-        
+
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
 
@@ -31,24 +29,21 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
         }
-        
+
         public async Task<IActionResult> OnGetAsync(bool addOrEditAdditionalInformation = false)
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
             var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
-            var latestOfstedJudgement = academy.LatestOfstedJudgement;
-            
+            LatestOfstedJudgement = academy.LatestOfstedJudgement;
+
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             ProjectReference = projectInformation.Project.Reference;
-            SchoolName = latestOfstedJudgement.SchoolName;
-            InspectionDate = latestOfstedJudgement.InspectionDate;
-            OverallEffectiveness = latestOfstedJudgement.OverallEffectiveness;
-            OfstedReport = latestOfstedJudgement.OfstedReport;
+
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
-                AdditionalInformation = latestOfstedJudgement.AdditionalInformation,
+                AdditionalInformation = LatestOfstedJudgement.AdditionalInformation,
                 HintText =
-                    "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
+                        "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
                 ReturnToPreview = ReturnToPreview
@@ -63,13 +58,15 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
             var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
             academy.LatestOfstedReportAdditionalInformation = AdditionalInformationViewModel?.AdditionalInformation;
             await _projectsRepository.Update(model.Result);
-            
+
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
             return RedirectToPage("/Projects/LatestOfstedJudgement/Index", null, new { Urn }, "additional-information-hint");
         }
+
+
     }
 }

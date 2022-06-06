@@ -37,9 +37,17 @@ namespace Data.TRAMS.Mappers.Response
             return new LatestOfstedJudgement
             {
                 InspectionDate = input.OfstedLastInspection,
+                InspectionEndDate = input.MisEstablishment?.InspectionEndDate,
                 OverallEffectiveness = ParseOfstedRating(input.MisEstablishment?.OverallEffectiveness),
                 SchoolName = input.EstablishmentName,
-                OfstedReport = input.MisEstablishment?.WebLink
+                OfstedReport = input.MisEstablishment?.WebLink,
+                QualityOfEducation = ParseOfstedRating(input.MisEstablishment?.QualityOfEducation),
+                BehaviourAndAttitudes = ParseOfstedRating(input.MisEstablishment?.BehaviourAndAttitudes),
+                PersonalDevelopment = ParseOfstedRating(input.MisEstablishment?.PersonalDevelopment),
+                EffectivenessOfLeadershipAndManagement = ParseOfstedRating(input.MisEstablishment?.EffectivenessOfLeadershipAndManagement),
+                EarlyYearsProvision = ParseOfstedRating(input.MisEstablishment?.EarlyYearsProvision),
+                SixthFormProvision = ParseOfstedRating(input.MisEstablishment?.SixthFormProvision),
+                DateOfLatestSection8Inspection = input.MisEstablishment?.DateOfLatestSection8Inspection
             };
         }
 
@@ -51,6 +59,7 @@ namespace Data.TRAMS.Mappers.Response
                 "2" => "Good",
                 "3" => "Requires improvement",
                 "4" => "Inadequate",
+                "9" => "No data",
                 _ => "N/A"
             };
         }

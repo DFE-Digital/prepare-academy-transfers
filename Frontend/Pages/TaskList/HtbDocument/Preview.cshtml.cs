@@ -148,10 +148,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
                              Urn = project.Urn,
                              OutgoingAcademyUrn = project.OutgoingAcademyUrn,
                              AcademyUkprn = academy.Ukprn,
-                             SchoolName = academy.LatestOfstedJudgement.SchoolName,
-                             InspectionDate = academy.LatestOfstedJudgement.InspectionDate,
-                             OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness,
-                             OfstedReport = academy.LatestOfstedJudgement.OfstedReport,
+                             LatestOfstedJudgement = academy.LatestOfstedJudgement,
                              AdditionalInformationViewModel = new AdditionalInformationViewModel
                              {
                                  AdditionalInformation = academy.LatestOfstedJudgement.AdditionalInformation,

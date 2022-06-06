@@ -72,6 +72,7 @@ namespace Frontend.Services
             foreach (var academy in academies)
             {
                 var academyModel = new ProjectTemplateAcademyModel();
+
                 academyModel.AcademyTypeAndRoute = academy.EstablishmentType;
                 academyModel.SchoolName = academy.Name;
                 academyModel.SchoolUrn = academy.Urn;
@@ -85,7 +86,7 @@ namespace Frontend.Services
                     $"{academy.GeneralInformation.NumberOnRoll} ({academy.GeneralInformation.PercentageFull})";
                 academyModel.PercentageFreeSchoolMeals = academy.GeneralInformation.PercentageFsm;
                 academyModel.OfstedLastInspection =
-                    DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.InspectionDate);
+                    DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.DateOfLatestInspection);
                 academyModel.OverallEffectiveness = academy.LatestOfstedJudgement.OverallEffectiveness;
                 academyModel.ViabilityIssues = academy.GeneralInformation.ViabilityIssue;
                 academyModel.FinancialDeficit = academy.GeneralInformation.Deficit;
@@ -115,6 +116,17 @@ namespace Frontend.Services
                 academyModel.KeyStage5AdditionalInformation =
                     academy.EducationPerformance.KeyStage5AdditionalInformation;
                 academyModel.LocalAuthorityName = academy.LocalAuthorityName;
+                academyModel.QualityOfEducation = academy.LatestOfstedJudgement.QualityOfEducation;
+                academyModel.BehaviourAndAttitudes = academy.LatestOfstedJudgement.BehaviourAndAttitudes;
+                academyModel.PersonalDevelopment = academy.LatestOfstedJudgement.PersonalDevelopment;
+                academyModel.EffectivenessOfLeadershipAndManagement = academy.LatestOfstedJudgement.EffectivenessOfLeadershipAndManagement;
+                academyModel.EarlyYearsProvision = academy.LatestOfstedJudgement.EarlyYearsProvision;
+                academyModel.EarlyYearsProvisionApplicable = academy.LatestOfstedJudgement.EarlyYearsProvisionApplicable;
+                academyModel.SixthFormProvision = academy.LatestOfstedJudgement.SixthFormProvision;
+                academyModel.SixthFormProvisionApplicable = academy.LatestOfstedJudgement.SixthFormProvisionApplicable;
+                academyModel.DateOfLatestSection8Inspection = DatesHelper.DateStringToGovUkDate(academy.LatestOfstedJudgement.DateOfLatestSection8Inspection);
+                academyModel.LatestInspectionIsSection8 = academy.LatestOfstedJudgement.LatestInspectionIsSection8;
+
                 academyModels.Add(academyModel);
             }
 

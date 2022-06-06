@@ -273,7 +273,7 @@ namespace Frontend.Services
                 hBuilder.AddText(new TextElement {Value = "Latest Ofsted judgement", Bold = true});
             });
 
-            builder.AddTable(new[]
+            var ofstedInformation = new List<TextElement[]>
             {
                 new[]
                 {
@@ -292,15 +292,59 @@ namespace Frontend.Services
                 },
                 new[]
                 {
-                    new TextElement {Value = "Ofsted report", Bold = true},
-                    new TextElement {Value = academy.OfstedReport},
+                    new TextElement {Value = "Quality of education", Bold = true},
+                    new TextElement {Value = academy.QualityOfEducation},
+                },
+                new[]
+                {
+                    new TextElement {Value = "Behaviour and attitudes", Bold = true},
+                    new TextElement {Value = academy.BehaviourAndAttitudes},
+                },
+                new[]
+                {
+                    new TextElement {Value = "Personal development", Bold = true},
+                    new TextElement {Value = academy.PersonalDevelopment},
+                },
+                new[]
+                {
+                    new TextElement {Value = "Effectiveness of leadership and management", Bold = true},
+                    new TextElement {Value = academy.EffectivenessOfLeadershipAndManagement},
                 },
                 new[]
                 {
                     new TextElement {Value = "Additional information", Bold = true},
                     new TextElement {Value = academy.OfstedAdditionalInformation},
                 }
-            });
+            };
+
+            if (academy.LatestInspectionIsSection8)
+            {
+                ofstedInformation.Add(new[]
+                {
+                    new TextElement {Value = "Latest section 8 inspection", Bold = true},
+                    new TextElement {Value = academy.DateOfLatestSection8Inspection},
+                });
+            }
+
+            if (academy.EarlyYearsProvisionApplicable)
+            {
+                ofstedInformation.Add(new[]
+                {
+                    new TextElement {Value = "Early years provision", Bold = true},
+                    new TextElement {Value = academy.EarlyYearsProvision},
+                });
+            }
+
+            if (academy.SixthFormProvisionApplicable)
+            {
+                ofstedInformation.Add(new[]
+                {
+                    new TextElement {Value = "Sixth form provision", Bold = true},
+                    new TextElement {Value = academy.SixthFormProvision},
+                });
+            }
+
+            builder.AddTable(ofstedInformation);
         }
 
         private static void BuildKeyStage2PerformanceInformation(IDocumentBodyBuilder builder,

@@ -90,7 +90,15 @@ namespace Frontend.Tests.TestFixtures
                 {
                     InspectionDate = "01/01/2020",
                     OverallEffectiveness = "overall effectiveness",
-                    OfstedReport = "ofsted report"
+                    OfstedReport = "ofsted report",
+                    QualityOfEducation = "Outstanding",
+                    BehaviourAndAttitudes = "Outstanding",
+                    PersonalDevelopment = "Outstanding",
+                    EffectivenessOfLeadershipAndManagement = "Outstanding",
+                    EarlyYearsProvision = "Outstanding",
+                    SixthFormProvision = "N/A",
+                    DateOfLatestSection8Inspection = "01/01/2021",
+                    
                 },
                 EducationPerformance = new EducationPerformance
                 {

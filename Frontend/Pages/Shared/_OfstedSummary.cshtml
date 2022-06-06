@@ -1,30 +1,54 @@
 @using Helpers
 @model Frontend.Pages.Projects.LatestOfstedJudgement.Index
 @{
-    var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
+    var ofstedReportElement = $"<a class=\"govuk-link\" href=\"{Model.LatestOfstedJudgement.OfstedReport}\" rel=\"noreferrer noopener\" target=\"_blank\">View the school's latest inspection report on Ofsted's website (opens in new tab)</a>";
 }
+
+@if (Model.LatestOfstedJudgement.LatestInspectionIsSection8)
+{
+    <h2 class="govuk-heading-m">Short inspection</h2>
+    <dl class="govuk-summary-list @(!Model.IsPreview ? "govuk-!-margin-bottom-9" : null)">
+        <gds-key-value key="Oftsed inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.LatestOfstedJudgement.DateOfLatestSection8Inspection)" show-action="@Model.IsPreview" />
+    </dl>
+}
+
+<h2 class="govuk-heading-m">Last full inspection: @Model.LatestOfstedJudgement.OverallEffectiveness</h2>
 <dl class="govuk-summary-list @(!Model.IsPreview ? "govuk-!-margin-bottom-9" : null)">
-    <gds-key-value key="School name" value="@Model.SchoolName" show-action="@Model.IsPreview"/>
-    <gds-key-value key="Ofsted inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.InspectionDate)" show-action="@Model.IsPreview"/>
-    <gds-key-value key="Overall effectiveness" value='@Model.OverallEffectiveness' show-action="@Model.IsPreview"/>
-    <gds-key-value key="Ofsted report" value="@ofstedReportElement" show-action="@Model.IsPreview"/>
+    <gds-key-value key="Ofsted inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.LatestOfstedJudgement.DateOfLatestInspection)" show-action="@Model.IsPreview" />
+
+    <gds-key-value key="Quality of education" value="@Model.LatestOfstedJudgement.QualityOfEducation" show-action="@Model.IsPreview" />
+    <gds-key-value key="Behaviour and attitudes" value="@Model.LatestOfstedJudgement.BehaviourAndAttitudes" show-action="@Model.IsPreview" />
+    <gds-key-value key="Personal development" value="@Model.LatestOfstedJudgement.PersonalDevelopment" show-action="@Model.IsPreview" />
+    <gds-key-value key="Leadership and management" value="@Model.LatestOfstedJudgement.EffectivenessOfLeadershipAndManagement" show-action="@Model.IsPreview" />
+
+    @if (Model.LatestOfstedJudgement.EarlyYearsProvisionApplicable)
+    {
+        <gds-key-value key="Early years provision" value="@Model.LatestOfstedJudgement.EarlyYearsProvision" show-action="@Model.IsPreview" />
+    }
+    @if (Model.LatestOfstedJudgement.SixthFormProvisionApplicable)
+    {
+        <gds-key-value key="Sixth form provision" value="@Model.LatestOfstedJudgement.SixthFormProvision" show-action="@Model.IsPreview" />
+    }
+
+    <gds-key-value key="Ofsted report" value="@ofstedReportElement" show-action="@Model.IsPreview" />
+
     @if (Model.IsPreview)
     {
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                Additional information
-            </dt>
-            <dd class="govuk-summary-list__value">
-                <stringsummary value="@Model.AdditionalInformationViewModel.AdditionalInformation"></stringsummary>
-            </dd>
-            <dd class="govuk-summary-list__actions">
-                <a class="govuk-link"
-                   asp-page="/Projects/LatestOfstedJudgement/Index"
-                   asp-route-urn="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
-                   asp-route-returnToPreview="true" asp-route-academyukprn="@Model.AcademyUkprn">
-                    Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
-                </a>
-            </dd>
+        <dt class="govuk-summary-list__key">
+            Additional information
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <stringsummary value="@Model.AdditionalInformationViewModel.AdditionalInformation"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link"
+           asp-page="/Projects/LatestOfstedJudgement/Index"
+           asp-route-urn="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+           asp-route-returnToPreview="true" asp-route-academyukprn="@Model.AcademyUkprn">
+                Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
+            </a>
+        </dd>
         </div>
     }
 </dl>
