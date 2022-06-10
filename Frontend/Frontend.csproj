@@ -6,6 +6,14 @@
     <Platforms>AnyCPU</Platforms>
     <UserSecretsId>d227be51-e8df-4258-9943-78e14a94484a</UserSecretsId>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>0436</NoWarn>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>0436</NoWarn>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <Content Remove="wwwroot\package-lock.json" />
     <Content Remove="wwwroot\package.json" />
