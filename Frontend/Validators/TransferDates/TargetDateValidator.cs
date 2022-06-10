@@ -11,7 +11,7 @@ namespace Frontend.Validators.TransferDates
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.TargetDate)
-                .SetValidator(new DateValidator());
+                .SetValidator(new DateValidator() {ErrorDisplayName = "expected transfer date"});
 
             RuleFor(x => x.TargetDate)
                 .SetValidator(new FutureDateValidator());

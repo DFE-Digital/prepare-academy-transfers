@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentValidation.TestHelper;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
@@ -8,11 +9,14 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
 {
     public class DateValidatorTests
     {
-        private DateValidator _validator;
+        private readonly DateValidator _validator;
         
         public DateValidatorTests()
         {
-            _validator = new DateValidator();
+            _validator = new DateValidator
+            {
+                ErrorDisplayName = "advisory board date"
+            };
         }
         
         [Theory]
@@ -34,7 +38,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("You must enter the date or confirm that you don't know it");
+                .WithErrorMessage("Enter advisory board date or select I do not know this");
         }
         
         [Fact]
@@ -54,9 +58,52 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("You must either enter the date or select 'I do not know this'");
+                .WithErrorMessage("Enter advisory board date or select I do not know this");
         }
-        
+
+        [Fact]
+        public async Task WhenFieldIsEmptyAndUnknownDate_DoesNotHaveMissingFieldError()
+        {
+            var dateVm = new DateViewModel
+            {
+                Date = new DateInputViewModel
+                {
+                    Day = "",
+                    Month = "2",
+                    Year = "2022"
+                },
+                UnknownDate = true
+            };
+            
+            var result = await _validator.TestValidateAsync(dateVm);
+
+            result.ShouldHaveValidationErrorFor(viewModel => viewModel.Date.Day).WithoutErrorMessage("The advisory board date must include a day");
+        }
+
+        [Theory]
+        [InlineData("", "1", "2022", "The advisory board date must include a day", nameof(DateInputViewModel.Day))]
+        [InlineData("1", "", "2022", "The advisory board date must include a month", nameof(DateInputViewModel.Month))]
+        [InlineData("1", "1", "", "The advisory board date must include a year", nameof(DateInputViewModel.Year))]
+        public async Task WhenFieldIsEmptyAndUnknownDateIsFalse_HasMissingFieldError(string day, string month, string year,
+            string expectedErrorMessage, string expectedPropertyName)
+        {
+            var dateVm = new DateViewModel
+            {
+                Date = new DateInputViewModel
+                {
+                    Day = day,
+                    Month = month,
+                    Year = year
+                },
+                UnknownDate = false
+            };
+            
+            var result = await _validator.TestValidateAsync(dateVm);
+
+            result.ShouldHaveValidationErrorFor(expectedPropertyName)
+                .WithErrorMessage(expectedErrorMessage);
+        }
+
         [Theory]
         [InlineData("1//2021")]
         [InlineData("/1/2021")]
