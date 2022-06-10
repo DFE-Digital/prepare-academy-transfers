@@ -1,38 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D9FE9CCF-0B51-4BDC-9B21-AC75D59C7BB7}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		Dockerfile = Dockerfile
 		manifest.yml = manifest.yml
 		README.md = README.md
-		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{6BF642D7-65ED-4682-9973-C71F2D8EDBEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Frontend.csproj", "{6BF642D7-65ED-4682-9973-C71F2D8EDBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend.Tests", "Frontend.Tests\Frontend.Tests.csproj", "{6A7EFD6D-24BD-4101-9CD0-F57EAE47BF4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend.Tests", "Frontend.Tests\Frontend.Tests.csproj", "{6A7EFD6D-24BD-4101-9CD0-F57EAE47BF4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentGeneration", "DocumentGeneration\DocumentGeneration.csproj", "{B3E5C233-7BB8-49DB-B9BE-6803D0C0B8B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGeneration", "DocumentGeneration\DocumentGeneration.csproj", "{B3E5C233-7BB8-49DB-B9BE-6803D0C0B8B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentGeneration.Tests", "DocumentGeneration.Tests\DocumentGeneration.Tests.csproj", "{0EE8EA1E-A952-4671-9613-2D26D2459C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGeneration.Tests", "DocumentGeneration.Tests\DocumentGeneration.Tests.csproj", "{0EE8EA1E-A952-4671-9613-2D26D2459C16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Mock", "Data.Mock\Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Mock", "Data.Mock\Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS", "Data.TRAMS\Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.TRAMS", "Data.TRAMS\Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.TRAMS.Tests", "Data.TRAMS.Tests\Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.TRAMS.Tests", "Data.TRAMS.Tests\Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend.Integration.Tests", "Frontend.Integration.Tests\Frontend.Integration.Tests.csproj", "{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend.Integration.Tests", "Frontend.Integration.Tests\Frontend.Integration.Tests.csproj", "{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Tests", "Data.Tests\Data.Tests.csproj", "{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,10 @@ Global
 		{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

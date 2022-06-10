@@ -16,7 +16,6 @@ namespace Frontend.Models.ProjectTemplate
         public string PublishedAdmissionNumber { get; set; }
         public string NumberOnRoll { get; set; }
         public string PercentageFreeSchoolMeals { get; set; }
-        public string OfstedLastInspection { get; set; }
         public string OverallEffectiveness { get; set; }
         public string ViabilityIssues { get; set; }
         public string FinancialDeficit { get; set; }
@@ -39,5 +38,16 @@ namespace Frontend.Models.ProjectTemplate
         public string KeyStage4AdditionalInformation { get; set; }
         public string KeyStage5AdditionalInformation { get; set; }
         public string LocalAuthorityName { get; set; }
+        public string QualityOfEducation { get; set; }
+        public string BehaviourAndAttitudes { get; set; }
+        public string PersonalDevelopment { get; set; }
+        public string EffectivenessOfLeadershipAndManagement { get; set; }
+        public string InspectionEndDate { get; set; }
+        public string EarlyYearsProvision { get; set; }
+        public bool EarlyYearsProvisionApplicable { get; set; }
+        public string SixthFormProvision { get; set; }
+        public bool SixthFormProvisionApplicable { get; set; }
+        public bool LatestInspectionIsSection8 { get; set; }
+        public string DateOfLatestSection8Inspection { get; set; }
     }
 }
