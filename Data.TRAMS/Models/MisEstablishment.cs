@@ -48,7 +48,6 @@ namespace Data.TRAMS.Models
         public string PreviousSixthFormProvision { get; set; }
         public string PublicationDate { get; set; }
         public string QualityOfEducation { get; set; }
-        public string Region { get; set; }
         public string ReligiousEthos { get; set; }
         public string SafeguardingIsEffective { get; set; }
         public string SchoolName { get; set; }

@@ -46,7 +46,6 @@ namespace Data.TRAMS.Models
         public string LocalAuthorityName { get; set; }
         public NameAndCode Lsoa { get; set; }
         public MisEstablishment MisEstablishment { get; set; }
-        public Misfea MisFurtherEducationEstablishment { get; set; }
         public NameAndCode Msoa { get; set; }
         public string Northing { get; set; }
         public string NurseryProvision { get; set; }
