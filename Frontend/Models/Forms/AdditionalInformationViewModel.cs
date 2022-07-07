@@ -7,5 +7,6 @@
         public string AdditionalInformation { get; set; }
         public string HintText { get; set; }
         public bool ReturnToPreview { get; set; }
+        public string TitleId { get => "additional-information"; } // For jump links
     }
 }

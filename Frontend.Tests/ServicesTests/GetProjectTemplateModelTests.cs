@@ -57,7 +57,7 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("100 (100%)", projectTemplateAcademyModel.NumberOnRoll);
                 Assert.Equal(academy.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years,
                     projectTemplateAcademyModel.PupilsFsm6Years);
-                Assert.Equal("1 January 2020", projectTemplateAcademyModel.OfstedLastInspection);
+                Assert.Equal("1 January 2020", projectTemplateAcademyModel.InspectionEndDate);
                 Assert.Equal(academy.LatestOfstedJudgement.OverallEffectiveness,
                     projectTemplateAcademyModel.OverallEffectiveness);
                 Assert.Equal(getTestInformationForProject.Project.Rationale.Project,
@@ -97,9 +97,19 @@ namespace Frontend.Tests.ServicesTests
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage2Performance.First().Year);
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage4Performance.First().Year);
                 Assert.Equal("2017-2018", projectTemplateAcademyModel.KeyStage5Performance.First().Year);
+                Assert.Equal("Outstanding", projectTemplateAcademyModel.QualityOfEducation);
+                Assert.Equal("Outstanding", projectTemplateAcademyModel.BehaviourAndAttitudes);
+                Assert.Equal("Outstanding", projectTemplateAcademyModel.PersonalDevelopment);
+                Assert.Equal("Outstanding", projectTemplateAcademyModel.EffectivenessOfLeadershipAndManagement);
+                Assert.Equal("Outstanding", projectTemplateAcademyModel.EarlyYearsProvision);
+                Assert.True(projectTemplateAcademyModel.EarlyYearsProvisionApplicable);
+                Assert.Equal("N/A", projectTemplateAcademyModel.SixthFormProvision);
+                Assert.False(projectTemplateAcademyModel.SixthFormProvisionApplicable);
+                Assert.Equal("1 January 2021", projectTemplateAcademyModel.DateOfLatestSection8Inspection);
+                Assert.True(projectTemplateAcademyModel.LatestInspectionIsSection8);
             }
 
-            [Fact]
+        [Fact]
             public async void GivenExistingProjectWithMultipleAcademies_AssignsTheProjectToTheViewModel()
             {
                 const string academyUrn = "urn 2";

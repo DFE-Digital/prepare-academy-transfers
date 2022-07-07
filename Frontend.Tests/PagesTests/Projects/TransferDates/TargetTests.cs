@@ -88,26 +88,26 @@ namespace Frontend.Tests.PagesTests.Projects.TransferDates
                 Assert.True(attribute.Skip);
             }
 
-            [Theory]
-            [InlineData(null, null)]
-            [InlineData("01", null)]
-            [InlineData(null, "2099")]
-            public async void WhenMonthAndYearAreNotSet_DoesNotSetDay(string monthValue, string yearValue)
+            [Fact]
+            public async void WhenMonthAndYearAreNotSet_DoesNotSetDay()
             {
                 _subject.TargetDateViewModel.TargetDate.Date.Day = null;
-                _subject.TargetDateViewModel.TargetDate.Date.Month = monthValue;
-                _subject.TargetDateViewModel.TargetDate.Date.Year = yearValue;
+                _subject.TargetDateViewModel.TargetDate.Date.Month = null;
+                _subject.TargetDateViewModel.TargetDate.Date.Year = null;
 
                 await _subject.OnPostAsync();
 
                 Assert.Null(_subject.TargetDateViewModel.TargetDate.Date.Day);
             }
             
-            [Fact]
-            public async void WhenMonthAndYearAreSet_SetsDayToFirstOfMonth()
+            [Theory]
+            [InlineData("01", null)]
+            [InlineData(null, "2099")]
+            [InlineData("01", "2099")]
+            public async void WhenMonthOrYearIsSet_SetsDayToFirstOfMonth(string monthValue, string yearValue)
             {
-                _subject.TargetDateViewModel.TargetDate.Date.Month = "01";
-                _subject.TargetDateViewModel.TargetDate.Date.Year = "2099";
+                _subject.TargetDateViewModel.TargetDate.Date.Month = monthValue;
+                _subject.TargetDateViewModel.TargetDate.Date.Year = yearValue;
 
                 await _subject.OnPostAsync();
 
