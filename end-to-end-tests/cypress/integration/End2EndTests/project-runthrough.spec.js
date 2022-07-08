@@ -269,18 +269,19 @@ describe("Creating and editing an academy transfer", function () {
         submit();
         clickBackLink()
 
-        // *** School performance ***
+        // Commenting this out for now as current project does not hold KS2 Table
+        // *** School performance *** 
         // Key stage 2 performance tables
-        cy.get(`[data-test='ks2-performance']`).click()
-        clickBackLink();
-        cy.get(`[data-test='ks2-performance']`).click()
-        cy.get(`[data-test='additional-information']`).click()
-        clickBackLink();
-        cy.get(`[data-test='ks2-performance']`).click()
-        cy.get(`[data-test='additional-information']`).click()
-        cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
-        submit();
-        clickBackLink()
+        // cy.get(`[data-test='ks2-performance']`).click()
+        // clickBackLink();
+        // cy.get(`[data-test='ks2-performance']`).click()
+        // cy.get(`[data-test='additional-information']`).click()
+        // clickBackLink();
+        // cy.get(`[data-test='ks2-performance']`).click()
+        // cy.get(`[data-test='additional-information']`).click()
+        // cy.fillInText("AdditionalInformation", "Additional information for ks2 performance");
+        // submit();
+        // clickBackLink()
 
         // Key stage 4 performance tables
         cy.get(`[data-test='ks4-performance']`).click()
