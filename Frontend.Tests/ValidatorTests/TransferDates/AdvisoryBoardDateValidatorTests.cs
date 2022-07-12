@@ -50,7 +50,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             
             var result = await _validator.ValidateAsync(validationContext);
             Assert.Single(result.Errors);
-            Assert.Equal("The Advisory Board date must be on or before the target date for the transfer", result.ToString());
+            Assert.Equal("The Advisory board date must be on or before the target date for the transfer", result.ToString());
         }
         
         [Fact]

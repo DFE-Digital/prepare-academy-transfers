@@ -27,7 +27,7 @@ namespace Frontend.Validators.TransferDates
                             (string) advisoryBoardDate, dateVm.TargetDate.DateInputAsString()))
                     {
                         context.AddFailure(
-                            "The target transfer date must be on or after the Advisory Board date");
+                            "The target transfer date must be on or after the Advisory board date");
                     }
                 });
         }

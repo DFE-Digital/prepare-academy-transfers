@@ -11,7 +11,7 @@ namespace Frontend.Validators.TransferDates
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.AdvisoryBoardDate)
-                .SetValidator(new DateValidator() {ErrorDisplayName= "advisory board date"});
+                .SetValidator(new DateValidator() {ErrorDisplayName= "Advisory board date"});
 
             RuleFor(x => x.AdvisoryBoardDate)
                 .SetValidator(new FutureDateValidator());
@@ -32,7 +32,7 @@ namespace Frontend.Validators.TransferDates
                             (string) targetDate))
                     {
                         context.AddFailure(
-                            "The Advisory Board date must be on or before the target date for the transfer");
+                            "The Advisory board date must be on or before the target date for the transfer");
                     }
                 });
         }

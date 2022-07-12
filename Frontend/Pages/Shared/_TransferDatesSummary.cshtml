@@ -3,7 +3,7 @@
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Advisory Board date
+            Advisory board date
         </dt>
         <dd class="govuk-summary-list__value">
             <datesummary value="@Model.AdvisoryBoardDate" has-date="@Model.HasAdvisoryBoardDate"></datesummary>
@@ -11,7 +11,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link" asp-page="/Projects/TransferDates/AdvisoryBoard" data-test="ab-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
-                Change<span class="govuk-visually-hidden"> Advisory Board date</span>
+                Change<span class="govuk-visually-hidden"> Advisory board date</span>
             </a>
         </dd>
     </div>
