@@ -53,8 +53,7 @@ namespace Frontend
             services
                 .AddRazorPages(options =>
                 {
-                    //options.Conventions.AuthorizeFolder("/");
-                    options.Conventions.AllowAnonymousToPage("/");
+                    options.Conventions.AuthorizeFolder("/");
                     options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
                     options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
                 })
