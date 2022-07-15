@@ -15,7 +15,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
         {
             _validator = new DateValidator
             {
-                ErrorDisplayName = "advisory board date"
+                ErrorDisplayName = "Advisory board date"
             };
         }
         
@@ -38,7 +38,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("Enter advisory board date or select I do not know this");
+                .WithErrorMessage("Enter Advisory board date or select I do not know this");
         }
         
         [Fact]
@@ -58,7 +58,7 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(a => a.Date.Day)
-                .WithErrorMessage("Enter advisory board date or select I do not know this");
+                .WithErrorMessage("Enter Advisory board date or select I do not know this");
         }
 
         [Fact]
@@ -77,13 +77,13 @@ namespace Frontend.Tests.ValidatorTests.TransferDates
             
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(viewModel => viewModel.Date.Day).WithoutErrorMessage("The advisory board date must include a day");
+            result.ShouldHaveValidationErrorFor(viewModel => viewModel.Date.Day).WithoutErrorMessage("The Advisory board date must include a day");
         }
 
         [Theory]
-        [InlineData("", "1", "2022", "The advisory board date must include a day", nameof(DateInputViewModel.Day))]
-        [InlineData("1", "", "2022", "The advisory board date must include a month", nameof(DateInputViewModel.Month))]
-        [InlineData("1", "1", "", "The advisory board date must include a year", nameof(DateInputViewModel.Year))]
+        [InlineData("", "1", "2022", "The Advisory board date must include a day", nameof(DateInputViewModel.Day))]
+        [InlineData("1", "", "2022", "The Advisory board date must include a month", nameof(DateInputViewModel.Month))]
+        [InlineData("1", "1", "", "The Advisory board date must include a year", nameof(DateInputViewModel.Year))]
         public async Task WhenFieldIsEmptyAndUnknownDateIsFalse_HasMissingFieldError(string day, string month, string year,
             string expectedErrorMessage, string expectedPropertyName)
         {
