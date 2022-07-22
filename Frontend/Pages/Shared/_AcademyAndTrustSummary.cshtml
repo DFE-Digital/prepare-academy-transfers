@@ -3,6 +3,14 @@
 @using Frontend.ExtensionMethods
 @model Frontend.Pages.Projects.AcademyAndTrustInformation.Index
 <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">
+            Advisory board date
+        </dt>
+        <dd class="govuk-summary-list__value ">
+            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.AdvisoryBoardDate)</displaynodataforemptystring>
+        </dd>
+    </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
             Recommendation
@@ -42,14 +50,6 @@
             <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
                 Change<span class="govuk-visually-hidden"> author</span>
             </a>
-        </dd>
-    </div>
-    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-        <dt class="govuk-summary-list__key">
-            Advisory board
-        </dt>
-        <dd class="govuk-summary-list__value ">
-            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.AdvisoryBoardDate)</displaynodataforemptystring>
         </dd>
     </div>
     <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">

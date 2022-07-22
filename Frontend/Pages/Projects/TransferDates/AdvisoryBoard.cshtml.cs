@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Data;
 using FluentValidation;
@@ -65,8 +66,9 @@ namespace Frontend.Pages.Projects.TransferDates
                 return Page();
             }
 
-            projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
+            projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();            
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
+            projectResult.Dates.HtbInserted = DateTime.Now.ToString("ddMMyyyy");
 
             await _projectsRepository.Update(projectResult);
 

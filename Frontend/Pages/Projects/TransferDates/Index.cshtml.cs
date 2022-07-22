@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Data;
 using Frontend.Models;
@@ -8,8 +9,10 @@ namespace Frontend.Pages.Projects.TransferDates
     public class Index : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
-        public string AdvisoryBoardDate { get; set; } 
-        public bool? HasAdvisoryBoardDate { get; set; } 
+        public string AdvisoryBoardDate { get; set; }
+        public string AdvisoryBoardDateInserted { get; set; }        
+        public bool? HasAdvisoryBoardDate { get; set; }
+        public bool? HasAdvisoryBoardDateInserted { get; set; }
         public string TargetDate { get; set; } 
         public bool? HasTargetDate { get; set; } 
 
@@ -24,6 +27,8 @@ namespace Frontend.Pages.Projects.TransferDates
 
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
+            AdvisoryBoardDateInserted = projectResult.Dates?.HtbInserted;
+            HasAdvisoryBoardDateInserted = projectResult.Dates?.HasHtbInserted;
             AdvisoryBoardDate = projectResult.Dates?.Htb;
             HasAdvisoryBoardDate = projectResult.Dates?.HasHtbDate;
             TargetDate = projectResult.Dates?.Target;
