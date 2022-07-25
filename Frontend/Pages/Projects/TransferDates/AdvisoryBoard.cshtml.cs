@@ -69,6 +69,15 @@ namespace Frontend.Pages.Projects.TransferDates
             projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();            
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
             projectResult.Dates.HtbInserted = DateTime.Now.ToString("ddMMyyyy");
+            if(!string.IsNullOrEmpty(projectResult.Dates.HtbInserted))
+            {
+                projectResult.Dates.HasHtbInserted = true;
+            }
+            else
+            {
+                projectResult.Dates.HasHtbInserted = false;
+            }
+            
 
             await _projectsRepository.Update(projectResult);
 
