@@ -227,7 +227,7 @@ namespace Frontend
         private static void AddServices(IServiceCollection services, IConfiguration configuration)
         {
             var tramsApiBase = configuration["TRAMS_API_BASE"];
-            var tramsApiKey = configuration["TRAMS_API_KEY"];
+            var tramsApiKey = configuration["apiKey"];
 
             services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
            
