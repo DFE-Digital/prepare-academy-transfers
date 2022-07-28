@@ -29,6 +29,7 @@
         <h2 class="govuk-heading-l">
             Projects
         </h2>
+        <h3 class="govuk-heading-m"></h3>
         @foreach (var project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
         {
             var firstOutgoingAcademy = project.TransferringAcademies.First();

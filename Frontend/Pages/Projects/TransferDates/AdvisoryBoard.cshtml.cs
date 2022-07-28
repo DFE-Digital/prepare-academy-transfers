@@ -65,20 +65,11 @@ namespace Frontend.Pages.Projects.TransferDates
                 validationResult.AddToModelState(ModelState, nameof(AdvisoryBoardViewModel));
                 return Page();
             }
-
             projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();            
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
             projectResult.Dates.HtbInserted = DateTime.Now.ToString("dd/MM/yyyy");
-            if(!string.IsNullOrEmpty(projectResult.Dates.HtbInserted))
-            {
-                projectResult.Dates.HasHtbInserted = true;
-            }
-            else
-            {
-                projectResult.Dates.HasHtbInserted = false;
-            }
-            
-
+            projectResult.Dates.HasHtbInserted = !string.IsNullOrEmpty(projectResult.Dates.HtbInserted) ? true : false;
+                   
             await _projectsRepository.Update(projectResult);
 
             if (ReturnToPreview)
