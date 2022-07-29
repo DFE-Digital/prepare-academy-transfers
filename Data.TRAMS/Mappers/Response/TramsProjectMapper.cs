@@ -86,10 +86,8 @@ namespace Data.TRAMS.Mappers.Response
             return new TransferDates
             {
                 Htb = input.Dates.HtbDate,
-                HtbInserted = input.Dates.HtbDateInserted,
                 Target = input.Dates.TargetDateForTransfer,
                 HasHtbDate = input.Dates.HasHtbDate,
-                HasHtbInserted = input.Dates.HasDateInserted,
                 HasTargetDateForTransfer = input.Dates.HasTargetDateForTransfer
             };
         }

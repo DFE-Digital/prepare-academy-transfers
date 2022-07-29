@@ -21,10 +21,8 @@ namespace Frontend.Tests.PagesTests.Projects.TransferDates
 
             ProjectRepository.Verify(r => r.GetByUrn(PopulatedProjectUrn), Times.Once);
             Assert.Equal(FoundPopulatedProjectFromRepo.Dates.Htb, _subject.AdvisoryBoardDate);
-            Assert.Equal(FoundPopulatedProjectFromRepo.Dates.HtbInserted, _subject.AdvisoryBoardDateInserted);
             Assert.Equal(FoundPopulatedProjectFromRepo.Dates.Target, _subject.TargetDate);
             Assert.Equal(FoundPopulatedProjectFromRepo.Dates.HasHtbDate, _subject.HasAdvisoryBoardDate);
-            Assert.Equal(FoundPopulatedProjectFromRepo.Dates.HasHtbInserted, _subject.HasAdvisoryBoardDateInserted);
             Assert.Equal(FoundPopulatedProjectFromRepo.Dates.HasTargetDateForTransfer, _subject.HasTargetDate);
         }
     }
