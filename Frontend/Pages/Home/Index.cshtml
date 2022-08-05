@@ -29,59 +29,96 @@
         <h2 class="govuk-heading-l">
             Projects
         </h2>
-        <h3 class="govuk-heading-m">
-            Pre-Advisory board
-        </h3>
-        @foreach (var project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
-        {
-            var firstOutgoingAcademy = project.TransferringAcademies.First();
-            
-            <div class="dfe-application-card">
-                <div class="dfe-application-card--project-info">
-                    <h3 class="govuk-heading-m">
-                        <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                            @firstOutgoingAcademy.IncomingTrustNameInTitleCase
-                        </a>
-                        <span class="govuk-caption-m govuk-!-display-inline">
-                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
-                        </span>
-                    </h3>
-                    <p class="govuk-body govuk-!-margin-bottom-1">
-                        Project reference: @project.Reference
-                    </p>
-                    <p class="govuk-body">
-                        Outgoing trust: @project.OutgoingTrustNameInTitleCase
-                    </p>
-                </div>
-            </div>
-        }
-        <nav class="moj-pagination" id="pagination-label">
-            <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
-            <ul class="moj-pagination__list">
-                @if (Model.HasPreviousPage)
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">Projects (@Model.Projects.Count)</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header app-!-width-three-fifths">Application information</th>
+                    <th class="govuk-table__header govuk-!-text-align-right app-!-width-two-fifths prepare-text-align-right">Project status</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                @foreach (var project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
                 {
-                    <li class="moj-pagination__item  moj-pagination__item--prev">
-                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
-                    </li>
-                    @for (var i = Model.StartingPage; i < Model.CurrentPage; i++)
+                    var firstOutgoingAcademy = project.TransferringAcademies.First();
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">
+                            <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+                                <strong>
+                                    <a class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
+                                        @firstOutgoingAcademy.IncomingTrustNameInTitleCase
+                                    </a>
+                                </strong>
+                                <span>
+                                    UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
+                                </span>
+                            </h2>
+                            <p class="govuk-!-margin-top-3">
+                                <div>Project reference: @project.Reference</div>
+                                <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
+                            </p>
+                        </td>
+                        <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
+                            <p class="govuk-!-margin-top-0">
+                                <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+                            </p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+            @*@foreach (var project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
+            {
+                var firstOutgoingAcademy = project.TransferringAcademies.First();
+
+                <div class="dfe-application-card">
+                    <div class="dfe-application-card--project-info">
+                        <h3 class="govuk-heading-m">
+                            <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
+                                @firstOutgoingAcademy.IncomingTrustNameInTitleCase
+                            </a>
+                            <span class="govuk-caption-m govuk-!-display-inline">
+                                UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
+                            </span>
+                        </h3>
+                        <p class="govuk-body govuk-!-margin-bottom-1">
+                            Project reference: @project.Reference
+                        </p>
+                        <p class="govuk-body">
+                            Outgoing trust: @project.OutgoingTrustNameInTitleCase
+                        </p>
+                    </div>
+                </div>
+            }*@
+            <nav class="moj-pagination" id="pagination-label">
+                <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+                <ul class="moj-pagination__list">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="moj-pagination__item  moj-pagination__item--prev">
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                        </li>
+                        @for (var i = Model.StartingPage; i < Model.CurrentPage; i++)
+                        {
+                            <li class="moj-pagination__item">
+                                <a asp-page="/Home/Index" asp-route-currentPage="@i" class="moj-pagination__link">@i</a>
+                            </li>
+                        }
+                    }
+                    <li class="moj-pagination__item moj-pagination__item--active">@Model.CurrentPage</li>
+                    @if (Model.HasNextPage)
                     {
                         <li class="moj-pagination__item">
-                            <a asp-page="/Home/Index" asp-route-currentPage="@i" class="moj-pagination__link">@i</a>
+                            <a asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" class="moj-pagination__link">@Model.NextPage</a>
+                        </li>
+                        <li class="moj-pagination__item  moj-pagination__item--next">
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
-                }
-                <li class="moj-pagination__item moj-pagination__item--active">@Model.CurrentPage</li>
-                @if (Model.HasNextPage)
-                {
-                    <li class="moj-pagination__item">
-                        <a asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" class="moj-pagination__link">@Model.NextPage</a>
-                    </li>
-                    <li class="moj-pagination__item  moj-pagination__item--next">
-                        <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage">Next<span class="govuk-visually-hidden"> set of pages</span></a>
-                    </li>
-                }
-            </ul>
-            <p class="moj-pagination__results"></p>
-        </nav>
+                </ul>
+                <p class="moj-pagination__results"></p>
+            </nav>
     </div>
 </div>
