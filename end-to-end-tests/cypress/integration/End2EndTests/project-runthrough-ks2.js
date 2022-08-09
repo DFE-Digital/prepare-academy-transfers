@@ -33,7 +33,7 @@ describe("Locate project and check against Key Stage 2 table", () => {
 
     // *** School performance *** 
     // Key stage 2 performance tables
-    it('Locate Key Stage 2', () => {
+    it.skip('Locate Key Stage 2', () => {
         selectExistingAcademyTransfer("The Hermitage School");
         cy.get('[data-test="sd-academy-1"]').click()
         cy.get(`[data-test='ks2-performance']`).click()

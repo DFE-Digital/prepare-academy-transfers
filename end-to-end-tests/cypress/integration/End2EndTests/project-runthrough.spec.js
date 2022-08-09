@@ -1,3 +1,5 @@
+/// <reference types ='Cypress'/>
+
 const {clear} = require("console");
 const fs = require("fs");
 
@@ -122,7 +124,7 @@ describe("Creating and editing an academy transfer", function () {
         cy.get("h1").should('contain.text', "Burnt Ash Primary School");
     });
 
-    it("Edit an Academy Transfer", function () {
+    it.skip("Edit an Academy Transfer", function () {
         selectExistingAcademyTransfer("Burnt Ash Primary School");
         cy.get("h1").should('contain.text', "Burnt Ash Primary School");
         cy.clickBackLink()
