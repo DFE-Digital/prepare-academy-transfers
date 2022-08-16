@@ -57,7 +57,8 @@ namespace Frontend.Pages.TaskList.HtbDocument
                     .ToList(),
                 project.Urn,
                 project.OutgoingAcademyUrn,
-                project.Benefits.AnyRisks
+                project.Benefits.AnyRisks,
+                project.Benefits.EqualitiesImpactAssessmentConsidered
             )
             {
                 ReturnToPreview = true

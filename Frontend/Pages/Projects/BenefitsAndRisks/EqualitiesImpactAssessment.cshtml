@@ -1,0 +1,47 @@
+﻿@page "/project/{urn}/benefits/equalities-impact-assessment"
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model Frontend.Pages.Projects.BenefitsAndRisks.EqualitiesImpactAssessment
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Has an Equalities Impact Assessment been considered?";
+    Layout = "_Layout";
+    var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.EqualitiesImpactAssessmentViewModel)}.{nameof(Model.EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/BenefitsAndRisks/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset" aria-describedby="equalities-impact-assessment-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-l">
+                                @Model.IncomingTrustName
+                            </span>
+                            Has an Equalities Impact Assessment been considered?
+                        </h1>
+                    </legend>
+
+                    <p asp-gds-validation-for="EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered"></p>
+                    <partial for="RadioButtonsYesNo" name="Shared/_InlineRadioButtons"/>
+                    
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>
