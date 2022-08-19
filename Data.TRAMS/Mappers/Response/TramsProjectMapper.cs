@@ -131,6 +131,7 @@ namespace Data.TRAMS.Mappers.Response
                 OtherIntendedBenefit = input.Benefits.IntendedTransferBenefits.OtherBenefitValue,
                 OtherFactors = otherFactors,
                 AnyRisks = input.Benefits.AnyRisks,
+                EqualitiesImpactAssessmentConsidered = input.Benefits.EqualitiesImpactAssessmentConsidered,
                 IsCompleted = input.Benefits.IsCompleted
             };
         }

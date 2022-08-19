@@ -35,7 +35,8 @@ namespace Frontend.Pages.Projects.BenefitsAndRisks
                 BuildOtherFactorsItemViewModel(projectResult.Benefits.OtherFactors).Where(o => o.Checked).ToList(),
                 projectResult.Urn,
                 projectResult.OutgoingAcademyUrn,
-                projectResult.Benefits.AnyRisks
+                projectResult.Benefits.AnyRisks,
+                projectResult.Benefits.EqualitiesImpactAssessmentConsidered
             );
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
             {

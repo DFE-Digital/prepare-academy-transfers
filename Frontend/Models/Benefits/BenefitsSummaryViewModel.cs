@@ -13,13 +13,15 @@ namespace Frontend.Models.Benefits
         public readonly IList<OtherFactorsItemViewModel> OtherFactorsItems;
         public readonly string OutgoingAcademyUrn;
         public readonly bool? AnyRisks;
+        public readonly bool? EqualitiesImpactAssessmentConsidered;
 
         public BenefitsSummaryViewModel(IList<TransferBenefits.IntendedBenefit> intendedBenefits, 
             string otherIntendedBenefit, 
             IList<OtherFactorsItemViewModel> otherFactorsItems,
             string projectUrn,
             string outgoingAcademyUrn,
-            bool? anyRisks = null)
+            bool? anyRisks = null,
+            bool? equalitiesImpactAssessmentConsidered = null)
         {
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
@@ -27,6 +29,7 @@ namespace Frontend.Models.Benefits
             Urn = projectUrn;
             OutgoingAcademyUrn = outgoingAcademyUrn;
             AnyRisks = anyRisks;
+            EqualitiesImpactAssessmentConsidered = equalitiesImpactAssessmentConsidered;
         }
 
         public List<string> IntendedBenefitsSummary()

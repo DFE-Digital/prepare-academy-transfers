@@ -7,6 +7,7 @@ namespace Data.TRAMS.Models.AcademyTransferProject
         public IntendedTransferBenefits IntendedTransferBenefits { get; set; }
         public OtherFactorsToConsider OtherFactorsToConsider { get; set; }
         public bool? AnyRisks { get; set; }
+        public bool? EqualitiesImpactAssessmentConsidered { get; set; }
         public bool? IsCompleted { get; set; }
     }
 

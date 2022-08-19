@@ -132,7 +132,8 @@ namespace Data.TRAMS.Mappers.Request
                     }
                 },
                 IsCompleted = input.Benefits.IsCompleted,
-                AnyRisks = input.Benefits.AnyRisks
+                AnyRisks = input.Benefits.AnyRisks,
+                EqualitiesImpactAssessmentConsidered = input.Benefits.EqualitiesImpactAssessmentConsidered
             };
         }
     }

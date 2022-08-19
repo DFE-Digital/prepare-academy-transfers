@@ -70,7 +70,8 @@ namespace Frontend.Integration.Tests.Fixtures
                         }
                     },
                     IsCompleted = true,
-                    AnyRisks = true
+                    AnyRisks = true,
+                    EqualitiesImpactAssessmentConsidered = true
                 },
                 Dates = new AcademyTransferProjectDates
                 {
@@ -98,7 +99,7 @@ namespace Frontend.Integration.Tests.Fixtures
                     Recommendation = TransferAcademyAndTrustInformation.RecommendationResult.Approve.ToString()
                 },
                 State = "State",
-                Status = "Status",
+                Status = "Status",                
                 OutgoingTrust = new TrustSummary
                 {
                     GroupName = OutgoingTrustName,

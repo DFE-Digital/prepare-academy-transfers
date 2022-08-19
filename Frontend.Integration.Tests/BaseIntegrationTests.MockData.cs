@@ -33,7 +33,7 @@ namespace Frontend.Integration.Tests
             _factory.AddGetWithJsonResponse($"/trust/{project.OutgoingTrustUkprn}",  AcademiesApiFixtures.Trust());
             _factory.AddGetWithJsonResponse($"/educationPerformance/{project.TransferringAcademies[0].OutgoingAcademy.Urn}",  AcademiesApiFixtures.EducationPerformance());
             _factory.AddGetWithJsonResponse(
-                $"/establishment/{project.TransferringAcademies[0].OutgoingAcademyUkprn}", AcademiesApiFixtures.Establishment());
+                $"/establishment/{project.TransferringAcademies[0].OutgoingAcademyUkprn}", AcademiesApiFixtures.Establishment());            
 
             return project;
         }
