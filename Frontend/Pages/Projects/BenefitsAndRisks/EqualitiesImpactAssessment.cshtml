@@ -5,7 +5,11 @@
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Has an Equalities Impact Assessment been considered?";
     Layout = "_Layout";
-    var formClasses = ViewData.ModelState.GetFieldValidationState($"{nameof(Model.EqualitiesImpactAssessmentViewModel)}.{nameof(Model.EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered)}") == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+
+    var key = $"{nameof(Model.EqualitiesImpactAssessmentViewModel)}.{nameof(Model.EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered)}";
+    var formClasses = ViewData.ModelState.GetFieldValidationState(key) == ModelValidationState.Invalid 
+                        ? "govuk-form-group--error" 
+                        : "";
 }
 
 @section BeforeMain
@@ -39,7 +43,7 @@
                     
                 </fieldset>
             </div>
-            <button class="govuk-button" data-module="govuk-button" type="submit">
+            <button class="govuk-button" data-module="govuk-button" type="submit" data-test="submit-btn">
                 Save and continue
             </button>
         </form>

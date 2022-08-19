@@ -31,6 +31,12 @@ namespace Frontend.Integration.Tests
         {
             _port = AllocateNext();
             _server = WireMockServer.Start(_port);
+            _server.LogEntriesChanged += _server_LogEntriesChanged;
+        }
+
+        private void _server_LogEntriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -133,6 +139,18 @@ namespace Frontend.Integration.Tests
                 .Given(Request.Create()
                     .WithPath(path)
                     .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
+                    .UsingPatch())
+                .RespondWith(Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBody(JsonConvert.SerializeObject(responseBody)));
+        }
+
+        public void AddAnyPatch<TResponseBody>(string path,TResponseBody responseBody)
+        {
+            _server
+                .Given(Request.Create()
+                    .WithPath(path)                    
                     .UsingPatch())
                 .RespondWith(Response.Create()
                     .WithStatusCode(200)
