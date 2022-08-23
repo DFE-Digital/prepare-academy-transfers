@@ -51,7 +51,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.BenefitsAndRisks
             Document.BaseUri.Should()
                 .EndWith($"/project/{project.ProjectUrn}/benefits/equalities-impact-assessment");
             Document.QuerySelector<IHtmlAnchorElement>("[data-qa=error_text]").Text().Trim().Should()
-                .Be("Select yes if a equalities impact assessment has been considered");
+                .Be("Select yes if an Equalities Impact Assessment has been considered");
         }
     }
 }

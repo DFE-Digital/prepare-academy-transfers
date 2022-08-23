@@ -5,11 +5,8 @@
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Has an Equalities Impact Assessment been considered?";
     Layout = "_Layout";
-
-    var key = $"{nameof(Model.EqualitiesImpactAssessmentViewModel)}.{nameof(Model.EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered)}";
-    var formClasses = ViewData.ModelState.GetFieldValidationState(key) == ModelValidationState.Invalid 
-                        ? "govuk-form-group--error" 
-                        : "";
+    
+    var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
 }
 
 @section BeforeMain

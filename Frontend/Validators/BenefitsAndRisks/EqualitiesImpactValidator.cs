@@ -10,7 +10,7 @@ namespace Frontend.Validators.BenefitsAndRisks
             CascadeMode = CascadeMode.Stop;
             RuleFor(x => x.EqualitiesImpactAssessmentConsidered)
                 .NotNull()
-                .WithMessage("Select yes if a equalities impact assessment has been considered");
+                .WithMessage("Select yes if an Equalities Impact Assessment has been considered");
         }
     }
 }
