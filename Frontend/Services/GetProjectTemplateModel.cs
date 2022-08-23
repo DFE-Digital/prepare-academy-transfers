@@ -53,9 +53,8 @@ namespace Frontend.Services
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
-                AnyRisks = project.Benefits.AnyRisks.HasValue
-                    ? project.Benefits.AnyRisks == true ? "Yes" : "No"
-                    : string.Empty,
+                EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered.ToDisplay(),
+                AnyRisks = project.Benefits.AnyRisks.ToDisplay(),
                 OtherFactors = GetOtherFactors(project.Benefits),
                 Academies = GetAcademyData(academies)
             };
