@@ -16,7 +16,7 @@ namespace Frontend.Tests.ValidatorTests.BenefitsAndRisks
             var vm = new EqualitiesImpactAssessmentViewModel();
             var result = await _validator.TestValidateAsync(vm);
             result.ShouldHaveValidationErrorFor(x => x.EqualitiesImpactAssessmentConsidered)
-                .WithErrorMessage("Select yes if a equalities impact assessment has been considered");
+                .WithErrorMessage("Select yes if an Equalities Impact Assessment has been considered");
         }
         
         [Theory]
