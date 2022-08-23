@@ -35,14 +35,7 @@ namespace Frontend.Tests.ServicesTests
             var exception =
                 Assert.Throws<ArgumentNullException>(() => _referenceNumberService.GenerateReferenceNumber(null));
             Assert.Equal("project", exception.ParamName);
-        }
-        
-        [Fact]
-        public void GivenNoTransferringAcademies_GenerateReferenceNumber_ThrowsException()
-        {
-            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademies>(0);
-            Assert.Throws<InvalidOperationException>(() => _referenceNumberService.GenerateReferenceNumber(FoundProjectFromRepo));
-        }
+        }              
 
         [Fact]
         public void GivenProject_NullRegion_GenerateReferenceNumber_ReturnsWithoutRegion()
@@ -108,43 +101,12 @@ namespace Frontend.Tests.ServicesTests
             var referenceNumber = _referenceNumberService.GenerateReferenceNumber(FoundProjectFromRepo);
             Assert.Contains(FoundProjectFromRepo.Urn, referenceNumber);
         }
-        
-        [Fact]
-        public void GivenProject_GenerateReferenceNumber_ReturnsWithRegionCode()
-        {
-            var regionName = "london";
-            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademies>()
-            {
-                new TransferringAcademies
-                {
-                    IncomingTrustLeadRscRegion = regionName
-                },
-                new TransferringAcademies
-                {
-                    IncomingTrustLeadRscRegion = regionName
-                }
-            };
-            var referenceNumber = _referenceNumberService.GenerateReferenceNumber(FoundProjectFromRepo);
-            Assert.StartsWith(_configuration.GetSection("LeadRscRegionCodes")[regionName], referenceNumber);
-        }
-
+                
         [Fact]
         public void GivenProject_GenerateReferenceNumber_ReturnsWithCorrectReference()
-        {
-            var regionName = "london";
-            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademies>()
-            {
-                new TransferringAcademies
-                {
-                    IncomingTrustLeadRscRegion = regionName
-                },
-                new TransferringAcademies
-                {
-                    IncomingTrustLeadRscRegion = regionName
-                }
-            };
+        {           
             var referenceNumber = _referenceNumberService.GenerateReferenceNumber(FoundProjectFromRepo);
-            Assert.Equal($"L-MAT-{FoundProjectFromRepo.Urn}",referenceNumber);
+            Assert.Equal($"SAT-{FoundProjectFromRepo.Urn}",referenceNumber);
         }
     }
 }
