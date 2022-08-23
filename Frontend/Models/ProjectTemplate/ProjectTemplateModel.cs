@@ -30,7 +30,9 @@ namespace Frontend.Models.ProjectTemplate
         [DocumentText("TypeOfTransfer")] public string TypeOfTransfer { get; set; }
 
         [DocumentText("TransferBenefits")] public string TransferBenefits { get; set; }
-        
+
+        [DocumentText("EqualitiesImpactAssessmentConsidered")] public string EqualitiesImpactAssessmentConsidered { get; set; }
+
         public List<ProjectTemplateAcademyModel> Academies { get; set; }
         
         [DocumentText("AnyRisks")] public string AnyRisks { get; set; }
