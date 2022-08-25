@@ -66,8 +66,7 @@ namespace Data.TRAMS
                 var outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
                 project.OutgoingTrust = new TrustSummary
                 {
-                    Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name,
-                    LeadRscRegion = outgoingTrust?.Result?.LeadRscRegion
+                    Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name
                 };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                     {
@@ -168,8 +167,7 @@ namespace Data.TRAMS
                         var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
                         transferring.IncomingTrust = new TrustSummary
                         {
-                            Ukprn = transferring.IncomingTrustUkprn,
-                            LeadRscRegion = incomingTrust.Result.LeadRscRegion
+                            Ukprn = transferring.IncomingTrustUkprn,                            
                         };
                         transferring.OutgoingAcademy = new AcademySummary
                         {

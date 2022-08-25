@@ -5,6 +5,5 @@ namespace Data.TRAMS.Models
         public string GroupId { get; set; }
         public string GroupName { get; set; }
         public string Ukprn { get; set; }
-        public string LeadRscRegion { get; set; }
     }
 }
