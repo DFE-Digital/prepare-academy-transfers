@@ -6,7 +6,7 @@ describe('Tests to check equalities impact assessment form', () => {
     });
 
     beforeEach(function () {
-        cy.visit(`${Cypress.env('url')}/project/10002121/benefits`);
+        cy.visit(`${Cypress.env('url')}project/10002121/benefits`);
     });
 
     it('Should save yes', () => {
