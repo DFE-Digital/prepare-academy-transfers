@@ -23,7 +23,7 @@ resource cloudfoundry_app worker_app {
 		"TRAMS_API_KEY"          = var.app_trams_api_key
 		"AZUREAD__CLIENTSECRET"  = var.app_azuread_clientsecret
 		"SENTRY_RELEASE"         = "academy-transfers-api:${var.cf_app_image_tag}"
-		"ServiceLink__ConversionsUrl" = var.app_servicelink__conversionsurl
+		"ServiceLink__ConversionsUrl" = var.app_servicelink_conversionsurl
 	}
 }
 
