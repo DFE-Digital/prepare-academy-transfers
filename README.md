@@ -37,6 +37,10 @@ The frontend repo requires the following user secrets to be able to connect to T
 - `TRAMS_API_KEY` - The API key for the TRAMS API
 - `TRAMS_API_BASE` - The base URL for the TRAMS API (with trailing slash)
 
+The following user secret is required for the landing page to be able to navigate to the Conversions service:
+
+- `ServiceLink:TransfersUrl` - The URL for the Conversions service.
+
 ### Redis
 
 When running Redis locally, you may find it easier to run inside docker, this can be done via the following command:
@@ -64,6 +68,15 @@ Full setup details can be found here: https://docs.microsoft.com/en-us/azure/act
 2. Select "add groups claim"
 3. Select "security groups"
 4. Group ids will be available in the `HttpContext.User.Claims`
+
+## Model validation
+This project uses fluent validators to validate the view model as opposed to MVC Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
+
+You will need to ensure you have ViewModel to hold the properties you will need to validate and to create a custom validator with an AbstractValidator<CustomViewModel> as it's base class.
+
+Once this is in place then you can use `ModelState.IsValid()` as usual in the controllers.
+
+[FluentValidator Documentation](https://docs.fluentvalidation.net/en/latest/start.html)
 
 ## Cypress testing
 
