@@ -26,8 +26,10 @@ using Newtonsoft.Json.Linq;
 using StackExchange.Redis;
 using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Frontend.Authorization;
 using Frontend.BackgroundServices;
+using Frontend.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
@@ -65,6 +67,8 @@ namespace Frontend
                 .AddMicrosoftIdentityUI();
 
 
+            services.Configure<ServiceLinkOptions>(Configuration.GetSection(ServiceLinkOptions.Name));
+            
             services.AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
@@ -218,8 +222,13 @@ namespace Frontend
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", context =>
+                {
+                    context.Response.Redirect("project-type", false);
+                    return Task.CompletedTask;
+                });
                 endpoints.MapRazorPages();
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/");
+                endpoints.MapControllerRoute("default", "{controller}/{action}/");
                 endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
             });
         }
@@ -256,6 +265,5 @@ namespace Frontend
             
             services.AddHostedService<PerformanceDataProcessingService>();
         }
-        
     }
 }
