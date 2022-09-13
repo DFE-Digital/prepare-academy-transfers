@@ -40,17 +40,17 @@ namespace Frontend.Integration.Tests.Pages.ProjectType
 		[Fact]
 		public async Task Should_display_error_and_not_continue_if_no_option_is_selected()
 		{
-				await OpenUrlAsync("/project-type");
+			await OpenUrlAsync("/project-type");
 
-				Document.QuerySelector<IHtmlInputElement>("#conversion-radio")!.IsChecked = false;
-				Document.QuerySelector<IHtmlInputElement>("#transfer-radio")!.IsChecked = false;
-				
-				await Document.QuerySelector<IHtmlButtonElement>("#submit-btn")!.SubmitAsync();
+			Document.QuerySelector<IHtmlInputElement>("#conversion-radio")!.IsChecked = false;
+			Document.QuerySelector<IHtmlInputElement>("#transfer-radio")!.IsChecked = false;
 
-				Document.QuerySelector("h1")!.TextContent!.Trim().Should().Be("What do you want to do?");
+			await Document.QuerySelector<IHtmlButtonElement>("#submit-btn")!.SubmitAsync();
 
-				Document.QuerySelector(".govuk-error-summary")!.Should().NotBeNull();
-				Document.QuerySelector(".govuk-error-summary")!.TextContent.Should().Contain("Select a project type");
+			Document.QuerySelector("h1")!.TextContent!.Trim().Should().Be("What do you want to do?");
+
+			Document.QuerySelector(".govuk-error-summary")!.Should().NotBeNull();
+			Document.QuerySelector(".govuk-error-summary")!.TextContent.Should().Contain("Select a project type");
 		}
 
 		[Fact]
