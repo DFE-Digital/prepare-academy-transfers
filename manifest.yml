@@ -12,3 +12,4 @@ applications:
     username: ((username))
     password: ((password))
     ASPNETCORE_ENVIRONMENT: Development
+    "ServiceLink:ConversionsUrl": ((serviceLinkConversionsUrl))

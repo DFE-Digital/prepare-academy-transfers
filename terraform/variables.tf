@@ -64,6 +64,11 @@ variable logit_sink_url {
 	description = "Target URL (HTTPS) for logs to be streamed to"
 }
 
+variable app_servicelink_conversionsurl {
+    type = string
+    description = "Application variable for the Conversions service URL"
+}
+
 ## ========================================================================== ##
 #  Locals					                                                   #
 ## ========================================================================== ##
