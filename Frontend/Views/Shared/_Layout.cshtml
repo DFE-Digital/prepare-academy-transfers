@@ -9,7 +9,9 @@
     <meta name="theme-color" content="#0b0c0c">
 
     @{
-        var pageTitle = (ViewData["Title"] == null ? "" : $"{ViewData["Title"]} - ") + "Manage an academy transfer";
+        var pageTitleSuffix = Context.Request.Path == "/project-type"
+            ? string.Empty : "- Manage an academy transfer";
+        var pageTitle = ViewData["Title"] == null ? "" : $"{ViewData["Title"]} {pageTitleSuffix}";
     }
 
     <title>@pageTitle</title>
@@ -60,7 +62,7 @@
         <div class="govuk-header__logo govuk-!-width-two-thirds">
             <a href="/" class="govuk-header__link govuk-header__link--homepage">
                 <span class="govuk-header__logotype-text">
-                    Manage an academy transfer
+                    Prepare conversions and transfers
                 </span>
             </a>
         </div>
