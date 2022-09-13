@@ -1,10 +1,15 @@
-@page "/"
+@page "/home"
 @model Frontend.Pages.Home.Index
 
 
 @{
     ViewBag.Title = "Home";
     Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+	<a asp-page="@Links.ProjectType.Index.PageName" class="govuk-back-link">@Links.ProjectType.Index.BackText</a>
 }
 
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
