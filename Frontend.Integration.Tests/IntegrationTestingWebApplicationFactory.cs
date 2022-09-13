@@ -52,7 +52,8 @@ namespace Frontend.Integration.Tests
                     .AddInMemoryCollection(new Dictionary<string, string>
                     {
                         {"TRAMS_API_BASE", $"http://localhost:{_port}"},
-                        {"AzureAd:AllowedRoles", string.Empty} // Do not restrict access for integration tests
+                        {"AzureAd:AllowedRoles", string.Empty}, // Do not restrict access for integration tests
+                        {"ServiceLink:ConversionsUrl", "https://an-extenal-service.com"}
                     })
                     .AddEnvironmentVariables();
             });
