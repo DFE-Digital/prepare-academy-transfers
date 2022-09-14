@@ -65,7 +65,9 @@ Cypress.Commands.add('storeSessionData', () => {
 })
 
 Cypress.Commands.add("login", () => {
-    cy.visit(Cypress.env('url'));
+    cy.visit(Cypress.env('url') + 'project-type')
+    cy.get('[id="transfer-radio"]').click()
+    cy.get('[id="submit-btn"]').click()
 })
 
 

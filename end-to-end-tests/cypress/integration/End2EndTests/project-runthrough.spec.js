@@ -1,8 +1,5 @@
 /// <reference types ='Cypress'/>
 
-const {clear} = require("console");
-const fs = require("fs");
-
 let selectFirstRadio = () => {
     cy.get("[type='radio']").then(options => {
         let option = options[0];
@@ -36,13 +33,13 @@ describe("Creating and editing an academy transfer", function () {
     });
 
     beforeEach(function () {
+        
         cy.login();
     });
 
     let projectUrl = "";
 
     it("Create an Academy Transfer", function () {
-        cy.get("h1").should('contain.text', "Manage an academy transfer");
 
         cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click();
 
