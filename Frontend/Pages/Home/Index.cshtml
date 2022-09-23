@@ -9,12 +9,12 @@
 
 @section BeforeMain
 {
-	<a asp-page="@Links.ProjectType.Index.PageName" class="govuk-back-link">@Links.ProjectType.Index.BackText</a>
+    <a asp-page="@Links.ProjectType.Index.PageName" class="govuk-back-link" data-cy="select-backlink">@Links.ProjectType.Index.BackText</a>
 }
 
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">
+            <h1 class="govuk-heading-xl" data-cy="select-heading">
             Manage an academy transfer
         </h1>
         <p class="govuk-body-l">

@@ -15,13 +15,12 @@ namespace Frontend.Pages.ProjectType
 		public IndexModel(IOptions<ServiceLinkOptions> options)
 		{
 			_conversionsUrl = options.Value.ConversionsUrl;
-			ProjectType = new ProjectTypeViewModel();
-		}
+        }
 
-		[BindProperty] 
-		public ProjectTypeViewModel ProjectType { get; set; }
-		
-		public IActionResult OnPost()
+		[BindProperty]
+        public ProjectTypeViewModel ProjectType { get; set; }
+
+        public IActionResult OnPost()
 		{
 			if (!ModelState.IsValid)
 			{
