@@ -1,5 +1,8 @@
 ﻿@page "/project-type"
 @using Frontend.ExtensionMethods
+@using Frontend.Helpers.TagHelpers
+@using Frontend.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Frontend.Pages.ProjectType.IndexModel
 @{
 	ViewData["Title"] = "Project type - Prepare conversions and transfers";
@@ -8,33 +11,34 @@
 
 <div asp-gds-validation-summary></div>
 
-<h1 class="govuk-heading-l">What do you want to do?</h1>
-
+<h1 class="govuk-heading-l" data-cy="select-heading">What do you want to do?</h1>
 <form method="post">
-	<div class="govuk-form-group">
-		<fieldset class="govuk-fieldset">
-			<legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-			</legend>
-			<div class="govuk-radios @ModelState.GetErrorStyleClass()" data-module="govuk-radios" id="Type">
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            </legend>
+            <div class="govuk-radios @ModelState.GetErrorStyleClass()" data-module="govuk-radios" id="ProjectType">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" type="radio" asp-for="@Model.ProjectType.Type"
+                           title="conversion" value="@ProjectTypes.Conversion" id="conversion-radio"
+                           data-cy="@Select.ProjectType.Input.Conversion" />
+                    <label class="govuk-label govuk-radios__label" for="conversion-radio">
+                        Manage an academy conversion
+                    </label>
+                </div>
 
-				@foreach (var decisionOption in Enum.GetValues(typeof(ProjectTypes)))
-				{
-					var decisionOptionString = $"{decisionOption.ToString()!.ToLower()}";
-					var id = $"{decisionOptionString}-radio";
-					var label = $"Manage an academy {decisionOptionString}";
-
-					<div class="govuk-radios__item">
-						<input class="govuk-radios__input" type="radio" asp-for="@Model.ProjectType.Type"
-						       title="@decisionOptionString" value="@decisionOption" id="@id"/>
-						<label class="govuk-label govuk-radios__label" for="@id">
-							@label
-						</label>
-					</div>
-				}
-			</div>
-		</fieldset>
-	</div>
-	<button type="submit" class="govuk-button" data-module="govuk-button" id="submit-btn">
-		Continue
-	</button>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" type="radio" asp-for="@Model.ProjectType.Type"
+                           title="@ProjectTypes.Transfer" value="@ProjectTypes.Transfer" id="transfer-radio" 
+                           data-cy="@Select.ProjectType.Input.Transfer" />
+                    <label class="govuk-label govuk-radios__label" for="transfer-radio">
+                        Manage an academy transfer
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <button class="govuk-button" data-module="govuk-button" id="submit-btn" @Select.Common.SubmitButton.ToData("cy")>
+        Continue
+    </button>
 </form>

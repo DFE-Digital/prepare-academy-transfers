@@ -21,6 +21,11 @@ Cypress.Commands.add('fillInTextAtIndex', (index, text) => {
 Cypress.Commands.add('getDataTest', (dataTest) => cy.get(`[data-test='${dataTest}']`))
 Cypress.Commands.add('clickDataTest', (dataTest) => cy.getDataTest(dataTest).click())
 
+// Record a decision 'Continue' button
+Cypress.Commands.add('continueBtn', () => {
+    cy.get('[id="submit-btn"]')
+})
+
 Cypress.Commands.add('fillInDate', (dayJs) => {
     cy.getDataTest("day").clear().type(dayJs.date())
     cy.getDataTest("month").clear().type(dayJs.month() + 1)

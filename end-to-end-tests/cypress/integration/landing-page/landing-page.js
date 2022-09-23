@@ -16,10 +16,15 @@ describe('Landing Page',() => {
     })
 
     it('TC01: Navigates to Transfer site from landing page, and clicks back to landing page', () => {
-        cy.get('[id="transfer-radio"]').click()
-        cy.get('[id="submit-btn"]').click()
-        cy.get('[class="govuk-heading-xl"]').should('contain.text', 'Manage an academy transfer')
-        cy.get('[class="govuk-back-link"]').click()
-        cy.get('[class="govuk-heading-l"]').should('contain.text', 'What do you want to do?')
+        cy.get('[data-cy="select-projecttype-input-transfer"]').click()
+        cy.get('[data-cy="select-common-submitbutton"]').click()
+        cy.get('[data-cy="select-heading"]').should('contain.text', 'Manage an academy transfer')
+        cy.get('[data-cy="select-backlink"]').click()
+        cy.get('[data-cy="select-heading"]').should('contain.text', 'What do you want to do?')
+    })
+
+    it('TC02: Checks error message on unselected project', () => {
+        cy.continueBtn().click()
+        cy.get('[data-qa="error_text"]').should('contain.text', 'Select a project type')
     })
 })
