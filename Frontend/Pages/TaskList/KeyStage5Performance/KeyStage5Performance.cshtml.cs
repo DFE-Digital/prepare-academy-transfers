@@ -72,7 +72,7 @@ namespace Frontend.Pages.TaskList.KeyStage5Performance
             {
                 AdditionalInformation = academy.EducationPerformance.KeyStage5AdditionalInformation,
                 HintText = 
-                    "If you add comments, they'll be included in the key stage 5 performance tables section of your project template.",
+                    "This information will go into your project template under the key stage performance section.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = AddOrEditAdditionalInformation,
                 ReturnToPreview = ReturnToPreview

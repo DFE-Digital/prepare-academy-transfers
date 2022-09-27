@@ -4,13 +4,20 @@
 {
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-form-group">
-            <h1 class="govuk-label-wrapper">
+            <h2 class="govuk-heading-m">
                 <label class="govuk-label govuk-label--m" for="@Model.AdditionalInformation" id="@Model.TitleId" >
                     Additional information (optional)
                 </label>
-            </h1>
-            <div id="additional-information-hint" class="govuk-hint">
+            </h2>
+            <div id="additional-information-hint" class="govuk-body">
                 @Model.HintText
+            </div>
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    Do not add ASK (Academies & Schools Knowledge) data to your template. ASK data is unpublished and should not be used to make a decision about a conversion.
+                </strong>
             </div>
             <form method="post">
                 <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
@@ -25,14 +32,21 @@
 else
 {
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-label-wrapper">
+        <h2 class="govuk-heading-m">
             <label class="govuk-label govuk-label--m" for="@Model.AdditionalInformation" id="@Model.TitleId" >
                 Additional information (optional)
             </label>
-        </h1>
-        <div id="additional-information-hint" class="govuk-hint">
+        </h2>
+        <div id="additional-information-hint" class="govuk-body">
             @Model.HintText
         </div>
+        <div class="govuk-warning-text">
+			<span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+			<strong class="govuk-warning-text__text">
+				<span class="govuk-warning-text__assistive">Warning</span>
+				Do not add ASK (Academies & Schools Knowledge) data to your template. ASK data is unpublished and should not be used to make a decision about a transfer.
+			</strong>
+		</div>
     </div>
     <div class="govuk-grid-column-full">
         <dl class="govuk-summary-list">
