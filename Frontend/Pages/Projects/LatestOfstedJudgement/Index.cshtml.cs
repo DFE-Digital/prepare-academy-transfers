@@ -45,7 +45,8 @@ namespace Frontend.Pages.Projects.LatestOfstedJudgement
                         "If you add comments, they'll be included in the latest Ofsted judgement section of your project template.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = addOrEditAdditionalInformation,
-                ReturnToPreview = ReturnToPreview
+                ReturnToPreview = ReturnToPreview,
+                HideWarning = true
             };
 
             return Page();

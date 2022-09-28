@@ -55,7 +55,8 @@ namespace Frontend.Pages.Projects
                     "If you add comments, they'll be included in the pupil numbers section of your project template.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = AddOrEditAdditionalInformation,
-                ReturnToPreview = ReturnToPreview
+                ReturnToPreview = ReturnToPreview,
+                HideWarning = true
             };
             return Page();
         }
