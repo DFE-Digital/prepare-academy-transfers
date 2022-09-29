@@ -15,22 +15,22 @@
 }
 
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-l">
            Academy: @Model.AcademyName
         </span>
         <h1 class="govuk-heading-l">
             Key stage 4 performance tables
         </h1>
-        <div class="govuk-inset-text">
-            The information here can’t be changed but you will be able to edit the project template after it’s been created.
-        </div>
         <p class="govuk-body">
-            This information is taken from the Find and compare schools in England service.
+            This information comes from Find and compare schools in England. You can add <a class="govuk-link" href="#additional-information">additional information</a> if you need to. These performance tables and additional information will go into your project template.
         </p>
-        <p class="govuk-body">
-            <a href="https://www.compare-school-performance.service.gov.uk/school/@Model.OutgoingAcademyUrn" class="govuk-link" rel="noreferrer noopener" target="_blank">View the school's performance data on Find and compare schools in England (opens in new tab)</a>
-        </p>
+		<p class="govuk-body">
+			<a href="https://www.compare-school-performance.service.gov.uk/school/@Model.OutgoingAcademyUrn" class="govuk-link" rel="noreferrer noopener" target="_blank">Source of data: Find and compare school performance (opens in new tab)</a>
+		</p>
+		<div class="govuk-inset-text">
+			There is no 2019 to 2020 key stage data because of the pandemic. 2020 to 2021 data is limited.
+		</div>
         <hr class="govuk-section-break govuk-section-break--l">
     </div>
 </div>

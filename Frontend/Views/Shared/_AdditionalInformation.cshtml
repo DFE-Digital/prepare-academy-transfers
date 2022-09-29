@@ -1,17 +1,12 @@
 ﻿@model Frontend.Models.Forms.AdditionalInformationViewModel
 
-@if (Model.AddOrEditAdditionalInformation) 
+@if (Model.AddOrEditAdditionalInformation)
 {
     <div class="govuk-grid-column-two-thirds">
         <div class="govuk-form-group">
-            <h1 class="govuk-label-wrapper">
-                <label class="govuk-label govuk-label--m" for="@Model.AdditionalInformation" id="@Model.TitleId" >
-                    Additional information (optional)
-                </label>
-            </h1>
-            <div id="additional-information-hint" class="govuk-hint">
-                @Model.HintText
-            </div>
+            @{
+                HeaderAndWarning(Model);
+            }
             <form method="post">
                 <input type="text" name="returnToPreview" value="@Model.ReturnToPreview.ToString()" hidden />
                 <textarea class="govuk-textarea" asp-for="@Model.AdditionalInformation" rows="5" aria-describedby="additional-information-hint"></textarea>
@@ -25,14 +20,9 @@
 else
 {
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-label-wrapper">
-            <label class="govuk-label govuk-label--m" for="@Model.AdditionalInformation" id="@Model.TitleId" >
-                Additional information (optional)
-            </label>
-        </h1>
-        <div id="additional-information-hint" class="govuk-hint">
-            @Model.HintText
-        </div>
+        @{
+            HeaderAndWarning(Model);
+        }
     </div>
     <div class="govuk-grid-column-full">
         <dl class="govuk-summary-list">
@@ -58,4 +48,28 @@ else
             </div>
         </dl>
     </div>
+}
+
+@{
+    void HeaderAndWarning(Frontend.Models.Forms.AdditionalInformationViewModel additionalInformationView)
+    {
+        <h2 class="govuk-heading-m">
+            <label class="govuk-label govuk-label--m" for="@additionalInformationView.AdditionalInformation" id="@additionalInformationView.TitleId">
+                Additional information (optional)
+            </label>
+        </h2>
+        <div id="additional-information-hint" class="govuk-body">
+            @additionalInformationView.HintText
+        </div>
+        @if (additionalInformationView.HideWarning is false)
+        {
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    Do not add ASK (Academies & Schools Knowledge) data to your template. ASK data is unpublished and should not be used to make a decision about a conversion.
+                </strong>
+            </div>
+        }
+    }
 }
