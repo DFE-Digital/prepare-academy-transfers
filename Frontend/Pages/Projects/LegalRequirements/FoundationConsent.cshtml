@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Have the diocese given consent for this transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Have the foundation given consent for this transfer?";
     Layout = "_Layout";
 
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
