@@ -1,4 +1,48 @@
-﻿@page
+﻿@page "/project/{urn}/legalrequirements/trust-agreement"
 @model Frontend.Pages.Projects.LegalRequirements.TrustAgreementModel
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
 @{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Have you received an agreement confirmation from the trust?";
+    Layout = "_Layout";
+
+    var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
 }
+
+@section BeforeMain
+    {
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/LegalRequirements/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+    <div asp-gds-validation-summary></div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form method="post" novalidate="">
+                <input type="hidden" asp-for="@Model.Urn" />
+                <input type="hidden" asp-for="@Model.ReturnToPreview" />
+                <input type="hidden" asp-for="@Model.IncomingTrustName" />
+                <div class="govuk-form-group @formClasses">
+                    <fieldset class="govuk-fieldset" aria-describedby="trust-agreement-hint">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                            <h1 class="govuk-fieldset__heading" data-test="header">
+                                <span class="govuk-caption-l">
+                                    @Model.IncomingTrustName
+                                </span>
+                                Have you received an agreement confirmation from the trust?
+                            </h1>
+                        </legend>
+
+                        <p asp-gds-validation-for="TrustAgreementViewModel.TrustAgreement"></p>
+                        <partial for="RadioButtonsYesNoNotApplicable" name="Shared/_RadioButtons" />
+
+                    </fieldset>
+                </div>
+                <button class="govuk-button" data-module="govuk-button" type="submit" data-test="submit-btn">
+                    Save and continue
+                </button>
+            </form>
+        </div>
+    </div>

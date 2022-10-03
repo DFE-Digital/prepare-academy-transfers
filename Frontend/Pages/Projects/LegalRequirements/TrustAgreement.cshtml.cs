@@ -42,6 +42,10 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToString());
                 return Page();
             }
+            if (ReturnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
+            }
 
             project.Result.LegalRequirements.TrustAgreement = TrustAgreementViewModel.TrustAgreement;
             await _projects.Update(project.Result);
@@ -71,7 +75,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 {
                     DisplayName = "Not Applicable",
                     Name = $"{nameof(TrustAgreementViewModel.TrustAgreement)}",
-                    Value = "Not Applicable",
+                    Value = "NotApplicable",
                     Checked = valueSelected is "Not Applicable"
                 }
             };

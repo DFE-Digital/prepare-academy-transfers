@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Frontend.ExtensionMethods;
 using Frontend.Models.LegalRequirements;
 
 namespace Frontend.Pages.Projects.LegalRequirements
@@ -30,7 +31,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var project = await _projects.GetByUrn(Urn);
             IncomingTrustName = project.Result.IncomingTrustName;
 
-            RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToString());
+            RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription());
             return Page();
         }
 
@@ -38,10 +39,15 @@ namespace Frontend.Pages.Projects.LegalRequirements
         {
             var project = await _projects.GetByUrn(Urn);
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid is false)
             {
-                RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToString());
+                RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription());
                 return Page();
+            }
+
+            if (ReturnToPreview)
+            {
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
             project.Result.LegalRequirements.DiocesanConsent = DiocesanConsentViewModel.DiocesanConsent;
@@ -72,7 +78,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 {
                     DisplayName = "Not Applicable",
                     Name = $"{nameof(DiocesanConsentViewModel.DiocesanConsent)}",
-                    Value = "Not Applicable",
+                    Value = "NotApplicable",
                     Checked = valueSelected is "Not Applicable"
                 }
             };

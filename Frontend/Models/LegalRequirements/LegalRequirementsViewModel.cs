@@ -22,11 +22,13 @@ namespace Frontend.Models.LegalRequirements
 
             public LegalRequirementsViewModel(ThreeOptions? trustAgreement,
                 ThreeOptions? diocesanConsent,
-                ThreeOptions? foundationConsent)
+                ThreeOptions? foundationConsent,
+                string projectUrn)
             {
                 TrustAgreement = trustAgreement;
                 DiocesanConsent = diocesanConsent;
                 FoundationConsent = foundationConsent;
+                Urn = projectUrn;
             }
 
         }

@@ -33,7 +33,8 @@ namespace Frontend.Pages.Projects.LegalRequirements
             LegalRequirementsViewModel = new LegalRequirementsViewModel(
                 projectResult.LegalRequirements.TrustAgreement,
                 projectResult.LegalRequirements.DiocesanConsent,
-                projectResult.LegalRequirements.FoundationConsent
+                projectResult.LegalRequirements.FoundationConsent,
+                projectResult.Urn
             );
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
             {

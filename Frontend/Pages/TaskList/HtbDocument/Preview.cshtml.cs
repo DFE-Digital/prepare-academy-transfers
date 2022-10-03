@@ -5,6 +5,7 @@ using Data;
 using Frontend.Models;
 using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
+using Frontend.Models.LegalRequirements;
 using Frontend.Pages.Projects;
 using Frontend.Pages.Projects.BenefitsAndRisks;
 using Frontend.Services.Interfaces;
@@ -20,6 +21,7 @@ namespace Frontend.Pages.TaskList.HtbDocument
         private readonly IProjects _projects;
         public Index FeaturesSummaryViewModel { get; set; }
         public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; set; }
+        public LegalRequirementsViewModel LegalRequirementsViewModel { get; set; }
         public Projects.TransferDates.Index TransferDatesSummaryViewModel { get; set; }
         public Projects.AcademyAndTrustInformation.Index AcademyAndTrustInformationSummaryViewModel { get; set; }
         public Projects.Rationale.Index RationaleSummaryViewModel { get; set; }
@@ -59,6 +61,16 @@ namespace Frontend.Pages.TaskList.HtbDocument
                 project.OutgoingAcademyUrn,
                 project.Benefits.AnyRisks,
                 project.Benefits.EqualitiesImpactAssessmentConsidered
+            )
+            {
+                ReturnToPreview = true
+            };
+
+            LegalRequirementsViewModel = new LegalRequirementsViewModel(
+                project.LegalRequirements.TrustAgreement,
+                project.LegalRequirements.DiocesanConsent,
+                project.LegalRequirements.FoundationConsent,
+                project.Urn
             )
             {
                 ReturnToPreview = true
