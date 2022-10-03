@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.Models.Projects;
+using Frontend.ExtensionMethods;
 using Frontend.Helpers;
 using Frontend.Models.ProjectTemplate;
 using Frontend.Services.Interfaces;
@@ -53,6 +54,9 @@ namespace Frontend.Services
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
+                TrustAgreement = project.LegalRequirements.TrustAgreement.ToDescription(),
+                DiocesanConsent = project.LegalRequirements.DiocesanConsent.ToDescription(),
+                FoundationConsent = project.LegalRequirements.FoundationConsent.ToDescription(),
                 EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered.ToDisplay(),
                 AnyRisks = project.Benefits.AnyRisks.ToDisplay(),
                 OtherFactors = GetOtherFactors(project.Benefits),
