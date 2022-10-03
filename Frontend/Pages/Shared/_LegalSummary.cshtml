@@ -1,0 +1,63 @@
+@model Frontend.Models.LegalRequirements.LegalRequirementsViewModel
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+                Trust agreement
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @if (!Model.TrustAgreement.HasValue)
+                {
+                    <span class="dfe-empty-tag">Empty</span>
+                }
+                else
+                {
+                    <p class="govuk-body" data-test="trust-agreement">@(Model.TrustAgreement)</p>
+                }
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="/Projects/LegalRequirements/TrustAgreement" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="trust-agreemnt">
+                    Change<span class="govuk-visually-hidden"> trust agreement</span>
+                </a>
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Diocesan consent
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @if (!Model.DiocesanConsent.HasValue)
+                {
+                    <span class="dfe-empty-tag">Empty</span>
+                }
+                else
+                {
+                    <p class="govuk-body" data-test="diocesan-consent">@(Model.DiocesanConsent)</p>
+                }
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="/Projects/LegalRequirements/DiocesanConsent" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="diocesan-consent">
+                    Change<span class="govuk-visually-hidden"> diocesan consent</span>
+                </a>
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Foundation consent
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @if (!Model.FoundationConsent.HasValue)
+                {
+                    <span class="dfe-empty-tag">Empty</span>
+                }
+                else
+                {
+                    <p class="govuk-body" data-test="foundation-consent">@(Model.FoundationConsent)</p>
+                }
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="/Projects/LegalRequirements/FoundationConsent" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="foundation-consent">
+                    Change<span class="govuk-visually-hidden"> foundation consent</span>
+                </a>
+            </dd>
+        </div>
+</dl>

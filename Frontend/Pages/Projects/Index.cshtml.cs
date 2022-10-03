@@ -18,6 +18,7 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses FeatureTransferStatus { get; set; }
         public ProjectStatuses TransferDatesStatus { get; set; }
         public ProjectStatuses BenefitsAndOtherFactorsStatus { get; set; }
+        public ProjectStatuses LegalRequirementsStatus { get; set; }
         public ProjectStatuses RationaleStatus { get; set; }
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
 

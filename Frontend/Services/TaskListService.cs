@@ -33,6 +33,7 @@ namespace Frontend.Services
             indexPage.FeatureTransferStatus = GetFeatureTransferStatus(project.Result);
             indexPage.TransferDatesStatus = GetTransferDatesStatus(project.Result);
             indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
+            indexPage.LegalRequirementsStatus = GetLegalRequirementsStatus(project.Result);
             indexPage.RationaleStatus = GetRationaleStatus(project.Result);
         }
 
@@ -77,6 +78,14 @@ namespace Frontend.Services
                 return ProjectStatuses.NotStarted;
 
             return project.Benefits.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
+        }
+        private ProjectStatuses GetLegalRequirementsStatus(Project project)
+        {
+            if (project.LegalRequirements.DiocesanConsent == null && project.LegalRequirements.DiocesanConsent == null &&
+                    project.LegalRequirements.DiocesanConsent == null){
+                return ProjectStatuses.NotStarted;
+            }
+            return project.LegalRequirements.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
 
         private ProjectStatuses GetRationaleStatus(Project project)
