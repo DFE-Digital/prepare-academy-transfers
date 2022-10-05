@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Data.Models;
 using Data.Models.Projects;
 using Data.TRAMS.Models;
@@ -20,6 +22,7 @@ namespace Data.TRAMS.Mappers.Request
                 ProjectReference = input.Reference,
                 TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
+                LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
@@ -68,6 +71,16 @@ namespace Data.TRAMS.Mappers.Request
             };
         }
 
+        private static AcademyTransferProjectLegalRequirements LegalRequirements(Project input)
+        {
+            return new AcademyTransferProjectLegalRequirements()
+            {
+                TrustAgreement = ToDescription(input.LegalRequirements.TrustAgreement),
+                DiocesanConsent = ToDescription(input.LegalRequirements.DiocesanConsent),
+                FoundationConsent = ToDescription(input.LegalRequirements.FoundationConsent),
+                IsCompleted = input.LegalRequirements.IsCompleted != false ? input.LegalRequirements.IsCompleted : null
+            };
+        }
         private static List<TransferringAcademyUpdate> TransferringAcademies(Project input)
         {
             return input.TransferringAcademies.Select(transferringAcademy =>
@@ -135,6 +148,19 @@ namespace Data.TRAMS.Mappers.Request
                 AnyRisks = input.Benefits.AnyRisks,
                 EqualitiesImpactAssessmentConsidered = input.Benefits.EqualitiesImpactAssessmentConsidered
             };
+        }
+        private static string ToDescription(ThreeOptions? source)
+        {
+
+            if (source == null) return string.Empty;
+            FieldInfo fi = source.GetType().GetField(source.ToString());
+
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0) return attributes[0].Description;
+
+            return source.ToString();
         }
     }
 }

@@ -43,13 +43,12 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.FoundationConsent.ToDescription());
                 return Page();
             }
+            project.Result.LegalRequirements.FoundationConsent = FoundationConsentViewModel.FoundationConsent;
+            await _projects.Update(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
-
-            project.Result.LegalRequirements.FoundationConsent = FoundationConsentViewModel.FoundationConsent;
-            await _projects.Update(project.Result);
 
             return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
         }

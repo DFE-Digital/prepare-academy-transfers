@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Data.Models;
 using Data.Models.Projects;
 using Data.TRAMS.Models;
+using Data.TRAMS.Models.AcademyTransferProject;
 using Helpers;
 
 namespace Data.TRAMS.Mappers.Response
@@ -14,6 +18,7 @@ namespace Data.TRAMS.Mappers.Response
             return new Project
             {
                 Benefits = Benefits(input),
+                LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
@@ -65,6 +70,16 @@ namespace Data.TRAMS.Mappers.Response
                 Project = input.Rationale.ProjectRationale,
                 Trust = input.Rationale.TrustSponsorRationale,
                 IsCompleted = input.Rationale.IsCompleted
+            };
+        }
+        private static TransferLegalRequirements LegalRequirements(TramsProject input)
+        {
+            return new TransferLegalRequirements()
+            {
+                TrustAgreement = ToThreeOptions(input.LegalRequirements.TrustAgreement),
+                DiocesanConsent = ToThreeOptions(input.LegalRequirements.DiocesanConsent),
+                FoundationConsent = ToThreeOptions(input.LegalRequirements.FoundationConsent),
+                IsCompleted = input.LegalRequirements.IsCompleted != false ? input.LegalRequirements.IsCompleted : null
             };
         }
 
@@ -133,6 +148,15 @@ namespace Data.TRAMS.Mappers.Response
                 EqualitiesImpactAssessmentConsidered = input.Benefits.EqualitiesImpactAssessmentConsidered,
                 IsCompleted = input.Benefits.IsCompleted
             };
+        }
+        private static ThreeOptions? ToThreeOptions(string source)
+        {
+
+            if (string.IsNullOrEmpty(source)) return null;
+            if (source == "Not applicable") return ThreeOptions.NotApplicable;
+            ThreeOptions? status = (ThreeOptions)Enum.Parse(typeof(ThreeOptions), source, true);
+
+            return status;
         }
     }
 }

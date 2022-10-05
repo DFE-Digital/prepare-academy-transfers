@@ -45,13 +45,13 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 return Page();
             }
 
+
+            project.Result.LegalRequirements.DiocesanConsent = DiocesanConsentViewModel.DiocesanConsent;
+            await _projects.Update(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
-
-            project.Result.LegalRequirements.DiocesanConsent = DiocesanConsentViewModel.DiocesanConsent;
-            await _projects.Update(project.Result);
 
             return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
         }

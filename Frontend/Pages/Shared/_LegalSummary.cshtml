@@ -1,3 +1,4 @@
+@using Frontend.ExtensionMethods
 @model Frontend.Models.LegalRequirements.LegalRequirementsViewModel
 <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
@@ -11,7 +12,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body" data-test="trust-agreement">@(Model.TrustAgreement)</p>
+                    <p class="govuk-body" data-test="trust-agreement">@(Model.TrustAgreement.ToDescription())</p>
                 }
             </dd>
             <dd class="govuk-summary-list__actions">
@@ -31,7 +32,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body" data-test="diocesan-consent">@(Model.DiocesanConsent)</p>
+                <p class="govuk-body" data-test="diocesan-consent">@(Model.DiocesanConsent.ToDescription())</p>
                 }
             </dd>
             <dd class="govuk-summary-list__actions">
@@ -51,7 +52,7 @@
                 }
                 else
                 {
-                    <p class="govuk-body" data-test="foundation-consent">@(Model.FoundationConsent)</p>
+                <p class="govuk-body" data-test="foundation-consent">@(Model.FoundationConsent.ToDescription())</p>
                 }
             </dd>
             <dd class="govuk-summary-list__actions">

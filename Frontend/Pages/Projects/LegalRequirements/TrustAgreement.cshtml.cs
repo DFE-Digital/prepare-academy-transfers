@@ -42,13 +42,14 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToString());
                 return Page();
             }
+
+            project.Result.LegalRequirements.TrustAgreement = TrustAgreementViewModel.TrustAgreement;
+            await _projects.Update(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
-            project.Result.LegalRequirements.TrustAgreement = TrustAgreementViewModel.TrustAgreement;
-            await _projects.Update(project.Result);
 
             return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
         }
