@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Models;
 using Data.Models.Projects;
+using Data.TRAMS.ExtensionMethods;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.AcademyTransferProject;
@@ -101,7 +102,13 @@ namespace Data.TRAMS.Tests.Mappers.Response
                         KeyStage5PerformanceAdditionalInformation = "KeyStage5PerformanceAdditionalInformation"
                     }
                 },
-                
+                LegalRequirements = new AcademyTransferProjectLegalRequirements()
+                {
+                    TrustAgreement = "No",
+                    DiocesanConsent = "No",
+                    FoundationConsent = "No",
+                    IsCompleted= false,
+                },
                 OutgoingTrustUkprn = "123"
             };
 
@@ -118,6 +125,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             AssertBenefitsCorrect(toMap, result);
             AssertDatesCorrect(toMap, result);
             AssertFeaturesCorrect(toMap, result);
+            AssertLegalRequirementsAreCorrect(toMap, result);
             AssertRationaleCorrect(toMap, result);
             AssertGeneralInformationCorrect(toMap, result);
             AssertTransferringAcademiesCorrect(toMap, result);
@@ -140,7 +148,13 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedTransfer.OutgoingAcademy.Ukprn, result.TransferringAcademies[0].OutgoingAcademyUkprn);
             Assert.Equal(expectedTransfer.OutgoingAcademy.Urn, result.TransferringAcademies[0].OutgoingAcademyUrn);
         }
-
+        private static void AssertLegalRequirementsAreCorrect(TramsProject toMap, Project result)
+        {
+            Assert.Equal(toMap.LegalRequirements.TrustAgreement, result.LegalRequirements.TrustAgreement.ToDescription());
+            Assert.Equal(toMap.LegalRequirements.DiocesanConsent, result.LegalRequirements.DiocesanConsent.ToDescription());
+            Assert.Equal(toMap.LegalRequirements.FoundationConsent, result.LegalRequirements.FoundationConsent.ToDescription());
+            Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
+        }
         private static void AssertRationaleCorrect(TramsProject toMap, Project result)
         {
             Assert.Equal(toMap.Rationale.ProjectRationale, result.Rationale.Project);
