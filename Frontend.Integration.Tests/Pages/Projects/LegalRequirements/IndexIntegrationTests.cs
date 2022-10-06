@@ -10,7 +10,7 @@ using Data.Models;
 using Data.TRAMS.ExtensionMethods;
 using Xunit;
 
-namespace Frontend.Integration.Tests.Pages.Projects.LegalRequires
+namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 {
     public class IndexIntegrationTests : BaseIntegrationTests
     {
