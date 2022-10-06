@@ -78,7 +78,7 @@ namespace Data.TRAMS.Mappers.Request
                 TrustAgreement = ToDescription(input.LegalRequirements.TrustAgreement),
                 DiocesanConsent = ToDescription(input.LegalRequirements.DiocesanConsent),
                 FoundationConsent = ToDescription(input.LegalRequirements.FoundationConsent),
-                IsCompleted = input.LegalRequirements.IsCompleted != false ? input.LegalRequirements.IsCompleted : null
+                IsCompleted = input.LegalRequirements.IsCompleted
             };
         }
         private static List<TransferringAcademyUpdate> TransferringAcademies(Project input)
