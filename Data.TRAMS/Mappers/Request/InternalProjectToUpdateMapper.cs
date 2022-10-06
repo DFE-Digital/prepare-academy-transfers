@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Data.Models;
 using Data.Models.Projects;
+using Data.TRAMS.ExtensionMethods;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.AcademyTransferProject;
 
@@ -75,9 +76,9 @@ namespace Data.TRAMS.Mappers.Request
         {
             return new AcademyTransferProjectLegalRequirements()
             {
-                TrustAgreement = ToDescription(input.LegalRequirements.TrustAgreement),
-                DiocesanConsent = ToDescription(input.LegalRequirements.DiocesanConsent),
-                FoundationConsent = ToDescription(input.LegalRequirements.FoundationConsent),
+                TrustAgreement = input.LegalRequirements.TrustAgreement.ToDescription(),
+                DiocesanConsent = input.LegalRequirements.DiocesanConsent.ToDescription(),
+                FoundationConsent = input.LegalRequirements.FoundationConsent.ToDescription(),
                 IsCompleted = input.LegalRequirements.IsCompleted
             };
         }
@@ -148,19 +149,6 @@ namespace Data.TRAMS.Mappers.Request
                 AnyRisks = input.Benefits.AnyRisks,
                 EqualitiesImpactAssessmentConsidered = input.Benefits.EqualitiesImpactAssessmentConsidered
             };
-        }
-        private static string ToDescription(ThreeOptions? source)
-        {
-
-            if (source == null) return string.Empty;
-            FieldInfo fi = source.GetType().GetField(source.ToString());
-
-            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
-                typeof(DescriptionAttribute), false);
-
-            if (attributes != null && attributes.Length > 0) return attributes[0].Description;
-
-            return source.ToString();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace Frontend.ExtensionMethods
+namespace Data.TRAMS.ExtensionMethods
 {
     public static class EnumExtensions
     {

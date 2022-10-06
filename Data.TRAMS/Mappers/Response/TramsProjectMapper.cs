@@ -79,7 +79,7 @@ namespace Data.TRAMS.Mappers.Response
                 TrustAgreement = ToThreeOptions(input.LegalRequirements.TrustAgreement),
                 DiocesanConsent = ToThreeOptions(input.LegalRequirements.DiocesanConsent),
                 FoundationConsent = ToThreeOptions(input.LegalRequirements.FoundationConsent),
-                IsCompleted = input.LegalRequirements.IsCompleted != false ? input.LegalRequirements.IsCompleted : null
+                IsCompleted = input.LegalRequirements.IsCompleted
             };
         }
 
@@ -151,7 +151,6 @@ namespace Data.TRAMS.Mappers.Response
         }
         private static ThreeOptions? ToThreeOptions(string source)
         {
-
             if (string.IsNullOrEmpty(source)) return null;
             if (source == "Not applicable") return ThreeOptions.NotApplicable;
             ThreeOptions? status = (ThreeOptions)Enum.Parse(typeof(ThreeOptions), source, true);
