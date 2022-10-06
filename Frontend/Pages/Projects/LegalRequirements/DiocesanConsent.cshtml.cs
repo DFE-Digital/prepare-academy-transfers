@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Models;
 using Data.TRAMS.ExtensionMethods;
 using Frontend.ExtensionMethods;
 using Frontend.Models.LegalRequirements;
@@ -32,7 +33,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var project = await _projects.GetByUrn(Urn);
             IncomingTrustName = project.Result.IncomingTrustName;
 
-            RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription());
+            RadioButtonsYesNoNotApplicable = DiocesanConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription(), DiocesanConsentViewModel.DiocesanConsent, nameof(DiocesanConsentViewModel.DiocesanConsent));
             return Page();
         }
 
@@ -42,7 +43,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
 
             if (ModelState.IsValid is false)
             {
-                RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription());
+                RadioButtonsYesNoNotApplicable = DiocesanConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription(), DiocesanConsentViewModel.DiocesanConsent, nameof(DiocesanConsentViewModel.DiocesanConsent));
                 return Page();
             }
             project.Result.LegalRequirements.DiocesanConsent = DiocesanConsentViewModel.DiocesanConsent;
@@ -52,43 +53,6 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
             return RedirectToPage(Links.LegalRequirements.Index.PageName, new { Urn });
-        }
-
-        private IList<RadioButtonViewModel> GetRadioButtons(string valueSelected)
-        {
-            var list = new List<RadioButtonViewModel>
-            {
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Yes",
-                    Name = $"{nameof(DiocesanConsentViewModel.DiocesanConsent)}",
-                    Value = "Yes",
-                    Checked = valueSelected is "Yes"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "No",
-                    Name = $"{nameof(DiocesanConsentViewModel.DiocesanConsent)}",
-                    Value = "No",
-                    Checked = valueSelected is "No"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Not Applicable",
-                    Name = $"{nameof(DiocesanConsentViewModel.DiocesanConsent)}",
-                    Value = "NotApplicable",
-                    Checked = valueSelected is "Not Applicable"
-                }
-            };
-
-            var selectedRadio =
-                list.FirstOrDefault(c => c.Value == DiocesanConsentViewModel.DiocesanConsent.ToString());
-            if (selectedRadio != null)
-            {
-                selectedRadio.Checked = true;
-            }
-
-            return list;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Frontend.Models.LegalRequirements
 {
-    public class TrustAgreementViewModel
+    public class TrustAgreementViewModel : CommonLegalViewModel
     {
         public ThreeOptions? TrustAgreement { get; set; }
     }

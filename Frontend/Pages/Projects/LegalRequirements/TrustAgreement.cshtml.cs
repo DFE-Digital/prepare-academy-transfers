@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.TRAMS.ExtensionMethods;
 
 namespace Frontend.Pages.Projects.LegalRequirements
 {
@@ -29,7 +30,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var project = await _projects.GetByUrn(Urn);
             IncomingTrustName = project.Result.IncomingTrustName;
 
-            RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToString());
+            RadioButtonsYesNoNotApplicable = TrustAgreementViewModel.GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToDescription(), TrustAgreementViewModel.TrustAgreement, nameof(TrustAgreementViewModel.TrustAgreement));
             return Page();
         }
 
@@ -39,7 +40,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
 
             if (!ModelState.IsValid)
             {
-                RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToString());
+                RadioButtonsYesNoNotApplicable = TrustAgreementViewModel.GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToDescription(), TrustAgreementViewModel.TrustAgreement, nameof(TrustAgreementViewModel.TrustAgreement));
                 return Page();
             }
 
@@ -51,44 +52,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             }
 
 
-            return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
-        }
-
-        private IList<RadioButtonViewModel> GetRadioButtons(string valueSelected)
-        {
-            var list = new List<RadioButtonViewModel>
-            {
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Yes",
-                    Name = $"{nameof(TrustAgreementViewModel.TrustAgreement)}",
-                    Value = "Yes",
-                    Checked = valueSelected is "Yes"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "No",
-                    Name = $"{nameof(TrustAgreementViewModel.TrustAgreement)}",
-                    Value = "No",
-                    Checked = valueSelected is "No"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Not Applicable",
-                    Name = $"{nameof(TrustAgreementViewModel.TrustAgreement)}",
-                    Value = "NotApplicable",
-                    Checked = valueSelected is "Not Applicable"
-                }
-            };
-
-            var selectedRadio =
-                list.FirstOrDefault(c => c.Value == TrustAgreementViewModel.TrustAgreement.ToString());
-            if (selectedRadio != null)
-            {
-                selectedRadio.Checked = true;
-            }
-
-            return list;
+            return RedirectToPage(Links.LegalRequirements.Index.PageName, new { Urn });
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Frontend.Models.LegalRequirements
 {
-    public class DiocesanConsentViewModel
+    public class DiocesanConsentViewModel : CommonLegalViewModel
     {
         public ThreeOptions? DiocesanConsent { get; set; }
     }

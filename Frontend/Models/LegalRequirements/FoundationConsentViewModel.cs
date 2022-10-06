@@ -2,7 +2,7 @@
 
 namespace Frontend.Models.LegalRequirements
 {
-    public class FoundationConsentViewModel
+    public class FoundationConsentViewModel : CommonLegalViewModel
     {
         public ThreeOptions? FoundationConsent { get; set; }
     }

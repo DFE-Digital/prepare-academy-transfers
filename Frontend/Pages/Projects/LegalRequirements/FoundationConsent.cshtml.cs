@@ -31,7 +31,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var project = await _projects.GetByUrn(Urn);
             IncomingTrustName = project.Result.IncomingTrustName;
 
-            RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.FoundationConsent.ToDescription());
+            RadioButtonsYesNoNotApplicable = FoundationConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.FoundationConsent.ToDescription(), FoundationConsentViewModel.FoundationConsent, nameof(FoundationConsentViewModel.FoundationConsent));
             return Page();
         }
 
@@ -41,7 +41,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
 
             if (ModelState.IsValid is false)
             {
-                RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.FoundationConsent.ToDescription());
+                RadioButtonsYesNoNotApplicable = FoundationConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.FoundationConsent.ToDescription(), FoundationConsentViewModel.FoundationConsent, nameof(FoundationConsentViewModel.FoundationConsent));
                 return Page();
             }
             project.Result.LegalRequirements.FoundationConsent = FoundationConsentViewModel.FoundationConsent;
@@ -51,44 +51,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
-            return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
-        }
-
-        private IList<RadioButtonViewModel> GetRadioButtons(string valueSelected)
-        {
-            var list = new List<RadioButtonViewModel>
-            {
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Yes",
-                    Name = $"{nameof(FoundationConsentViewModel.FoundationConsent)}",
-                    Value = "Yes",
-                    Checked = valueSelected is "Yes"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "No",
-                    Name = $"{nameof(FoundationConsentViewModel.FoundationConsent)}",
-                    Value = "No",
-                    Checked = valueSelected is "No"
-                },
-                new RadioButtonViewModel
-                {
-                    DisplayName = "Not Applicable",
-                    Name = $"{nameof(FoundationConsentViewModel.FoundationConsent)}",
-                    Value = "NotApplicable",
-                    Checked = valueSelected is "Not Applicable"
-                }
-            };
-
-            var selectedRadio =
-                list.FirstOrDefault(c => c.Value == FoundationConsentViewModel.FoundationConsent.ToString());
-            if (selectedRadio != null)
-            {
-                selectedRadio.Checked = true;
-            }
-
-            return list;
+            return RedirectToPage(Links.LegalRequirements.Index.PageName, new { Urn });
         }
     }
 }
