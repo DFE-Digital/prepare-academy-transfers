@@ -8,6 +8,7 @@ namespace Data.TRAMS.Models
         public TramsProject()
         {
             Benefits = new AcademyTransferProjectBenefits();
+            LegalRequirements = new AcademyTransferProjectLegalRequirements();
             Dates = new AcademyTransferProjectDates();
             Features = new AcademyTransferProjectFeatures();
             Rationale = new AcademyTransferProjectRationale();
@@ -16,6 +17,7 @@ namespace Data.TRAMS.Models
             OutgoingTrust = new TrustSummary();
         }
         public AcademyTransferProjectBenefits Benefits { get; set; }
+        public AcademyTransferProjectLegalRequirements LegalRequirements { get; set; }
         public AcademyTransferProjectDates Dates { get; set; }
         public AcademyTransferProjectFeatures Features { get; set; }
         public string OutgoingTrustUkprn { get; set; }

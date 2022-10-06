@@ -12,6 +12,7 @@ namespace Data.Models
             Features = new TransferFeatures();
             Dates = new TransferDates();
             Benefits = new TransferBenefits();
+            LegalRequirements = new TransferLegalRequirements();
             Rationale = new TransferRationale();
             AcademyAndTrustInformation = new TransferAcademyAndTrustInformation();
         }
@@ -27,6 +28,7 @@ namespace Data.Models
         public TransferFeatures Features { get; set; }
         public TransferDates Dates { get; set; }
         public TransferBenefits Benefits { get; set; }
+        public TransferLegalRequirements LegalRequirements { get; set; }
         public TransferRationale Rationale { get; set; }
         public TransferAcademyAndTrustInformation AcademyAndTrustInformation { get; set; }
         public string GeneralInformationAdditionalInformation { get; set; }

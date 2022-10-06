@@ -50,6 +50,11 @@
                             <a class="govuk-link" aria-describedby="benefits" asp-page="/Projects/BenefitsAndRisks/Index" asp-route-urn="@Model.Urn" data-test="transfer-benefits">Benefits and risks</a>
                         </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
                     </li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" aria-describedby="legal-requirements" asp-page="/Projects/LegalRequirements/Index" asp-route-urn="@Model.Urn" data-test="transfer-legal-requirements">Legal requirements</a>
+                            </span><projectstatus id="legal-requirements" status="@Model.LegalRequirementsStatus"></projectstatus>
+                        </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="rationale" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn" data-test="transfer-rationale">Rationale</a>

@@ -6,6 +6,7 @@ namespace Data.TRAMS.Models
     public class TramsProjectUpdate
     {
         public AcademyTransferProjectBenefits Benefits { get; set; }
+        public AcademyTransferProjectLegalRequirements LegalRequirements { get; set; }
         public AcademyTransferProjectDates Dates { get; set; }
         public AcademyTransferProjectFeatures Features { get; set; }
         public string OutgoingTrustUkprn { get; set; }

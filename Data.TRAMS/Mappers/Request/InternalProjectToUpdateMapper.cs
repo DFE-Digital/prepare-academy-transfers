@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Data.Models;
 using Data.Models.Projects;
+using Data.TRAMS.ExtensionMethods;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.AcademyTransferProject;
 
@@ -20,6 +23,7 @@ namespace Data.TRAMS.Mappers.Request
                 ProjectReference = input.Reference,
                 TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
+                LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
@@ -68,6 +72,16 @@ namespace Data.TRAMS.Mappers.Request
             };
         }
 
+        private static AcademyTransferProjectLegalRequirements LegalRequirements(Project input)
+        {
+            return new AcademyTransferProjectLegalRequirements()
+            {
+                TrustAgreement = input.LegalRequirements.TrustAgreement.ToDescription(),
+                DiocesanConsent = input.LegalRequirements.DiocesanConsent.ToDescription(),
+                FoundationConsent = input.LegalRequirements.FoundationConsent.ToDescription(),
+                IsCompleted = input.LegalRequirements.IsCompleted
+            };
+        }
         private static List<TransferringAcademyUpdate> TransferringAcademies(Project input)
         {
             return input.TransferringAcademies.Select(transferringAcademy =>
