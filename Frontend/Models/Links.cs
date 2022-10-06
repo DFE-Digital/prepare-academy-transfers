@@ -12,7 +12,10 @@ namespace Frontend.Models
         {
             public static readonly LinkItem Index = new LinkItem {BackText = "Back to project type", PageName = "/ProjectType/Index"};
         }
-
+        public static class Project
+        {
+            public static readonly LinkItem Index = new LinkItem { BackText = "Back to project", PageName = "/Projects/Index" };
+        }
         public static class ProjectList
         {
             public static readonly LinkItem Index = new LinkItem { PageName = "/Home/Index" };
@@ -20,6 +23,19 @@ namespace Frontend.Models
         public static class LegalRequirements
         {
             public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/Index" };
+                
+            public static class TrustAgreement
+            {
+                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/TrustAgreement" };
+            }
+            public static class DiocesanConsent
+            {
+                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/DiocesanConsent" };
+            }
+            public static class FoundationConsent
+            {
+                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/FoundationConsent" };
+            }
         }
     }
 

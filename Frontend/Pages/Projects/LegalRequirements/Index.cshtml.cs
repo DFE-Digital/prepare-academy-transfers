@@ -55,7 +55,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
 
             await _projects.Update(projectResult);
 
-            return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index",
+            return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : Links.Project.Index.PageName,
                 new { Urn });
         }
 
