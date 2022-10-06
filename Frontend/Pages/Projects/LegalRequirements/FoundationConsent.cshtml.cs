@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.TRAMS.ExtensionMethods;
 using Frontend.ExtensionMethods;
 
 namespace Frontend.Pages.Projects.LegalRequirements

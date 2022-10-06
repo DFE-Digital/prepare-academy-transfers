@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.TRAMS.ExtensionMethods;
 using Frontend.ExtensionMethods;
 using Frontend.Models.LegalRequirements;
 
@@ -44,16 +45,13 @@ namespace Frontend.Pages.Projects.LegalRequirements
                 RadioButtonsYesNoNotApplicable = GetRadioButtons(project.Result.LegalRequirements.DiocesanConsent.ToDescription());
                 return Page();
             }
-
-
             project.Result.LegalRequirements.DiocesanConsent = DiocesanConsentViewModel.DiocesanConsent;
             await _projects.Update(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
-
-            return RedirectToPage("/Projects/LegalRequirements/Index", new { Urn });
+            return RedirectToPage(Links.LegalRequirements.Index.PageName, new { Urn });
         }
 
         private IList<RadioButtonViewModel> GetRadioButtons(string valueSelected)
