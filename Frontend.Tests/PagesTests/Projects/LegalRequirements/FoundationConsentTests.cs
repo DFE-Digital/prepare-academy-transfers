@@ -51,7 +51,6 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenUrnAndFoundationConsent_UpdatesTheProject()
             {
-
                 _subject.FoundationConsentViewModel.FoundationConsent = ThreeOptions.No;
 
                 await _subject.OnPostAsync();

@@ -51,7 +51,6 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenUrnAndTrustAgreement_UpdatesTheProject()
             {
-                
                 _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
 
                 await _subject.OnPostAsync();

@@ -14,8 +14,10 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 {
     public class FoundationConsentTests : BaseIntegrationTests
     {
+        private readonly IntegrationTestingWebApplicationFactory _factory;
         public FoundationConsentTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
+            _factory = factory;
         }
 
         [Fact]
@@ -28,6 +30,26 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
             Document.BaseUri.Should()
                 .EndWith($"/project/{project.ProjectUrn}/legalrequirements/foundation-consent");
+        }
+
+        [Fact]
+        public async Task Should_save_selection()
+        {
+            var project = GetProject(p => p.LegalRequirements.FoundationConsent = ThreeOptions.No.ToDescription());
+            project.LegalRequirements.FoundationConsent = ThreeOptions.No.ToDescription();
+
+            _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+
+            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/foundation-consent");
+
+            Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
+
+            await Document.QuerySelector<IHtmlButtonElement>("[data-test=submit-btn]").SubmitAsync();
+
+            Document.QuerySelector<IHtmlElement>("h1").Text().Trim().Should()
+                .Be("Legal requirements");
+            Document.QuerySelector<IHtmlElement>("[data-test=foundation-consent]").Text().Trim().Should().
+                Be("No");
         }
     }
 }

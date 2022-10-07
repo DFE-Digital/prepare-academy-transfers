@@ -51,7 +51,6 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenUrnAndDiocesanConsent_UpdatesTheProject()
             {
-
                 _subject.DiocesanConsentViewModel.DiocesanConsent = ThreeOptions.No;
 
                 await _subject.OnPostAsync();
