@@ -36,7 +36,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             }
 
             [Fact]
-            public async void GivenReturnToPreview_KeepsValue()
+            public async Task GivenReturnToPreview_KeepsValue()
             {
                 _subject.ReturnToPreview = true;
 
@@ -49,7 +49,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class PostTests : TrustAgreementTests
         {
             [Fact]
-            public async void GivenUrnAndTrustAgreement_UpdatesTheProject()
+            public async Task GivenUrnAndTrustAgreement_UpdatesTheProject()
             {
                 
                 _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
@@ -63,7 +63,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
 
 
             [Fact]
-            public async void GivenUrnAndTrustAgreement_RedirectsToTheSummaryPage()
+            public async Task GivenUrnAndTrustAgreement_RedirectsToTheSummaryPage()
             {
                 _subject.Urn = ProjectUrn0001;
                 
@@ -76,7 +76,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             }
 
             [Fact]
-            public async void GivenReturnToPreview_RedirectToThePreviewPage()
+            public async Task GivenReturnToPreview_RedirectToThePreviewPage()
             {
                 _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
                 _subject.Urn = ProjectUrn0001;

@@ -36,7 +36,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             }
 
             [Fact]
-            public async void GivenReturnToPreview_KeepsValue()
+            public async Task GivenReturnToPreview_KeepsValue()
             {
                 _subject.ReturnToPreview = true;
 
@@ -63,7 +63,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
 
 
             [Fact]
-            public async void GivenUrnAndDiocesanConsent_RedirectsToTheSummaryPage()
+            public async Task GivenUrnAndDiocesanConsent_RedirectsToTheSummaryPage()
             {
                 _subject.Urn = ProjectUrn0001;
 
@@ -76,7 +76,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             }
 
             [Fact]
-            public async void GivenReturnToPreview_RedirectToThePreviewPage()
+            public async Task GivenReturnToPreview_RedirectToThePreviewPage()
             {
                 _subject.DiocesanConsentViewModel.DiocesanConsent = ThreeOptions.No;
                 _subject.Urn = ProjectUrn0001;

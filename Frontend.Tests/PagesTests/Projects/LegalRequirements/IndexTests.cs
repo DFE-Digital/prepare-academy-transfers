@@ -1,4 +1,5 @@
-﻿using Frontend.Pages.Projects.LegalRequirements;
+﻿using System.Threading.Tasks;
+using Frontend.Pages.Projects.LegalRequirements;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;
 using Xunit;
@@ -18,7 +19,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         }
 
         [Fact]
-        public async void GivenUrn_FetchesProjectFromTheRepository()
+        public async Task GivenUrn_FetchesProjectFromTheRepository()
         {
             await _subject.OnGetAsync();
 
@@ -26,7 +27,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         }
 
         [Fact]
-        public async void GivenUrn_AssignsModelToThePage()
+        public async Task GivenUrn_AssignsModelToThePage()
         {
             var response = await _subject.OnGetAsync();
 
