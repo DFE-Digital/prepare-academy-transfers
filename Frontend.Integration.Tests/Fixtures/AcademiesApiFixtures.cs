@@ -223,7 +223,7 @@ namespace Frontend.Integration.Tests.Fixtures
                 {
                     new KeyStage2
                     {
-                        Year = "test ks2 year",
+                        Year = "2021",
                         PercentageMeetingExpectedStdInRWM = GetTestResult(),
                         PercentageAchievingHigherStdInRWM = GetTestResult(),
                         ReadingProgressScore = GetTestResult(),
@@ -245,7 +245,7 @@ namespace Frontend.Integration.Tests.Fixtures
                 {
                     new KeyStage4
                     {
-                        Year = "test ks4 year",
+                        Year = "2021",
                         SipAttainment8score = GetTestResult(),
                         SipAttainment8scoreenglish = GetTestResult(),
                         SipAttainment8scoremaths = GetTestResult(),

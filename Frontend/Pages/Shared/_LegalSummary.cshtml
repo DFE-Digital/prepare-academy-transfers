@@ -26,15 +26,15 @@
             <dd class="govuk-summary-list__value">
                 @if (@legalActionValue.HasValue is false)
                 {
-                    <span class="dfe-empty-tag">Empty</span>
+                    <span class="dfe-empty-tag" id="@testTag" data-test=@testTag>Empty</span>
                 }
                 else
                 {
-                    <p class="govuk-body" data-test=@testTag>@(legalActionValue.ToDescription())</p>
+                    <p class="govuk-body" id="@testTag" data-test=@testTag>@(legalActionValue.ToDescription())</p>
                 }
             </dd>
             <dd class="govuk-summary-list__actions">
-                <a class="govuk-link" asp-page=@pageRedirect asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test=@testTag>
+                <a class="govuk-link" asp-page=@pageRedirect asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
                     Change<span class="govuk-visually-hidden"> @legalActionName</span>
                 </a>
             </dd>
