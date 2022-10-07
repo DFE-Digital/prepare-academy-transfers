@@ -25,7 +25,6 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/diocesan-consent");
 
-
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
             Document.BaseUri.Should()
                 .EndWith($"/project/{project.ProjectUrn}/legalrequirements/diocesan-consent");

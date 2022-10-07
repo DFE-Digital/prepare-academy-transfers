@@ -175,6 +175,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
             Assert.True(result.Dates.HasHtbDate);
             Assert.True(result.Dates.HasTargetDateForTransfer);
         }
+
         private static void AssertLegalRequirementsAreCorrect(Project toMap, TramsProjectUpdate result)
         {
             Assert.Equal(toMap.LegalRequirements.TrustAgreement.ToDescription(), result.LegalRequirements.TrustAgreement);

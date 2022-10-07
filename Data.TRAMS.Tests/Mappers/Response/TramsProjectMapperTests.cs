@@ -107,7 +107,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
                     TrustAgreement = "No",
                     DiocesanConsent = "No",
                     FoundationConsent = "No",
-                    IsCompleted= false,
+                    IsCompleted = false,
                 },
                 OutgoingTrustUkprn = "123"
             };
@@ -148,6 +148,7 @@ namespace Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedTransfer.OutgoingAcademy.Ukprn, result.TransferringAcademies[0].OutgoingAcademyUkprn);
             Assert.Equal(expectedTransfer.OutgoingAcademy.Urn, result.TransferringAcademies[0].OutgoingAcademyUrn);
         }
+
         private static void AssertLegalRequirementsAreCorrect(TramsProject toMap, Project result)
         {
             Assert.Equal(toMap.LegalRequirements.TrustAgreement, result.LegalRequirements.TrustAgreement.ToDescription());
