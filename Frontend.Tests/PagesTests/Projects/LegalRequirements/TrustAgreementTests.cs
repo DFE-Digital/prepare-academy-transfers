@@ -27,7 +27,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class GetTests : TrustAgreementTests
         {
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async Task GivenUrn_FetchesProjectFromTheRepository()
             {
                 _subject.Urn = ProjectUrn0001;
                 await _subject.OnGetAsync();

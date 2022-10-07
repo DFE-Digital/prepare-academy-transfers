@@ -27,7 +27,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class GetTests : DiocesanConsentTests
         {
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async Task GivenUrn_FetchesProjectFromTheRepository()
             {
                 _subject.Urn = ProjectUrn0001;
                 await _subject.OnGetAsync();
@@ -49,7 +49,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class PostTests : DiocesanConsentTests
         {
             [Fact]
-            public async void GivenUrnAndDiocesanConsent_UpdatesTheProject()
+            public async Task GivenUrnAndDiocesanConsent_UpdatesTheProject()
             {
 
                 _subject.DiocesanConsentViewModel.DiocesanConsent = ThreeOptions.No;

@@ -27,7 +27,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class GetTests : FoundationConsentTests
         {
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async Task GivenUrn_FetchesProjectFromTheRepository()
             {
                 _subject.Urn = ProjectUrn0001;
                 await _subject.OnGetAsync();
@@ -49,7 +49,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
         public class PostTests : FoundationConsentTests
         {
             [Fact]
-            public async void GivenUrnAndFoundationConsent_UpdatesTheProject()
+            public async Task GivenUrnAndFoundationConsent_UpdatesTheProject()
             {
 
                 _subject.FoundationConsentViewModel.FoundationConsent = ThreeOptions.No;
