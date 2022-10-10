@@ -117,7 +117,7 @@ $ npm run cy:run -- --env grepTags=@stage,url="BASE_URL_OF_APP",authorizationHea
 
 To only execute all.cy.js file which has all import test files
 ```
-$ npm run cy:run -- --spec "cypress/e2e/all.cy.js", --env grepTags=@stage,url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
+$ npm run cy:run -- --spec "cypress/e2e/all.spec.cy.js" --env grepTags=@stage,url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
 ```
 
 We append a wildcard (\*\*) to the URL argument (see `cypress.json`), so it must have a trailing slash (e.g., `url="https://localhost:5001/"`).
@@ -173,4 +173,4 @@ i.e., grepTags=@dev,grepTags=@stage
 ```
 
 Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep 
-cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changelog 
+cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changelog
