@@ -1,7 +1,7 @@
 let outgoingTrustId = '10059580';
 let incomingTrustId = '10060470';
 
-describe('Select multiple academies', () => {
+describe('Select multiple academies', { tags: '@dev'},  () => {
     afterEach(() => {
         cy.storeSessionData();
     });

@@ -112,3 +112,22 @@ Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`))
 // PAGE: Benefits and risks
 // PAGE: Rationale
 // PAGE: Trust information and project dates
+
+// Universal: Navigate to Transfer and pick the first project
+
+// Selects Transfers by default: universal
+Cypress.Commands.add('selectsTransferLandingPage', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-conversion"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+})
+
+// Selects the first project on the list: universal
+Cypress.Commands.add('selectsFirstProjectOnList', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-conversion"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+    cy.get('[id="school-name-0"]').click();
+})

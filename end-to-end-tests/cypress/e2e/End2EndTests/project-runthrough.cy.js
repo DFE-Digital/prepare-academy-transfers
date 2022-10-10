@@ -26,7 +26,7 @@ function clickBackLink() {
         .click();
 }
 
-describe("Creating and editing an academy transfer", function () {
+describe("Creating and editing an academy transfer", { tags: '@dev'}, function () {
 
     afterEach(() => {
         cy.storeSessionData();
