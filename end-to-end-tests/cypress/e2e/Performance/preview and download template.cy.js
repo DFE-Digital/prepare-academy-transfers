@@ -19,7 +19,7 @@ let selectAllCheckboxesUptoIndex = (index) => {
     });
 }
 
-describe("Performance test for preview and download template with multiple academies", function () {
+describe("Performance test for preview and download template with multiple academies", { tags: '@dev'}, function () {
     let startTimeStamp;
     let endTimeStamp;
     let timeTaken;
