@@ -44,5 +44,5 @@ jobs:
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
-          name: cypress-screenshots
+          name: screenshots
           path: end-to-end-tests/cypress/screenshots

@@ -119,7 +119,7 @@ Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`))
 Cypress.Commands.add('selectsTransferLandingPage', () => {
     let url = Cypress.env('url');
     cy.visit(url);
-    cy.get('[data-cy="select-projecttype-input-conversion"]').click();
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
     cy.get('[data-cy="select-common-submitbutton"]').click();
 })
 
@@ -127,7 +127,44 @@ Cypress.Commands.add('selectsTransferLandingPage', () => {
 Cypress.Commands.add('selectsFirstProjectOnList', () => {
     let url = Cypress.env('url');
     cy.visit(url);
-    cy.get('[data-cy="select-projecttype-input-conversion"]').click();
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
     cy.get('[data-cy="select-common-submitbutton"]').click();
-    cy.get('[id="school-name-0"]').click();
+    cy.get('[data-id="project-link-10002234"]').click();
+})
+
+//--Legal Requirements (Task List)
+
+// Trust Agreement: Change Link
+Cypress.Commands.add('trustAgreementLink', () => {
+    cy.get('[href="/project/10002234/legalrequirements/trust-agreement"]').click()
+})
+
+// Save & Continue btn (Universal)
+Cypress.Commands.add('saveAndContinueButton', () => {
+    cy.get('[data-test="submit-btn"]')
+})
+
+// Trust Agreement: status
+Cypress.Commands.add('trustAgreementStatus', () => {
+    cy.get('[data-test="trust-agreement"]')
+})
+
+// Diocesan Consent: Change Link
+Cypress.Commands.add('diocesanConsentLink', () => {
+    cy.get('[href="/project/10002234/legalrequirements/diocesan-consent"]').click()
+})
+
+// Diocesan Consent: Status
+Cypress.Commands.add('diocesanConsentStatus', () => {
+    cy.get('[data-test="diocesan-consent"]')
+})
+
+// Foundation consent: Change Link
+Cypress.Commands.add('foundationConsentLink', () => {
+    cy.get('[href="/project/10002234/legalrequirements/foundation-consent"]').click()
+})
+
+// Foundation consent: Status
+Cypress.Commands.add('foundationConsentStatus', () => {
+    cy.get('[data-test="foundation-consent"]')
 })
