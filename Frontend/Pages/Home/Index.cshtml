@@ -50,7 +50,7 @@
                         <td class="govuk-table__cell">
                             <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
                                 <strong>
-                                    <a class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
+                                    <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
                                         @firstOutgoingAcademy.IncomingTrustNameInTitleCase
                                     </a>
                                 </strong>
