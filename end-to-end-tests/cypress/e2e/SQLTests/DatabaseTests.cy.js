@@ -1,7 +1,7 @@
 /*
     This was an attempt to try and create some tests or methods that can coneect 
 */
-describe('Example to Demonstrate SQL Database Testing in Cypress', () => {
+describe('Example to Demonstrate SQL Database Testing in Cypress', { tags: '@spike'}, () => {
 
     it.skip('TEST CONNECTION with Pre-Prod', function () {
         cy.sqlServer("SELECT TOP (2) * FROM [cdm].[contact]").then((result) => {

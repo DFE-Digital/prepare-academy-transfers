@@ -35,3 +35,20 @@ module.exports = (on, config) => {
   tasks = sqlServer.loadDBPlugin(config.env.db);
   on('task', tasks);
 }
+
+// ***********************************************************
+
+//***Cypress Grep module for filtering tests Any new tags should be added to the examples**
+/**
+ * @example {{tags: '@dev'} : Development
+ * @example {tags: '@stage'} : Staging
+ * @example {tags: '@integration'} : Integration
+ * @example {tags: ['@dev', '@stage']}
+ * @example {tags: '@spike'}
+ * @example {tags: '@skip'}
+ */
+ module.export = (on, config) => {
+  
+  require('cypress-grep/src/plugin')(config)
+}
+// ***********************************************************
