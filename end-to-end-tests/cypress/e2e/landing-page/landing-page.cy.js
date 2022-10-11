@@ -1,4 +1,4 @@
-// <reference types ='Cypress'/>
+/// <reference types ='Cypress'/>
 
 const url = Cypress.env('url') + 'project-type'
 

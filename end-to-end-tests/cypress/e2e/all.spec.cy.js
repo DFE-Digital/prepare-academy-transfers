@@ -27,3 +27,6 @@ import './SQLTests/DatabaseTests.cy'
 
 // Trusts-transfers
 import './trust-transfers/search-incoming-trust.cy'
+
+// Legal Requirments
+import './legal-requirements/legal-requirements.cy'
