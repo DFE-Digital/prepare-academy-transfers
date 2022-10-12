@@ -45,4 +45,4 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: academy-transfers-api/end-to-end-tests/cypress/screenshots
+          path: /end-to-end-tests/cypress/screenshots
