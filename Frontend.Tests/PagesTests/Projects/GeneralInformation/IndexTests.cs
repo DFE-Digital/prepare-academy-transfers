@@ -36,6 +36,7 @@ namespace Frontend.Tests.PagesTests.Projects.GeneralInformation
             var fixture = new Fixture();
             var outgoingAcademy = fixture.Create<Academy>();
             outgoingAcademy.Ukprn = ukprn;
+            outgoingAcademy.LastChangedDate = "22-10-2021";
             FoundInformationForProject.OutgoingAcademies = new List<Academy>
             {
                 outgoingAcademy

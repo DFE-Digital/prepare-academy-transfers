@@ -19,6 +19,7 @@ namespace Frontend.Tests
         protected const string PopulatedProjectUrn = "01234";
         protected const string AcademyUrn = "1234";
         protected const string AcademyUkprn = "12345";
+        protected const string AcademyLastChangedDate = "22-10-2021";
         protected const string ErrorMessage = "Error";
         protected Mock<IGetInformationForProject> GetInformationForProject;
         protected Mock<IProjects> ProjectRepository;
@@ -50,7 +51,8 @@ namespace Frontend.Tests
                         OutgoingAcademyName = OutgoingAcademyName,
                         OutgoingAcademyUrn = AcademyUrn,
                         IncomingTrustName = "TRUST NAME",
-                        OutgoingAcademyUkprn = AcademyUkprn
+                        OutgoingAcademyUkprn = AcademyUkprn,
+                        LastChangedDate = AcademyLastChangedDate
                     }
                 }
             };
@@ -110,7 +112,8 @@ namespace Frontend.Tests
                         Urn = AcademyUrn,
                         LocalAuthorityName = LAName,
                         Name = OutgoingAcademyName,
-                        Ukprn = AcademyUkprn
+                        Ukprn = AcademyUkprn,
+                        LastChangedDate = AcademyLastChangedDate
                     }
                     
                 }
