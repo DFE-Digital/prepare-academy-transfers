@@ -142,7 +142,6 @@ Cypress.Commands.add('selectsFirstProjectOnList', () => {
     cy.visit(url);
     cy.get('[data-cy="select-projecttype-input-transfer"]').click();
     cy.get('[data-cy="select-common-submitbutton"]').click();
-    //cy.get('[data-id="project-link-10002234"]').click();
     selectExistingAcademyTransfer("Burnt Ash Primary School");
 })
 
