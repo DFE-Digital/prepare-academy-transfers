@@ -112,3 +112,72 @@ Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`))
 // PAGE: Benefits and risks
 // PAGE: Rationale
 // PAGE: Trust information and project dates
+
+// Universal: Navigate to Transfer and pick the first project
+
+// Selects Transfers by default: universal
+Cypress.Commands.add('selectsTransferLandingPage', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+})
+
+// Selects the first project on the list: universal
+Cypress.Commands.add('selectsFirstProjectOnList', () => {
+
+    let selectExistingAcademyTransfer = (projectName) =>
+    cy.get('[class="govuk-link"]').then(projects => {
+        for (let i = 0; i < projects.length; i++) {
+            if (projects[i].text.includes("Burnt Ash Primary School")) {
+                projects[i].click();
+                break;
+            }
+        }
+    });
+
+    let projectUrl = "";
+
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+    selectExistingAcademyTransfer("Burnt Ash Primary School");
+})
+
+//--Legal Requirements (Task List)
+
+// Trust Agreement: Change Link
+Cypress.Commands.add('trustAgreementLink', () => {
+    cy.get('a[href*="trust-agreement"]').click()
+})
+
+// Save & Continue btn (Universal)
+Cypress.Commands.add('saveAndContinueButton', () => {
+    cy.get('[data-test="submit-btn"]')
+})
+
+// Trust Agreement: status
+Cypress.Commands.add('trustAgreementStatus', () => {
+    cy.get('[data-test="trust-agreement"]')
+})
+
+// Diocesan Consent: Change Link
+Cypress.Commands.add('diocesanConsentLink', () => {
+    cy.get('a[href*="diocesan-consent"]').click()
+})
+
+// Diocesan Consent: Status
+Cypress.Commands.add('diocesanConsentStatus', () => {
+    cy.get('[data-test="diocesan-consent"]')
+})
+
+// Foundation consent: Change Link
+Cypress.Commands.add('foundationConsentLink', () => {
+    cy.get('a[href*="foundation-consent"]').click()
+})
+
+// Foundation consent: Status
+Cypress.Commands.add('foundationConsentStatus', () => {
+    cy.get('[data-test="foundation-consent"]')
+})
