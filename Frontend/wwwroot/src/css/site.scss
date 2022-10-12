@@ -80,3 +80,28 @@ abbr {
 .prepare-text-align-right {
     text-align: right !important;
 }
+
+.app-\!-width-one-fifth {
+	width: 100% !important;
+	@include govuk-media-query($from: tablet) {
+		width: 20% !important;
+	}
+}
+.app-\!-width-two-fifths {
+	width: 100% !important;
+	@include govuk-media-query($from: tablet) {
+		width: 40% !important;
+	}
+}
+.app-\!-width-three-fifths {
+	width: 100% !important;
+	@include govuk-media-query($from: tablet) {
+		width: 60% !important;
+	}
+}
+.app-\!-width-four-fifths {
+	width: 100% !important;
+	@include govuk-media-query($from: tablet) {
+		width: 80% !important;
+	}
+}
