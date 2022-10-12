@@ -29,7 +29,7 @@ namespace Data.TRAMS
             {
                 return JsonConvert.DeserializeObject<RepositoryResult<Academy>>(cachedString);
             }
-            
+
             using var response = await _httpClient.GetAsync($"establishment/{ukprn}");
 
             if (!response.IsSuccessStatusCode)

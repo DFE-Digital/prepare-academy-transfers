@@ -19,6 +19,7 @@ namespace Data.Models
         public string Urn { get; set; }
         public string Name { get; set; }
         public string LocalAuthorityName { get; set; }
+        public string LastChangedDate { get; set; }
         public string EstablishmentType { get; set; }
         public string FaithSchool { get; set; }
         public string Pfi { get; set; }
