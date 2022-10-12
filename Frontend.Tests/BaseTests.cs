@@ -71,6 +71,7 @@ namespace Frontend.Tests
             var populatedTransferringAcademy = fixture.Build<TransferringAcademies>()
                 .With(a => a.OutgoingAcademyName, OutgoingAcademyName)
                 .With(a => a.OutgoingAcademyUrn, AcademyUrn)
+                .With(a => a.LastChangedDate, AcademyLastChangedDate)
                 .Create();
             
             FoundPopulatedProjectFromRepo = fixture.Build<Project>()
