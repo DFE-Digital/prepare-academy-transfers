@@ -55,7 +55,8 @@ namespace Frontend.Pages.Projects.GeneralInformation
             DiocesePercent = generalInformation.DiocesesPercent;
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
-            GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate).ToString("MMMM yyyy");
+            DateTime.TryParse(academy.LastChangedDate, out DateTime lastChangedDateTimeate);
+            GIASLastChangedDate = lastChangedDateTimeate.ToString("MMMM yyyy");
 
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
