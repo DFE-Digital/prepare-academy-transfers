@@ -125,18 +125,32 @@ Cypress.Commands.add('selectsTransferLandingPage', () => {
 
 // Selects the first project on the list: universal
 Cypress.Commands.add('selectsFirstProjectOnList', () => {
+
+    let selectExistingAcademyTransfer = (projectName) =>
+    cy.get('[class="govuk-link"]').then(projects => {
+        for (let i = 0; i < projects.length; i++) {
+            if (projects[i].text.includes("Burnt Ash Primary School")) {
+                projects[i].click();
+                break;
+            }
+        }
+    });
+
+    let projectUrl = "";
+
     let url = Cypress.env('url');
     cy.visit(url);
     cy.get('[data-cy="select-projecttype-input-transfer"]').click();
     cy.get('[data-cy="select-common-submitbutton"]').click();
-    cy.get('[data-id="project-link-10002234"]').click();
+    //cy.get('[data-id="project-link-10002234"]').click();
+    selectExistingAcademyTransfer("Burnt Ash Primary School");
 })
 
 //--Legal Requirements (Task List)
 
 // Trust Agreement: Change Link
 Cypress.Commands.add('trustAgreementLink', () => {
-    cy.get('[href="/project/10002234/legalrequirements/trust-agreement"]').click()
+    cy.get('a[href*="trust-agreement"]').click()
 })
 
 // Save & Continue btn (Universal)
@@ -151,7 +165,7 @@ Cypress.Commands.add('trustAgreementStatus', () => {
 
 // Diocesan Consent: Change Link
 Cypress.Commands.add('diocesanConsentLink', () => {
-    cy.get('[href="/project/10002234/legalrequirements/diocesan-consent"]').click()
+    cy.get('a[href*="diocesan-consent"]').click()
 })
 
 // Diocesan Consent: Status
@@ -161,7 +175,7 @@ Cypress.Commands.add('diocesanConsentStatus', () => {
 
 // Foundation consent: Change Link
 Cypress.Commands.add('foundationConsentLink', () => {
-    cy.get('[href="/project/10002234/legalrequirements/foundation-consent"]').click()
+    cy.get('a[href*="foundation-consent"]').click()
 })
 
 // Foundation consent: Status
