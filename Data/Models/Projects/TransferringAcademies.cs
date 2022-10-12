@@ -9,6 +9,7 @@ namespace Data.Models.Projects
         public string IncomingTrustUkprn { get; set; }
         public string OutgoingAcademyName { get; set; }
         public string OutgoingAcademyUkprn { get; set; }
+        public string LastChangedDate { get; set; }
         public string OutgoingAcademyUrn { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedReportAdditionalInformation { get; set; }

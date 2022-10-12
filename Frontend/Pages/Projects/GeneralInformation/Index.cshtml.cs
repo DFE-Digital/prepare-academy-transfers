@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
@@ -22,6 +23,7 @@ namespace Frontend.Pages.Projects.GeneralInformation
         public string SchoolType { get; set; }
         public string DiocesePercent { get; set; }
         public string DistanceFromAcademyToTrustHq { get; set; }
+        public string GIASLastChangedDate { get; set; }
         public string MP { get; set; }
         
         [BindProperty(SupportsGet = true)]
@@ -53,6 +55,8 @@ namespace Frontend.Pages.Projects.GeneralInformation
             DiocesePercent = generalInformation.DiocesesPercent;
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
+            DateTime.TryParse(academy.LastChangedDate, out DateTime lastChangedDateTime);
+            GIASLastChangedDate = lastChangedDateTime.ToString("MMMM yyyy");
 
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;

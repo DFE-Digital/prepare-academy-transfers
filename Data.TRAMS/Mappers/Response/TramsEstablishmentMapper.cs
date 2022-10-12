@@ -28,7 +28,8 @@ namespace Data.TRAMS.Mappers.Response
                     PercentageEligibleForFreeSchoolMealsDuringLast6Years = PercentageHelper.DisplayAsPercentage(input.Census.PercentageEligableForFSM6Years)
                 },
                 Ukprn = input.Ukprn,
-                Urn = input.Urn
+                Urn = input.Urn,
+                LastChangedDate = input.LastChangedDate
             };
         }
 
