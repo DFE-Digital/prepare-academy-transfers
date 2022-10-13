@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
@@ -57,7 +58,7 @@ namespace Frontend.Pages.Projects.GeneralInformation
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
             GIASLastChangedDate = "N/A";
-            if (academy.LastChangedDate.IsNullOrEmpty() is false) GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate).ToString("MMMM yyyy");
+            if (academy.LastChangedDate.IsNullOrEmpty() is false) GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate, CultureInfo.InvariantCulture).ToString("MMMM yyyy");
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
             return Page();
