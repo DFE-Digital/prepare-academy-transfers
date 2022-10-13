@@ -1,8 +1,8 @@
-// <reference types ='Cypress'/>
+/// <reference types ='Cypress'/>
 
 const url = Cypress.env('url') + 'project-type'
 
-describe('Landing Page',() => {
+describe('Landing Page', { tags: '@dev'}, () => {
     beforeEach(() => {
         cy.visit(url)
     })

@@ -1,6 +1,6 @@
 /// <reference types ='Cypress'/>
 
-describe('Tests to check equalities impact assessment form', () => {
+describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () => {
     afterEach(() => {
         cy.storeSessionData();
     });

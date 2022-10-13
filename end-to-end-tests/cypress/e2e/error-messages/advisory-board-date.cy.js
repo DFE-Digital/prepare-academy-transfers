@@ -1,4 +1,4 @@
-describe('Tests to check target date error messages', () => {
+describe('Tests to check advisory board date error messages', { tags: '@dev'}, () => {
     afterEach(() => {
         cy.storeSessionData();
     });
@@ -7,7 +7,8 @@ describe('Tests to check target date error messages', () => {
         cy.login();
     });
 
-    it('Transfer date should be in the future', () => {
+    it('Advisory board date should be in the future', () => {
+        cy.login();
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
         cy.get('#SearchQuery').type('sd');
@@ -24,11 +25,11 @@ describe('Tests to check target date error messages', () => {
         cy.get('.govuk-button').click();
         cy.clickDataTest("create-project");
         cy.clickDataTest("transfer-dates");
-        cy.clickDataTest("target-date");
-        cy.fillInDateMonthYear(Cypress.dayjs().subtract(1,'M'))
+        cy.clickDataTest("ab-date");
+        cy.fillInDate(Cypress.dayjs().subtract(1,'M'))
         cy.get('.govuk-button').click();
         cy.get('.govuk-error-summary__body > .govuk-list > li > a').should('have.text', 'You must enter a future date').should('be.visible');
-        //cy.get('#TargetDateViewModel\\.TargetDate\\.Date\\.Day-error').should('have.text', 'Error:You must enter a future date').should('be.visible');
+        cy.get('#AdvisoryBoardViewModel\\.AdvisoryBoardDate\\.Date\\.Day-error').should('have.text', 'Error:You must enter a future date').should('be.visible');
     });
 
     after(function () {
