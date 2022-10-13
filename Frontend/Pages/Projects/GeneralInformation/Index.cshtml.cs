@@ -1,9 +1,11 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Frontend.Pages.Projects.GeneralInformation
 {
@@ -55,9 +57,8 @@ namespace Frontend.Pages.Projects.GeneralInformation
             DiocesePercent = generalInformation.DiocesesPercent;
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
-            DateTime.TryParse(academy.LastChangedDate, out DateTime lastChangedDateTime);
-            GIASLastChangedDate = lastChangedDateTime.ToString("MMMM yyyy");
-
+            GIASLastChangedDate = "N/A";
+            if (academy.LastChangedDate.IsNullOrEmpty() is false) GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate, CultureInfo.GetCultureInfo("en-GB")).ToString("MMMM yyyy");
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
             return Page();
