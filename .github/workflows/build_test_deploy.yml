@@ -146,3 +146,16 @@ jobs:
           TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
           TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
           TF_VAR_app_servicelink_conversionsurl: ${{ secrets.SERVICELINK_CONVERSIONSURL }}
+
+  create-tag:    
+    needs: deploy-image
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/checkout@v2
+      - name: Create tag string          
+        run: echo "RELEASE_TAGNAME=dev-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV    
+      - name: Create git tag
+        run: |
+          git tag ${{ env.RELEASE_TAGNAME }}
+      - name: Push git tag
+        run: git push origin ${{ env.RELEASE_TAGNAME }}

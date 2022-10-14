@@ -11,7 +11,7 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
-  terraform-plan:
+  terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment}}
@@ -77,3 +77,24 @@ jobs:
           TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
           TF_VAR_app_servicelink_conversionsurl: ${{ secrets.SERVICELINK_CONVERSIONSURL }}
           
+  create-tag:
+    needs: terraform-apply
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/checkout@v2
+      - name: Create tag string          
+        run: echo "RELEASE_TAGNAME=${{ github.event.inputs.environment }}-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
+      - name: Create git tag
+        run: |
+          git tag ${{ env.RELEASE_TAGNAME }}
+      - name: Push git tag
+        run: git push origin ${{ env.RELEASE_TAGNAME }}
+      - name: Create release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_TAGNAME }}
+          release_name: ${{ env.RELEASE_TAGNAME }}
+          draft: ${{ github.event.inputs.environment == 'staging' }}
+          prerelease: ${{ github.event.inputs.environment == 'staging' }}
