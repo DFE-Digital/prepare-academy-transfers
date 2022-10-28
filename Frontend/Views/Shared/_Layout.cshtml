@@ -9,6 +9,11 @@
     <meta name="theme-color" content="#0b0c0c">
 
     @{
+        var analyticsConsent = Context.Request.Cookies.ContainsKey(".ManageAnAcademyTransfer.Consent")
+                           && bool.Parse(Context.Request.Cookies[".ManageAnAcademyTransfer.Consent"]);
+
+        var showAnalytics = analyticsConsent;
+
         var pageTitleSuffix = Context.Request.Path == "/project-type"
             ? string.Empty : "- Manage an academy transfer";
         var pageTitle = ViewData["Title"] == null ? "" : $"{ViewData["Title"]} {pageTitleSuffix}";
@@ -30,15 +35,27 @@
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
 
-    <!-- <environment include="production"> -->
-    <!-- Google Tag Manager -->
-    <script asp-add-nonce>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    @if (showAnalytics)
+    {
+        <!-- <environment include="production"> -->
+        <!-- Google Tag Manager -->
+        <script asp-add-nonce>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-T43KJ2P');</script>
-    <!-- End Google Tag Manager -->
-    <!-- </environment> -->
+        <!-- End Google Tag Manager -->
+        <!-- </environment> -->
+    }
+
+    @if (analyticsConsent)
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript asp-add-nonce>
+            <iframe src=https://www.googletagmanager.com/ns.html?id=GTM-5H6G773 height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
 </head>
 
 <body class="govuk-template__body ">
@@ -56,6 +73,8 @@
 </script>
 
 <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+<partial name="_CookieBanner" />
 
 <header class="govuk-header " role="banner" data-module="govuk-header">
     <div class="govuk-header__container govuk-width-container">
@@ -121,6 +140,12 @@
                             Accessibility statement
                         </a>
                     </li>
+                    <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" asp-page="@Links.CookiePreferences.PageName"
+                               data-test="cookie-preferences" asp-route-returnUrl="@Context.Request.Path">
+                                Cookies
+                            </a>
+                     </li>
                 </ul>
                 <svg aria-hidden="true" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
                     <path fill="currentColor" d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"/>
