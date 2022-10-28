@@ -1,7 +1,9 @@
 ﻿@page "/project/{urn}/school-data/{academyUkprn}"
+@using DocumentFormat.OpenXml.Bibliography
 @model Frontend.Pages.TaskList.SchoolData
 
 @{
+    ViewBag.Title = Model.AcademyName;
     Layout = "_Layout";
 }
 
