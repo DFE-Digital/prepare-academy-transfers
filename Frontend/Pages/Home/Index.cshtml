@@ -12,6 +12,22 @@
     <a asp-page="@Links.ProjectType.Index.PageName" class="govuk-back-link" data-cy="select-backlink">@Links.ProjectType.Index.BackText</a>
 }
 
+@if (Model.IsFiltered)
+{
+   <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+         <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+         </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+         <h3 class="govuk-notification-banner__heading">
+            Projects filtered.
+         </h3>
+      </div>
+   </div>
+}
+
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-xl" data-cy="select-heading">
