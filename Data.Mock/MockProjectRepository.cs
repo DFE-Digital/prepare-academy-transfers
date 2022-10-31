@@ -22,7 +22,7 @@ namespace Data.Mock
             _projects = new List<Project> {PopulatedProject(), EmptyProject()};
         }
 
-        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1)
+        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default)
         {
             var result = new RepositoryResult<List<ProjectSearchResult>>
             {
