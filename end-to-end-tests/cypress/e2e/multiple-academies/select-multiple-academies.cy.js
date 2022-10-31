@@ -8,6 +8,7 @@ describe('Select multiple academies', { tags: '@dev'},  () => {
 
     beforeEach(function () {
         cy.login();
+        cy.get('[data-test=cookie-banner-accept]').click();
     });
     
     it('Check your answers page should have both academies listed', function() {
