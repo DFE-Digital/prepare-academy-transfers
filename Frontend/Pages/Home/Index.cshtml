@@ -31,11 +31,12 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h2 class="govuk-heading-l">
-            Projects
-        </h2>
-        <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">Projects (@Model.Projects.Count)</caption>
+       <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27">
+          @Model.Projects.Count projects found
+       </h2>
+
+       <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Model.Projects.Count projects found</caption>
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header app-!-width-three-fifths">Application information</th>
