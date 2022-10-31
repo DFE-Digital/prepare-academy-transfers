@@ -41,7 +41,13 @@ namespace Frontend.Integration.Tests
 
             return await link.NavigateAsync();
         }
-        
+
+        public async Task NavigateDataTestAsync(string dataTest)
+        {
+            var anchors = Document.QuerySelectorAll($"[data-test='{dataTest}']").First() as IHtmlAnchorElement;
+            await anchors.NavigateAsync();
+        }
+
         private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
         {
             var config = AngleSharp.Configuration.Default
