@@ -32,9 +32,9 @@ describe("Creating and editing an academy transfer", { tags: '@dev'}, function (
         cy.storeSessionData();
     });
 
-    beforeEach(function () {
-        
+    beforeEach(function () {        
         cy.login();
+        cy.get('[data-test=cookie-banner-accept]').click();
     });
 
     let projectUrl = "";

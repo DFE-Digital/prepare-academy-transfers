@@ -7,6 +7,7 @@ describe('Tests to check search incoming trust error message', { tags: '@dev'}, 
 
     beforeEach(function () {
         cy.login();
+        cy.get('[data-test=cookie-banner-accept]').click();
     });
     
     it('Should not show the outgoing trust in search results', () => {
