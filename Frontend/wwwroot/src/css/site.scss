@@ -105,3 +105,57 @@ abbr {
 		width: 80% !important;
 	}
 }
+
+/* Fitlering Styling */
+
+.prepare-text-align-right {
+	text-align: right !important;
+}
+
+.prepare-project-listing__filters-container {
+	margin-bottom: 0;
+}
+
+.prepare-project-listing__filters-details {
+	background-color: #f3f2f1;
+	padding: 1rem;
+	clear: both;
+	margin-bottom: 2em;
+	border-left: 0;
+}
+
+.prepare-project-listing__fitlers-details-summary:before {
+	content: none;
+}
+
+.prepare-project-listing__fitlers-details-summary {
+	padding-left: 0;
+	margin-top: 1em;
+}
+
+.prepare-project-listing__button--main {
+	margin-bottom: 1em;
+	text-decoration: none;
+}
+
+.prepare-project-listing__filter {
+	background-color: govuk-colour("white");
+	overflow-y: auto;
+	height: 200px;
+}
+
+.prepare-project-listing__conditional {
+	border: 0;
+	margin-left: 0 !important;
+	margin-bottom: 0 !important;
+	padding-left: 0 !important;
+}
+
+.prepare-project-listing__button--apply {
+	background-color: govuk-colour("black");
+	color: govuk-colour("white");
+}
+
+.prepare-project-listing__button--apply:hover {
+	background-color: govuk-colour("light-grey");
+}

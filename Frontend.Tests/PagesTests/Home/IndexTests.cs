@@ -27,7 +27,7 @@ namespace Frontend.Tests.PagesTests.Home
                 new ProjectSearchResult {Urn = "5"},
                 new ProjectSearchResult {Urn = "6"}
             };
-            ProjectRepository.Setup(r => r.GetProjects(It.IsAny<int>()))
+            ProjectRepository.Setup(r => r.GetProjects(It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryResult<List<ProjectSearchResult>> {Result = foundProjects});
             _subject.Url = _urlHelper.Object;
         }
@@ -41,7 +41,7 @@ namespace Frontend.Tests.PagesTests.Home
             _subject.CurrentPage = page;
             await _subject.OnGetAsync();
 
-            ProjectRepository.Verify(r => r.GetProjects(page), Times.Once());
+            ProjectRepository.Verify(r => r.GetProjects(page, default), Times.Once());
         }
 
         [Fact]
