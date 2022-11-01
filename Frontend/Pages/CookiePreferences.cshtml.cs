@@ -9,7 +9,7 @@ namespace Frontend.Pages
 {
     public class CookiePreferencesModel : PageModel
     {
-        private const string ConsentCookieName = ".ManageAnAcademyTransfer.Consent";
+        private const string ConsentCookieName = ".PrepareConversionsAndTransfers.Consent";
         public bool? Consent { get; set; }
         public bool PreferencesSet { get; set; } = false;
         public string returnPath { get; set; }
