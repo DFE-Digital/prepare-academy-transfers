@@ -87,7 +87,7 @@ namespace Frontend
             {
                 options.IdleTimeout =
                     TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
+                options.Cookie.Name = ".PrepareConversionsAndTransfers.Session";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 if (string.IsNullOrEmpty(Configuration["CI"]))
@@ -100,7 +100,7 @@ namespace Frontend
                 options =>
                 {
                     options.AccessDeniedPath = "/access-denied";
-                    options.Cookie.Name = "ManageAnAcademyTransfer.Login";
+                    options.Cookie.Name = ".PrepareConversionsAndTransfers.Login";
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
                     options.ExpireTimeSpan =
