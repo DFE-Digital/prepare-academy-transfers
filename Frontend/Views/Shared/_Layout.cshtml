@@ -9,8 +9,8 @@
     <meta name="theme-color" content="#0b0c0c">
 
     @{
-        var analyticsConsent = Context.Request.Cookies.ContainsKey(".ManageAnAcademyTransfer.Consent")
-                           && bool.Parse(Context.Request.Cookies[".ManageAnAcademyTransfer.Consent"]);
+        var analyticsConsent = Context.Request.Cookies.ContainsKey(".PrepareConversionsAndTransfers.Consent")
+                           && bool.Parse(Context.Request.Cookies[".PrepareConversionsAndTransfers.Consent"]);
 
         var showAnalytics = analyticsConsent;
 
