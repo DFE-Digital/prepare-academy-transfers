@@ -88,7 +88,11 @@ namespace Frontend.Pages
                     if (cookie.StartsWith("_ga") || cookie.Equals("_gid"))
                     {
                         _logger.LogInformation($"Expiring Google analytics cookie: {cookie}");
-                        Response.Cookies.Append(cookie, string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(-1) });
+                        Response.Cookies.Append(cookie, string.Empty, new CookieOptions
+                        {
+                            Expires = DateTime.Now.AddDays(-1),
+                            SameSite = SameSiteMode.Lax
+                        });
                     }
                 }
             }
