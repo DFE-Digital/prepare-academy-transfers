@@ -100,7 +100,7 @@ namespace Frontend
                 options =>
                 {
                     options.AccessDeniedPath = "/access-denied";
-                    options.Cookie.Name = "ManageAnAcademyTransfer.Login";
+                    options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
                     options.ExpireTimeSpan =

@@ -12,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^10.9.0",
-    "cypress-grep": "^3.0.3",
+    "cypress-grep": "^2.6.1",
     "cypress-localstorage-commands": "^1.6.1",
     "cypress-sql-server": "^1.0.0",
     "mysql": "^2.18.1"
