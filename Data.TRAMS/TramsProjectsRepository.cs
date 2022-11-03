@@ -32,22 +32,22 @@ namespace Data.TRAMS
             _internalToUpdateMapper = internalToUpdateMapper;
         }
 
-        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1,
-           string title = default)
+        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default)
         {
            HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProject?page={page}&title={title}");
 
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var summaries = JsonConvert.DeserializeObject<List<TramsProjectSummary>>(apiResponse);
+                var summaries = JsonConvert.DeserializeObject<PagedResult<TramsProjectSummary>>(apiResponse);
 
                 var mappedSummaries = 
-                    summaries.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
+                    summaries.Results.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
 
                 return new RepositoryResult<List<ProjectSearchResult>>
                 {
-                    Result = mappedSummaries
+                    Result = mappedSummaries,
+                    TotalRecords = summaries.TotalCount
                 };
             }
 

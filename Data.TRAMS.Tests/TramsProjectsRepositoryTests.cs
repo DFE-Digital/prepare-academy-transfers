@@ -297,7 +297,7 @@ namespace Data.TRAMS.Tests
             {
                 _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
 
                 await _subject.GetProjects();
@@ -326,7 +326,7 @@ namespace Data.TRAMS.Tests
 
                 _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries)))
                 });
 
                 await _subject.GetProjects();
@@ -342,7 +342,7 @@ namespace Data.TRAMS.Tests
             {
                 _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries,12)))
                 });
 
                 _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
@@ -376,7 +376,7 @@ namespace Data.TRAMS.Tests
             {
                 _httpClient.Setup(c => c.GetAsync($"academyTransferProject?page={page}&title=")).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(_foundSummaries))
+                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
 
                 await _subject.GetProjects(page);
