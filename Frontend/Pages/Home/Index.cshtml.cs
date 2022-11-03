@@ -14,6 +14,7 @@ namespace Frontend.Pages.Home
       private readonly ILogger<Index> _logger;
       private readonly IProjects _projectsRepository;
       public List<ProjectSearchResult> Projects;
+      public int TotalProjectCount;
 
       public Index(IProjects projectsRepository, ILogger<Index> logger)
       {
@@ -40,6 +41,7 @@ namespace Frontend.Pages.Home
          var projects = await _projectsRepository.GetProjects(CurrentPage, TitleFilter);
 
          Projects = projects.Result;
+         TotalProjectCount = projects.TotalRecords;
 
          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
 

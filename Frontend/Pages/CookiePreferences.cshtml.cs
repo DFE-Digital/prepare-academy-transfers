@@ -91,6 +91,7 @@ namespace Frontend.Pages
                         Response.Cookies.Append(cookie, string.Empty, new CookieOptions
                         {
                             Expires = DateTime.Now.AddDays(-1),
+                            Secure = true,
                             SameSite = SameSiteMode.Lax
                         });
                     }
