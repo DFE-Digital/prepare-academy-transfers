@@ -12,7 +12,7 @@ To get the Frontend project running you will require:
 
 - .NET Core 3.1
 - Redis (running locally or in Docker, see below)
-- Node v12.x
+- Node v18.x
 
 1. **Install dependencies**
 - .NET
@@ -101,23 +101,6 @@ To execute the tests and push the results to the cypress dashboard:
 
 ```
 npm run cypress:run -- --record --key 'KEY' url="BASE_URL_OF_APP",authorizationHeader="secret"
-```
-
-To execute tests with grep tags on dev:
-
-```
-$ npm run cy:run -- --env grepTags=@dev,grepTags=@stage,url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
-```
-
-To execute tests with grep tags on stage:
-
-```
-$ npm run cy:run -- --env grepTags=@stage,url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
-```
-
-To only execute all.cy.js file which has all import test files
-```
-$ npm run cy:run -- --spec "cypress/e2e/all.spec.cy.js" --env grepTags=@stage,url="BASE_URL_OF_APP",authorizationHeader="<SECRET HERE>"
 ```
 
 We append a wildcard (\*\*) to the URL argument (see `cypress.json`), so it must have a trailing slash (e.g., `url="https://localhost:5001/"`).
