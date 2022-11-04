@@ -12,7 +12,7 @@ To get the Frontend project running you will require:
 
 - .NET Core 3.1
 - Redis (running locally or in Docker, see below)
-- Node v12.x
+- Node v18.x
 
 1. **Install dependencies**
 - .NET
