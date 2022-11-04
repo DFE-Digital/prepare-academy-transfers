@@ -181,3 +181,10 @@ Cypress.Commands.add('foundationConsentLink', () => {
 Cypress.Commands.add('foundationConsentStatus', () => {
     cy.get('[data-test="foundation-consent"]')
 })
+
+// Trust Listing Summary Page (Universal)
+Cypress.Commands.add('selectTrustListing', (listing) => {
+    cy.get('[data-id^="project-link-"]').first().click()
+    cy.get('*[href*="features"]').should('be.visible')
+    cy.saveLocalStorage()
+});
