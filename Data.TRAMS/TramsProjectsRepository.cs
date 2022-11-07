@@ -34,7 +34,7 @@ namespace Data.TRAMS
 
         public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default)
         {
-           HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProject?page={page}&title={title}");
+           HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProjects?page={page}&title={title}");
 
             if (response.IsSuccessStatusCode)
             {
