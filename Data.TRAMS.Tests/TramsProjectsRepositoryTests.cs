@@ -295,7 +295,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
@@ -324,7 +324,7 @@ namespace Data.TRAMS.Tests
                     }
                 );
 
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries)))
                 });
@@ -340,7 +340,7 @@ namespace Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries,12)))
                 });
@@ -360,7 +360,7 @@ namespace Data.TRAMS.Tests
             [InlineData(HttpStatusCode.InternalServerError)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject?page=1&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = httpStatusCode
                 });
@@ -374,14 +374,14 @@ namespace Data.TRAMS.Tests
             [InlineData(3)]
             public async void GivenPage_GetsProjectForPage(int page)
             {
-                _httpClient.Setup(c => c.GetAsync($"academyTransferProject?page={page}&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync($"academyTransferProjects?page={page}&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
 
                 await _subject.GetProjects(page);
                 
-                _httpClient.Verify(c => c.GetAsync($"academyTransferProject?page={page}&title="), Times.Once());
+                _httpClient.Verify(c => c.GetAsync($"academyTransferProjects?page={page}&title="), Times.Once());
             }
         }
 
