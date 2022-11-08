@@ -47,17 +47,17 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-       <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27">
+       <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27" data-cy="select-projectlist-filter-count">
           @Model.TotalProjectCount projects found
        </h2>
 
        <details class="govuk-details prepare-project-listing__filters-container" data-module="govuk-details" @(Model.IsFiltered ? "open" : null )>
           <summary class="govuk-details__summary prepare-project-listing__fitlers-details-summary">
-             <span class="govuk-details__summary-text govuk-button govuk-button--secondary prepare-project-listing__button--main">
+             <span class="govuk-details__summary-text govuk-button govuk-button--secondary prepare-project-listing__button--main" data-cy="select-projectlist-filter-expand">
                 Filter projects
              </span>
           </summary>
-          <div class="govuk-details__text prepare-project-listing__filters-details">
+          <div class="govuk-details__text prepare-project-listing__filters-details" data-id="filter-container">
              <form method="get" class="form">
                 <div class="govuk-grid-row">
                    <div class="govuk-grid-column-one-quarter">
@@ -80,7 +80,7 @@
                 <div class="govuk-grid-row">
                    <div class="govuk-grid-column-full">
                       <div class="govuk-button-group">
-                         <button class="govuk-button govuk-button--secondary prepare-project-listing__button--apply" data-module="govuk-button ">
+                         <button class="govuk-button govuk-button--secondary prepare-project-listing__button--apply" data-cy="select-projectlist-filter-apply" data-module="govuk-button ">
                             Apply filters
                          </button>
 
