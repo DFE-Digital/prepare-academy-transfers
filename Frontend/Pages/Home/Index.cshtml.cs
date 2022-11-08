@@ -11,6 +11,8 @@ namespace Frontend.Pages.Home
 {
    public class Index : PageModel
    {
+      private const int PageSize = 10;
+
       private readonly ILogger<Index> _logger;
       private readonly IProjects _projectsRepository;
       public List<ProjectSearchResult> Projects;
@@ -24,7 +26,7 @@ namespace Frontend.Pages.Home
 
       public int StartingPage { get; private set; } = 1;
       public bool HasPreviousPage => CurrentPage > 1;
-      public bool HasNextPage => Projects.Count == 10;
+      public bool HasNextPage => TotalProjectCount > CurrentPage * PageSize;
       public int PreviousPage => CurrentPage - 1;
       public int NextPage => CurrentPage + 1;
 
@@ -38,7 +40,8 @@ namespace Frontend.Pages.Home
       {
          if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
-         var projects = await _projectsRepository.GetProjects(CurrentPage, TitleFilter);
+         RepositoryResult<List<ProjectSearchResult>> projects =
+            await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
 
          Projects = projects.Result;
          TotalProjectCount = projects.TotalRecords;

@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http;
-using System.Threading;
 using Data.Models;
 using Data.TRAMS.Models;
 using Data.TRAMS.Tests.TestFixtures;
