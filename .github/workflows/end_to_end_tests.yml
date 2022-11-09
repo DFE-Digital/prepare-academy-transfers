@@ -30,7 +30,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '18.x'
 
       - name: Npm install
         run: npm install
@@ -39,7 +39,7 @@ jobs:
       #        run: docker logs "${{ job.services.web-app.id }}"
 
       - name: Run tests
-        run: npm run cypress:run -- --record --key ${{ secrets.CYPRESS_KEY }} --spec "cypress/e2e/all.spec.cy.js" --env grepTags=@dev,url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+        run: npm run cypress:run -- --record --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
 
       - uses: actions/upload-artifact@v1
         if: failure()
