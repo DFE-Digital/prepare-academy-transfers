@@ -4,193 +4,206 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Data.Models;
+using Data.TRAMS.ExtensionMethods;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.AcademyTransferProject;
 using Newtonsoft.Json;
 
 namespace Data.TRAMS
 {
-    public class TramsProjectsRepository : IProjects
-    {
-        private readonly ITramsHttpClient _httpClient;
-        private readonly IMapper<TramsProject, Project> _externalToInternalProjectMapper;
-        private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
-        private readonly IMapper<Project, TramsProjectUpdate> _internalToUpdateMapper;
-        private readonly IAcademies _academies;
-        private readonly ITrusts _trusts;
+   public class TramsProjectsRepository : IProjects
+   {
+      private readonly IAcademies _academies;
+      private readonly IMapper<TramsProject, Project> _externalToInternalProjectMapper;
+      private readonly ITramsHttpClient _httpClient;
+      private readonly IMapper<Project, TramsProjectUpdate> _internalToUpdateMapper;
+      private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
+      private readonly ITrusts _trusts;
 
-        public TramsProjectsRepository(ITramsHttpClient httpClient,
-            IMapper<TramsProject, Project> externalToInternalProjectMapper,
-            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
-            ITrusts trusts, IMapper<Project, TramsProjectUpdate> internalToUpdateMapper)
-        {
-            _httpClient = httpClient;
-            _externalToInternalProjectMapper = externalToInternalProjectMapper;
-            _summaryToInternalProjectMapper = summaryToInternalProjectMapper;
-            _academies = academies;
-            _trusts = trusts;
-            _internalToUpdateMapper = internalToUpdateMapper;
-        }
+      public TramsProjectsRepository(ITramsHttpClient httpClient,
+         IMapper<TramsProject, Project> externalToInternalProjectMapper,
+         IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
+         ITrusts trusts, IMapper<Project, TramsProjectUpdate> internalToUpdateMapper)
+      {
+         _httpClient = httpClient;
+         _externalToInternalProjectMapper = externalToInternalProjectMapper;
+         _summaryToInternalProjectMapper = summaryToInternalProjectMapper;
+         _academies = academies;
+         _trusts = trusts;
+         _internalToUpdateMapper = internalToUpdateMapper;
+      }
 
-        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default)
-        {
-           HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProject?page={page}&title={title}");
+      public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default,
+         int pageSize = 10)
+      {
+         var queryParameters = new Dictionary<string, string>
+         {
+            { "page", page.ToString() },
+            { "count", pageSize.ToString() },
+            { "title", title?.Trim() }
+         };
 
-            if (response.IsSuccessStatusCode)
+         HttpResponseMessage response =
+            await _httpClient.GetAsync($"academyTransferProjects{queryParameters.ToQueryString()}");
+
+         if (response.IsSuccessStatusCode)
+         {
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var summaries = JsonConvert.DeserializeObject<PagedResult<TramsProjectSummary>>(apiResponse);
+
+            List<ProjectSearchResult> mappedSummaries =
+               summaries.Results.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
+
+            return new RepositoryResult<List<ProjectSearchResult>>
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                var summaries = JsonConvert.DeserializeObject<PagedResult<TramsProjectSummary>>(apiResponse);
+               Result = mappedSummaries,
+               TotalRecords = summaries.TotalCount
+            };
+         }
 
-                var mappedSummaries = 
-                    summaries.Results.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
+         throw new TramsApiException(response);
+      }
 
-                return new RepositoryResult<List<ProjectSearchResult>>
-                {
-                    Result = mappedSummaries,
-                    TotalRecords = summaries.TotalCount
-                };
-            }
+      public async Task<RepositoryResult<Project>> GetByUrn(string urn)
+      {
+         HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProject/{urn}");
+         if (response.IsSuccessStatusCode)
+         {
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var project = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
 
-            throw new TramsApiException(response);
-        }
+            #region API Interim
 
-        public async Task<RepositoryResult<Project>> GetByUrn(string urn)
-        {
-            var response = await _httpClient.GetAsync($"academyTransferProject/{urn}");
-            if (response.IsSuccessStatusCode)
+            RepositoryResult<Trust> outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
+            project.OutgoingTrust = new TrustSummary
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                var project = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
+               Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name
+            };
+            project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
+               {
+                  RepositoryResult<Trust> incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+                  RepositoryResult<Academy> outgoingAcademy =
+                     await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                #region API Interim
+                  transferring.IncomingTrust = new TrustSummary
+                  {
+                     GroupName = incomingTrust.Result.Name,
+                     GroupId = incomingTrust.Result.GiasGroupId,
+                     Ukprn = transferring.IncomingTrustUkprn
+                  };
+                  transferring.OutgoingAcademy = new AcademySummary
+                  {
+                     Name = outgoingAcademy.Result.Name,
+                     Ukprn = transferring.OutgoingAcademyUkprn,
+                     Urn = outgoingAcademy.Result.Urn
+                  };
 
-                var outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
-                project.OutgoingTrust = new TrustSummary
-                {
-                    Ukprn = project.OutgoingTrustUkprn, GroupName = outgoingTrust?.Result?.Name
-                };
-                project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
-                    {
-                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                        var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
+                  return transferring;
+               })
+               .Select(t => t.Result)
+               .ToList();
 
-                        transferring.IncomingTrust = new TrustSummary
-                        {
-                            GroupName = incomingTrust.Result.Name,
-                            GroupId = incomingTrust.Result.GiasGroupId,
-                            Ukprn = transferring.IncomingTrustUkprn
-                        };
-                        transferring.OutgoingAcademy = new AcademySummary
-                        {
-                            Name = outgoingAcademy.Result.Name,
-                            Ukprn = transferring.OutgoingAcademyUkprn,
-                            Urn = outgoingAcademy.Result.Urn
-                        };
+            #endregion
 
-                        return transferring;
-                    })
-                    .Select(t => t.Result)
-                    .ToList();
+            Project mappedProject = _externalToInternalProjectMapper.Map(project);
 
-                #endregion
-
-                var mappedProject = _externalToInternalProjectMapper.Map(project);
-
-                return new RepositoryResult<Project>
-                {
-                    Result = mappedProject
-                };
-            }
-
-            throw new TramsApiException(response);
-        }
-
-        public async Task<RepositoryResult<Project>> Update(Project project)
-        {
-            var externalProject = _internalToUpdateMapper.Map(project);
-            var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
-                "application/json");
-            var response = await _httpClient.PatchAsync($"academyTransferProject/{project.Urn}", content);
-            if (response.IsSuccessStatusCode)
+            return new RepositoryResult<Project>
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
+               Result = mappedProject
+            };
+         }
 
-                #region API Interim
+         throw new TramsApiException(response);
+      }
 
-                createdProject.OutgoingTrust = new TrustSummary {Ukprn = createdProject.OutgoingTrustUkprn};
-                createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
-                    {
-                        var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
+      public async Task<RepositoryResult<Project>> Update(Project project)
+      {
+         TramsProjectUpdate externalProject = _internalToUpdateMapper.Map(project);
+         var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
+            "application/json");
+         HttpResponseMessage response = await _httpClient.PatchAsync($"academyTransferProject/{project.Urn}", content);
+         if (response.IsSuccessStatusCode)
+         {
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
 
-                        transferring.IncomingTrust = new TrustSummary() {Ukprn = transferring.IncomingTrustUkprn};
-                        transferring.OutgoingAcademy = new AcademySummary
-                        {
-                            Name = outgoingAcademy.Result.Name,
-                            Ukprn = transferring.OutgoingAcademyUkprn,
-                            Urn = outgoingAcademy.Result.Urn
-                        };
+            #region API Interim
 
-                        return transferring;
-                    })
-                    .Select(t => t.Result)
-                    .ToList();
+            createdProject.OutgoingTrust = new TrustSummary { Ukprn = createdProject.OutgoingTrustUkprn };
+            createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
+               {
+                  RepositoryResult<Academy> outgoingAcademy =
+                     await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                #endregion
+                  transferring.IncomingTrust = new TrustSummary { Ukprn = transferring.IncomingTrustUkprn };
+                  transferring.OutgoingAcademy = new AcademySummary
+                  {
+                     Name = outgoingAcademy.Result.Name,
+                     Ukprn = transferring.OutgoingAcademyUkprn,
+                     Urn = outgoingAcademy.Result.Urn
+                  };
 
-                return new RepositoryResult<Project>
-                {
-                    Result = _externalToInternalProjectMapper.Map(createdProject)
-                };
-            }
+                  return transferring;
+               })
+               .Select(t => t.Result)
+               .ToList();
 
-            throw new TramsApiException(response);
-        }
+            #endregion
 
-        public async Task<RepositoryResult<Project>> Create(Project project)
-        {
-            var externalProject = _internalToUpdateMapper.Map(project);
-            var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
-                "application/json");
-            var response = await _httpClient.PostAsync("academyTransferProject", content);
-            if (response.IsSuccessStatusCode)
+            return new RepositoryResult<Project>
             {
-                var apiResponse = await response.Content.ReadAsStringAsync();
-                var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
+               Result = _externalToInternalProjectMapper.Map(createdProject)
+            };
+         }
 
-                #region API Interim
+         throw new TramsApiException(response);
+      }
 
-                createdProject.OutgoingTrust = new TrustSummary {Ukprn = createdProject.OutgoingTrustUkprn};
-                
-                createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
-                    {
-                        var outgoingAcademy = await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                        transferring.IncomingTrust = new TrustSummary
-                        {
-                            Ukprn = transferring.IncomingTrustUkprn,                            
-                        };
-                        transferring.OutgoingAcademy = new AcademySummary
-                        {
-                            Name = outgoingAcademy.Result.Name,
-                            Ukprn = transferring.OutgoingAcademyUkprn,
-                            Urn = outgoingAcademy.Result.Urn
-                        };
+      public async Task<RepositoryResult<Project>> Create(Project project)
+      {
+         TramsProjectUpdate externalProject = _internalToUpdateMapper.Map(project);
+         var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
+            "application/json");
+         HttpResponseMessage response = await _httpClient.PostAsync("academyTransferProject", content);
+         if (response.IsSuccessStatusCode)
+         {
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
 
-                        return transferring;
-                    })
-                    .Select(t => t.Result)
-                    .ToList();
+            #region API Interim
 
-                #endregion
+            createdProject.OutgoingTrust = new TrustSummary { Ukprn = createdProject.OutgoingTrustUkprn };
 
-                return new RepositoryResult<Project>()
-                {
-                    Result = _externalToInternalProjectMapper.Map(createdProject)
-                };
-            }
+            createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
+               {
+                  RepositoryResult<Academy> outgoingAcademy =
+                     await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
+                  RepositoryResult<Trust> incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+                  transferring.IncomingTrust = new TrustSummary
+                  {
+                     Ukprn = transferring.IncomingTrustUkprn
+                  };
+                  transferring.OutgoingAcademy = new AcademySummary
+                  {
+                     Name = outgoingAcademy.Result.Name,
+                     Ukprn = transferring.OutgoingAcademyUkprn,
+                     Urn = outgoingAcademy.Result.Urn
+                  };
 
-            throw new TramsApiException(response);
-        }
-    }
+                  return transferring;
+               })
+               .Select(t => t.Result)
+               .ToList();
+
+            #endregion
+
+            return new RepositoryResult<Project>
+            {
+               Result = _externalToInternalProjectMapper.Map(createdProject)
+            };
+         }
+
+         throw new TramsApiException(response);
+      }
+   }
 }
