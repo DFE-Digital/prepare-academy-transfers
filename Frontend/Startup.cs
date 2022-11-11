@@ -34,6 +34,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Frontend.Services.AzureAd;
 
 namespace Frontend
 {
@@ -78,6 +79,7 @@ namespace Frontend
             ConfigureRedisConnection(services);
 
             services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
+            services.Configure<AzureAdOptions>(Configuration.GetSection(AzureAdOptions.Name));
 
             AddServices(services, Configuration);
         
@@ -255,7 +257,11 @@ namespace Frontend
             services.AddTransient<IGetInformationForProject, GetInformationForProject>();
             services.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
             services.AddTransient<ITaskListService, TaskListService>();
-            
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IGraphClientFactory, GraphClientFactory>();
+            services.AddTransient<IGraphUserService, GraphUserService>();
+
             services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
             services.AddSingleton<PerformanceDataChannel>();
