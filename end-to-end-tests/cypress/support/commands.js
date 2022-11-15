@@ -193,4 +193,53 @@ Cypress.Commands.add('selectTrustListing', (listing) => {
 Cypress.Commands.add('navigateToFilterProjects',() => {  
     cy.get('[data-cy="select-projectlist-filter-expand"]').click();
     cy.get('[data-id="filter-container"]').should('be.visible');
-  });
+});
+
+// Universal: selects first project from list
+Cypress.Commands.add('selectFirstProject', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-conversion"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+    cy.get('[id="school-name-0"]').click();
+});
+
+// Unassign a user
+Cypress.Commands.add('unassignUser', () => {
+    cy.get('[data-id="assigned-user"]')
+      .invoke('text')
+      .then((text) => {
+        if (text.includes('Empty')) {
+            return
+        }
+        else {
+          // assign link
+          cy.get('a[href*="project-assignment"]').click();
+          // unassign link
+          cy.get('[id="unassign-link"]').click();
+          // continue button
+          cy.get('[class="govuk-button"]').click();
+        }
+    });
+});
+
+// Universal: selects conversion project from list
+Cypress.Commands.add('selectsTransfers', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+});
+
+// Assign User
+Cypress.Commands.add('assignUser', () => {
+    cy.get('[data-id="assigned-user"]')
+      .invoke('text')
+      .then((text) => {
+        if (text.includes('Empty')) {
+          cy.get('a[href*="project-assignment"]').click();
+          cy.get('[id="delivery-officer"]').click().type('Chris Sherlock').type('{enter}');
+          cy.get('[class="govuk-button"]').click();
+        }
+    });
+});
