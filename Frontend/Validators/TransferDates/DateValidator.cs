@@ -1,9 +1,11 @@
 using System;
 using System.Globalization;
+using DocumentFormat.OpenXml.Bibliography;
 using FluentValidation;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Helpers;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace Frontend.Validators.TransferDates
 {
@@ -57,6 +59,15 @@ namespace Frontend.Validators.TransferDates
                         context.AddFailure("Enter a valid date");
                     }
                 });
+            RuleFor(x => x.Date.Year)
+                .Custom((year, context) =>
+                {
+                    var dateVm = context.InstanceToValidate;
+                    if (!dateVm.UnknownDate && !IsAValidYear(dateVm.Date))
+                    {
+                        context.AddFailure("Year must be between 2000 and 2050");
+                    }
+                });
         }
 
         private static bool DateIsEmpty(DateInputViewModel dateVm) =>
@@ -68,6 +79,12 @@ namespace Frontend.Validators.TransferDates
                 DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year);
             return !string.IsNullOrEmpty(dateString) && 
                    DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
+        }
+        private bool IsAValidYear(DateInputViewModel dateVm)
+        {
+            var date =
+                DatesHelper.ParseDateTime(DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year));
+            return date.Year >= 2000 && date.Year <= 2050;
         }
     }
 }

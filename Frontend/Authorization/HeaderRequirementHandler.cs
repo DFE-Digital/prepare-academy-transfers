@@ -48,7 +48,7 @@ namespace Frontend.Authorization
             var authHeader = httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString()?
                 .Replace("Bearer ", string.Empty);
 
-            var secret = configuration.GetSection("AzureAd")["ClientSecret"];
+            var secret = configuration.GetValue<string>("CypressTestSecret");
 
             if (string.IsNullOrWhiteSpace(authHeader) || string.IsNullOrWhiteSpace(secret))
             {
