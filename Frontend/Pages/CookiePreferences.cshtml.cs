@@ -1,8 +1,10 @@
 using Frontend.Models;
+using Frontend.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 
 namespace Frontend.Pages
@@ -14,15 +16,20 @@ namespace Frontend.Pages
         public bool PreferencesSet { get; set; } = false;
         public string returnPath { get; set; }
         private readonly ILogger<CookiePreferencesModel> _logger;
+        private readonly IOptions<ServiceLinkOptions> _options;        
 
-        public CookiePreferencesModel(ILogger<CookiePreferencesModel> logger)
+        public CookiePreferencesModel(ILogger<CookiePreferencesModel> logger, IOptions<ServiceLinkOptions> options)
         {
             _logger = logger;
+            _options = options;
         }
+
+        public string ConversionsCookieUrl { get; set; }
 
         public ActionResult OnGet(bool? consent, string returnUrl)
         {
             returnPath = returnUrl;
+            ConversionsCookieUrl = $"{_options.Value.ConversionsUrl}/public/cookie-preferences?returnUrl=%2Fhome";
 
             if (Request.Cookies.ContainsKey(ConsentCookieName))
             {
