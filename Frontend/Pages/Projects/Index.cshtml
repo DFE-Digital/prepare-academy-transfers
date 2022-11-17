@@ -2,8 +2,8 @@
 @model Frontend.Pages.Projects.Index
 
 @{
-    ViewBag.Title = Model.IncomingTrustName;
     Layout = "_Layout";
+    ViewBag.Title = Model.IncomingTrustName;    
 }
 
 @section BeforeMain
@@ -30,7 +30,7 @@
                 <strong data-id="assigned-user">@Model.AssignedUser.FullName</strong>
             }
             
-            <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-id="@Model.Urn">Change</a>
+            <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
         </p>
 
         <h2 class="govuk-heading-l">

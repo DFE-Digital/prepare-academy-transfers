@@ -22,7 +22,7 @@ namespace Frontend.Models
         }
         public static class ProjectAssignment
         {
-            public static readonly LinkItem Index = new LinkItem {  PageName = "/ProjectAssignment/Index" };
+            public static readonly LinkItem Index = new LinkItem {  PageName = "/Projects/ProjectAssignment/Index" };
         }
         public static class LegalRequirements
         {
