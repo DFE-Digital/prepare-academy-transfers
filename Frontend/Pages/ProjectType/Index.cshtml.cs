@@ -8,9 +8,7 @@ namespace Frontend.Pages.ProjectType
 {
 	public class IndexModel : PageModel
 	{
-		private const string ErrorMessage = "Select a project type";
-		
-		private readonly string _conversionsUrl;
+        private readonly string _conversionsUrl;
 
 		public IndexModel(IOptions<ServiceLinkOptions> options)
 		{
@@ -29,7 +27,7 @@ namespace Frontend.Pages.ProjectType
 			
 			if (ProjectType.Type is ProjectTypes.Conversion)
 			{
-				return Redirect(_conversionsUrl);
+				return Redirect($"{_conversionsUrl}/project-list");
 			}
 			
 			return RedirectToPage(Links.ProjectList.Index.PageName);
