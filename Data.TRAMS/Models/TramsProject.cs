@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.TRAMS.Models.AcademyTransferProject;
+using Frontend.Models;
 
 namespace Data.TRAMS.Models
 {
@@ -29,5 +30,6 @@ namespace Data.TRAMS.Models
         public string Status { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }
         public TrustSummary OutgoingTrust { get; set; }
+        public User AssignedUser { get; set; }
     }
 }

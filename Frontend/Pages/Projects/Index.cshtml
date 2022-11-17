@@ -17,6 +17,22 @@
         <h1 class="govuk-heading-xl">
             @Model.IncomingTrustName
         </h1>
+        
+        <p class="govuk-body govuk-!-margin-bottom-8">
+            Delivery officer:
+
+            @if (Model.AssignedUser == null || string.IsNullOrWhiteSpace(Model?.AssignedUser.FullName))
+            {
+                <span data-id="assigned-user" class="empty">Empty</span>
+            }
+            else
+            {
+                <strong data-id="assigned-user">@Model.AssignedUser.FullName</strong>
+            }
+            
+            <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-id="@Model.Urn">Change</a>
+        </p>
+
         <h2 class="govuk-heading-l">
             Create a project template
         </h2>
