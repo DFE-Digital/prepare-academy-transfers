@@ -1,0 +1,11 @@
+﻿@page "/users"
+@model Frontend.Pages.UsersModel
+@{    
+    Layout = "_Layout";
+}
+@{
+    foreach (var user in Model.Users)
+    {
+        <strong>@user.FullName | @user.EmailAddress</strong><br />
+    }
+}
