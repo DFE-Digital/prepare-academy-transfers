@@ -103,6 +103,7 @@
     </div>
     @await RenderSectionAsync("BeforeMain", false)
     <main class="govuk-main-wrapper " id="main-content" role="main">
+        <partial name="_Notification" />
         @RenderBody()
     </main>
 </div>

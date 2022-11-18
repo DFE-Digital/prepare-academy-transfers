@@ -7,7 +7,7 @@
 
 @section BeforeMain
     {
-    <a asp-page="@Links.Project.Index.PageName" asp-route-id="@Model.Id" class="govuk-back-link">Back</a>
+    <a asp-page="@Links.Project.Index.PageName" asp-route-urn="@Model.Id" class="govuk-back-link">Back</a>
 }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -37,7 +37,7 @@
 	                        }
 	                        else
 	                        {
-		                        <option value="@deliveryOfficer.FullName">@deliveryOfficer.FullName</option>   
+		                        <option value="@deliveryOfficer.FullName">@deliveryOfficer.FullName</option>
 	                        }
                         }
                     }

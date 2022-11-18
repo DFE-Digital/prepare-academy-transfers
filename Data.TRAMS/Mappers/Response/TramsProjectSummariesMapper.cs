@@ -21,7 +21,8 @@ namespace Data.TRAMS.Mappers.Response
                         OutgoingAcademyUkprn = academy.OutgoingAcademyUkprn,
                         IncomingTrustUkprn = academy.IncomingTrustUkprn,
                         IncomingTrustName = academy.IncomingTrustName
-                    }).ToList()
+                    }).ToList(),
+                AssignedUser = input.AssignedUser
             };
         }
     }

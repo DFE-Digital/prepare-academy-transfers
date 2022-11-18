@@ -1,5 +1,5 @@
 using Data;
-using Data.Models;
+using Frontend.ExtensionMethods;
 using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Frontend.ExtensionMethods.TempDataExtensions;
 
 namespace Frontend.Pages.Projects.ProjectAssignment
 {
-    public class IndexModel : PageModel
+ public class IndexModel : PageModel
     {
 		private readonly IUserRepository _userRepository;
 		private readonly IProjects _projectRepository;
@@ -41,24 +42,24 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 		public async Task<IActionResult> OnPost(string urn, string selectedName, bool unassignDeliveryOfficer)
 		{
 			var project = (await _projectRepository.GetByUrn(urn)).Result;
-			
+
 			if (unassignDeliveryOfficer)
 			{
-				project.AssignedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty);				
+				project.AssignedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty);
 
 				await _projectRepository.Update(project);
-				
-				//TempData.SetNotification(NotificationType.Success, "Done", "Project is unassigned");
+
+				TempData.SetNotification("Done", "Project is unassigned");
 			}
 			else if (!string.IsNullOrEmpty(selectedName))
 			{
 				var deliveryOfficers = await _userRepository.GetAllUsers();
 
 				project.AssignedUser = deliveryOfficers.SingleOrDefault(u => u.FullName == selectedName);
-				
+
 				await _projectRepository.Update(project);
-				
-				//TempData.SetNotification(NotificationType.Success, "Done", "Project is assigned");
+
+				TempData.SetNotification("Done", "Project is assigned");
 			}
 
 			return RedirectToPage(Links.Project.Index.PageName, new { urn });
