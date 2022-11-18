@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.TRAMS.Models.AcademyTransferProject;
+using Frontend.Models;
 
 namespace Data.TRAMS.Models
 {
@@ -17,5 +18,6 @@ namespace Data.TRAMS.Models
         public string State { get; set; }
         public string Status { get; set; }
         public List<TransferringAcademyUpdate> TransferringAcademies { get; set; }
+        public User AssignedUser { get; set; }
     }
 }

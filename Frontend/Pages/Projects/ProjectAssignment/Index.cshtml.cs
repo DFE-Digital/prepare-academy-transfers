@@ -40,15 +40,13 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 
 		public async Task<IActionResult> OnPost(string urn, string selectedName, bool unassignDeliveryOfficer)
 		{
+			var project = (await _projectRepository.GetByUrn(urn)).Result;
+			
 			if (unassignDeliveryOfficer)
 			{
-				var updatedProject = new Project
-				{
-					Urn = urn,
-					AssignedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty)
-				};
+				project.AssignedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty);				
 
-				await _projectRepository.Update(updatedProject);
+				await _projectRepository.Update(project);
 				
 				//TempData.SetNotification(NotificationType.Success, "Done", "Project is unassigned");
 			}
@@ -56,12 +54,9 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 			{
 				var deliveryOfficers = await _userRepository.GetAllUsers();
 
-				var updatedProject = new Project
-				{
-					AssignedUser = deliveryOfficers.SingleOrDefault(u => u.FullName == selectedName)
-				};
-
-				await _projectRepository.Update(updatedProject);
+				project.AssignedUser = deliveryOfficers.SingleOrDefault(u => u.FullName == selectedName);
+				
+				await _projectRepository.Update(project);
 				
 				//TempData.SetNotification(NotificationType.Success, "Done", "Project is assigned");
 			}

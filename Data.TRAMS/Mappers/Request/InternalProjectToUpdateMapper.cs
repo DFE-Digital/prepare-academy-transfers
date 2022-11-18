@@ -27,7 +27,8 @@ namespace Data.TRAMS.Mappers.Request
                 Dates = Dates(input),
                 Features = Features(input),
                 Rationale = Rationale(input),
-                GeneralInformation = GeneralInformation(input)
+                GeneralInformation = GeneralInformation(input),
+                AssignedUser = input.AssignedUser
             };
         }
 
