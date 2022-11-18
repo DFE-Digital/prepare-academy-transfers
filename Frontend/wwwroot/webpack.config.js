@@ -1,5 +1,6 @@
-var MiniCssExtractPlugin = require('mini-css-extract-plugin');
-var path = require('path');
+let MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     mode: 'production',
@@ -7,7 +8,11 @@ module.exports = {
         main: ['./src/js/site.js', './src/css/site.scss'],
         'google-analytics-events': './src/js/google-analytics-events.js',
     },
-    plugins: [new MiniCssExtractPlugin({ filename: 'site.css' })],
+    plugins: [new MiniCssExtractPlugin({ filename: 'site.css' }),
+        new CopyPlugin({
+            patterns: [ { from: path.join(__dirname, 'node_modules/accessible-autocomplete/dist'), to: path.join(__dirname, 'dist') } ],
+        })
+    ],
     module: {
         rules: [
             {
