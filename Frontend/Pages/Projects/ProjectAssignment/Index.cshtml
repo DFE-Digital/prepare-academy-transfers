@@ -7,15 +7,15 @@
 
 @section BeforeMain
     {
-    <a asp-page="@Links.Project.Index.PageName" asp-route-urn="@Model.Id" class="govuk-back-link">Back</a>
+    <a asp-page="@Links.Project.Index.PageName" asp-route-urn="@Model.Urn" class="govuk-back-link">Back</a>
 }
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <span data-id="school-name" class="govuk-caption-l">@Model.SchoolName</span>
+            <span data-id="school-name" class="govuk-caption-l">@Model.IncomingTrustName</span>
             <h1 class="govuk-heading-l">Who will be on this project?</h1>
 
-            <div class="govuk-form-group">
+           <div class="govuk-form-group">
                 <label class="govuk-label" for="delivery-officer">
                     Delivery officer
                 </label>
@@ -25,7 +25,7 @@
                 </div>
 
                 <form method="post">
-                    <input type="hidden" asp-for="@Model.Id" />
+                    <input type="hidden" asp-for="@Model.Urn" />
                     <select name="SelectedName" class="autocomplete__menu govuk-select" id="delivery-officer">
                         <option value=""></option>
                         @{
@@ -51,10 +51,10 @@
                     <span class="govuk-body govuk-!-margin-right-2 govuk-!-margin-left-1">or </span><a href="#" id="unassign-link" class="govuk-link">Unassign the delivery officer</a>
                 </div>
             </form>
-        </div>
+          </div>
 
+        </div>
     </div>
-</div>
 
 <script type="application/javascript" asp-add-nonce>
     var deliveryOfficerSelect = document.querySelector('#delivery-officer');

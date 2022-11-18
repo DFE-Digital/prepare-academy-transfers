@@ -22,16 +22,16 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 			_userRepository = userRepository;
 		}
 
-		public string SchoolName { get; private set; }
-		public string Id { get; set; }
+		public string IncomingTrustName { get; private set; }
+		public string Urn { get; set; }
 		public IEnumerable<User> DeliveryOfficers { get; set; }
 		public string SelectedDeliveryOfficer { get; set; }
 
-		public async Task<IActionResult> OnGet(string urn)
+		public async Task<IActionResult> OnGetAsync(string urn)
 		{
 			var projectResponse = await _projectRepository.GetByUrn(urn);
-			Id = urn;
-			SchoolName = projectResponse.Result.IncomingTrustName;
+			Urn = urn;
+			IncomingTrustName = projectResponse.Result.IncomingTrustName;
 			SelectedDeliveryOfficer = projectResponse.Result?.AssignedUser?.FullName;
 
 			DeliveryOfficers = await _userRepository.GetAllUsers();
@@ -39,7 +39,7 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPost(string urn, string selectedName, bool unassignDeliveryOfficer)
+		public async Task<IActionResult> OnPostAsync(string urn, string selectedName, bool unassignDeliveryOfficer)
 		{
 			var project = (await _projectRepository.GetByUrn(urn)).Result;
 
