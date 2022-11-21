@@ -4,6 +4,8 @@ using System.IO;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Frontend.Integration.Tests.Pages.Projects.ProjectAssignment;
+using Frontend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -36,7 +38,7 @@ namespace Frontend.Integration.Tests
 
         private void _server_LogEntriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            
+
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -62,6 +64,7 @@ namespace Frontend.Integration.Tests
             {
                 services.AddAuthentication("Test");
                 services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
+                services.AddTransient<IUserRepository, TestUserRepository>();                
             });
         }
 
@@ -151,7 +154,7 @@ namespace Frontend.Integration.Tests
         {
             _server
                 .Given(Request.Create()
-                    .WithPath(path)                    
+                    .WithPath(path)
                     .UsingPatch())
                 .RespondWith(Response.Create()
                     .WithStatusCode(200)
