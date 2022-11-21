@@ -30,7 +30,7 @@
     <link rel="apple-touch-icon" sizes="167x167" href="~/assets/images/govuk-apple-touch-icon-167x167.png">
     <link rel="apple-touch-icon" sizes="152x152" href="~/assets/images/govuk-apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" href="~/assets/images/govuk-apple-touch-icon.png">
-
+    <link rel="stylesheet" href="~/dist/accessible-autocomplete.min.css" />
     <link rel="stylesheet" href="~/dist/site.css"/>
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
@@ -56,6 +56,8 @@
         </noscript>
         <!-- End Google Tag Manager (noscript) -->
     }
+
+    <script type="text/javascript" src="~/dist/accessible-autocomplete.min.js" asp-add-nonce></script>
 </head>
 
 <body class="govuk-template__body ">
@@ -101,6 +103,7 @@
     </div>
     @await RenderSectionAsync("BeforeMain", false)
     <main class="govuk-main-wrapper " id="main-content" role="main">
+        <partial name="_Notification" />
         @RenderBody()
     </main>
 </div>

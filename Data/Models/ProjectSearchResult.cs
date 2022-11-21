@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.Projects;
+using Frontend.Models;
 using Helpers;
 
 namespace Data.Models
@@ -11,6 +12,7 @@ namespace Data.Models
         public string OutgoingTrustName { get; set; }
         public string OutgoingTrustNameInTitleCase => OutgoingTrustName.ToTitleCase();
         public List<TransferringAcademies> TransferringAcademies { get; set; }
+        public User AssignedUser { get; set; }
         public string Urn { get; set; }
     }
 }

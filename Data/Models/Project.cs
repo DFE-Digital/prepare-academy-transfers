@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.Projects;
+using Frontend.Models;
 using Helpers;
 
 namespace Data.Models
@@ -37,5 +38,6 @@ namespace Data.Models
         public string OutgoingAcademyUrn => TransferringAcademies[0].OutgoingAcademyUrn;
         public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
         public string IncomingTrustName => TransferringAcademies[0].IncomingTrustNameInTitleCase;
+        public User AssignedUser { get; set; }
     }
 }

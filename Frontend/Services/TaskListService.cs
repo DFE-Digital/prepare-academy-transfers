@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Data;
 using Data.Models;
-using Data.Models.KeyStagePerformance;
 using Data.Models.Projects;
-using Frontend.ExtensionMethods;
-using Frontend.Helpers;
-using Frontend.Models;
 using Frontend.Services.Interfaces;
 using Helpers;
 
@@ -22,7 +17,7 @@ namespace Frontend.Services
             _projectRepository = projectRepository;
         }
 
-        public void BuildTaskListStatuses(Frontend.Pages.Projects.Index indexPage)
+        public void BuildTaskListStatuses(Pages.Projects.Index indexPage)
         {
             var project = _projectRepository.GetByUrn(indexPage.Urn).Result;
             indexPage.ProjectReference = project.Result.Reference;
@@ -35,6 +30,7 @@ namespace Frontend.Services
             indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
             indexPage.LegalRequirementsStatus = GetLegalRequirementsStatus(project.Result);
             indexPage.RationaleStatus = GetRationaleStatus(project.Result);
+            indexPage.AssignedUser = project.Result.AssignedUser;
         }
 
         private ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Data.TRAMS.Models.AcademyTransferProject;
+using Frontend.Models;
 
 namespace Data.TRAMS.Models
 {
@@ -10,5 +11,6 @@ namespace Data.TRAMS.Models
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }
+        public User AssignedUser { get; set; }
     }
 }
