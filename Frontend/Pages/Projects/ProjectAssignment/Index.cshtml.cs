@@ -33,13 +33,12 @@ namespace Frontend.Pages.Projects.ProjectAssignment
 			Urn = urn;
 			IncomingTrustName = projectResponse.Result.IncomingTrustName;
 			SelectedDeliveryOfficer = projectResponse.Result?.AssignedUser?.FullName;
-
 			DeliveryOfficers = await _userRepository.GetAllUsers();
 
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPostAsync(string urn, string selectedName, bool unassignDeliveryOfficer)
+		public async Task<IActionResult> OnPostAsync(string urn, string selectedName, bool unassignDeliveryOfficer = false)
 		{
 			var project = (await _projectRepository.GetByUrn(urn)).Result;
 

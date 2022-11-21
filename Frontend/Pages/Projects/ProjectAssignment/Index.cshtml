@@ -31,7 +31,7 @@
                         @{
                         foreach (var deliveryOfficer in Model.DeliveryOfficers)
                         {
-	                        if (Model.SelectedDeliveryOfficer == deliveryOfficer.FullName)
+	                        if (Model.SelectedDeliveryOfficer == deliveryOfficer.FullName) 
 	                        {
 		                        <option value="@deliveryOfficer.FullName" selected>@deliveryOfficer.FullName</option>
 	                        }
