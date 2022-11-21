@@ -148,10 +148,10 @@ namespace Frontend.Tests.PagesTests.Projects.ProjectAssignment
 
 				await _subject.OnPostAsync("12345", "", true);
 
-				var expectedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty);
-
-				_projectRepository.Verify(m => m.Update(It.Is<Project>(p => p.AssignedUser.Should().BeEquivalentTo(expectedUser, "") != null)),
-					 Times.Once);
+				_projectRepository.Verify(m => m.Update(It.Is<Project>(p =>
+					p.AssignedUser.Id == Guid.Empty.ToString() &&
+					p.AssignedUser.EmailAddress == string.Empty &&
+					p.AssignedUser.FullName == string.Empty)), Times.Once);
 			}
 
 			[Fact]
