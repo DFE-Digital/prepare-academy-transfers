@@ -92,10 +92,10 @@ namespace Frontend.Tests.PagesTests.Projects.ProjectAssignment
 
 				await _subject.OnPostAsync("12345", users.First().FullName);
 
-				var expectedUser = new User(users.First().Id, users.First().EmailAddress, users.First().FullName);
-
-				_projectRepository.Verify(m => m.Update(It.Is<Project>(p => p.AssignedUser.Should().BeEquivalentTo(expectedUser, "") != null)),
-					Times.Once);
+				_projectRepository.Verify(m => m.Update(It.Is<Project>(p =>
+					p.AssignedUser.Id == users.First().Id &&
+					p.AssignedUser.EmailAddress == users.First().EmailAddress &&
+					p.AssignedUser.FullName == users.First().FullName)), Times.Once);
 			}
 
 			[Fact]
