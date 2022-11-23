@@ -19,7 +19,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Setup node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '18.x'
       # This could be cached in the future to allow for quicker build times
@@ -48,7 +48,7 @@ jobs:
           echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: setup node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '18.x'
 
