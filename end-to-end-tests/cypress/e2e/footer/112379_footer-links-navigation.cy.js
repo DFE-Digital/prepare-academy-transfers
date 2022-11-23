@@ -17,7 +17,7 @@ Cypress._.each(['ipad-mini'], (viewport) => {
         it('TC02: should navigate to Give Feedback link', () => {
           cy.get('h2').should('contain', 'Give feedback');
           cy.get('li').should('contain', 'Email');
-          cy.get('data-cy="footer-feedback-link"')
+          cy.get('[data-cy="footer-feedback-link"]')
             .should('contain', 'Give feedback on Prepare conversions and transfers (opens in a new tab)');
         });
 
