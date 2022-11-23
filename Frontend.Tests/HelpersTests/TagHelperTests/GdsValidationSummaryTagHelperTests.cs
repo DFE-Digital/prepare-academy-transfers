@@ -109,14 +109,16 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 var expectedOutput = 
                     "<div class='govuk-grid-row'>" +
                         "<div class='govuk-grid-column-full'>" +
-                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' " +
+                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' " +
                                 "data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>" +
-                                "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
-                                "</h2>" +
-                                "<div class='govuk-error-summary__body'>" +
-                                    "<ul class='govuk-list govuk-error-summary__list'>" +
-                                        "<li><a href='#testField' data-qa='error_text'>Test error</a></li>" +
-                                    "</ul>" +
+                                "<div role='alert'>" +
+                                    "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
+                                    "</h2>" +
+                                    "<div class='govuk-error-summary__body'>" +
+                                        "<ul class='govuk-list govuk-error-summary__list'>" +
+                                            "<li><a href='#testField' data-qa='error_text'>Test error</a></li>" +
+                                        "</ul>" +
+                                    "</div>" +
                                 "</div>" +
                             "</div>" +
                         "</div>" +
@@ -162,19 +164,21 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
                 var expectedOutput = 
                     "<div class='govuk-grid-row'>" +
                         "<div class='govuk-grid-column-full'>" +
-                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' role='alert' " +
+                            "<div class='govuk-error-summary' aria-labelledby='error-summary-title' " +
                                 "data-module='govuk-error-summary' data-ga-event-form='error' data-qa='error'>" +
-                                "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
-                                "</h2>" +
-                                "<div class='govuk-error-summary__body'>" +
-                                    "<ul class='govuk-list govuk-error-summary__list'>" +
-                                        "<li><a href='#testField' data-qa='error_text'>Test error 1</a></li>" +
-                                        "<li><a href='#testField' data-qa='error_text'>Test error 2</a></li>" +
-                                        "<li><a href='#testField2' data-qa='error_text'>Test field 2 error 1</a></li>" +
-                                        "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 1</a></li>" +
-                                        "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 2</a></li>" +
-                                        "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 3</a></li>" +
-                                    "</ul>" +
+                                "<div role='alert'>" +
+                                    "<h2 class='govuk-error-summary__title' id='error-summary-title' data-qa='error__heading'>There is a problem" +
+                                    "</h2>" +
+                                    "<div class='govuk-error-summary__body'>" +
+                                        "<ul class='govuk-list govuk-error-summary__list'>" +
+                                            "<li><a href='#testField' data-qa='error_text'>Test error 1</a></li>" +
+                                            "<li><a href='#testField' data-qa='error_text'>Test error 2</a></li>" +
+                                            "<li><a href='#testField2' data-qa='error_text'>Test field 2 error 1</a></li>" +
+                                            "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 1</a></li>" +
+                                            "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 2</a></li>" +
+                                            "<li><a href='#testField3' data-qa='error_text'>Test field 3 error 3</a></li>" +
+                                        "</ul>" +
+                                    "</div>" +
                                 "</div>" +
                             "</div>" +
                         "</div>" +

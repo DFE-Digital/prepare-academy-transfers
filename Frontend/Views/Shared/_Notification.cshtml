@@ -4,15 +4,16 @@
 
 @if (hasSuccess)
 {
-    var message = TempData["Success.Message"];
     <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
             <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-                Success
+                @(TempData.Peek("Success.Title") ?? "Success")
             </h2>
         </div>
         <div class="govuk-notification-banner__content">
-            <p class="govuk-body">@message </p>
+            <h3 class="govuk-notification-banner__heading" id="notification-message">
+                @TempData["Success.Message"]
+            </h3>
         </div>
     </div>
 }

@@ -3,21 +3,23 @@
 {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
-                <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
-                    There is a problem
-                </h2>
-                <div class="govuk-error-summary__body">
-                    <ul class="govuk-list govuk-error-summary__list">
-                        @foreach (var error in Model.Errors)
-                        {
-                            <li>
-                                <a href="#@error.ErrorElementId" data-qa="error__text">
-                                    @error.ErrorMessage
-                                </a>
-                            </li>
-                        }
-                    </ul>
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" data-module="govuk-error-summary" data-ga-event-form="error" data-qa="error">
+                <div role="alert">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title" data-qa="error__heading">
+                        There is a problem
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @foreach (var error in Model.Errors)
+                            {
+                                <li>
+                                    <a href="#@error.ErrorElementId" data-qa="error__text">
+                                        @error.ErrorMessage
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
