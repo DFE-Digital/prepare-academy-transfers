@@ -21,6 +21,7 @@ namespace Frontend.Pages.Projects
         public ProjectStatuses LegalRequirementsStatus { get; set; }
         public ProjectStatuses RationaleStatus { get; set; }
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
+        public User AssignedUser { get; set; }
 
         /// <summary>
         /// Item1 Academy Ukprn, Item2 Academy Name

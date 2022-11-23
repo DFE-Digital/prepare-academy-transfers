@@ -2,8 +2,8 @@
 @model Frontend.Pages.Projects.Index
 
 @{
-    ViewBag.Title = Model.IncomingTrustName;
     Layout = "_Layout";
+    ViewBag.Title = Model.IncomingTrustName;
 }
 
 @section BeforeMain
@@ -14,9 +14,25 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
-        <h1 class="govuk-heading-xl">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
             @Model.IncomingTrustName
         </h1>
+
+        <p class="govuk-body govuk-!-margin-bottom-8">
+            Delivery officer:
+
+            @if (Model.AssignedUser == null || string.IsNullOrWhiteSpace(Model?.AssignedUser.FullName))
+            {
+                <span data-id="assigned-user" class="empty">Empty</span>
+            }
+            else
+            {
+                <strong data-id="assigned-user">@Model.AssignedUser.FullName</strong>
+            }
+
+            <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
+        </p>
+
         <h2 class="govuk-heading-l">
             Create a project template
         </h2>

@@ -30,7 +30,7 @@
     <link rel="apple-touch-icon" sizes="167x167" href="~/assets/images/govuk-apple-touch-icon-167x167.png">
     <link rel="apple-touch-icon" sizes="152x152" href="~/assets/images/govuk-apple-touch-icon-152x152.png">
     <link rel="apple-touch-icon" href="~/assets/images/govuk-apple-touch-icon.png">
-
+    <link rel="stylesheet" href="~/dist/accessible-autocomplete.min.css" />
     <link rel="stylesheet" href="~/dist/site.css"/>
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
@@ -56,6 +56,8 @@
         </noscript>
         <!-- End Google Tag Manager (noscript) -->
     }
+
+    <script type="text/javascript" src="~/dist/accessible-autocomplete.min.js" asp-add-nonce></script>
 </head>
 
 <body class="govuk-template__body ">
@@ -101,6 +103,7 @@
     </div>
     @await RenderSectionAsync("BeforeMain", false)
     <main class="govuk-main-wrapper " id="main-content" role="main">
+        <partial name="_Notification" />
         @RenderBody()
     </main>
 </div>
@@ -108,23 +111,20 @@
 <footer class="govuk-footer " role="contentinfo">
     <div class="govuk-width-container ">
         <div class="govuk-footer__navigation">
-            <div class="govuk-footer__section govuk-grid-column-one-half">
+            <div class="govuk-footer__section govuk-grid-column-one-half" data-cy="get-support-section">
                 <h2 class="govuk-footer__heading govuk-heading-m">Get support</h2>
                 <ul class="govuk-footer__list">
                     <li class="govuk-footer__list-item govuk-!-margin-bottom-1">
-                        Email: <a class="govuk-link govuk-footer__link" href="mailto:servicedelivery.rdd@education.gov.uk">servicedelivery.rdd@education.gov.uk</a>
-                    </li>
-                    <li class="govuk-footer__list-item">
-                        <span>Include `Manage an Academy Transfer - Private Beta`</span><br/>in the email subject line
+                            Email: <a class="govuk-link govuk-footer__link" data-cy="get-support-email" href="mailto:regionalservices.rg@education.gov.uk?subject=Prepare conversions and transfers support">regionalservices.rg@education.gov.uk</a>
                     </li>
                 </ul>
             </div>
       <div class="govuk-footer__section govuk-grid-column-one-half">
         <h2 class="govuk-footer__heading govuk-heading-m">Give feedback</h2>
-        <ul class="govuk-footer__list ">
+        <ul class="govuk-footer__list " data-cy="footer-feedback-link">
           <li class="govuk-footer__list-item">
             <a class="govuk-footer__link" target="_blank" href="@_configuration["BetaFeedbackLink"]">
-              Give feedback on Manage an academy transfer (opens in a new tab)
+                Give feedback on Prepare conversions and transfers (opens in a new tab)
             </a>
           </li>
         </ul>

@@ -2,7 +2,7 @@ resource cloudfoundry_app worker_app {
 	name               = local.web_app_name
 	space              = data.cloudfoundry_space.space.id
 	docker_image       = local.docker_image
-	strategy           = "blue-green-v2"
+	strategy           = "blue-green-v3"
 
 	service_binding { 
 		service_instance = cloudfoundry_service_instance.redis.id
@@ -20,10 +20,14 @@ resource cloudfoundry_app worker_app {
 		"ASPNETCORE_ENVIRONMENT" = var.aspnetcore_environment
 		"ASPNETCORE_URLS"        = "http://+:8080"
 		"TRAMS_API_BASE"         = var.app_trams_api_base
-		"TRAMS_API_KEY"          = var.app_trams_api_key
-		"AZUREAD__CLIENTSECRET"  = var.app_azuread_clientsecret
+		"TRAMS_API_KEY"          = var.app_trams_api_key		
 		"SENTRY_RELEASE"         = "academy-transfers-api:${var.cf_app_image_tag}"
 		"ServiceLink__ConversionsUrl" = var.app_servicelink_conversionsurl
+		"AzureAd__ClientSecret"    = var.app_azuread_clientsecret
+		"AzureAd__ClientId"        = var.app_azuread_clientid
+		"AzureAd__TenantId"        = var.app_azuread_tenantid
+		"AzureAd__GroupId"         = var.app_azuread_groupid
+		"CypressTestSecret"        = var.app_cypresstest_secret
 	}
 }
 

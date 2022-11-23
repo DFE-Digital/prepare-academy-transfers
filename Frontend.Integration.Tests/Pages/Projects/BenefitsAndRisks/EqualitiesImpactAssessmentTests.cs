@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Frontend.Integration.Tests.Pages.Projects.BenefitsAndRisks
 {
-    public class EqualitiesImpactAssessmentIntegrationTests : BaseIntegrationTests
+    public class EqualitiesImpactAssessmentTests : BaseIntegrationTests
     {
         private readonly IntegrationTestingWebApplicationFactory _factory;
 
-        public EqualitiesImpactAssessmentIntegrationTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
+        public EqualitiesImpactAssessmentTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
             _factory = factory;
         }

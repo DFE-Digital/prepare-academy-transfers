@@ -20,6 +20,10 @@ namespace Frontend.Models
         {
             public static readonly LinkItem Index = new LinkItem { PageName = "/Home/Index" };
         }
+        public static class ProjectAssignment
+        {
+            public static readonly LinkItem Index = new LinkItem {  PageName = "/Projects/ProjectAssignment/Index" };
+        }
         public static class LegalRequirements
         {
             public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/Index" };

@@ -59,6 +59,25 @@ variable app_azuread_clientsecret {
   description = "Application variable for the Azure AD Authorization header"
 } 
 
+variable app_azuread_clientid {
+  type = string
+  description = "Application variable for the Azure AD client id"
+} 
+
+variable app_azuread_tenantid {
+  type = string
+  description = "Application variable for the Azure AD tenant id"
+} 
+
+variable app_azuread_groupid {
+  type = string
+  description = "Application variable for the Azure AD group id"
+} 
+
+variable app_cypresstest_secret {
+  type = string
+  description = "Application variable for the Cypress tests secret"
+} 
 variable logit_sink_url {
 	type = string
 	description = "Target URL (HTTPS) for logs to be streamed to"

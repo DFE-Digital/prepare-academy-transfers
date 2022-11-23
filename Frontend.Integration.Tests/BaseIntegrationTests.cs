@@ -8,8 +8,6 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 using AngleSharp.Io.Network;
-using Data.TRAMS.Models;
-using Frontend.Integration.Tests.Fixtures;
 using Xunit;
 
 namespace Frontend.Integration.Tests
