@@ -67,7 +67,11 @@ namespace Frontend
 
 
             services.Configure<ServiceLinkOptions>(Configuration.GetSection(ServiceLinkOptions.Name));
-            services.AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
+
+            services
+               .AddFluentValidationAutoValidation()
+               .AddFluentValidationClientsideAdapters()
+               .AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
 
             ConfigureRedisConnection(services);
 
