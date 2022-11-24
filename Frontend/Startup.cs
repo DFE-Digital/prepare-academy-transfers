@@ -40,13 +40,10 @@ namespace Frontend
 {
     public class Startup
     {
-        private readonly IHostEnvironment _hostEnvironment;
-
-        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
-        {
-            _hostEnvironment = hostEnvironment;
-            Configuration = configuration;
-        }
+       public Startup(IConfiguration configuration)
+       {
+          Configuration = configuration;
+       }
 
         public IConfiguration Configuration { get; }
 
