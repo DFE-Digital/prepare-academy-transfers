@@ -193,4 +193,50 @@ Cypress.Commands.add('selectTrustListing', (listing) => {
 Cypress.Commands.add('navigateToFilterProjects',() => {  
     cy.get('[data-cy="select-projectlist-filter-expand"]').click();
     cy.get('[data-id="filter-container"]').should('be.visible');
-  });
+});
+
+// Universal: selects first project from list
+Cypress.Commands.add('selectFirstProject', () => {
+    cy.get(':nth-child(1) > :nth-child(1) > .govuk-caption-l > strong > .govuk-link').click();
+    cy.url().should('include', '/project');
+});
+
+// Unassign a user
+Cypress.Commands.add('unassignUser', () => {
+    cy.get('[data-id="assigned-user"]')
+      .invoke('text')
+      .then((text) => {
+        if (text.includes('Empty')) {
+          return
+        }
+        else {
+          // assign link
+          cy.get('a[href*="project-assignment"]').click();
+          // unassign link
+          cy.get('[id="unassign-link"]').click();
+          // continue button
+          cy.get('[class="govuk-button"]').click();
+        }
+    });
+});
+
+// Universal: selects conversion project from list
+Cypress.Commands.add('selectsTransfers', () => {
+    let url = Cypress.env('url');
+    cy.visit(url);
+    cy.get('[data-cy="select-projecttype-input-transfer"]').click();
+    cy.get('[data-cy="select-common-submitbutton"]').click();
+});
+
+// Assign User
+Cypress.Commands.add('assignUser', () => {
+    cy.get('[data-id="assigned-user"]')
+      .invoke('text')
+      .then((text) => {
+        if (text.includes('Empty')) {
+          cy.get('a[href*="project-assignment"]').click();
+          cy.get('[id="delivery-officer"]').click().type('Richika Dogra').type('{enter}');
+          cy.get('[class="govuk-button"]').click();
+        }
+    });
+});
