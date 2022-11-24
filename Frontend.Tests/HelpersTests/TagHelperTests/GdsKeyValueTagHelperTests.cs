@@ -83,7 +83,7 @@ namespace Frontend.Tests.HelpersTests.TagHelperTests
             tagHelper.Process(_tagHelperContext, _tagHelperOutput);
 
             _tagHelperOutput.Attributes.TryGetAttributes("class", out IReadOnlyList<TagHelperAttribute> attributes);
-            Assert.Equal("govuk-summary-list__row govuk-summary-list__row--no-actions", attributes.First().Value.ToString());
+            Assert.Equal("govuk-summary-list__row govuk-summary-list__row--no-actions", attributes[0].Value.ToString());
         }
 
         [Fact]

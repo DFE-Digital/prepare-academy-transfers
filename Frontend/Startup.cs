@@ -27,6 +27,7 @@ using StackExchange.Redis;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using FluentValidation;
 using Frontend.Authorization;
 using Frontend.BackgroundServices;
 using Frontend.Options;
@@ -66,12 +67,7 @@ namespace Frontend
 
 
             services.Configure<ServiceLinkOptions>(Configuration.GetSection(ServiceLinkOptions.Name));
-            
-            services.AddFluentValidation(fv =>
-            {
-                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
-                fv.DisableDataAnnotationsValidation = true;
-            });
+            services.AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
 
             ConfigureRedisConnection(services);
 
