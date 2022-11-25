@@ -6,16 +6,16 @@ on:
 env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE: dfe-digital/academy-transfers-api
-  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}  
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 3.1.301
+          dotnet-version: 6.0.403
       - name: Restore dependencies
         run: dotnet restore
       - name: Setup node.js
@@ -141,7 +141,7 @@ jobs:
           TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
           TF_VAR_cf_api_url: https://api.london.cloud.service.gov.uk
           TF_VAR_app_trams_api_base: ${{ secrets.TRAMS_API_BASE }}
-          TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}          
+          TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
           TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
           TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
           TF_VAR_app_servicelink_conversionsurl: ${{ secrets.SERVICELINK_CONVERSIONSURL }}
@@ -151,13 +151,13 @@ jobs:
           TF_VAR_app_azuread_groupid: ${{ secrets.AZUREAD_GROUPID }}
           TF_VAR_app_cypresstest_secret : ${{ secrets.CYPRESS_TEST_SECRET }}
 
-  create-tag:    
+  create-tag:
     needs: deploy-image
     runs-on: ubuntu-latest
-    steps:      
+    steps:
       - uses: actions/checkout@v2
-      - name: Create tag string          
-        run: echo "RELEASE_TAGNAME=dev-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV    
+      - name: Create tag string
+        run: echo "RELEASE_TAGNAME=dev-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
       - name: Create git tag
         run: |
           git tag ${{ env.RELEASE_TAGNAME }}
