@@ -191,7 +191,9 @@ namespace Frontend
             }
 
             app.UseSecurityHeaders(
-                SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
+               SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
+                  .AddXssProtectionDisabled()
+            );
 
             if (!string.IsNullOrEmpty(Configuration["CI"]))
             {
