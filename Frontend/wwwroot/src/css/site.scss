@@ -16,6 +16,11 @@ $govuk-new-link-styles: true;
   text-align: right;
 }
 
+.autocomplete__option {
+	font-family: Arial, sans-serif !important;
+	font-weight: 400;
+}
+
 .empty {
 	display: inline-block;
 	border: 2px solid;
