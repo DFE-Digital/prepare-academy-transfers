@@ -32,7 +32,7 @@ namespace Frontend.Tests.ValidatorTests.Transfers
             var result = await _validator.TestValidateAsync(outgoingTrustDetails);
 
             result.ShouldHaveValidationErrorFor(x => x.TrustId)
-                .WithErrorMessage("Select the outgoing trust");
+                .WithErrorMessage("Select a trust");
         }
 
         [Fact]
