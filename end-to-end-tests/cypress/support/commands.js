@@ -100,7 +100,7 @@ Cypress.Commands.add('OutGoingSearch_Link_Back', () => cy.get(`${backLink}`))
 // PAGE: Outgoing trust details
 // PAGE: Select the transferring academies 
 // PAGE: What is the incoming trust name?
-// PAGE: Select an incoming trust
+// PAGE: Select the incoming trust
 // PAGE: Check trust and academy details
 
 /*
