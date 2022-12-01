@@ -93,14 +93,14 @@ describe("Creating and editing an academy transfer", { tags: '@dev'}, function (
         cy.get("[name='query']").clear().type("burnt")
         cy.get('.govuk-button').should('contain.text', 'Search').click();
 
-        cy.get("h1").should('contain.text', "Select an incoming trust");
+        cy.get("h1").should('contain.text', "Select the incoming trust");
         cy.clickBackLink()
 
         cy.get("h1").should('contain.text', "What is the incoming trust name?");
         cy.get("[name='query']").clear().type("burnt")
         cy.get('.govuk-button').should('contain.text', 'Search').click();
 
-        cy.get("h1").should('contain.text', "Select an incoming trust");
+        cy.get("h1").should('contain.text', "Select the incoming trust");
         selectFirstRadio()
         cy.get('.govuk-button').should('contain.text', 'Continue').click();
 
@@ -111,7 +111,7 @@ describe("Creating and editing an academy transfer", { tags: '@dev'}, function (
         cy.get("[name='query']").clear().type("burnt")
         cy.get('.govuk-button').should('contain.text', 'Search').click();
 
-        cy.get("h1").should('contain.text', "Select an incoming trust");
+        cy.get("h1").should('contain.text', "Select the incoming trust");
         selectFirstRadio()
         cy.get('.govuk-button').should('contain.text', 'Continue').click();
 
