@@ -9,7 +9,7 @@ namespace Frontend.Validators.Transfers
         {
             RuleFor(x => x.SelectedTrustId)
                 .NotEmpty()
-                .WithMessage("Select an incoming trust");
+                .WithMessage("Select a trust");
         }
 
         protected override void EnsureInstanceNotNull(object instanceToValidate)

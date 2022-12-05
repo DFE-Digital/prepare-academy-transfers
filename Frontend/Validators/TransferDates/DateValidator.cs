@@ -1,11 +1,9 @@
 using System;
 using System.Globalization;
-using DocumentFormat.OpenXml.Bibliography;
 using FluentValidation;
 using Frontend.Models.Forms;
 using Frontend.Models.TransferDates;
 using Helpers;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace Frontend.Validators.TransferDates
 {
@@ -14,10 +12,10 @@ namespace Frontend.Validators.TransferDates
         public string ErrorDisplayName { get; set; }
         public DateValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
 
             RuleFor(x => x.Date.Day)
-                .Custom((day, context) =>
+                .Custom((_, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
                     if (!dateVm.UnknownDate && DateIsEmpty(dateVm.Date) || dateVm.UnknownDate && !DateIsEmpty(dateVm.Date))
@@ -27,7 +25,7 @@ namespace Frontend.Validators.TransferDates
                 });
             
             RuleFor(x => x.Date.Day)
-              .Custom((day, context) =>
+              .Custom((_, context) =>
               {
                   var dateVm = context.InstanceToValidate;
 
@@ -51,7 +49,7 @@ namespace Frontend.Validators.TransferDates
               });
 
             RuleFor(x => x.Date.Day)
-                .Custom((day, context) =>
+                .Custom((_, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
                     if (!dateVm.UnknownDate && !IsAValidDate(dateVm.Date))
@@ -59,8 +57,9 @@ namespace Frontend.Validators.TransferDates
                         context.AddFailure("Enter a valid date");
                     }
                 });
+
             RuleFor(x => x.Date.Year)
-                .Custom((year, context) =>
+                .Custom((_, context) =>
                 {
                     var dateVm = context.InstanceToValidate;
                     if (!dateVm.UnknownDate && !IsAValidYear(dateVm.Date))
@@ -73,18 +72,19 @@ namespace Frontend.Validators.TransferDates
         private static bool DateIsEmpty(DateInputViewModel dateVm) =>
             string.IsNullOrEmpty(dateVm.Day) && string.IsNullOrEmpty(dateVm.Month) && string.IsNullOrEmpty(dateVm.Year);
         
-        private bool IsAValidDate(DateInputViewModel dateVm)
+        private static bool IsAValidDate(DateInputViewModel dateVm)
         {
             var dateString =
                 DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year);
             return !string.IsNullOrEmpty(dateString) && 
                    DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
         }
-        private bool IsAValidYear(DateInputViewModel dateVm)
+
+        private static bool IsAValidYear(DateInputViewModel dateVm)
         {
-            var date =
+            DateTime date =
                 DatesHelper.ParseDateTime(DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year));
-            return date.Year >= 2000 && date.Year <= 2050;
+            return date.Year is >= 2000 and <= 2050;
         }
     }
 }

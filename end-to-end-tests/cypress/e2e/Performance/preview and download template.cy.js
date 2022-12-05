@@ -61,7 +61,7 @@ describe("Performance test for preview and download template with multiple acade
         cy.get("[name='query']").clear().type("burnt")
         cy.get('.govuk-button').should('contain.text', 'Search').click();
 
-        cy.get("h1").should('contain.text', "Select an incoming trust");
+        cy.get("h1").should('contain.text', "Select the incoming trust");
         selectFirstRadio()
         cy.get('.govuk-button').should('contain.text', 'Continue').click();
 

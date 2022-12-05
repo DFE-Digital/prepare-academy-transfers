@@ -27,6 +27,7 @@ using StackExchange.Redis;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using FluentValidation;
 using Frontend.Authorization;
 using Frontend.BackgroundServices;
 using Frontend.Options;
@@ -40,13 +41,10 @@ namespace Frontend
 {
     public class Startup
     {
-        private readonly IHostEnvironment _hostEnvironment;
-
-        public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
-        {
-            _hostEnvironment = hostEnvironment;
-            Configuration = configuration;
-        }
+       public Startup(IConfiguration configuration)
+       {
+          Configuration = configuration;
+       }
 
         public IConfiguration Configuration { get; }
 
@@ -69,12 +67,11 @@ namespace Frontend
 
 
             services.Configure<ServiceLinkOptions>(Configuration.GetSection(ServiceLinkOptions.Name));
-            
-            services.AddFluentValidation(fv =>
-            {
-                fv.RegisterValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
-                fv.DisableDataAnnotationsValidation = true;
-            });
+
+            services
+               .AddFluentValidationAutoValidation()
+               .AddFluentValidationClientsideAdapters()
+               .AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
 
             ConfigureRedisConnection(services);
 
@@ -194,7 +191,9 @@ namespace Frontend
             }
 
             app.UseSecurityHeaders(
-                SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment()));
+               SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
+                  .AddXssProtectionDisabled()
+            );
 
             if (!string.IsNullOrEmpty(Configuration["CI"]))
             {

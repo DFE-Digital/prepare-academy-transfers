@@ -123,7 +123,7 @@ namespace Frontend.Tests.PagesTests.Transfers
 
                 var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustSearch");
                 Assert.Equal("", redirectResponse.RouteValues["query"]);
-                Assert.Equal("Select the outgoing trust", subject.TempData["ErrorMessage"]);
+                Assert.Equal("Select a trust", subject.TempData["ErrorMessage"]);
             }
         }
 

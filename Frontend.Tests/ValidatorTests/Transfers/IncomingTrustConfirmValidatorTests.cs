@@ -35,7 +35,7 @@ namespace Frontend.Tests.ValidatorTests.Transfers
             var result = await _validator.TestValidateAsync(trustSearch);
 
             result.ShouldHaveValidationErrorFor(x => x.SelectedTrustId)
-                .WithErrorMessage("Select an incoming trust");
+                .WithErrorMessage("Select a trust");
         }
 
         [Fact]
