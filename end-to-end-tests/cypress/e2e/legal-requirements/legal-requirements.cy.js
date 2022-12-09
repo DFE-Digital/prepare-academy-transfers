@@ -50,27 +50,6 @@ describe('Legal Requirements', { tags: '@dev'}, () => {
         cy.diocesanConsentStatus().should('contain.text', 'Not applicable')
     })
 
-    it('TC03: Answer to Foundation consent and changes current answer from Yes, No, Not Applicable', () => {
-        // Clicks on change link
-        cy.foundationConsentLink()
-        // Selects Yes
-        cy.get('[id="FoundationConsent"]').click()
-        cy.saveAndContinueButton().click()
-        cy.foundationConsentStatus().should('contain.text', 'Yes')
-        // Clicks on change link
-        cy.foundationConsentLink()
-        // Selects No
-        cy.get('[id="No"]').click()
-        cy.saveAndContinueButton().click()
-        cy.foundationConsentStatus().should('contain.text', 'No')
-        // Clicks on change link
-        cy.foundationConsentLink()
-        // Selects Not applicable
-        cy.get('[id="NotApplicable"]').click()
-        cy.saveAndContinueButton().click()
-        cy.foundationConsentStatus().should('contain.text', 'Not applicable')
-    })
-
     it('TC04: Confirm Legal Requirements page check & marked complete', () => {
         cy.selectsFirstProjectOnList().then(() => {
             cy.get('[data-test="legal-requirements"]')
