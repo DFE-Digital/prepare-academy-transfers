@@ -3,7 +3,7 @@
 @model Frontend.Pages.Projects.LegalRequirements.DiocesanConsentModel
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Have the diocese given consent for this transfer?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Diocesan consent";
     Layout = "_Layout";
     
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
@@ -31,7 +31,7 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                                Have the diocese given consent for this transfer?
+                            Have you spoken with the diocese about the incoming trust?
                         </h1>
                     </legend>
 

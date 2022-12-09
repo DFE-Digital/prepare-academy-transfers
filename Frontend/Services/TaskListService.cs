@@ -77,7 +77,7 @@ namespace Frontend.Services
         }
         private ProjectStatuses GetLegalRequirementsStatus(Project project)
         {
-            if (project.LegalRequirements.DiocesanConsent == null && project.LegalRequirements.FoundationConsent == null &&
+            if (project.LegalRequirements.DiocesanConsent == null &&
                     project.LegalRequirements.TrustAgreement == null)
             {
                 return ProjectStatuses.NotStarted;

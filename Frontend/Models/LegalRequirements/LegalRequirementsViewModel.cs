@@ -15,16 +15,13 @@ namespace Frontend.Models.LegalRequirements
     {
         public readonly ThreeOptions? TrustAgreement;
         public readonly ThreeOptions? DiocesanConsent;
-        public readonly ThreeOptions? FoundationConsent;
 
         public LegalRequirementsViewModel(ThreeOptions? trustAgreement,
             ThreeOptions? diocesanConsent,
-            ThreeOptions? foundationConsent,
             string projectUrn)
         {
             TrustAgreement = trustAgreement;
             DiocesanConsent = diocesanConsent;
-            FoundationConsent = foundationConsent;
             Urn = projectUrn;
         }
     }

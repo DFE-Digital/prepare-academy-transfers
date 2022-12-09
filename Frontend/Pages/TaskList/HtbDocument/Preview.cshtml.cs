@@ -69,7 +69,6 @@ namespace Frontend.Pages.TaskList.HtbDocument
             LegalRequirementsViewModel = new LegalRequirementsViewModel(
                 project.LegalRequirements.TrustAgreement,
                 project.LegalRequirements.DiocesanConsent,
-                project.LegalRequirements.FoundationConsent,
                 project.Urn
             )
             {

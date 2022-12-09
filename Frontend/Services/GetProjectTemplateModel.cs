@@ -57,7 +57,6 @@ namespace Frontend.Services
                 TransferBenefits = GetTransferBenefits(project.Benefits),
                 TrustAgreement = project.LegalRequirements.TrustAgreement.ToDescription(),
                 DiocesanConsent = project.LegalRequirements.DiocesanConsent.ToDescription(),
-                FoundationConsent = project.LegalRequirements.FoundationConsent.ToDescription(),
                 EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered.ToDisplay(),
                 AnyRisks = project.Benefits.AnyRisks.ToDisplay(),
                 OtherFactors = GetOtherFactors(project.Benefits),

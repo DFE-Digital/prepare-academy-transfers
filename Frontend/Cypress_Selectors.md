@@ -66,7 +66,5 @@ All pages in the Legal Requirements section present a three-option choice (Yes, 
 - `select-legal-summary-consultation-change` - The `Change` link for the consultation question
 - `select-legal-summary-diocesanconsent-status` - The status text for diocesan consent question
 - `select-legal-summary-diocesanconsent-change` - The `Change` link for the diocesan consent question
-- `select-legal-summary-foundationconsent-status` - The status text for the foundation consent question
-- `select-legal-summary-foundationconsent-change` - The `Change` link for the foundation consent question
 
 
