@@ -61,24 +61,6 @@ namespace Frontend.Tests.ServicesTests
 
         public class LegalRequirementsStatusTest : TaskListServiceTests
         {
-            public static IEnumerable<object[]> LegalRequirementsCompleted()
-            {
-                yield return new object[]
-                {
-                    new TransferLegalRequirements()
-                    {
-                        IsCompleted = true
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferLegalRequirements()
-                    {
-                        IsCompleted = true
-                    }
-                };
-            }
-
             [Theory]
             [MemberData(nameof(LegalRequirementsCompleted))]
             public void GivenLegalRequirementsCompleted_StatusCompleted(TransferLegalRequirements info)
@@ -86,38 +68,6 @@ namespace Frontend.Tests.ServicesTests
                 FoundProjectFromRepo.LegalRequirements = info;
                 _subject.BuildTaskListStatuses(_index);
                 Assert.Equal(ProjectStatuses.Completed, _index.LegalRequirementsStatus);
-            }
-
-            public static IEnumerable<object[]> LegalRequirementsInProgress()
-            {
-                yield return new object[]
-                {
-                    new TransferLegalRequirements
-                    {
-                        DiocesanConsent = ThreeOptions.Yes
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferLegalRequirements
-                    {
-                        DiocesanConsent = ThreeOptions.No
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferLegalRequirements
-                    {
-                        TrustAgreement = ThreeOptions.No
-                    }
-                };
-                yield return new object[]
-                {
-                    new TransferLegalRequirements
-                    {
-                        TrustAgreement = ThreeOptions.Yes
-                    }
-                };
             }
 
             [Theory]
@@ -438,7 +388,7 @@ namespace Frontend.Tests.ServicesTests
                             {{TransferBenefits.OtherFactor.HighProfile, "High Profile"}}
                     }
                 };
-                
+
                 yield return new object[]
                 {
                     new TransferBenefits
@@ -452,7 +402,7 @@ namespace Frontend.Tests.ServicesTests
                         IsCompleted = false
                     }
                 };
-                
+
             }
 
             public static IEnumerable<object[]> BenefitsComplete()
@@ -487,7 +437,7 @@ namespace Frontend.Tests.ServicesTests
                         IsCompleted = true
                     }
                 };
-                
+
                 yield return new object[]
                 {
                     new TransferBenefits
@@ -544,7 +494,7 @@ namespace Frontend.Tests.ServicesTests
                         Trust = "Trust rationale"
                     }
                 };
-                
+
                 yield return new object[]
                 {
                     new TransferRationale
@@ -577,6 +527,54 @@ namespace Frontend.Tests.ServicesTests
                 _subject.BuildTaskListStatuses(_index);
                 Assert.Equal(ProjectStatuses.Completed, _index.RationaleStatus);
             }
+        }
+        public static IEnumerable<object[]> LegalRequirementsCompleted()
+        {
+            yield return new object[]
+            {
+                new TransferLegalRequirements()
+                {
+                    IsCompleted = true
+                }
+            };
+            yield return new object[]
+            {
+                new TransferLegalRequirements()
+                {
+                    IsCompleted = true
+                }
+            };
+        }
+        public static IEnumerable<object[]> LegalRequirementsInProgress()
+        {
+            yield return new object[]
+            {
+                new TransferLegalRequirements
+                {
+                    DiocesanConsent = ThreeOptions.Yes
+                }
+            };
+            yield return new object[]
+            {
+                new TransferLegalRequirements
+                {
+                    DiocesanConsent = ThreeOptions.No
+                }
+            };
+            yield return new object[]
+            {
+                new TransferLegalRequirements
+                {
+                    TrustAgreement = ThreeOptions.No
+                }
+            };
+            yield return new object[]
+            {
+                new TransferLegalRequirements
+                {
+                    TrustAgreement = ThreeOptions.Yes
+                }
+            };
         }
     }
 }
