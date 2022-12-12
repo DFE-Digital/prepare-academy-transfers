@@ -17,11 +17,11 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
 {
     public class TrustAgreementTests : BaseTests
     {
-        private readonly TrustAgreementModel _subject;
+        private readonly IncomingTrustAgreementModel _subject;
 
         public TrustAgreementTests()
         {
-            _subject = new TrustAgreementModel(ProjectRepository.Object);
+            _subject = new IncomingTrustAgreementModel(ProjectRepository.Object);
         }
 
         public class GetTests : TrustAgreementTests
@@ -51,13 +51,13 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenUrnAndTrustAgreement_UpdatesTheProject()
             {
-                _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
+                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
 
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
                     r.Update(It.Is<Project>(
-                        project => project.LegalRequirements.TrustAgreement == ThreeOptions.No)));
+                        project => project.LegalRequirements.IncomingTrustAgreement == ThreeOptions.No)));
             }
 
 
@@ -66,7 +66,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             {
                 _subject.Urn = ProjectUrn0001;
                 
-                _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
+                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
 
                 var response = await _subject.OnPostAsync();
 
@@ -77,7 +77,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenReturnToPreview_RedirectToThePreviewPage()
             {
-                _subject.TrustAgreementViewModel.TrustAgreement = ThreeOptions.No;
+                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
                 _subject.Urn = ProjectUrn0001;
                 _subject.ReturnToPreview = true;
 

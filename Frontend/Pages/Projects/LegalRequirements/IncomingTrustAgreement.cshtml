@@ -1,5 +1,5 @@
 ﻿@page "/project/{urn}/legalrequirements/trust-agreement"
-@model Frontend.Pages.Projects.LegalRequirements.TrustAgreementModel
+@model Frontend.Pages.Projects.LegalRequirements.IncomingTrustAgreementModel
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
@@ -31,11 +31,11 @@
                                 <span class="govuk-caption-l">
                                     @Model.IncomingTrustName
                                 </span>
-                                Have you received an agreement confirmation from the trust?
+                                Has the incoming trust agreed to take on the academy?
                             </h1>
                         </legend>
 
-                        <p asp-gds-validation-for="TrustAgreementViewModel.TrustAgreement"></p>
+                        <p asp-gds-validation-for="IncomingTrustAgreementViewModel.IncomingTrustAgreement"></p>
                         <partial for="RadioButtonsYesNoNotApplicable" name="Shared/_RadioButtons" />
 
                     </fieldset>

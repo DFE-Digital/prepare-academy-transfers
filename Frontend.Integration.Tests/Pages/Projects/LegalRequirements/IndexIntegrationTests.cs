@@ -43,7 +43,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         [Fact]
         public async Task Should_display_trust_agreement_value()
         {
-            var project = GetProject(p => p.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription());
+            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements");
 

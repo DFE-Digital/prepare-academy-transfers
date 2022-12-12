@@ -77,7 +77,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 GeneralInformationAdditionalInformation = "GeneralInformationAdditionalInformation",
                 LegalRequirements = new TransferLegalRequirements()
                 {
-                    TrustAgreement = ThreeOptions.No,
+                    IncomingTrustAgreement = ThreeOptions.No,
                     DiocesanConsent = ThreeOptions.No,
                     IsCompleted = false
                 }
@@ -177,7 +177,7 @@ namespace Data.TRAMS.Tests.Mappers.Request
 
         private static void AssertLegalRequirementsAreCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal(toMap.LegalRequirements.TrustAgreement.ToDescription(), result.LegalRequirements.TrustAgreement);
+            Assert.Equal(toMap.LegalRequirements.IncomingTrustAgreement.ToDescription(), result.LegalRequirements.IncomingTrustAgreement);
             Assert.Equal(toMap.LegalRequirements.DiocesanConsent.ToDescription(), result.LegalRequirements.DiocesanConsent);
             Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
         }

@@ -31,8 +31,9 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var projectResult = project.Result;
             ProjectReference = projectResult.Reference;
             LegalRequirementsViewModel = new LegalRequirementsViewModel(
-                projectResult.LegalRequirements.TrustAgreement,
+                projectResult.LegalRequirements.IncomingTrustAgreement,
                 projectResult.LegalRequirements.DiocesanConsent,
+                projectResult.LegalRequirements.OutgoingTrustConsent,
                 projectResult.Urn
             );
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
@@ -60,7 +61,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
 
         private bool LegalRequirementsSectionDataIsPopulated(Project project) =>
             project.LegalRequirements.DiocesanConsent != null
-            && project.LegalRequirements.TrustAgreement != null;
+            && project.LegalRequirements.IncomingTrustAgreement != null;
 
 
     }

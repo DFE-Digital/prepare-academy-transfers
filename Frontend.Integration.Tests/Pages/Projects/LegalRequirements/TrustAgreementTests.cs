@@ -23,7 +23,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         [Fact]
         public async Task Should_successfully_load_radio_buttons()
         {
-            var project = GetProject(p => p.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription());
+            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
 
@@ -35,8 +35,8 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         [Fact]
         public async Task Should_save_selection()
         {
-            var project = GetProject(p => p.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription());
-            project.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription();
+            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
+            project.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription();
 
             _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
 

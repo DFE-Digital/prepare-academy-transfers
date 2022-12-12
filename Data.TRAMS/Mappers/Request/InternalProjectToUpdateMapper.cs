@@ -77,7 +77,7 @@ namespace Data.TRAMS.Mappers.Request
         {
             return new AcademyTransferProjectLegalRequirements()
             {
-                TrustAgreement = input.LegalRequirements.TrustAgreement.ToDescription(),
+                IncomingTrustAgreement = input.LegalRequirements.IncomingTrustAgreement.ToDescription(),
                 DiocesanConsent = input.LegalRequirements.DiocesanConsent.ToDescription(),
                 IsCompleted = input.LegalRequirements.IsCompleted
             };

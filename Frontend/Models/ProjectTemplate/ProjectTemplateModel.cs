@@ -15,8 +15,9 @@ namespace Frontend.Models.ProjectTemplate
         [DocumentText("Author")] public string Author { get; set; }
         [DocumentText("ProjectName")] public string ProjectName { get; set; }
         [DocumentText("RationaleForProject")] public string RationaleForProject { get; set; }
-        [DocumentText("TrustAgreement")] public string TrustAgreement { get; set; }
+        [DocumentText("IncomingTrustAgreement")] public string IncomingTrustAgreement { get; set; }
         [DocumentText("DiocesanConsent")] public string DiocesanConsent { get; set; }
+        [DocumentText("OutgoingTrustConsent")] public string OutgoingTrustConsent { get; set; }
         [DocumentText("RationaleForTrust")] public string RationaleForTrust { get; set; }
         [DocumentText("ClearedBy")] public string ClearedBy { get; set; }
         [DocumentText("Version")] public string Version { get; set; }

@@ -28,13 +28,17 @@ namespace Frontend.Models
         {
             public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/Index" };
                 
-            public static class TrustAgreement
+            public static class IncomingTrustAgreement
             {
-                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/TrustAgreement" };
+                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/IncomingTrustAgreement" };
             }
             public static class DiocesanConsent
             {
                 public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/DiocesanConsent" };
+            }
+            public static class OutgoingTrustConsent
+            {
+                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/OutgoingTrustConsent" };
             }
         }
 

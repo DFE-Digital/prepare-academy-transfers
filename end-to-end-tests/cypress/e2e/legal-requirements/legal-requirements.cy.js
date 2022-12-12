@@ -8,25 +8,25 @@ describe('Legal Requirements', { tags: '@dev'}, () => {
         cy.get('[data-test="transfer-legal-requirements"]').click()
     })
 
-    it('TC01: Answer to Trust Agreement and changes current answer from Yes, No, Not Applicable ', () => {
+    it('TC01: Answer to Incoming Trust Agreement and changes current answer from Yes, No, Not Applicable ', () => {
         // Clicks on link
-        cy.trustAgreementLink()
+        cy.incomingTrustAgreementLink()
         // Selects Yes
-        cy.get('[id="TrustAgreement"]').click()
+        cy.get('[id="IncomingTrustAgreement"]').click()
         cy.saveAndContinueButton().click()
-        cy.trustAgreementStatus().should('contain.text', 'Yes')
+        cy.incomingTrustAgreementStatus().should('contain.text', 'Yes')
         // Clicks on link
-        cy.trustAgreementLink()
+        cy.incomingTrustAgreementLink()
         // Selects No
         cy.get('[id="No"]').click()
         cy.saveAndContinueButton().click()
-        cy.trustAgreementStatus().should('contain.text', 'No')
+        cy.incomingTrustAgreementStatus().should('contain.text', 'No')
         // Clicks on link
-        cy.trustAgreementLink()
+        cy.incomingTrustAgreementLink()
         // Selects Not applicable
         cy.get('[id="NotApplicable"]').click()
         cy.saveAndContinueButton().click()
-        cy.trustAgreementStatus().should('contain.text', 'Not applicable')
+        cy.incomingTrustAgreementStatus().should('contain.text', 'Not applicable')
     })
 
     it('TC02: Answer to Diocesan consent and changes current answer from Yes, No, Not Applicable', () => {
@@ -48,6 +48,27 @@ describe('Legal Requirements', { tags: '@dev'}, () => {
         cy.get('[id="NotApplicable"]').click()
         cy.saveAndContinueButton().click()
         cy.diocesanConsentStatus().should('contain.text', 'Not applicable')
+    })
+
+    it('TC02: Answer to Outgoing Trust consent and changes current answer from Yes, No, Not Applicable', () => {
+        // Clicks on change link
+        cy.outgoingTrustConsentLink()
+        // Selects Yes
+        cy.get('[id="OutgoingTrustConsent"]').click()
+        cy.saveAndContinueButton().click()
+        cy.outgoingTrustConsentStatus().should('contain.text', 'Yes')
+        // Clicks on change link
+        cy.outgoingTrustConsentLink()
+        // Selects No
+        cy.get('[id="No"]').click()
+        cy.saveAndContinueButton().click()
+        cy.outgoingTrustConsentStatus().should('contain.text', 'No')
+        // Clicks on change link
+        cy.outgoingTrustConsentLink()
+        // Selects Not applicable
+        cy.get('[id="NotApplicable"]').click()
+        cy.saveAndContinueButton().click()
+        cy.outgoingTrustConsentStatus().should('contain.text', 'Not applicable')
     })
 
     it('TC04: Confirm Legal Requirements page check & marked complete', () => {

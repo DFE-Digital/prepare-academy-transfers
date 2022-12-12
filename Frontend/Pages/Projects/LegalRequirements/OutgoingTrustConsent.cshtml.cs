@@ -1,26 +1,29 @@
 using Data;
+using Frontend.Models.Benefits;
 using Frontend.Models.Forms;
-using Frontend.Models.LegalRequirements;
 using Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Models;
 using Data.TRAMS.ExtensionMethods;
+using Frontend.ExtensionMethods;
+using Frontend.Models.LegalRequirements;
 
 namespace Frontend.Pages.Projects.LegalRequirements
 {
-    public class TrustAgreementModel : CommonPageModel
+    public class OutgoingTrustConsentModel : CommonPageModel
     {
         private readonly IProjects _projects;
 
-        public TrustAgreementModel(IProjects projects)
+        public OutgoingTrustConsentModel(IProjects projects)
         {
             _projects = projects;
         }
 
-        [BindProperty] public TrustAgreementViewModel TrustAgreementViewModel { get; set; } = new TrustAgreementViewModel();
+        [BindProperty] public OutgoingTrustConsentViewModel OutgoingTrustConsentViewModel { get; set; } = new OutgoingTrustConsentViewModel();
 
         public IList<RadioButtonViewModel> RadioButtonsYesNoNotApplicable { get; set; }
 
@@ -30,7 +33,7 @@ namespace Frontend.Pages.Projects.LegalRequirements
             var project = await _projects.GetByUrn(Urn);
             IncomingTrustName = project.Result.IncomingTrustName;
 
-            RadioButtonsYesNoNotApplicable = TrustAgreementViewModel.GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToDescription(), TrustAgreementViewModel.TrustAgreement, nameof(TrustAgreementViewModel.TrustAgreement));
+            RadioButtonsYesNoNotApplicable = OutgoingTrustConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.OutgoingTrustConsent.ToDescription(), OutgoingTrustConsentViewModel.OutgoingTrustConsent, nameof(OutgoingTrustConsentViewModel.OutgoingTrustConsent));
             return Page();
         }
 
@@ -38,20 +41,17 @@ namespace Frontend.Pages.Projects.LegalRequirements
         {
             var project = await _projects.GetByUrn(Urn);
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid is false)
             {
-                RadioButtonsYesNoNotApplicable = TrustAgreementViewModel.GetRadioButtons(project.Result.LegalRequirements.TrustAgreement.ToDescription(), TrustAgreementViewModel.TrustAgreement, nameof(TrustAgreementViewModel.TrustAgreement));
+                RadioButtonsYesNoNotApplicable = OutgoingTrustConsentViewModel.GetRadioButtons(project.Result.LegalRequirements.OutgoingTrustConsent.ToDescription(), OutgoingTrustConsentViewModel.OutgoingTrustConsent, nameof(OutgoingTrustConsentViewModel.OutgoingTrustConsent));
                 return Page();
             }
-
-            project.Result.LegalRequirements.TrustAgreement = TrustAgreementViewModel.TrustAgreement;
+            project.Result.LegalRequirements.OutgoingTrustConsent = OutgoingTrustConsentViewModel.OutgoingTrustConsent;
             await _projects.Update(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
-
-
             return RedirectToPage(Links.LegalRequirements.Index.PageName, new { Urn });
         }
     }

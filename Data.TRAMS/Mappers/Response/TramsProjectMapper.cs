@@ -77,8 +77,9 @@ namespace Data.TRAMS.Mappers.Response
         {
             return new TransferLegalRequirements()
             {
-                TrustAgreement = ToThreeOptions(input.LegalRequirements.TrustAgreement),
+                IncomingTrustAgreement = ToThreeOptions(input.LegalRequirements.IncomingTrustAgreement),
                 DiocesanConsent = ToThreeOptions(input.LegalRequirements.DiocesanConsent),
+                OutgoingTrustConsent = ToThreeOptions(input.LegalRequirements.OutgoingTrustConsent),
                 IsCompleted = input.LegalRequirements.IsCompleted
             };
         }
