@@ -47,7 +47,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements");
 
-            Document.QuerySelector<IHtmlElement>("[data-test=trust-agreement]").Text().Trim().Should().
+            Document.QuerySelector<IHtmlElement>("[data-test=incoming-trust-agreement]").Text().Trim().Should().
                 Be("No");
         }
     }

@@ -79,6 +79,7 @@ namespace Data.TRAMS.Mappers.Request
             {
                 IncomingTrustAgreement = input.LegalRequirements.IncomingTrustAgreement.ToDescription(),
                 DiocesanConsent = input.LegalRequirements.DiocesanConsent.ToDescription(),
+                OutgoingTrustConsent = input.LegalRequirements.OutgoingTrustConsent.ToDescription(),
                 IsCompleted = input.LegalRequirements.IsCompleted
             };
         }
