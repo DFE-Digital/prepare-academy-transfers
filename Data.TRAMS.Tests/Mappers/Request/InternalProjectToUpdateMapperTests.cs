@@ -79,7 +79,6 @@ namespace Data.TRAMS.Tests.Mappers.Request
                 {
                     TrustAgreement = ThreeOptions.No,
                     DiocesanConsent = ThreeOptions.No,
-                    FoundationConsent = ThreeOptions.No,
                     IsCompleted = false
                 }
             };
@@ -180,7 +179,6 @@ namespace Data.TRAMS.Tests.Mappers.Request
         {
             Assert.Equal(toMap.LegalRequirements.TrustAgreement.ToDescription(), result.LegalRequirements.TrustAgreement);
             Assert.Equal(toMap.LegalRequirements.DiocesanConsent.ToDescription(), result.LegalRequirements.DiocesanConsent);
-            Assert.Equal(toMap.LegalRequirements.FoundationConsent.ToDescription(), result.LegalRequirements.FoundationConsent);
             Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
         }
 

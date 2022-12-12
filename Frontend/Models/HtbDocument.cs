@@ -19,7 +19,6 @@ namespace Frontend.Models
         [DocumentText("AgeRange")] public string AgeRange { get; set; }
         [DocumentText("SchoolCapacity")] public string SchoolCapacity { get; set; }
         [DocumentText("DiocesanConsent")] public string DiocesanConsent { get; set; }
-        [DocumentText("FoundationConsent")] public string FoundationConsent { get; set; }
         [DocumentText("TrustAgreement")] public string TrustAgreement { get; set; }
 
         [DocumentText("PublishedAdmissionNumber")]

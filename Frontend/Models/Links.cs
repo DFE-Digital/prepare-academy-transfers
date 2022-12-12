@@ -36,10 +36,6 @@ namespace Frontend.Models
             {
                 public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/DiocesanConsent" };
             }
-            public static class FoundationConsent
-            {
-                public static readonly LinkItem Index = new LinkItem { PageName = "/Projects/LegalRequirements/FoundationConsent" };
-            }           
         }
 
         public static readonly LinkItem CookiePreferences = new LinkItem { PageName = "/CookiePreferences" };        

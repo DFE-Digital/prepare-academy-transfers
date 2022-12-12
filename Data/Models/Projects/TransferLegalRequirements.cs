@@ -8,7 +8,6 @@ namespace Data.Models.Projects
     {
         public ThreeOptions? TrustAgreement { get; set; }
         public ThreeOptions? DiocesanConsent { get; set; }
-        public ThreeOptions? FoundationConsent { get; set; }
         public bool? IsCompleted { get; set; }
     }
 }

@@ -89,14 +89,6 @@ namespace Frontend.Models
                     public static string Status => Typespace.Name(ref _status);
                     public static string Change => Typespace.Name(ref _change);
                 }
-
-                public sealed class FoundationConsent
-                {
-                    private static string _status, _change;
-
-                    public static string Status => Typespace.Name(ref _status);
-                    public static string Change => Typespace.Name(ref _change);
-                }
             }
         }
     }

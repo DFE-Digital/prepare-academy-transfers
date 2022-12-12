@@ -106,7 +106,6 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 {
                     TrustAgreement = "No",
                     DiocesanConsent = "No",
-                    FoundationConsent = "No",
                     IsCompleted = false,
                 },
                 OutgoingTrustUkprn = "123"
@@ -153,7 +152,6 @@ namespace Data.TRAMS.Tests.Mappers.Response
         {
             Assert.Equal(toMap.LegalRequirements.TrustAgreement, result.LegalRequirements.TrustAgreement.ToDescription());
             Assert.Equal(toMap.LegalRequirements.DiocesanConsent, result.LegalRequirements.DiocesanConsent.ToDescription());
-            Assert.Equal(toMap.LegalRequirements.FoundationConsent, result.LegalRequirements.FoundationConsent.ToDescription());
             Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
         }
         private static void AssertRationaleCorrect(TramsProject toMap, Project result)

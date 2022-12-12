@@ -172,16 +172,6 @@ Cypress.Commands.add('diocesanConsentStatus', () => {
     cy.get('[data-test="diocesan-consent"]')
 })
 
-// Foundation consent: Change Link
-Cypress.Commands.add('foundationConsentLink', () => {
-    cy.get('a[href*="foundation-consent"]').click()
-})
-
-// Foundation consent: Status
-Cypress.Commands.add('foundationConsentStatus', () => {
-    cy.get('[data-test="foundation-consent"]')
-})
-
 // Trust Listing Summary Page (Universal)
 Cypress.Commands.add('selectTrustListing', (listing) => {
     cy.get('[data-id^="project-link-"]').first().click()
