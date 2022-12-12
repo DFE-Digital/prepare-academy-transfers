@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Have you received an agreement confirmation from the trust?";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Incoming trust agreement";
     Layout = "_Layout";
 
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
