@@ -104,8 +104,9 @@ namespace Data.TRAMS.Tests.Mappers.Response
                 },
                 LegalRequirements = new AcademyTransferProjectLegalRequirements()
                 {
-                    TrustAgreement = "No",
+                    IncomingTrustAgreement = "No",
                     DiocesanConsent = "No",
+                    OutgoingTrustConsent = "No",
                     IsCompleted = false,
                 },
                 OutgoingTrustUkprn = "123"
@@ -150,8 +151,9 @@ namespace Data.TRAMS.Tests.Mappers.Response
 
         private static void AssertLegalRequirementsAreCorrect(TramsProject toMap, Project result)
         {
-            Assert.Equal(toMap.LegalRequirements.TrustAgreement, result.LegalRequirements.TrustAgreement.ToDescription());
+            Assert.Equal(toMap.LegalRequirements.IncomingTrustAgreement, result.LegalRequirements.IncomingTrustAgreement.ToDescription());
             Assert.Equal(toMap.LegalRequirements.DiocesanConsent, result.LegalRequirements.DiocesanConsent.ToDescription());
+            Assert.Equal(toMap.LegalRequirements.OutgoingTrustConsent, result.LegalRequirements.OutgoingTrustConsent.ToDescription());
             Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
         }
         private static void AssertRationaleCorrect(TramsProject toMap, Project result)

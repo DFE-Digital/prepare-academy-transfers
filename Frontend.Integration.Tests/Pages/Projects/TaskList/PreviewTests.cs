@@ -26,12 +26,14 @@ namespace Frontend.Integration.Tests.Pages.Projects.TaskList
             var project = GetProject(p =>
             {
                 p.LegalRequirements.DiocesanConsent = ThreeOptions.No.ToDescription();
-                p.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription();
+                p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription();
+                p.LegalRequirements.OutgoingTrustConsent = ThreeOptions.No.ToDescription();
             });
             
             await OpenUrlAsync($"/project/{project.ProjectUrn}/advisory-board/preview?");
             Document.QuerySelector<IHtmlParagraphElement>("[data-test=diocesan-consent]").Text().Should().Be("No");
-            Document.QuerySelector<IHtmlElement>("[data-test=trust-agreement]").Text().Should().Be("No");
+            Document.QuerySelector<IHtmlElement>("[data-test=incoming-trust-agreement]").Text().Should().Be("No");
+            Document.QuerySelector<IHtmlElement>("[data-test=outgoing-trust-consent]").Text().Should().Be("No");
         }
     }
 }

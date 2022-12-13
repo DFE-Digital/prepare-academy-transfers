@@ -12,10 +12,10 @@ using AngleSharp.Html.Dom;
 
 namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 {
-    public class TrustAgreementIntegrationTests : BaseIntegrationTests
+    public class OutgoingTrustConsentTests : BaseIntegrationTests
     {
         private readonly IntegrationTestingWebApplicationFactory _factory;
-        public TrustAgreementIntegrationTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
+        public OutgoingTrustConsentTests(IntegrationTestingWebApplicationFactory factory) : base(factory)
         {
             _factory = factory;
         }
@@ -23,24 +23,24 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         [Fact]
         public async Task Should_successfully_load_radio_buttons()
         {
-            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
+            var project = GetProject(p => p.LegalRequirements.OutgoingTrustConsent = ThreeOptions.No.ToDescription());
 
-            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/outgoing-trust-consent");
 
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
             Document.BaseUri.Should()
-                .EndWith($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+                .EndWith($"/project/{project.ProjectUrn}/legalrequirements/outgoing-trust-consent");
         }
 
         [Fact]
         public async Task Should_save_selection()
         {
-            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
-            project.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription();
+            var project = GetProject(p => p.LegalRequirements.OutgoingTrustConsent = ThreeOptions.No.ToDescription());
+            project.LegalRequirements.OutgoingTrustConsent = ThreeOptions.No.ToDescription();
 
             _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
 
-            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/outgoing-trust-consent");
 
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
 
@@ -48,7 +48,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 
             Document.QuerySelector<IHtmlElement>("h1").Text().Trim().Should()
                 .Be("Legal requirements");
-            Document.QuerySelector<IHtmlElement>("[data-test=incoming-trust-agreement]").Text().Trim().Should().
+            Document.QuerySelector<IHtmlElement>("[data-test=outgoing-trust-consent]").Text().Trim().Should().
                 Be("No");
         }
     }

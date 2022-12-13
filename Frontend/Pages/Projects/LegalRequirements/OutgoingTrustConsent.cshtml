@@ -1,9 +1,9 @@
-﻿@page "/project/{urn}/legalrequirements/diocesan-consent"
+﻿@page "/project/{urn}/legalrequirements/outgoing-trust-consent"
 
-@model Frontend.Pages.Projects.LegalRequirements.DiocesanConsentModel
+@model Frontend.Pages.Projects.LegalRequirements.OutgoingTrustConsentModel
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Diocesan consent";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Outgoing trust resolution";
     Layout = "_Layout";
     
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
@@ -25,20 +25,20 @@
             <input type="hidden" asp-for="@Model.ReturnToPreview"/>
             <input type="hidden" asp-for="@Model.IncomingTrustName"/>
             <div class="govuk-form-group @formClasses">
-                <fieldset class="govuk-fieldset" aria-describedby="diocesan-consent-hint">
+                <fieldset class="govuk-fieldset" aria-describedby="outgoing-trust-consent-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                         <h1 class="govuk-fieldset__heading" data-test="header">
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            Have you spoken with the diocese about the incoming trust?
+                            Have you received a resolution from the outgoing trust?
                         </h1>
-                        <div id="diocesan-consent-hint" class="govuk-hint">
-                            You'll need to speak with the diocese if the academy is part of one.
+                        <div id="outgoing-trust-consent-hint" class="govuk-hint">
+                           Only voluntary transfers need a resolution from the outgoing trust.
                         </div>
                     </legend>
 
-                    <p asp-gds-validation-for="DiocesanConsentViewModel.DiocesanConsent"></p>
+                    <p asp-gds-validation-for="OutgoingTrustConsentViewModel.OutgoingTrustConsent"></p>
                     <partial for="RadioButtonsYesNoNotApplicable" name="Shared/_RadioButtons"/>
                     
                 </fieldset>

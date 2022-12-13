@@ -55,7 +55,8 @@ namespace Frontend.Services
                     ? $"Other: {project.Features.OtherTypeOfTransfer}"
                     : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
-                TrustAgreement = project.LegalRequirements.TrustAgreement.ToDescription(),
+                IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement.ToDescription(),
+                OutgoingTrustConsent = project.LegalRequirements.OutgoingTrustConsent.ToDescription(),
                 DiocesanConsent = project.LegalRequirements.DiocesanConsent.ToDescription(),
                 EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered.ToDisplay(),
                 AnyRisks = project.Benefits.AnyRisks.ToDisplay(),

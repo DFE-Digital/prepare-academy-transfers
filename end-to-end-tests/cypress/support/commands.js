@@ -147,19 +147,18 @@ Cypress.Commands.add('selectsFirstProjectOnList', () => {
 
 //--Legal Requirements (Task List)
 
-// Trust Agreement: Change Link
-Cypress.Commands.add('trustAgreementLink', () => {
-    cy.get('a[href*="trust-agreement"]').click()
-})
-
 // Save & Continue btn (Universal)
 Cypress.Commands.add('saveAndContinueButton', () => {
     cy.get('[data-test="submit-btn"]')
 })
+// Incoming Trust Agreement: Change Link
+Cypress.Commands.add('incomingTrustAgreementLink', () => {
+    cy.get('a[href*="incoming-trust-agreement"]').click()
+})
 
-// Trust Agreement: status
-Cypress.Commands.add('trustAgreementStatus', () => {
-    cy.get('[data-test="trust-agreement"]')
+// Incoming Trust Agreement: status
+Cypress.Commands.add('incomingTrustAgreementStatus', () => {
+    cy.get('[data-test="incoming-trust-agreement"]')
 })
 
 // Diocesan Consent: Change Link
@@ -170,6 +169,16 @@ Cypress.Commands.add('diocesanConsentLink', () => {
 // Diocesan Consent: Status
 Cypress.Commands.add('diocesanConsentStatus', () => {
     cy.get('[data-test="diocesan-consent"]')
+})
+
+// Outgoing Trust Consent: Change Link
+Cypress.Commands.add('outgoingTrustConsentLink', () => {
+    cy.get('a[href*="outgoing-trust-consent"]').click()
+})
+
+// Outgoing Trust Consent: Status
+Cypress.Commands.add('outgoingTrustConsentStatus', () => {
+    cy.get('[data-test="outgoing-trust-consent"]')
 })
 
 // Trust Listing Summary Page (Universal)

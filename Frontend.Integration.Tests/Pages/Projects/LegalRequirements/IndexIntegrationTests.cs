@@ -43,11 +43,11 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         [Fact]
         public async Task Should_display_trust_agreement_value()
         {
-            var project = GetProject(p => p.LegalRequirements.TrustAgreement = ThreeOptions.No.ToDescription());
+            var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements");
 
-            Document.QuerySelector<IHtmlElement>("[data-test=trust-agreement]").Text().Trim().Should().
+            Document.QuerySelector<IHtmlElement>("[data-test=incoming-trust-agreement]").Text().Trim().Should().
                 Be("No");
         }
     }

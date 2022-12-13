@@ -6,8 +6,9 @@ namespace Data.TRAMS.Models.AcademyTransferProject
 {
     public class AcademyTransferProjectLegalRequirements
     {
-        public string TrustAgreement { get; set; }
+        public string IncomingTrustAgreement { get; set; }
         public string DiocesanConsent { get; set; }
+        public string OutgoingTrustConsent { get; set; }
         public bool? IsCompleted { get; set; }
     }
 }

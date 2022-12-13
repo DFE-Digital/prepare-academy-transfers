@@ -15,16 +15,16 @@ using Xunit;
 
 namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
 {
-    public class TrustAgreementTests : BaseTests
+    public class OutgoingTrustConsentTests : BaseTests
     {
-        private readonly IncomingTrustAgreementModel _subject;
+        private readonly OutgoingTrustConsentModel _subject;
 
-        public TrustAgreementTests()
+        public OutgoingTrustConsentTests()
         {
-            _subject = new IncomingTrustAgreementModel(ProjectRepository.Object);
+            _subject = new OutgoingTrustConsentModel(ProjectRepository.Object);
         }
 
-        public class GetTests : TrustAgreementTests
+        public class GetTests : OutgoingTrustConsentTests
         {
             [Fact]
             public async Task GivenUrn_FetchesProjectFromTheRepository()
@@ -46,27 +46,27 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             }
         }
 
-        public class PostTests : TrustAgreementTests
+        public class PostTests : OutgoingTrustConsentTests
         {
             [Fact]
-            public async Task GivenUrnAndTrustAgreement_UpdatesTheProject()
+            public async Task GivenUrnAndOutgoingTrustConsent_UpdatesTheProject()
             {
-                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
+                _subject.OutgoingTrustConsentViewModel.OutgoingTrustConsent = ThreeOptions.No;
 
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
                     r.Update(It.Is<Project>(
-                        project => project.LegalRequirements.IncomingTrustAgreement == ThreeOptions.No)));
+                        project => project.LegalRequirements.OutgoingTrustConsent == ThreeOptions.No)));
             }
 
 
             [Fact]
-            public async Task GivenUrnAndTrustAgreement_RedirectsToTheSummaryPage()
+            public async Task GivenUrnAndOutgoingTrustConsent_RedirectsToTheSummaryPage()
             {
                 _subject.Urn = ProjectUrn0001;
-                
-                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
+
+                _subject.OutgoingTrustConsentViewModel.OutgoingTrustConsent = ThreeOptions.No;
 
                 var response = await _subject.OnPostAsync();
 
@@ -77,7 +77,7 @@ namespace Frontend.Tests.PagesTests.Projects.LegalRequirements
             [Fact]
             public async Task GivenReturnToPreview_RedirectToThePreviewPage()
             {
-                _subject.IncomingTrustAgreementViewModel.IncomingTrustAgreement = ThreeOptions.No;
+                _subject.OutgoingTrustConsentViewModel.OutgoingTrustConsent = ThreeOptions.No;
                 _subject.Urn = ProjectUrn0001;
                 _subject.ReturnToPreview = true;
 

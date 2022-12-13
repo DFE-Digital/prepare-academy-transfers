@@ -37,6 +37,10 @@ namespace Frontend.Helpers.TagHelpers
                 output.PreContent.SetHtmlContent("<span class='govuk-visually-hidden'>Error:</span>");
                 output.Content.SetHtmlContent(modelStateEntry.Errors.FirstOrDefault()?.ErrorMessage);
             }
+            else
+            {
+                output.SuppressOutput();
+            }
         }
     }
 }

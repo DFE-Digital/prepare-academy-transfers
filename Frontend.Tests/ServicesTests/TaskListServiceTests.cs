@@ -80,7 +80,7 @@ namespace Frontend.Tests.ServicesTests
             }
 
             [Fact]
-            public void GivenNoDioceseAndNoTrustAgreement_StatusNotStarted()
+            public void GivenNoDioceseAndNoIncomingTrustAgreement_StatusNotStarted()
             {
                 FoundProjectFromRepo.LegalRequirements = new TransferLegalRequirements();
                 _subject.BuildTaskListStatuses(_index);
@@ -565,14 +565,14 @@ namespace Frontend.Tests.ServicesTests
             {
                 new TransferLegalRequirements
                 {
-                    TrustAgreement = ThreeOptions.No
+                    IncomingTrustAgreement = ThreeOptions.No
                 }
             };
             yield return new object[]
             {
                 new TransferLegalRequirements
                 {
-                    TrustAgreement = ThreeOptions.Yes
+                    IncomingTrustAgreement = ThreeOptions.Yes
                 }
             };
         }
