@@ -33,9 +33,12 @@
                             </span>
                             Have you spoken with the diocese about the incoming trust?
                         </h1>
+                        <div id="diocesan-consent-hint" class="govuk-hint">
+                            You'll need to speak with the diocese if the academy is part of one.
+                        </div>
                     </legend>
 
-                    <p asp-gds-validation-for="DiocesanConsentViewModel.DiocesanConsent"></p>
+                    <p asp-gds-validation-for="DiocesanConsentViewModel.DiocesanConsent" style="display: none"></p>
                     <partial for="RadioButtonsYesNoNotApplicable" name="Shared/_RadioButtons"/>
                     
                 </fieldset>

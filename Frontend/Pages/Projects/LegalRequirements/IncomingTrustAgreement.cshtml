@@ -33,9 +33,12 @@
                                 </span>
                                 Has the incoming trust agreed to take on the academy?
                             </h1>
+                            <div id="incoming-trust-agreement-hint" class="govuk-hint">
+                                This agreement is needed for voluntary and involuntary transfers.
+                            </div>
                         </legend>
 
-                        <p asp-gds-validation-for="IncomingTrustAgreementViewModel.IncomingTrustAgreement"></p>
+                        <p asp-gds-validation-for="IncomingTrustAgreementViewModel.IncomingTrustAgreement" style="display: none"></p>
                         <partial for="RadioButtonsYesNoNotApplicable" name="Shared/_RadioButtons" />
 
                     </fieldset>

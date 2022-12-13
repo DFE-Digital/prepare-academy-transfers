@@ -31,8 +31,11 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                                Have you received a resolution from the outgoing trust?
+                            Have you received a resolution from the outgoing trust?
                         </h1>
+                        <div id="outgoing-trust-consent-hint" class="govuk-hint">
+                           Only voluntary transfers need a resolution from the outgoing trust.
+                        </div>
                     </legend>
 
                     <p asp-gds-validation-for="OutgoingTrustConsentViewModel.OutgoingTrustConsent"></p>
