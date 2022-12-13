@@ -25,11 +25,11 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
         {
             var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
 
-            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/incoming-trust-agreement");
 
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
             Document.BaseUri.Should()
-                .EndWith($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+                .EndWith($"/project/{project.ProjectUrn}/legalrequirements/incoming-trust-agreement");
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Frontend.Integration.Tests.Pages.Projects.LegalRequirements
 
             _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
 
-            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/trust-agreement");
+            await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/incoming-trust-agreement");
 
             Document.QuerySelector<IHtmlElement>("[id=No]").IsChecked().Should().BeTrue();
 
