@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
@@ -33,7 +34,7 @@ namespace DocumentGeneration.Builders
             {
                 Val = $"Heading{(int)_headingLevel}"
             };
-            ParagraphProperties paragraphProperties = new(paragraphStyle);
+            List<ParagraphProperties> paragraphProperties = new List<ParagraphProperties> { new(paragraphStyle) };
             paragraph.Append(paragraphProperties);
 
             var builder = new ParagraphBuilder(paragraph);
