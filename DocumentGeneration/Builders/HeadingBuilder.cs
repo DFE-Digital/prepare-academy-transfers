@@ -29,7 +29,11 @@ namespace DocumentGeneration.Builders
         {
             // Create a new paragraph and add a heading to it
             Paragraph paragraph = new Paragraph();
-            ParagraphProperties paragraphProperties = new ParagraphProperties(new ParagraphStyleId() { Val = $"Heading{(int)_headingLevel}" });
+            var paragraphStyle = new ParagraphStyleId
+            {
+                Val = $"Heading{(int)_headingLevel}"
+            };
+            ParagraphProperties paragraphProperties = new(paragraphStyle);
             paragraph.Append(paragraphProperties);
 
             var builder = new ParagraphBuilder(paragraph);
