@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentGeneration.Elements;
 using DocumentGeneration.Interfaces;
@@ -27,7 +28,15 @@ namespace DocumentGeneration.Builders
 
         public void AddText(TextElement text)
         {
-            var paragraph = new Paragraph();
+            // Create a new paragraph and add a heading to it
+            Paragraph paragraph = new Paragraph();
+            var paragraphStyle = new ParagraphStyleId
+            {
+                Val = $"Heading{(int)_headingLevel}"
+            };
+            List<ParagraphProperties> paragraphProperties = new List<ParagraphProperties> { new(paragraphStyle) };
+            paragraph.Append(paragraphProperties);
+
             var builder = new ParagraphBuilder(paragraph);
             text.FontSize = HeadingLevelToFontSize();
             text.Colour = "104f75";
