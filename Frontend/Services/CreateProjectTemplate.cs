@@ -106,7 +106,7 @@ namespace Frontend.Services
                 {
                     builder.AddHeading(hBuilder =>
                     {
-                        hBuilder.SetHeadingLevel(HeadingLevel.One);
+                        hBuilder.SetHeadingLevel(HeadingLevel.Two);
                         hBuilder.AddText(new TextElement {Value = academy.SchoolName, Bold = true});
                     });
 
@@ -143,7 +143,7 @@ namespace Frontend.Services
         {
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText(new TextElement {Value = "General information", Bold = true});
             });
 
@@ -224,7 +224,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText(new TextElement {Value = "Pupil numbers", Bold = true});
             });
 
@@ -269,7 +269,7 @@ namespace Frontend.Services
         {
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText(new TextElement {Value = "Latest Ofsted judgement", Bold = true});
             });
 
@@ -367,7 +367,7 @@ namespace Frontend.Services
             {
                 builder.AddHeading(hBuilder =>
                 {
-                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.SetHeadingLevel(HeadingLevel.Three);
                     hBuilder.AddText($"{PerformanceDataHelpers.GetFormattedYear(ks2Result.Year)} Key stage 2");
                 });
 
@@ -521,13 +521,13 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Attainment 8");
             });
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Attainment 8 Scores");
             });
 
@@ -598,7 +598,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Attainment 8 English");
             });
 
@@ -672,7 +672,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Attainment 8 Maths");
             });
 
@@ -743,7 +743,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Attainment 8 EBacc");
             });
 
@@ -814,13 +814,13 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Progress 8");
             });
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Pupils included in P8");
             });
 
@@ -894,7 +894,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("School progress score");
             });
 
@@ -1026,7 +1026,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Progress 8 English");
             });
 
@@ -1100,7 +1100,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Progress 8 Maths");
             });
 
@@ -1168,7 +1168,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Progress 8 EBacc");
             });
 
@@ -1236,7 +1236,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                hBuilder.SetHeadingLevel(HeadingLevel.Three);
                 hBuilder.AddText("Percentage of pupils entering EBacc");
             });
 
@@ -1326,7 +1326,7 @@ namespace Frontend.Services
 
             builder.AddHeading(hBuilder =>
             {
-                hBuilder.SetHeadingLevel(HeadingLevel.One);
+                hBuilder.SetHeadingLevel(HeadingLevel.Two);
                 hBuilder.AddText(new TextElement {Value = "Key stage 5 performance tables (KS5)", Bold = true});
             });
 
@@ -1335,7 +1335,7 @@ namespace Frontend.Services
             {
                 builder.AddHeading(hBuilder =>
                 {
-                    hBuilder.SetHeadingLevel(HeadingLevel.Two);
+                    hBuilder.SetHeadingLevel(HeadingLevel.Three);
                     hBuilder.AddText($"{PerformanceDataHelpers.GetFormattedYear(ks5Result.Year)} Key stage 5");
                 });
 
