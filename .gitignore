@@ -216,7 +216,23 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools
 
-# Docker
-/.env*
-!/.env.*.example
+# Docker / Terraform
+## Environment variables
+.env
+.env.*
+!.env.example
+!.env.*.example
 
+## Terraform
+.terraformrc*
+terraform.rc*
+*.tfstate*
+*.tfvars*
+!terraform.tfvars.example
+.terraform/
+backend.vars
+
+## Dependencies
+/Brewfile.lock.json
+/terraform/Brewfile.lock.json
+/terraform.gpaas-azure-migration/Brewfile.lock.json
