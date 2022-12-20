@@ -221,10 +221,8 @@ __pycache__/
 ## Environment variables
 .env
 .env.*
-.env.local
-.env.*.local
-!.env.development.local.example
-!.env.database.example
+!.env.example
+!.env.*.example
 
 ## Terraform
 .terraformrc*
