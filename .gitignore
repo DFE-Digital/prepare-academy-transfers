@@ -216,7 +216,6 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools
 
-
 # Docker / Terraform
 ## Environment variables
 .env
