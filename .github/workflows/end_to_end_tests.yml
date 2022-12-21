@@ -18,7 +18,7 @@ jobs:
       packages: read
 
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: Dev, staging
     defaults:
       run:
         working-directory: end-to-end-tests
@@ -49,8 +49,8 @@ jobs:
 
     cypress-tests:
     needs: deploy-image
-    environment: staging
-    if: ${{ github.event.inputs.environment}} == staging
+    environment: dev
+    if: ${{ github.event.inputs.environment}} == dev
     runs-on: ubuntu-22.04
     defaults:
       run:
@@ -71,4 +71,14 @@ jobs:
         if: failure()
         with:
          name: screenshots
-         path: end-to-end-tests/cypress/screenshots        
+         path: end-to-end-tests/cypress/screenshots
+
+  summary:
+    needs: deploy-image
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Output
+        run: |
+          ENVIRONMENT=${{ github.event.inputs.environment }}
+          echo "Deploying: `$GITHUB_SHA` to `$ENVIRONMENT`" >> $GITHUB_STEP_SUMMARY
+          echo "Status: `${{ job.deploy-image.result }}`" >> $GITHUB_STEP_SUMMARY                
