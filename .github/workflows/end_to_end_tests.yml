@@ -46,3 +46,29 @@ jobs:
         with:
           name: cypress-screenshots
           path: end-to-end-tests/cypress/screenshots
+
+    cypress-tests:
+    needs: deploy-image
+    environment: staging
+    if: ${{ github.event.inputs.environment}} == staging
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+         working-directory: end-to-end-tests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Npm install
+        run: npm install
+      - name: Run cypress
+        run: npm run cy:run -- --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.CYPRESS_TEST_SECRET }}'
+        env:
+          db: ${{ secrets.DB_CONNECTION_STRING }}
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+         name: screenshots
+         path: end-to-end-tests/cypress/screenshots        

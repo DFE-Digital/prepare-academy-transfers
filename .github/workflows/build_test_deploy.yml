@@ -163,3 +163,29 @@ jobs:
           git tag ${{ env.RELEASE_TAGNAME }}
       - name: Push git tag
         run: git push origin ${{ env.RELEASE_TAGNAME }}
+
+  cypress-tests:
+    needs: deploy-image
+    environment: dev
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: end-to-end-tests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Npm install
+        run: npm install
+      - name: Run cypress
+        run: npm run cy:run -- --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.CYPRESS_TEST_SECRET }}'
+        env:
+          db: ${{ secrets.DB_CONNECTION_STRING }}
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+           name: screenshots
+           path: end-to-end-tests/cypress/screenshots
+           
