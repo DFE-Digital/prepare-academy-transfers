@@ -8,6 +8,15 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DFE-Digital/academy-transfers-api.git"
+  },
+  "keywords": [
+    "regression",
+    "cypress",
+    "testing"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
