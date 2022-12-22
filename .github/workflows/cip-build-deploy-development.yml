@@ -3,7 +3,7 @@ name: Continuous delivery / Development
 on:
   push:
     branches:
-      - main
+      - example
 
 jobs:
   build-and-push-image-development:
