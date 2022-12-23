@@ -26,7 +26,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
 
         // check change link
         cy.get('a[data-test=equalities-impact-assessment]').click();
-        cy.get('[data-test=header]').should($el => expect($el.text().trim()).to.equal(`Bristol And South Gloucestershire Utc\n                            \n                            Has an Equalities Impact Assessment been considered?`));
+        cy.get('[data-test=header]').should($el => expect($el.text().trim()).to.contains(`Has an Equalities Impact Assessment been considered?`));
     });
 
     it('Should save no', () => {
