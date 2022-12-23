@@ -6,7 +6,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
     });
 
     beforeEach(function () {
-        cy.visit(`${Cypress.env('url')}project/10002121/benefits`);
+        cy.visit(`${Cypress.env('url')}project/10000121/benefits`);
     });
 
     it('Should save yes', () => {
@@ -18,7 +18,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
         cy.get('p[data-test=equalities-impact-assessment]').should($el => expect($el.text()).to.equal('Yes'));
 
         // back to task list
-        cy.get('[href="/project/10002121"]').click();
+        cy.get('[href="/project/10000121"]').click();
 
         // check template preview        
         cy.get('[data-test=preview-htb]').click();
@@ -26,7 +26,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
 
         // check change link
         cy.get('a[data-test=equalities-impact-assessment]').click();
-        cy.get('[data-test=header]').should($el => expect($el.text().trim()).to.equal(`Bristol And South Gloucestershire Utc\n                            \n                            Has an Equalities Impact Assessment been considered?`));
+        cy.get('[data-test=header]').should($el => expect($el.text().trim()).to.contains(`Has an Equalities Impact Assessment been considered?`));
     });
 
     it('Should save no', () => {
@@ -38,7 +38,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
         cy.get('p[data-test=equalities-impact-assessment]').should($el => expect($el.text()).to.equal('No'));
 
         // back to task list
-        cy.get('[href="/project/10002121"]').click();
+        cy.get('[href="/project/10000121"]').click();
 
         // check template preview        
         cy.get('[data-test=preview-htb]').click();

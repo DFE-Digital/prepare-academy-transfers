@@ -90,7 +90,7 @@ describe("Creating and editing an academy transfer", { tags: '@dev'}, function (
         cy.get('.govuk-button').should('contain.text', 'Continue').click();
 
         cy.get("h1").should('contain.text', "What is the incoming trust name?");
-        cy.get("[name='query']").clear().type("burnt")
+        cy.get("[name='query']").click().type("burnt")
         cy.get('.govuk-button').should('contain.text', 'Search').click();
 
         cy.get("h1").should('contain.text', "Select the incoming trust");
