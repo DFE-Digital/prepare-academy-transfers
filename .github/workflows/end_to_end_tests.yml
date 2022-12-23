@@ -2,7 +2,7 @@ name: End to end tests
 
 on:
   workflow_run:
-    workflows: [ "Test, build, and deploy" ]
+    workflows: [ "Test, build, and deploy", "Deploy to environment" ]
     types:
       - completed
 
@@ -12,13 +12,13 @@ env:
 
 jobs:
   run_tests:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.conclusion.inputs.environment != 'production' }}
     permissions:
       contents: read
       packages: read
 
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: ${{ github.event.workflow_run.conclusion.inputs.environment }}
     defaults:
       run:
         working-directory: end-to-end-tests
