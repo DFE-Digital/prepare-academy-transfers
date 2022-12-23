@@ -5,8 +5,17 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
         cy.storeSessionData();
     });
 
+    let fetchProjectsDev = ['10002480']
+    let fetchProjectsStage = ['10000121']
+    let url = Cypress.env('url')
+
     beforeEach(function () {
-        cy.visit(`${Cypress.env('url')}project/10002121/benefits`);
+        if (url.toString().includes('dev')) {
+            cy.visit(`${Cypress.env('url')}project/${fetchProjectsDev}/benefits`);
+        }
+        else {
+            cy.visit(`${Cypress.env('url')}project/${fetchProjectsStage}/benefits`);
+        }
     });
 
     it('Should save yes', () => {
@@ -18,7 +27,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
         cy.get('p[data-test=equalities-impact-assessment]').should($el => expect($el.text()).to.equal('Yes'));
 
         // back to task list
-        cy.get('[href="/project/10002121"]').click();
+        cy.get('.govuk-back-link').click();
 
         // check template preview        
         cy.get('[data-test=preview-htb]').click();
@@ -38,7 +47,7 @@ describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () 
         cy.get('p[data-test=equalities-impact-assessment]').should($el => expect($el.text()).to.equal('No'));
 
         // back to task list
-        cy.get('[href="/project/10002121"]').click();
+        cy.get('.govuk-back-link').click();
 
         // check template preview        
         cy.get('[data-test=preview-htb]').click();
