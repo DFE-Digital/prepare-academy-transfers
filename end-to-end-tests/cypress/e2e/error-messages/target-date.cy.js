@@ -7,6 +7,7 @@ describe('Tests to check target date error messages', { tags: '@dev'}, () => {
     it('Transfer date should be in the future', () => {
         cy.clickDataTest("create-transfer");
         cy.get('#SearchQuery').clear();
+        //search Trust
         cy.get('#SearchQuery').type('bu');
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
@@ -15,6 +16,7 @@ describe('Tests to check target date error messages', { tags: '@dev'}, () => {
         cy.selectCheckbox(0);
         cy.get('.govuk-button').click();
         cy.get('#SearchQuery').clear();
+        //search outgoing Trust
         cy.get('#SearchQuery').type('ts');
         cy.get('.govuk-button').click();
         cy.selectRadio(0);
