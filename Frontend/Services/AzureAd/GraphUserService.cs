@@ -18,20 +18,22 @@ namespace Frontend.Services.AzureAd
 			_azureAdOptions = azureAdOptions.Value;
 		}
 
-		public async Task<IEnumerable<Microsoft.Graph.User>> GetAllUsers()
+		public async Task<IEnumerable<User>> GetAllUsers()
 		{
-			var users = new List<Microsoft.Graph.User>();
-			IGroupMembersCollectionWithReferencesPage members;
-
-			do
+			var users = new List<User>();
+			var queryOptions = new List<QueryOption>()
 			{
-				members = await _client.Groups[_azureAdOptions.GroupId.ToString()].Members
-					.Request()
-					.GetAsync();
+				new QueryOption("$count", "true"),
+				new QueryOption("$top", "999")
+			};
 
-				users.AddRange(members.Cast<Microsoft.Graph.User>().ToList());
-			}
-			while (members.NextPageRequest != null);
+			var members = await _client.Groups[_azureAdOptions.GroupId.ToString()].Members
+				.Request(queryOptions)
+				.Header("ConsistencyLevel", "eventual")
+				.Select("givenName,surname,id,mail")
+				.GetAsync();
+
+			users.AddRange(members.Cast<User>().ToList());
 
 			return users;
 		}
