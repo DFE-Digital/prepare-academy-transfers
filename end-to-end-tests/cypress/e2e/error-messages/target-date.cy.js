@@ -5,7 +5,7 @@ describe('Tests to check target date error messages', { tags: '@dev'}, () => {
 
     beforeEach(function () {
         cy.login();
-        cy.get('[data-test=cookie-banner-accept]').click();
+        //cy.get('[data-test=cookie-banner-accept]').click();
     });
 
     it('Transfer date should be in the future', () => {
