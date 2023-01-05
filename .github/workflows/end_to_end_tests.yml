@@ -37,6 +37,11 @@ jobs:
       
       #      - name: Verify logs
       #        run: docker logs "${{ job.services.web-app.id }}"
+      - name: debug1
+        run: echo LAST_RUN_ENV - ${{ github.event.workflow_run.conclusion.inputs.environment }}
+
+      - name: debug2
+        run: echo ENV_TERNARY - ${{ github.event.workflow_run.conclusion.inputs.environment == 'staging' && 'Staging' || 'Dev' }}
 
       - name: Run tests
         run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
