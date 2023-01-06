@@ -1,4 +1,7 @@
 @page
+@using Microsoft.Extensions.Configuration
+
+@inject IConfiguration _configuration
 
 @{
     ViewData["Title"] = "Accessibility statement for the Manage an academy transfer website";
@@ -37,7 +40,7 @@
 		</p>
 		<ul class="govuk-list govuk-list--bullet">
 			<li>
-				email <a class="govuk-link" href="mailto:regionalservices.rg@education.gov.uk?subject=Prepare conversions and transfers support">regionalservices.rg@education.gov.uk</a>
+				email <a class="govuk-link" href="mailto:@_configuration["SupportEmail"]?subject=Prepare%20conversions%20and%20transfers:%20support%20query">@_configuration["SupportEmail"]</a>
 			</li>
 			<li>call 0370 000 2288 </li>
 		</ul>
@@ -47,7 +50,7 @@
 
 		<h2 class="govuk-heading-l">Reporting accessibility problems with this website</h2>
 		<p class="govuk-body">
-			We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, email us at: <a class="govuk-link" href="mailto:regionalservices.rg@education.gov.uk?subject=Prepare conversions and transfers support">regionalservices.rg@education.gov.uk</a>.
+			We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, email us at: <a class="govuk-link" href="mailto:@_configuration["SupportEmail"]?subject=Prepare%20conversions%20and%20transfers:%20support%20query">@_configuration["SupportEmail"]</a>.
 		</p>
 
 		<h2 class="govuk-heading-l">Enforcement procedure</h2>
