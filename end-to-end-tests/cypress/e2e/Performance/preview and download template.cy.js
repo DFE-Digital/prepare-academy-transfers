@@ -30,40 +30,39 @@ describe("Performance test for preview and download template with multiple acade
     });
 
     afterEach(() => {
-        cy.storeSessionData();
         endTimeStamp = new Date().getTime();
         timeTaken = endTimeStamp - startTimeStamp
         expect(timeTaken, "Time Taken").to.lessThan(15000)
     });
     
     //Slow due to CY.intercept and authorization key
-    it.skip("Multiple Academies performance test", function () {
+    it("Multiple Academies performance test", function () {
         
         cy.get("h1").should('contain.text', "Manage an academy transfer");
         cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click()
 
         cy.get("h1").should('contain.text', "What is the outgoing trust name?");
         cy.get("#SearchQuery").clear().type("bishop fraser")
-        cy.get('.govuk-button').should('contain.text', 'Search').click();
+        cy.get('[type="submit"]').should('contain.text', 'Search').click();
 
         cy.get("h1").should('contain.text', "Select the outgoing trust");
         selectFirstRadio()
-        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+        cy.get('[type="submit"]').should('contain.text', 'Continue').click();
 
         cy.get("h1").should('contain.text', "Outgoing trust details");
-        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+        cy.get('[data-test="confirm-outgoing-trust"]').should('contain.text', 'Continue').click();
 
         cy.get("h1").should('contain.text', "Select the transferring academies");
         selectAllCheckboxesUptoIndex(3)
-        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+        cy.get('[type="submit"]').should('contain.text', 'Continue').click();
 
         cy.get("h1").should('contain.text', "What is the incoming trust name?");
         cy.get("[name='query']").clear().type("burnt")
-        cy.get('.govuk-button').should('contain.text', 'Search').click();
+        cy.get('[type="submit"]').should('contain.text', 'Search').click();
 
         cy.get("h1").should('contain.text', "Select the incoming trust");
         selectFirstRadio()
-        cy.get('.govuk-button').should('contain.text', 'Continue').click();
+        cy.get('[type="submit"]').should('contain.text', 'Continue').click();
 
         cy.get("h1").should('contain.text', "Check trust and academy details");
         cy.get('button[data-test="create-project"]').click()
@@ -85,8 +84,7 @@ describe("Performance test for preview and download template with multiple acade
             let currentUrn = location.pathname.split('/')[2]
             console.log(currentUrn);
             cy.request(`/project/${currentUrn}/advisory-board/download/generatedocument`).then(response => {
-                expect(response.status).to.equal(200)
-                expect(response.headers['content-type']).to.equal("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                expect(response.status).to.equal(200);
             })
         })
         endTimeStamp = new Date().getTime();

@@ -7,10 +7,6 @@ describe('Landing Page', { tags: '@dev'}, () => {
         cy.visit(url)
     })
 
-    afterEach(() => {
-        cy.storeSessionData()
-    })
-
     after(function () {
         cy.clearLocalStorage()
     })
