@@ -1,8 +1,4 @@
 describe('Tests to check advisory board date error messages', { tags: '@dev'}, () => {
-    afterEach(() => {
-        cy.storeSessionData();
-    });
-
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

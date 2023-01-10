@@ -2,10 +2,6 @@ let outgoingTrustId = '10059580';
 let incomingTrustId = '10060470';
 
 describe('Select multiple academies', { tags: '@dev'},  () => {
-    afterEach(() => {
-        cy.storeSessionData();
-    });
-
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

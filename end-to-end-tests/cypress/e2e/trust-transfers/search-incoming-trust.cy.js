@@ -1,10 +1,6 @@
 let trustId = '10060470';
 
 describe('Tests to check search incoming trust error message', { tags: '@dev'}, () => {
-    afterEach(() => {
-        cy.storeSessionData();
-    });
-
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

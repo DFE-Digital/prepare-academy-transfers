@@ -1,10 +1,6 @@
 /// <reference types ='Cypress'/>
 
 describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () => {
-    afterEach(() => {
-        cy.storeSessionData();
-    });
-
     let fetchProjectsDev = ['10002480']
     let fetchProjectsStage = ['10000121']
     let url = Cypress.env('url')
