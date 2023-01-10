@@ -1,7 +1,6 @@
 ﻿@page "/project-type"
 @using Frontend.ExtensionMethods
 @using Frontend.Helpers.TagHelpers
-@using Frontend.Utils
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Frontend.Pages.ProjectType.IndexModel
 @{
@@ -38,7 +37,7 @@
             </div>
         </fieldset>
     </div>
-    <button class="govuk-button" data-module="govuk-button" id="submit-btn" @Select.Common.SubmitButton.ToData("cy")>
+    <button class="govuk-button" data-module="govuk-button" id="submit-btn" data-cy="select-common-submitbutton">
         Continue
     </button>
 </form>

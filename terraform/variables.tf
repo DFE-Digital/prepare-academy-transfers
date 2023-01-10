@@ -93,6 +93,11 @@ variable app_support_email {
 	description = "email address for support"
 }
 
+variable app_templatefeedback {
+   type = string
+   description = "Feedback form URL displayed on download template page"
+}
+
 ## ========================================================================== ##
 #  Locals					                                                   #
 ## ========================================================================== ##
