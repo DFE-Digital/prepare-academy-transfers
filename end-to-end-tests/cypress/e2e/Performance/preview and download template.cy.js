@@ -35,9 +35,13 @@ describe("Performance test for preview and download template with multiple acade
         expect(timeTaken, "Time Taken").to.lessThan(15000)
     });
     
-    //Slow due to CY.intercept and authorization key
     it("Multiple Academies performance test", function () {
-        
+        //Log the test run environment
+        cy.url().then((url) => {
+            cy.log('Tests running on env.: ' + url)
+        })
+
+        //Start a new transfer
         cy.get("h1").should('contain.text', "Manage an academy transfer");
         cy.get('.govuk-button--start').should('contain.text', 'Start a new transfer project').click()
 
