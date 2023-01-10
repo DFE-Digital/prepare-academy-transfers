@@ -29,6 +29,7 @@ resource cloudfoundry_app worker_app {
 		"AzureAd__GroupId"         = var.app_azuread_groupid
 		"CypressTestSecret"        = var.app_cypresstest_secret
 		"SupportEmail"             = var.app_support_email
+      "TemplateFeedback"         = var.app_templatefeedback
 	}
 }
 

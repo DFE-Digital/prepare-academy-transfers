@@ -81,6 +81,7 @@ jobs:
           TF_VAR_app_azuread_groupid: ${{ secrets.AZUREAD_GROUPID }}
           TF_VAR_app_cypresstest_secret : ${{ secrets.CYPRESS_TEST_SECRET }}
           TF_VAR_app_support_email: ${{ secrets.SUPPORT_EMAIL }}
+          TF_VAR_app_templatefeedback: ${{ secrets.TEMPLATEFEEDBACK }}
 
   run_tests:
     needs: terraform-apply
