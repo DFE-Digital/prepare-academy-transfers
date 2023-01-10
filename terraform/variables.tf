@@ -93,6 +93,11 @@ variable app_support_email {
 	description = "email address for support"
 }
 
+variable app_accessrequest {
+   type = string
+   description = "URL to the form used to request access to the service"
+}
+
 variable app_templatefeedback {
    type = string
    description = "Feedback form URL displayed on download template page"
