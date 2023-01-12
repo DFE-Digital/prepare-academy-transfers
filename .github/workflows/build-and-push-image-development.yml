@@ -42,11 +42,6 @@ jobs:
           push: true
           tags: ${{ steps.prepare-tags.outputs.tags }}
 
-  deploy-image:
-    needs: build-and-push-image-development
-    runs-on: ubuntu-22.04
-    environment: Dev
-    steps:
       - name: Azure login with ACA credentials
         uses: azure/login@v1
         with:
