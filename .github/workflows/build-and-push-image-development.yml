@@ -26,11 +26,8 @@ jobs:
         run: |
           DOCKER_IMAGE=${{ secrets.DEVELOPMENT_AZURE_ACR_URL }}/acatran-app
           VERSION=dev-`date +%Y-%m-%d`.${{ github.run_number }}
-          TAGS="${DOCKER_IMAGE}:${VERSION}"
-          if [ "${{ github.event_name }}" = "push" ]; then
-            VERSION=sha-${GITHUB_SHA}
-            TAGS="$TAGS,${DOCKER_IMAGE}:${VERSION}"
-          fi
+          SHA=sha-${GITHUB_SHA}
+          TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:${SHA}"
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo "deploy-version=${VERSION}" >> $GITHUB_OUTPUT
 
