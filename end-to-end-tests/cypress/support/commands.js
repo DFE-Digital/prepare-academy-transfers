@@ -239,3 +239,15 @@ Cypress.Commands.add('assignUser', () => {
         }
     });
 });
+
+// Check accessibility
+Cypress.Commands.add('excuteAccessibilityTests', (wcagStandards, continueOnFail, impactLevel) => {
+    cy.injectAxe();
+    cy.checkA11y(null, {
+        runOnly: {
+            type: 'tag',
+            values: wcagStandards
+        },
+        includedImpacts: impactLevel
+    }, null, continueOnFail);
+})

@@ -38,3 +38,4 @@ beforeEach(() => {
 require('cypress-grep')()
 
 // ***********************************************************
+import 'cypress-axe'
