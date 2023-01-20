@@ -75,9 +75,9 @@ public static class Links
 
 public class LinkItem
 {
-   public string PageName { get; set; }
-   public string BackText { get; set; }
-   public string Urn { get; set; }
+   public string PageName { get; init; }
+   public string BackText { get; init; }
+   public string Urn { get; init; }
 
    public LinkItem For(string urn)
    {
