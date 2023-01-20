@@ -49,6 +49,7 @@
     <EmbeddedResource Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Shared\_DynamicBackLink.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Benefits\OtherFactors.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Features\Type.cshtml" />
     <_ContentIncludedByDefault Remove="Views\HeadteacherBoard\Download.cshtml" />
@@ -57,5 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\EducationPerformance\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Shared\_DynamicBackLink.cshtml" />
   </ItemGroup>
 </Project>
