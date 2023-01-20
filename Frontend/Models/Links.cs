@@ -8,8 +8,6 @@ public static class Links
 {
    private static readonly IDictionary<string, LinkItem> LinkCache = new ConcurrentDictionary<string, LinkItem>();
 
-   public static readonly LinkItem CookiePreferences = Create(page: "/CookiePreferences");
-
    private static LinkItem Create(string page, string text = "Back")
    {
       var item = new LinkItem { PageName = page, BackText = text };
@@ -22,6 +20,11 @@ public static class Links
       if (string.IsNullOrWhiteSpace(page)) return default;
 
       return LinkCache.ContainsKey(page) ? LinkCache[page] : default;
+   }
+
+   public static class Global
+   {
+      public static readonly LinkItem CookiePreferences = Create(page: "/CookiePreferences");
    }
 
    public static class HeadteacherBoard
