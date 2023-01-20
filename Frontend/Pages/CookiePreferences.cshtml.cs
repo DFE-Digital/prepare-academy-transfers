@@ -47,7 +47,7 @@ namespace Frontend.Pages
                     return Redirect(returnUrl);
                 }
 
-                return RedirectToPage(Links.CookiePreferences);
+                return RedirectToPage(Links.Global.CookiePreferences);
             }
 
             return Page();

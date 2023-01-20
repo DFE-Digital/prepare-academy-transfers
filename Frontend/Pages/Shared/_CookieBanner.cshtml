@@ -9,15 +9,15 @@
 			<div class="app-cookie-banner__container" id="cookieActionsContainer">
 				<p class="govuk-body">
 					We use cookies to
-					<a class="govuk-link" data-test="cookie-banner-link-1" asp-page="@Links.CookiePreferences.PageName">collect information</a>
+					<a class="govuk-link" data-test="cookie-banner-link-1" asp-page="@Links.Global.CookiePreferences.PageName">collect information</a>
 					about how you use the <a asp-page="@Links.ProjectList.Index.PageName" data-test="cookie-banner-transfer-link">transfers part of our service.</a>
 				</p>
 				<div>
-					<a role="button" draggable="false" data-test="cookie-banner-accept" class="govuk-button govuk-!-margin-bottom-2" asp-page="@Links.CookiePreferences.PageName" asp-route-consent="true" asp-route-returnUrl="@Context.Request.Path">
+					<a role="button" draggable="false" data-test="cookie-banner-accept" class="govuk-button govuk-!-margin-bottom-2" asp-page="@Links.Global.CookiePreferences.PageName" asp-route-consent="true" asp-route-returnUrl="@Context.Request.Path">
 						Accept cookies for the transfers part of this service
 					</a>
 					<p class="inline-message govuk-body">
-						or <a class="govuk-link" data-test="cookie-banner-link-2" asp-page="@(Links.CookiePreferences.PageName)" asp-route-returnUrl="@Context.Request.Path">set your cookie preferences</a>
+						or <a class="govuk-link" data-test="cookie-banner-link-2" asp-page="@(Links.Global.CookiePreferences.PageName)" asp-route-returnUrl="@Context.Request.Path">set your cookie preferences</a>
 					</p>
 				</div>
 			</div>

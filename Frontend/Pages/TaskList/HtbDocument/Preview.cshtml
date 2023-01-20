@@ -1,7 +1,5 @@
 @page "/project/{urn}/advisory-board/preview"
 @using Frontend.Helpers
-@using Data.Models
-@using Data.Models.KeyStagePerformance
 @model Frontend.Pages.TaskList.HtbDocument.Preview
 
 @{
@@ -11,7 +9,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
+   <partial name="_DynamicBackLink" model="@Links.Project.Index.For(Model.Urn)"></partial>
 }
 
 <div class="govuk-grid-row">
@@ -187,15 +185,17 @@
         <p class="govuk-body govuk-!-margin-bottom-6">
             Generate the project template into a Word document and download it.
         </p>
-        <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
-            <div class="govuk-button-group">
-                <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
-                <p class="govuk-body">
-                    <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
-                        Save and return to this project later
-                    </a>
-                </p>
-            </div>
-        </form>
+       <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+          <input type="hidden" name="bl" value="@Links.HeadteacherBoard.Preview.PageName" />
+          <input type="hidden" name="u" value="@Model.Urn" />
+          <div class="govuk-button-group">
+             <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
+             <p class="govuk-body">
+                <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
+                   Save and return to this project later
+                </a>
+             </p>
+          </div>
+       </form>
     </div>
 </div>
