@@ -68,3 +68,8 @@ variable "enable_cdn_frontdoor" {
   description = "Set to true to create a CDN"
   type        = bool
 }
+
+variable "cdn_frontdoor_enable_rate_limiting" {
+  description = "Enable CDN Front Door Rate Limiting. This will create a WAF policy, and CDN security policy. For pricing reasons, there will only be one WAF policy created."
+  type        = bool
+}
