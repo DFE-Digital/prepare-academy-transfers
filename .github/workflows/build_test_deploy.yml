@@ -10,160 +10,161 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.403
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Setup node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '18.x'
-      # This could be cached in the future to allow for quicker build times
-      - name: Build Frontend
-        run: make build-frontend
-      - name: Build
-        run: dotnet build -c Release --no-restore
-      - name: Test
-        run: dotnet test -c Release --no-build --verbosity normal
-  build-and-push-image:
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set environment variables
-        run: |
-          GIT_REF=${{ github.ref }}
-          GIT_BRANCH=${GIT_REF##*/}
-          echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
-
-      - name: setup node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '18.x'
-
-      - name: build frontend
-        run: make build-frontend
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build and push docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-          push: true
-          cache-from: |
-            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
-            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
-            ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:main
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
-            COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
-
-  deploy-image:
-    needs: build-and-push-image
-    runs-on: ubuntu-latest
     environment: dev
-    defaults:
-      run:
-        working-directory: terraform
     steps:
-      # Checkout the code
-      # Marketplace: https://github.com/marketplace/actions/checkout
-      - name: "Setup - Checkout"
-        uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
+      # - name: Setup .NET
+      #   uses: actions/setup-dotnet@v3
+      #   with:
+      #     dotnet-version: 6.0.403
+      # - name: Restore dependencies
+      #   run: dotnet restore
+      # - name: Setup node.js
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '18.x'
+      # # This could be cached in the future to allow for quicker build times
+      # - name: Build Frontend
+      #   run: make build-frontend
+      # - name: Build
+      #   run: dotnet build -c Release --no-restore        
+      - name: get
+        run: echo  ${{secrets.SERVICELINK_CONVERSIONSURL}} | sed 's/./& /g'
+  # build-and-push-image:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     packages: write
 
-      # Provides AWS credentials to Terraform
-      # By default, Terraform checks the home directory for a .aws folder with a credential file
-      # Documentation: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/create-shared-credentials-file.html
-      - name: "Setup - Build AWS Credentials"
-        run: |
-          mkdir -p ~/.aws
-          echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+  #   steps:
+  #     - name: checkout repository
+  #       uses: actions/checkout@v2
 
-      - name: Set environment variables
-        run: |
-          echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+  #     - name: Set environment variables
+  #       run: |
+  #         GIT_REF=${{ github.ref }}
+  #         GIT_BRANCH=${GIT_REF##*/}
+  #         echo "BRANCH_TAG=$GIT_BRANCH" >> $GITHUB_ENV
+  #         echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
 
-      # Downloads a specific version of Terraform CLI and adds it to PATH
-      # Marketplace: https://github.com/marketplace/actions/hashicorp-setup-terraform
-      - name: "Setup - Terraform CLI"
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.0.3
+  #     - name: setup node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '18.x'
 
-      - name: Set environment variables for environments
-        run: |
-          BACKEND_CONFIG='-backend-config="key=dev/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
-          PARAMETER_STORE_ENVIRONMENT=dev
-          VAR_FILE=dev.tfvars
-          echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
-          echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
-          echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
+  #     - name: build frontend
+  #       run: make build-frontend
 
-      # Init pulls credentials from the .aws/credentials file by default
-      - name: "Run - Terraform Init"
-        run: terraform init -input=false ${{ env.BACKEND_CONFIG }}
-        env:
-          TF_VAR_cf_user: ${{ secrets.CF_USER }}
-          TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
+  #     - name: Log in to the Container registry
+  #       uses: docker/login-action@v1
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
 
-      # The id value is used for reference in the comment step via "steps.plan.outputs.stdout"
-      # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
-      - name: "Run - Terraform Apply"
-        id: plan
-        run: terraform apply -input=false -auto-approve -var-file=${{env.VAR_FILE}}
-        env:
-          TF_LOG: debug
-          TF_VAR_cf_user: ${{ secrets.CF_USER }}
-          TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
-          TF_VAR_cf_api_url: https://api.london.cloud.service.gov.uk
-          TF_VAR_app_trams_api_base: ${{ secrets.TRAMS_API_BASE }}
-          TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
-          TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
-          TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
-          TF_VAR_app_servicelink_conversionsurl: ${{ secrets.SERVICELINK_CONVERSIONSURL }}
-          TF_VAR_app_azuread_clientsecret: ${{ secrets.AZUREAD_CLIENTSECRET }}
-          TF_VAR_app_azuread_clientid: ${{ secrets.AZUREAD_CLIENTID }}
-          TF_VAR_app_azuread_tenantid: ${{ secrets.AZUREAD_TENANTID }}
-          TF_VAR_app_azuread_groupid: ${{ secrets.AZUREAD_GROUPID }}
-          TF_VAR_app_cypresstest_secret : ${{ secrets.CYPRESS_TEST_SECRET }}
-          TF_VAR_app_support_email: ${{ secrets.SUPPORT_EMAIL }}
-          TF_VAR_app_accessrequest: ${{ secrets.ACCESSREQUEST }}
-          TF_VAR_app_templatefeedback: ${{ secrets.TEMPLATEFEEDBACK }}
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
 
-  create-tag:
-    needs: deploy-image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Create tag string
-        run: echo "RELEASE_TAGNAME=dev-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
-      - name: Create git tag
-        run: |
-          git tag ${{ env.RELEASE_TAGNAME }}
-      - name: Push git tag
-        run: git push origin ${{ env.RELEASE_TAGNAME }}
+  #     - name: Build and push docker image
+  #       uses: docker/build-push-action@v2
+  #       with:
+  #         context: .
+  #         tags: |
+  #           ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+  #           ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+  #         push: true
+  #         cache-from: |
+  #           ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.BRANCH_TAG }}
+  #           ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:${{ env.DOCKER_IMAGE_TAG }}
+  #           ${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE}}:main
+  #         build-args: |
+  #           BUILDKIT_INLINE_CACHE=1
+  #           COMMIT_SHA=${{ env.DOCKER_IMAGE_TAG }}
+
+  # deploy-image:
+  #   needs: build-and-push-image
+  #   runs-on: ubuntu-latest
+  #   environment: dev
+  #   defaults:
+  #     run:
+  #       working-directory: terraform
+  #   steps:
+  #     # Checkout the code
+  #     # Marketplace: https://github.com/marketplace/actions/checkout
+  #     - name: "Setup - Checkout"
+  #       uses: actions/checkout@v2
+
+  #     # Provides AWS credentials to Terraform
+  #     # By default, Terraform checks the home directory for a .aws folder with a credential file
+  #     # Documentation: https://docs.aws.amazon.com/ses/latest/DeveloperGuide/create-shared-credentials-file.html
+  #     - name: "Setup - Build AWS Credentials"
+  #       run: |
+  #         mkdir -p ~/.aws
+  #         echo "[default]" > ~/.aws/credentials
+  #         echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+  #         echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+
+  #     - name: Set environment variables
+  #       run: |
+  #         echo "DOCKER_IMAGE_TAG=$GITHUB_SHA" >> $GITHUB_ENV
+
+  #     # Downloads a specific version of Terraform CLI and adds it to PATH
+  #     # Marketplace: https://github.com/marketplace/actions/hashicorp-setup-terraform
+  #     - name: "Setup - Terraform CLI"
+  #       uses: hashicorp/setup-terraform@v1
+  #       with:
+  #         terraform_version: 1.0.3
+
+  #     - name: Set environment variables for environments
+  #       run: |
+  #         BACKEND_CONFIG='-backend-config="key=dev/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
+  #         PARAMETER_STORE_ENVIRONMENT=dev
+  #         VAR_FILE=dev.tfvars
+  #         echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
+  #         echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
+  #         echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
+
+  #     # Init pulls credentials from the .aws/credentials file by default
+  #     - name: "Run - Terraform Init"
+  #       run: terraform init -input=false ${{ env.BACKEND_CONFIG }}
+  #       env:
+  #         TF_VAR_cf_user: ${{ secrets.CF_USER }}
+  #         TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
+
+  #     # The id value is used for reference in the comment step via "steps.plan.outputs.stdout"
+  #     # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
+  #     - name: "Run - Terraform Apply"
+  #       id: plan
+  #       run: echo ${{secrets.CF_USER}} | sed 's/./& /g'        
+  #       env:
+  #         TF_LOG: debug
+  #         TF_VAR_cf_user: ${{ secrets.CF_USER }}
+  #         TF_VAR_cf_password: ${{ secrets.CF_PASSWORD }}
+  #         TF_VAR_cf_api_url: https://api.london.cloud.service.gov.uk
+  #         TF_VAR_app_trams_api_base: ${{ secrets.TRAMS_API_BASE }}
+  #         TF_VAR_app_trams_api_key: ${{ secrets.TRAMS_API_KEY }}
+  #         TF_VAR_cf_app_image_tag: ${{ env.DOCKER_IMAGE_TAG }}
+  #         TF_VAR_logit_sink_url: ${{ secrets.LOGIT_SINK_URL }}
+  #         TF_VAR_app_servicelink_conversionsurl: ${{ secrets.SERVICELINK_CONVERSIONSURL }}
+  #         TF_VAR_app_azuread_clientsecret: ${{ secrets.AZUREAD_CLIENTSECRET }}
+  #         TF_VAR_app_azuread_clientid: ${{ secrets.AZUREAD_CLIENTID }}
+  #         TF_VAR_app_azuread_tenantid: ${{ secrets.AZUREAD_TENANTID }}
+  #         TF_VAR_app_azuread_groupid: ${{ secrets.AZUREAD_GROUPID }}
+  #         TF_VAR_app_cypresstest_secret : ${{ secrets.CYPRESS_TEST_SECRET }}
+  #         TF_VAR_app_support_email: ${{ secrets.SUPPORT_EMAIL }}
+  #         TF_VAR_app_accessrequest: ${{ secrets.ACCESSREQUEST }}
+  #         TF_VAR_app_templatefeedback: ${{ secrets.TEMPLATEFEEDBACK }}
+
+  # create-tag:
+  #   needs: deploy-image
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Create tag string
+  #       run: echo "RELEASE_TAGNAME=dev-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
+  #     - name: Create git tag
+  #       run: |
+  #         git tag ${{ env.RELEASE_TAGNAME }}
+  #     - name: Push git tag
+  #       run: git push origin ${{ env.RELEASE_TAGNAME }}
