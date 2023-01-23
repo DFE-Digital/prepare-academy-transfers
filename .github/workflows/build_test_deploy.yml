@@ -2,7 +2,7 @@ name: Test, build, and deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev-2023-01-12.421 ]
 env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE: dfe-digital/academy-transfers-api
