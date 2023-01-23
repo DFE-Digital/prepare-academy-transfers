@@ -18,7 +18,7 @@ To get the Frontend project running you will require:
 - .NET
     - `dotnet restore`
 - Node
-    - `make build-frontend` or 
+    - `make build-frontend` or
       - `cd` to `Frontend/wwwroot`
       - run `npm install`
       - run `npm run build`
@@ -47,7 +47,7 @@ When running Redis locally, you may find it easier to run inside docker, this ca
 
 `docker run -p 6379:6379 --name redis -d redis`
 
-By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server 
+By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server
 (without SSL) hosted on `localhost:6379` with an optional password of `password`.
 
 ## Authentication and Authorisation
@@ -146,7 +146,7 @@ Further details about Cypress can be found here: https://docs.cypress.io/api/tab
 To run tests with multiple tags in a list:
 
 ```
-i.e., greTags=@dev+@stage 
+i.e., greTags=@dev+@stage
 ```
 
 To run tests including multiple tags independently targeting individual tags:
@@ -155,5 +155,5 @@ To run tests including multiple tags independently targeting individual tags:
 i.e., grepTags=@dev,grepTags=@stage
 ```
 
-Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep 
+Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep
 cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changelog
