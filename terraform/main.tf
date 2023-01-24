@@ -2,7 +2,7 @@ resource cloudfoundry_app worker_app {
 	name               = local.web_app_name
 	space              = data.cloudfoundry_space.space.id
 	docker_image       = local.docker_image
-	strategy           = "blue-green-v3"
+	strategy           = "none"
 	service_binding {
 		service_instance = cloudfoundry_service_instance.redis.id
 	}
