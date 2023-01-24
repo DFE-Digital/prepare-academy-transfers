@@ -11,7 +11,7 @@ terraform {
 	aws = "~> 2.59"
 	cloudfoundry = {
 	  source  = "cloudfoundry-community/cloudfoundry"
-	  version = ">= 0.12.6"
+	  version = ">= 0.50.4"
 	}
   }
   ## ========================================================================== ##
