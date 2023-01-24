@@ -28,9 +28,7 @@ resource cloudfoundry_app worker_app {
 		"AzureAd__TenantId"        = var.app_azuread_tenantid
 		"AzureAd__GroupId"         = var.app_azuread_groupid
 		"CypressTestSecret"        = var.app_cypresstest_secret
-		"SupportEmail"             = var.app_support_email
-      "AccessRequest"            = var.app_accessrequest
-      "TemplateFeedback"         = var.app_templatefeedback
+		"SupportEmail"             = var.app_support_email      
 	}
 }
 
