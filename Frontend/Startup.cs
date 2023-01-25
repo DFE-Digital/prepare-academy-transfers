@@ -185,7 +185,7 @@ namespace Frontend
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Errors");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -194,6 +194,8 @@ namespace Frontend
                SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
                   .AddXssProtectionDisabled()
             );
+
+            app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
 
             if (!string.IsNullOrEmpty(Configuration["CI"]))
             {
