@@ -15,6 +15,7 @@
     <Content Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Errors\Index.cshtml" />
     <None Include="wwwroot\package-lock.json" />
     <None Include="wwwroot\package.json" />
     <None Include="wwwroot\src\**" />
