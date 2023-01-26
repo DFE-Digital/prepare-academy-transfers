@@ -1,3 +1,6 @@
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Data;
 using Data.Models;
 using Data.Models.KeyStagePerformance;
@@ -6,271 +9,217 @@ using Data.TRAMS.Mappers.Request;
 using Data.TRAMS.Mappers.Response;
 using Data.TRAMS.Models;
 using Data.TRAMS.Models.EducationPerformance;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using Frontend.Authorization;
+using Frontend.BackgroundServices;
+using Frontend.Options;
 using Frontend.Security;
 using Frontend.Services;
+using Frontend.Services.AzureAd;
 using Frontend.Services.Interfaces;
 using Frontend.Validators.Features;
 using Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json.Linq;
-using StackExchange.Redis;
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using FluentValidation;
-using Frontend.Authorization;
-using Frontend.BackgroundServices;
-using Frontend.Options;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Frontend.Services.AzureAd;
 
-namespace Frontend
+namespace Frontend;
+
+public class Startup
 {
-    public class Startup
-    {
-       public Startup(IConfiguration configuration)
-       {
-          Configuration = configuration;
-       }
+   private readonly TimeSpan _authenticationExpiration;
 
-        public IConfiguration Configuration { get; }
+   public Startup(IConfiguration configuration)
+   {
+      Configuration = configuration;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services
-                .AddRazorPages(options =>
-                {
-                    options.Conventions.AuthorizeFolder("/");
-                    options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
-                    options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
-                })
-                .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
+      _authenticationExpiration =
+         TimeSpan.FromMinutes(int.Parse(Configuration["AuthenticationExpirationInMinutes"] ?? "60"));
+   }
 
-            services.AddControllersWithViews(options => options.Filters.Add(
-                    new AutoValidateAntiforgeryTokenAttribute()))
-                .AddSessionStateTempDataProvider()
-                .AddMicrosoftIdentityUI();
+   private IConfiguration Configuration { get; }
+
+   private IConfigurationSection GetConfigurationSection<T>()
+   {
+      string sectionName = typeof(T).Name.Replace("Options", string.Empty);
+      return Configuration.GetRequiredSection(sectionName);
+   }
 
 
-            services.Configure<ServiceLinkOptions>(Configuration.GetSection(ServiceLinkOptions.Name));
+   // This method gets called by the runtime. Use this method to add services to the container.
+   public void ConfigureServices(IServiceCollection services)
+   {
+      services
+         .AddRazorPages(options =>
+         {
+            options.Conventions.AuthorizeFolder("/");
+            options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
+            options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
+         })
+         .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
 
-            services
-               .AddFluentValidationAutoValidation()
-               .AddFluentValidationClientsideAdapters()
-               .AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
+      services.AddControllersWithViews(options => options.Filters.Add(
+            new AutoValidateAntiforgeryTokenAttribute()))
+         .AddSessionStateTempDataProvider()
+         .AddMicrosoftIdentityUI();
 
-            ConfigureRedisConnection(services);
 
-            services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
-            services.Configure<AzureAdOptions>(Configuration.GetSection(AzureAdOptions.Name));
+      services.Configure<ServiceLinkOptions>(GetConfigurationSection<ServiceLinkOptions>());
 
-            AddServices(services, Configuration);
-        
-            var policyBuilder = SetupAuthorizationPolicyBuilder();
-            services.AddAuthorization(options => { options.DefaultPolicy = policyBuilder.Build(); });
-            services.AddSession(options =>
-            {
-                options.IdleTimeout =
-                    TimeSpan.FromMinutes(Int32.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-                if (string.IsNullOrEmpty(Configuration["CI"]))
-                {
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                }
-            });
-            services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
-            services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
-                options =>
-                {
-                    options.AccessDeniedPath = "/access-denied";
-                    options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.IsEssential = true;
-                    options.ExpireTimeSpan =
-                        TimeSpan.FromMinutes(int.Parse(Configuration["AuthenticationExpirationInMinutes"]));
-                    options.SlidingExpiration = true;
-                    if (string.IsNullOrEmpty(Configuration["CI"]))
-                    {
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    }
-                });
-            services.AddHealthChecks();
-        }
+      services
+         .AddFluentValidationAutoValidation()
+         .AddFluentValidationClientsideAdapters()
+         .AddValidatorsFromAssemblyContaining<FeaturesReasonValidator>();
 
-        /// <summary>
-        /// Builds Authorization policy
-        /// Ensure authenticated user and restrict roles if they are provided in configuration
-        /// </summary>
-        /// <returns>AuthorizationPolicyBuilder</returns>
-        private AuthorizationPolicyBuilder SetupAuthorizationPolicyBuilder()
-        {
-            var policyBuilder = new AuthorizationPolicyBuilder();
-            var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
-            policyBuilder.RequireAuthenticatedUser();
-            if (!string.IsNullOrWhiteSpace(allowedRoles))
-            {
-                policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
-            }
-            return policyBuilder;
-        }
+      services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
+      services.Configure<AzureAdOptions>(GetConfigurationSection<AzureAdOptions>());
 
-        private void ConfigureRedisConnection(IServiceCollection services)
-        {
-            var vcapServicesDefined = !string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]);
-            var redisUrlDefined = !string.IsNullOrEmpty(Configuration["REDIS_URL"]);
+      AddServices(services, Configuration);
 
-            if (!vcapServicesDefined && !redisUrlDefined)
-            {
-                return;
-            }
+      AuthorizationPolicyBuilder policyBuilder = SetupAuthorizationPolicyBuilder();
+      services.AddAuthorization(options => { options.DefaultPolicy = policyBuilder.Build(); });
 
-            var redisPass = "";
-            var redisHost = "";
-            var redisPort = "";
-            var redisTls = false;
+      services.AddSession(options =>
+      {
+         options.IdleTimeout = _authenticationExpiration;
+         options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
+         options.Cookie.HttpOnly = true;
+         options.Cookie.IsEssential = true;
+         if (string.IsNullOrEmpty(Configuration["CI"])) options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+      });
+      services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
+      services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
+         options =>
+         {
+            options.AccessDeniedPath = "/access-denied";
+            options.Cookie.Name = ".ManageAnAcademyTransfer.Login";
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+            options.ExpireTimeSpan = _authenticationExpiration;
+            options.SlidingExpiration = true;
+            if (string.IsNullOrEmpty(Configuration["CI"])) options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+         });
+      services.AddHealthChecks();
+   }
 
-            if (!string.IsNullOrEmpty(Configuration["VCAP_SERVICES"]))
-            {
-                var vcapConfiguration = JObject.Parse(Configuration["VCAP_SERVICES"]);
-                var redisCredentials = vcapConfiguration["redis"]?[0]?["credentials"];
-                redisPass = (string) redisCredentials?["password"];
-                redisHost = (string) redisCredentials?["host"];
-                redisPort = (string) redisCredentials?["port"];
-                redisTls = (bool) redisCredentials?["tls_enabled"];
-            }
-            else if (!string.IsNullOrEmpty(Configuration["REDIS_URL"]))
-            {
-                var redisUri = new Uri(Configuration["REDIS_URL"]);
-                redisPass = redisUri.UserInfo.Split(":")[1];
-                redisHost = redisUri.Host;
-                redisPort = redisUri.Port.ToString();
-            }
+   /// <summary>
+   ///    Builds Authorization policy
+   ///    Ensure authenticated user and restrict roles if they are provided in configuration
+   /// </summary>
+   /// <returns>AuthorizationPolicyBuilder</returns>
+   private AuthorizationPolicyBuilder SetupAuthorizationPolicyBuilder()
+   {
+      var policyBuilder = new AuthorizationPolicyBuilder();
+      var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
+      policyBuilder.RequireAuthenticatedUser();
+      if (!string.IsNullOrWhiteSpace(allowedRoles))
+         policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
+      return policyBuilder;
+   }
 
-            var redisConfigurationOptions = new ConfigurationOptions()
-            {
-                Password = redisPass,
-                EndPoints = {$"{redisHost}:{redisPort}"},
-                Ssl = redisTls
-            };
+   // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+   public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+   {
+      if (env.IsDevelopment())
+      {
+         app.UseDeveloperExceptionPage();
+      }
+      else
+      {
+         app.UseExceptionHandler("/Errors");
+         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+         app.UseHsts();
+      }
 
-            var redisConnection = ConnectionMultiplexer.Connect(redisConfigurationOptions);
+      app.UseSecurityHeaders(
+         SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
+            .AddXssProtectionDisabled()
+      );
 
-            services.AddStackExchangeRedisCache(
-                options => { options.ConfigurationOptions = redisConfigurationOptions; });
-            services.AddDataProtection().PersistKeysToStackExchangeRedis(redisConnection, "DataProtectionKeys");
-        }
+      app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Errors");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+      if (!string.IsNullOrEmpty(Configuration["CI"])) app.UseHttpsRedirection();
 
-            app.UseSecurityHeaders(
-               SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
-                  .AddXssProtectionDisabled()
-            );
+      //For Azure AD redirect uri to remain https
+      var forwardOptions = new ForwardedHeadersOptions
+      {
+         ForwardedHeaders = ForwardedHeaders.All,
+         RequireHeaderSymmetry = false
+      };
+      forwardOptions.KnownNetworks.Clear();
+      forwardOptions.KnownProxies.Clear();
+      app.UseForwardedHeaders(forwardOptions);
 
-            app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
+      app.UseStaticFiles();
 
-            if (!string.IsNullOrEmpty(Configuration["CI"]))
-            {
-                app.UseHttpsRedirection();
-            }
+      app.UseRouting();
 
-            //For Azure AD redirect uri to remain https
-            var forwardOptions = new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.All,
-                RequireHeaderSymmetry = false
-            };
-            forwardOptions.KnownNetworks.Clear();
-            forwardOptions.KnownProxies.Clear();
-            app.UseForwardedHeaders(forwardOptions);
+      app.UseSentryTracing();
 
-            app.UseStaticFiles();
+      app.UseAuthentication();
+      app.UseAuthorization();
 
-            app.UseRouting();
+      app.UseSession();
 
-            app.UseSentryTracing();
+      app.UseEndpoints(endpoints =>
+      {
+         endpoints.MapGet("/", context =>
+         {
+            context.Response.Redirect("project-type", false);
+            return Task.CompletedTask;
+         });
+         endpoints.MapRazorPages();
+         endpoints.MapControllerRoute("default", "{controller}/{action}/");
+         endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
+      });
+   }
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+   private static void AddServices(IServiceCollection services, IConfiguration configuration)
+   {
+      var tramsApiBase = configuration["TRAMS_API_BASE"];
+      var tramsApiKey = configuration["TRAMS_API_KEY"];
 
-            app.UseSession();
+      services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", context =>
-                {
-                    context.Response.Redirect("project-type", false);
-                    return Task.CompletedTask;
-                });
-                endpoints.MapRazorPages();
-                endpoints.MapControllerRoute("default", "{controller}/{action}/");
-                endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
-            });
-        }
+      services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
+      services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
+      services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
+      services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
+      services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+      services
+         .AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
+      services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
+      services.AddTransient<ITrusts, TramsTrustsRepository>();
+      services.AddTransient<IAcademies, TramsEstablishmentRepository>();
+      services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
+      services.AddTransient<IProjects, TramsProjectsRepository>();
+      services.AddTransient<ICreateProjectTemplate, CreateProjectTemplate>();
+      services.AddTransient<IGetInformationForProject, GetInformationForProject>();
+      services.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
+      services.AddTransient<ITaskListService, TaskListService>();
 
-        private static void AddServices(IServiceCollection services, IConfiguration configuration)
-        {
-            var tramsApiBase = configuration["TRAMS_API_BASE"];
-            var tramsApiKey = configuration["TRAMS_API_KEY"];
+      services.AddTransient<IUserRepository, UserRepository>();
+      services.AddTransient<IGraphClientFactory, GraphClientFactory>();
+      services.AddTransient<IGraphUserService, GraphUserService>();
 
-            services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
-           
-            services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
-            services.AddTransient<IMapper<TramsTrust, Trust>, TramsTrustMapper>();
-            services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
-            services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
-            services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
-            services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
-            services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
-            services.AddTransient<ITrusts, TramsTrustsRepository>();
-            services.AddTransient<IAcademies, TramsEstablishmentRepository>();
-            services.AddTransient<IEducationPerformance, TramsEducationPerformanceRepository>();
-            services.AddTransient<IProjects, TramsProjectsRepository>();
-            services.AddTransient<ICreateProjectTemplate, CreateProjectTemplate>();
-            services.AddTransient<IGetInformationForProject, GetInformationForProject>();
-            services.AddTransient<IGetProjectTemplateModel, GetProjectTemplateModel>();
-            services.AddTransient<ITaskListService, TaskListService>();
+      services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
+      services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
+      services.AddSingleton<PerformanceDataChannel>();
+      services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+      services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();
+      services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
 
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IGraphClientFactory, GraphClientFactory>();
-            services.AddTransient<IGraphUserService, GraphUserService>();
-
-            services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
-            services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
-            services.AddSingleton<PerformanceDataChannel>();
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();
-            services.AddSingleton<IAuthorizationHandler, ClaimsRequirementHandler>();
-            
-            services.AddHostedService<PerformanceDataProcessingService>();
-        }
-    }
+      services.AddHostedService<PerformanceDataProcessingService>();
+   }
 }
