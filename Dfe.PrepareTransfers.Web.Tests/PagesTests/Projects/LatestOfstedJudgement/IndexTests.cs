@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LatestOfstedJudgeme
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project =>
+                        r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project =>
                             project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn)
                                 .LatestOfstedReportAdditionalInformation
                             == _subject.AdditionalInformationViewModel.AdditionalInformation)),

@@ -12,9 +12,9 @@ RUN npm run build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /build
 
-COPY ./Data/ ./Data/
-COPY ./Data.TRAMS/ ./Data.TRAMS/
-COPY ./Data.Mock/ ./Data.Mock/
+COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
+COPY ./Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
+COPY ./Dfe.PrepareTransfers.Data.Mock/ ./Dfe.PrepareTransfers.Data.Mock/
 COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
 COPY ./Helpers/ ./Helpers/
 COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/

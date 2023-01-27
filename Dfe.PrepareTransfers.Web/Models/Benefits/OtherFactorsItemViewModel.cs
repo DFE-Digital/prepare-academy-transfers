@@ -1,4 +1,4 @@
-﻿using Data.Models.Projects;
+﻿using Dfe.PrepareTransfers.Data.Models.Projects;
 
 namespace Dfe.PrepareTransfers.Web.Models.Benefits
 {

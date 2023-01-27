@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Microsoft.AspNetCore.Html;
 
 namespace Dfe.PrepareTransfers.Web.Helpers

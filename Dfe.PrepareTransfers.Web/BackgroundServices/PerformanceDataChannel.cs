@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using Data.Models;
+using Dfe.PrepareTransfers.Data.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.PrepareTransfers.Web.BackgroundServices

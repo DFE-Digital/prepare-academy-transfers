@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Data.Models;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 
 namespace Dfe.PrepareTransfers.Web.Services.Responses
 {

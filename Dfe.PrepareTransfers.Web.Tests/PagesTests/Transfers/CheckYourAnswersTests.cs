@@ -1,5 +1,5 @@
-﻿using Data;
-using Data.Models;
+﻿using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Pages.Transfers;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Http;

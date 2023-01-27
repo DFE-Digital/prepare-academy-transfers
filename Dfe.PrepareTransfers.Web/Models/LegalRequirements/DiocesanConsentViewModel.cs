@@ -1,4 +1,4 @@
-﻿using Data.Models;
+﻿using Dfe.PrepareTransfers.Data.Models;
 
 namespace Dfe.PrepareTransfers.Web.Models.LegalRequirements
 {

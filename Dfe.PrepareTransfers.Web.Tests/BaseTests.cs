@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using AutoFixture;
-using Data;
-using Data.Models;
-using Data.Models.Projects;
-using Data.TRAMS;
+using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.TRAMS;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
 using Moq;

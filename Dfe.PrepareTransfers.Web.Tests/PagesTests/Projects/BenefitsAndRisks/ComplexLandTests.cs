@@ -1,5 +1,5 @@
-﻿using Data.Models;
-using Data.Models.Projects;
+﻿using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks;
 using Moq;
 using Xunit;

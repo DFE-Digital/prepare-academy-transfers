@@ -70,7 +70,7 @@ Full setup details can be found here: https://docs.microsoft.com/en-us/azure/act
 4. Group ids will be available in the `HttpContext.User.Claims`
 
 ## Model validation
-This project uses fluent validators to validate the view model as opposed to MVC Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
+This project uses fluent validators to validate the view model as opposed to MVC Dfe.PrepareTransfers.Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
 
 You will need to ensure you have ViewModel to hold the properties you will need to validate and to create a custom validator with an AbstractValidator<CustomViewModel> as it's base class.
 

@@ -1,9 +1,9 @@
-﻿using Data.Models;
-using Data.Models.Projects;
+﻿using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using System.Collections.Generic;
 using Xunit;
-using static Data.Models.Projects.TransferFeatures;
+using static Dfe.PrepareTransfers.Data.Models.Projects.TransferFeatures;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ModelTests
 {

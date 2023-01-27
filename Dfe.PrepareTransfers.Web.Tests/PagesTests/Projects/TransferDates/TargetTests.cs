@@ -41,7 +41,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             [Fact]
             public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
-                FoundProjectFromRepo.Dates = new Data.Models.Projects.TransferDates
+                FoundProjectFromRepo.Dates = new Dfe.PrepareTransfers.Data.Models.Projects.TransferDates
                 {
                     Target = "15/01/2020",
                     HasTargetDateForTransfer = true
@@ -120,7 +120,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project =>
+                        r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project =>
                             project.Dates.Target == _subject.TargetDateViewModel.TargetDate.DateInputAsString()
                             && project.Dates.HasTargetDateForTransfer ==
                             !_subject.TargetDateViewModel.TargetDate.UnknownDate)),

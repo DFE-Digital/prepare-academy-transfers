@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Data.Models;
-using Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.AcademyAndTrustInformation;
 using Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation;

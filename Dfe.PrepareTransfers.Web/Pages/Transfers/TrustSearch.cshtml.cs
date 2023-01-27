@@ -1,5 +1,5 @@
-using Data;
-using Data.Models;
+using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models;
 using FluentValidation.Results;
 using Dfe.PrepareTransfers.Web.Validators.Transfers;
 using Microsoft.AspNetCore.Mvc;

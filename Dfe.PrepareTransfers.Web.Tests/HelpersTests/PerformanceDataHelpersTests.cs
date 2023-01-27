@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Web.Helpers;
 using Microsoft.AspNetCore.Html;
 using Xunit;

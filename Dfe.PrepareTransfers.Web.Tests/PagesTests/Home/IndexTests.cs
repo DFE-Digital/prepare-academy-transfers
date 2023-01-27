@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Data;
-using Data.Models;
+using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Pages.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

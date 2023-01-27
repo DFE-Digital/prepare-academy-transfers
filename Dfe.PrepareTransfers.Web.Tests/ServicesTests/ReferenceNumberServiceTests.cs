@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Data.Models;
-using Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Microsoft.Extensions.Configuration;

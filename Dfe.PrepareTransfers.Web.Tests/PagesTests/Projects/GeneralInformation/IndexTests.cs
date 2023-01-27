@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
-using Data.Models;
+using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;

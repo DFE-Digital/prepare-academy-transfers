@@ -1,5 +1,5 @@
 ﻿using System;
-using Data.Models;
+using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 

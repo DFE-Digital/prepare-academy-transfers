@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Data;
-using Data.Models.Projects;
+using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 

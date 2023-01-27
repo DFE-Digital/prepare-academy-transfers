@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 
 namespace Dfe.PrepareTransfers.Web.Models.ProjectTemplate
 {

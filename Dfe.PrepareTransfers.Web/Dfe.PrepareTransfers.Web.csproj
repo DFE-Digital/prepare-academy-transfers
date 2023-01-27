@@ -23,9 +23,9 @@
     <None Remove="Models\EducationPerformance\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Data.Mock\Data.Mock.csproj" />
-    <ProjectReference Include="..\Data.TRAMS\Data.TRAMS.csproj" />
-    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Dfe.PrepareTransfers.Data.Mock\Dfe.PrepareTransfers.Data.Mock.csproj" />
+    <ProjectReference Include="..\Dfe.PrepareTransfers.Data.TRAMS\Dfe.PrepareTransfers.Data.TRAMS.csproj" />
+    <ProjectReference Include="..\Dfe.PrepareTransfers.Data\Dfe.PrepareTransfers.Data.csproj" />
     <ProjectReference Include="..\Dfe.PrepareTransfers.DocumentGeneration\Dfe.PrepareTransfers.DocumentGeneration.csproj" />
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>

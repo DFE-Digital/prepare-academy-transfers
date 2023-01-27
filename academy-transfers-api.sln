@@ -20,13 +20,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Docume
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.DocumentGeneration.Tests", "Dfe.PrepareTransfers.DocumentGeneration.Tests\Dfe.PrepareTransfers.DocumentGeneration.Tests.csproj", "{0EE8EA1E-A952-4671-9613-2D26D2459C16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data", "Dfe.PrepareTransfers.Data\Dfe.PrepareTransfers.Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Mock", "Data.Mock\Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.Mock", "Dfe.PrepareTransfers.Data.Mock\Dfe.PrepareTransfers.Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.TRAMS", "Data.TRAMS\Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.TRAMS", "Dfe.PrepareTransfers.Data.TRAMS\Dfe.PrepareTransfers.Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.TRAMS.Tests", "Data.TRAMS.Tests\Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.TRAMS.Tests", "Dfe.PrepareTransfers.Data.TRAMS.Tests\Dfe.PrepareTransfers.Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
 EndProject
@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Tests", "Helpers.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web.Integration.Tests", "Dfe.PrepareTransfers.Web.Integration.Tests\Dfe.PrepareTransfers.Web.Integration.Tests.csproj", "{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Tests", "Data.Tests\Data.Tests.csproj", "{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.Tests", "Dfe.PrepareTransfers.Data.Tests\Dfe.PrepareTransfers.Data.Tests.csproj", "{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using AutoFixture;
-using Data;
+using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Rationale;
 using Dfe.PrepareTransfers.Web.Pages.Projects.Rationale;
@@ -45,11 +45,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Rationale
             public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
                 var fixture = new Fixture();
-                var foundProject = fixture.Build<Data.Models.Project>()
+                var foundProject = fixture.Build<Dfe.PrepareTransfers.Data.Models.Project>()
                     .With(project => project.Urn, ProjectUrn0001).Create();
 
                 ProjectRepository.Setup(s => s.GetByUrn(It.IsAny<string>())).ReturnsAsync(
-                    new RepositoryResult<Data.Models.Project>
+                    new RepositoryResult<Dfe.PrepareTransfers.Data.Models.Project>
                     {
                         Result = foundProject
                     });
@@ -88,7 +88,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Rationale
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                    r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
                 
                 Assert.IsType<PageResult>(result);
             }
@@ -99,7 +99,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Rationale
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Trust == _subject.ViewModel.TrustOrSponsorRationale)),
+                        r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project => project.Rationale.Trust == _subject.ViewModel.TrustOrSponsorRationale)),
                     Times.Once);
             }
 

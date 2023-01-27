@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Data.Models;
-using Data.Models.Academies;
-using Data.Models.KeyStagePerformance;
-using Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Academies;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services.Responses;
 
 namespace Dfe.PrepareTransfers.Web.Tests.TestFixtures

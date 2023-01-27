@@ -1,4 +1,4 @@
-﻿using Data.Models.Projects;
+﻿using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements;
 using Dfe.PrepareTransfers.Web.Tests.Helpers;
 using Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LegalRequirements;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Data.Models;
+using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Models;
 using Xunit;
 

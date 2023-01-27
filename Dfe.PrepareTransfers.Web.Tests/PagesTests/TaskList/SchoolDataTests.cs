@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Data;
-using Data.Models;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Web.Pages.TaskList;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Moq;

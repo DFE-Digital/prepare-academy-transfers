@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Data;
+using Dfe.PrepareTransfers.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Dfe.PrepareTransfers.Web.Models;

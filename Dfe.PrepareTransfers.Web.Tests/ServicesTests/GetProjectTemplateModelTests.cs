@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Data.Models;
-using Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Web.Services;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Moq;

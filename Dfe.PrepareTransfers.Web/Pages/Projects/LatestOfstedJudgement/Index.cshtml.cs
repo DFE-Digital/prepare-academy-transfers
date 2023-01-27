@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Data;
+using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
@@ -13,7 +13,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public Data.Models.Academies.LatestOfstedJudgement LatestOfstedJudgement { get; set; }
+        public Dfe.PrepareTransfers.Data.Models.Academies.LatestOfstedJudgement LatestOfstedJudgement { get; set; }
 
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }

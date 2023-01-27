@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Data;
+using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Web.Helpers;
 using Dfe.PrepareTransfers.Web.Models;
 using Microsoft.AspNetCore.Mvc;

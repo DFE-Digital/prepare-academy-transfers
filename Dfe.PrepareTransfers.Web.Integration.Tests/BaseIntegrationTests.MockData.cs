@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Data.TRAMS.Models;
+using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures;
 
 namespace Dfe.PrepareTransfers.Web.Integration.Tests

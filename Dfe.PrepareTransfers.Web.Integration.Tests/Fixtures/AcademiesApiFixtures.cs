@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Data.Models.Projects;
-using Data.TRAMS.Models;
-using Data.TRAMS.Models.AcademyTransferProject;
-using Data.TRAMS.Models.EducationPerformance;
+using Dfe.PrepareTransfers.Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.TRAMS.Models;
+using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
+using Dfe.PrepareTransfers.Data.TRAMS.Models.EducationPerformance;
 
 namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
 {

@@ -229,7 +229,7 @@ describe("Creating and editing an academy transfer", { tags: '@dev'}, function (
         cy.get('.govuk-button').should('contain.text', 'Confirm and continue').click();
         cy.getDataTest("academyandtrustinformation").should('have.text', "COMPLETED");
 
-        // *** School Data ***
+        // *** School Dfe.PrepareTransfers.Data ***
         cy.clickDataTest("sd-academy-1")
         cy.clickBackLink()
         cy.clickDataTest("sd-academy-1")
