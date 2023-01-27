@@ -15,7 +15,7 @@ WORKDIR /build
 COPY ./Data/ ./Data/
 COPY ./Data.TRAMS/ ./Data.TRAMS/
 COPY ./Data.Mock/ ./Data.Mock/
-COPY ./DocumentGeneration/ ./DocumentGeneration/
+COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
 COPY ./Helpers/ ./Helpers/
 COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
 

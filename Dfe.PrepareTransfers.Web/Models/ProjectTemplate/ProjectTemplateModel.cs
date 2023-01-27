@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DocumentGeneration;
+using Dfe.PrepareTransfers.DocumentGeneration;
 
 namespace Dfe.PrepareTransfers.Web.Models.ProjectTemplate
 {

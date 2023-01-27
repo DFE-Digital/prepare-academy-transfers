@@ -16,9 +16,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web.Tests", "Dfe.PrepareTransfers.Web.Tests\Dfe.PrepareTransfers.Web.Tests.csproj", "{6A7EFD6D-24BD-4101-9CD0-F57EAE47BF4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGeneration", "DocumentGeneration\DocumentGeneration.csproj", "{B3E5C233-7BB8-49DB-B9BE-6803D0C0B8B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.DocumentGeneration", "Dfe.PrepareTransfers.DocumentGeneration\Dfe.PrepareTransfers.DocumentGeneration.csproj", "{B3E5C233-7BB8-49DB-B9BE-6803D0C0B8B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentGeneration.Tests", "DocumentGeneration.Tests\DocumentGeneration.Tests.csproj", "{0EE8EA1E-A952-4671-9613-2D26D2459C16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.DocumentGeneration.Tests", "Dfe.PrepareTransfers.DocumentGeneration.Tests\Dfe.PrepareTransfers.DocumentGeneration.Tests.csproj", "{0EE8EA1E-A952-4671-9613-2D26D2459C16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
 EndProject

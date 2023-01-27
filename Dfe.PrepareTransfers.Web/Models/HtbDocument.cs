@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.KeyStagePerformance;
-using DocumentGeneration;
+using Dfe.PrepareTransfers.DocumentGeneration;
 
 namespace Dfe.PrepareTransfers.Web.Models
 {

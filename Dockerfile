@@ -6,7 +6,7 @@ WORKDIR /build
 COPY Data.Mock/ ./Data.Mock/
 COPY Data.TRAMS/ ./Data.TRAMS/
 COPY Data/ ./Data/
-COPY DocumentGeneration/ ./DocumentGeneration/
+COPY Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
 COPY Helpers/ ./Helpers/
 COPY Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
