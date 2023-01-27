@@ -3,7 +3,7 @@ using System.Linq;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Benefits;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.BenefitsSummaryTests

@@ -40,7 +40,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
         }
 
         private void AssertKs2MappedCorrectly(
-            Dfe.PrepareTransfers.Data.Models.KeyStagePerformance.EducationPerformance mappedInternalEducationPerformance,
+            Data.Models.KeyStagePerformance.EducationPerformance mappedInternalEducationPerformance,
             TramsEducationPerformance tramsEducationPerformanceToMap)
         {
             var mappedKs2Result = mappedInternalEducationPerformance.KeyStage2Performance.First();

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 
-namespace Dfe.PrepareTransfers.Web.Helpers.TagHelpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
     [HtmlTargetElement("backtopreview")]
     public class BackToPreviewPageTagHelper : TagHelper

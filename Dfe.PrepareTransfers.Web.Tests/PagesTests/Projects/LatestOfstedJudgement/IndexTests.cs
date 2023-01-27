@@ -3,7 +3,7 @@ using System.Linq;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LatestOfstedJudgeme
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project =>
+                        r.Update(It.Is<Data.Models.Project>(project =>
                             project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn)
                                 .LatestOfstedReportAdditionalInformation
                             == _subject.AdditionalInformationViewModel.AdditionalInformation)),

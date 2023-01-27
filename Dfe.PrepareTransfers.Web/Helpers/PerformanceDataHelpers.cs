@@ -5,7 +5,7 @@ using System.Linq;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Microsoft.AspNetCore.Html;
 
-namespace Dfe.PrepareTransfers.Web.Helpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
 {
     public static class PerformanceDataHelpers
     {

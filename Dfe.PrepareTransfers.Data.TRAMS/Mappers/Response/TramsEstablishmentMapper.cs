@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Academies;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {

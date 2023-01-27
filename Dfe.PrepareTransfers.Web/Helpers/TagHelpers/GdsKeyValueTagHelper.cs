@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Dfe.PrepareTransfers.Web.Helpers.TagHelpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
     [HtmlTargetElement("gds-key-value", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class GdsKeyValueTagHelper : TagHelper

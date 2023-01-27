@@ -6,7 +6,7 @@ using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response

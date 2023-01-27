@@ -8,7 +8,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.PrepareTransfers.DocumentGeneration.Builders;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
-using Dfe.PrepareTransfers.DocumentGeneration.Helpers;
+using Dfe.PrepareTransfers.DocumentGeneration.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 
 namespace Dfe.PrepareTransfers.DocumentGeneration

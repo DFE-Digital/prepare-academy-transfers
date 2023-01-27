@@ -4,7 +4,7 @@ using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Validators.TransferDates;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates

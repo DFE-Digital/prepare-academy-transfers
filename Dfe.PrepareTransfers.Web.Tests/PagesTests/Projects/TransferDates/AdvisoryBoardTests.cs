@@ -6,7 +6,7 @@ using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
@@ -40,7 +40,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             [Fact]
             public async void GivenExistingProject_AssignsTheProjectToThePageModel()
             {
-                FoundProjectFromRepo.Dates = new Dfe.PrepareTransfers.Data.Models.Projects.TransferDates
+                FoundProjectFromRepo.Dates = new Data.Models.Projects.TransferDates
                 {
                     Htb = "15/01/2020",
                     HasHtbDate = true
@@ -84,7 +84,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
 
                 Assert.IsType<PageResult>(result);
             }
@@ -95,7 +95,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Dfe.PrepareTransfers.Data.Models.Project>(project =>
+                        r.Update(It.Is<Data.Models.Project>(project =>
                             project.Dates.Htb == _subject.AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString()
                             && project.Dates.HasHtbDate ==
                             !_subject.AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate)),
@@ -137,7 +137,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                         Result = new Project
                         {
                             Urn = "0002",
-                            Dates = new Dfe.PrepareTransfers.Data.Models.Projects.TransferDates
+                            Dates = new Data.Models.Projects.TransferDates
                             {
                                 Target = "01/01/2000"
                             }

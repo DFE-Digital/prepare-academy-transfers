@@ -2,7 +2,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Integration.Tests

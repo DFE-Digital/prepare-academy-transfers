@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace Dfe.PrepareTransfers.Web.Helpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
 {
     public static class Session
     {

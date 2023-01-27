@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Helpers
+namespace Dfe.PrepareTransfers.Helpers
 {
     public static class DatesHelper
     {

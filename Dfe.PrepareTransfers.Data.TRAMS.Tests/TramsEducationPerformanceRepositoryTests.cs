@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.EducationPerformance;
-using Dfe.PrepareTransfers.Data.TRAMS.Tests.Helpers;
+using Dfe.PrepareTransfers.Data.TRAMS.Tests.Dfe.PrepareTransfers.Helpers;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;

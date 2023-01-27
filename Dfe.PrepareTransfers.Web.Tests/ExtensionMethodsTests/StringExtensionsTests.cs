@@ -1,5 +1,5 @@
 using Dfe.PrepareTransfers.Web.ExtensionMethods;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ExtensionMethodsTests

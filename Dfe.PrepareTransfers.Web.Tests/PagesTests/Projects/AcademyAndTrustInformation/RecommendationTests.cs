@@ -4,7 +4,7 @@ using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.AcademyAndTrustInformation;
 using Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;

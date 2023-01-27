@@ -3,7 +3,7 @@ using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace Dfe.PrepareTransfers.DocumentGeneration.Helpers
+namespace Dfe.PrepareTransfers.DocumentGeneration.Dfe.PrepareTransfers.Helpers
 {
     public static class DocumentBuilderHelpers
     {

@@ -1,7 +1,7 @@
 ﻿using Dfe.PrepareTransfers.Data.Models.Projects;
 using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Models.Features;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Validators.Features;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Xunit;

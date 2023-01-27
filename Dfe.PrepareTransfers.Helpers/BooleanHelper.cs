@@ -1,4 +1,4 @@
-﻿namespace Helpers
+﻿namespace Dfe.PrepareTransfers.Helpers
 {
     public static class BooleanHelper
     {

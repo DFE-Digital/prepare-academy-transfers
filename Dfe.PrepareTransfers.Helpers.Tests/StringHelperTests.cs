@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Helpers.Tests
+namespace Dfe.PrepareTransfers.Helpers.Tests
 {
     public class StringHelperTests
     {

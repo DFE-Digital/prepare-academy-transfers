@@ -2,7 +2,7 @@
 using Dfe.PrepareTransfers.Web.Models.Benefits;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;

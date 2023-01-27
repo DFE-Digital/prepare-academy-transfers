@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Web.Models.Forms;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Dfe.PrepareTransfers.Web.Helpers.TagHelpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
     [HtmlTargetElement("gds-checkboxes", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class GdsCheckBoxesTagHelper : TagHelper

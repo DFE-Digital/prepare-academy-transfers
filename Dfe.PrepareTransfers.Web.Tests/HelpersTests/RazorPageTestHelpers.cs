@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 
-namespace Dfe.PrepareTransfers.Web.Tests.Helpers
+namespace Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers
 {
     public static class RazorPageTestHelpers
     {

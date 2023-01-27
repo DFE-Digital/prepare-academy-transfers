@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
-namespace Helpers.Tests
+namespace Dfe.PrepareTransfers.Helpers.Tests
 {
     public class EnumHelperTests
     {

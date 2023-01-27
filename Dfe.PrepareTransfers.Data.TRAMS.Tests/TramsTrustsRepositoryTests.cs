@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
-using Dfe.PrepareTransfers.Data.TRAMS.Tests.Helpers;
+using Dfe.PrepareTransfers.Data.TRAMS.Tests.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures;
 using Moq;
 using Newtonsoft.Json;

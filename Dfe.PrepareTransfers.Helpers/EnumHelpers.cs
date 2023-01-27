@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Helpers
+namespace Dfe.PrepareTransfers.Helpers
 {
     public static class EnumHelpers<T>
     {

@@ -7,7 +7,7 @@ using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {

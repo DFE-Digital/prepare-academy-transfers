@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Dfe.PrepareTransfers.Web.Helpers.TagHelpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
     [HtmlTargetElement("p", Attributes = GdsValidationForAttributeName)]
     public class GdsValidationForTagHelper : TagHelper

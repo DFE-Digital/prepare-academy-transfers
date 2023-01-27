@@ -9,7 +9,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.PrepareTransfers.DocumentGeneration;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
-using Dfe.PrepareTransfers.Web.Helpers;
+using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;

@@ -3,7 +3,7 @@ using System.Net.Http;
 using Moq;
 using Newtonsoft.Json;
 
-namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Helpers
+namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Dfe.PrepareTransfers.Helpers
 {
     public static class HttpClientTestHelpers
     {

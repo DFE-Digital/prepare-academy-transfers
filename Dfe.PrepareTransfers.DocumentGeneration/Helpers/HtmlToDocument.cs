@@ -5,7 +5,7 @@ using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces.Parents;
 
-namespace Dfe.PrepareTransfers.DocumentGeneration.Helpers
+namespace Dfe.PrepareTransfers.DocumentGeneration.Dfe.PrepareTransfers.Helpers
 {
     public static class HtmlToDocument
     {

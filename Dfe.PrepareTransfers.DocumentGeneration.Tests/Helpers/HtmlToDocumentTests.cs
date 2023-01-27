@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Dfe.PrepareTransfers.DocumentGeneration.Builders;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
-using Dfe.PrepareTransfers.DocumentGeneration.Helpers;
+using Dfe.PrepareTransfers.DocumentGeneration.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 using Xunit;
 
-namespace Dfe.PrepareTransfers.DocumentGeneration.Tests.Helpers
+namespace Dfe.PrepareTransfers.DocumentGeneration.Tests.Dfe.PrepareTransfers.Helpers
 {
     public class HtmlToDocumentTests
     {

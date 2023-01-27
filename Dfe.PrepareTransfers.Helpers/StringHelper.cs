@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace Helpers
+namespace Dfe.PrepareTransfers.Helpers
 {
     public static class StringHelper
     {

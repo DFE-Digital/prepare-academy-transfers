@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Helpers
+namespace Dfe.PrepareTransfers.Helpers
 {
     public static class PercentageHelper
     {

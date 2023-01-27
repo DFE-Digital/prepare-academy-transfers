@@ -1,6 +1,6 @@
 using System;
 
-namespace Helpers
+namespace Dfe.PrepareTransfers.Helpers
 {
     public class DateTimeProvider : IDateTimeProvider
     {

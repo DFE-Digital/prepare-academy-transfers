@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Xunit;
 
-namespace Dfe.PrepareTransfers.Web.Tests.Helpers
+namespace Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers
 {
     public static class ControllerTestHelpers
     {

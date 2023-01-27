@@ -1,7 +1,7 @@
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Dfe.PrepareTransfers.Web.Helpers.TagHelpers
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
     [HtmlTargetElement("datesummary")]
     public class DateSummaryTagHelper : TagHelper

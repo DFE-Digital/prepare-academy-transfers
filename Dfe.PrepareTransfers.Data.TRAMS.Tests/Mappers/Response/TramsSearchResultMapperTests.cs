@@ -35,7 +35,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
         }
 
         private static void AssertAcademyMappedCorrectly(TramsTrustSearchEstablishment establishmentToMap,
-            Dfe.PrepareTransfers.Data.Models.TrustSearchAcademy mappedAcademy)
+            Data.Models.TrustSearchAcademy mappedAcademy)
         {
             Assert.Equal(establishmentToMap.Name, mappedAcademy.Name);
             Assert.Equal(establishmentToMap.Urn, mappedAcademy.Urn);

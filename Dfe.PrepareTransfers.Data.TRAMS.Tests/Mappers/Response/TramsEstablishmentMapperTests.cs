@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response

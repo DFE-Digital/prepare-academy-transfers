@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Helpers.Tests
+namespace Dfe.PrepareTransfers.Helpers.Tests
 {
     public class DatesHelperTests
     {

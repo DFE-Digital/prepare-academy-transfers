@@ -6,8 +6,8 @@ using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Utils;
 using global::Dfe.PrepareTransfers.Web.Models.Benefits;
-using global::Helpers;
-using Helpers;
+using global::Dfe.PrepareTransfers.Helpers;
+using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Web.Models.LegalRequirements
 {

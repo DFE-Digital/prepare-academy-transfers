@@ -28,9 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.TRAMS.Tests", "Dfe.PrepareTransfers.Data.TRAMS.Tests\Dfe.PrepareTransfers.Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Helpers", "Dfe.PrepareTransfers.Helpers\Dfe.PrepareTransfers.Helpers.csproj", "{9735BC9F-06B2-467B-8341-3CF568942C64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Tests", "Helpers.Tests\Helpers.Tests.csproj", "{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Helpers.Tests", "Dfe.PrepareTransfers.Helpers.Tests\Dfe.PrepareTransfers.Helpers.Tests.csproj", "{D139DEC4-359F-4EB5-90E3-3DD1D04F24F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web.Integration.Tests", "Dfe.PrepareTransfers.Web.Integration.Tests\Dfe.PrepareTransfers.Web.Integration.Tests.csproj", "{E0C8BA1B-0620-45B1-A7ED-87CBC6BE21C6}"
 EndProject

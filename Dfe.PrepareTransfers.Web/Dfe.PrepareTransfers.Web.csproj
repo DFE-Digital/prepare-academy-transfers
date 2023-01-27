@@ -27,7 +27,7 @@
     <ProjectReference Include="..\Dfe.PrepareTransfers.Data.TRAMS\Dfe.PrepareTransfers.Data.TRAMS.csproj" />
     <ProjectReference Include="..\Dfe.PrepareTransfers.Data\Dfe.PrepareTransfers.Data.csproj" />
     <ProjectReference Include="..\Dfe.PrepareTransfers.DocumentGeneration\Dfe.PrepareTransfers.DocumentGeneration.csproj" />
-    <ProjectReference Include="..\Helpers\Helpers.csproj" />
+    <ProjectReference Include="..\Dfe.PrepareTransfers.Helpers\Dfe.PrepareTransfers.Helpers.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />

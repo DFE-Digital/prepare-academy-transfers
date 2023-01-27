@@ -1,7 +1,7 @@
 ﻿using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Web.Tests.Helpers;
+using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Validators.Features;
 using Microsoft.AspNetCore.Routing;
 using Moq;

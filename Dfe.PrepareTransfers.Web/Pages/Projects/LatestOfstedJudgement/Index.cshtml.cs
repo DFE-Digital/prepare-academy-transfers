@@ -13,7 +13,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public Dfe.PrepareTransfers.Data.Models.Academies.LatestOfstedJudgement LatestOfstedJudgement { get; set; }
+        public Data.Models.Academies.LatestOfstedJudgement LatestOfstedJudgement { get; set; }
 
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }

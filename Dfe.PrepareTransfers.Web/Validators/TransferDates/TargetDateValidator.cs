@@ -1,6 +1,6 @@
 using FluentValidation;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
-using Helpers;
+using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Web.Validators.TransferDates
 {

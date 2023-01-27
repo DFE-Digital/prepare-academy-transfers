@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Helpers\Helpers.csproj" />
+      <ProjectReference Include="..\Dfe.PrepareTransfers.Helpers\Dfe.PrepareTransfers.Helpers.csproj" />
     </ItemGroup>
 
 </Project>
