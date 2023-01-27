@@ -1,8 +1,6 @@
-﻿namespace Frontend.Options
+﻿namespace Frontend.Options;
+
+public class ServiceLinkOptions
 {
-	public class ServiceLinkOptions
-	{
-		public const string Name = "ServiceLink";
-		public string ConversionsUrl { get; set; }
-	}
+   public string ConversionsUrl { get; set; }
 }
