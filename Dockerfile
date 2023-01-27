@@ -8,9 +8,9 @@ COPY Data.TRAMS/ ./Data.TRAMS/
 COPY Data/ ./Data/
 COPY DocumentGeneration/ ./DocumentGeneration/
 COPY Helpers/ ./Helpers/
-COPY Frontend/ ./Frontend/
+COPY Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR Frontend
+WORKDIR Dfe.PrepareTransfers.Web
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app
 
@@ -18,4 +18,4 @@ RUN dotnet publish -c Release -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Frontend.dll"]
+ENTRYPOINT ["dotnet", "Dfe.PrepareTransfers.Web.dll"]

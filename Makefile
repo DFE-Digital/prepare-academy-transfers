@@ -1,2 +1,2 @@
 build-frontend:
-	cd Frontend/wwwroot;npm install; npm run build
+	cd Dfe.PrepareTransfers.Web/wwwroot;npm install; npm run build

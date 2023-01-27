@@ -1,0 +1,24 @@
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.Index
+<dl class="govuk-summary-list">
+    <gds-key-value key="School phase" value="@Model.SchoolPhase"/>
+    <gds-key-value key="Age range" value="@Model.AgeRange"/>
+    <gds-key-value key="Capacity" value="@Model.Capacity"/>
+    <gds-key-value key="Number on roll (percentage the school is full)" value="@Model.NumberOnRoll"/>
+    <gds-key-value key="Percentage of free school meals (%FSM)" value="@Model.FreeSchoolMeals"/>
+</dl>
+<div class="govuk-grid-column-two-thirds govuk-!-padding-left-0 govuk-!-padding-top-3">
+    <div class="govuk-body">
+        This information comes from KIM (Knowledge Information Management) and FSS (Free School Store). It will go into your project template.
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m">
+</div>
+<dl class="govuk-summary-list">
+    <gds-key-value key="Published admission number (PAN)" value="@Model.PublishedAdmissionNumber"/>
+    <gds-key-value key="Private finance initiative (PFI) scheme" value="@Model.PrivateFinanceInitiative"/>
+    <gds-key-value key="Viability issues" value="@Model.ViabilityIssues"/>
+    <gds-key-value key="Financial deficit" value="@Model.FinancialDeficit"/>
+    <gds-key-value key="School type" value="@Model.SchoolType"/>
+    <gds-key-value key="Percentage of good or outstanding academies in the diocesan trust" value="@Model.DiocesePercent"/>
+    <gds-key-value key="Distance from the academy to the trust headquarters" value="@Model.DistanceFromAcademyToTrustHq"/>
+    <gds-key-value key="MP (Party)" value="@Model.MP"/>
+</dl>

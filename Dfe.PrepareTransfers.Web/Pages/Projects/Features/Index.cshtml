@@ -1,0 +1,33 @@
+﻿@page "/project/{urn}/features"
+@model Dfe.PrepareTransfers.Web.Pages.Projects.Features.Index
+
+@{
+    ViewBag.Title = "Features of the transfer";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            Project reference: @Model.ProjectReference
+        </span>
+        <h1 class="govuk-heading-l">
+            Features of the transfer
+        </h1>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+        <partial for="@Model" name="_FeaturesSummary"/>
+
+      <partial name="Shared/_MarkSectionCompleted" for="MarkSectionCompletedViewModel"/>
+    </div>
+</div>

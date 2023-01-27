@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.Models.Projects;
-using Frontend.Models;
+using Dfe.PrepareTransfers.Web.Models;
 using Helpers;
 
 namespace Data.Models

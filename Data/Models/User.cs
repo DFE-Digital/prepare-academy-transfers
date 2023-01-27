@@ -1,4 +1,4 @@
-﻿namespace Frontend.Models
+﻿namespace Dfe.PrepareTransfers.Web.Models
 {
     public class User
     {

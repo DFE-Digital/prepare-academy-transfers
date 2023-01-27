@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Data.TRAMS.Models.AcademyTransferProject;
-using Frontend.Models;
+using Dfe.PrepareTransfers.Web.Models;
 
 namespace Data.TRAMS.Models
 {

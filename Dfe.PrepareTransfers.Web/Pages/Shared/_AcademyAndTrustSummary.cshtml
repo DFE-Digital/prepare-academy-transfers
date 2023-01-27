@@ -1,0 +1,71 @@
+﻿@using Data.Models.Projects
+@using Helpers
+@using Dfe.PrepareTransfers.Web.ExtensionMethods
+@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.Index
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">
+            Advisory board
+        </dt>
+        <dd class="govuk-summary-list__value ">
+            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.AdvisoryBoardDate)</displaynodataforemptystring>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Recommendation
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @if (Model.Recommendation == TransferAcademyAndTrustInformation.RecommendationResult.Empty)
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                var displayName = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(Model.Recommendation);
+                @displayName
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="recommendation">
+                Change<span class="govuk-visually-hidden"> recommendation</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Author
+        </dt>
+        <dd class="govuk-summary-list__value ">
+            @if (string.IsNullOrEmpty(Model.Author))
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                <span class="dfe-text-area-display">@Model.Author</span>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/Recommendation" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
+                Change<span class="govuk-visually-hidden"> author</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">
+            Project name
+        </dt>
+        <dd class="govuk-summary-list__value ">
+            <displaynodataforemptystring>@Model.IncomingTrustName</displaynodataforemptystring>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <dt class="govuk-summary-list__key">
+            Proposed academy transfer
+        </dt>
+        <dd class="govuk-summary-list__value ">
+            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.TargetDate)</displaynodataforemptystring>
+        </dd>
+    </div>
+</dl>

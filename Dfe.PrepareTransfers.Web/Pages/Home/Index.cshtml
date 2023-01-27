@@ -1,0 +1,189 @@
+@page "/home"
+@using Data.Models
+@using Data.Models.Projects
+@model Dfe.PrepareTransfers.Web.Pages.Home.Index
+
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+    {
+    <a asp-page="@Links.ProjectType.Index.PageName" class="govuk-back-link" data-cy="select-backlink">@Links.ProjectType.Index.BackText</a>
+}
+
+    @if (Model.IsFiltered)
+{
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+                Projects filtered.
+            </h3>
+        </div>
+    </div>
+}
+
+<div class="govuk-grid-row govuk-!-margin-bottom-9">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl" data-cy="select-heading">
+            Manage an academy transfer
+        </h1>
+        <p class="govuk-body-l">
+            Use this service to start a new academy transfer project or update an existing project.
+        </p>
+        <a asp-page="/Transfers/TrustName" role="button" draggable="false"
+           class="govuk-button govuk-button--start" data-module="govuk-button" data-test="create-transfer">
+            Start a new transfer project
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+            </svg>
+        </a>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27" data-cy="select-projectlist-filter-count">
+            @Model.TotalProjectCount projects found
+        </h2>
+
+        <details class="govuk-details prepare-project-listing__filters-container" data-module="govuk-details" @(Model.IsFiltered ? "open" : null)>
+            <summary class="govuk-details__summary prepare-project-listing__fitlers-details-summary">
+                <span class="govuk-details__summary-text govuk-button govuk-button--secondary prepare-project-listing__button--main" data-cy="select-projectlist-filter-expand">
+                    Filter projects
+                </span>
+            </summary>
+            <div class="govuk-details__text prepare-project-listing__filters-details" data-id="filter-container">
+                <form method="get" class="form">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-quarter">
+                            <div class="govuk-form-group">
+                                <h1 class="govuk-label-wrapper">
+                                    <label class="govuk-label govuk-label--s" for="filter-project-title">
+                                        Project title
+                                    </label>
+                                </h1>
+                                <div id="filter-project-title-hint" class="govuk-hint">
+                                    For example, The Rutland Learning Trust
+                                </div>
+
+                                <input asp-for="TitleFilter" class="govuk-input" type="text" aria-describedby="filter-project-title-hint">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            <div class="govuk-button-group">
+                                <button class="govuk-button govuk-button--secondary prepare-project-listing__button--apply" data-cy="select-projectlist-filter-apply" data-module="govuk-button ">
+                                    Apply filters
+                                </button>
+
+                                <a class="govuk-link" href="/home">Clear filters</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </details>
+
+        @if (Model.TotalProjectCount == 0)
+        {
+            <div class="govuk-heading-m govuk-!-margin-top-3">There are no matching results.</div>
+            <p class="govuk-body">Improve your results by:</p>
+            <ul class="govuk-list govuk-list--bullet govuk-body">
+                <li>double-checking your spelling</li>
+                <li>searching again with another trust</li>
+                <li>removing some filters</li>
+            </ul>
+        }
+        else
+        {
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Model.TotalProjectCount projects found</caption>
+
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header app-!-width-three-fifths">Application information</th>
+                        <th class="govuk-table__header govuk-!-text-align-right app-!-width-two-fifths prepare-text-align-right">Project status</th>
+                    </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                    @{var index = 0;}
+                    @foreach (ProjectSearchResult project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
+                    {
+                        TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.First();
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">
+                                <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+                                    <strong>
+                                        <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
+                                            @firstOutgoingAcademy.IncomingTrustNameInTitleCase
+                                        </a>
+                                    </strong>
+                                    <span>
+                                        UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
+                                    </span>
+                                </h2>
+                                <p class="govuk-!-margin-top-3">
+                                    <div>Project reference: @project.Reference</div>
+                                    <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
+                                    @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
+                                    {
+                                        <div id="@("delivery-officer-" + index)">Delivery officer: <span class="empty">Empty</span></div>
+                                    }
+                                    else
+                                    {
+                                        <div id="@("delivery-officer-" + index)">Delivery officer: <strong>@project.AssignedUser.FullName</strong></div>
+                                    }
+                                </p>
+                            </td>
+                            <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
+                                <p class="govuk-!-margin-top-0">
+                                    <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+                                </p>
+                            </td>
+                        </tr>
+
+                        index++;
+                    }
+                </tbody>
+            </table>
+
+            <nav class="moj-pagination" id="pagination-label">
+                <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+                <ul class="moj-pagination__list">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="moj-pagination__item  moj-pagination__item--prev">
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-TitleFilter="@Model.TitleFilter">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                        </li>
+                        @for (var i = Model.StartingPage; i < Model.CurrentPage; i++)
+                        {
+                            <li class="moj-pagination__item">
+                                <a asp-page="/Home/Index" asp-route-currentPage="@i" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@i</a>
+                            </li>
+                        }
+                    }
+                    <li class="moj-pagination__item moj-pagination__item--active">@Model.CurrentPage</li>
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="moj-pagination__item">
+                            <a asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@Model.NextPage</a>
+                        </li>
+                        <li class="moj-pagination__item  moj-pagination__item--next">
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                        </li>
+                    }
+                </ul>
+                <p class="moj-pagination__results"></p>
+            </nav>
+        }
+    </div>
+</div>

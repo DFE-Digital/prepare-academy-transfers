@@ -1,0 +1,97 @@
+@model Dfe.PrepareTransfers.Web.Models.Benefits.BenefitsSummaryViewModel
+@using Helpers
+@using Data.Models.Projects
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+        What are the intended benefits of the transfer?
+    </dt>
+    @if (!Model.IntendedBenefitsSummary().Any())
+    {
+        <dd class="govuk-summary-list__value">
+            <span class="dfe-empty-tag">Empty</span>
+        </dd>
+    }
+    else
+    {
+        <dd class="govuk-summary-list__value">
+            @foreach (var benefit in Model.IntendedBenefitsSummary())
+            {
+                <p class="govuk-body">
+                    @benefit
+                </p>
+            }
+        </dd>
+    }
+    <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/IntendedBenefits" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="intended-benefits">
+            Change<span class="govuk-visually-hidden"> the intended benefits of the transfer</span>
+        </a>
+    </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+        Are there any risks to consider for this transfer?
+    </dt>
+    <dd class="govuk-summary-list__value">
+        @if (!Model.AnyRisks.HasValue)
+        {
+            <span class="dfe-empty-tag">Empty</span>
+        }
+        else
+        {
+            <p class="govuk-body">@(Model.AnyRisks == true ? "Yes" : "No")</p>
+        }
+    </dd>
+    <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/Risks" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="any-risks">
+            Change<span class="govuk-visually-hidden"> risks to consider</span>
+        </a>
+    </dd>
+    </div>
+    @foreach (var otherFactor in Model.OtherFactorsItems)
+    {
+        var label = (EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(otherFactor.OtherFactor));
+        <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            @label
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @if (string.IsNullOrWhiteSpace(otherFactor.Description))
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                <p class="govuk-body">@otherFactor.Description</p>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks.OtherFactors.GetPageUrlFromOtherFactor(otherFactor.OtherFactor)" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="@label">
+                Change<span class="govuk-visually-hidden"> @label</span>
+            </a>
+
+        </dd>
+        </div>
+    }
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+        Has an Equalities Impact Assessment been considered?
+    </dt>
+    <dd class="govuk-summary-list__value">
+        @if (!Model.EqualitiesImpactAssessmentConsidered.HasValue)
+        {
+            <span class="dfe-empty-tag">Empty</span>
+        }
+        else
+        {
+            <p class="govuk-body" data-test="equalities-impact-assessment">@(Model.EqualitiesImpactAssessmentConsidered == true ? "Yes" : "No")</p>
+        }
+    </dd>
+    <dd class="govuk-summary-list__actions">
+        <a class="govuk-link" asp-page="/Projects/BenefitsAndRisks/EqualitiesImpactAssessment" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="equalities-impact-assessment">
+            Change<span class="govuk-visually-hidden"> equalities impact assessment</span>
+        </a>
+    </dd>
+    </div>
+</dl>
