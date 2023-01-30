@@ -3,7 +3,6 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /build
 
 # Copy csproj and restore as distinct layers
-COPY Dfe.PrepareTransfers.Data.Mock/ ./Dfe.PrepareTransfers.Data.Mock/
 COPY Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
 COPY Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
 COPY Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
