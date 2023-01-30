@@ -1,8 +1,12 @@
 ﻿@page
 @model Dfe.PrepareTransfers.Web.Pages.Errors.IndexModel
-@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
 @{
+	ViewBag.Title = "Error";
+	Layout = "_Layout";
 }
+@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
+
+
 <div class="govuk-width-container">
 	<main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
 		<div class="govuk-grid-row">
