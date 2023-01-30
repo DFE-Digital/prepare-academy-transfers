@@ -1,0 +1,201 @@
+@page "/project/{urn}/advisory-board/preview"
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
+@model Dfe.PrepareTransfers.Web.Pages.TaskList.HtbDocument.Preview
+
+@{
+    ViewBag.Title = "Preview project template";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <partial name="_DynamicBackLink" model="@Links.Project.Index.For(Model.Urn)"></partial>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <span class="govuk-caption-l">
+            Project reference: @Model.ProjectReference
+        </span>
+        <h1 class="govuk-heading-xl">
+            Preview project template
+        </h1>
+        <hr class="govuk-section-break govuk-section-break--l">
+    </div>
+    
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-6">
+        <h2 class="govuk-heading-l">
+            Transfer details
+        </h2>
+    </div>
+
+    <div class="govuk-grid-column-full">
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Features of the transfer
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="_FeaturesSummary" model="Model.FeaturesSummaryViewModel"></partial>
+            </div>
+        </section>
+
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Expected transfer dates
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="_TransferDatesSummary" model="Model.TransferDatesSummaryViewModel"></partial>
+            </div>
+        </section>
+
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Benefits and risks
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="Shared/_BenefitsSummary" model="Model.BenefitsSummaryViewModel"></partial>
+            </div>
+        </section>
+        
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Legal requirements
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="Shared/_LegalSummary" model="Model.LegalRequirementsViewModel"></partial>
+            </div>
+        </section>
+
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Rationale
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="Shared/_RationaleSummary" model="Model.RationaleSummaryViewModel"></partial>
+            </div>
+        </section>
+
+        <section class="app-summary-card govuk-!-margin-bottom-7">
+            <header class="app-summary-card__header">
+                <h2 class="app-summary-card__title">
+                    Academy and trust information and project dates
+                </h2>
+            </header>
+            <div class="app-summary-card__body">
+                <partial name="Shared/_AcademyAndTrustSummary" model="Model.AcademyAndTrustInformationSummaryViewModel"></partial>
+            </div>
+        </section>
+
+        @foreach (var academy in Model.Academies)
+        {
+            <h2 class="govuk-heading-l">
+                @academy.Academy.Name
+            </h2>
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        General information
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="Shared/_GeneralInformation" model="academy.GeneralInformationViewModel"></partial>
+                </div>
+            </section>
+
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        Pupil numbers
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="Shared/_PupilNumbers" model="academy.PupilNumbersViewModel"></partial>
+                </div>
+            </section>
+
+            <section class="app-summary-card govuk-!-margin-bottom-7">
+                <header class="app-summary-card__header">
+                    <h2 class="app-summary-card__title">
+                        Latest Ofsted judgement
+                    </h2>
+                </header>
+                <div class="app-summary-card__body">
+                    <partial name="/Pages/Shared/OfstedSummary/_PreviewSummary.cshtml" model="academy.LatestOfstedJudgementViewModel"></partial>
+                </div>
+            </section>
+
+            @if (PerformanceDataHelpers.HasKeyStage2PerformanceInformation(academy.EducationPerformance.KeyStage2Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 2 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage2PerformanceSummary" model="@academy.EducationPerformance"></partial>
+                    </div>
+                </section>
+            }
+
+            @if (PerformanceDataHelpers.HasKeyStage4PerformanceInformation(academy.EducationPerformance.KeyStage4Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 4 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage4PerformanceSummary" model="@academy.EducationPerformance"></partial>
+                    </div>
+                </section>
+            }
+
+            @if (PerformanceDataHelpers.HasKeyStage5PerformanceInformation(academy.EducationPerformance.KeyStage5Performance))
+            {
+                <section class="app-summary-card govuk-!-margin-bottom-7">
+                    <header class="app-summary-card__header">
+                        <h2 class="app-summary-card__title">
+                            Key stage 5 performance tables
+                        </h2>
+                    </header>
+                    <div class="app-summary-card__body">
+                        <partial name="KeyStage5PerformanceSummary" model="@academy.EducationPerformance"></partial>
+                    </div>
+                </section>
+            }
+        }
+    </div>
+    
+    <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-l">
+            Generate project template
+        </h2>
+        <p class="govuk-body govuk-!-margin-bottom-6">
+            Generate the project template into a Word document and download it.
+        </p>
+       <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
+          <input type="hidden" name="bl" value="@Links.HeadteacherBoard.Preview.PageName" />
+          <input type="hidden" name="u" value="@Model.Urn" />
+          <div class="govuk-button-group">
+             <button class="govuk-button" data-module="govuk-button" data-test="generate-htb">Generate project template</button>
+             <p class="govuk-body">
+                <a asp-page="/Home/Index" class="govuk-link govuk-link--no-visited-state">
+                   Save and return to this project later
+                </a>
+             </p>
+          </div>
+       </form>
+    </div>
+</div>

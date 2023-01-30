@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '18.x'
       # This could be cached in the future to allow for quicker build times
-      - name: Build Frontend
+      - name: Build Dfe.PrepareTransfers.Web
         run: make build-frontend
       - name: Build
         run: dotnet build -c Release --no-restore

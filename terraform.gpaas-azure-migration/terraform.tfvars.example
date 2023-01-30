@@ -11,7 +11,7 @@ enable_cdn_frontdoor      = true
 
 virtual_network_address_space = ""
 
-container_command = ["/bin/bash", "-c", "./docker-entrypoint.sh dotnet Frontend.dll"]
+container_command = ["/bin/bash", "-c", "./docker-entrypoint.sh dotnet Dfe.PrepareTransfers.Web.dll"]
 
 container_secret_environment_variables = {
   "TramsApi__Endpoint"        = ""

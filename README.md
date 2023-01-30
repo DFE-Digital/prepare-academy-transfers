@@ -8,7 +8,7 @@ The internal service for managing Academy Transfers.
 
 ### Quickstart
 
-To get the Frontend project running you will require:
+To get the Dfe.PrepareTransfers.Web project running you will require:
 
 - .NET Core 3.1
 - Redis (running locally or in Docker, see below)
@@ -19,18 +19,18 @@ To get the Frontend project running you will require:
     - `dotnet restore`
 - Node
     - `make build-frontend` or
-      - `cd` to `Frontend/wwwroot`
+      - `cd` to `Dfe.PrepareTransfers.Web/wwwroot`
       - run `npm install`
       - run `npm run build`
 2. **Ensure Redis is running**
 3. **Set user secrets**
-   - `dotnet user-secrets set "Key" "Value" --project Frontend`
+   - `dotnet user-secrets set "Key" "Value" --project Dfe.PrepareTransfers.Web`
 4. **Run the application**
-- `dotnet run --project Frontend`
+- `dotnet run --project Dfe.PrepareTransfers.Web`
 
 ### User-secrets
 
-**Frontend**
+**Dfe.PrepareTransfers.Web**
 
 The frontend repo requires the following user secrets to be able to connect to TRAMS:
 
@@ -70,7 +70,7 @@ Full setup details can be found here: https://docs.microsoft.com/en-us/azure/act
 4. Group ids will be available in the `HttpContext.User.Claims`
 
 ## Model validation
-This project uses fluent validators to validate the view model as opposed to MVC Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
+This project uses fluent validators to validate the view model as opposed to MVC Dfe.PrepareTransfers.Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
 
 You will need to ensure you have ViewModel to hold the properties you will need to validate and to create a custom validator with an AbstractValidator<CustomViewModel> as it's base class.
 

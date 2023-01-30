@@ -3,7 +3,7 @@ ARG NODEJS_IMAGE_TAG=18.12-bullseye
 
 # Stage 1 - Build frontend assets
 FROM node:${NODEJS_IMAGE_TAG} as frontend
-COPY ./Frontend/ /build/
+COPY ./Dfe.PrepareTransfers.Web/ /build/
 WORKDIR /build/wwwroot
 RUN npm install
 RUN npm run build
@@ -12,14 +12,14 @@ RUN npm run build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /build
 
-COPY ./Data/ ./Data/
-COPY ./Data.TRAMS/ ./Data.TRAMS/
-COPY ./Data.Mock/ ./Data.Mock/
-COPY ./DocumentGeneration/ ./DocumentGeneration/
-COPY ./Helpers/ ./Helpers/
-COPY --from=frontend /build/ ./Frontend/
+COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
+COPY ./Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
+COPY ./Dfe.PrepareTransfers.Data.Mock/ ./Dfe.PrepareTransfers.Data.Mock/
+COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
+COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
+COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR /build/Frontend
+WORKDIR /build/Dfe.PrepareTransfers.Web
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app --no-restore
 

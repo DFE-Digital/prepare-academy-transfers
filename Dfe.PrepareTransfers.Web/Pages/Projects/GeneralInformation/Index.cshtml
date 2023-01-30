@@ -1,0 +1,40 @@
+@page "/project/{urn}/general-information/{academyUkprn}"
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.Index
+
+@{
+    ViewBag.Title = "General Information (reference)";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+    {
+    <a class="govuk-back-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
+}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <span class="govuk-caption-l">
+                Academy: @Model.AcademyName
+            </span>
+            <h1 class="govuk-heading-l">General information</h1>
+            <div class="govuk-body">
+                This information comes from GIAS (Get Information about Schools). It will go into your project template.
+            </div>
+            <p class="govuk-body">
+                Published on GIAS: <strong>@Model.GIASLastChangedDate</strong>.
+            </p>
+            <hr class="govuk-section-break govuk-section-break--m">
+        </div>
+        <div class="govuk-grid-column-full">
+            <partial name="_GeneralInformation" model="Model" />
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <form asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyukprn="@Model.AcademyUkprn" method="get">
+                <button class="govuk-button" data-module="govuk-button">
+                    Confirm and continue
+                </button>
+            </form>
+        </div>
+    </div>

@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.gpaas-azure-migration
-    command: /bin/bash -c "./docker-entrypoint.sh dotnet Frontend.dll"
+    command: /bin/bash -c "./docker-entrypoint.sh dotnet Dfe.PrepareTransfers.Web.dll"
     ports:
       - 80:80/tcp
     env_file:

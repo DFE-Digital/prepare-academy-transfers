@@ -1,2 +1,2 @@
 [config]
-project = Frontend/Frontend.csproj
+project = Dfe.PrepareTransfers.Web/Dfe.PrepareTransfers.Web.csproj
