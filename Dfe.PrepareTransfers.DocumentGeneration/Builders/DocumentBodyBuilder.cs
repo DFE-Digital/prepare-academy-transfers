@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 
@@ -11,13 +10,11 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
     public class DocumentBodyBuilder : IDocumentBodyBuilder
     {
         private readonly WordprocessingDocument _document;
-        private readonly Body _body;
         private OpenXmlElement _previousElement;
 
         public DocumentBodyBuilder(WordprocessingDocument document, OpenXmlElement previousElement)
         {
             _document = document;
-            _body = document.MainDocumentPart.Document.Body;
             _previousElement = previousElement;
         }
 

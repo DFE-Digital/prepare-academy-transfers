@@ -36,7 +36,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
-            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer ?? string.Empty;;
+            projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] = Answer ?? string.Empty;
 
             await _projectsRepository.Update(projectResult);
 

@@ -4,8 +4,6 @@ using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Moq;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
@@ -13,20 +11,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
     public class ReferenceNumberServiceTests : BaseTests
     {
         private readonly IReferenceNumberService _referenceNumberService;
-        private readonly IConfigurationRoot _configuration;
+
         public ReferenceNumberServiceTests()
         {
-            var config = new Dictionary<string, string>
-            {
-                {"LeadRscRegionCodes:London", "L"},
-                {"LeadRscRegionCodes:North", "N"}
-            };
-
-            _configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(config)
-                .Build();
-            
-            _referenceNumberService = new ReferenceNumberService(_configuration);
+            _referenceNumberService = new ReferenceNumberService();
         }
 
         [Fact]
@@ -53,11 +41,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                     Urn = ProjectUrn0001,
                     TransferringAcademies = new List<TransferringAcademies>()
                     {
-                        new TransferringAcademies()
+                        new()
                         {
                             IncomingTrustName = "Incoming Trust"
                         },
-                        new TransferringAcademies()
+                        new()
                         {
                             IncomingTrustName = "Incoming Trust Two"
                         },
@@ -71,7 +59,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                     Urn = ProjectUrn0001,
                     TransferringAcademies = new List<TransferringAcademies>()
                     {
-                        new TransferringAcademies()
+                        new()
                         {
                             IncomingTrustName = "Incoming Trust"
 

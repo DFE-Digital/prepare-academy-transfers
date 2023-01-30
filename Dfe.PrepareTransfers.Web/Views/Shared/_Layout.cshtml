@@ -37,7 +37,6 @@
 
     @if (showAnalytics)
     {
-        <!-- <environment include="production"> -->
         <!-- Google Tag Manager -->
         <script asp-add-nonce>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -45,7 +44,6 @@
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-T43KJ2P');</script>
         <!-- End Google Tag Manager -->
-        <!-- </environment> -->
     }
 
     @if (analyticsConsent)
@@ -61,7 +59,6 @@
 </head>
 
 <body class="govuk-template__body ">
-<!-- <environment include="production"> -->
 <!-- Google Tag Manager (noscript) -->
 <noscript asp-add-nonce>
     <iframe src=https://www.googletagmanager.com/ns.html?id=GTM-T43KJ2P
@@ -69,7 +66,6 @@
     </iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
-<!-- </environment> -->
 <script asp-add-nonce>
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
 </script>
