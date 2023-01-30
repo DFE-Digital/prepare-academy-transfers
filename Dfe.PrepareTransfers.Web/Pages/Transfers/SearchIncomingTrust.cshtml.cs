@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dfe.PrepareTransfers.Web.Helpers;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 {
-    public class SearchIncomingTrustModel : TransfersPageModel
+    public class SearchIncomingTrustModel : TransfersPageModel, ISetTrusts
     {
         private readonly ITrusts _trustsRepository;
 
@@ -20,7 +21,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             _trustsRepository = trustsRepository;
         }
 
-        public List<TrustSearchResult> Trusts;
+        public List<TrustSearchResult> Trusts { get; private set; }
+
         [BindProperty(Name = "query", SupportsGet = true)]
         public string SearchQuery { get; set; } = "";
         [BindProperty]
@@ -71,6 +73,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
             return RedirectToPage("/Transfers/IncomingTrust", new { query = SearchQuery });
+        }
+
+        void ISetTrusts.SetTrusts(IEnumerable<TrustSearchResult> trusts)
+        {
+           Trusts = trusts.ToList();
         }
     }
 }

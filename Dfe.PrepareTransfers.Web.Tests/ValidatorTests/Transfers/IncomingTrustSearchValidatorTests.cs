@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Web.Helpers;
 using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Pages.Transfers;
 using Dfe.PrepareTransfers.Web.Validators.Transfers;
@@ -21,30 +24,28 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         }
 
         [Fact]
-        public async void WhenTrustResultsAreEmpty_ShouldSetError()
+        public async Task WhenTrustResultsAreEmpty_ShouldSetError()
         {
-            var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object)
-            {
-                Trusts = new List<TrustSearchResult>()
-            };
+            var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object);
 
-            var result = await _validator.TestValidateAsync(trustSearch);
+            ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<TrustSearchResult>());
+
+            TestValidationResult<SearchIncomingTrustModel> result = await _validator.TestValidateAsync(trustSearch);
 
             result.ShouldHaveValidationErrorFor(x => x.Trusts)
                 .WithErrorMessage("We could not find any trusts matching your search criteria");
         }
 
         [Fact]
-        public async void WhenResultsAreNotEmpty_ShouldNotSetError()
+        public async Task WhenResultsAreNotEmpty_ShouldNotSetError()
         {
-            var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object)
+            var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object);
+
+            ((ISetTrusts)trustSearch).SetTrusts(new List<TrustSearchResult>
             {
-                Trusts = new List<TrustSearchResult>
-                {
-                    new TrustSearchResult() { TrustName = "Trust One" },
-                    new TrustSearchResult() { TrustName = "Trust Two" },
-                }
-            };
+               new() { TrustName = "Trust One" },
+               new() { TrustName = "Trust Two" },
+            });
 
             var result = await _validator.TestValidateAsync(trustSearch);
 

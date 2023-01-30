@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Web.Models.Benefits;
 using Dfe.PrepareTransfers.Web.Models.LegalRequirements;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +10,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements
     public class Index : CommonPageModel
     {
         private readonly IProjects _projects;
-        public LegalRequirementsViewModel LegalRequirementsViewModel;
+        public LegalRequirementsViewModel LegalRequirementsViewModel { get; private set; }
+
         [BindProperty]
         public MarkSectionCompletedViewModel MarkSectionCompletedViewModel { get; set; }
 

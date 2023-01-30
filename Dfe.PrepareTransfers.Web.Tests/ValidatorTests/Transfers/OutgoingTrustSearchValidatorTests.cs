@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Web.Helpers;
 using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Pages.Transfers;
 using Dfe.PrepareTransfers.Web.Validators.Transfers;
@@ -23,31 +24,29 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         }
 
         [Fact]
-        public async void WhenTrustResultsAreEmpty_ShouldSetError()
+        public async Task WhenTrustResultsAreEmpty_ShouldSetError()
         {
-            var trustSearch = new TrustSearchModel(_trustsRepository.Object)
-            {
-                Trusts = new List<TrustSearchResult>()
-            };
+           var trustSearch = new TrustSearchModel(_trustsRepository.Object);
 
-            var result = await _validator.TestValidateAsync(trustSearch);
+           ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<TrustSearchResult>());
+
+            TestValidationResult<TrustSearchModel> result = await _validator.TestValidateAsync(trustSearch);
             result.ShouldHaveValidationErrorFor(x => x.Trusts)
                 .WithErrorMessage("We could not find any trusts matching your search criteria");
         }
 
         [Fact]
-        public async void WhenTrustResultsAreNotEmpty_ShouldNotSetError()
+        public async Task WhenTrustResultsAreNotEmpty_ShouldNotSetError()
         {
-            var trustSearch = new TrustSearchModel(_trustsRepository.Object)
-            {
-                Trusts = new List<TrustSearchResult>()
-                {
-                    new TrustSearchResult() { TrustName = "Trust One", Academies = new List<TrustSearchAcademy>{new TrustSearchAcademy()}},
-                    new TrustSearchResult() { TrustName = "Trust Two", Academies = new List<TrustSearchAcademy>{new TrustSearchAcademy()}},
-                }
-            };
+            var trustSearch = new TrustSearchModel(_trustsRepository.Object);
 
-            var result = await _validator.TestValidateAsync(trustSearch);
+            ((ISetTrusts)trustSearch).SetTrusts(new List<TrustSearchResult>
+            {
+               new() { TrustName = "Trust One", Academies = new List<TrustSearchAcademy> { new() } },
+               new() { TrustName = "Trust Two", Academies = new List<TrustSearchAcademy> { new() } }
+            });
+
+            TestValidationResult<TrustSearchModel> result = await _validator.TestValidateAsync(trustSearch);
             result.ShouldNotHaveValidationErrorFor(x => x);
         }
     }

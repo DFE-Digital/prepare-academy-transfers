@@ -15,8 +15,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
       private readonly ILogger<Index> _logger;
       private readonly IProjects _projectsRepository;
-      public List<ProjectSearchResult> Projects;
-      public int TotalProjectCount;
+      private List<ProjectSearchResult> _projects;
+
+      public IReadOnlyList<ProjectSearchResult> Projects => _projects.AsReadOnly();
+      public int TotalProjectCount { get; private set; }
 
       public Index(IProjects projectsRepository, ILogger<Index> logger)
       {
@@ -43,7 +45,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
          RepositoryResult<List<ProjectSearchResult>> projects =
             await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
 
-         Projects = projects.Result;
+         _projects = projects.Result;
          TotalProjectCount = projects.TotalRecords;
 
          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;

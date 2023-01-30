@@ -56,6 +56,11 @@ public class Startup
       return Configuration.GetRequiredSection(sectionName);
    }
 
+   private T GetTypedConfiguration<T>()
+   {
+      return GetConfigurationSection<T>().Get<T>();
+   }
+
 
    // This method gets called by the runtime. Use this method to add services to the container.
    public void ConfigureServices(IServiceCollection services)
@@ -142,10 +147,9 @@ public class Startup
          app.UseHsts();
       }
 
-      app.UseSecurityHeaders(
-         SecureHeadersDefinitions.SecurityHeadersDefinitions.GetHeaderPolicyCollection(env.IsDevelopment())
-            .AddXssProtectionDisabled()
-      );
+      app.UseSecurityHeaders(SecurityHeadersDefinitions
+         .GetHeaderPolicyCollection(env.IsDevelopment(), GetTypedConfiguration<AllowedExternalSourcesOptions>())
+         .AddXssProtectionDisabled());
 
       app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
 

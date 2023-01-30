@@ -3,24 +3,25 @@ using Dfe.PrepareTransfers.Data.Models;
 using FluentValidation.Results;
 using Dfe.PrepareTransfers.Web.Validators.Transfers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dfe.PrepareTransfers.Web.Helpers;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 {
-    public class TrustSearchModel : TransfersPageModel
+    public class TrustSearchModel : TransfersPageModel, ISetTrusts
     {
-        public List<TrustSearchResult> Trusts;
+        public List<TrustSearchResult> Trusts { get; private set; }
+
         [BindProperty(Name = "query", SupportsGet = true)]
         public string SearchQuery { get; set; } = "";
 
-        protected readonly ITrusts _trustsRepository;
+        protected readonly ITrusts TrustsRepository;
 
         public TrustSearchModel(ITrusts trustsRepository)
         {
-            _trustsRepository = trustsRepository;
+            TrustsRepository = trustsRepository;
         }
 
         public async Task<IActionResult> OnGetAsync(bool change = false)
@@ -34,7 +35,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 return SetErrorMessageAndRedirectToTrustName(queryValidationResult);
             }
 
-            var result = await _trustsRepository.SearchTrusts(SearchQuery);
+            var result = await TrustsRepository.SearchTrusts(SearchQuery);
             Trusts = result.Result.Where(trust => trust.Academies.Any()).ToList();
 
             var searchValidator = new OutgoingTrustSearchValidator();
@@ -60,6 +61,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             TempData["ErrorMessage"] = validationResult.Errors.First().ErrorMessage;
             return RedirectToPage("/Transfers/TrustName", new { query = SearchQuery });
+        }
+
+        void ISetTrusts.SetTrusts(IEnumerable<TrustSearchResult> trusts)
+        {
+           Trusts = trusts.ToList();
         }
     }
 }

@@ -15,7 +15,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         {
             StatusCode = httpResponseMessage.StatusCode;
             base.Data.Add("Sentry:Tag:StatusCode", StatusCode);
-            base.Data.Add("Content", httpResponseMessage.Content?.ReadAsStringAsync().Result);
+
+            var messageContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+            if (string.IsNullOrWhiteSpace(messageContent) is false)
+               base.Data.Add("Content", messageContent);
         }
 
         protected TramsApiException(SerializationInfo info, StreamingContext context) : base(info, context)

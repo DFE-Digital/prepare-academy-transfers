@@ -14,7 +14,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
     public class Index : CommonPageModel
     {
         private readonly IProjects _projects;
-        public BenefitsSummaryViewModel BenefitsSummaryViewModel;
+        public BenefitsSummaryViewModel BenefitsSummaryViewModel { get; private set; }
+
         [BindProperty]
         public MarkSectionCompletedViewModel MarkSectionCompletedViewModel { get; set; }
 
