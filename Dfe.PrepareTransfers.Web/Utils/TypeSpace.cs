@@ -9,7 +9,7 @@ namespace Dfe.PrepareTransfers.Web.Utils
     public class Typespace
     {
         private static readonly Regex NonAlphaNumeric =
-            new Regex("[^a-z0-9-]", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            new Regex("[^a-z0-9-]", RegexOptions.IgnoreCase | RegexOptions.Compiled, TimeSpan.FromSeconds(1));
 
         private Typespace() { }
 
