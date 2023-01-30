@@ -1,7 +1,5 @@
-@using Dfe.PrepareTransfers.Web.ExtensionMethods
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods
-@using Dfe.PrepareTransfers.Web.Models.LegalRequirements
 @using Dfe.PrepareTransfers.Data.Models
 @model Dfe.PrepareTransfers.Web.Models.LegalRequirements.LegalRequirementsViewModel
 <dl class="govuk-summary-list">
@@ -14,30 +12,30 @@
     @{
         await LegalAction("Diocesan consent", @Model.DiocesanConsent, "diocesan-consent", Links.LegalRequirements.DiocesanConsent.Index.PageName);
     }
-</dl>
-
-@{
-    async Task LegalAction(string legalActionName, ThreeOptions? legalActionValue, string testTag, string pageRedirect)
-    {
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
+    
+    @{
+       async Task LegalAction(string legalActionName, ThreeOptions? legalActionValue, string testTag, string pageRedirect)
+       {
+          <div class="govuk-summary-list__row">
+             <dt class="govuk-summary-list__key">
                 @legalActionName
-            </dt>
-            <dd class="govuk-summary-list__value">
+             </dt>
+             <dd class="govuk-summary-list__value">
                 @if (@legalActionValue.HasValue is false)
                 {
-                    <span class="dfe-empty-tag" id="@testTag" data-test=@testTag>Empty</span>
+                   <span class="dfe-empty-tag" id="@testTag" data-test=@testTag>Empty</span>
                 }
                 else
                 {
-                    <p class="govuk-body" id="@testTag" data-test=@testTag>@(legalActionValue.ToDescription())</p>
+                   <p class="govuk-body" id="@testTag" data-test=@testTag>@(legalActionValue.ToDescription())</p>
                 }
-            </dd>
-            <dd class="govuk-summary-list__actions">
+             </dd>
+             <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" asp-page=@pageRedirect asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
-                    Change<span class="govuk-visually-hidden"> @legalActionName</span>
+                   Change<span class="govuk-visually-hidden"> @legalActionName</span>
                 </a>
-            </dd>
-        </div>
+             </dd>
+          </div>
+       }
     }
-}
+</dl>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models.Forms;
@@ -10,7 +11,7 @@ namespace Dfe.PrepareTransfers.Web.Models.Benefits
     {
         private readonly IList<TransferBenefits.IntendedBenefit> _intendedBenefits;
         private readonly string _otherIntendedBenefit;
-        public readonly IList<OtherFactorsItemViewModel> OtherFactorsItems;
+        public readonly IReadOnlyList<OtherFactorsItemViewModel> OtherFactorsItems;
         public readonly string OutgoingAcademyUrn;
         public readonly bool? AnyRisks;
         public readonly bool? EqualitiesImpactAssessmentConsidered;
@@ -25,7 +26,9 @@ namespace Dfe.PrepareTransfers.Web.Models.Benefits
         {
             _intendedBenefits = intendedBenefits;
             _otherIntendedBenefit = otherIntendedBenefit;
-            OtherFactorsItems = otherFactorsItems;
+            OtherFactorsItems =
+               new ReadOnlyCollection<OtherFactorsItemViewModel>(otherFactorsItems ??
+                                                                 new List<OtherFactorsItemViewModel>());
             Urn = projectUrn;
             OutgoingAcademyUrn = outgoingAcademyUrn;
             AnyRisks = anyRisks;
@@ -34,10 +37,10 @@ namespace Dfe.PrepareTransfers.Web.Models.Benefits
 
         public List<string> IntendedBenefitsSummary()
         {
-            var summary = _intendedBenefits.ToList()
-                .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
-                .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
-                .ToList();
+           List<string> summary = _intendedBenefits.ToList()
+              .FindAll(EnumHelpers<TransferBenefits.IntendedBenefit>.HasDisplayValue)
+              .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.GetDisplayValue)
+              .ToList();
 
             if (_intendedBenefits.Contains(TransferBenefits.IntendedBenefit.Other))
             {
