@@ -67,7 +67,7 @@ namespace Dfe.PrepareTransfers.Web.Pages
                 Consent = consent;
                 PreferencesSet = true;
 
-                var cookieOptions = new CookieOptions { Expires = DateTime.Today.AddMonths(6), Secure = true };
+                var cookieOptions = new CookieOptions { Expires = DateTime.Today.AddMonths(6), Secure = true, HttpOnly = true };
                 Response.Cookies.Append(ConsentCookieName, consent.Value.ToString(), cookieOptions);
 
                 if (!consent.Value)
@@ -84,7 +84,7 @@ namespace Dfe.PrepareTransfers.Web.Pages
         {
             if (consent.HasValue)
             {
-                var cookieOptions = new CookieOptions { Expires = DateTime.Today.AddMonths(6), Secure = true };
+                var cookieOptions = new CookieOptions { Expires = DateTime.Today.AddMonths(6), Secure = true, HttpOnly = true };
                 Response.Cookies.Append(ConsentCookieName, consent.Value.ToString(), cookieOptions);
             }
 
@@ -99,7 +99,8 @@ namespace Dfe.PrepareTransfers.Web.Pages
                         {
                             Expires = DateTime.Now.AddDays(-1),
                             Secure = true,
-                            SameSite = SameSiteMode.Lax
+                            SameSite = SameSiteMode.Lax,
+                            HttpOnly = true
                         });
                     }
                 }
