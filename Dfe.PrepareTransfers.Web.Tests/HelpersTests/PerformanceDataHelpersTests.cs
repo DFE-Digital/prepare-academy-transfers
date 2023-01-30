@@ -153,12 +153,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
                 };
                 Assert.True(PerformanceDataHelpers.HasKeyStage2PerformanceInformation(model));
             }
-
-            [Fact]
-            public void GivenStringOnlyValue_ShouldReturnFalse()
-            {
-                
-            }
         }
 
         public class HasKeyStage4PerformanceDataTests

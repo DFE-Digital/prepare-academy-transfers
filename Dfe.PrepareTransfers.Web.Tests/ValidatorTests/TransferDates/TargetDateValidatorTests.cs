@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Models.Forms;
@@ -11,7 +12,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
 {
     public class TargetDateValidatorTests
     {
-        private readonly TargetDateValidator _validator = new TargetDateValidator();
+        private readonly TargetDateValidator _validator = new();
 
         [Fact]
         public void ShouldHaveChildValidators()
@@ -21,7 +22,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         }
 
         [Fact]
-        public async void GivenAdvisoryBoardDateAndTargetDateLessThanAdvisoryBoardDate_ShouldGiveError()
+        public async Task GivenAdvisoryBoardDateAndTargetDateLessThanAdvisoryBoardDate_ShouldGiveError()
         {
             var advisoryBoardDate = DateTime.Now.AddMonths(2);
             var targetDate = DateTime.Now.AddMonths(1);
@@ -52,7 +53,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void GivenAdvisoryBoardDateAndTargetDateGreaterThanAdvisoryBoardDate_ShouldNotGiveError()
+        public async Task GivenAdvisoryBoardDateAndTargetDateGreaterThanAdvisoryBoardDate_ShouldNotGiveError()
         {
             var advisoryBoardDate = DateTime.Now.AddDays(3);
             var targetDate = DateTime.Now.AddMonths(1);
@@ -85,7 +86,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public async void GivenTargetDateAndNoAdvisoryBoardDate_ShouldNotGiveError(string advisoryBoardDate)
+        public async Task GivenTargetDateAndNoAdvisoryBoardDate_ShouldNotGiveError(string advisoryBoardDate)
         {
             var targetDate = DateTime.Now.AddMonths(1);
             var vm = new TargetDateViewModel
@@ -114,7 +115,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void GivenAdvisoryBoardDateAndUnknownTargetDate_ShouldNotGiveError()
+        public async Task GivenAdvisoryBoardDateAndUnknownTargetDate_ShouldNotGiveError()
         {
             var vm = new TargetDateViewModel
             {

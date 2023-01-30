@@ -4,13 +4,13 @@
 @model Dfe.PrepareTransfers.Web.Models.LegalRequirements.LegalRequirementsViewModel
 <dl class="govuk-summary-list">
     @{
-        await LegalAction("Outgoing trust resolution", @Model.OutgoingTrustConsent, "outgoing-trust-consent", Links.LegalRequirements.OutgoingTrustConsent.Index.PageName);
+        await LegalAction("Outgoing trust resolution", @Model.OutgoingTrustConsent, "outgoing-trust-consent", Links.LegalRequirements.OutgoingTrustConsent.Home.PageName);
     }
     @{
-        await LegalAction("Incoming trust agreement", @Model.IncomingTrustAgreement, "incoming-trust-agreement", Links.LegalRequirements.IncomingTrustAgreement.Index.PageName);
+        await LegalAction("Incoming trust agreement", @Model.IncomingTrustAgreement, "incoming-trust-agreement", Links.LegalRequirements.IncomingTrustAgreement.Home.PageName);
     }
     @{
-        await LegalAction("Diocesan consent", @Model.DiocesanConsent, "diocesan-consent", Links.LegalRequirements.DiocesanConsent.Index.PageName);
+        await LegalAction("Diocesan consent", @Model.DiocesanConsent, "diocesan-consent", Links.LegalRequirements.DiocesanConsent.Home.PageName);
     }
     
     @{

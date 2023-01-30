@@ -40,40 +40,45 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
             _runs = new List<Run>();
         }
 
-        public void AddText(TextElement text)
+        public void AddText(TextElement textElement)
         {
             const string defaultFontSize = "24";
-            var run = new Run() { RunProperties = new RunProperties() };
-            run.RunProperties.RunFonts = new RunFonts()
+            var run = new Run
             {
-                Ascii = "Arial",
-                HighAnsi = "Arial",
-                ComplexScript = "Arial"
+               RunProperties = new RunProperties
+               {
+                  RunFonts = new RunFonts()
+                  {
+                     Ascii = "Arial",
+                     HighAnsi = "Arial",
+                     ComplexScript = "Arial"
+                  }
+               }
             };
 
-            DocumentBuilderHelpers.AddTextToElement(run, text.Value);
+            DocumentBuilderHelpers.AddTextToElement(run, textElement.Value);
 
-            if (text.Bold)
+            if (textElement.Bold)
             {
                 run.RunProperties.Bold = new Bold();
             }
 
-            if (text.Italic)
+            if (textElement.Italic)
             {
                 run.RunProperties.Italic = new Italic();
             }
 
-            if (text.Underline)
+            if (textElement.Underline)
             {
                 run.RunProperties.Underline = new Underline
                     { Val = new EnumValue<UnderlineValues>(UnderlineValues.Single), Color = "000000" };
             }
 
-            run.RunProperties.FontSize = new FontSize { Val = text.FontSize ?? defaultFontSize };
+            run.RunProperties.FontSize = new FontSize { Val = textElement.FontSize ?? defaultFontSize };
 
-            if (!string.IsNullOrEmpty(text.Colour))
+            if (!string.IsNullOrEmpty(textElement.Colour))
             {
-                run.RunProperties.Color = new Color { Val = text.Colour };
+                run.RunProperties.Color = new Color { Val = textElement.Colour };
             }
 
             _runs.Add(run);

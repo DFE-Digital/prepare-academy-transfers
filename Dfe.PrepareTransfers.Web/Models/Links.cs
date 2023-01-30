@@ -59,18 +59,18 @@ public static class Links
 
       public static class IncomingTrustAgreement
       {
-         public static readonly LinkItem Index =
+         public static readonly LinkItem Home =
             Create("/Projects/LegalRequirements/IncomingTrustAgreement");
       }
 
       public static class DiocesanConsent
       {
-         public static readonly LinkItem Index = Create("/Projects/LegalRequirements/DiocesanConsent");
+         public static readonly LinkItem Home = Create("/Projects/LegalRequirements/DiocesanConsent");
       }
 
       public static class OutgoingTrustConsent
       {
-         public static readonly LinkItem Index = Create("/Projects/LegalRequirements/OutgoingTrustConsent");
+         public static readonly LinkItem Home = Create("/Projects/LegalRequirements/OutgoingTrustConsent");
       }
    }
 }
