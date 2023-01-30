@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Docume
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data", "Dfe.PrepareTransfers.Data\Dfe.PrepareTransfers.Data.csproj", "{32F19A87-2718-429C-A5F0-3B6815C1497F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.Mock", "Dfe.PrepareTransfers.Data.Mock\Dfe.PrepareTransfers.Data.Mock.csproj", "{B438E250-451B-4435-B689-E64D702AED13}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.TRAMS", "Dfe.PrepareTransfers.Data.TRAMS\Dfe.PrepareTransfers.Data.TRAMS.csproj", "{AB12AC97-D04C-4525-B615-EE0BD1E21229}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.TRAMS.Tests", "Dfe.PrepareTransfers.Data.TRAMS.Tests\Dfe.PrepareTransfers.Data.TRAMS.Tests.csproj", "{98D82005-DF8A-43F5-960A-8FDD77EE693E}"
@@ -62,10 +60,6 @@ Global
 		{32F19A87-2718-429C-A5F0-3B6815C1497F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F19A87-2718-429C-A5F0-3B6815C1497F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F19A87-2718-429C-A5F0-3B6815C1497F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B438E250-451B-4435-B689-E64D702AED13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B438E250-451B-4435-B689-E64D702AED13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B438E250-451B-4435-B689-E64D702AED13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B438E250-451B-4435-B689-E64D702AED13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB12AC97-D04C-4525-B615-EE0BD1E21229}.Release|Any CPU.ActiveCfg = Release|Any CPU
