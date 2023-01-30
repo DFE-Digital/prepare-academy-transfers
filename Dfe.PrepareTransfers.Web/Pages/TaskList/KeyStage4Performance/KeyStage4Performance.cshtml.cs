@@ -15,20 +15,20 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage4Performance
     {
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectRepository;
-        
+
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
-        
+
         [BindProperty(SupportsGet = true)]
         public bool AddOrEditAdditionalInformation { get; set; }
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
         public string AcademyName { get; set; }
-        //todo: remove data models here
+
         #region remove
         public EducationPerformance EducationPerformance { get; set; }
         #endregion
-        
+
         public KeyStage4Performance(IGetInformationForProject getInformationForProject, IProjects projectRepository)
         {
             _getInformationForProject = getInformationForProject;
@@ -49,7 +49,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage4Performance
             var academy = project.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
             academy.KeyStage4PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
             await _projectRepository.Update(project.Result);
-            
+
             if (ReturnToPreview)
             {
                 return new RedirectToPageResult(
@@ -80,6 +80,5 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage4Performance
                 ReturnToPreview = ReturnToPreview
             };
         }
-        
     }
 }

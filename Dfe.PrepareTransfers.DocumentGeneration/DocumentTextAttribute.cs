@@ -2,6 +2,7 @@ using System;
 
 namespace Dfe.PrepareTransfers.DocumentGeneration
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public class DocumentTextAttribute : Attribute
     {
         private readonly string _placeholder;

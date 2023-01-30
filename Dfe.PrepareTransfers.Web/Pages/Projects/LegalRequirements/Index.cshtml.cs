@@ -55,7 +55,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements
                 new { Urn });
         }
 
-        private bool LegalRequirementsSectionDataIsPopulated(Project project) =>
+        private static bool LegalRequirementsSectionDataIsPopulated(Project project) =>
             project.LegalRequirements.DiocesanConsent != null
             && project.LegalRequirements.IncomingTrustAgreement != null;
 

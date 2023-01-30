@@ -46,9 +46,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
             await anchors.NavigateAsync();
         }
 
-        private IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
+        private static IBrowsingContext CreateBrowsingContext(HttpClient httpClient)
         {
-            var config = AngleSharp.Configuration.Default
+            var config = Configuration.Default
                 .WithRequester(new HttpClientRequester(httpClient))
                 .WithDefaultLoader(new LoaderOptions { IsResourceLoadingEnabled = true });
 
@@ -60,6 +60,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
         public void Dispose()
         {
             _factory.Reset();
+            GC.SuppressFinalize(this);
         }
     }
 }

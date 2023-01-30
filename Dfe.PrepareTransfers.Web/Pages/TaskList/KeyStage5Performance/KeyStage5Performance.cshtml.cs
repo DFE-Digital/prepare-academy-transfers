@@ -21,12 +21,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage5Performance
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
         public string AcademyName { get; set; }
-        
-        //todo: remove data models here
+
+
         #region remove
         public EducationPerformance EducationPerformance { get; set; }
         #endregion
-        
+
         public KeyStage5Performance(IGetInformationForProject getInformationForProject, IProjects projects)
         {
             _getInformationForProject = getInformationForProject;
@@ -36,7 +36,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage5Performance
         public async Task<IActionResult> OnGetAsync()
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
-            
+
             PopulateModel(projectInformation);
             return Page();
         }
@@ -71,7 +71,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage5Performance
             AdditionalInformationViewModel = new AdditionalInformationViewModel
             {
                 AdditionalInformation = academy.EducationPerformance.KeyStage5AdditionalInformation,
-                HintText = 
+                HintText =
                     "This information will go into your project template under the key stage performance section.",
                 Urn = projectInformation.Project.Urn,
                 AddOrEditAdditionalInformation = AddOrEditAdditionalInformation,

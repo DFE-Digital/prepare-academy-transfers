@@ -17,15 +17,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage2Performance
 
         [BindProperty]
         public AdditionalInformationViewModel AdditionalInformationViewModel { get; set; }
-        
+
         [BindProperty(SupportsGet = true)]
         public bool AddOrEditAdditionalInformation { get; set; }
-        
+
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
         public string AcademyName { get; set; }
-        
-        //todo: remove data models here
+
         #region remove
         public EducationPerformance EducationPerformance { get; set; }
         #endregion
@@ -55,7 +54,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage2Performance
                     new {Urn}
                 );
             }
-            
+
             return new RedirectToPageResult(nameof(KeyStage2Performance),
                 null,
                 new {Urn},

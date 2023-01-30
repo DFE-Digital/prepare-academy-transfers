@@ -39,7 +39,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
                 mappedKs5Results[1].National.AppliedGeneralAverage);
         }
 
-        private void AssertKs2MappedCorrectly(
+        private static void AssertKs2MappedCorrectly(
             Data.Models.KeyStagePerformance.EducationPerformance mappedInternalEducationPerformance,
             TramsEducationPerformance tramsEducationPerformanceToMap)
         {
@@ -78,7 +78,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.True(AssertPupilCategoryResponse(tramsKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM,
                 mappedKs2Result.NationalAveragePercentageMeetingExpectedStdInRWM));
         }
-        
+
         [Fact]
         public void GivenTramsEducationPerformanceKeyStage4Results_MapsToInternalEducationPerformance()
         {
@@ -127,7 +127,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(tramsKs4Result.NationalEnteringEbacc, mappedKs4Result.NationalEnteringEbacc);
         }
 
-        private bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
+        private static bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
             DisadvantagedPupilsResult mappedResult) =>
             tramsResponse.Disadvantaged == mappedResult.Disadvantaged &&
             tramsResponse.NotDisadvantaged == mappedResult.NotDisadvantaged;

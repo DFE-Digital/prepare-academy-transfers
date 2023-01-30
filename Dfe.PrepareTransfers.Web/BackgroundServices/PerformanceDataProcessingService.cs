@@ -36,7 +36,7 @@ namespace Dfe.PrepareTransfers.Web.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await foreach (var academyUkprn in _performanceDataChannel.ReadAllAsync())
+            await foreach (var academyUkprn in _performanceDataChannel.ReadAllAsync(CancellationToken.None))
             {
                 using var scope = _serviceProvider.CreateScope();
                 var educationPerformance = scope.ServiceProvider.GetRequiredService<IEducationPerformance>();

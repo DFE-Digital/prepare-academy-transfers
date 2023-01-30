@@ -103,7 +103,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             academyToMap.Census.NumberOfGirls = null;
             academyToMap.Census.PercentageEligableForFSM6Years = null;
             academyToMap.Census.PercentageEnglishNotFirstLanguage = null;
-            
+
             var result = _subject.Map(academyToMap);
             Assert.Null(result.PupilNumbers.BoysOnRoll);
             Assert.Null(result.PupilNumbers.GirlsOnRoll);
@@ -111,7 +111,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Null(result.PupilNumbers.PercentageEligibleForFreeSchoolMealsDuringLast6Years);
             Assert.Null(result.PupilNumbers.WithStatementOfSen);
         }
-        
+
         [Fact]
         public void GiveNullMisEstablishment_ReturnsCorrectValue()
         {
@@ -129,7 +129,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
         {
             var academyToMap = _tramsEstablishment;
             academyToMap.ViewAcademyConversion = null;
-            
+
             var result = _subject.Map(academyToMap);
             Assert.True(string.IsNullOrEmpty(result.GeneralInformation.Deficit));
             Assert.True(string.IsNullOrEmpty(result.GeneralInformation.Pan));

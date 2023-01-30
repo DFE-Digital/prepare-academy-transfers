@@ -49,7 +49,7 @@ namespace Dfe.PrepareTransfers.Data.Models.Academies
             }
         }
 
-        private bool OfstedRatingHasData(string ofstedRating)
+        private static bool OfstedRatingHasData(string ofstedRating)
         {
             return !(ofstedRating == "No data" || ofstedRating == "N/A");
         }
