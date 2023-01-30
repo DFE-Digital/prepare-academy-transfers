@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
             };
         }
 
-        private TableBorders NoneTableBorders()
+        private static TableBorders NoneTableBorders()
         {
             return new TableBorders();
         }

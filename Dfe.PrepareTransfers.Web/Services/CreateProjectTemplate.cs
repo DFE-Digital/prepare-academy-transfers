@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.PrepareTransfers.DocumentGeneration;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
@@ -20,13 +19,13 @@ namespace Dfe.PrepareTransfers.Web.Services
     {
         private readonly IGetProjectTemplateModel _getProjectTemplateModel;
         private const string LocalAuthority = "local authority";
-        
+
         public CreateProjectTemplate(IGetProjectTemplateModel getProjectTemplateModel)
         {
             _getProjectTemplateModel = getProjectTemplateModel;
         }
 
-        private MemoryStream CreateMemoryStream(string template)
+        private static MemoryStream CreateMemoryStream(string template)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = assembly.GetManifestResourceNames()
@@ -60,7 +59,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             };
         }
 
-        private void BuildOtherFactors(DocumentBuilder documentBuilder, ProjectTemplateModel projectTemplateModel)
+        private static void BuildOtherFactors(DocumentBuilder documentBuilder, ProjectTemplateModel projectTemplateModel)
         {
             documentBuilder.ReplacePlaceholderWithContent("Risks", builder =>
             {
@@ -98,7 +97,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             });
         }
 
-        private void BuildAcademyData(DocumentBuilder documentBuilder, List<ProjectTemplateAcademyModel> academies)
+        private static void BuildAcademyData(DocumentBuilder documentBuilder, List<ProjectTemplateAcademyModel> academies)
         {
             documentBuilder.ReplacePlaceholderWithContent("AcademySection", builder =>
             {

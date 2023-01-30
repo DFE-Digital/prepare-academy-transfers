@@ -61,7 +61,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
                 new {Urn});
         }
 
-        private bool BenefitsSectionDataIsPopulated(Project project) =>
+        private static bool BenefitsSectionDataIsPopulated(Project project) =>
             project.Benefits.IntendedBenefits != null 
             && project.Benefits.IntendedBenefits.Any() 
             && (project.Benefits.OtherFactors != null && project.Benefits.OtherFactors.Any() || project.Benefits.AnyRisks == false);

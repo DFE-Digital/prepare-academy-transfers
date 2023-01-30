@@ -32,7 +32,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private AcademyTransferProjectAcademyAndTrustInformation GeneralInformation(Project input)
+        private static AcademyTransferProjectAcademyAndTrustInformation GeneralInformation(Project input)
         {
             return new AcademyTransferProjectAcademyAndTrustInformation
             {

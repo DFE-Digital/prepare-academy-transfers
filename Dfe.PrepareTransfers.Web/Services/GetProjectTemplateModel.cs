@@ -70,7 +70,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             };
         }
 
-        private List<ProjectTemplateAcademyModel> GetAcademyData(List<Academy> academies)
+        private static List<ProjectTemplateAcademyModel> GetAcademyData(List<Academy> academies)
         {
             var academyModels = new List<ProjectTemplateAcademyModel>();
             foreach (var academy in academies)

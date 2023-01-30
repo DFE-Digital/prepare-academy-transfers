@@ -63,7 +63,7 @@ namespace Dfe.PrepareTransfers.Helpers
         {
             var resourceKeyProperty = resourceManagerProvider.GetProperty(resourceKey,
                 BindingFlags.Static | BindingFlags.Public, null, typeof(string),
-                new Type[0], null);
+                Array.Empty<Type>(), null);
             if (resourceKeyProperty != null)
             {
                 return (string) resourceKeyProperty.GetMethod.Invoke(null, null);

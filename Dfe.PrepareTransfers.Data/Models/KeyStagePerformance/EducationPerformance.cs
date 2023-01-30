@@ -11,13 +11,13 @@ namespace Dfe.PrepareTransfers.Data.Models.KeyStagePerformance
             KeyStage4Performance = new List<KeyStage4>();
             KeyStage5Performance = new List<KeyStage5>();
         }
-        
-        //todo: remove this when view models/view component
+
         #region remove
         public string ProjectUrn { get;set; }
         public string AcademyName { get; set; }
         public string AcademyUkprn { get; set; }
         #endregion
+
         public List<KeyStage2> KeyStage2Performance { get; set; }
         public string KeyStage2AdditionalInformation { get; set; }
         public List<KeyStage4> KeyStage4Performance { get; set; }

@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
@@ -9,12 +6,10 @@ using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
-using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
-    public class GetInformationForProject : IGetInformationForProject
+	public class GetInformationForProject : IGetInformationForProject
     {
         private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
@@ -25,8 +20,7 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
-            _educationPerformanceRepository = educationPerformanceRepository;
-  
+            _educationPerformanceRepository = educationPerformanceRepository;  
         }
 
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
@@ -71,7 +65,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             return performance;
         }
 
-        private void SetAdditionalInformation(Academy academyDomain, TransferringAcademies academy)
+        private static void SetAdditionalInformation(Academy academyDomain, TransferringAcademies academy)
         {
             academyDomain.PupilNumbers.AdditionalInformation = academy.PupilNumbersAdditionalInformation;
             academyDomain.LatestOfstedJudgement.AdditionalInformation = academy.LatestOfstedReportAdditionalInformation;

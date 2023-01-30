@@ -127,7 +127,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(tramsKs4Result.NationalEnteringEbacc, mappedKs4Result.NationalEnteringEbacc);
         }
 
-        private bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
+        private static bool AssertPupilCategoryResponse(DisadvantagedPupilsResponse tramsResponse,
             DisadvantagedPupilsResult mappedResult) =>
             tramsResponse.Disadvantaged == mappedResult.Disadvantaged &&
             tramsResponse.NotDisadvantaged == mappedResult.NotDisadvantaged;

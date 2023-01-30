@@ -16,7 +16,7 @@ namespace Dfe.PrepareTransfers.Web.Pages
         public bool PreferencesSet { get; set; } = false;
         public string returnPath { get; set; }
         private readonly ILogger<CookiePreferencesModel> _logger;
-        private readonly IOptions<ServiceLinkOptions> _options;        
+        private readonly IOptions<ServiceLinkOptions> _options;
 
         public CookiePreferencesModel(ILogger<CookiePreferencesModel> logger, IOptions<ServiceLinkOptions> options)
         {
@@ -94,7 +94,7 @@ namespace Dfe.PrepareTransfers.Web.Pages
                 {
                     if (cookie.StartsWith("_ga") || cookie.Equals("_gid"))
                     {
-                        _logger.LogInformation($"Expiring Google analytics cookie: {cookie}");
+                        _logger.LogInformation("Expiring Google analytics cookie: {cookie}", cookie);
                         Response.Cookies.Append(cookie, string.Empty, new CookieOptions
                         {
                             Expires = DateTime.Now.AddDays(-1),

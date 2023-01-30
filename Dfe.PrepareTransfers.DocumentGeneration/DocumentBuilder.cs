@@ -242,7 +242,7 @@ namespace Dfe.PrepareTransfers.DocumentGeneration
             }
         }
 
-        private PropertyInfo[] GetProperties<TDocument>()
+        private static PropertyInfo[] GetProperties<TDocument>()
         {
             return typeof(TDocument).GetProperties()
                 .Where(p => p.GetCustomAttribute<DocumentTextAttribute>() != null)

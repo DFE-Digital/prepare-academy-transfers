@@ -131,7 +131,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             AssertTransferringAcademiesCorrect(toMap, result);
         }
 
-        private void AssertGeneralInformationCorrect(TramsProject toMap, Project result)
+        private static void AssertGeneralInformationCorrect(TramsProject toMap, Project result)
         {
             Assert.Equal(toMap.GeneralInformation.Author, result.AcademyAndTrustInformation.Author);
             var expectedRecommendation =
