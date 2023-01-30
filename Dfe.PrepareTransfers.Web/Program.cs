@@ -7,7 +7,7 @@ using Serilog.Formatting.Compact;
 
 namespace Dfe.PrepareTransfers.Web
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace Dfe.PrepareTransfers.Web
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
                 .ConfigureAppConfiguration((_, configuration) => configuration.AddEnvironmentVariables())

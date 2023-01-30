@@ -178,7 +178,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                {
                   RepositoryResult<Academy> outgoingAcademy =
                      await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-                  // RepositoryResult<Trust> incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
                   transferring.IncomingTrust = new TrustSummary
                   {
                      Ukprn = transferring.IncomingTrustUkprn

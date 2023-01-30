@@ -8,7 +8,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks
     {
         public OtherFactorsValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
             RuleFor(x => x.OtherFactorsVm)
                 .Custom((list, context) =>
                 {

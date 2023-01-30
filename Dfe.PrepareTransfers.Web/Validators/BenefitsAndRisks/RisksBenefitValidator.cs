@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using Dfe.PrepareTransfers.Web.Models.Benefits;
 
 namespace Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks
@@ -8,7 +7,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks
     {
         public RisksValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
             RuleFor(x => x.RisksInvolved)
                 .NotNull()
                 .WithMessage("Select yes if there are risks to consider");

@@ -8,7 +8,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.Features
     {
         public FeaturesTypeValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
             
             RuleFor(x => x.TypeOfTransfer)
                           .NotEqual(TransferFeatures.TransferTypes.Empty)

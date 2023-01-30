@@ -27,8 +27,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods
             .Select(x => $"{Encode(x.Key)}={Encode(x.Value)}")
             .ToList();
 
+         var prefixContent = prefix ? "?" : string.Empty;
+
          return parameterPairs.Count > 0
-            ? $"{(prefix ? "?" : string.Empty)}{string.Join("&", parameterPairs)}"
+            ? $"{prefixContent}{string.Join("&", parameterPairs)}"
             : string.Empty;
 
          string Encode(string x)

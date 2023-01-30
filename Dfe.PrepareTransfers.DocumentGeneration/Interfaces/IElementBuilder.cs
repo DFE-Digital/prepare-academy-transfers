@@ -1,6 +1,6 @@
 namespace Dfe.PrepareTransfers.DocumentGeneration.Interfaces
 {
-    public interface IElementBuilder<T>
+    public interface IElementBuilder<out T>
     {
         public T Build();
     }

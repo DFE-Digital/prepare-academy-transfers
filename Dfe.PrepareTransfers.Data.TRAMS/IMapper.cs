@@ -1,6 +1,6 @@
 namespace Dfe.PrepareTransfers.Data.TRAMS
 {
-    public interface IMapper<T, V>
+    public interface IMapper<in T, out V>
     {
         V Map(T input);
     }

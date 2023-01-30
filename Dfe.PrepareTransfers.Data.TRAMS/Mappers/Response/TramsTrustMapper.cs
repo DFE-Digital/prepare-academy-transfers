@@ -7,7 +7,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {
     public class TramsTrustMapper : IMapper<TramsTrust, Trust>
     {
-        private IMapper<TramsEstablishment, Academy> _establishmentMapper;
+        private readonly IMapper<TramsEstablishment, Academy> _establishmentMapper;
 
         public TramsTrustMapper(IMapper<TramsEstablishment, Academy> establishmentMapper)
         {

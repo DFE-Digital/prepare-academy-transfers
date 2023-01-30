@@ -73,10 +73,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
             var foundOtherFactor =
                 available.FirstOrDefault(otherFactor => otherFactors.Select(o => o.Key).Contains(otherFactor));
 
+            string backLinkContent =
+               backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index";
+
             var pageUrl = GetPageUrlFromOtherFactor(foundOtherFactor);
-            return string.IsNullOrEmpty(pageUrl)
-                ? backLink ? "/Projects/BenefitsAndRisks/OtherFactors" : "/Projects/BenefitsAndRisks/Index"
-                : pageUrl;
+
+            return string.IsNullOrEmpty(pageUrl) ? backLinkContent : pageUrl;
         }
 
         public static string GetPageUrlFromOtherFactor(TransferBenefits.OtherFactor foundOtherFactor)

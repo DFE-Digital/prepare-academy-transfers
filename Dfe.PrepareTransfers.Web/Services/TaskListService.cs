@@ -33,19 +33,23 @@ namespace Dfe.PrepareTransfers.Web.Services
             indexPage.AssignedUser = project.Result.AssignedUser;
         }
 
-        private ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)
+        private static ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)
         {
-            var academyAndTrustInformation = project.AcademyAndTrustInformation;
-            return (string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
-                    (academyAndTrustInformation.Recommendation ==
-                     TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.NotStarted
-                : (!string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
-                   (academyAndTrustInformation.Recommendation !=
-                    TransferAcademyAndTrustInformation.RecommendationResult.Empty)) ? ProjectStatuses.Completed
-                : ProjectStatuses.InProgress;
+            TransferAcademyAndTrustInformation academyAndTrustInformation = project.AcademyAndTrustInformation;
+
+            if (string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
+                academyAndTrustInformation.Recommendation ==
+                TransferAcademyAndTrustInformation.RecommendationResult.Empty)
+               return ProjectStatuses.NotStarted;
+
+            return string.IsNullOrEmpty(academyAndTrustInformation.Author) ||
+                   academyAndTrustInformation.Recommendation ==
+                   TransferAcademyAndTrustInformation.RecommendationResult.Empty
+               ? ProjectStatuses.InProgress
+               : ProjectStatuses.Completed;
         }
 
-        private ProjectStatuses GetFeatureTransferStatus(Project project)
+        private static ProjectStatuses GetFeatureTransferStatus(Project project)
         {
             if (project.Features.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty &&
                                                          project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
@@ -54,7 +58,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             return project.Features.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
 
-        private ProjectStatuses GetTransferDatesStatus(Project project)
+        private static ProjectStatuses GetTransferDatesStatus(Project project)
         {
             if ((string.IsNullOrEmpty(project.Dates.Target) && (project.Dates.HasTargetDateForTransfer ?? true)) &&
                 (string.IsNullOrEmpty(project.Dates.Htb) && (project.Dates.HasHtbDate ?? true)))
@@ -67,7 +71,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             return ProjectStatuses.InProgress;
         }
 
-        private ProjectStatuses GetBenefitsAndOtherFactorsStatus(Project project)
+        private static ProjectStatuses GetBenefitsAndOtherFactorsStatus(Project project)
         {
             if ((project.Benefits.IntendedBenefits == null || !project.Benefits.IntendedBenefits.Any()) &&
                 (project.Benefits.OtherFactors == null || !project.Benefits.OtherFactors.Any()))
@@ -75,7 +79,7 @@ namespace Dfe.PrepareTransfers.Web.Services
 
             return project.Benefits.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
-        private ProjectStatuses GetLegalRequirementsStatus(Project project)
+        private static ProjectStatuses GetLegalRequirementsStatus(Project project)
         {
             if (project.LegalRequirements.DiocesanConsent == null &&
                     project.LegalRequirements.IncomingTrustAgreement == null &&
@@ -87,7 +91,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             return project.LegalRequirements.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
 
-        private ProjectStatuses GetRationaleStatus(Project project)
+        private static ProjectStatuses GetRationaleStatus(Project project)
         {
             if (string.IsNullOrEmpty(project.Rationale.Project) &&
                 string.IsNullOrEmpty(project.Rationale.Trust))

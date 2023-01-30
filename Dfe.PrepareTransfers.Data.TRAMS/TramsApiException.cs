@@ -1,10 +1,12 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS
 {
-    public class TramsApiException  : Exception
+   [Serializable]
+    public class TramsApiException : Exception
     {
         public HttpStatusCode StatusCode { get; }
 
@@ -14,6 +16,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             StatusCode = httpResponseMessage.StatusCode;
             base.Data.Add("Sentry:Tag:StatusCode", StatusCode);
             base.Data.Add("Content", httpResponseMessage.Content?.ReadAsStringAsync().Result);
+        }
+
+        protected TramsApiException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks
     {
         public IntendedBenefitsValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
             RuleFor(x => x.SelectedIntendedBenefits)
                 .NotEmpty()
                 .WithMessage("Select at least one intended benefit");

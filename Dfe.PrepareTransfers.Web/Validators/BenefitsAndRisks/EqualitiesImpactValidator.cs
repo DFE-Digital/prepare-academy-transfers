@@ -7,7 +7,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks
     {
         public EqualitiesImpactValidator()
         {
-            CascadeMode = CascadeMode.Stop;
+            ClassLevelCascadeMode = CascadeMode.Stop;
             RuleFor(x => x.EqualitiesImpactAssessmentConsidered)
                 .NotNull()
                 .WithMessage("Select yes if an Equalities Impact Assessment has been considered");
