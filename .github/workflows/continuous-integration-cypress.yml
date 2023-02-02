@@ -2,7 +2,7 @@ name: Cypress tests
 
 on:
   workflow_run:
-    workflows: ["Deploy to environment (CIP)"]
+    workflows: ["Deploy to environment (Dev, Staging)"]
     branches: [ main ]
     types:
       - completed
@@ -25,7 +25,7 @@ jobs:
       run:
         working-directory: end-to-end-tests
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
 
