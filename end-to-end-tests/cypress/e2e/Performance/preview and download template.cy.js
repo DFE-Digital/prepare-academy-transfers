@@ -28,12 +28,6 @@ describe("Performance test for preview and download template with multiple acade
         startTimeStamp = new Date().getTime();
         cy.login();
     });
-
-    afterEach(() => {
-        endTimeStamp = new Date().getTime();
-        timeTaken = endTimeStamp - startTimeStamp
-        expect(timeTaken, "Time Taken").to.lessThan(16000)
-    });
     
     it("Multiple Academies performance test", function () {
         //Log the test run environment
@@ -95,6 +89,7 @@ describe("Performance test for preview and download template with multiple acade
         cy.log("endTimeStamp = " + endTimeStamp)
         timeTaken = endTimeStamp - startTimeStamp
         cy.log("Time take = " + timeTaken);
+        expect(timeTaken, "Time Taken").to.lessThan(16000);
     });
 
     after(function () {
