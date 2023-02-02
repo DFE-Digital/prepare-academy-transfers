@@ -1,11 +1,7 @@
-name: "Deploy to environment"
+name: "Deploy to Production (GovPaaS)"
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment (staging, production)"
-        required: true
 
 env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
@@ -14,7 +10,7 @@ jobs:
   terraform-apply:
     name: "Terraform Apply"
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment}}
+    environment: production
     defaults:
       run:
         working-directory: terraform
@@ -22,7 +18,7 @@ jobs:
       # Checkout the code
       # Marketplace: https://github.com/marketplace/actions/checkout
       - name: "Setup - Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Provides AWS credentials to Terraform
       # By default, Terraform checks the home directory for a .aws folder with a credential file
@@ -47,9 +43,9 @@ jobs:
 
       - name: Set environment variables for environments
         run: |
-          BACKEND_CONFIG='-backend-config="key=${{ github.event.inputs.environment }}/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
-          PARAMETER_STORE_ENVIRONMENT=${{ github.event.inputs.environment }}
-          VAR_FILE=${{ github.event.inputs.environment }}.tfvars
+          BACKEND_CONFIG='-backend-config="key=production/app.tfstate" -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME }}"'
+          PARAMETER_STORE_ENVIRONMENT=production
+          VAR_FILE=production.tfvars
           echo "BACKEND_CONFIG=${BACKEND_CONFIG}" >> $GITHUB_ENV
           echo "PARAMETER_STORE_ENVIRONMENT=${PARAMETER_STORE_ENVIRONMENT}" >> $GITHUB_ENV
           echo "VAR_FILE=${VAR_FILE}" >> $GITHUB_ENV
@@ -84,47 +80,13 @@ jobs:
           TF_VAR_app_accessrequest: ${{ secrets.ACCESSREQUEST }}
           TF_VAR_app_templatefeedback: ${{ secrets.TEMPLATEFEEDBACK }}
 
-  run_tests:
-    needs: terraform-apply
-    if: ${{ github.event.inputs.environment != 'production' }}
-    permissions:
-      contents: read
-      packages: read
-
-    runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment == 'staging' && 'Staging' || 'Dev' }}
-    defaults:
-      run:
-        working-directory: end-to-end-tests
-
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-
-      - name: setup node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '18.x'
-
-      - name: Npm install
-        run: npm install
-
-      - name: Run tests
-        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
-
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: end-to-end-tests/cypress/screenshots
-
   create-tag:
     needs: terraform-apply
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Create tag string
-        run: echo "RELEASE_TAGNAME=${{ github.event.inputs.environment }}-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
+        run: echo "RELEASE_TAGNAME=production-`date +%Y-%m-%d`.${{ github.run_number }}" >> $GITHUB_ENV
       - name: Create git tag
         run: |
           git tag ${{ env.RELEASE_TAGNAME }}
@@ -137,5 +99,5 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAGNAME }}
           release_name: ${{ env.RELEASE_TAGNAME }}
-          draft: ${{ github.event.inputs.environment == 'staging' }}
-          prerelease: ${{ github.event.inputs.environment == 'staging' }}
+          draft: false
+          prerelease: false
