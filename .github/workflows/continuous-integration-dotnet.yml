@@ -10,7 +10,7 @@ on:
 env:
   NODE_VERSION: 18.x
   DOTNET_VERSION: 6.0.403
-  JAVA_VERSION: 1.11
+  JAVA_VERSION: 11
 
 jobs:
   build:
