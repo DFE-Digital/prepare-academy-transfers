@@ -11,6 +11,7 @@ locals {
   enable_mssql_database                  = var.enable_mssql_database
   enable_redis_cache                     = var.enable_redis_cache
   enable_cdn_frontdoor                   = var.enable_cdn_frontdoor
+  cdn_frontdoor_enable_rate_limiting     = var.cdn_frontdoor_enable_rate_limiting
   key_vault_access_users                 = toset(var.key_vault_access_users)
   tfvars_filename                        = var.tfvars_filename
 }

@@ -1,0 +1,29 @@
+@using Dfe.PrepareTransfers.Helpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement.Index
+
+<dl class="govuk-summary-list">
+    @if (Model.LatestOfstedJudgement.LatestInspectionIsSection8)
+    {
+        <gds-key-value key="Latest short inspection date" value="@DatesHelper.DateStringToGovUkDate(Model.LatestOfstedJudgement.DateOfLatestSection8Inspection)" show-action=true />
+    }
+
+    <gds-key-value key="Overall effectiveness" value='@Model.LatestOfstedJudgement.OverallEffectiveness' show-action=true />
+    <partial name="/Pages/Shared/OfstedSummary/_SummaryRows.cshtml" for="@Model"></partial>
+
+    <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+        Additional information
+    </dt>
+    <dd class="govuk-summary-list__value">
+        <stringsummary value="@Model.AdditionalInformationViewModel.AdditionalInformation"></stringsummary>
+    </dd>
+    <dd class="govuk-summary-list__actions">
+        <a class="govuk-link"
+           asp-page="/Projects/LatestOfstedJudgement/Index"
+           asp-route-urn="@Model.Urn" asp-route-addOrEditAdditionalInformation="true"
+           asp-route-returnToPreview="true" asp-route-academyukprn="@Model.AcademyUkprn">
+            Change<span class="govuk-visually-hidden"> latest ofsted judgement additional information</span>
+        </a>
+    </dd>
+    </div>
+</dl>

@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '18.x'
       # This could be cached in the future to allow for quicker build times
-      - name: Build Frontend
+      - name: Build Dfe.PrepareTransfers.Web
         run: make build-frontend
       - name: Build
         run: dotnet build -c Release --no-restore
@@ -63,7 +63,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@master
+        with:
+          version: v0.9.1
 
       - name: Build and push docker image
         uses: docker/build-push-action@v2

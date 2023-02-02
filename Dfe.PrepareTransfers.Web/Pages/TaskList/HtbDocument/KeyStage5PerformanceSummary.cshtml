@@ -1,0 +1,23 @@
+@using Dfe.PrepareTransfers.Data.Models
+@using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance
+@model EducationPerformance
+
+<partial name="TaskList/KeyStage5Performance/KeyStage5PerformanceTables" model="@Model"/>
+
+<dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Additional information
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <stringsummary value="@Model.KeyStage5AdditionalInformation"></stringsummary>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link"
+               asp-page="/TaskList/KeyStage5Performance/KeyStage5Performance" asp-route-urn="@Model.ProjectUrn"
+               asp-route-addOrEditAdditionalInformation="@true" asp-route-returnToPreview="@true"  asp-route-academyukprn="@Model.AcademyUkprn">
+                Change<span class="govuk-visually-hidden"> Key Stage 5 Performance additional information</span>
+            </a>
+        </dd>
+    </div>
+</dl>

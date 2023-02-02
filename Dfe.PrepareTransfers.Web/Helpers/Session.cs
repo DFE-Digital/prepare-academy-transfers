@@ -1,0 +1,23 @@
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
+
+namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
+{
+    public static class Session
+    {
+        public static void AddStringListToSession(ISession session, string key, IEnumerable<string> valuesToStore)
+        {
+            var listAsString = string.Join(",", valuesToStore);
+            session.SetString(key, listAsString);
+        }
+
+        public static List<string> GetStringListFromSession(ISession session, string key)
+        {
+            var sessionString = session.GetString(key);
+            return sessionString == null 
+                ? new List<string>() 
+                : sessionString.Split(",").ToList();
+        }
+    }
+}

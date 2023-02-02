@@ -8,7 +8,7 @@ The internal service for managing Academy Transfers.
 
 ### Quickstart
 
-To get the Frontend project running you will require:
+To get the Dfe.PrepareTransfers.Web project running you will require:
 
 - .NET Core 3.1
 - Redis (running locally or in Docker, see below)
@@ -18,19 +18,19 @@ To get the Frontend project running you will require:
 - .NET
     - `dotnet restore`
 - Node
-    - `make build-frontend` or 
-      - `cd` to `Frontend/wwwroot`
+    - `make build-frontend` or
+      - `cd` to `Dfe.PrepareTransfers.Web/wwwroot`
       - run `npm install`
       - run `npm run build`
 2. **Ensure Redis is running**
 3. **Set user secrets**
-   - `dotnet user-secrets set "Key" "Value" --project Frontend`
+   - `dotnet user-secrets set "Key" "Value" --project Dfe.PrepareTransfers.Web`
 4. **Run the application**
-- `dotnet run --project Frontend`
+- `dotnet run --project Dfe.PrepareTransfers.Web`
 
 ### User-secrets
 
-**Frontend**
+**Dfe.PrepareTransfers.Web**
 
 The frontend repo requires the following user secrets to be able to connect to TRAMS:
 
@@ -47,7 +47,7 @@ When running Redis locally, you may find it easier to run inside docker, this ca
 
 `docker run -p 6379:6379 --name redis -d redis`
 
-By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server 
+By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server
 (without SSL) hosted on `localhost:6379` with an optional password of `password`.
 
 ## Authentication and Authorisation
@@ -70,7 +70,7 @@ Full setup details can be found here: https://docs.microsoft.com/en-us/azure/act
 4. Group ids will be available in the `HttpContext.User.Claims`
 
 ## Model validation
-This project uses fluent validators to validate the view model as opposed to MVC Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
+This project uses fluent validators to validate the view model as opposed to MVC Dfe.PrepareTransfers.Data Annotation. Due to this, using attribute tags such as [Required] will have no effect.
 
 You will need to ensure you have ViewModel to hold the properties you will need to validate and to create a custom validator with an AbstractValidator<CustomViewModel> as it's base class.
 
@@ -146,7 +146,7 @@ Further details about Cypress can be found here: https://docs.cypress.io/api/tab
 To run tests with multiple tags in a list:
 
 ```
-i.e., greTags=@dev+@stage 
+i.e., greTags=@dev+@stage
 ```
 
 To run tests including multiple tags independently targeting individual tags:
@@ -155,5 +155,5 @@ To run tests including multiple tags independently targeting individual tags:
 i.e., grepTags=@dev,grepTags=@stage
 ```
 
-Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep 
+Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep
 cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changelog

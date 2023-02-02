@@ -1,0 +1,46 @@
+name: Cypress tests
+
+on:
+  workflow_run:
+    workflows: ["Deploy to environment (CIP)"]
+    branches: [ main ]
+    types:
+      - completed
+
+env:
+  NODE_VERSION: 18.x
+
+jobs:
+  cypress-tests:
+    if: github.event.workflow_run.conclusion == 'success'
+    strategy:
+      matrix:
+        include:
+          - environment: dev
+          - environment: staging
+    environment:
+      name: ${{ matrix.environment }}
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: end-to-end-tests
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Npm install
+        run: npm install
+
+      - name: Run cypress
+       run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: cypress-screenshots
+          path: end-to-end-tests/cypress/screenshots

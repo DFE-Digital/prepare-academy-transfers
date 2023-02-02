@@ -1,0 +1,73 @@
+﻿@page "/project/{urn}/features/type"
+@model Dfe.PrepareTransfers.Web.Pages.Projects.Features.Type
+
+@using Dfe.PrepareTransfers.Data.Models.Projects
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What type of transfer is it?";
+    Layout = "_Layout";
+    var typeOfTransferFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.FeaturesTypeViewModel.TypeOfTransfer)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherTypeFormClasses = ViewData.ModelState.GetFieldValidationState(nameof(Model.FeaturesTypeViewModel.OtherType)) == ModelValidationState.Invalid ? "govuk-form-group--error" : "";
+    var otherSelected = Model.FeaturesTypeViewModel.TypeOfTransfer == TransferFeatures.TransferTypes.Other;
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+
+            <div class="govuk-form-group @typeOfTransferFormClasses @otherTypeFormClasses">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-l">
+                                @Model.IncomingTrustName
+                            </span>
+                            What type of transfer is it?
+                        </h1>
+                    </legend>
+
+                    <p asp-gds-validation-for="FeaturesTypeViewModel.TypeOfTransfer"></p>
+
+                    <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                        @await Html.PartialAsync("_RadioButtons", Model.TypeOfTransferRadioButtons())
+                        <div class="govuk-radios__divider">or</div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" asp-for="FeaturesTypeViewModel.TypeOfTransfer" type="radio" value="@TransferFeatures.TransferTypes.Other.ToString()" checked="@otherSelected" data-aria-controls="conditional-other">
+                            <label class="govuk-label govuk-radios__label" for="other">
+                                Any other type of transfer
+                            </label>
+                        </div>
+                        <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-other">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label" asp-for="FeaturesTypeViewModel.OtherType">
+                                    Enter the type of transfer
+                                </label>
+
+                                <p asp-gds-validation-for="FeaturesTypeViewModel.OtherType"></p>
+
+                                <input class="govuk-input govuk-!-width-two-thirds" name='@($"{nameof(Model.FeaturesTypeViewModel)}.{nameof(Model.FeaturesTypeViewModel.OtherType)}")' asp-for="FeaturesTypeViewModel.OtherType">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>
