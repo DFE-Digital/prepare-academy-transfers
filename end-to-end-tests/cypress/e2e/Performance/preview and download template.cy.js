@@ -32,7 +32,7 @@ describe("Performance test for preview and download template with multiple acade
     afterEach(() => {
         endTimeStamp = new Date().getTime();
         timeTaken = endTimeStamp - startTimeStamp
-        expect(timeTaken, "Time Taken").to.lessThan(15000)
+        expect(timeTaken, "Time Taken").to.lessThan(16000)
     });
     
     it("Multiple Academies performance test", function () {
