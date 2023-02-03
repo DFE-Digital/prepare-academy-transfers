@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "cypress-grep": "^2.6.1",
     "cypress-localstorage-commands": "^1.6.1",
     "cypress-sql-server": "^1.0.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "mysql": "^2.18.1"
   },
   "dependencies": {
