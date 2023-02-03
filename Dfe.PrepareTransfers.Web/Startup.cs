@@ -90,6 +90,7 @@ public class Startup
       services.Configure<RouteOptions>(options => { options.LowercaseUrls = true; });
       services.Configure<AzureAdOptions>(GetConfigurationSection<AzureAdOptions>());
 
+      services.AddHealthChecks();
       AddServices(services, Configuration);
 
       AuthorizationPolicyBuilder policyBuilder = SetupAuthorizationPolicyBuilder();
@@ -166,6 +167,8 @@ public class Startup
       app.UseForwardedHeaders(forwardOptions);
 
       app.UseStaticFiles();
+
+      app.UseHealthChecks("/health");
 
       app.UseRouting();
 
