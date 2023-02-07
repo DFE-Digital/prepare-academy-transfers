@@ -20,9 +20,7 @@
     ]
   },  
   "scripts": {
-    "lint-staged": "npm lint-staged",
     "prepare": "husky install",
-    "precommit": "npm run lint",
     "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
   }
 }
