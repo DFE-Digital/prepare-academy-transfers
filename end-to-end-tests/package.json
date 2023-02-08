@@ -6,9 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore",
-    "prepare": "husky install",
-    "create-hook": "husky add .husky/pre-commit \"npm test\""
+    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +16,6 @@
     "cypress-localstorage-commands": "^1.6.1",
     "cypress-sql-server": "^1.0.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "husky": "^3.1.0",
     "mysql": "^2.18.1"
   },
   "dependencies": {
