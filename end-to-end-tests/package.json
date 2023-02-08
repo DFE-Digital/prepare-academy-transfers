@@ -18,7 +18,7 @@
     "cypress-localstorage-commands": "^1.6.1",
     "cypress-sql-server": "^1.0.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "husky": "^3.1.0",
+    "husky": "^7.0.0",
     "mysql": "^2.18.1"
   },
   "dependencies": {
