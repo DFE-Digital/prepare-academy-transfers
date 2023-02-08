@@ -7,7 +7,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore",
-    "prepare": "husky install",
+    "prepare": "husky install prepare-acadeny-transfers/.husky",
     "create-hook": "husky add .husky/pre-commit \"npm test\""
   },
   "author": "",
