@@ -54,16 +54,6 @@ variable "container_secret_environment_variables" {
   sensitive   = true
 }
 
-variable "enable_mssql_database" {
-  description = "Set to true to create an Azure SQL server/database, with a private endpoint within the virtual network"
-  type        = bool
-}
-
-variable "enable_redis_cache" {
-  description = "Set to true to create a Redis Cache"
-  type        = bool
-}
-
 variable "enable_cdn_frontdoor" {
   description = "Set to true to create a CDN"
   type        = bool
@@ -72,4 +62,29 @@ variable "enable_cdn_frontdoor" {
 variable "cdn_frontdoor_enable_rate_limiting" {
   description = "Enable CDN Front Door Rate Limiting. This will create a WAF policy, and CDN security policy. For pricing reasons, there will only be one WAF policy created."
   type        = bool
+}
+
+variable "container_health_probe_path" {
+  description = "Specifies the path that is used to determine the liveness of the Container"
+  type        = string
+}
+
+variable "cdn_frontdoor_health_probe_path" {
+  description = "Specifies the path relative to the origin that is used to determine the health of the origin."
+  type        = string
+}
+
+variable "enable_monitoring" {
+  description = "Create an App Insights instance and notification group for the Container App"
+  type        = bool
+}
+
+variable "monitor_email_receivers" {
+  description = "A list of email addresses that should be notified by monitoring alerts"
+  type        = list(string)
+}
+
+variable "monitor_endpoint_healthcheck" {
+  description = "Specify a route that should be monitored for a 200 OK status"
+  type        = string
 }

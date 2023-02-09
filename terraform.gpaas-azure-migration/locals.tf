@@ -8,10 +8,13 @@ locals {
   image_name                             = var.image_name
   container_command                      = var.container_command
   container_secret_environment_variables = var.container_secret_environment_variables
-  enable_mssql_database                  = var.enable_mssql_database
-  enable_redis_cache                     = var.enable_redis_cache
   enable_cdn_frontdoor                   = var.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting     = var.cdn_frontdoor_enable_rate_limiting
   key_vault_access_users                 = toset(var.key_vault_access_users)
   tfvars_filename                        = var.tfvars_filename
+  container_health_probe_path            = var.container_health_probe_path
+  cdn_frontdoor_health_probe_path        = var.cdn_frontdoor_health_probe_path
+  enable_monitoring                      = var.enable_monitoring
+  monitor_email_receivers                = var.monitor_email_receivers
+  monitor_endpoint_healthcheck           = var.monitor_endpoint_healthcheck
 }
