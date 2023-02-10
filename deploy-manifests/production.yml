@@ -1,8 +1,6 @@
 ---
 applications:
 - name: academy-transfers-production
-  services:
-    - academy-transfers-production-redis
   buildpacks:
     - dotnet_core_buildpack
   env:

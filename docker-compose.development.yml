@@ -9,15 +9,6 @@ services:
       - 80:80/tcp
     env_file:
       - .env.development
-    depends_on:
-      - redis
-    networks:
-      - dev
-
-  redis:
-    image: redis:6
-    ports:
-      - 6379:6379
     networks:
       - dev
 
