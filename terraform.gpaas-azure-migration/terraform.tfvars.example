@@ -6,7 +6,6 @@ image_name                = ""
 
 enable_container_registry = true
 enable_mssql_database     = false
-enable_redis_cache        = false
 enable_cdn_frontdoor      = true
 
 virtual_network_address_space = ""

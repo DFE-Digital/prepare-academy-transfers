@@ -11,7 +11,6 @@ The internal service for managing Academy Transfers.
 To get the Dfe.PrepareTransfers.Web project running you will require:
 
 - .NET Core 3.1
-- Redis (running locally or in Docker, see below)
 - Node v18.x
 
 1. **Install dependencies**
@@ -22,10 +21,9 @@ To get the Dfe.PrepareTransfers.Web project running you will require:
       - `cd` to `Dfe.PrepareTransfers.Web/wwwroot`
       - run `npm install`
       - run `npm run build`
-2. **Ensure Redis is running**
-3. **Set user secrets**
+1. **Set user secrets**
    - `dotnet user-secrets set "Key" "Value" --project Dfe.PrepareTransfers.Web`
-4. **Run the application**
+2. **Run the application**
 - `dotnet run --project Dfe.PrepareTransfers.Web`
 
 ### User-secrets
@@ -40,15 +38,6 @@ The frontend repo requires the following user secrets to be able to connect to T
 The following user secret is required for the landing page to be able to navigate to the Conversions service:
 
 - `ServiceLink:TransfersUrl` - The URL for the Conversions service.
-
-### Redis
-
-When running Redis locally, you may find it easier to run inside docker, this can be done via the following command:
-
-`docker run -p 6379:6379 --name redis -d redis`
-
-By default the Redis config for the frontend is defined in `appsettings.Development.json` under `VCAP_SERVICES`. This connects to a Redis server
-(without SSL) hosted on `localhost:6379` with an optional password of `password`.
 
 ## Authentication and Authorisation
 Authentication is provided by Azure AD. The settings are stored in the application configuration and built on startup.
@@ -168,8 +157,8 @@ cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changel
   `npm install eslint-plugin-cypress --save-dev`
 
  -Installation using yarn
-  `yarn add eslint-plugin-cypress --dev` 
- 
+  `yarn add eslint-plugin-cypress --dev`
+
  -Usage: Add an .eslintrc.json file to your cypress directory with the following:
    {
       "plugins": [

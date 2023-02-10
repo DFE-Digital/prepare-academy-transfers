@@ -1,8 +1,6 @@
 ---
 applications:
 - name: academy-transfers-staging
-  services:
-    - academy-transfers-staging-redis
   buildpacks:
     - dotnet_core_buildpack
   env:
