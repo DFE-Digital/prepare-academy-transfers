@@ -23,6 +23,7 @@ using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -102,7 +103,9 @@ public class Startup
          options.Cookie.Name = ".ManageAnAcademyTransfer.Session";
          options.Cookie.HttpOnly = true;
          options.Cookie.IsEssential = true;
-         if (string.IsNullOrEmpty(Configuration["CI"])) options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+         if (string.IsNullOrEmpty(Configuration["CI"])) 
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
       });
       services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
       services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -114,7 +117,9 @@ public class Startup
             options.Cookie.IsEssential = true;
             options.ExpireTimeSpan = _authenticationExpiration;
             options.SlidingExpiration = true;
-            if (string.IsNullOrEmpty(Configuration["CI"])) options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+            if (string.IsNullOrEmpty(Configuration["CI"]))
+               options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
          });
       services.AddHealthChecks();
    }
@@ -151,6 +156,12 @@ public class Startup
       app.UseSecurityHeaders(SecurityHeadersDefinitions
          .GetHeaderPolicyCollection(env.IsDevelopment(), GetTypedConfiguration<AllowedExternalSourcesOptions>())
          .AddXssProtectionDisabled());
+
+      app.UseCookiePolicy(new CookiePolicyOptions
+      {
+         HttpOnly = HttpOnlyPolicy.Always,
+         Secure = CookieSecurePolicy.Always
+      });
 
       app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
 

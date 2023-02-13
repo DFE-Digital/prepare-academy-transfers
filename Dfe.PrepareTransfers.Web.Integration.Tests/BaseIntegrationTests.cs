@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
         protected async Task<IDocument> OpenUrlAsync(string url)
         {
-            return await _browsingContext.OpenAsync($"http://localhost{url}");
+            return await _browsingContext.OpenAsync($"https://localhost{url}");
         }
 
         protected async Task<IDocument> NavigateAsync(string linkText, int? index = null)
