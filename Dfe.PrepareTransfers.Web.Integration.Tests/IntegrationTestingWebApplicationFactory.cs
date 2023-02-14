@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
@@ -24,21 +23,13 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
     public class IntegrationTestingWebApplicationFactory : WebApplicationFactory<Startup>
     {
         private static int _currentPort = 5080;
-        private static readonly object _sync = new object();
+        private static readonly object Sync = new();
 
-        private readonly WireMockServer _server;
-        private readonly int _port;
+        private readonly WireMockServer _mockApiServer;
 
         public IntegrationTestingWebApplicationFactory()
         {
-            _port = AllocateNext();
-            _server = WireMockServer.Start(_port);
-            _server.LogEntriesChanged += _server_LogEntriesChanged;
-        }
-
-        private void _server_LogEntriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
+           _mockApiServer = WireMockServer.Start(AllocateNext());
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -53,7 +44,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
                     .AddJsonFile(configPath)
                     .AddInMemoryCollection(new Dictionary<string, string>
                     {
-                        {"TRAMS_API_BASE", $"http://localhost:{_port}"},
+                        {"TRAMS_API_BASE", _mockApiServer.Url },
                         {"AzureAd:AllowedRoles", string.Empty}, // Do not restrict access for integration tests
                         {"ServiceLink:ConversionsUrl", "https://an-extenal-service.com"}
                     })
@@ -64,7 +55,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
             {
                 services.AddAuthentication("Test");
                 services.AddTransient<IAuthenticationSchemeProvider, MockSchemeProvider>();
-                services.AddTransient<IUserRepository, TestUserRepository>();                
+                services.AddTransient<IUserRepository, TestUserRepository>();
             });
         }
 
@@ -113,19 +104,19 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
             protected override Task<AuthenticateResult> HandleAuthenticateAsync()
             {
-                var claims = new List<Claim> {new Claim(ClaimTypes.Name, "Name")};
-                var identity = new ClaimsIdentity(claims, "Test");
-                var principal = new ClaimsPrincipal(identity);
-                var ticket = new AuthenticationTicket(principal, "Test");
+               var claims = new List<Claim> { new(ClaimTypes.Name, "Name") };
+               var identity = new ClaimsIdentity(claims, "Test");
+               var principal = new ClaimsPrincipal(identity);
+               var ticket = new AuthenticationTicket(principal, "Test");
 
-                return Task.FromResult(AuthenticateResult.Success(ticket));
+               return Task.FromResult(AuthenticateResult.Success(ticket));
             }
         }
 
 
         public void AddGetWithJsonResponse<TResponseBody>(string path, TResponseBody responseBody)
         {
-            _server
+            _mockApiServer
                 .Given(Request.Create()
                     .WithPath(path)
                     .UsingGet())
@@ -139,7 +130,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
         public void AddPatchWithJsonRequest<TRequestBody, TResponseBody>(string path, TRequestBody requestBody,
             TResponseBody responseBody)
         {
-            _server
+            _mockApiServer
                 .Given(Request.Create()
                     .WithPath(path)
                     .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
@@ -152,7 +143,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
         public void AddAnyPatch<TResponseBody>(string path,TResponseBody responseBody)
         {
-            _server
+            _mockApiServer
                 .Given(Request.Create()
                     .WithPath(path)
                     .UsingPatch())
@@ -165,7 +156,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
         public void AddPostWithJsonRequest<TRequestBody, TResponseBody>(string path, TRequestBody requestBody,
             TResponseBody responseBody)
         {
-            _server
+            _mockApiServer
                 .Given(Request.Create()
                     .WithPath(path)
                     .WithBody(new JsonMatcher(JsonConvert.SerializeObject(requestBody), true))
@@ -178,7 +169,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
         public void AddErrorResponse(string path, string method)
         {
-            _server
+            _mockApiServer
                 .Given(Request.Create()
                     .WithPath(path)
                     .UsingMethod(method))
@@ -188,12 +179,12 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
         public void Reset()
         {
-            _server.Reset();
+            _mockApiServer.Reset();
         }
 
         private static int AllocateNext()
         {
-            lock (_sync)
+            lock (Sync)
             {
                 var next = _currentPort;
                 _currentPort++;
@@ -207,7 +198,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 
             if (disposing)
             {
-                _server.Stop();
+                _mockApiServer.Stop();
             }
         }
     }
