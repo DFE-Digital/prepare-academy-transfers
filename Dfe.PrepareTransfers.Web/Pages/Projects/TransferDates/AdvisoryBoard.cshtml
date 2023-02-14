@@ -28,7 +28,7 @@
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-ab-date-hint">
-                        <h1 class="govuk-fieldset__heading">
+                        <h1 class="govuk-fieldset__heading" id="AdvisoryBoardViewModel_AdvisoryBoardDate_Date">
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
@@ -39,6 +39,7 @@
                         For example, 12 11 2021. You can change this date later.
                     </div>
 
+                   <p asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date"></p>
                    <p asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day"></p>
                    <p asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Month"></p>
                    <p asp-gds-validation-for="AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Year"></p>

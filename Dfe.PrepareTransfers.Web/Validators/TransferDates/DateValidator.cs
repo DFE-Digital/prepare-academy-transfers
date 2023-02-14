@@ -11,7 +11,8 @@ public class DateValidator : AbstractValidator<DateViewModel>
 {
    public DateValidator()
    {
-      ClassLevelCascadeMode = CascadeMode.Stop;
+      ClassLevelCascadeMode = CascadeMode.Continue;
+      RuleLevelCascadeMode = CascadeMode.Continue;
 
       EnsureEitherUnknownOrDateIsSpecified();
       EnsureAllDatePartsAreProvided();
@@ -27,18 +28,23 @@ public class DateValidator : AbstractValidator<DateViewModel>
          .Custom((_, context) =>
          {
             DateViewModel dateVm = context.InstanceToValidate;
-            if (!dateVm.UnknownDate && !IsAValidYear(dateVm.Date))
-               context.AddFailure("Year must be between 2000 and 2050");
+
+            if (dateVm.UnknownDate || DateIsIncomplete(dateVm.Date) || IsAValidYear(dateVm.Date)) return;
+
+            context.AddFailure("Year must be between 2000 and 2050");
          });
    }
 
    private void EnsureTheSpecifiedDateIsValid()
    {
-      RuleFor(x => x.Date.Day)
+      RuleFor(x => x.Date)
          .Custom((_, context) =>
          {
             DateViewModel dateVm = context.InstanceToValidate;
-            if (!dateVm.UnknownDate && !IsAValidDate(dateVm.Date)) context.AddFailure("Enter a valid date");
+
+            if (dateVm.UnknownDate || DateIsEmpty(dateVm.Date) || IsAValidDate(dateVm.Date)) return;
+
+            context.AddFailure("Enter a valid date");
          });
    }
 
@@ -51,20 +57,36 @@ public class DateValidator : AbstractValidator<DateViewModel>
 
             if (dateVm.UnknownDate) return;
 
-            if (string.IsNullOrEmpty(dateVm.Date.Day))
-               context.AddFailure(nameof(dateVm.Date.Day), $"The {ErrorDisplayName} must include a day");
+            if (string.IsNullOrWhiteSpace(dateVm.Date.Day))
+               context.AddFailure($"The {ErrorDisplayName} must include a day");
+         });
 
-            if (string.IsNullOrEmpty(dateVm.Date.Month))
-               context.AddFailure(nameof(dateVm.Date.Month), $"The {ErrorDisplayName} must include a month");
+      RuleFor(x => x.Date.Month)
+         .Custom((_, context) =>
+         {
+            DateViewModel dateVm = context.InstanceToValidate;
 
-            if (string.IsNullOrEmpty(dateVm.Date.Year))
-               context.AddFailure(nameof(dateVm.Date.Year), $"The {ErrorDisplayName} must include a year");
+            if (dateVm.UnknownDate) return;
+
+            if (string.IsNullOrWhiteSpace(dateVm.Date.Month))
+               context.AddFailure($"The {ErrorDisplayName} must include a month");
+         });
+
+      RuleFor(x => x.Date.Year)
+         .Custom((_, context) =>
+         {
+            DateViewModel dateVm = context.InstanceToValidate;
+
+            if (dateVm.UnknownDate) return;
+
+            if (string.IsNullOrWhiteSpace(dateVm.Date.Year))
+               context.AddFailure($"The {ErrorDisplayName} must include a year");
          });
    }
 
    private void EnsureEitherUnknownOrDateIsSpecified()
    {
-      RuleFor(x => x.Date.Day)
+      RuleFor(x => x.Date)
          .Custom((_, context) =>
          {
             DateViewModel dateVm = context.InstanceToValidate;
@@ -75,9 +97,16 @@ public class DateValidator : AbstractValidator<DateViewModel>
 
    private static bool DateIsEmpty(DateInputViewModel dateVm)
    {
-      return string.IsNullOrEmpty(dateVm.Day) &&
-             string.IsNullOrEmpty(dateVm.Month) &&
-             string.IsNullOrEmpty(dateVm.Year);
+      return string.IsNullOrWhiteSpace(dateVm.Day) &&
+             string.IsNullOrWhiteSpace(dateVm.Month) &&
+             string.IsNullOrWhiteSpace(dateVm.Year);
+   }
+
+   private static bool DateIsIncomplete(DateInputViewModel dateVm)
+   {
+      return string.IsNullOrWhiteSpace(dateVm.Day) ||
+             string.IsNullOrWhiteSpace(dateVm.Month) ||
+             string.IsNullOrWhiteSpace(dateVm.Year);
    }
 
    private static bool IsAValidDate(DateInputViewModel dateVm)
@@ -85,7 +114,7 @@ public class DateValidator : AbstractValidator<DateViewModel>
       var dateString =
          DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year);
 
-      return !string.IsNullOrEmpty(dateString) &&
+      return !string.IsNullOrWhiteSpace(dateString) &&
              DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
    }
 

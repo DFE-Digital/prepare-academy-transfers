@@ -22,7 +22,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public async void WhenDateIsNullAndUnknownIsFalse_ShouldShowError(string dateValue)
+        public async Task WhenDateIsNullAndUnknownIsFalse_ShouldShowError(string dateValue)
         {
             var dateVm = new DateViewModel
             {
@@ -37,12 +37,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
 
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+            result.ShouldHaveValidationErrorFor(a => a.Date)
                 .WithErrorMessage("Enter Advisory board date or select I do not know this");
         }
         
         [Fact]
-        public async void WhenDateIsNotNullAndUnknownIsTrue_ShouldShowError()
+        public async Task WhenDateIsNotNullAndUnknownIsTrue_ShouldShowError()
         {
             var dateVm = new DateViewModel
             {
@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
 
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+            result.ShouldHaveValidationErrorFor(a => a.Date)
                 .WithErrorMessage("Enter Advisory board date or select I do not know this");
         }
 
@@ -77,13 +77,13 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
             
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(viewModel => viewModel.Date.Day).WithoutErrorMessage("The Advisory board date must include a day");
+            result.ShouldHaveValidationErrorFor(viewModel => viewModel.Date).WithoutErrorMessage("The Advisory board date must include a day");
         }
 
         [Theory]
-        [InlineData("", "1", "2022", "The Advisory board date must include a day", nameof(DateInputViewModel.Day))]
-        [InlineData("1", "", "2022", "The Advisory board date must include a month", nameof(DateInputViewModel.Month))]
-        [InlineData("1", "1", "", "The Advisory board date must include a year", nameof(DateInputViewModel.Year))]
+        [InlineData("", "1", "2022", "The Advisory board date must include a day", "Date.Day")]
+        [InlineData("1", "", "2022", "The Advisory board date must include a month", "Date.Month")]
+        [InlineData("1", "1", "", "The Advisory board date must include a year", "Date.Year")]
         public async Task WhenFieldIsEmptyAndUnknownDateIsFalse_HasMissingFieldError(string day, string month, string year,
             string expectedErrorMessage, string expectedPropertyName)
         {
@@ -101,26 +101,20 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
             var result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldHaveValidationErrorFor(expectedPropertyName)
-                .WithErrorMessage(expectedErrorMessage);
+               .WithErrorMessage(expectedErrorMessage);
         }
 
         [Theory]
-        [InlineData("1//2021")]
-        [InlineData("/1/2021")]
-        [InlineData("//")]
-        [InlineData("/2/")]
-        [InlineData("1//2000")]
         [InlineData("1/1/20000")]
         [InlineData("35/1/2021")]
         [InlineData("01/14/2000")]
         [InlineData("01/11/9")]
         [InlineData("Date")]
         [InlineData("1-3-1900")]
-        [InlineData(" ")]
         [InlineData("2020/12/1")]
         [InlineData("01012000")]
         [InlineData("20000101")]
-        public async void WhenDateIsInvalidAndUnknownIsFalse_ShouldShowError(string dateValue)
+        public async Task WhenDateIsInvalidAndUnknownIsFalse_ShouldShowError(string dateValue)
         {
             var dateVm = new DateViewModel
             {
@@ -135,7 +129,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
 
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+            result.ShouldHaveValidationErrorFor(a => a.Date)
                 .WithErrorMessage("Enter a valid date");
         }
     }
