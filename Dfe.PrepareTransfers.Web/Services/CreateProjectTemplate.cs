@@ -9,6 +9,7 @@ using Dfe.PrepareTransfers.DocumentGeneration;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers;
+using Dfe.PrepareTransfers.Web.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
@@ -539,6 +540,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -610,6 +612,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -684,6 +687,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -755,6 +759,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -832,6 +837,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -906,6 +912,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -1038,6 +1045,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -1112,6 +1120,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -1180,6 +1189,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -1248,6 +1258,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     new TextElement {Value = ks4Results[1].Year, Bold = true},
                     new TextElement {Value = ks4Results[2].Year, Bold = true}
                 },
+                KeyStageStatus(),
                 new[]
                 {
                     new TextElement {Value = academy.SchoolName, Bold = true},
@@ -1433,6 +1444,15 @@ namespace Dfe.PrepareTransfers.Web.Services
                     ErrorCode = ErrorCode.ApiError,
                     ErrorMessage = "API has encountered an error"
                 }
+            };
+        }
+        private static TextElement[] KeyStageStatus()
+        {
+            return new[]
+            {
+                new TextElement("Status") { Bold = true }, new TextElement(KeyStage4DataStatusHelper.DetermineKeyStageDataStatus(DateTime.Now)) { Bold = true },
+                new TextElement(KeyStage4DataStatusHelper.DetermineKeyStageDataStatus(DateTime.Now.AddYears(-1))) { Bold = true },
+                new TextElement(KeyStage4DataStatusHelper.DetermineKeyStageDataStatus(DateTime.Now.AddYears(-2))) { Bold = true }
             };
         }
     }
