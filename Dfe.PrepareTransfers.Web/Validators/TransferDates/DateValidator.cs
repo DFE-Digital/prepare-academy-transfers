@@ -55,7 +55,7 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate) return;
+            if (dateVm.UnknownDate || dateVm.IgnoreDayPart) return;
 
             if (string.IsNullOrWhiteSpace(dateVm.Date.Day))
                context.AddFailure($"The {ErrorDisplayName} must include a day");
