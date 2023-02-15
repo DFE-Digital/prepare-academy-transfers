@@ -30,8 +30,11 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
                 return;
             }
 
-            var modelStateErrors = ViewContext.ViewData.ModelState.Where(ms => ms.Value.Errors.Any())
-                .Select(a => new { a.Key, a.Value.Errors }).ToList();
+            var modelStateErrors = ViewContext.ViewData.ModelState
+               .Where(ms => ms.Value.Errors.Any())
+               .OrderBy(x => x.Key)
+               .Select(a => new { a.Key, a.Value.Errors })
+               .ToList();
             
             var sb = new StringBuilder();
             sb.Append("<div class='govuk-grid-row'>");
