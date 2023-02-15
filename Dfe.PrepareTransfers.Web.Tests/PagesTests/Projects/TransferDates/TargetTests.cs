@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
@@ -8,6 +9,7 @@ using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates;
 using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -31,7 +33,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
         public class OnGetAsyncTests : TargetTests
         {
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async Task GivenUrn_FetchesProjectFromTheRepository()
             {
                 await _subject.OnGetAsync();
 
@@ -39,14 +41,14 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             }
 
             [Fact]
-            public async void GivenExistingProject_AssignsTheProjectToThePageModel()
+            public async Task GivenExistingProject_AssignsTheProjectToThePageModel()
             {
                 FoundProjectFromRepo.Dates = new Data.Models.Projects.TransferDates
                 {
                     Target = "15/01/2020",
                     HasTargetDateForTransfer = true
                 };
-                var response = await _subject.OnGetAsync();
+                IActionResult response = await _subject.OnGetAsync();
 
                 Assert.IsType<PageResult>(response);
                 Assert.Equal(FoundProjectFromRepo.Urn, _subject.Urn);
@@ -63,14 +65,14 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 {
                     TargetDate = new DateViewModel
                     {
-                        Date = new DateInputViewModel { Day = "15", Month = "10", Year = (System.DateTime.Now.Year + 1).ToString() },
+                        Date = new DateInputViewModel { Day = "15", Month = "10", Year = (DateTime.Now.Year + 1).ToString() },
                         UnknownDate = false
                     }
                 };
             }
 
             [Fact]
-            public async void GivenUrn_FetchesProjectFromTheRepository()
+            public async Task GivenUrn_FetchesProjectFromTheRepository()
             {
                 await _subject.OnPostAsync();
 
@@ -80,16 +82,16 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             [Fact]
             public void TargetDateViewModel_SkipsAutomaticValidation()
             {
-                var attribute = (CustomizeValidatorAttribute)typeof(Target)
-                    .GetProperty("TargetDateViewModel")
-                    ?.GetCustomAttributes(typeof(CustomizeValidatorAttribute), false).First();
+               var attribute = (CustomizeValidatorAttribute)typeof(Target).GetProperty("TargetDateViewModel")
+                  ?.GetCustomAttributes(typeof(CustomizeValidatorAttribute), false)
+                  .First();
 
                 Assert.NotNull(attribute);
                 Assert.True(attribute.Skip);
             }
 
             [Fact]
-            public async void WhenMonthAndYearAreNotSet_DoesNotSetDay()
+            public async Task WhenMonthAndYearAreNotSet_DoesNotSetDay()
             {
                 _subject.TargetDateViewModel.TargetDate.Date.Day = null;
                 _subject.TargetDateViewModel.TargetDate.Date.Month = null;
@@ -104,7 +106,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             [InlineData("01", null)]
             [InlineData(null, "2099")]
             [InlineData("01", "2099")]
-            public async void WhenMonthOrYearIsSet_SetsDayToFirstOfMonth(string monthValue, string yearValue)
+            public async Task WhenMonthOrYearIsSet_SetsDayToFirstOfMonth(string monthValue, string yearValue)
             {
                 _subject.TargetDateViewModel.TargetDate.Date.Month = monthValue;
                 _subject.TargetDateViewModel.TargetDate.Date.Year = yearValue;
@@ -115,7 +117,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             }
 
             [Fact]
-            public async void GivenUrnAndTargetDate_UpdatesTheProject()
+            public async Task GivenUrnAndTargetDate_UpdatesTheProject()
             {
                 await _subject.OnPostAsync();
 
@@ -128,11 +130,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             }
 
             [Fact]
-            public async void GivenReturnToPreview_RedirectsToPreviewPage()
+            public async Task GivenReturnToPreview_RedirectsToPreviewPage()
             {
                 _subject.ReturnToPreview = true;
 
-                var response = await _subject.OnPostAsync();
+                IActionResult response = await _subject.OnPostAsync();
 
                 ControllerTestHelpers.AssertResultRedirectsToPage(
                     response, Links.HeadteacherBoard.Preview.PageName,
@@ -141,9 +143,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             }
 
             [Fact]
-            public async void GivenUrnAndTarget_RedirectsBackToTheSummary()
+            public async Task GivenUrnAndTarget_RedirectsBackToTheSummary()
             {
-                var result = await _subject.OnPostAsync();
+                IActionResult result = await _subject.OnPostAsync();
 
                 var routeValues = new RouteValueDictionary(new List<KeyValuePair<string, string>>
                 {
@@ -154,11 +156,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
             }
             
             [Fact]
-            public async void GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
+            public async Task GivenTargetTransferDateBeforeHtbDate_SetErrorOnTheModel()
             {
                 FoundProjectFromRepo.Dates.Htb = DateTime.Now.AddYears(-1).ToShortDate();
                 
-                var targetDate = DateTime.Now.AddYears(-2);
+                DateTime targetDate = DateTime.Now.AddYears(-2);
 
                 _subject.TargetDateViewModel = new TargetDateViewModel()
                 {
@@ -174,10 +176,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                     }
                 };
 
-                var result = await _subject.OnPostAsync();
+                IActionResult result = await _subject.OnPostAsync();
                 
                 Assert.IsType<PageResult>(result);
-                Assert.Single(_subject.ModelState[$"TargetDateViewModel.TargetDate.Date.Day"].Errors);
+                Assert.Single(_subject.ModelState["TargetDateViewModel.TargetDate.Date"]!.Errors);
             }
         }
     }
