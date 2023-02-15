@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Helpers
         {
             if (string.IsNullOrEmpty(dateString))
             {
-                return new List<string>() {"", "", ""};
+               return new List<string> { string.Empty, string.Empty, string.Empty };
             }
 
             return dateString.Split("/").ToList();
@@ -61,7 +61,7 @@ namespace Dfe.PrepareTransfers.Helpers
 
         public static List<DateTime> GetFirstWorkingDaysOfTheTheMonthForTheNextYear(string startDateString)
         {
-            DateTime.TryParseExact(startDateString, "dd/MM/yyyy", null, DateTimeStyles.None, out var date);
+            DateTime.TryParseExact(startDateString, "dd/MM/yyyy", null, DateTimeStyles.None, out DateTime date);
             var dates = new List<DateTime>();
 
             if (DateIsFirstWorkingDayOfTheMonth(date))
@@ -96,7 +96,7 @@ namespace Dfe.PrepareTransfers.Helpers
 
         private static bool DateIsAWeekend(DateTime date)
         {
-            return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+            return date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
         }
 
         private static bool DateIsFirstWorkingDayOfTheMonth(DateTime date)
@@ -129,12 +129,12 @@ namespace Dfe.PrepareTransfers.Helpers
             if (string.IsNullOrWhiteSpace(sourceDateString))
                 throw new ArgumentNullException(nameof(sourceDateString));
             
-            var sourceDate = ParseDateTime(sourceDateString);
+            DateTime sourceDate = ParseDateTime(sourceDateString);
 
             if (string.IsNullOrWhiteSpace(targetDateString))
                 throw new ArgumentNullException(nameof(targetDateString));
             
-            var targetDate = ParseDateTime(targetDateString);
+            DateTime targetDate = ParseDateTime(targetDateString);
 
             return sourceDate > targetDate;
         }
@@ -142,7 +142,7 @@ namespace Dfe.PrepareTransfers.Helpers
         public static DateTime ParseDateTime(string date)
         {
             DateTime.TryParseExact(date, new[] {"dd/MM/yyyy", "dd-MM-yyyy"}, null,
-                DateTimeStyles.None, out var parsedDate);
+                DateTimeStyles.None, out DateTime parsedDate);
             return parsedDate;
         }
     }
