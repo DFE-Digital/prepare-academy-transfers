@@ -1,4 +1,5 @@
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
+@using Dfe.PrepareTransfers.Web.Helpers
 @model Dfe.PrepareTransfers.Data.Models.KeyStagePerformance.EducationPerformance
 
 @{
@@ -20,6 +21,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipAttainment8score)</td>
@@ -51,6 +53,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipAttainment8scoreenglish)</td>
@@ -83,6 +86,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipAttainment8scoremaths)</td>
@@ -115,6 +119,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipAttainment8scoreebacc)</td>
@@ -151,6 +156,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipNumberofpupilsprogress8)</td>
@@ -182,6 +188,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipProgress8Score)</td>
@@ -232,6 +239,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipProgress8english)</td>
@@ -264,6 +272,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipProgress8maths)</td>
@@ -296,6 +305,7 @@
     </tr>
     </thead>
     <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
         <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedHtmlResult(keyStage4Results[0].SipProgress8ebacc)</td>
@@ -330,23 +340,24 @@
    </tr>
    </thead>
    <tbody class="govuk-table__body">
+        @Html.Raw(KeyStage4DataStatusHelper.KeyStageDataRow())
    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].Enteringebacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].Enteringebacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].Enteringebacc.ToString())</td>
+       <th scope="row" class="govuk-table__header">@Model.AcademyName</th>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].Enteringebacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].Enteringebacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].Enteringebacc.ToString())</td>
    </tr>
    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">@Model.LocalAuthorityName local authority average</th>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].LAEnteringEbacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].LAEnteringEbacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].LAEnteringEbacc.ToString())</td>
+       <th scope="row" class="govuk-table__header">@Model.LocalAuthorityName local authority average</th>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].LAEnteringEbacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].LAEnteringEbacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].LAEnteringEbacc.ToString())</td>
    </tr>
    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">National average</th>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].NationalEnteringEbacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].NationalEnteringEbacc.ToString())</td>
-      <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].NationalEnteringEbacc.ToString())</td>
+       <th scope="row" class="govuk-table__header">National average</th>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[0].NationalEnteringEbacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[1].NationalEnteringEbacc.ToString())</td>
+       <td class="govuk-table__cell">@PerformanceDataHelpers.GetFormattedResult(keyStage4Results[2].NationalEnteringEbacc.ToString())</td>
    </tr>
    </tbody>
 </table>
