@@ -29,7 +29,10 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate || DateIsIncomplete(dateVm.Date) || IsAValidYear(dateVm.Date)) return;
+            if (dateVm.UnknownDate || DateIsIncomplete(dateVm.Date, dateVm.IgnoreDayPart)) return;
+
+            if (int.TryParse(dateVm.Date.Year, out var year) &&
+                year is >= 2000 and <= 2050) return;
 
             context.AddFailure("Year must be between 2000 and 2050");
          });
@@ -42,7 +45,8 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate || DateIsEmpty(dateVm.Date) || IsAValidDate(dateVm.Date)) return;
+            if (dateVm.UnknownDate || DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart) ||
+                IsAValidDate(dateVm.Date)) return;
 
             context.AddFailure("Enter a valid date");
          });
@@ -55,7 +59,7 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate) return;
+            if (dateVm.UnknownDate || dateVm.IgnoreDayPart) return;
 
             if (string.IsNullOrWhiteSpace(dateVm.Date.Day))
                context.AddFailure($"The {ErrorDisplayName} must include a day");
@@ -90,21 +94,22 @@ public class DateValidator : AbstractValidator<DateViewModel>
          .Custom((_, context) =>
          {
             DateViewModel dateVm = context.InstanceToValidate;
-            if ((!dateVm.UnknownDate && DateIsEmpty(dateVm.Date)) || (dateVm.UnknownDate && !DateIsEmpty(dateVm.Date)))
+            if ((!dateVm.UnknownDate && DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart)) ||
+                (dateVm.UnknownDate && DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart) is false))
                context.AddFailure($"Enter {ErrorDisplayName} or select I do not know this");
          });
    }
 
-   private static bool DateIsEmpty(DateInputViewModel dateVm)
+   private static bool DateIsEmpty(DateInputViewModel dateVm, bool ignoreDay)
    {
-      return string.IsNullOrWhiteSpace(dateVm.Day) &&
+      return ignoreDay is false && string.IsNullOrWhiteSpace(dateVm.Day) &&
              string.IsNullOrWhiteSpace(dateVm.Month) &&
              string.IsNullOrWhiteSpace(dateVm.Year);
    }
 
-   private static bool DateIsIncomplete(DateInputViewModel dateVm)
+   private static bool DateIsIncomplete(DateInputViewModel dateVm, bool ignoreDay)
    {
-      return string.IsNullOrWhiteSpace(dateVm.Day) ||
+      return (ignoreDay is false && string.IsNullOrWhiteSpace(dateVm.Day)) ||
              string.IsNullOrWhiteSpace(dateVm.Month) ||
              string.IsNullOrWhiteSpace(dateVm.Year);
    }
@@ -116,13 +121,5 @@ public class DateValidator : AbstractValidator<DateViewModel>
 
       return !string.IsNullOrWhiteSpace(dateString) &&
              DateTime.TryParseExact(dateString, "dd/MM/yyyy", null, DateTimeStyles.None, out _);
-   }
-
-   private static bool IsAValidYear(DateInputViewModel dateVm)
-   {
-      DateTime date =
-         DatesHelper.ParseDateTime(DatesHelper.DayMonthYearToDateString(dateVm.Day, dateVm.Month, dateVm.Year));
-
-      return date.Year is >= 2000 and <= 2050;
    }
 }

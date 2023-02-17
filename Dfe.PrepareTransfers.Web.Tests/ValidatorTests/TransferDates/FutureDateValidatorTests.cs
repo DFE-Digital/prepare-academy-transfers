@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
@@ -17,9 +18,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         }
         
         [Fact]
-        public async void WhenDateIsPast_ShouldShowError()
+        public async Task WhenDateIsPast_ShouldShowError()
         {
-            var pastDate = DateTime.Now.AddDays(-10);
+            DateTime pastDate = DateTime.Now.AddDays(-10);
             var dateVm = new DateViewModel
             {
                 Date = new DateInputViewModel
@@ -33,14 +34,14 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
 
             var result = await _validator.TestValidateAsync(dateVm);
 
-            result.ShouldHaveValidationErrorFor(a => a.Date.Day)
+            result.ShouldHaveValidationErrorFor(a => a.Date)
                 .WithErrorMessage("You must enter a future date");
         }
         
         [Fact]
-        public async void WhenDateIsToday_ShouldNotShowError()
+        public async Task WhenDateIsToday_ShouldNotShowError()
         {
-            var pastDate = DateTime.Now;
+            DateTime pastDate = DateTime.Now;
             var dateVm = new DateViewModel
             {
                 Date = new DateInputViewModel
@@ -52,7 +53,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
                 UnknownDate = false
             };
 
-            var result = await _validator.TestValidateAsync(dateVm);
+            TestValidationResult<DateViewModel> result = await _validator.TestValidateAsync(dateVm);
 
             result.ShouldNotHaveAnyValidationErrors();
         }
