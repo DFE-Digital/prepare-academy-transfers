@@ -8,6 +8,10 @@ $govuk-new-link-styles: true;
 @import "attachment";
 @import "cookie-banner";
 
+.input-validation-error {
+	border-color: #d4351c !important;
+}
+
 .dfe-inline-block {
   display: inline-block;
 }

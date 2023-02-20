@@ -7,7 +7,7 @@
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the expected date for the transfer?";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
-    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDateViewModel.TargetDate.Date.Day)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
+    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDateViewModel.TargetDate.Date)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
 }
 
 @section BeforeMain
@@ -42,7 +42,6 @@
                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date"></p>
                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Month"></p>
                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Year"></p>
-
 
                     <div class="govuk-date-input" id="transfer-first-discussed-date">
                         <div class="govuk-date-input__item">
