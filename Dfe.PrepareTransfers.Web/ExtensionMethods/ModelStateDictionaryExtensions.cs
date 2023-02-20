@@ -13,7 +13,7 @@ public static class ModelStateDictionaryExtensions
    /// </summary>
    /// <param name="modelState"><see cref="ModelStateDictionary" /> to check for validation failure</param>
    /// <param name="pageTitle">The title of the page</param>
-   /// <returns>page title with the error prefix is the validation has failed</returns>
+   /// <returns>page title with the error prefix if the validation has failed</returns>
    public static string BuildPageTitle(this ModelStateDictionary modelState, string pageTitle)
    {
       return $"{(modelState.IsValid ? string.Empty : "Error: ")}{pageTitle}";
