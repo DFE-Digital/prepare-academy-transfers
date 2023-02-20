@@ -40,10 +40,10 @@ public static class ModelStateDictionaryExtensions
    /// </remarks>
    public static string GetFormFieldErrorStyle(this ModelStateDictionary modelState, params string[] fieldNames)
    {
-      var isInvalid = fieldNames
+      var anyInvalid = fieldNames
          .Select(field => modelState.GetFieldValidationState(field) == ModelValidationState.Invalid)
-         .Any(x => x);
+         .Any(isInvalid => isInvalid);
 
-      return isInvalid ? InputValidationErrorClass : string.Empty;
+      return anyInvalid ? InputValidationErrorClass : string.Empty;
    }
 }
