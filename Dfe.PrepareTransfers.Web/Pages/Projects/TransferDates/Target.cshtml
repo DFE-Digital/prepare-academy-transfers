@@ -1,13 +1,15 @@
 @page "/project/{urn}/transfer-dates/target-date"
-@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.PrepareTransfers.Web.ExtensionMethods
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates.Target
 
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "When is the expected date for the transfer?";
-    Layout = "_Layout";
-    var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
-    var inputError = ViewData.ModelState.GetFieldValidationState(nameof(Model.TargetDateViewModel.TargetDate.Date)) == ModelValidationState.Invalid ? "govuk-input--error" : "";
+   Layout = "_Layout";
+   ViewBag.Title = ViewData.ModelState.BuildPageTitle("When is the expected date for the transfer?");
+   var formClasses = ViewData.ModelState.GetFormGroupErrorStyle();
+   var inputError = ViewData.ModelState.GetFormFieldErrorStyle("TargetDateViewModel.TargetDate.Date");
 }
 
 @section BeforeMain
