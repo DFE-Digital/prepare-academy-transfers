@@ -187,7 +187,8 @@
     "wrap-ansi": "^7.0.0",
     "wrappy": "^1.0.2",
     "yallist": "^4.0.0",
-    "yauzl": "^2.10.0"
+    "yauzl": "^2.10.0",
+    "zaproxy": "^1.0.1"
   },
   "description": ""
 }
