@@ -1,0 +1,34 @@
+name: Security scanner tests
+
+on:
+  workflow_run:
+    workflows: ["Test, build, and deploy"]
+    types:
+      - completed
+
+jobs:
+  run-tests-with-zap:
+    name: Run Cypress tests with OWASP ZAP
+    environment: Dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Prepare environment
+        run: |
+          echo "URL=${{ secrets.ENDPOINT }}" >> $GITHUB_ENV
+          echo "API_KEY=${{ secrets.AUTH_HEADER_CYPRESS }}" >> $GITHUB_ENV
+          echo "HTTP_PROXY=http://zap:8080" >> $GITHUB_ENV
+          echo "NO_PROXY=*.google-analytics.com,*.googletagmanager.com,*.microsoftonline.com" >> $GITHUB_ENV
+          echo "ZAP_API_KEY=${{ secrets.ZAP_API_KEY }}" >> $GITHUB_ENV
+
+      - name: Run tests with scanner
+        run: |
+          docker-compose -f end-to-end-tests/docker-compose.yml up --exit-code-from cypress
+
+      # TODO report metrics through another system
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: report
+      #     path: ./end-to-end-tests/ZAP-Report.html
