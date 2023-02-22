@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.13.2"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.14.2"
 
   environment    = local.environment
   project_name   = local.project_name
