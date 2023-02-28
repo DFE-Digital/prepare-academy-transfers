@@ -11,6 +11,7 @@ locals {
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold
+  cdn_frontdoor_host_add_response_headers      = var.cdn_frontdoor_host_add_response_headers
   key_vault_access_users                       = toset(var.key_vault_access_users)
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path
