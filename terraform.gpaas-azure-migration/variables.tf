@@ -64,6 +64,11 @@ variable "cdn_frontdoor_enable_rate_limiting" {
   type        = bool
 }
 
+variable "cdn_frontdoor_rate_limiting_threshold" {
+  description = "Maximum number of concurrent requests before Rate Limiting policy is applied"
+  type        = number
+}
+
 variable "container_health_probe_path" {
   description = "Specifies the path that is used to determine the liveness of the Container"
   type        = string
