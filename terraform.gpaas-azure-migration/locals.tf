@@ -10,6 +10,7 @@ locals {
   container_secret_environment_variables       = var.container_secret_environment_variables
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
+  cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold
   key_vault_access_users                       = toset(var.key_vault_access_users)
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path
