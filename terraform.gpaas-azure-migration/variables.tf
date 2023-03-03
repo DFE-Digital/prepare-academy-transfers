@@ -54,6 +54,11 @@ variable "container_secret_environment_variables" {
   sensitive   = true
 }
 
+variable "container_max_replicas" {
+  description = "Container max replicas"
+  type        = number
+}
+
 variable "enable_cdn_frontdoor" {
   description = "Set to true to create a CDN"
   type        = bool
