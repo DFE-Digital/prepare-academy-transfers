@@ -16,6 +16,7 @@ concurrency:
 
 env:
   DOCKER_IMAGE: acatran-app
+  NODE_VERSION: 18.x
 
 jobs:
   set-env:
@@ -111,8 +112,9 @@ jobs:
 
       - name: Update Azure Container Apps Revision
         uses: azure/CLI@v1
+        id: azure
         with:
-          azcliversion: 2.40.0
+          azcliversion: 2.45.0
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
             az containerapp update \
@@ -120,3 +122,37 @@ jobs:
               --resource-group ${{ secrets.CIP_ACA_RESOURCE_GROUP }} \
               --image ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }} \
               --output none
+
+  cypress-tests:
+    name: Run Cypress Tests
+    if: needs.set-env.outputs.environment == 'staging' || needs.set-env.outputs.environment == 'dev'
+    needs: [ deploy-image, set-env ]
+    runs-on: ubuntu-22.04
+    environment: ${{ needs.set-env.outputs.environment }}
+    defaults:
+      run:
+        working-directory: end-to-end-tests
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Npm install
+        run: npm install
+
+      - name: Run cypress
+        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.CIP_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+        env:
+          db: ${{ secrets.DB_CONNECTION_STRING }}
+
+      - name: Upload screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v1
+        with:
+          name: screenshots-${{ needs.set-env.outputs.environment }}
+          path: end-to-end-tests/cypress/screenshots
