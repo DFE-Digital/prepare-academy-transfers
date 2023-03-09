@@ -1,0 +1,37 @@
+name: Deploy To Environment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: "Choose an environment to deploy to"
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  deploy-to-environment:
+    uses: DFE-Digital/terraform-azurerm-container-apps-hosting/.github/workflows/build-push-and-deploy-to-environment.yml@v0.15.0
+    with:
+      docker-image-name: "acatran-app"
+      docker-build-file-name: "Dockerfile.gpaas-azure-migration"
+      cypress-tests-enabled: true
+      cypress-tests-working-directory: "./end-to-end-tests"
+      cypress-tests-screenshot-path: "./end-to-end-tests/cypress/screenshots"
+      environment-name-development: "dev"
+      environment-name-staging: "staging"
+      environment-name-prod: "prod"
+    secrets:
+      azure-acr-client-id: ${{ secrets.CIP_ACR_CLIENTID }}
+      azure-acr-secret: ${{ secrets.CIP_ACR_SECRET }}
+      azure-acr-url: ${{ secrets.AZURE_ACR_URL }}
+      azure-aca-credentials: ${{ secrets.CIP_ACA_CREDENTIALS }}
+      azure-aca-name: ${{ secrets.CIP_ACA_CONTAINERAPP_NAME }}
+      azure-aca-resource-group: ${{ secrets.CIP_ACA_RESOURCE_GROUP }}
+      cypress-tests-development-run-command: "npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.CIP_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}',db='${{ secrets.DB_CONNECTION_STRING }}'"
+      cypress-tests-staging-run-command: "npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.CIP_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}',db='${{ secrets.DB_CONNECTION_STRING }}'"
