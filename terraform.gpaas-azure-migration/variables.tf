@@ -59,6 +59,11 @@ variable "container_max_replicas" {
   type        = number
 }
 
+variable "enable_event_hub" {
+  description = "Send Azure Container App logs to an Event Hub sink"
+  type        = bool
+}
+
 variable "enable_cdn_frontdoor" {
   description = "Set to true to create a CDN"
   type        = bool
