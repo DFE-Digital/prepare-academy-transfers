@@ -9,6 +9,7 @@ locals {
   container_command                            = var.container_command
   container_secret_environment_variables       = var.container_secret_environment_variables
   container_max_replicas                       = var.container_max_replicas
+  enable_event_hub                             = var.enable_event_hub
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold
