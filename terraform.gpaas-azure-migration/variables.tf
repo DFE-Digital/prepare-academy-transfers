@@ -134,3 +134,13 @@ variable "existing_network_watcher_resource_group_name" {
   description = "Existing network watcher resource group."
   type        = string
 }
+
+variable "enable_dns_zone" {
+  description = "Conditionally create a DNS zone"
+  type        = bool
+}
+
+variable "dns_zone_domain_name" {
+  description = "DNS zone domain name. If created, records will automatically be created to point to the CDN."
+  type        = string
+}
