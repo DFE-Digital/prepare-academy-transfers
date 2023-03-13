@@ -24,6 +24,8 @@ module "azure_container_apps_hosting" {
   cdn_frontdoor_enable_rate_limiting      = local.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold   = local.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers = local.cdn_frontdoor_host_add_response_headers
+  cdn_frontdoor_custom_domains            = local.cdn_frontdoor_custom_domains
+  cdn_frontdoor_host_redirects            = local.cdn_frontdoor_host_redirects
 
   container_health_probe_path     = local.container_health_probe_path
   cdn_frontdoor_health_probe_path = local.cdn_frontdoor_health_probe_path
