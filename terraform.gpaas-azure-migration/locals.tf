@@ -12,6 +12,7 @@ locals {
   enable_event_hub                             = var.enable_event_hub
   enable_dns_zone                              = var.enable_dns_zone
   dns_zone_domain_name                         = var.dns_zone_domain_name
+  dns_ns_records                               = var.dns_ns_records
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold

@@ -14,6 +14,7 @@ module "azure_container_apps_hosting" {
 
   enable_dns_zone      = local.enable_dns_zone
   dns_zone_domain_name = local.dns_zone_domain_name
+  dns_ns_records       = local.dns_ns_records
 
   image_name                             = local.image_name
   container_command                      = local.container_command
