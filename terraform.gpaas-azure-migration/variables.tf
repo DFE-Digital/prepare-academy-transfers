@@ -155,6 +155,16 @@ variable "dns_ns_records" {
   )
 }
 
+variable "dns_txt_records" {
+  description = "DNS TXT records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(string)
+    })
+  )
+}
+
 variable "cdn_frontdoor_custom_domains" {
   description = "Azure CDN Front Door custom domains. If they are within the DNS zone (optionally created), the Validation TXT records and ALIAS/CNAME records will be created"
   type        = list(string)
