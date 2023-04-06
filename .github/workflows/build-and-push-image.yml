@@ -100,7 +100,7 @@ jobs:
             }
 
   deploy-image:
-    name: Deploy to ${{ needs.set-env.outputs.environment }}
+    name: Deploy to ${{ needs.set-env.outputs.environment }} (${{ needs.set-env.outputs.release }})
     needs: [ build-and-push-image, set-env ]
     runs-on: ubuntu-22.04
     environment: ${{ needs.set-env.outputs.environment }}
