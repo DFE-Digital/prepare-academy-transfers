@@ -23,6 +23,7 @@ module "azure_container_apps_hosting" {
   container_max_replicas                 = local.container_max_replicas
 
   enable_cdn_frontdoor                    = local.enable_cdn_frontdoor
+  cdn_frontdoor_origin_fqdn_override      = local.cdn_frontdoor_origin_fqdn_override
   cdn_frontdoor_enable_rate_limiting      = local.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold   = local.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers = local.cdn_frontdoor_host_add_response_headers

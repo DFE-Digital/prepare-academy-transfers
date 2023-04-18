@@ -20,6 +20,7 @@ locals {
   cdn_frontdoor_host_add_response_headers      = var.cdn_frontdoor_host_add_response_headers
   cdn_frontdoor_custom_domains                 = var.cdn_frontdoor_custom_domains
   cdn_frontdoor_host_redirects                 = var.cdn_frontdoor_host_redirects
+  cdn_frontdoor_origin_fqdn_override           = var.cdn_frontdoor_origin_fqdn_override
   key_vault_access_users                       = toset(var.key_vault_access_users)
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path
