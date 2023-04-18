@@ -21,6 +21,7 @@ locals {
   cdn_frontdoor_custom_domains                 = var.cdn_frontdoor_custom_domains
   cdn_frontdoor_host_redirects                 = var.cdn_frontdoor_host_redirects
   key_vault_access_users                       = toset(var.key_vault_access_users)
+  key_vault_access_ipv4                        = var.key_vault_access_ipv4
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path
   cdn_frontdoor_health_probe_path              = var.cdn_frontdoor_health_probe_path
