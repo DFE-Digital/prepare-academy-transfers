@@ -2,8 +2,8 @@ version: "3.8"
 services:
   zap:
     container_name: zap
-    image: owasp/zap2docker-stable:2.11.1 # pinned until alpn config issue is resolved - https://github.com/zaproxy/zaproxy/issues/7699
-    command: "zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.key=${ZAP_API_KEY} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true"
+    image: owasp/zap2docker-stable
+    command: "zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.key=${ZAP_API_KEY} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config network.localServers.mainProxy.alpn.enabled=false -config network.localServers.mainProxy.address=0.0.0.0"
     user: zap
   cypress:
     build:
