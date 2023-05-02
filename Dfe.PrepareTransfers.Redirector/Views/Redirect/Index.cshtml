@@ -1,0 +1,16 @@
+﻿@model Dfe.PrepareTransfers.Redirector.Models.Redirection
+@{
+    ViewBag.Title = "Prepare Conversions has moved";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-xl">Prepare conversions and transfers has moved</h1>
+
+        <p class="govuk-body">If you have any bookmarks or saved links, please update them to reflect the new address:</p>
+        <p class="govuk-body">
+            <a href="@Model.Destination">@Model.Destination</a>
+        </p>
+        <p class="govuk-body">You will automatically be redirected in @Model.Delay seconds</p>
+    </div>
+</div>
