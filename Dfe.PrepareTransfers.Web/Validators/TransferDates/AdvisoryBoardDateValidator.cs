@@ -13,9 +13,6 @@ public class AdvisoryBoardDateValidator : AbstractValidator<AdvisoryBoardViewMod
       RuleFor(x => x.AdvisoryBoardDate)
          .SetValidator(new DateValidator { ErrorDisplayName = "Advisory board date" });
 
-      RuleFor(x => x.AdvisoryBoardDate)
-         .SetValidator(new FutureDateValidator());
-
       RuleFor(x => x.AdvisoryBoardDate.Date.Day)
          .Custom((day, context) =>
          {
