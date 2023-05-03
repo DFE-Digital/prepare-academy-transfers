@@ -25,9 +25,7 @@ describe('Tests to check advisory board date error messages', { tags: '@dev'}, (
         cy.clickDataTest("ab-date");
         cy.fillInDate(Cypress.dayjs().subtract(1,'M'))
         cy.get('.govuk-button').click();
-        cy.url().then(href => {
-            expect(href).includes('/home');
-        });
+        cy.url().should('contain', '/transfer-dates')
     });
 
     after(function () {
