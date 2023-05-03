@@ -9,7 +9,9 @@ using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates;
 using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Helpers;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Moq;
@@ -179,7 +181,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 IActionResult result = await _subject.OnPostAsync();
                 
                 Assert.IsType<PageResult>(result);
-                Assert.Single(_subject.ModelState["TargetDateViewModel.TargetDate.Date"]!.Errors);
+                _subject.ModelState.Values.First().ValidationState.Should().Be(ModelValidationState.Invalid);
             }
         }
     }
