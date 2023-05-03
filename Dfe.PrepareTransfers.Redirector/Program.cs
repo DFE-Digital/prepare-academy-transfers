@@ -18,10 +18,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+   name: "redirect",
+   pattern: "{*path}",
+   new { controller = "Redirect", action = "Index" });
 
 app.Run();
