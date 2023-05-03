@@ -13,9 +13,6 @@ public class TargetDateValidator : AbstractValidator<TargetDateViewModel>
       RuleFor(x => x.TargetDate)
          .SetValidator(new DateValidator { ErrorDisplayName = "expected transfer date" });
 
-      RuleFor(x => x.TargetDate)
-         .SetValidator(new FutureDateValidator());
-
       RuleFor(x => x.TargetDate.Date.Day)
          .Custom((day, context) =>
          {
