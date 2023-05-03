@@ -1,25 +1,31 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["Dfe.PrepareTransfers.Redirector/Dfe.PrepareTransfers.Redirector.csproj", "Dfe.PrepareTransfers.Redirector/"]
-RUN dotnet restore "Dfe.PrepareTransfers.Redirector/Dfe.PrepareTransfers.Redirector.csproj"
-COPY . .
+ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
+ARG NODEJS_IMAGE_TAG=18.12-bullseye
 
-# Stage 2 - Build assets
-FROM node:18.12-bullseye as frontend
-COPY --from=build /src /src
-WORKDIR /src/Dfe.PrepareTransfers/wwwroot
+# Stage 1 - Node Assets
+FROM node:${NODEJS_IMAGE_TAG} as frontendBuild
+COPY . /build/
+WORKDIR /build/wwwroot
 RUN npm install
-RUN npm run build
-RUN mkdir -p /src/Dfe.PrepareTransfers.Redirector/wwwroot/css/
-RUN mv dist/site.css /src/Dfe.PrepareTransfers.Redirector/wwwroot/css/site.css
+Run npm run build
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS sdk
-COPY --from=frontend /src /src
-WORKDIR /src/Dfe.PrepareTransfers.Redirector
-RUN dotnet build "Dfe.PrepareTransfers.Redirector.csproj" -c Release
-RUN dotnet publish "Dfe.PrepareTransfers.Redirector.csproj" -c Release -o /app /p:UseAppHost=false
+# Stage 2 - DotNet
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnetBuild
+WORKDIR /build
+COPY . .
+RUN  rm -rf ./Dfe.PrepareTransfers.Redirector/wwwroot/src
+RUN  rm -rf ./Dfe.PrepareTransfers.Redirector/wwwroot/dist
+COPY --from=frontendBuild /build/ ./Dfe.PrepareTransfers.Redirector
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
-COPY --from=sdk /app /app
+# Stage 3 - Publish
+WORKDIR /build/Dfe.PrepareTransfers.Redirector
+RUN dotnet restore
+RUN dotnet build --configuration Release
+RUN dotnet publish --no-build --configuration Release --output /app
+
+# Stage 4 - Finalise
+ARG ASPNET_IMAGE_TAG
+FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
+COPY --from=dotnetBuild /app /app
 WORKDIR /app
+EXPOSE 80/tcp
 ENTRYPOINT ["dotnet", "Dfe.PrepareTransfers.Redirector.dll"]
