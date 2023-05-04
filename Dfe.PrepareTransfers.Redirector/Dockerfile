@@ -2,11 +2,11 @@ ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
 ARG NODEJS_IMAGE_TAG=18.12-bullseye
 
 # Stage 1 - Node Assets
-FROM node:${NODEJS_IMAGE_TAG} as frontendBuild
+FROM node:${NODEJS_IMAGE_TAG} AS frontendBuild
 COPY . /build/
 WORKDIR /build/wwwroot
 RUN npm install
-Run npm run build
+RUN npm run build
 
 # Stage 2 - DotNet
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnetBuild
