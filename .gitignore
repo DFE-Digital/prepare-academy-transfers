@@ -236,3 +236,6 @@ backend.vars
 /Brewfile.lock.json
 /terraform/Brewfile.lock.json
 /terraform.gpaas-azure-migration/Brewfile.lock.json
+
+# Redirector
+/Dfe.PrepareTransfers.Redirector/wwwroot/dist/
