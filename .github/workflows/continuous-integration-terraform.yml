@@ -27,19 +27,19 @@ jobs:
         run: rm ./terraform.gpaas-azure-migration/backend.tf
 
       - name: Run a Terraform init
-        uses: docker://hashicorp/terraform:1.4.0
+        uses: docker://hashicorp/terraform:1.4.5
         with:
           entrypoint: terraform
           args: -chdir=terraform.gpaas-azure-migration init
 
       - name: Run a Terraform validate
-        uses: docker://hashicorp/terraform:1.4.0
+        uses: docker://hashicorp/terraform:1.4.5
         with:
           entrypoint: terraform
           args: -chdir=terraform.gpaas-azure-migration validate
 
       - name: Run a Terraform format check
-        uses: docker://hashicorp/terraform:1.4.0
+        uses: docker://hashicorp/terraform:1.4.5
         with:
           entrypoint: terraform
           args: -chdir=terraform.gpaas-azure-migration fmt -check=true -diff=true
