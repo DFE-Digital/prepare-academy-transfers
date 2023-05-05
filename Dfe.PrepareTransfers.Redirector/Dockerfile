@@ -27,5 +27,4 @@ ARG ASPNET_IMAGE_TAG
 FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
 COPY --from=dotnetBuild /app /app
 WORKDIR /app
-EXPOSE 80/tcp
 ENTRYPOINT ["dotnet", "Dfe.PrepareTransfers.Redirector.dll"]
