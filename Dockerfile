@@ -1,20 +1,33 @@
-# Stage 1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
+ARG NODEJS_IMAGE_TAG=18.12-bullseye
+
+# Stage 1 - Build frontend assets
+FROM node:${NODEJS_IMAGE_TAG} as frontend
+COPY ./Dfe.PrepareTransfers.Web/ /build/
+WORKDIR /build/wwwroot
+RUN npm install
+RUN npm run build
+
+# Stage 2 - Build project
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /build
 
-# Copy csproj and restore as distinct layers
-COPY Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
-COPY Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
-COPY Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
-COPY Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
-COPY Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
+COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
+COPY ./Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
+COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
+COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
+COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR Dfe.PrepareTransfers.Web
+WORKDIR /build/Dfe.PrepareTransfers.Web
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app --no-restore
 
-# Stage 2
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+# Stage 3 - Final
+ARG ASPNET_IMAGE_TAG
+FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
+COPY --from=publish /app /app
+
 WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Dfe.PrepareTransfers.Web.dll"]
+COPY ./script/web-docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+EXPOSE 80/tcp
