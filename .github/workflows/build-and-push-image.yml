@@ -1,4 +1,4 @@
-name: Deploy to environment (CIP)
+name: Deploy to environment
 
 on:
   push:
