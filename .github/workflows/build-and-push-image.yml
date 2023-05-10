@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: Dockerfile.gpaas-azure-migration
+          file: Dockerfile
           tags: |
             ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.branch }}
             ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }}
