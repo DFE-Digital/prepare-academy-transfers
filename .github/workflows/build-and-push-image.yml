@@ -12,7 +12,7 @@ on:
         required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.inputs.environment }}
 
 env:
   DOCKER_IMAGE: acatran-app
