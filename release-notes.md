@@ -4,5 +4,5 @@
 
 ---
 
-# 1.0.0 - Initial release of Record Concerns
+# 1.0.0 - Initial release of Prepare Transfers
 Initial Release of the Prepare-transfers system into production.
