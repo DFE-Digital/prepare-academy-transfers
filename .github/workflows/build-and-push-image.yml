@@ -1,4 +1,4 @@
-name: Deploy to environment (CIP)
+name: Deploy to environment
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
         required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.inputs.environment }}
 
 env:
   DOCKER_IMAGE: acatran-app
@@ -26,7 +26,12 @@ jobs:
       environment: ${{ steps.var.outputs.environment }}
       branch: ${{ steps.var.outputs.branch }}
       release: ${{ steps.var.outputs.release }}
+      checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
       - id: var
         run: |
           GIT_REF=${{ github.ref }}
@@ -34,9 +39,11 @@ jobs:
           INPUT=${{ github.event.inputs.environment }}
           ENVIRONMENT=${INPUT:-"dev"}
           RELEASE=${ENVIRONMENT,,}-`date +%Y-%m-%d`.${{ github.run_number }}
+          CHECKED_OUT_SHA="$(git log -1 '--format=format:%H')"
           echo "environment=${ENVIRONMENT,,}" >> $GITHUB_OUTPUT
           echo "branch=$GIT_BRANCH" >> $GITHUB_OUTPUT
           echo "release=${RELEASE}" >> $GITHUB_OUTPUT
+          echo "checked-out-sha=${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
 
   build-and-push-image:
     name: Build and push to ACR
@@ -51,19 +58,21 @@ jobs:
       - name: Azure Container Registry login
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.CIP_ACR_CLIENTID }}
-          password: ${{ secrets.CIP_ACR_SECRET }}
-          registry: ${{ secrets.CIP_ACR_URL }}
+          username: ${{ secrets.AZURE_ACR_CLIENTID }}
+          password: ${{ secrets.AZURE_ACR_SECRET }}
+          registry: ${{ secrets.AZURE_ACR_URL }}
 
       - name: Build and push docker image
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: Dockerfile.gpaas-azure-migration
+          file: Dockerfile
+          build-args: COMMIT_SHA=${{ needs.set-env.outputs.checked-out-sha }}
           tags: |
-            ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.branch }}
-            ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }}
-            ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:latest
+            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.branch }}
+            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }}
+            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:sha-${{ needs.set-env.outputs.checked-out-sha }}
+            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:latest
           push: true
 
   create-tag:
@@ -108,7 +117,7 @@ jobs:
       - name: Azure login with ACA credentials
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.CIP_ACA_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_ACA_CREDENTIALS }}
 
       - name: Update Azure Container Apps Revision
         uses: azure/CLI@v1
@@ -118,9 +127,9 @@ jobs:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
             az containerapp update \
-              --name ${{ secrets.CIP_ACA_CONTAINERAPP_NAME }} \
-              --resource-group ${{ secrets.CIP_ACA_RESOURCE_GROUP }} \
-              --image ${{ secrets.CIP_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }} \
+              --name ${{ secrets.AZURE_ACA_NAME }} \
+              --resource-group ${{ secrets.AZURE_ACA_RESOURCE_GROUP }} \
+              --image ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }} \
               --output none
 
   cypress-tests:
@@ -146,7 +155,7 @@ jobs:
         run: npm install
 
       - name: Run cypress
-        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.CIP_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
 

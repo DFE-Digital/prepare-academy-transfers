@@ -1,4 +1,4 @@
-name: .NET
+name: .NET Build and Test
 
 on:
   push:
@@ -7,40 +7,45 @@ on:
     branches: [ main ]
     types: [ opened, synchronize, reopened]
 
+env:
+  DOTNET_VERSION: '6.0.403'
+  JAVA_VERSION: '11'
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0 # Shallow clones disabled for a better relevancy of SC analysis
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.403
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup JDK
+      uses: actions/setup-java@v3
       with:
-        java-version: 1.11
+        distribution: 'microsoft'
+        java-version: ${{ env.JAVA_VERSION }}
+
     - name: Cache SonarCloud packages
       uses: actions/cache@v1
       with:
         path: ~\sonar\cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
+
     - name: Install SonarCloud scanners
       run: dotnet tool install --global dotnet-sonarscanner
+
     - name: Install dotnet reportgenerator
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
     - name: Restore dependencies
       run: dotnet restore
-    - name: Setup node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '18.x'
-    # This could be cached in the future to allow for quicker build times
+
     - name: Build Dfe.PrepareTransfers.Web
       run: make build-frontend
     - name: Build, Test and Analyze
