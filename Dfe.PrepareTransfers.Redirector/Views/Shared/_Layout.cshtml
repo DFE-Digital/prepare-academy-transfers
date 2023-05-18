@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html class="govuk-template" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0c0c">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+
+    <title>@ViewBag.Title - Prepare conversions and transfers </title>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+
+    <meta http-equiv="refresh" content="@Model.Delay;@Model.Destination" />
+    <link rel="canonical" href="@Model.Destination" />
+</head>
+
+<body class="govuk-template__body">
+
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
+    <header class="govuk-header " role="banner" data-module="govuk-header">
+        <div class="govuk-header__container govuk-width-container">
+            <div class="govuk-header__logo govuk-!-width-two-thirds">
+                <a class="govuk-header__link govuk-header__link--homepage" href="/project-type">
+                    <span class="govuk-header__logotype-text">
+                        Prepare conversions and transfers
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="govuk-width-container">
+        <div class="govuk-phase-banner">
+            <p class="govuk-phase-banner__content">
+                <strong class="govuk-tag govuk-phase-banner__content__tag">
+                    beta
+                </strong>
+                <span class="govuk-phase-banner__text">
+                    This is a new service – your <a class="govuk-link" rel="noopener" href="https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=yXfS-grGoU2187O4s0qC-T2PiQYMRztGs3k0_bVP6INURE4zWktYMjNBM1RNWFcxRElCSVJYMTREUSQlQCN0PWcu" target="_blank">feedback (opens in new tab)</a> will help us to improve it.
+                </span>
+            </p>
+        </div>
+
+        <main class="govuk-main-wrapper gov-main-wrapper--auto-spacing" id="main-content" role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="govuk-footer " role="contentinfo">
+        <div class="govuk-width-container ">
+            <div class="govuk-footer__navigation">
+                <div class="govuk-footer__section" data-cy="get-support-section">
+                    <h2 class="govuk-footer__heading govuk-heading-m">Get support</h2>
+                    <ul class="govuk-footer__list govuk-footer__list--columns-1">
+                        <li class="govuk-footer__list-item">
+                            Email
+                            <a class="govuk-footer__link" data-cy="get-support-email" href="mailto:regionalservices.rg@education.gov.uk?subject=Prepare%20conversions%20and%20transfers:%20support%20query">
+                                regionalservices.rg@education.gov.uk
+                            </a>
+                    </ul>
+                </div>
+                <div class="govuk-footer__section">
+                    <h2 class="govuk-footer__heading govuk-heading-m">Give feedback</h2>
+                    <ul class="govuk-footer__list govuk-footer__list--columns-1">
+                        <li class="govuk-footer__list-item">
+                            <a class="govuk-footer__link" rel="noopener" href="https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=yXfS-grGoU2187O4s0qC-T2PiQYMRztGs3k0_bVP6INURE4zWktYMjNBM1RNWFcxRElCSVJYMTREUSQlQCN0PWcu" target="_blank" id="footer-feedback-link">
+                                Give feedback on Prepare conversions and transfers (opens in a new tab)
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="govuk-width-container ">
+            <div class="govuk-footer__meta">
+                <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+                    <h2 class="govuk-visually-hidden">Support links</h2>
+                    <ul class="govuk-footer__inline-list">
+                        <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" data-test="accessibility-statement" href="@(Model.DestinationHost)public/accessibility">
+                                Accessibility statement
+                            </a>
+                        </li>
+                        <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" data-test="cookie-preferences" href="@(Model.DestinationHost)public/cookie-preferences?returnUrl=%2Fproject-type">
+                                Cookies
+                            </a>
+                        </li>
+                    </ul>
+                    <svg aria-hidden="true" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
+                        <path fill="currentColor" d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145" />
+                    </svg>
+                    <span class="govuk-footer__licence-description">
+                        All content is available under the
+                        <a class="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government License v3.0</a>, except where otherwise stated
+                    </span>
+                </div>
+                <div class="govuk-footer__meta-item">
+                    <a class="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened]
+
+env:
+  DOTNET_VERSION: '6.0.403'
+  JAVA_VERSION: '11'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Shallow clones disabled for a better relevancy of SC analysis
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'microsoft'
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v1
+      with:
+        path: ~\sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Install SonarCloud scanners
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: Install dotnet reportgenerator
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build Dfe.PrepareTransfers.Web
+      run: make build-frontend
+    - name: Build, Test and Analyze
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        dotnet-sonarscanner begin /k:"DFE-Digital_prepare-academy-transfers" /o:"dfe-digital" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths=CoverageReport/SonarQube.xml
+        dotnet build -c Release --no-restore
+        dotnet test -c Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        reportgenerator -reports:./**/coverage.cobertura.xml -targetdir:./CoverageReport -reporttypes:SonarQube
+        dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"

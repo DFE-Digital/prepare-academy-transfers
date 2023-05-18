@@ -1,0 +1,23 @@
+name: Terraform Lint
+
+on:
+  pull_request:
+
+jobs:
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: v0.44.1
+
+      - name: Run TFLint
+        run: tflint -f compact

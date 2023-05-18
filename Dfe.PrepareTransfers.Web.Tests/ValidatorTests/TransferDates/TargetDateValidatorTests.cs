@@ -18,7 +18,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.TransferDates
         public void ShouldHaveChildValidators()
         {
             _validator.ShouldHaveChildValidator(a => a.TargetDate, typeof(DateValidator));
-            _validator.ShouldHaveChildValidator(a => a.TargetDate, typeof(FutureDateValidator));
         }
 
         [Fact]
