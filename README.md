@@ -146,7 +146,7 @@ i.e., grepTags=@dev,grepTags=@stage
 
 Further details on using cypress-grep test tagging: https://github.com/cypress-io/cypress-grep
 cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changelog
-```
+
 ##### Cypress Linting
  Cypress ESLint Plugin
  ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code, with the goal of making code more consistent and avoiding bugs.
@@ -159,14 +159,16 @@ cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changel
  -Installation using yarn
   `yarn add eslint-plugin-cypress --dev`
 
- -Usage: Add an .eslintrc.json file to your cypress directory with the following:
+ -Usage: Add an `.eslintrc.json` file to your cypress directory with the following:
+ ```
    {
       "plugins": [
       "cypress"
      ]
     }
-
+```
 -Add rules, example:
+```
   {
     "rules": {
       "cypress/no-assigning-return-values": "error",
@@ -177,7 +179,9 @@ cypress 10.9.0 Latest changes: https://docs.cypress.io/guides/references/changel
       "cypress/no-pause": "error"
     }
   }
+```
  -Use the recommended configuration and you can forego configuring plugins, rules, and env individually.
+```
   {
     "extends": [
       "plugin:cypress/recommended"
@@ -208,4 +212,43 @@ Edit package.json > prepare script and run it once:
 
 `git commit -m "Keep calm and commit"`
 esLint will run befor the commit
+
+### Security testing with ZAP
+
+The Cypress tests can also be run, proxied via OWASP ZAP for passive security scanning of the application.
+
+These can be run using the configured docker-compose.yml, which will spin up containers for the ZAP daemon and the Cypress tests, including all networking required. You will need to update any config in the file before running
+
+Create a .env file for docker, this file needs to include
+
+* all of your required cypress configuration
+* HTTP_PROXY e.g. http://zap:8080
+* ZAP_API_KEY, can be any random guid
+
+Example env:
 ```
+URL=<Enter URL>
+API_KEY=<Enter API key>
+HTTP_PROXY=http://zap:8080
+ZAP_API_KEY=<Enter random guid>
+```
+_Note: You might have trouble running this locally because of docker thinking localhost is the container and not your machine_
+
+To run docker compose use:
+
+`docker-compose -f docker-compose.yml --exit-code-from cypress`
+
+_Note: `--exit-code-from cypress` tells the container to quit when cypress finishes_
+
+You can also exclude URLs from being intercepted by using the NO_PROXY setting
+
+e.g. `NO_PROXY=*.google.com,yahoo.co.uk`
+
+Alternatively, you can run the Cypress tests against an existing ZAP proxy by setting the environment configuration
+```
+HTTP_PROXY="<zap-daemon-url>"
+NO_PROXY="<list-of-urls-to-ignore>"
+```
+and setting the runtime variables
+
+`zapReport=true,zapApiKey=<zap-api-key>,zapUrl="<zap-daemon-url>"`

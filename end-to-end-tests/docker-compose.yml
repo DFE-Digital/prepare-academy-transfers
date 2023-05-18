@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  zap:
+    container_name: zap
+    image: owasp/zap2docker-stable
+    command: "zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.key=${ZAP_API_KEY} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config network.localServers.mainProxy.alpn.enabled=false -config network.localServers.mainProxy.address=0.0.0.0"
+    user: zap
+  cypress:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: -- --env url="${URL}",authorizationHeader="${API_KEY}",zapReport=true,zapApiKey=${ZAP_API_KEY},zapUrl="${HTTP_PROXY}"
+    depends_on:
+      zap:
+        condition: service_healthy
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY}
+      - NO_PROXY="${NO_PROXY}"
+    volumes:
+      - ./:/reports
