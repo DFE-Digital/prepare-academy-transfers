@@ -20,6 +20,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
       public IReadOnlyList<ProjectSearchResult> Projects => _projects.AsReadOnly();
       public int TotalProjectCount { get; private set; }
 
+      public int SearchCount { get; private set; }
       public Index(IProjects projectsRepository, ILogger<Index> logger)
       {
          _projectsRepository = projectsRepository;
@@ -46,7 +47,9 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
             await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
 
          _projects = projects.Result;
+         SearchCount = projects.Result.Count;
          TotalProjectCount = projects.TotalRecords;
+      
 
          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
 
