@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Dfe.PrepareTransfers.Helpers;
 using Xunit;
+using System;
 
 namespace Dfe.PrepareTransfers.Web.Integration.Tests
 {
@@ -12,21 +13,20 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
         public BasicTests(IntegrationTestingWebApplicationFactory factory) : base(factory) { }
 
         [Theory]
-        [InlineData("/")]
+        [InlineData("/home")]
         public async Task Should_be_success_result_on_get(string url)
         {
             var projects = GetProjects();
 
-            await OpenUrlAsync(url);
-
+            await OpenAndConfirmPathAsync(url);
+            
             Document.StatusCode.Should().Be(HttpStatusCode.OK);
             Document.ContentType.Should().Be("text/html");
             Document.CharacterSet.Should().Be("utf-8");
-            Document.QuerySelector("h1.govuk-heading-xl")?.TextContent.Trim().Should().Be("Manage an academy transfer");
-            Document.QuerySelector("h2.govuk-heading-l")?.TextContent.Trim().Should().Be("Projects");
-            Document.QuerySelector("#main-content > div:nth-child(2) > div > div:nth-child(3) > div > h3 > a")
-                ?.TextContent
-                .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName.ToTitleCase());
+            Document.QuerySelector("h1.govuk-heading-xl").TextContent.Trim().Should().Be("Manage an academy transfer");
+            Document.QuerySelector("h2").TextContent.Trim().Should().Be("1 projects found");
+            Document.QuerySelector("[data-id=project-link-001]").TextContent
+              .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName.ToTitleCase());
         }
     }
 }

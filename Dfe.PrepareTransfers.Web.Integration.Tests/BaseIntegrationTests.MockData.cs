@@ -10,13 +10,14 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 	{
 		protected IEnumerable<TramsProjectSummary> GetProjects(Action<TramsProjectSummary> postSetup = null)
 		{
-			var projects = AcademiesApiFixtures.Projects();
+			IEnumerable<TramsProjectSummary> projects = AcademiesApiFixtures.Projects();
 			if (postSetup != null)
 			{
 				postSetup(projects.First());
 			}
 
-			_factory.AddGetWithJsonResponse("/academyTransferProject", projects);
+			PagedResult<TramsProjectSummary> projectResults = new PagedResult<TramsProjectSummary>(projects, projects.Count());
+			_factory.AddGetWithJsonResponse("/academyTransferProjects", projectResults);
 			return projects;
 		}
 
