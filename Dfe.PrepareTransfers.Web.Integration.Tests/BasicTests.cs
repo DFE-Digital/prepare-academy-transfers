@@ -18,10 +18,8 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
         {
             var projects = GetProjects();
 
-            await OpenUrlAsync(url);
+            await OpenAndConfirmPathAsync(url);
             
-            Console.Write(Document.DocumentElement.OuterHtml);
-
             Document.StatusCode.Should().Be(HttpStatusCode.OK);
             Document.ContentType.Should().Be("text/html");
             Document.CharacterSet.Should().Be("utf-8");

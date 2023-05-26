@@ -7,6 +7,7 @@ using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 using AngleSharp.Io.Network;
+using FluentAssertions;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Integration.Tests
@@ -61,5 +62,18 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
             _factory.Reset();
             GC.SuppressFinalize(this);
         }
+
+        private static string BuildRequestAddress(string path)
+        {
+            return $"https://localhost{(path.StartsWith('/') ? path : $"/{path}")}";
+        }
+
+        protected async Task OpenAndConfirmPathAsync(string path, string expectedPath = null, string because = null)
+        {
+            await _browsingContext.OpenAsync(BuildRequestAddress(path));
+
+            Document.Url.Should().Be(BuildRequestAddress(expectedPath ?? path), because ?? "navigation should be successful");
+        }
+        
     }
 }
