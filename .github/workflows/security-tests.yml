@@ -2,7 +2,7 @@ name: Security scanner tests
 
 on:
   workflow_run:
-    workflows: ["Test, build, and deploy"]
+    workflows: ["Deploy to environment"]
     types:
       - completed
 
@@ -15,20 +15,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Prepare environment
-        run: |
-          echo "URL=${{ secrets.ENDPOINT }}" >> $GITHUB_ENV
-          echo "API_KEY=${{ secrets.AUTH_HEADER_CYPRESS }}" >> $GITHUB_ENV
-          echo "HTTP_PROXY=http://zap:8080" >> $GITHUB_ENV
-          echo "NO_PROXY=*.google-analytics.com,*.googletagmanager.com,*.microsoftonline.com" >> $GITHUB_ENV
-          echo "ZAP_API_KEY=${{ secrets.ZAP_API_KEY }}" >> $GITHUB_ENV
-
       - name: Run tests with scanner
+        env:
+          AUTH_HEADER: ${{ secrets.AUTH_HEADER_CYPRESS }}
+          DB_CONN: ${{ secrets.DB_CONNECTION_STRING }}
+          HTTP_PROXY: http://zap:8080
+          KEY: ${{ secrets.CYPRESS_KEY }}
+          NO_PROXY: "*.google-analytics.com,*.googletagmanager.com,*.microsoftonline.com"
+          URL: ${{ secrets.AZURE_ENDPOINT }}
+          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
         run: |
           docker-compose -f end-to-end-tests/docker-compose.yml up --exit-code-from cypress
 
-      # TODO report metrics through another system
-      # - uses: actions/upload-artifact@v1
-      #   with:
-      #     name: report
-      #     path: ./end-to-end-tests/ZAP-Report.html
+      - name: Get git sha
+        if: '!cancelled()'
+        run: |
+          CHECKED_OUT_SHA="$(git log -1 '--format=format:%H')"
+          echo "checked_out_sha=${CHECKED_OUT_SHA}" >> $GITHUB_ENV
+
+      - name: Push report to blob storage
+        if: '!cancelled()'
+        uses: azure/CLI@v1
+        id: azure
+        with:
+          azcliversion: 2.49.0
+          inlineScript: |
+            az storage azcopy blob upload -c ${{ secrets.OWASP_STORAGE_CONTAINER_NAME }} --account-name ${{ secrets.OWASP_STORAGE_ACCOUNT_NAME }} -s "end-to-end-tests/reports/ZAP-Report.html" -d "Dfe.PrepareTransfers/${{ env.checked_out_sha }}/ZAP-Report.html" --sas-token "${{ secrets.OWASP_BLOB_SAS_TOKEN }}"
