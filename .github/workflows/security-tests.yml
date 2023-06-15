@@ -33,6 +33,12 @@ jobs:
           CHECKED_OUT_SHA="$(git log -1 '--format=format:%H')"
           echo "checked_out_sha=${CHECKED_OUT_SHA}" >> $GITHUB_ENV
 
+      - name: Azure login with SPN
+        if: '!cancelled()'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.OWASP_AZ_CREDENTIALS }}
+
       - name: Push report to blob storage
         if: '!cancelled()'
         uses: azure/CLI@v1
@@ -40,4 +46,10 @@ jobs:
         with:
           azcliversion: 2.49.0
           inlineScript: |
-            az storage azcopy blob upload -c ${{ secrets.OWASP_STORAGE_CONTAINER_NAME }} --account-name ${{ secrets.OWASP_STORAGE_ACCOUNT_NAME }} -s "end-to-end-tests/reports/ZAP-Report.html" -d "Dfe.PrepareTransfers/${{ env.checked_out_sha }}/ZAP-Report.html" --sas-token "${{ secrets.OWASP_BLOB_SAS_TOKEN }}"
+            az storage blob upload \
+              --container-name ${{ secrets.OWASP_STORAGE_CONTAINER_NAME }} \
+              --account-name ${{ secrets.OWASP_STORAGE_ACCOUNT_NAME }} \
+              --file "end-to-end-tests/reports/ZAP-Report.html" \
+              --name "Dfe.PrepareTransfers/${{ env.checked_out_sha }}/ZAP-Report.html" \
+              --auth-mode login \
+              --overwrite
