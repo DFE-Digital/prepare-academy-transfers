@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.17.5"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.18.1"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -36,10 +36,8 @@ module "azure_container_apps_hosting" {
   enable_monitoring               = local.enable_monitoring
   monitor_email_receivers         = local.monitor_email_receivers
   monitor_endpoint_healthcheck    = local.monitor_endpoint_healthcheck
-  monitor_enable_slack_webhook    = local.monitor_enable_slack_webhook
-  monitor_slack_webhook_receiver  = local.monitor_slack_webhook_receiver
-  monitor_slack_channel           = local.monitor_slack_channel
 
+  existing_logic_app_workflow                  = local.existing_logic_app_workflow
   existing_network_watcher_name                = local.existing_network_watcher_name
   existing_network_watcher_resource_group_name = local.existing_network_watcher_resource_group_name
 }
