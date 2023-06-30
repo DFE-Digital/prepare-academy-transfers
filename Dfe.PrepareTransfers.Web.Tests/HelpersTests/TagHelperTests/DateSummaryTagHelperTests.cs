@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers;
-using Dfe.PrepareTransfers.Web.Models;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 

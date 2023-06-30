@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Data.Models
 {

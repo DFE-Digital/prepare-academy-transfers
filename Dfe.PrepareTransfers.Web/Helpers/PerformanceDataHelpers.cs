@@ -15,7 +15,9 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
         {
             if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
                 string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
+            {
                 return new HtmlString(NoDataText);
+            }
 
             return new HtmlString(
                 $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}<br>(disadvantaged pupils: {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})");
@@ -25,7 +27,9 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
         {
             if (string.IsNullOrEmpty(disadvantagedPupilResult?.NotDisadvantaged) &&
                 string.IsNullOrEmpty(disadvantagedPupilResult?.Disadvantaged))
+            {
                 return NoDataText;
+            }
 
             return
                 $"{GetFormattedResult(disadvantagedPupilResult.NotDisadvantaged)}\n(disadvantaged pupils: {GetFormattedResult(disadvantagedPupilResult.Disadvantaged)})";
@@ -40,14 +44,20 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
             decimal? upperConfidenceInterval)
         {
             if (lowerConfidenceInterval == null && upperConfidenceInterval == null)
+            {
                 return NoDataText;
+            }
 
             return $"{lowerConfidenceInterval.ToString()} to {upperConfidenceInterval.ToString()}";
         }
 
         public static string GetFormattedYear(string year)
         {
-            if (string.IsNullOrEmpty(year)) return year;
+            if (string.IsNullOrEmpty(year))
+            {
+                return year;
+            }
+
             var trimmedYear = string.Concat(year.Where(c => !char.IsWhiteSpace(c)));
             return trimmedYear.Contains('-') ? trimmedYear.Replace("-", " to ") : year;
         }
@@ -115,11 +125,15 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
         private static IEnumerable<KeyStage4> GetResultsWithNextLatestYearPopulatedForMissingYearData(IList<KeyStage4> keyStage4Results)
         {
             if (!keyStage4Results.Any(k => string.IsNullOrEmpty(k.Year)))
+            {
                 return keyStage4Results;
-            
+            }
+
             if (keyStage4Results.All(k => string.IsNullOrEmpty(k.Year)))
+            {
                 return keyStage4Results;
-            
+            }
+
             for (var i = 0; i < keyStage4Results.Count; i++)
             {
                 if (string.IsNullOrEmpty(keyStage4Results[i].Year))

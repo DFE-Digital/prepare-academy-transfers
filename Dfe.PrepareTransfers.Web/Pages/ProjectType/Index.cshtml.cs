@@ -19,9 +19,15 @@ public class IndexModel : PageModel
 
    public IActionResult OnPost()
    {
-      if (!ModelState.IsValid) return Page();
+      if (!ModelState.IsValid)
+      {
+          return Page();
+      }
 
-      if (ProjectType.Type is ProjectTypes.Conversion) return Redirect($"{_conversionsUrl}/project-list");
+      if (ProjectType.Type is ProjectTypes.Conversion)
+      {
+          return Redirect($"{_conversionsUrl}/project-list");
+      }
 
       return RedirectToPage(Links.ProjectList.Index.PageName);
    }

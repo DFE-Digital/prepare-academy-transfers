@@ -1,4 +1,5 @@
-﻿@model LinkItem
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LinkItem
 
 @{ LinkItem link = (Links.FindByPageName(Context.Request.Query["bl"]) ?? Model).OverrideFrom(Context.Request.Query); }
 

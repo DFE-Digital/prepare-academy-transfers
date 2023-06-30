@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Dfe.PrepareTransfers.Data.Models.Projects
+﻿namespace Dfe.PrepareTransfers.Data.Models.Projects
 {
     public class TransferLegalRequirements
     {

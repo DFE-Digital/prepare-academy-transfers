@@ -104,8 +104,10 @@ public class Startup
          options.Cookie.HttpOnly = true;
          options.Cookie.IsEssential = true;
 
-         if (string.IsNullOrEmpty(Configuration["CI"])) 
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+         if (string.IsNullOrEmpty(Configuration["CI"]))
+         {
+             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+         }
       });
       services.AddMicrosoftIdentityWebAppAuthentication(Configuration);
       services.Configure<CookieAuthenticationOptions>(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -119,7 +121,9 @@ public class Startup
             options.SlidingExpiration = true;
 
             if (string.IsNullOrEmpty(Configuration["CI"]))
-               options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            }
          });
       services.AddHealthChecks();
    }
@@ -135,7 +139,10 @@ public class Startup
       var allowedRoles = Configuration.GetSection("AzureAd")["AllowedRoles"];
       policyBuilder.RequireAuthenticatedUser();
       if (!string.IsNullOrWhiteSpace(allowedRoles))
-         policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
+      {
+          policyBuilder.RequireClaim(ClaimTypes.Role, allowedRoles.Split(','));
+      }
+
       return policyBuilder;
    }
 
@@ -165,7 +172,10 @@ public class Startup
 
       app.UseStatusCodePagesWithReExecute("/Errors", "?statusCode={0}");
 
-      if (!string.IsNullOrEmpty(Configuration["CI"])) app.UseHttpsRedirection();
+      if (!string.IsNullOrEmpty(Configuration["CI"]))
+      {
+          app.UseHttpsRedirection();
+      }
 
       //For Azure AD redirect uri to remain https
       var forwardOptions = new ForwardedHeadersOptions

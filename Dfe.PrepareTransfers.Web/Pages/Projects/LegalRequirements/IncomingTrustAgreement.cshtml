@@ -1,6 +1,7 @@
 ﻿@page "/project/{urn}/legalrequirements/incoming-trust-agreement"
 @model Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements.IncomingTrustAgreementModel
-@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Incoming trust agreement";

@@ -29,10 +29,16 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate || DateIsIncomplete(dateVm.Date, dateVm.IgnoreDayPart)) return;
+            if (dateVm.UnknownDate || DateIsIncomplete(dateVm.Date, dateVm.IgnoreDayPart))
+            {
+                return;
+            }
 
             if (int.TryParse(dateVm.Date.Year, out var year) &&
-                year is >= 2000 and <= 2050) return;
+                year is >= 2000 and <= 2050)
+            {
+                return;
+            }
 
             context.AddFailure("Year must be between 2000 and 2050");
          });
@@ -46,7 +52,10 @@ public class DateValidator : AbstractValidator<DateViewModel>
             DateViewModel dateVm = context.InstanceToValidate;
 
             if (dateVm.UnknownDate || DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart) ||
-                IsAValidDate(dateVm.Date)) return;
+                IsAValidDate(dateVm.Date))
+            {
+                return;
+            }
 
             context.AddFailure("Enter a valid date");
          });
@@ -59,10 +68,15 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate || dateVm.IgnoreDayPart) return;
+            if (dateVm.UnknownDate || dateVm.IgnoreDayPart)
+            {
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(dateVm.Date.Day))
-               context.AddFailure($"The {ErrorDisplayName} must include a day");
+            {
+                context.AddFailure($"The {ErrorDisplayName} must include a day");
+            }
          });
 
       RuleFor(x => x.Date.Month)
@@ -70,10 +84,15 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate) return;
+            if (dateVm.UnknownDate)
+            {
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(dateVm.Date.Month))
-               context.AddFailure($"The {ErrorDisplayName} must include a month");
+            {
+                context.AddFailure($"The {ErrorDisplayName} must include a month");
+            }
          });
 
       RuleFor(x => x.Date.Year)
@@ -81,10 +100,15 @@ public class DateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate) return;
+            if (dateVm.UnknownDate)
+            {
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(dateVm.Date.Year))
-               context.AddFailure($"The {ErrorDisplayName} must include a year");
+            {
+                context.AddFailure($"The {ErrorDisplayName} must include a year");
+            }
          });
    }
 
@@ -96,7 +120,9 @@ public class DateValidator : AbstractValidator<DateViewModel>
             DateViewModel dateVm = context.InstanceToValidate;
             if ((!dateVm.UnknownDate && DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart)) ||
                 (dateVm.UnknownDate && DateIsEmpty(dateVm.Date, dateVm.IgnoreDayPart) is false))
-               context.AddFailure($"Enter {ErrorDisplayName} or select I do not know this");
+            {
+                context.AddFailure($"Enter {ErrorDisplayName} or select I do not know this");
+            }
          });
    }
 

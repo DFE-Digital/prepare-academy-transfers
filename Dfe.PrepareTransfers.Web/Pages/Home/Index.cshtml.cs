@@ -41,7 +41,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
       public async Task<IActionResult> OnGetAsync()
       {
-         if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
+         if (RedirectToReturnUrl(out IActionResult actionResult))
+         {
+             return actionResult;
+         }
 
          RepositoryResult<List<ProjectSearchResult>> projects =
             await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
@@ -51,7 +54,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
          TotalProjectCount = projects.TotalRecords;
       
 
-         if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+         if (CurrentPage - 5 > 1)
+         {
+             StartingPage = CurrentPage - 5;
+         }
 
          _logger.LogInformation("Home page loaded");
          return Page();
@@ -66,7 +72,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
       {
          actionResult = null;
          var decodedUrl = "";
-         if (!string.IsNullOrEmpty(ReturnUrl)) decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+         if (!string.IsNullOrEmpty(ReturnUrl))
+         {
+             decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+         }
 
          if (Url.IsLocalUrl(decodedUrl))
          {

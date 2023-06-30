@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Dfe.PrepareTransfers.Data;
+﻿using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Web.Pages.TaskList;

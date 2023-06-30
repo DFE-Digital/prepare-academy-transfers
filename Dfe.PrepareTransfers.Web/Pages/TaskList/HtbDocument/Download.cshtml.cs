@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Dfe.Academisation.ExtensionMethods;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
-using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.PrepareTransfers.Web.Pages.TaskList.HtbDocument
