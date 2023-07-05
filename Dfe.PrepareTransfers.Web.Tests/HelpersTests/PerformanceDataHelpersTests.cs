@@ -65,11 +65,28 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
         public class GetFormattedConfidenceIntervalTests
         {
             [Fact]
-            public void GivenConfidenceIntervals_ShouldFormatCorrectly()
+            public void GivenConfidenceIntervals_ShouldFormatCorrectly_One_zero()
             {
-                var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(1.2M, 2.4M);
+                var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(1.20M, 2.40M);
 
                 Assert.Equal("1.2 to 2.4", result);
+            }
+
+            [Fact]
+
+            public void GivenConfidenceIntervals_ShouldFormatCorrectly_Two_Zeros()
+            {
+                var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(1.2100m, 2.41000M);
+
+                Assert.Equal("1.21 to 2.41", result);
+            }
+            
+            [Fact]
+            public void GivenConfidenceIntervals_ShouldFormatCorrectly_Rounding_Correctly()
+            {
+                var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(-0.21490m, -0.41500M);
+
+                Assert.Equal("1.21 to 2.42", result);
             }
 
             [Fact]
