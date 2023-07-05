@@ -74,7 +74,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
 
             [Fact]
 
-            public void GivenConfidenceIntervals_ShouldFormatCorrectly_Two_Zeros()
+            public void GivenConfidenceIntervals_ShouldFormatCorrectly_Multiple_Zeros()
             {
                 var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(1.2100m, 2.41000M);
 
@@ -86,7 +86,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
             {
                 var result = PerformanceDataHelpers.GetFormattedConfidenceInterval(-0.21490m, -0.41500M);
 
-                Assert.Equal("1.21 to 2.42", result);
+                Assert.Equal("-0.21 to -0.42", result);
             }
 
             [Fact]
