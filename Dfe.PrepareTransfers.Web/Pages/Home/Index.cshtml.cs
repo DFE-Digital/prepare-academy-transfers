@@ -47,35 +47,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
           RepositoryResult<List<ProjectSearchResult>> projects =
               await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
-
-          var seenPairings = new HashSet<(string, string)>();
-          var filteredProjects = new List<ProjectSearchResult>();
-
-          foreach (var project in projects.Result)
-          {
-              var newAcademies = new List<TransferringAcademies>();
-
-              foreach (var academy in project.TransferringAcademies)
-              {
-                  var key = (academy.OutgoingAcademyUkprn, academy.IncomingTrustUkprn);
-                  if (seenPairings.Add(key))
-                  {
-                      newAcademies.Add(academy);
-                  }
-              }
-
-              if (newAcademies.Any())
-              {
-                  project.TransferringAcademies = newAcademies;
-                  filteredProjects.Add(project);
-              }
-          }
-
           
-          _projects = new List<ProjectSearchResult>(filteredProjects.Where(x => x.Reference is not null));
-
-            SearchCount = _projects.Count;
+          _projects = new List<ProjectSearchResult>(projects.Result.Where(r => r.Reference is not null));
+          SearchCount = projects.Result.Count;
           TotalProjectCount = projects.TotalRecords;
+      
 
           if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
 
