@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -41,28 +43,53 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
       public async Task<IActionResult> OnGetAsync()
       {
-         if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
+          if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
-         RepositoryResult<List<ProjectSearchResult>> projects =
-            await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
+          RepositoryResult<List<ProjectSearchResult>> projects =
+              await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
 
-         _projects = projects.Result;
-         SearchCount = projects.Result.Count;
-         TotalProjectCount = projects.TotalRecords;
-      
+          var seenPairings = new HashSet<(string, string)>();
+          var filteredProjects = new List<ProjectSearchResult>();
 
-         if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+          foreach (var project in projects.Result)
+          {
+              var newAcademies = new List<TransferringAcademies>();
 
-         _logger.LogInformation("Home page loaded");
-         return Page();
+              foreach (var academy in project.TransferringAcademies)
+              {
+                  var key = (academy.OutgoingAcademyUkprn, academy.IncomingTrustUkprn);
+                  if (seenPairings.Add(key))
+                  {
+                      newAcademies.Add(academy);
+                  }
+              }
+
+              if (newAcademies.Any())
+              {
+                  project.TransferringAcademies = newAcademies;
+                  filteredProjects.Add(project);
+              }
+          }
+
+          
+          _projects = new List<ProjectSearchResult>(filteredProjects.Where(x => x.Reference is not null));
+
+            SearchCount = _projects.Count;
+          TotalProjectCount = projects.TotalRecords;
+
+          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+
+          _logger.LogInformation("Home page loaded");
+          return Page();
       }
 
-      /// <summary>
-      ///    If there is a return url, redirects the user to that page after logging in
-      /// </summary>
-      /// <param name="actionResult">action result to redirect to</param>
-      /// <returns>true if redirecting</returns>
-      private bool RedirectToReturnUrl(out IActionResult actionResult)
+
+        /// <summary>
+        ///    If there is a return url, redirects the user to that page after logging in
+        /// </summary>
+        /// <param name="actionResult">action result to redirect to</param>
+        /// <returns>true if redirecting</returns>
+        private bool RedirectToReturnUrl(out IActionResult actionResult)
       {
          actionResult = null;
          var decodedUrl = "";
