@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Dfe.Academisation.ExtensionMethods;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
-using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
@@ -40,7 +40,9 @@ namespace Dfe.PrepareTransfers.Web.Services
             if (string.IsNullOrEmpty(academyAndTrustInformation.Author) &&
                 academyAndTrustInformation.Recommendation ==
                 TransferAcademyAndTrustInformation.RecommendationResult.Empty)
-               return ProjectStatuses.NotStarted;
+            {
+                return ProjectStatuses.NotStarted;
+            }
 
             return string.IsNullOrEmpty(academyAndTrustInformation.Author) ||
                    academyAndTrustInformation.Recommendation ==
@@ -53,7 +55,9 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             if (project.Features.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty &&
                                                          project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+            {
                 return ProjectStatuses.NotStarted;
+            }
 
             return project.Features.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
@@ -62,11 +66,15 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             if ((string.IsNullOrEmpty(project.Dates.Target) && (project.Dates.HasTargetDateForTransfer ?? true)) &&
                 (string.IsNullOrEmpty(project.Dates.Htb) && (project.Dates.HasHtbDate ?? true)))
+            {
                 return ProjectStatuses.NotStarted;
+            }
 
             if ((!string.IsNullOrEmpty(project.Dates.Target) || project.Dates.HasTargetDateForTransfer == false) &&
                 (!string.IsNullOrEmpty(project.Dates.Htb) || project.Dates.HasHtbDate == false))
+            {
                 return ProjectStatuses.Completed;
+            }
 
             return ProjectStatuses.InProgress;
         }
@@ -75,7 +83,9 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             if ((project.Benefits.IntendedBenefits == null || !project.Benefits.IntendedBenefits.Any()) &&
                 (project.Benefits.OtherFactors == null || !project.Benefits.OtherFactors.Any()))
+            {
                 return ProjectStatuses.NotStarted;
+            }
 
             return project.Benefits.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }
@@ -95,7 +105,9 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             if (string.IsNullOrEmpty(project.Rationale.Project) &&
                 string.IsNullOrEmpty(project.Rationale.Trust))
+            {
                 return ProjectStatuses.NotStarted;
+            }
 
             return project.Rationale.IsCompleted == true ? ProjectStatuses.Completed : ProjectStatuses.InProgress;
         }

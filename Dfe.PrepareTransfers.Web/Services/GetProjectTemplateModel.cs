@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
-using Dfe.PrepareTransfers.Web.ExtensionMethods;
 using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;

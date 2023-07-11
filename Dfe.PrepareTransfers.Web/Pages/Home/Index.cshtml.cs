@@ -43,6 +43,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
       public async Task<IActionResult> OnGetAsync()
       {
+
           if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
           RepositoryResult<List<ProjectSearchResult>> projects =
@@ -52,7 +53,6 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
           SearchCount = projects.Result.Count;
           TotalProjectCount = projects.TotalRecords;
       
-
           if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
 
           _logger.LogInformation("Home page loaded");
@@ -69,7 +69,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
       {
          actionResult = null;
          var decodedUrl = "";
-         if (!string.IsNullOrEmpty(ReturnUrl)) decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+         if (!string.IsNullOrEmpty(ReturnUrl))
+         {
+             decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+         }
 
          if (Url.IsLocalUrl(decodedUrl))
          {

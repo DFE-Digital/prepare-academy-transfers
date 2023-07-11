@@ -3,7 +3,9 @@
 
 @using Dfe.PrepareTransfers.Data.Models.Projects
 @using Dfe.PrepareTransfers.Helpers
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @using Microsoft.AspNetCore.Mvc.ModelBinding
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What are the risks with this transfer?";

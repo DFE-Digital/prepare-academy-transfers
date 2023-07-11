@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Web.Pages.Projects;
+﻿using Dfe.PrepareTransfers.Web.Pages.Projects;
 
 namespace Dfe.PrepareTransfers.Web.Services.Interfaces
 {

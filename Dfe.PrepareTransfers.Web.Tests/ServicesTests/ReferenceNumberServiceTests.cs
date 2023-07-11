@@ -76,9 +76,14 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
             FoundProjectFromRepo = project;
             var referenceNumber = _referenceNumberService.GenerateReferenceNumber(FoundProjectFromRepo);
             if (project.TransferringAcademies.Count > 1)
+            {
                 Assert.Contains("MAT", referenceNumber);
+            }
+
             if (project.TransferringAcademies.Count == 1)
+            {
                 Assert.Contains("SAT", referenceNumber);
+            }
         }
 
         [Theory]

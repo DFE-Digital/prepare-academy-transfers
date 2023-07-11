@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Dfe.PrepareTransfers.Data.Models.KeyStagePerformance
 {
     public class KeyStage2
