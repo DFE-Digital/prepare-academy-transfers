@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -41,34 +43,29 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
       public async Task<IActionResult> OnGetAsync()
       {
-         if (RedirectToReturnUrl(out IActionResult actionResult))
-         {
-             return actionResult;
-         }
 
-         RepositoryResult<List<ProjectSearchResult>> projects =
-            await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
+          if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
-         _projects = projects.Result;
-         SearchCount = projects.Result.Count;
-         TotalProjectCount = projects.TotalRecords;
+          RepositoryResult<List<ProjectSearchResult>> projects =
+              await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
+          
+          _projects = new List<ProjectSearchResult>(projects.Result.Where(r => r.Reference is not null));
+          SearchCount = projects.Result.Count;
+          TotalProjectCount = projects.TotalRecords;
       
+          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
 
-         if (CurrentPage - 5 > 1)
-         {
-             StartingPage = CurrentPage - 5;
-         }
-
-         _logger.LogInformation("Home page loaded");
-         return Page();
+          _logger.LogInformation("Home page loaded");
+          return Page();
       }
 
-      /// <summary>
-      ///    If there is a return url, redirects the user to that page after logging in
-      /// </summary>
-      /// <param name="actionResult">action result to redirect to</param>
-      /// <returns>true if redirecting</returns>
-      private bool RedirectToReturnUrl(out IActionResult actionResult)
+
+        /// <summary>
+        ///    If there is a return url, redirects the user to that page after logging in
+        /// </summary>
+        /// <param name="actionResult">action result to redirect to</param>
+        /// <returns>true if redirecting</returns>
+        private bool RedirectToReturnUrl(out IActionResult actionResult)
       {
          actionResult = null;
          var decodedUrl = "";
