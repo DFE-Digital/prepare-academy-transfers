@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Dfe.PrepareTransfers.Helpers\Dfe.PrepareTransfers.Helpers.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Dfe.Academisation.CorrelationIdMiddleware" Version="2.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
     <PackageReference Include="Microsoft.Graph" Version="4.53.0" />

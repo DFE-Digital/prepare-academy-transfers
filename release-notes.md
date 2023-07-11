@@ -1,3 +1,10 @@
+## 1.1.0
+
+Added correlation id middleware to incoming / outgoing requests.
+This app will generate a correlation id and forward it on to the Trams API
+
+---
+
 ## 1.0.2 - 
 * Fixed bug 133124 : Added decimal truncation to peformance data helpers
 

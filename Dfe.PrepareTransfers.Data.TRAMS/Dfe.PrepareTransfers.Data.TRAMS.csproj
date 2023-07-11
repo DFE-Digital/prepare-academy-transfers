@@ -10,7 +10,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dfe.Academisation.CorrelationIdMiddleware" Version="2.0.1" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     </ItemGroup>
 
