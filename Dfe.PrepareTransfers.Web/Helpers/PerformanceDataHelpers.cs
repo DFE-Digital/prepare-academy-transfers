@@ -48,7 +48,14 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
                 return NoDataText;
             }
 
-            return $"{lowerConfidenceInterval.ToString()} to {upperConfidenceInterval.ToString()}";
+            return $"{truncateNullableDecimal(lowerConfidenceInterval)} to {truncateNullableDecimal(upperConfidenceInterval)}";
+        }
+
+        private static string truncateNullableDecimal(decimal? nullableDecimalToTruncate)
+        {
+            decimal decimalToTruncate = Convert.ToDecimal(nullableDecimalToTruncate);
+           
+            return decimalToTruncate.ToString("0.##");
         }
 
         public static string GetFormattedYear(string year)
