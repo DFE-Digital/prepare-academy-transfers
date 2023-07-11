@@ -1,33 +1,34 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
 namespace Dfe.PrepareTransfers.Data.TRAMS
 {
-    public class TramsHttpClient : HttpClient, ITramsHttpClient
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using Academisation.CorrelationIdMiddleware;
+
+    public class TramsHttpClient : ITramsHttpClient
     {
-        public TramsHttpClient(string url, string apiKey)
+        private readonly HttpClient _httpClient;
+
+        public TramsHttpClient(IHttpClientFactory httpClientFactory, ICorrelationContext correlationContext)
         {
-            BaseAddress = new Uri(url);
-            DefaultRequestHeaders.Add("ApiKey", apiKey);
-            DefaultRequestHeaders.Add("ContentType", "application/json");
+            _httpClient = httpClientFactory.CreateClient("TramsApiClient");
+            _httpClient.DefaultRequestHeaders.Add(Dfe.Academisation.CorrelationIdMiddleware.Keys.HeaderKey, correlationContext.CorrelationId.ToString());
         }
 
-        public new async Task<HttpResponseMessage> GetAsync(string url)
+        public async Task<HttpResponseMessage> GetAsync(string url)
         {
-            var response = await base.GetAsync(url);
+            var response = await _httpClient.GetAsync(url);
             return response;
         }
 
-        public new async Task<HttpResponseMessage> PostAsync(string url, HttpContent content)
+        public async Task<HttpResponseMessage> PostAsync(string url, HttpContent content)
         {
-            var response = await base.PostAsync(url, content);
+            var response = await _httpClient.PostAsync(url, content);
             return response;
         }
 
-        public new async Task<HttpResponseMessage> PatchAsync(string url, HttpContent content)
+        public async Task<HttpResponseMessage> PatchAsync(string url, HttpContent content)
         {
-            var response = await base.PatchAsync(url, content);
+            var response = await _httpClient.PatchAsync(url, content);
             return response;
         }
     }
