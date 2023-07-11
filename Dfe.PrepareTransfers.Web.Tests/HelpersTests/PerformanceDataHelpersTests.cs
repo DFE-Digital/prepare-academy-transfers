@@ -295,13 +295,24 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
             {
                 var ks4Results = new List<KeyStage4>();
                 if (year1 != null)
+                {
                     ks4Results.Add(new KeyStage4 { Year = year1 });
+                }
+
                 if (year2 != null)
+                {
                     ks4Results.Add(new KeyStage4 { Year = year2 });
+                }
+
                 if (year3 != null)
+                {
                     ks4Results.Add(new KeyStage4 { Year = year3 });
+                }
+
                 if (year4 != null)
+                {
                     ks4Results.Add(new KeyStage4 { Year = year4 });
+                }
 
                 var expected = ks4Results.OrderByDescending(r => r.Year).Take(3).ToList();
                 

@@ -77,8 +77,11 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 PercentageFsm = PercentageHelper.DisplayAsPercentage(input.Census.PercentageFsm)
             };
 
-            if (input.ViewAcademyConversion == null) return generalInformation;
-            
+            if (input.ViewAcademyConversion == null)
+            {
+                return generalInformation;
+            }
+
             generalInformation.Pan = input.ViewAcademyConversion.Pan;
             generalInformation.Pfi = input.ViewAcademyConversion.Pfi;
             generalInformation.Deficit = input.ViewAcademyConversion.Deficit;

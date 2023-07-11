@@ -16,14 +16,23 @@ public class TargetDateValidator : AbstractValidator<TargetDateViewModel>
       RuleFor(x => x.TargetDate.Date.Day)
          .Custom((day, context) =>
          {
-            if (!context.RootContextData.TryGetValue("AdvisoryBoardDate", out var advisoryBoardDate)) return;
-            if (string.IsNullOrWhiteSpace((string)advisoryBoardDate)) return;
+            if (!context.RootContextData.TryGetValue("AdvisoryBoardDate", out var advisoryBoardDate))
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace((string)advisoryBoardDate))
+            {
+                return;
+            }
 
             TargetDateViewModel dateVm = context.InstanceToValidate;
             if (!dateVm.TargetDate.UnknownDate && DatesHelper.SourceDateStringIsGreaterThanToTargetDateString(
                    (string)advisoryBoardDate, dateVm.TargetDate.DateInputAsString()))
-               context.AddFailure(
-                  "The target transfer date must be on or after the Advisory board date");
+            {
+                context.AddFailure(
+                    "The target transfer date must be on or after the Advisory board date");
+            }
          });
    }
 }

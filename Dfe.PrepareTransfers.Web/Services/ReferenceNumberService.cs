@@ -9,7 +9,9 @@ namespace Dfe.PrepareTransfers.Web.Services
        public string GenerateReferenceNumber(Project project)
         {
             if (project == null)
+            {
                 throw new ArgumentNullException(nameof(project));
+            }
 
             string referenceNumber = "SAT";
             if (project.TransferringAcademies.Count > 1)

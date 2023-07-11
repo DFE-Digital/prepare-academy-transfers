@@ -58,7 +58,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
             GIASLastChangedDate = "N/A";
-            if (academy.LastChangedDate.IsNullOrEmpty() is false) GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate, CultureInfo.GetCultureInfo("en-GB")).ToString("MMMM yyyy");
+            if (academy.LastChangedDate.IsNullOrEmpty() is false)
+            {
+                GIASLastChangedDate = DateTime.Parse(academy.LastChangedDate, CultureInfo.GetCultureInfo("en-GB")).ToString("MMMM yyyy");
+            }
+
             Urn = getInformationForProjectResponse.Project.Urn;
             OutgoingAcademyUrn = getInformationForProjectResponse.Project.OutgoingAcademyUrn;
             return Page();

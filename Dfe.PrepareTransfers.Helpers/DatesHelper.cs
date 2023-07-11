@@ -15,7 +15,9 @@ namespace Dfe.PrepareTransfers.Helpers
         public static string DayMonthYearToDateString(string day, string month, string year)
         {
             if (string.IsNullOrEmpty(day) && string.IsNullOrEmpty(month) && string.IsNullOrEmpty(year))
+            {
                 return null;
+            }
 
             day = string.IsNullOrEmpty(day) ? "" : day.PadLeft(2, '0');
             month = string.IsNullOrEmpty(month) ? "" : month.PadLeft(2, '0');
@@ -38,7 +40,10 @@ namespace Dfe.PrepareTransfers.Helpers
             string unKnownDateText = "I do not know this")
         {
             if (hasDate ?? true)
+            {
                 return DateStringToGovUkDate(dateString);
+            }
+
             return unKnownDateText;
         }
 
@@ -127,13 +132,17 @@ namespace Dfe.PrepareTransfers.Helpers
             string targetDateString)
         {
             if (string.IsNullOrWhiteSpace(sourceDateString))
+            {
                 throw new ArgumentNullException(nameof(sourceDateString));
-            
+            }
+
             DateTime sourceDate = ParseDateTime(sourceDateString);
 
             if (string.IsNullOrWhiteSpace(targetDateString))
+            {
                 throw new ArgumentNullException(nameof(targetDateString));
-            
+            }
+
             DateTime targetDate = ParseDateTime(targetDateString);
 
             return sourceDate > targetDate;

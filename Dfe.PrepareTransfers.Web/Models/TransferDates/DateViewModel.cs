@@ -18,7 +18,9 @@ public class DateViewModel
    public string DateInputAsString()
    {
       if (string.IsNullOrWhiteSpace(Date?.Day) && string.IsNullOrWhiteSpace(Date?.Month) && string.IsNullOrWhiteSpace(Date?.Year))
-         return null;
+      {
+          return null;
+      }
 
       var day = string.IsNullOrWhiteSpace(Date.Day) ? "" : Date.Day.PadLeft(2, '0');
       var month = string.IsNullOrWhiteSpace(Date.Month) ? "" : Date.Month.PadLeft(2, '0');

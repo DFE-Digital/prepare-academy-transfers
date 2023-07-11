@@ -16,7 +16,10 @@ public static class Links
 
    public static LinkItem FindByPageName(string page)
    {
-      if (string.IsNullOrWhiteSpace(page)) return default;
+      if (string.IsNullOrWhiteSpace(page))
+      {
+          return default;
+      }
 
       return LinkCache.ContainsKey(page) ? LinkCache[page] : default;
    }

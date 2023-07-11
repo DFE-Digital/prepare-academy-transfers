@@ -76,16 +76,28 @@ namespace Dfe.PrepareTransfers.Helpers
         {
             var fieldInfo = value.GetType().GetField(value.ToString() ?? string.Empty);
 
-            if (fieldInfo == null) return string.Empty;
+            if (fieldInfo == null)
+            {
+                return string.Empty;
+            }
 
             var descriptionAttributes = fieldInfo.GetCustomAttributes(
                 typeof(DisplayAttribute), false) as DisplayAttribute[];
 
-            if (descriptionAttributes == null) return string.Empty;
-            if (descriptionAttributes.Length == 0) return string.Empty;
+            if (descriptionAttributes == null)
+            {
+                return string.Empty;
+            }
+
+            if (descriptionAttributes.Length == 0)
+            {
+                return string.Empty;
+            }
 
             if (descriptionAttributes[0].ResourceType != null)
+            {
                 return lookupResource(descriptionAttributes[0].ResourceType, descriptionAttributes[0].Name);
+            }
 
             return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
         }

@@ -1,10 +1,6 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;

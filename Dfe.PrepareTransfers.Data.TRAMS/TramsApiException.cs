@@ -18,7 +18,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             var messageContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
             if (string.IsNullOrWhiteSpace(messageContent) is false)
-               base.Data.Add("Content", messageContent);
+            {
+                base.Data.Add("Content", messageContent);
+            }
         }
 
         protected TramsApiException(SerializationInfo info, StreamingContext context) : base(info, context)
