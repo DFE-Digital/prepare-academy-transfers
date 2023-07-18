@@ -95,6 +95,12 @@ variable "container_apps_allow_ips_inbound" {
   default     = []
 }
 
+variable "cdn_frontdoor_health_probe_protocol" {
+  description = "Use Http or Https"
+  type        = string
+  default     = "Https"
+}
+
 variable "container_health_probe_path" {
   description = "Specifies the path that is used to determine the liveness of the Container"
   type        = string
