@@ -89,6 +89,12 @@ variable "cdn_frontdoor_host_add_response_headers" {
   type        = list(map(string))
 }
 
+variable "container_apps_allow_ips_inbound" {
+  description = "Restricts access to the Container Apps by creating a network security group rule that only allow inbound traffic from the provided list of IPs"
+  type        = list(string)
+  default     = []
+}
+
 variable "container_health_probe_path" {
   description = "Specifies the path that is used to determine the liveness of the Container"
   type        = string
@@ -139,6 +145,12 @@ variable "existing_network_watcher_resource_group_name" {
 variable "enable_dns_zone" {
   description = "Conditionally create a DNS zone"
   type        = bool
+}
+
+variable "cdn_frontdoor_forwarding_protocol" {
+  description = "Azure CDN Front Door forwarding protocol"
+  type        = string
+  default     = "HttpsOnly"
 }
 
 variable "dns_zone_domain_name" {
