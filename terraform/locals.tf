@@ -10,6 +10,8 @@ locals {
   container_secret_environment_variables       = var.container_secret_environment_variables
   container_max_replicas                       = var.container_max_replicas
   enable_event_hub                             = var.enable_event_hub
+  enable_logstash_consumer                     = var.enable_logstash_consumer
+  eventhub_export_log_analytics_table_names    = var.eventhub_export_log_analytics_table_names
   enable_dns_zone                              = var.enable_dns_zone
   dns_zone_domain_name                         = var.dns_zone_domain_name
   dns_ns_records                               = var.dns_ns_records
