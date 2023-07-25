@@ -1,7 +1,7 @@
 ## NEXT
 
-* Fixed bug 134921: background services not crashing application when exceptions are thrown now
-
+* Fixed bug 134921 : background services not crashing application when exceptions are thrown now
+* User Story 133832 : Added Application insights 
 
 ---
 
