@@ -85,6 +85,7 @@ public class Startup
 
         services.Configure<ServiceLinkOptions>(GetConfigurationSection<ServiceLinkOptions>());
 
+        services.AddApplicationInsightsTelemetry();
         services
            .AddFluentValidationAutoValidation()
            .AddFluentValidationClientsideAdapters()
