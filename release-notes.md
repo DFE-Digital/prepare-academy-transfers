@@ -1,6 +1,13 @@
+## NEXT
+
+* Fixed bug 134921: background services not crashing application when exceptions are thrown now
+
+
+---
+
 ## 1.1.0
 
-Added correlation id middleware to incoming / outgoing requests.
+* Added correlation id middleware to incoming / outgoing requests.
 This app will generate a correlation id and forward it on to the Trams API
 
 ---
