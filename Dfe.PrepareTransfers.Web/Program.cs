@@ -36,9 +36,6 @@ namespace Dfe.PrepareTransfers.Web
                     {
                         options.AddServerHeader = false;
                     });
-                }).ConfigureHostOptions(options =>
-                {
-                    options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
                 });
     }
 }

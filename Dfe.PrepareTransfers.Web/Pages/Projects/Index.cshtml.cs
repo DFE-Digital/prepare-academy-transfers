@@ -36,14 +36,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects
         public async Task<IActionResult> OnGet(CancellationToken cancellationToken)
         {
             _taskListService.BuildTaskListStatuses(this);
-            await RetrievePerformanceData(cancellationToken);
+            //await RetrievePerformanceData(cancellationToken);
             return Page();
         }
 
         private async Task RetrievePerformanceData(CancellationToken cancellationToken)
         {
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            cts.CancelAfter(TimeSpan.FromSeconds(30)); // wait max 30 seconds
+            cts.CancelAfter(TimeSpan.FromSeconds(90)); // wait max 30 seconds
 
             foreach (var academyUkprnAndUrn in Academies)
             {
