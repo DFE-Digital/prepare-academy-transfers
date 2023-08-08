@@ -30,7 +30,7 @@ module.exports = defineConfig({
       })
 
       on('after:run', async () => {
-        if(process.env.zapReport) {
+        if(process.env.zap) {
           await generateZapReport()
         }
       })
