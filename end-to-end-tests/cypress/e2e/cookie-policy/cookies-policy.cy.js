@@ -23,9 +23,9 @@ Cypress._.each(['ipad-mini'], (viewport) => {
 			})
 
 			it('TC02: should consent to cookies from cookie header button', () => {
-				let consentCookie = cy.getCookie('.ManageAnAcademyTransfer.Consent')
-				consentCookie.should('exist')
-				consentCookie.should('have.property', 'value', 'True')
+				cy.getCookie('.ManageAnAcademyTransfer.Consent')
+				.should('exist')
+				.should('have.property', 'value', 'True')
 			});
 
 			it('TC03: should hide the cookie banner when consent has been given', () => {
