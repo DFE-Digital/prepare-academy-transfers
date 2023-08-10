@@ -4,10 +4,10 @@ const fs = require('fs')
 module.exports = {
     generateZapReport: async () => {
       const zapOptions = {
-        apiKey: process.env.zapApiKey,
+        apiKey: process.env.ZAP_API_KEY,
         proxy: {
-          host: process.env.zapAddress,
-          port: process.env.zapPort
+          host: process.env.ZAP_ADDRESS,
+          port: process.env.ZAP_PORT
         }
       }
       const zaproxy = new ZapClient(zapOptions)

@@ -1,31 +1,78 @@
 name: Security scanner tests
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Deploy to environment"]
     types:
       - completed
+
+env:
+  ZAP_ADDRESS: localhost
+  ZAP_PORT: 9876
 
 jobs:
   run-tests-with-zap:
     name: Run Cypress tests with OWASP ZAP
     environment: Dev
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: end-to-end-tests
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Create directory on runner
+        run: |
+          mkdir -m 777 ${{ github.workspace }}/zapoutput
+
+      - name: Get latest ZAP container version
+        run: |
+          ZAP_VERSION="$(wget -q -O - "https://hub.docker.com/v2/repositories/softwaresecurityproject/zap-stable/tags?page_size=2" | grep -o '"name": *"[^"]*' | grep -o '[^"]*$' | tail -n 1)"
+          echo "ZAP_VERSION=${ZAP_VERSION}">> $GITHUB_ENV
+
+      - name: Restore ZAP container from cache if exists
+        id: cache-docker-zap
+        uses: actions/cache@v3
+        with:
+          path: ~/ci/cache/docker/softwaresecurityproject
+          key: cache-docker-zap-${{ env.ZAP_VERSION }}
+
+      - name: Use cached image if hit
+        if: steps.cache-docker-zap.outputs.cache-hit == 'true'
+        run: docker image load --input ~/ci/cache/docker/softwaresecurityproject/zap-stable-${{ env.ZAP_VERSION }}.tar
+
+      - name: Pull image if no cache hit
+        if: steps.cache-docker-zap.outputs.cache-hit != 'true'
+        run: docker pull softwaresecurityproject/zap-stable:latest && mkdir -p ~/ci/cache/docker/softwaresecurityproject && docker image save softwaresecurityproject/zap-stable:latest --output ~/ci/cache/docker/softwaresecurityproject/zap-stable-${{ env.ZAP_VERSION }}.tar
+
+      - name: Start ZAP container
+        env:
+          ZAP_PORT: 9876
+        run: docker run --name zap_container --rm -d -v ${{ github.workspace }}/zapoutput/:/zap/wrk:rw -u zap -p ${{ env.ZAP_PORT }}:${{ env.ZAP_PORT }} -i softwaresecurityproject/zap-stable zap.sh -daemon -port ${{ env.ZAP_PORT }} -host 0.0.0.0 -config api.key=${{ secrets.ZAP_API_KEY }} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config network.localServers.mainProxy.alpn.enabled=false -config network.localServers.mainProxy.address=0.0.0.0
+
+      - name: Set up NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Run tests with scanner
         env:
           AUTH_HEADER: ${{ secrets.AUTH_HEADER_CYPRESS }}
-          DB_CONN: ${{ secrets.DB_CONNECTION_STRING }}
-          HTTP_PROXY: http://zap:8080
+          db: ${{ secrets.DB_CONNECTION_STRING }}
+          HTTP_PROXY: http://${{ env.ZAP_ADDRESS }}:${{ env.ZAP_PORT }}
           KEY: ${{ secrets.CYPRESS_KEY }}
-          NO_PROXY: "*.google-analytics.com,*.googletagmanager.com,*.microsoftonline.com"
+          NO_PROXY: "google-analytics.com,googletagmanager.com,microsoftonline.com,gvt1.com"
           URL: ${{ secrets.AZURE_ENDPOINT }}
+          ZAP: true
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
-        run: |
-          docker-compose -f end-to-end-tests/docker-compose.yml up --exit-code-from cypress
+          ZAP_ADDRESS: ${{ env.ZAP_ADDRESS }}
+          ZAP_PORT: ${{ env.ZAP_PORT }}
+        run: npm run cypress:run -- --key $KEY --env url${URL,authorizationHeader=$AUTH_HEADER
 
       - name: Get git sha
         if: '!cancelled()'
@@ -49,7 +96,11 @@ jobs:
             az storage blob upload \
               --container-name ${{ secrets.OWASP_STORAGE_CONTAINER_NAME }} \
               --account-name ${{ secrets.OWASP_STORAGE_ACCOUNT_NAME }} \
-              --file "end-to-end-tests/reports/ZAP-Report.html" \
+              --file "${{ github.workspace }}/zapoutput/ZAP-Report.html" \
               --name "Dfe.PrepareTransfers/${{ env.checked_out_sha }}/ZAP-Report.html" \
               --auth-mode login \
               --overwrite
+
+      - name: Stop ZAP container
+        if: always()
+        run: docker stop zap_container
