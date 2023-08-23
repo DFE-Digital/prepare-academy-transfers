@@ -32,18 +32,18 @@ public static class Links
    public static class HeadteacherBoard
    {
       public static readonly LinkItem Preview =
-         Create("/TaskList/HtbDocument/Preview", "Back to preview");
+         Create("/TaskList/HtbDocument/Preview", "Back");
    }
 
    public static class ProjectType
    {
       public static readonly LinkItem Index =
-         Create("/ProjectType/Index", "Back to project type");
+         Create("/ProjectType/Index", "Back");
    }
 
    public static class Project
    {
-      public static readonly LinkItem Index = Create("/Projects/Index", "Back to project");
+      public static readonly LinkItem Index = Create("/Projects/Index", "Back");
    }
 
    public static class ProjectList
