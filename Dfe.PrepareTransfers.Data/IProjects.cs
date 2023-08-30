@@ -11,5 +11,7 @@ namespace Dfe.PrepareTransfers.Data
         public Task<RepositoryResult<Project>> GetByUrn(string urn);
         public Task<RepositoryResult<Project>> Update(Project project);
         public Task<RepositoryResult<Project>> Create(Project project);
+
+        public Task<bool> UpdateRationale(Project project);
     }
 }

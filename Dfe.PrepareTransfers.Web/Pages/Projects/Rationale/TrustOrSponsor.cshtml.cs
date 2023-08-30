@@ -44,7 +44,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Rationale
             var projectResult = project.Result;
             projectResult.Rationale.Trust = ViewModel.TrustOrSponsorRationale;
 
-            await _projectsRepository.Update(projectResult);
+            await _projectsRepository.UpdateRationale(projectResult);
 
             if (ReturnToPreview)
             {

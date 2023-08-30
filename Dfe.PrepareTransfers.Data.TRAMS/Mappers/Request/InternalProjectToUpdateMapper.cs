@@ -41,7 +41,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private static AcademyTransferProjectRationale Rationale(Project input)
+        public static AcademyTransferProjectRationale Rationale(Project input)
         {
             return new AcademyTransferProjectRationale
             {
