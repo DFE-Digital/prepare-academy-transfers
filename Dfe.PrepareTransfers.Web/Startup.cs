@@ -234,7 +234,7 @@ public class Startup
       services.AddTransient<IGraphUserService, GraphUserService>();
 
       services.AddSingleton(new AcademisationHttpClient(academisationApiBase, academisationApiKey));
-      services.AddSingleton<IAcademisationHttpClient>(r => new AcademisationHttpClient(tramsApiBase, tramsApiKey));
+      services.AddSingleton<IAcademisationHttpClient>(r => new AcademisationHttpClient(academisationApiBase,academisationApiKey));
       services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
       services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
       services.AddSingleton<PerformanceDataChannel>();
