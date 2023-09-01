@@ -17,16 +17,19 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         private readonly IAcademies _academies;
         private readonly IMapper<TramsProject, Project> _externalToInternalProjectMapper;
         private readonly ITramsHttpClient _httpClient;
+
+        private readonly IAcademisationHttpClient _academisationHttpClient;
         private readonly IMapper<Project, TramsProjectUpdate> _internalToUpdateMapper;
         private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
         private readonly ITrusts _trusts;
 
-        public TramsProjectsRepository(ITramsHttpClient httpClient,
+        public TramsProjectsRepository(ITramsHttpClient httpClient,IAcademisationHttpClient academisationHttpClient,
            IMapper<TramsProject, Project> externalToInternalProjectMapper,
            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
            ITrusts trusts, IMapper<Project, TramsProjectUpdate> internalToUpdateMapper)
         {
             _httpClient = httpClient;
+            _academisationHttpClient = academisationHttpClient;
             _externalToInternalProjectMapper = externalToInternalProjectMapper;
             _summaryToInternalProjectMapper = summaryToInternalProjectMapper;
             _academies = academies;
@@ -217,7 +220,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             TramsProjectUpdate externalProject = _internalToUpdateMapper.Map(project);
             var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
                "application/json");
-            HttpResponseMessage response = await _httpClient.PostAsync("academyTransferProject", content);
+            HttpResponseMessage response = await _academisationHttpClient.PostAsync("transfer-project", content);
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
