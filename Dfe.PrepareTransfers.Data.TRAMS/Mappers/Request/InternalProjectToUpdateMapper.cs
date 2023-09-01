@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 Status = input.Status,
                 ProjectUrn = input.Urn,
                 ProjectReference = input.Reference,
-                TransferringAcademies = TransferringAcademies(input),
+                TransferringAcademies = TransferringAcademies (input),
                 Benefits = Benefits(input),
                 LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
@@ -51,7 +51,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private static AcademyTransferProjectFeatures Features(Project input)
+        public static AcademyTransferProjectFeatures Features(Project input)
         {
             return new AcademyTransferProjectFeatures
             {
@@ -98,7 +98,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 }).ToList();
         }
 
-        private static AcademyTransferProjectBenefits Benefits(Project input)
+        public static AcademyTransferProjectBenefits Benefits(Project input)
         {
             return new AcademyTransferProjectBenefits
             {

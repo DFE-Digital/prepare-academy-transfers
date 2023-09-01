@@ -45,7 +45,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
          };
 
             HttpResponseMessage response =
-               await _httpClient.GetAsync($"academyTransferProjects{queryParameters.ToQueryString()}");
+               await _httpClient.GetAsync($"transfer-project/GetTransferProjects{queryParameters.ToQueryString()}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -67,7 +67,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
         public async Task<RepositoryResult<Project>> GetByUrn(string urn)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"academyTransferProject/{urn}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"transfer-project/{urn}");
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
@@ -168,7 +168,41 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             var content = new StringContent(JsonConvert.SerializeObject(rationale), Encoding.Default,
                "application/json");
-            HttpResponseMessage response = await _httpClient.PatchAsync($"academyTransferProject/{project.Urn}/set-rationale", content);
+            HttpResponseMessage response = await _httpClient.PatchAsync($"transfer-project/{project.Urn}/set-rationale", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
+
+        public async Task<bool> UpdateFeatures(Project project)
+        {
+            var features = InternalProjectToUpdateMapper.Features(project);
+            //need to map to the command here to pull the rationale out
+
+            var content = new StringContent(JsonConvert.SerializeObject(features), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _httpClient.PatchAsync($"transfer-project/{project.Urn}/set-features", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
+
+        public async Task<bool> UpdateBenefits(Project project)
+        {
+            var benefits = InternalProjectToUpdateMapper.Benefits(project);
+            //need to map to the command here to pull the rationale out
+
+            var content = new StringContent(JsonConvert.SerializeObject(benefits), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _httpClient.PatchAsync($"transfer-project/{project.Urn}/set-benefits", content);
             if (response.IsSuccessStatusCode)
             {
                 return true;
