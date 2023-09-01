@@ -207,6 +207,8 @@ public class Startup
    {
       var tramsApiBase = configuration["TRAMS_API_BASE"];
       var tramsApiKey = configuration["TRAMS_API_KEY"];
+      var academisationApiBase = configuration["ACADEMISATION_API_BASE"];
+      var academisationApiKey = configuration["ACADEMISATION_API_KEY"];
 
       services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
 
@@ -231,6 +233,8 @@ public class Startup
       services.AddTransient<IGraphClientFactory, GraphClientFactory>();
       services.AddTransient<IGraphUserService, GraphUserService>();
 
+      services.AddSingleton(new AcademisationHttpClient(academisationApiBase, academisationApiKey));
+      services.AddSingleton<IAcademisationHttpClient>(r => new AcademisationHttpClient(academisationApiBase,academisationApiKey));
       services.AddSingleton(new TramsHttpClient(tramsApiBase, tramsApiKey));
       services.AddSingleton<ITramsHttpClient>(r => new TramsHttpClient(tramsApiBase, tramsApiKey));
       services.AddSingleton<PerformanceDataChannel>();
