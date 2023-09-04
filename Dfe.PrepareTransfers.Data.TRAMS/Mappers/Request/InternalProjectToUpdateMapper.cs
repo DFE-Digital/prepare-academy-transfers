@@ -98,8 +98,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             return input.TransferringAcademies.Select(transferringAcademy =>
                 new TransferringAcademyUpdate
                 {
-                    IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
-                    OutgoingAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn,
+                    //IncomingTrustUkprn = transferringAcademy.IncomingTrustUkprn,
+                    TransferringAcademyUkprn = transferringAcademy.OutgoingAcademyUkprn,
                     PupilNumbersAdditionalInformation = transferringAcademy.PupilNumbersAdditionalInformation,
                     LatestOfstedReportAdditionalInformation = transferringAcademy.LatestOfstedReportAdditionalInformation,
                     KeyStage2PerformanceAdditionalInformation = transferringAcademy.KeyStage2PerformanceAdditionalInformation,
@@ -112,13 +112,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
         {
             return new TransferringAcademyUpdate
                 {
-                    IncomingTrustUkprn = input.IncomingTrustUkprn,
-                    OutgoingAcademyUkprn = input.OutgoingAcademyUkprn,
-                    PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation,
-                    LatestOfstedReportAdditionalInformation = input.LatestOfstedReportAdditionalInformation,
-                    KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation,
-                    KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation,
-                    KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation
+                    //IncomingTrustUkprn = input.IncomingTrustUkprn,
+                    TransferringAcademyUkprn = input.OutgoingAcademyUkprn,
+                    PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation ?? string.Empty,
+                    LatestOfstedReportAdditionalInformation = input.LatestOfstedReportAdditionalInformation ?? string.Empty,
+                    KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation ?? string.Empty,
+                    KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation ?? string.Empty,
+                    KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation ?? string.Empty
                 };
         }
 
@@ -141,7 +141,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                             input.Benefits.OtherFactors.ContainsKey(TransferBenefits.OtherFactor.HighProfile),
                         FurtherSpecification =
                             input.Benefits.OtherFactors.GetValueOrDefault(TransferBenefits.OtherFactor.HighProfile,
-                                "")
+                                "") ?? string.Empty,
                     },
                     FinanceAndDebt = new OtherFactor
                     {
@@ -150,7 +150,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                                 .FinanceAndDebtConcerns),
                         FurtherSpecification =
                             input.Benefits.OtherFactors.GetValueOrDefault(
-                                TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "")
+                                TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "") ?? string.Empty
                     },
                     ComplexLandAndBuilding = new OtherFactor
                     {
@@ -159,7 +159,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                                 .ComplexLandAndBuildingIssues),
                         FurtherSpecification =
                             input.Benefits.OtherFactors.GetValueOrDefault(
-                                TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "")
+                                TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues, "") ?? string.Empty
                     },
                     OtherRisks = new OtherFactor
                     {
@@ -167,7 +167,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                             .OtherRisks),
                         FurtherSpecification =
                             input.Benefits.OtherFactors.GetValueOrDefault(
-                                TransferBenefits.OtherFactor.OtherRisks, "")
+                                TransferBenefits.OtherFactor.OtherRisks, "") ?? string.Empty
                     }
                 },
                 IsCompleted = input.Benefits.IsCompleted,

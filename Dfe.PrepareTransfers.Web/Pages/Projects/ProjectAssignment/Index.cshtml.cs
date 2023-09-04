@@ -46,7 +46,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.ProjectAssignment
 			{
 				project.AssignedUser = new User(Guid.Empty.ToString(), string.Empty, string.Empty);
 
-				await _projectRepository.Update(project);
+				await _projectRepository.AssignUser(project);
 
 				TempData.SetNotification("Done", "Project is unassigned");
 			}
@@ -56,7 +56,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.ProjectAssignment
 
 				project.AssignedUser = deliveryOfficers.SingleOrDefault(u => u.FullName == selectedName);
 
-				await _projectRepository.Update(project);
+				await _projectRepository.AssignUser(project);
 
 				TempData.SetNotification("Done", "Project is assigned");
 			}

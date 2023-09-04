@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage4Performance
             var project = await _projectRepository.GetByUrn(Urn);
             var academy = project.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
             academy.KeyStage4PerformanceAdditionalInformation = AdditionalInformationViewModel.AdditionalInformation;
-            await _projectRepository.Update(project.Result);
+            await _projectRepository.UpdateAcademy(project.Result.Urn, academy);
 
             if (ReturnToPreview)
             {

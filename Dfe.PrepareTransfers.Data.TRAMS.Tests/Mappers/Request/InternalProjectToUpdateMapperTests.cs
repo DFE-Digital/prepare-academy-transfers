@@ -203,7 +203,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
             Assert.Equal(toMap.TransferringAcademies[0].IncomingTrustUkprn,
                 result.TransferringAcademies[0].IncomingTrustUkprn);
             Assert.Equal(toMap.TransferringAcademies[0].OutgoingAcademyUkprn,
-                result.TransferringAcademies[0].OutgoingAcademyUkprn);
+                result.TransferringAcademies[0].TransferringAcademyUkprn);
             Assert.Equal(toMap.TransferringAcademies[0].PupilNumbersAdditionalInformation, result.TransferringAcademies[0].PupilNumbersAdditionalInformation);
             Assert.Equal(toMap.TransferringAcademies[0].LatestOfstedReportAdditionalInformation, result.TransferringAcademies[0].LatestOfstedReportAdditionalInformation);
             Assert.Equal(toMap.TransferringAcademies[0].KeyStage2PerformanceAdditionalInformation, result.TransferringAcademies[0].KeyStage2PerformanceAdditionalInformation);

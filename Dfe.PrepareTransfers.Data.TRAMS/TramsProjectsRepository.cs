@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -274,7 +275,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             var content = new StringContent(JsonConvert.SerializeObject(academy), Encoding.Default,
                "application/json");
-            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{projectUrn}/set-trust-information-and-project-dates", content);
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{projectUrn}/set-school-additional-data", content);
             if (response.IsSuccessStatusCode)
             {
                 return true;
@@ -327,6 +328,26 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                 };
             }
 
+            throw new TramsApiException(response);
+        }
+
+        public async Task<bool> AssignUser(Project project)
+        {
+            dynamic user = new ExpandoObject();
+
+            user.userId = project.AssignedUser.Id;
+            user.userEmail = project.AssignedUser.EmailAddress;
+            user.userFullName = project.AssignedUser.FullName;
+
+            var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/assign-user", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
             throw new TramsApiException(response);
         }
     }
