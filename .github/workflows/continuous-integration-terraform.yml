@@ -1,13 +1,17 @@
-name: Validate terraform
+name: Continuous Integration / Terraform
 
 on:
   push:
     branches: main
+    paths:
+      - 'terraform/**.tf'
   pull_request:
+    paths:
+      - 'terraform/**.tf'
 
 jobs:
   terraform-validate:
-    name: Terraform Validate
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -23,38 +27,7 @@ jobs:
             exit 1
           fi
 
-      - name: Remove azure backend
-        run: rm ./terraform/backend.tf
-
-      - name: Run a Terraform init
-        uses: docker://hashicorp/terraform:1.4.5
-        with:
-          entrypoint: terraform
-          args: -chdir=terraform init
-
-      - name: Run a Terraform validate
-        uses: docker://hashicorp/terraform:1.4.5
-        with:
-          entrypoint: terraform
-          args: -chdir=terraform validate
-
-      - name: Run a Terraform format check
-        uses: docker://hashicorp/terraform:1.4.5
-        with:
-          entrypoint: terraform
-          args: -chdir=terraform fmt -check=true -diff=true
-
-  terraform-docs-validation:
-    name: Terraform Docs validation
-    needs: terraform-validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Generate Terraform docs
+      - name: Validate Terraform docs
         uses: terraform-docs/gh-actions@v1.0.0
         with:
           working-dir: terraform
@@ -62,3 +35,38 @@ jobs:
           output-file: README.md
           output-method: inject
           fail-on-diff: true
+
+      - name: Remove azure backend
+        run: rm ./terraform/backend.tf
+
+      - name: Run a Terraform init
+        uses: docker://hashicorp/terraform:1.5.6
+        with:
+          entrypoint: terraform
+          args: -chdir=terraform init
+
+      - name: Run a Terraform validate
+        uses: docker://hashicorp/terraform:1.5.6
+        with:
+          entrypoint: terraform
+          args: -chdir=terraform validate
+
+      - name: Run a Terraform format check
+        uses: docker://hashicorp/terraform:1.5.6
+        with:
+          entrypoint: terraform
+          args: -chdir=terraform fmt -check=true -diff=true
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: v0.44.1
+
+      - name: Run TFLint
+        working-directory: terraform
+        run: tflint -f compact
+
+      - name: Run TFSec
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.3.1
+        with:
+          github_token: ${{ github.token }}
