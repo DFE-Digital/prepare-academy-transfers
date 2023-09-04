@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
                 project.Result.Benefits.OtherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
             }
 
-            await _projects.Update(project.Result);
+            await _projects.UpdateBenefits(project.Result);
 
             //Only go back to preview if No,or no change. Changing to Yes will take them through the options
             if (ReturnToPreview && RisksViewModel.RisksInvolved == false ||

@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             
             projectResult.Features.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
-            await _projects.Update(projectResult);
+            await _projects.UpdateFeatures(projectResult);
 
             return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index", new {Urn});
         }

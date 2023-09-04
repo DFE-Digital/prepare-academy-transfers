@@ -56,7 +56,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
 
             projectResult.Benefits.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
-            await _projects.Update(projectResult);
+            await _projects.UpdateBenefits(projectResult);
 
             return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index",
                 new {Urn});

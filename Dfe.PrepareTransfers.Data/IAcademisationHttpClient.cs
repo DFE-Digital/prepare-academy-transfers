@@ -9,6 +9,6 @@ namespace Dfe.PrepareTransfers.Data
 
         public Task<HttpResponseMessage> PostAsync(string url, HttpContent content);
 
-        public Task<HttpResponseMessage> PatchAsync(string url, HttpContent content);
+        public Task<HttpResponseMessage> PutAsync(string url, HttpContent content);
     }
 }

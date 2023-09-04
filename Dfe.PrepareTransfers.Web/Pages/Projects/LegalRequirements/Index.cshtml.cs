@@ -49,7 +49,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements
 
             projectResult.LegalRequirements.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
-            await _projects.Update(projectResult);
+            await _projects.UpdateLegalRequirements(projectResult);
 
             return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : Links.Project.Index.PageName,
                 new { Urn });

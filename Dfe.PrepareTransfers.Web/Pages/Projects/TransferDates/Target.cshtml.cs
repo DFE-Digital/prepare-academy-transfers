@@ -73,7 +73,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsString();
             projectResult.Dates.HasTargetDateForTransfer = !TargetDateViewModel.TargetDate.UnknownDate;
 
-            await _projectsRepository.Update(projectResult);
+            await _projectsRepository.UpdateDates(projectResult);
 
             if (ReturnToPreview)
             {

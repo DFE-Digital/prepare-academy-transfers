@@ -47,7 +47,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Rationale
 
             projectResult.Rationale.IsCompleted = MarkSectionCompletedViewModel.IsCompleted;
 
-            await _projects.Update(projectResult);
+            await _projects.UpdateRationale(projectResult);
 
             return RedirectToPage(ReturnToPreview ? Links.HeadteacherBoard.Preview.PageName : "/Projects/Index",
                 new {Urn});

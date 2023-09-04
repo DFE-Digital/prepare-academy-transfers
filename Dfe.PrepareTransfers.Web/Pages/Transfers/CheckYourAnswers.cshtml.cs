@@ -89,9 +89,9 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             var createResponse = await _projectsRepository.Create(project);
             HttpContext.Session.SetString(ProjectCreatedSessionKey, createResponse.Result.Urn);
 
-            createResponse.Result.Reference =
-                _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
-            await _projectsRepository.Update(createResponse.Result);
+            //createResponse.Result.Reference =
+            //    _referenceNumberService.GenerateReferenceNumber(createResponse.Result);
+            //await _projectsRepository.Update(createResponse.Result);
 
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);

@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
 
             var projectResult = project.Result;
             projectResult.Benefits.OtherFactors[TransferBenefits.OtherFactor.OtherRisks] = Answer ?? string.Empty;
-            await _projectsRepository.Update(projectResult);
+            await _projectsRepository.UpdateBenefits(projectResult);
 
             if (ReturnToPreview)
             {

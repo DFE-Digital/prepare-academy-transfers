@@ -9,7 +9,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         public AcademisationHttpClient(string url, string apiKey)
         {
             BaseAddress = new Uri(url);
-            DefaultRequestHeaders.Add("ApiKey", apiKey);
+            DefaultRequestHeaders.Add("x-api-key", apiKey);
             DefaultRequestHeaders.Add("ContentType", "application/json");
         }
 
@@ -25,9 +25,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             return response;
         }
 
-        public new async Task<HttpResponseMessage> PatchAsync(string url, HttpContent content)
+        public new async Task<HttpResponseMessage> PutAsync(string url, HttpContent content)
         {
-            var response = await base.PatchAsync(url, content);
+            var response = await base.PutAsync(url, content);
             return response;
         }
     }

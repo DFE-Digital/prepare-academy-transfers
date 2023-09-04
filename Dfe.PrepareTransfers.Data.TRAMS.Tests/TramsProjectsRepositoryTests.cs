@@ -33,7 +33,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             _academies = new Mock<IAcademies>();
             _trusts = new Mock<ITrusts>();
             _subject = new TramsProjectsRepository(
-                _httpClient.Object, _externalToInternalMapper.Object, _summaryToInternalMapper.Object,
+                _httpClient.Object, null, _externalToInternalMapper.Object, _summaryToInternalMapper.Object,
                 _academies.Object, _trusts.Object, _internalToUpdateMapper.Object
             );
             _foundTrust = new Trust

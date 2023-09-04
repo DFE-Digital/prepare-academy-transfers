@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             projectResult.Features.TypeOfTransfer = FeaturesTypeViewModel.TypeOfTransfer;
             projectResult.Features.OtherTypeOfTransfer = FeaturesTypeViewModel.OtherType;
             
-            await _projects.Update(projectResult);
+            await _projects.UpdateFeatures(projectResult);
             
             return ReturnToPreview ? 
                 RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn }) :

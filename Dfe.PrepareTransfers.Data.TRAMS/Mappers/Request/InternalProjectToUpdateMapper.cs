@@ -32,7 +32,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private static AcademyTransferProjectAcademyAndTrustInformation GeneralInformation(Project input)
+        public static AcademyTransferProjectAcademyAndTrustInformation GeneralInformation(Project input)
         {
             return new AcademyTransferProjectAcademyAndTrustInformation
             {
@@ -41,12 +41,22 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
+        public static TransferProjectCreate MapToCreate(Project input)
+        {
+            return new TransferProjectCreate
+            {
+                OutgoingTrustUkprn = input.OutgoingTrustUkprn,
+                IncomingTrustUkprn = input.IncomingTrustUkprn,
+                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList()
+            };
+        }
+
         public static AcademyTransferProjectRationale Rationale(Project input)
         {
             return new AcademyTransferProjectRationale
             {
-                ProjectRationale = input.Rationale.Project,
-                TrustSponsorRationale = input.Rationale.Trust,
+                ProjectRationale = input.Rationale.Project ?? string.Empty,
+                TrustSponsorRationale = input.Rationale.Trust ?? string.Empty,
                 IsCompleted = input.Rationale.IsCompleted
             };
         }
@@ -62,7 +72,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private static AcademyTransferProjectDates Dates(Project input)
+        public static AcademyTransferProjectDates Dates(Project input)
         {
             return new AcademyTransferProjectDates
             {
@@ -73,7 +83,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             };
         }
 
-        private static AcademyTransferProjectLegalRequirements LegalRequirements(Project input)
+        public static AcademyTransferProjectLegalRequirements LegalRequirements(Project input)
         {
             return new AcademyTransferProjectLegalRequirements()
             {
@@ -98,6 +108,20 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 }).ToList();
         }
 
+        public static TransferringAcademyUpdate TransferringAcademy(TransferringAcademies input)
+        {
+            return new TransferringAcademyUpdate
+                {
+                    IncomingTrustUkprn = input.IncomingTrustUkprn,
+                    OutgoingAcademyUkprn = input.OutgoingAcademyUkprn,
+                    PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation,
+                    LatestOfstedReportAdditionalInformation = input.LatestOfstedReportAdditionalInformation,
+                    KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation,
+                    KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation,
+                    KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation
+                };
+        }
+
         public static AcademyTransferProjectBenefits Benefits(Project input)
         {
             return new AcademyTransferProjectBenefits
@@ -107,7 +131,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                     SelectedBenefits = input.Benefits.IntendedBenefits
                         .Select(benefit => benefit.ToString())
                         .ToList(),
-                    OtherBenefitValue = input.Benefits.OtherIntendedBenefit
+                    OtherBenefitValue = input.Benefits.OtherIntendedBenefit ?? string.Empty,
                 },
                 OtherFactorsToConsider = new OtherFactorsToConsider
                 {
