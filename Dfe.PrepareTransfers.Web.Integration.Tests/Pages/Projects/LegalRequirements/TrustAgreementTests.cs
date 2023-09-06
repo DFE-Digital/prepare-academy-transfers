@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Pages.Projects.LegalRequire
             var project = GetProject(p => p.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription());
             project.LegalRequirements.IncomingTrustAgreement = ThreeOptions.No.ToDescription();
 
-            _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+            _factory.AddAnyPut($"/transfer-project/{project.ProjectUrn}/set-legal-requirements", project);
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/incoming-trust-agreement");
 

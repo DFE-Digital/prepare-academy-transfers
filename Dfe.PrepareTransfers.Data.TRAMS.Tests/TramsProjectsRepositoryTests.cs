@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures;
@@ -15,7 +16,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
     public class TramsProjectsRepositoryTests
     {
         private readonly TramsProjectsRepository _subject;
-        private readonly Mock<ITramsHttpClient> _httpClient;
+        private readonly Mock<IAcademisationHttpClient> _httpClient;
         private readonly Mock<IMapper<TramsProject, Project>> _externalToInternalMapper;
         private readonly Mock<IMapper<TramsProjectSummary, ProjectSearchResult>> _summaryToInternalMapper;
         private readonly Mock<IMapper<Project, TramsProjectUpdate>> _internalToUpdateMapper;
@@ -26,14 +27,14 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
         public TramsProjectsRepositoryTests()
         {
-            _httpClient = new Mock<ITramsHttpClient>();
+            _httpClient = new Mock<IAcademisationHttpClient>();
             _externalToInternalMapper = new Mock<IMapper<TramsProject, Project>>();
             _summaryToInternalMapper = new Mock<IMapper<TramsProjectSummary, ProjectSearchResult>>();
             _internalToUpdateMapper = new Mock<IMapper<Project, TramsProjectUpdate>>();
             _academies = new Mock<IAcademies>();
             _trusts = new Mock<ITrusts>();
-            _subject = new TramsProjectsRepository(
-                _httpClient.Object, null, _externalToInternalMapper.Object, _summaryToInternalMapper.Object,
+            _subject = new TramsProjectsRepository(null,
+                _httpClient.Object, _externalToInternalMapper.Object, _summaryToInternalMapper.Object,
                 _academies.Object, _trusts.Object, _internalToUpdateMapper.Object
             );
             _foundTrust = new Trust
@@ -78,7 +79,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             public async void GivenUrn_GetsProjectFromAPI()
             {
                 await _subject.GetByUrn("12345");
-                _httpClient.Verify(c => c.GetAsync("academyTransferProject/12345"), Times.Once);
+                _httpClient.Verify(c => c.GetAsync("transfer-project/12345"), Times.Once);
             }
 
             [Fact]
@@ -103,7 +104,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [InlineData(HttpStatusCode.InternalServerError)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProject/12345")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("transfer-project/12345")).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = httpStatusCode
                 });
@@ -126,7 +127,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
                 _internalToUpdateMapper.Setup(m => m.Map(_projectToUpdate)).Returns(_mappedProject);
 
-                _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
+                _httpClient.Setup(c => c.PutAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(_updatedProject))
@@ -195,16 +196,20 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
         public class CreateProjectTests : TramsProjectsRepositoryTests
         {
             private readonly Project _projectToCreate;
-            private readonly TramsProjectUpdate _mappedProject;
+            private readonly TransferProjectCreate _mappedProject;
             private readonly TramsProject _createdProject;
 
             public CreateProjectTests()
             {
-                _projectToCreate = new Project {Status = "New"};
-                _mappedProject = new TramsProjectUpdate {Status = "Mapped new"};
+                _projectToCreate = new Project {Status = "New", OutgoingTrustUkprn = "10059868", TransferringAcademies = new List<Data.Models.Projects.TransferringAcademies>() { 
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066875", IncomingTrustUkprn = "10059612" },
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066884", IncomingTrustUkprn = "10059612" }} };
+
+
+                _mappedProject = InternalProjectToUpdateMapper.MapToCreate(_projectToCreate);
                 _createdProject = new TramsProject {ProjectUrn = "12345", Status = "Mapped new"};
 
-                _internalToUpdateMapper.Setup(m => m.Map(_projectToCreate)).Returns(_mappedProject);
+                //_internalToUpdateMapper.Setup(m => m.(_projectToCreate)).Returns(_mappedProject);
                 _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
                     new HttpResponseMessage
                     {
@@ -218,21 +223,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             }
 
             [Fact]
-            public async void GivenProject_MapsToExternalProject()
-            {
-                await _subject.Create(_projectToCreate);
-
-                _internalToUpdateMapper.Verify(m => m.Map(_projectToCreate), Times.Once);
-            }
-
-            [Fact]
             public async void GivenProjectGetsMapped_PostsMappedProjectToTheApi()
             {
                 await _subject.Create(_projectToCreate);
                 var expectedPostedContent = JsonConvert.SerializeObject(_mappedProject);
 
                 _httpClient.Verify(c => c.PostAsync(
-                    "academyTransferProject",
+                    "transfer-project",
                     It.Is<StringContent>(content => AssertStringContentMatches(expectedPostedContent, content).Result)
                 ), Times.Once);
             }
@@ -295,7 +292,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [Fact]
             public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
@@ -324,7 +321,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     }
                 );
 
-                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries)))
                 });
@@ -340,7 +337,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries,12)))
                 });
@@ -360,7 +357,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [InlineData(HttpStatusCode.InternalServerError)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                _httpClient.Setup(c => c.GetAsync("academyTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = httpStatusCode
                 });
@@ -374,14 +371,14 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [InlineData(3)]
             public async void GivenPage_GetsProjectForPage(int page)
             {
-                _httpClient.Setup(c => c.GetAsync($"academyTransferProjects?page={page}&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                _httpClient.Setup(c => c.GetAsync($"transfer-project/GetTransferProjects?page={page}&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
 
                 await _subject.GetProjects(page);
                 
-                _httpClient.Verify(c => c.GetAsync($"academyTransferProjects?page={page}&count=10&title="), Times.Once());
+                _httpClient.Verify(c => c.GetAsync($"transfer-project/GetTransferProjects?page={page}&count=10&title="), Times.Once());
             }
         }
 

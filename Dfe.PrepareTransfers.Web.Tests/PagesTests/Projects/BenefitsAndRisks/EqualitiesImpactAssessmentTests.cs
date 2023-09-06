@@ -89,7 +89,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
 
                 var result = await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(pr => pr.Update(It.Is<Project>(p => p.Benefits.EqualitiesImpactAssessmentConsidered == equalitiesImpactAssessmentConsidered)),
+                ProjectRepository.Verify(pr => pr.UpdateBenefits(It.Is<Project>(p => p.Benefits.EqualitiesImpactAssessmentConsidered == equalitiesImpactAssessmentConsidered)),
                     Times.Once);
             }
 

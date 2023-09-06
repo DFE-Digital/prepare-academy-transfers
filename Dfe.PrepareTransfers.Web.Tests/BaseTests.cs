@@ -85,8 +85,23 @@ namespace Dfe.PrepareTransfers.Web.Tests
                     Result = FoundPopulatedProjectFromRepo
                 });
             
-            ProjectRepository.Setup(r => r.Update(It.IsAny<Project>()))
-            .ReturnsAsync(new RepositoryResult<Project>());
+            ProjectRepository.Setup(r => r.UpdateRationale(It.IsAny<Project>()))
+            .ReturnsAsync(true);
+
+            ProjectRepository.Setup(r => r.UpdateDates(It.IsAny<Project>()))
+.ReturnsAsync(true);
+
+            ProjectRepository.Setup(r => r.UpdateFeatures(It.IsAny<Project>()))
+.ReturnsAsync(true);
+
+            ProjectRepository.Setup(r => r.UpdateBenefits(It.IsAny<Project>()))
+.ReturnsAsync(true);
+
+            ProjectRepository.Setup(r => r.UpdateGeneralInfomation(It.IsAny<Project>()))
+.ReturnsAsync(true);
+
+            ProjectRepository.Setup(r => r.UpdateLegalRequirements(It.IsAny<Project>()))
+.ReturnsAsync(true);
         }
 
         private void MockGetInformationForProject()

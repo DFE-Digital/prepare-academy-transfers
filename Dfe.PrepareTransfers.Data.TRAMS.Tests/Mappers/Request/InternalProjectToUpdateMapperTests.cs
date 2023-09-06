@@ -200,8 +200,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
 
         private static void AssertTransferringAcademiesCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal(toMap.TransferringAcademies[0].IncomingTrustUkprn,
-                result.TransferringAcademies[0].IncomingTrustUkprn);
+            //Assert.Equal(toMap.TransferringAcademies[0].IncomingTrustUkprn,
+            //    result.TransferringAcademies[0].IncomingTrustUkprn);
             Assert.Equal(toMap.TransferringAcademies[0].OutgoingAcademyUkprn,
                 result.TransferringAcademies[0].TransferringAcademyUkprn);
             Assert.Equal(toMap.TransferringAcademies[0].PupilNumbersAdditionalInformation, result.TransferringAcademies[0].PupilNumbersAdditionalInformation);

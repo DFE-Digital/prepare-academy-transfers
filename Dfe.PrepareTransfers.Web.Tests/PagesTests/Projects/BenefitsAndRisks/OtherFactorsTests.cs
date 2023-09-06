@@ -31,7 +31,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
             await _subject.OnPostAsync();
 
             ProjectRepository.Verify(r =>
-                r.Update(It.Is<Project>(project => !project.Benefits.OtherFactors.Any()))
+                r.UpdateBenefits(It.Is<Project>(project => !project.Benefits.OtherFactors.Any()))
             );
         }
 
@@ -78,7 +78,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
             await _subject.OnPostAsync();
 
             ProjectRepository.Verify(r =>
-                r.Update(It.Is<Project>(project => assertOtherFactorsEqual(project)))
+                r.UpdateBenefits(It.Is<Project>(project => assertOtherFactorsEqual(project)))
             );
         }
 
@@ -126,7 +126,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
             _subject.Urn = ProjectUrn0001;
 
             await _subject.OnPostAsync();
-            ProjectRepository.Verify(r => r.Update(It.Is<Project>(
+            ProjectRepository.Verify(r => r.UpdateBenefits(It.Is<Project>(
                 project => project.Benefits.OtherFactors.Keys.Count == 1 &&
                            project.Benefits.OtherFactors[otherFactors[0].OtherFactor] ==
                            "test Description"

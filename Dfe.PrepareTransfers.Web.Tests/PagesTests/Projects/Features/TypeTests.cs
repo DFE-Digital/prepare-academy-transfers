@@ -42,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Features
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(
-                    r => r.Update(It.Is<Project>(project => project.Features.TypeOfTransfer == transferType)),
+                    r => r.UpdateFeatures(It.Is<Project>(project => project.Features.TypeOfTransfer == transferType)),
                     Times.Once);
             }
 
@@ -55,7 +55,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Features
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(
-                    r => r.Update(It.Is<Project>(project =>
+                    r => r.UpdateFeatures(It.Is<Project>(project =>
                         project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other &&
                         project.Features.OtherTypeOfTransfer == "Other")),
                     Times.Once);

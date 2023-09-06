@@ -36,7 +36,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(project => project.Benefits.AnyRisks == yesNo))
+                    r.UpdateBenefits(It.Is<Project>(project => project.Benefits.AnyRisks == yesNo))
                 );
             }
 

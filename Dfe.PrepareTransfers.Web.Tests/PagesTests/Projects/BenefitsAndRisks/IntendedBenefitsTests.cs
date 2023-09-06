@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(
+                    r.UpdateBenefits(It.Is<Project>(
                         project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains))));
             }
 
@@ -76,7 +76,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(
+                    r.UpdateBenefits(It.Is<Project>(
                         project => project.Benefits.IntendedBenefits.All(intendedBenefits.Contains) &&
                                    project.Benefits.OtherIntendedBenefit == "Other benefit")
                     )

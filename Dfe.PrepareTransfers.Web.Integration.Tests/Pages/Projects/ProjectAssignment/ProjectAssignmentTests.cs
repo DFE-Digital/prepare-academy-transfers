@@ -22,9 +22,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Pages.Projects.ProjectAssig
 		public async Task Should_unassign_a_project()
 		{
 			var project = GetProject();
-			_factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+            _factory.AddAnyPut($"/transfer-project/{project.ProjectUrn}/assign-user", project);
 
-			await OpenUrlAsync($"/project-assignment/{project.ProjectUrn}");
+            await OpenUrlAsync($"/project-assignment/{project.ProjectUrn}");
 
 			Document.QuerySelector<IHtmlInputElement>("#UnassignDeliveryOfficer").Value = "true";
 			await Document.QuerySelector<IHtmlFormElement>("form").SubmitAsync();
@@ -36,7 +36,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Pages.Projects.ProjectAssig
 		public async Task Should_assign_a_project()
 		{
 			var project = GetProject();
-			_factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+            _factory.AddAnyPut($"/transfer-project/{project.ProjectUrn}/assign-user", project);
 
 			await OpenUrlAsync($"/project-assignment/{project.ProjectUrn}");
 

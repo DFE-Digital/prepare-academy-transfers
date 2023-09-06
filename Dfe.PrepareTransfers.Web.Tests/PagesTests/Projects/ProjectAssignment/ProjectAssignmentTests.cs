@@ -92,7 +92,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.ProjectAssignment
 
 				await _subject.OnPostAsync("12345", users.First().FullName);
 
-				_projectRepository.Verify(m => m.Update(It.Is<Project>(p =>
+				_projectRepository.Verify(m => m.AssignUser(It.Is<Project>(p =>
 					p.AssignedUser.Id == users.First().Id &&
 					p.AssignedUser.EmailAddress == users.First().EmailAddress &&
 					p.AssignedUser.FullName == users.First().FullName)), Times.Once);
@@ -148,7 +148,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.ProjectAssignment
 
 				await _subject.OnPostAsync("12345", "", true);
 
-				_projectRepository.Verify(m => m.Update(It.Is<Project>(p =>
+				_projectRepository.Verify(m => m.AssignUser(It.Is<Project>(p =>
 					p.AssignedUser.Id == Guid.Empty.ToString() &&
 					p.AssignedUser.EmailAddress == string.Empty &&
 					p.AssignedUser.FullName == string.Empty)), Times.Once);

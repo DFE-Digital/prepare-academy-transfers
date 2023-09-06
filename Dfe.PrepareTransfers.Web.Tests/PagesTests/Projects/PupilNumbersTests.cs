@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Pages.Projects;
 using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using Moq;
 using Xunit;
@@ -65,9 +67,8 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects
             {
                 await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn).PupilNumbersAdditionalInformation == AdditionalInformation
-                )));
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.PupilNumbersAdditionalInformation == AdditionalInformation)
+                ));
             }
 
             [Fact]

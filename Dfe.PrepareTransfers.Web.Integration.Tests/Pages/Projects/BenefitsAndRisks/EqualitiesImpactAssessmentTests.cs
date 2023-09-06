@@ -23,7 +23,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Pages.Projects.BenefitsAndR
             var project = GetProject(p => p.Benefits.EqualitiesImpactAssessmentConsidered = trueFalse);
             project.Benefits.EqualitiesImpactAssessmentConsidered = trueFalse;
 
-            _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+            _factory.AddAnyPut($"/transfer-project/{project.ProjectUrn}/set-benefits", project);
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/benefits/equalities-impact-assessment");
 

@@ -77,7 +77,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Rationale
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                    r.UpdateRationale(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
                 
                 Assert.IsType<PageResult>(result);
             }
@@ -88,7 +88,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Rationale
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
+                        r.UpdateRationale(It.Is<Data.Models.Project>(project => project.Rationale.Project == _subject.ViewModel.ProjectRationale)),
                     Times.Once);
             }
 
