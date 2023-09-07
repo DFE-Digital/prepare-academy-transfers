@@ -224,7 +224,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             var content = new StringContent(JsonConvert.SerializeObject(generalInformation), Encoding.Default,
                "application/json");
-            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-trust-information-and-project-dates", content);
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-general-information", content);
             if (response.IsSuccessStatusCode)
             {
                 return true;
