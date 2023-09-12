@@ -104,6 +104,12 @@ namespace Dfe.PrepareTransfers.DocumentGeneration
             builder.AddHeading(action);
         }
 
+         public void AddTextHeading(string headingText, HeadingLevel headingLevel)
+        {
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTextHeading(headingText, headingLevel);
+        }
+
         public void AddHeader(Action<IHeaderBuilder> action)
         {
             var headerPart = _document.MainDocumentPart.HeaderParts.First();

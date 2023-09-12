@@ -393,6 +393,19 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
                 Assert.Equal("Meow", paragraphs[0].InnerText);
             }
 
+            [Fact]
+            public void GivenTextHeadingWithTextElement_AddsTextToDocument()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddTextHeading("Meow", HeadingLevel.One);
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single((IEnumerable) paragraphs);
+                Assert.Equal("Meow", paragraphs[0].InnerText);
+            }
+
             [Theory]
             [InlineData(HeadingLevel.One, "36")]
             [InlineData(HeadingLevel.Two, "32")]
@@ -449,6 +462,8 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
                 Assert.Single(header.Descendants<Paragraph>());
                 Assert.Equal("Meow", header.InnerText);
             }
+
+            
 
             [Fact]
             public void GivenAddingATableByRows_GeneratesTheCorrectTable()

@@ -13,6 +13,11 @@ using Dfe.PrepareTransfers.Web.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
+using static Dfe.PrepareTransfers.Web.Services.ProjectOverviewGenerator;
+using static Dfe.PrepareTransfers.Web.Services.RisksGenerator;
+using static Dfe.PrepareTransfers.Web.Services.BenefitsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.RationaleGenerator;
+using static Dfe.PrepareTransfers.Web.Services.LegalRequirementsGenerator;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
@@ -51,7 +56,11 @@ namespace Dfe.PrepareTransfers.Web.Services
             var builder = DocumentBuilder.CreateFromTemplate(ms, projectTemplateModel);
 
             BuildTitle(builder, projectTemplateModel);
-            BuildOtherFactors(builder, projectTemplateModel);
+            AddProjectOverviewDetail(builder, projectTemplateModel);
+            AddBenefits(builder, projectTemplateModel);
+            AddRisks(builder, projectTemplateModel);
+            AddRationale(builder, projectTemplateModel);
+            AddLegalRequirementsDetail(builder, projectTemplateModel);
             BuildAcademyData(builder, projectTemplateModel.Academies);
 
             return new CreateProjectTemplateResponse
