@@ -68,45 +68,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                 Document = builder.Build()
             };
         }
-
-        private static void BuildOtherFactors(DocumentBuilder documentBuilder, ProjectTemplateModel projectTemplateModel)
-        {
-            documentBuilder.ReplacePlaceholderWithContent("Risks", builder =>
-            {
-                builder.AddTable(tableBuilder =>
-                {
-                    foreach (var otherFactor in projectTemplateModel.OtherFactors)
-                    {
-                        //Full Table Width = dxa 9740
-                        tableBuilder.AddRow(rowBuilder =>
-                        {
-                            rowBuilder.AddCell(new TextElement(otherFactor.Item1)
-                                    {Bold = true},
-                                new TableCellProperties
-                                {
-                                    TableCellWidth = new TableCellWidth
-                                        {Width = "5235", Type = TableWidthUnitValues.Dxa},
-                                    TableCellBorders = new TableCellBorders
-                                    {
-                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
-                                    }
-                                });
-                            rowBuilder.AddCell(new TextElement(otherFactor.Item2),
-                                new TableCellProperties
-                                {
-                                    TableCellWidth = new TableCellWidth
-                                        {Width = "4505", Type = TableWidthUnitValues.Dxa},
-                                    TableCellBorders = new TableCellBorders
-                                    {
-                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
-                                    }
-                                });
-                        });
-                    }
-                });
-            });
-        }
-
+        
         private static void BuildAcademyData(DocumentBuilder documentBuilder, List<ProjectTemplateAcademyModel> academies)
         {
             documentBuilder.ReplacePlaceholderWithContent("AcademySection", builder =>
