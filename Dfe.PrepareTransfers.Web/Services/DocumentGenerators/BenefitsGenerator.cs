@@ -10,7 +10,7 @@ using Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 
-namespace Dfe.PrepareTransfers.Web.Services
+namespace Dfe.PrepareTransfers.Web.Services.DocumentGenerators
 {
     public static class BenefitsGenerator
     {

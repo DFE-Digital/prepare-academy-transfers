@@ -8,7 +8,7 @@ using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System.Collections.Generic;
 
-namespace Dfe.PrepareTransfers.Web.Services
+namespace Dfe.PrepareTransfers.Web.Services.DocumentGenerators
 {
    public static class ProjectOverviewGenerator
    {

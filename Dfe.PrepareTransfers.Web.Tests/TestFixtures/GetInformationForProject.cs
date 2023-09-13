@@ -3,7 +3,9 @@ using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Academies;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Data.Models.Projects;
+using Dfe.PrepareTransfers.Web.Services;
 using Dfe.PrepareTransfers.Web.Services.Responses;
+
 
 namespace Dfe.PrepareTransfers.Web.Tests.TestFixtures
 {
@@ -41,6 +43,13 @@ namespace Dfe.PrepareTransfers.Web.Tests.TestFixtures
                         {TransferBenefits.OtherFactor.FinanceAndDebtConcerns, "debtConcerns"}
                     },
                     AnyRisks = true
+                },
+                LegalRequirements = new TransferLegalRequirements
+                {
+                    DiocesanConsent = ThreeOptions.Yes,
+                    IncomingTrustAgreement = ThreeOptions.No,
+                    OutgoingTrustConsent = ThreeOptions.NotApplicable,
+                    
                 },
                 TransferringAcademies = new List<TransferringAcademies>
                 {

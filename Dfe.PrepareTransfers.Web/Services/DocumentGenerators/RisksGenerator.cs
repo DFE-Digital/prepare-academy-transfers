@@ -1,15 +1,11 @@
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.DocumentGeneration;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
-using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
 using Dfe.PrepareTransfers.Helpers;
-using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 
-namespace Dfe.PrepareTransfers.Web.Services
+namespace Dfe.PrepareTransfers.Web.Services.DocumentGenerators
 {
     public static class RisksGenerator
     {

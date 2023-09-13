@@ -398,7 +398,7 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
             {
                 var documentBody = GenerateDocumentBody(builder =>
                 {
-                    builder.AddTextHeading("Meow", HeadingLevel.One);
+                    builder.AddTextHeading("Meow",HeadingLevel.One);
                 });
 
                 var paragraphs = documentBody.Descendants<Paragraph>().ToList();
@@ -879,8 +879,46 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
                 Assert.Equal("", documentText[2]);
             }
 
+              [Fact]
+            public void
+                Givengene()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("", documentText[2]);
+            }
+
             [Fact]
             public void GivenTemplateDocumentWithPlaceholderTestAndPlaceholderValues_PopulatePlaceholdersWithDocument()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow", PlaceholderTwo = "Woof"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("Woof", documentText[2]);
+            }
+
+            
+            [Fact]
+            public void PopulatePlaceholdersWithDocument()
             {
                 var template = Template();
 

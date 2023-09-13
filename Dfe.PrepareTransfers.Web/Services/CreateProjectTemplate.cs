@@ -13,11 +13,11 @@ using Dfe.PrepareTransfers.Web.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
-using static Dfe.PrepareTransfers.Web.Services.ProjectOverviewGenerator;
-using static Dfe.PrepareTransfers.Web.Services.RisksGenerator;
-using static Dfe.PrepareTransfers.Web.Services.BenefitsGenerator;
-using static Dfe.PrepareTransfers.Web.Services.RationaleGenerator;
-using static Dfe.PrepareTransfers.Web.Services.LegalRequirementsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.ProjectOverviewGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RisksGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.BenefitsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RationaleGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.LegalRequirementsGenerator;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
