@@ -95,10 +95,10 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
             }
         }
 
-        public void AddTextHeading(string headingText, HeadingLevel headinglevel)
+        public void AddTextHeading(string headingText, HeadingLevel headingLevel)
         {
             HeadingBuilder builder = new();
-            builder.SetHeadingLevel(headinglevel);
+            builder.SetHeadingLevel(headingLevel);
             builder.AddText(headingText);
             List<Paragraph> newElements = builder.Build();
             foreach (Paragraph element in newElements)
