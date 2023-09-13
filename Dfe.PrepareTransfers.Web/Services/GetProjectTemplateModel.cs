@@ -53,9 +53,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                         .ReasonForTheTransfer != TransferFeatures.ReasonForTheTransferTypes.Empty ?
                     EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features
                         .ReasonForTheTransfer) : EmptyFieldMessage,
-                TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other
-                    ? $"Other: {project.Features.OtherTypeOfTransfer}" :project.Features.TypeOfTransfer ==
-                     TransferFeatures.TransferTypes.Empty ? EmptyFieldMessage : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
+                TypeOfTransfer = TransferTypeSelector(project),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
                 IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement != null ?project.LegalRequirements.IncomingTrustAgreement.ToDescription() : EmptyFieldMessage,
                 OutgoingTrustConsent = project.LegalRequirements.OutgoingTrustConsent != null ? project.LegalRequirements.OutgoingTrustConsent.ToDescription() : EmptyFieldMessage,
@@ -74,6 +72,25 @@ namespace Dfe.PrepareTransfers.Web.Services
             {
                 ProjectTemplateModel = projectTemplateModel
             };
+        }
+
+        public string TransferTypeSelector(Project project)
+        {
+            
+            if (project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
+            {
+                return $"Other: {project.Features.OtherTypeOfTransfer}";
+            }
+
+            else if (project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+            {
+               return EmptyFieldMessage;
+            }
+
+            else
+            {
+                return EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer);
+            }         
         }
 
         private static List<ProjectTemplateAcademyModel> GetAcademyData(List<Academy> academies)

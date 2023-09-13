@@ -43,7 +43,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                     _getTestInformationForProject);
         }
        
-            private DocumentBuilder AddPlaceholderToDocument(string placeholder)
+            private static DocumentBuilder AddPlaceholderToDocument(string placeholder)
             {
                 
                 DocumentBuilder documentBuilder = new DocumentBuilder();
@@ -60,7 +60,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 return builderFromTemplate;
             }
 
-            private  List<Text> ListOfExpectedElementData(Byte[] document)
+            private static  List<Text> ListOfExpectedElementData(Byte[] document)
             {
                  var createdDocument = WordprocessingDocument.Open(new MemoryStream(document), false);
                  var createdText = createdDocument.MainDocumentPart.Document.Body
