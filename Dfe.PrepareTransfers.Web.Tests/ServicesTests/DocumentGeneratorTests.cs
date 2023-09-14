@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.DocumentGeneration;
 using Dfe.PrepareTransfers.Web.Services;
-using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.ProjectOverviewGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.TrustInformationGenerator;
 using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.BenefitsGenerator;
 using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RisksGenerator;
 using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RationaleGenerator;
 using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.LegalRequirementsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.TransferFeaturesGenerator;
 using Moq;
 using Xunit;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
@@ -72,19 +73,19 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
 
  
             [Fact]
-            public async void ProjectOverviewGenerator_generates_correct_data()
+            public async void TrustInformationGenerator_generates_correct_data()
             {
                 var result = await _subject.Execute(_projectUrn);
                 
-                var placeholderDocument = AddPlaceholderToDocument("[ProjectOverview]");
+                var placeholderDocument = AddPlaceholderToDocument("[TrustInformation]");
 
-                AddProjectOverviewDetail(placeholderDocument,result.ProjectTemplateModel);
+                AddTrustInformationDetail(placeholderDocument,result.ProjectTemplateModel);
             
                 var createdText = ListOfExpectedElementData(placeholderDocument.Build());
 
                 var project = _getTestInformationForProject.Project;
 
-                Assert.Equal("Project Overview", createdText[0].InnerText); 
+                Assert.Equal("Trust information and project dates", createdText[0].InnerText); 
                 Assert.Equal("Recommendation", createdText[1].InnerText);        
                 Assert.Equal(project.AcademyAndTrustInformation.Recommendation.ToString(), createdText[2].InnerText);   
                 Assert.Equal("Author", createdText[3].InnerText);  
@@ -95,10 +96,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 Assert.Equal(DateTime.Parse(project.Dates.Htb), DateTime.Parse(createdText[8].InnerText));
                 Assert.Equal("Proposed academy transfer date", createdText[9].InnerText);
                 Assert.Equal(DateTime.Parse(project.Dates.Target),DateTime.Parse(createdText[10].InnerText));
-                Assert.Equal("Reason for this transfer", createdText[11].InnerText);
-                Assert.Equal(EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features.ReasonForTheTransfer), createdText[12].InnerText);
-                Assert.Equal("What type of transfer is it?", createdText[13].InnerText);
-                Assert.Equal( EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer), createdText[14].InnerText);
             }
 
             [Fact]   
@@ -185,6 +182,26 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 Assert.Equal(legalRequirements.IncomingTrustAgreement.ToString(), createdText[4].InnerText); 
                 Assert.Equal("Diocesan consent", createdText[5].InnerText); 
                 Assert.Equal(legalRequirements.DiocesanConsent.ToString(), createdText[6].InnerText);               
+            }
+
+             [Fact]   
+            public async void TransferFeaturesGenerator_generates_correct_data()
+            {
+                var result = await _subject.Execute(_projectUrn);
+                
+                var placeholderDocument = AddPlaceholderToDocument("[FeaturesInformation]");
+
+                AddFeaturesDetail(placeholderDocument,result.ProjectTemplateModel);
+            
+                var createdText = ListOfExpectedElementData(placeholderDocument.Build());
+
+                var project = _getTestInformationForProject.Project;
+               
+                Assert.Equal("Features of the transfer", createdText[0].InnerText); 
+                Assert.Equal("Reason for this transfer", createdText[1].InnerText);
+                Assert.Equal(EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features.ReasonForTheTransfer), createdText[2].InnerText);
+                Assert.Equal("What type of transfer is it?", createdText[3].InnerText);
+                Assert.Equal( EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer), createdText[4].InnerText);               
             }
     }
 }
