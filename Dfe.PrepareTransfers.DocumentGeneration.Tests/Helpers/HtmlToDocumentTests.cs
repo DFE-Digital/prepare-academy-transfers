@@ -399,6 +399,11 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests.Dfe.PrepareTransfers.Hel
             throw new NotImplementedException();
         }
 
+        public void AddTextHeading(string headingText, HeadingLevel headingLevel)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddNumberedList(Action<IListBuilder> action)
         {
             var listFake = new ListFake {Type = "number"};
