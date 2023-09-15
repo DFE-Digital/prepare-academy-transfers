@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
 {
@@ -93,5 +94,20 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Builders
                 _previousElement = element;
             }
         }
+
+        public void AddTextHeading(string headingText, HeadingLevel headingLevel)
+        {
+            HeadingBuilder builder = new();
+            builder.SetHeadingLevel(headingLevel);
+            builder.AddText(headingText);
+            List<Paragraph> newElements = builder.Build();
+            foreach (Paragraph element in newElements)
+            {
+                _previousElement.InsertAfterSelf(element);
+                _previousElement = element;
+            }
+        }
+
+        
     }
 }

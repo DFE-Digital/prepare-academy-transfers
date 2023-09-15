@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.18.1"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v0.19.4"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -10,7 +10,9 @@ module "azure_container_apps_hosting" {
 
   enable_container_registry = local.enable_container_registry
 
-  enable_event_hub = local.enable_event_hub
+  enable_event_hub                          = local.enable_event_hub
+  enable_logstash_consumer                  = local.enable_logstash_consumer
+  eventhub_export_log_analytics_table_names = local.eventhub_export_log_analytics_table_names
 
   enable_dns_zone      = local.enable_dns_zone
   dns_zone_domain_name = local.dns_zone_domain_name
@@ -23,6 +25,7 @@ module "azure_container_apps_hosting" {
   container_max_replicas                 = local.container_max_replicas
 
   enable_cdn_frontdoor                      = local.enable_cdn_frontdoor
+  cdn_frontdoor_forwarding_protocol         = local.cdn_frontdoor_forwarding_protocol
   cdn_frontdoor_enable_rate_limiting        = local.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold     = local.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers   = local.cdn_frontdoor_host_add_response_headers
@@ -30,6 +33,8 @@ module "azure_container_apps_hosting" {
   cdn_frontdoor_host_redirects              = local.cdn_frontdoor_host_redirects
   cdn_frontdoor_origin_fqdn_override        = local.cdn_frontdoor_origin_fqdn_override
   cdn_frontdoor_origin_host_header_override = local.cdn_frontdoor_origin_host_header_override
+  cdn_frontdoor_health_probe_protocol       = local.cdn_frontdoor_health_probe_protocol
+  container_apps_allow_ips_inbound          = local.container_apps_allow_ips_inbound
 
   container_health_probe_path     = local.container_health_probe_path
   cdn_frontdoor_health_probe_path = local.cdn_frontdoor_health_probe_path

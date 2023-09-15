@@ -13,6 +13,12 @@ using Dfe.PrepareTransfers.Web.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.TrustInformationGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RisksGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.BenefitsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.RationaleGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.LegalRequirementsGenerator;
+using static Dfe.PrepareTransfers.Web.Services.DocumentGenerators.TransferFeaturesGenerator;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
@@ -51,7 +57,12 @@ namespace Dfe.PrepareTransfers.Web.Services
             var builder = DocumentBuilder.CreateFromTemplate(ms, projectTemplateModel);
 
             BuildTitle(builder, projectTemplateModel);
-            BuildOtherFactors(builder, projectTemplateModel);
+            AddTrustInformationDetail(builder, projectTemplateModel);
+            AddFeaturesDetail(builder, projectTemplateModel);
+            AddBenefits(builder, projectTemplateModel);
+            AddRisks(builder, projectTemplateModel);
+            AddRationale(builder, projectTemplateModel);
+            AddLegalRequirementsDetail(builder, projectTemplateModel);
             BuildAcademyData(builder, projectTemplateModel.Academies);
 
             return new CreateProjectTemplateResponse
@@ -59,45 +70,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                 Document = builder.Build()
             };
         }
-
-        private static void BuildOtherFactors(DocumentBuilder documentBuilder, ProjectTemplateModel projectTemplateModel)
-        {
-            documentBuilder.ReplacePlaceholderWithContent("Risks", builder =>
-            {
-                builder.AddTable(tableBuilder =>
-                {
-                    foreach (var otherFactor in projectTemplateModel.OtherFactors)
-                    {
-                        //Full Table Width = dxa 9740
-                        tableBuilder.AddRow(rowBuilder =>
-                        {
-                            rowBuilder.AddCell(new TextElement(otherFactor.Item1)
-                                    {Bold = true},
-                                new TableCellProperties
-                                {
-                                    TableCellWidth = new TableCellWidth
-                                        {Width = "5235", Type = TableWidthUnitValues.Dxa},
-                                    TableCellBorders = new TableCellBorders
-                                    {
-                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
-                                    }
-                                });
-                            rowBuilder.AddCell(new TextElement(otherFactor.Item2),
-                                new TableCellProperties
-                                {
-                                    TableCellWidth = new TableCellWidth
-                                        {Width = "4505", Type = TableWidthUnitValues.Dxa},
-                                    TableCellBorders = new TableCellBorders
-                                    {
-                                        TopBorder = new TopBorder {Size = 0, Color = "ffffff"}
-                                    }
-                                });
-                        });
-                    }
-                });
-            });
-        }
-
+        
         private static void BuildAcademyData(DocumentBuilder documentBuilder, List<ProjectTemplateAcademyModel> academies)
         {
             documentBuilder.ReplacePlaceholderWithContent("AcademySection", builder =>

@@ -163,9 +163,21 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Dfe.PrepareTransfers.Helpers
         private static TextElement TextElementWithFormatting(string toAdd, List<string> tagsEnabled)
         {
             var textElement = new TextElement(toAdd);
-            if (tagsEnabled.Contains("b")) textElement.Bold = true;
-            if (tagsEnabled.Contains("i")) textElement.Italic = true;
-            if (tagsEnabled.Contains("u")) textElement.Underline = true;
+            if (tagsEnabled.Contains("b"))
+            {
+                textElement.Bold = true;
+            }
+
+            if (tagsEnabled.Contains("i"))
+            {
+                textElement.Italic = true;
+            }
+
+            if (tagsEnabled.Contains("u"))
+            {
+                textElement.Underline = true;
+            }
+
             return textElement;
         }
 

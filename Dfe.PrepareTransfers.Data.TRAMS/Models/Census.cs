@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace Dfe.PrepareTransfers.Data.TRAMS.Models
 {
     public class Census

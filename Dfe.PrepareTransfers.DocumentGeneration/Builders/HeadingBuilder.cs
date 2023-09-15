@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Dfe.PrepareTransfers.DocumentGeneration.Elements;
 using Dfe.PrepareTransfers.DocumentGeneration.Interfaces;

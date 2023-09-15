@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models.Projects;
-using Dfe.PrepareTransfers.Web.ExtensionMethods;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Features;
 using Dfe.PrepareTransfers.Web.Models.Forms;

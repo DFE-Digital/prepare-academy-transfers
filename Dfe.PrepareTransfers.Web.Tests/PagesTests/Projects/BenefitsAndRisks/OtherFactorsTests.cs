@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
-using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Benefits;
 using Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks;
 using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;

@@ -1,4 +1,7 @@
 ﻿@page "/project/{urn}"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using NetEscapades.AspNetCore.SecurityHeaders.TagHelpers
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.Projects.Index
 
 @{
@@ -8,7 +11,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Home/Index">Back to transfer projects</a>
+    <a class="govuk-back-link" asp-page="/Home/Index">Back</a>
 }
 
 <div class="govuk-grid-row">

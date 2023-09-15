@@ -1,7 +1,5 @@
 ﻿using FluentValidation.TestHelper;
 using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Web.Models.Benefits;
-using Dfe.PrepareTransfers.Web.Validators.BenefitsAndRisks;
 using Dfe.PrepareTransfers.Web.Validators.ProjectType;
 using Xunit;
 

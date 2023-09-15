@@ -4,18 +4,25 @@ using Moq;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Xunit;
 
+
 namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
 {
     public class CreateProjectTemplateTests
     {
         private readonly CreateProjectTemplate _subject;
+        private readonly GetProjectTemplateModel _templateSubject;
         private readonly Mock<IGetProjectTemplateModel> _getHtbDocumentForProject;
         private readonly string _projectUrn = "projectId";
+        
+        private readonly Mock<IGetInformationForProject> _getInformationForProject;
 
         public CreateProjectTemplateTests()
         {
             _getHtbDocumentForProject = new Mock<IGetProjectTemplateModel>();
             _subject = new CreateProjectTemplate(_getHtbDocumentForProject.Object);
+            _getInformationForProject = new Mock<IGetInformationForProject>();
+            _templateSubject = new GetProjectTemplateModel(_getInformationForProject.Object);
+            
         }
 
         public class ExecuteTests : CreateProjectTemplateTests

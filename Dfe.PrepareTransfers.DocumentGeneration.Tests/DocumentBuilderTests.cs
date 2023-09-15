@@ -393,6 +393,19 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
                 Assert.Equal("Meow", paragraphs[0].InnerText);
             }
 
+            [Fact]
+            public void GivenTextHeadingWithTextElement_AddsTextToDocument()
+            {
+                var documentBody = GenerateDocumentBody(builder =>
+                {
+                    builder.AddTextHeading("Meow",HeadingLevel.One);
+                });
+
+                var paragraphs = documentBody.Descendants<Paragraph>().ToList();
+                Assert.Single((IEnumerable) paragraphs);
+                Assert.Equal("Meow", paragraphs[0].InnerText);
+            }
+
             [Theory]
             [InlineData(HeadingLevel.One, "36")]
             [InlineData(HeadingLevel.Two, "32")]
@@ -449,6 +462,8 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
                 Assert.Single(header.Descendants<Paragraph>());
                 Assert.Equal("Meow", header.InnerText);
             }
+
+            
 
             [Fact]
             public void GivenAddingATableByRows_GeneratesTheCorrectTable()
@@ -866,6 +881,25 @@ namespace Dfe.PrepareTransfers.DocumentGeneration.Tests
 
             [Fact]
             public void GivenTemplateDocumentWithPlaceholderTestAndPlaceholderValues_PopulatePlaceholdersWithDocument()
+            {
+                var template = Template();
+
+                var document = new ExampleDocument {PlaceholderOne = "Meow", PlaceholderTwo = "Woof"};
+                var builderFromTemplate = DocumentBuilder.CreateFromTemplate(new MemoryStream(template), document);
+                var result = builderFromTemplate.Build();
+
+                var createdDocument = WordprocessingDocument.Open(new MemoryStream(result), false);
+                var documentText = createdDocument.MainDocumentPart.Document.Body.Descendants<Text>()
+                    .Select(t => t.Text).ToList();
+
+                Assert.Equal("Meow", documentText[0]);
+                Assert.Equal("Non replaced text", documentText[1]);
+                Assert.Equal("Woof", documentText[2]);
+            }
+
+            
+            [Fact]
+            public void PopulatePlaceholdersWithDocument()
             {
                 var template = Template();
 

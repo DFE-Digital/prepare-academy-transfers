@@ -1,13 +1,7 @@
-﻿using Dfe.PrepareTransfers.Data.Models.Projects;
-using Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements;
+﻿using Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements;
 using Dfe.PrepareTransfers.Web.Tests.Dfe.PrepareTransfers.Helpers;
-using Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LegalRequirements;
 using Microsoft.AspNetCore.Routing;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Models;

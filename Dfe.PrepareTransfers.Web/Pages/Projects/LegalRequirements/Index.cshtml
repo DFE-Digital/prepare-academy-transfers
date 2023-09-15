@@ -1,5 +1,6 @@
 ﻿@page "/project/{urn}/legalrequirements"
 
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements.Index
 @{
     ViewBag.Title = "Legal Requirements";
@@ -8,7 +9,7 @@
 
 @section BeforeMain
     {
-    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back</a>
 }
 
     <div class="govuk-grid-row">

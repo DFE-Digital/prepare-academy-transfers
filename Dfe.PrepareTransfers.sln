@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 		manifest.yml = manifest.yml
 		README.md = README.md
+		release-notes.md = release-notes.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web", "Dfe.PrepareTransfers.Web\Dfe.PrepareTransfers.Web.csproj", "{6BF642D7-65ED-4682-9973-C71F2D8EDBEA}"
@@ -34,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Web.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Data.Tests", "Dfe.PrepareTransfers.Data.Tests\Dfe.PrepareTransfers.Data.Tests.csproj", "{83CC61DF-CA4C-472A-B3CC-A3C2CE8EFBF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dfe.PrepareTransfers.Redirector", "Dfe.PrepareTransfers.Redirector\Dfe.PrepareTransfers.Redirector.csproj", "{00CA5F9E-F586-47E3-BF76-7CAE1CF8104E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dfe.PrepareTransfers.Redirector", "Dfe.PrepareTransfers.Redirector\Dfe.PrepareTransfers.Redirector.csproj", "{00CA5F9E-F586-47E3-BF76-7CAE1CF8104E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

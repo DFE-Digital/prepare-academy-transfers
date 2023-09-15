@@ -1,5 +1,3 @@
-using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers

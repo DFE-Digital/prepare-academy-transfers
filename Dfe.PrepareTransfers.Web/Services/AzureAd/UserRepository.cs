@@ -1,9 +1,9 @@
 ﻿using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
-using Dfe.PrepareTransfers.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dfe.Academisation.ExtensionMethods;
 
 namespace Dfe.PrepareTransfers.Web.Services.AzureAd
 {

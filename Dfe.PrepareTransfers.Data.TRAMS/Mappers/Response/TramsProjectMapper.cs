@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
-using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
 using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
@@ -152,8 +149,16 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
         }
         private static ThreeOptions? ToThreeOptions(string source)
         {
-            if (string.IsNullOrEmpty(source)) return null;
-            if (source == "Not applicable") return ThreeOptions.NotApplicable;
+            if (string.IsNullOrEmpty(source))
+            {
+                return null;
+            }
+
+            if (source == "Not applicable")
+            {
+                return ThreeOptions.NotApplicable;
+            }
+
             ThreeOptions? status = (ThreeOptions)Enum.Parse(typeof(ThreeOptions), source, true);
 
             return status;

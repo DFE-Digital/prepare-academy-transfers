@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Dfe.PrepareTransfers.Data.Models.Academies
 {
     public class PupilNumbers

@@ -1,13 +1,12 @@
 ﻿using AutoFixture;
 using Dfe.PrepareTransfers.Web.Services.AzureAd;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
-using Dfe.PrepareTransfers.Helpers;
 using Microsoft.Graph;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Dfe.Academisation.ExtensionMethods;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests.AzureAdTests

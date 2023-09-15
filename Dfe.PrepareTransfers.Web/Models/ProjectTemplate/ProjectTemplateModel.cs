@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Dfe.PrepareTransfers.DocumentGeneration;
+using static Dfe.PrepareTransfers.Data.Models.Projects.TransferBenefits;
 
 namespace Dfe.PrepareTransfers.Web.Models.ProjectTemplate
 {
@@ -39,6 +40,13 @@ namespace Dfe.PrepareTransfers.Web.Models.ProjectTemplate
         public List<ProjectTemplateAcademyModel> Academies { get; set; }
         
         [DocumentText("AnyRisks")] public string AnyRisks { get; set; }
+
+        [DocumentText("OtherIntendedBenefit")] public string OtherIntendedBenefit { get; set; }
+
+        [DocumentText("AnyIdentifiedRisks")] public bool? AnyIdentifiedRisks  { get; set; }
         public List<Tuple<string,string>> OtherFactors { get; set; }
+
+        public List<IntendedBenefit> ListOfTransferBenefits { get; set; }
+        public Dictionary<OtherFactor, string> ListOfOtherFactors { get; set; }
     }
 }

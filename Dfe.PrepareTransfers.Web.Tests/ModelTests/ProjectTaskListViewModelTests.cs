@@ -1,11 +1,4 @@
-﻿using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
-using Dfe.PrepareTransfers.Web.Models;
-using System.Collections.Generic;
-using Xunit;
-using static Dfe.PrepareTransfers.Data.Models.Projects.TransferFeatures;
-
-namespace Dfe.PrepareTransfers.Web.Tests.ModelTests
+﻿namespace Dfe.PrepareTransfers.Web.Tests.ModelTests
 {
     // public class ProjectTaskListViewModelTests
     // {

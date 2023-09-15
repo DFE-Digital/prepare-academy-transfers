@@ -69,6 +69,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                     projectTemplateModel.Version);
                 Assert.Equal("1 January 2020", projectTemplateModel.DateOfHtb);
                 Assert.Equal("1 January 2020", projectTemplateModel.DateOfProposedTransfer);
+                Assert.Equal(getTestInformationForProject.Project.Benefits.OtherFactors,projectTemplateModel.ListOfOtherFactors);
+                Assert.Equal(getTestInformationForProject.Project.Benefits.IntendedBenefits,projectTemplateModel.ListOfTransferBenefits);
+                Assert.Equal(getTestInformationForProject.Project.Benefits.AnyRisks,projectTemplateModel.AnyIdentifiedRisks);
+                
                 Assert.Equal(academy.GeneralInformation.ViabilityIssue, projectTemplateAcademyModel.ViabilityIssues);
                 Assert.Equal(academy.GeneralInformation.Deficit, projectTemplateAcademyModel.FinancialDeficit);
                 Assert.Equal(academy.GeneralInformation.Pfi, projectTemplateAcademyModel.Pfi);

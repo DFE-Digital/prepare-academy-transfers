@@ -10,11 +10,14 @@ locals {
   container_secret_environment_variables       = var.container_secret_environment_variables
   container_max_replicas                       = var.container_max_replicas
   enable_event_hub                             = var.enable_event_hub
+  enable_logstash_consumer                     = var.enable_logstash_consumer
+  eventhub_export_log_analytics_table_names    = var.eventhub_export_log_analytics_table_names
   enable_dns_zone                              = var.enable_dns_zone
   dns_zone_domain_name                         = var.dns_zone_domain_name
   dns_ns_records                               = var.dns_ns_records
   dns_txt_records                              = var.dns_txt_records
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
+  container_apps_allow_ips_inbound             = var.container_apps_allow_ips_inbound
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold
   cdn_frontdoor_host_add_response_headers      = var.cdn_frontdoor_host_add_response_headers
@@ -22,6 +25,8 @@ locals {
   cdn_frontdoor_host_redirects                 = var.cdn_frontdoor_host_redirects
   cdn_frontdoor_origin_fqdn_override           = var.cdn_frontdoor_origin_fqdn_override
   cdn_frontdoor_origin_host_header_override    = var.cdn_frontdoor_origin_host_header_override
+  cdn_frontdoor_forwarding_protocol            = var.cdn_frontdoor_forwarding_protocol
+  cdn_frontdoor_health_probe_protocol          = var.cdn_frontdoor_health_probe_protocol
   key_vault_access_users                       = toset(var.key_vault_access_users)
   key_vault_access_ipv4                        = var.key_vault_access_ipv4
   tfvars_filename                              = var.tfvars_filename

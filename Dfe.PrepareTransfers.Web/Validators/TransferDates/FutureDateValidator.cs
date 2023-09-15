@@ -14,12 +14,18 @@ public class FutureDateValidator : AbstractValidator<DateViewModel>
          {
             DateViewModel dateVm = context.InstanceToValidate;
 
-            if (dateVm.UnknownDate) return;
+            if (dateVm.UnknownDate)
+            {
+                return;
+            }
 
             DateTime.TryParseExact(dateVm.DateInputAsString(), "dd/MM/yyyy", null, DateTimeStyles.None,
                out DateTime dateTime);
 
-            if (dateTime.Date < DateTime.Today) context.AddFailure("You must enter a future date");
+            if (dateTime.Date < DateTime.Today)
+            {
+                context.AddFailure("You must enter a future date");
+            }
          });
    }
 }

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
-using Dfe.PrepareTransfers.Web.ExtensionMethods;
 using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
@@ -19,6 +18,8 @@ namespace Dfe.PrepareTransfers.Web.Services
     public class GetProjectTemplateModel : IGetProjectTemplateModel
     {
         private readonly IGetInformationForProject _getInformationForProject;
+
+        private static readonly string EmptyFieldMessage = "No data";
 
         public GetProjectTemplateModel(IGetInformationForProject getInformationForProject)
         {
@@ -32,42 +33,64 @@ namespace Dfe.PrepareTransfers.Web.Services
             var academies = informationForProjectResult.OutgoingAcademies;
             var projectTemplateModel = new ProjectTemplateModel
             {
-                Recommendation =
+                Recommendation = project.AcademyAndTrustInformation.Recommendation != TransferAcademyAndTrustInformation.RecommendationResult.Empty ?
                     EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.GetDisplayValue(
-                        project.AcademyAndTrustInformation.Recommendation),
-                Author = project.AcademyAndTrustInformation.Author,
+                    project.AcademyAndTrustInformation.Recommendation) : EmptyFieldMessage,
+                Author = project.AcademyAndTrustInformation.Author ?? EmptyFieldMessage,
                 ProjectName = project.IncomingTrustName,
                 ProjectReference = project.Reference,
                 IncomingTrustName = project.IncomingTrustName,
                 IncomingTrustUkprn = project.IncomingTrustUkprn,
-                RationaleForProject = project.Rationale.Project,
-                RationaleForTrust = project.Rationale.Trust,
+                RationaleForProject = project.Rationale.Project ?? EmptyFieldMessage,
+                RationaleForTrust = project.Rationale.Trust ?? EmptyFieldMessage,
                 ClearedBy = "",
                 Version = DateTime.Now.ToString("yyyyMMdd", CultureInfo.CurrentUICulture),
-                DateOfHtb = DatesHelper.FormatDateString(project.Dates.Htb, project.Dates.HasHtbDate),
+                DateOfHtb = DatesHelper.FormatDateString(project.Dates.Htb, project.Dates.HasHtbDate) ?? EmptyFieldMessage,
                 DateOfProposedTransfer =
-                    DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer),
+                    DatesHelper.FormatDateString(project.Dates.Target, project.Dates.HasTargetDateForTransfer)?? EmptyFieldMessage,
 
-                ReasonForTheTransfer =
+                ReasonForTheTransfer = project.Features
+                        .ReasonForTheTransfer != TransferFeatures.ReasonForTheTransferTypes.Empty ?
                     EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features
-                        .ReasonForTheTransfer),
-                TypeOfTransfer = project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other
-                    ? $"Other: {project.Features.OtherTypeOfTransfer}"
-                    : EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer),
+                        .ReasonForTheTransfer) : EmptyFieldMessage,
+                TypeOfTransfer = TransferTypeSelector(project),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
-                IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement.ToDescription(),
-                OutgoingTrustConsent = project.LegalRequirements.OutgoingTrustConsent.ToDescription(),
-                DiocesanConsent = project.LegalRequirements.DiocesanConsent.ToDescription(),
-                EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered.ToDisplay(),
+                IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement != null ?project.LegalRequirements.IncomingTrustAgreement.ToDescription() : EmptyFieldMessage,
+                OutgoingTrustConsent = project.LegalRequirements.OutgoingTrustConsent != null ? project.LegalRequirements.OutgoingTrustConsent.ToDescription() : EmptyFieldMessage,
+                DiocesanConsent = project.LegalRequirements.DiocesanConsent != null  ? project.LegalRequirements.DiocesanConsent.ToDescription() : EmptyFieldMessage,
+                EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered == true ? "Yes" : "Not Considered",
                 AnyRisks = project.Benefits.AnyRisks.ToDisplay(),
                 OtherFactors = GetOtherFactors(project.Benefits),
-                Academies = GetAcademyData(academies)
+                Academies = GetAcademyData(academies),
+                ListOfTransferBenefits = project.Benefits.IntendedBenefits,
+                OtherIntendedBenefit = project.Benefits.OtherIntendedBenefit,
+                ListOfOtherFactors = project.Benefits.OtherFactors,
+                AnyIdentifiedRisks = project.Benefits.AnyRisks,
             };
 
             return new GetProjectTemplateModelResponse
             {
                 ProjectTemplateModel = projectTemplateModel
             };
+        }
+
+        public string TransferTypeSelector(Project project)
+        {
+            
+            if (project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Other)
+            {
+                return $"Other: {project.Features.OtherTypeOfTransfer}";
+            }
+
+            else if (project.Features.TypeOfTransfer == TransferFeatures.TransferTypes.Empty)
+            {
+               return EmptyFieldMessage;
+            }
+
+            else
+            {
+                return EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer);
+            }         
         }
 
         private static List<ProjectTemplateAcademyModel> GetAcademyData(List<Academy> academies)

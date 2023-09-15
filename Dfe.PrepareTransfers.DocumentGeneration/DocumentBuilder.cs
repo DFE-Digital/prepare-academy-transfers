@@ -104,6 +104,12 @@ namespace Dfe.PrepareTransfers.DocumentGeneration
             builder.AddHeading(action);
         }
 
+         public void AddTextHeading(string headingText, HeadingLevel headingLevel)
+        {
+            var builder = new DocumentBodyBuilder(_document, _body.ChildElements.Last());
+            builder.AddTextHeading(headingText, headingLevel);
+        }
+
         public void AddHeader(Action<IHeaderBuilder> action)
         {
             var headerPart = _document.MainDocumentPart.HeaderParts.First();
@@ -134,7 +140,10 @@ namespace Dfe.PrepareTransfers.DocumentGeneration
             var mainPart = _document.MainDocumentPart;
             var settingsPart = mainPart.DocumentSettingsPart;
 
-            if (settingsPart != null) return;
+            if (settingsPart != null)
+            {
+                return;
+            }
 
             settingsPart = mainPart.AddNewPart<DocumentSettingsPart>();
             settingsPart.Settings = new Settings(
@@ -207,14 +216,20 @@ namespace Dfe.PrepareTransfers.DocumentGeneration
                     paragraph.InnerText.Contains($"{p.GetCustomAttribute<DocumentTextAttribute>()?.Placeholder}",
                         StringComparison.OrdinalIgnoreCase));
 
-                if (property == null) continue;
+                if (property == null)
+                {
+                    continue;
+                }
 
                 var attribute = property.GetCustomAttribute<DocumentTextAttribute>();
 
-                if (attribute == null) continue;
+                if (attribute == null)
+                {
+                    continue;
+                }
 
                 foreach (var paragraphChildElement in paragraph.ChildElements
-                    .Where(paragraphChildElement => paragraphChildElement.GetType() != typeof(ParagraphProperties)).ToList())
+                             .Where(paragraphChildElement => paragraphChildElement.GetType() != typeof(ParagraphProperties)).ToList())
                 {
                     paragraph.RemoveChild(paragraphChildElement);
                 }

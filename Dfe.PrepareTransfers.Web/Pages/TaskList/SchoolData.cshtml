@@ -1,4 +1,5 @@
 ﻿@page "/project/{urn}/school-data/{academyUkprn}"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.TaskList.SchoolData
 
 @{
@@ -8,7 +9,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back to task list</a>
+    <a class="govuk-back-link" asp-page="/Projects/Index" asp-route-urn="@Model.Urn">Back</a>
 }
 
 <div class="govuk-grid-row">
