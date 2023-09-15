@@ -58,7 +58,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                 IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement != null ?project.LegalRequirements.IncomingTrustAgreement.ToDescription() : EmptyFieldMessage,
                 OutgoingTrustConsent = project.LegalRequirements.OutgoingTrustConsent != null ? project.LegalRequirements.OutgoingTrustConsent.ToDescription() : EmptyFieldMessage,
                 DiocesanConsent = project.LegalRequirements.DiocesanConsent != null  ? project.LegalRequirements.DiocesanConsent.ToDescription() : EmptyFieldMessage,
-                EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered == true ? "Yes" : "Not Considered",
+                EqualitiesImpactAssessmentConsidered = project.Benefits.EqualitiesImpactAssessmentConsidered == true ? "Yes" : "Not considered",
                 AnyRisks = project.Benefits.AnyRisks.ToDisplay(),
                 OtherFactors = GetOtherFactors(project.Benefits),
                 Academies = GetAcademyData(academies),
