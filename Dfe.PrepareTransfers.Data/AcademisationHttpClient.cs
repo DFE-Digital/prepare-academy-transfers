@@ -16,19 +16,19 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
         public new async Task<HttpResponseMessage> GetAsync(string url)
         {
-            var response = await base.GetAsync(url);
+            var response = await _httpClient.GetAsync(url);
             return response;
         }
 
         public new async Task<HttpResponseMessage> PostAsync(string url, HttpContent content)
         {
-            var response = await base.PostAsync(url, content);
+            var response = await _httpClient.PostAsync(url, content);
             return response;
         }
 
         public new async Task<HttpResponseMessage> PutAsync(string url, HttpContent content)
         {
-            var response = await base.PutAsync(url, content);
+            var response = await _httpClient.PutAsync(url, content);
             return response;
         }
     }
