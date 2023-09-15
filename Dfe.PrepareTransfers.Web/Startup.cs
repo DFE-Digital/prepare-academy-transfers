@@ -232,6 +232,13 @@ public class Startup
             httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
         });
 
+        services.AddHttpClient("AcademisationApiClient", httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(academisationApiBase);
+            httpClient.DefaultRequestHeaders.Add("x-api-key", academisationApiKey);
+            httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+        });
+
         services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
 
         services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
@@ -255,6 +262,7 @@ public class Startup
         services.AddTransient<IGraphUserService, GraphUserService>();
         
         services.AddScoped<ITramsHttpClient, TramsHttpClient>();
+        services.AddScoped<IAcademisationHttpClient, AcademisationHttpClient>();
         services.AddSingleton<PerformanceDataChannel>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();

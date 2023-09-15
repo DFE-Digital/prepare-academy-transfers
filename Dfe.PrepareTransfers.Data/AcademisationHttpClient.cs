@@ -1,16 +1,17 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Dfe.Academisation.CorrelationIdMiddleware;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS
 {
     public class AcademisationHttpClient : HttpClient, IAcademisationHttpClient
     {
-        public AcademisationHttpClient(string url, string apiKey)
+        private readonly HttpClient _httpClient;
+
+        public AcademisationHttpClient(IHttpClientFactory httpClientFactory, ICorrelationContext correlationContext)
         {
-            BaseAddress = new Uri(url);
-            DefaultRequestHeaders.Add("x-api-key", apiKey);
-            DefaultRequestHeaders.Add("ContentType", "application/json");
+            _httpClient = httpClientFactory.CreateClient("AcademisationApiClient");
+            _httpClient.DefaultRequestHeaders.Add(Dfe.Academisation.CorrelationIdMiddleware.Keys.HeaderKey, correlationContext.CorrelationId.ToString());
         }
 
         public new async Task<HttpResponseMessage> GetAsync(string url)
