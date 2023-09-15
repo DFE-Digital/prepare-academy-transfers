@@ -138,7 +138,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 Assert.Equal(EnumHelpers<TransferBenefits.OtherFactor>.GetDisplayValue(TransferBenefits.OtherFactor.FinanceAndDebtConcerns), createdText[3].InnerText);   
                 Assert.Equal(benefits.OtherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns], createdText[4].InnerText); 
                 Assert.Equal("Equalities impact assessment considered", createdText[5].InnerText);   
-                Assert.Equal("Not Considered", createdText[6].InnerText); 
+                Assert.Equal("Not considered", createdText[6].InnerText); 
                 
             }
 
