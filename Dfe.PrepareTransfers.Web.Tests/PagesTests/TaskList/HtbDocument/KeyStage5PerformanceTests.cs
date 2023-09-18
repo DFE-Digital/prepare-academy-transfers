@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Pages.TaskList.KeyStage5Performance;
@@ -109,10 +110,8 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.TaskList.HtbDocument
                 const string additionalInfo = "some additional info";
                 _subject.AdditionalInformationViewModel.AdditionalInformation = additionalInfo;
                 await _subject.OnPostAsync();
-                ProjectRepository.Verify(r => r.Update(It.Is<Project>(
-                    project => project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn)
-                        .KeyStage5PerformanceAdditionalInformation == additionalInfo
-                )));
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.KeyStage5PerformanceAdditionalInformation == additionalInfo)
+                ));
             }
 
             [Fact]

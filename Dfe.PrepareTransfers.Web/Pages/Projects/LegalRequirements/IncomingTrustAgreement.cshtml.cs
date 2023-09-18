@@ -43,7 +43,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LegalRequirements
             }
 
             project.Result.LegalRequirements.IncomingTrustAgreement = IncomingTrustAgreementViewModel.IncomingTrustAgreement;
-            await _projects.Update(project.Result);
+            await _projects.UpdateLegalRequirements(project.Result);
             if (ReturnToPreview)
             {
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });

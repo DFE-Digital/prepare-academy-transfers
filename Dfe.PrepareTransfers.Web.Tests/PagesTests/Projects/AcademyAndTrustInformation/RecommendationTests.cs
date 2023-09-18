@@ -63,7 +63,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
             await Subject.OnPostAsync(_vm);
 
             ProjectRepository.Verify(r =>
-                r.Update(It.Is<Project>(project =>
+                r.UpdateGeneralInfomation(It.Is<Project>(project =>
                     project.AcademyAndTrustInformation.Recommendation == _vm.Recommendation &&
                     project.AcademyAndTrustInformation.Author == _vm.Author)), Times.Once);
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement;
@@ -56,12 +57,8 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LatestOfstedJudgeme
             {
                 await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project =>
-                            project.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == _subject.AcademyUkprn)
-                                .LatestOfstedReportAdditionalInformation
-                            == _subject.AdditionalInformationViewModel.AdditionalInformation)),
-                    Times.Once);
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.LatestOfstedReportAdditionalInformation == _subject.AdditionalInformationViewModel.AdditionalInformation)
+                ), Times.Once);
             }
 
             [Fact]

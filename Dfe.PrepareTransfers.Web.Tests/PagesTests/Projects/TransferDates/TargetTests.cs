@@ -124,7 +124,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project =>
+                        r.UpdateDates(It.Is<Data.Models.Project>(project =>
                             project.Dates.Target == _subject.TargetDateViewModel.TargetDate.DateInputAsString()
                             && project.Dates.HasTargetDateForTransfer ==
                             !_subject.TargetDateViewModel.TargetDate.UnknownDate)),

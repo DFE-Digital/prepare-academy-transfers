@@ -43,7 +43,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
             }
 
             project.Result.Benefits.EqualitiesImpactAssessmentConsidered = EqualitiesImpactAssessmentViewModel.EqualitiesImpactAssessmentConsidered;
-            await _projects.Update(project.Result);
+            await _projects.UpdateBenefits(project.Result);
 
             return RedirectToPage("/Projects/BenefitsAndRisks/Index", new {Urn});
         }

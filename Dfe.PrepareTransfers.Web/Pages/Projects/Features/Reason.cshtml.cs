@@ -49,7 +49,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
 
             project.Result.Features.ReasonForTheTransfer = ReasonForTheTransfer;
 
-            await _projects.Update(project.Result);
+            await _projects.UpdateFeatures(project.Result);
 
             if (ReturnToPreview)
             {

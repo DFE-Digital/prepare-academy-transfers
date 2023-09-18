@@ -50,7 +50,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LegalRequirements
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(
+                    r.UpdateLegalRequirements(It.Is<Project>(
                         project => project.LegalRequirements.IncomingTrustAgreement == ThreeOptions.No)));
             }
 

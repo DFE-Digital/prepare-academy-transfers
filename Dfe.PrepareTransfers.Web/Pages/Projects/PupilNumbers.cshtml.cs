@@ -65,10 +65,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects
         {
             var model = await _projectsRepository.GetByUrn(Urn);
 
-            model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn)
-                    .PupilNumbersAdditionalInformation
+            var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
+
+            academy.PupilNumbersAdditionalInformation
                 = AdditionalInformationViewModel.AdditionalInformation;
-            await _projectsRepository.Update(model.Result);
+
+            await _projectsRepository.UpdateAcademy(model.Result.Urn, academy);
 
             if (ReturnToPreview)
             {

@@ -45,6 +45,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
                     .AddInMemoryCollection(new Dictionary<string, string>
                     {
                         {"TRAMS_API_BASE", _mockApiServer.Url },
+                        {"ACADEMISATION_API_BASE", _mockApiServer.Url },
                         {"AzureAd:AllowedRoles", string.Empty}, // Do not restrict access for integration tests
                         {"ServiceLink:ConversionsUrl", "https://an-extenal-service.com"}
                     })
@@ -149,6 +150,18 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
                     .UsingPatch())
                 .RespondWith(Response.Create()
                     .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBody(JsonConvert.SerializeObject(responseBody)));
+        }
+
+        public void AddAnyPut<TResponseBody>(string path, TResponseBody responseBody)
+        {
+            _mockApiServer
+                .Given(Request.Create()
+                    .WithPath(path)
+                    .UsingPut())
+                .RespondWith(Response.Create()
+                    .WithStatusCode(201)
                     .WithHeader("Content-Type", "application/json")
                     .WithBody(JsonConvert.SerializeObject(responseBody)));
         }

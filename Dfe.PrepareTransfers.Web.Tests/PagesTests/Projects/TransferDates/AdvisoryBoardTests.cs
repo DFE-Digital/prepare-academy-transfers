@@ -82,7 +82,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 var result = await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
+                    r.UpdateDates(It.Is<Data.Models.Project>(project => project.Urn == ProjectUrn0001)), Times.Never);
 
                 Assert.IsType<PageResult>(result);
             }
@@ -93,7 +93,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.Update(It.Is<Data.Models.Project>(project =>
+                        r.UpdateDates(It.Is<Data.Models.Project>(project =>
                             project.Dates.Htb == _subject.AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString()
                             && project.Dates.HasHtbDate ==
                             !_subject.AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate)),

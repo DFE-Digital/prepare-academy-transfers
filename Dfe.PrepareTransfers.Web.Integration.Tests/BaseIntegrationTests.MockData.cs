@@ -17,8 +17,8 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 			}
 
 			PagedResult<TramsProjectSummary> projectResults = new PagedResult<TramsProjectSummary>(projects, projects.Count());
-			_factory.AddGetWithJsonResponse("/academyTransferProjects", projectResults);
-			return projects;
+			_factory.AddGetWithJsonResponse("/transfer-project/GetTransferProjects", projectResults);
+            return projects;
 		}
 
 		protected TramsProject GetProject(Action<TramsProject> postSetup = null)
@@ -29,7 +29,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 				postSetup(project);
 			}
 
-			_factory.AddGetWithJsonResponse($"/academyTransferProject/{project.ProjectUrn}", project);
+			_factory.AddGetWithJsonResponse($"/transfer-project/{project.ProjectUrn}", project);
 			_factory.AddGetWithJsonResponse($"/trust/{project.TransferringAcademies[0].IncomingTrustUkprn}", AcademiesApiFixtures.Trust());
 			_factory.AddGetWithJsonResponse($"/trust/{project.OutgoingTrustUkprn}", AcademiesApiFixtures.Trust());
 			_factory.AddGetWithJsonResponse($"/educationPerformance/{project.TransferringAcademies[0].OutgoingAcademy.Urn}", AcademiesApiFixtures.EducationPerformance());

@@ -53,7 +53,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Features
             _subject.ReasonForTheTransfer = reason;
             await _subject.OnPostAsync();
             ProjectRepository.Verify(
-                r => r.Update(
+                r => r.UpdateFeatures(
                     It.Is<Project>(project => project.Features.ReasonForTheTransfer == reason))
             );
         }
@@ -66,7 +66,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Features
             await _subject.OnPostAsync();
 
             //Assert
-            ProjectRepository.Verify(r => r.Update(It.IsAny<Project>()), Times.Never);
+            ProjectRepository.Verify(r => r.UpdateFeatures(It.IsAny<Project>()), Times.Never);
         }
 
         [Fact]

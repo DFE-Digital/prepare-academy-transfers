@@ -218,15 +218,24 @@ public class Startup
         });
     }
 
-    private static void AddServices(IServiceCollection services, IConfiguration configuration)
-    {
-        var tramsApiBase = configuration["TRAMS_API_BASE"];
-        var tramsApiKey = configuration["TRAMS_API_KEY"];
+   private static void AddServices(IServiceCollection services, IConfiguration configuration)
+   {
+      var tramsApiBase = configuration["TRAMS_API_BASE"];
+      var tramsApiKey = configuration["TRAMS_API_KEY"];
+      var academisationApiBase = configuration["ACADEMISATION_API_BASE"];
+      var academisationApiKey = configuration["ACADEMISATION_API_KEY"];
 
         services.AddHttpClient("TramsApiClient", httpClient =>
         {
             httpClient.BaseAddress = new Uri(tramsApiBase);
             httpClient.DefaultRequestHeaders.Add("ApiKey", tramsApiKey);
+            httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+        });
+
+        services.AddHttpClient("AcademisationApiClient", httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(academisationApiBase);
+            httpClient.DefaultRequestHeaders.Add("x-api-key", academisationApiKey);
             httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
         });
 
@@ -253,6 +262,7 @@ public class Startup
         services.AddTransient<IGraphUserService, GraphUserService>();
         
         services.AddScoped<ITramsHttpClient, TramsHttpClient>();
+        services.AddScoped<IAcademisationHttpClient, AcademisationHttpClient>();
         services.AddSingleton<PerformanceDataChannel>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();

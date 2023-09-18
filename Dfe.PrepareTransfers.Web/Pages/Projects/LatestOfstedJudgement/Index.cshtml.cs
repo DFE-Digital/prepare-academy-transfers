@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.LatestOfstedJudgement
             var model = await _projectsRepository.GetByUrn(Urn);
             var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
             academy.LatestOfstedReportAdditionalInformation = AdditionalInformationViewModel?.AdditionalInformation;
-            await _projectsRepository.Update(model.Result);
+            await _projectsRepository.UpdateAcademy(model.Result.Urn, academy);
 
             if (ReturnToPreview)
             {

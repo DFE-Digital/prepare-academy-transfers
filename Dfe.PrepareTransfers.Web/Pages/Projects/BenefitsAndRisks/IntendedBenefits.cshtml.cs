@@ -74,7 +74,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
                 new List<TransferBenefits.IntendedBenefit>(IntendedBenefitsViewModel.SelectedIntendedBenefits);
             projectResult.Benefits.OtherIntendedBenefit = IntendedBenefitsViewModel.OtherBenefit;
 
-            await _projects.Update(projectResult);
+            await _projects.UpdateBenefits(projectResult);
 
             if (ReturnToPreview)
             {

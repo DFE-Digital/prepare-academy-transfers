@@ -34,7 +34,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Pages.Projects.LegalRequire
             var project = GetProject(p => p.LegalRequirements.DiocesanConsent = ThreeOptions.No.ToDescription());
             project.LegalRequirements.DiocesanConsent = ThreeOptions.No.ToDescription();
 
-            _factory.AddAnyPatch($"/academyTransferProject/{project.ProjectUrn}", project);
+            _factory.AddAnyPut($"/transfer-project/{project.ProjectUrn}/set-legal-requirements", project);
 
             await OpenUrlAsync($"/project/{project.ProjectUrn}/legalrequirements/diocesan-consent");
 

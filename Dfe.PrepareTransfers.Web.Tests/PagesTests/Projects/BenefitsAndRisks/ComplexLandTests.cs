@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.BenefitsAndRisks
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                    r.Update(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer ?? string.Empty)
+                    r.UpdateBenefits(It.Is<Project>(project => project.Benefits.OtherFactors.ContainsValue(_subject.Answer ?? string.Empty)
                                                        && project.Benefits.OtherFactors.ContainsKey(TransferBenefits
                                                            .OtherFactor.ComplexLandAndBuildingIssues)))
                 );

@@ -47,7 +47,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.BenefitsAndRisks
             projectResult.Benefits.OtherFactors = OtherFactorsViewModel.OtherFactorsVm
                 .Where(of => of.Checked)
                 .ToDictionary(d => d.OtherFactor, x => x.Description);
-            await _projects.Update(projectResult);
+            await _projects.UpdateBenefits(projectResult);
 
             var available = new List<TransferBenefits.OtherFactor>
 
