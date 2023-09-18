@@ -33,7 +33,7 @@ namespace Dfe.PrepareTransfers.Web.Services.DocumentGenerators
 
                         build.AddTable(new List<TextElement[]>
                         {
-                         new[] { new TextElement { Value = "Risks" , Bold = true}, new TextElement { Value = "No Risks Identified" } }
+                         new[] { new TextElement { Value = "Risks" , Bold = true}, new TextElement { Value = "No risks Identified" } }
                         });
                  }
 
