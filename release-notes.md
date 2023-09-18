@@ -2,6 +2,7 @@
 * User Story 137527 : Back button labelling updated for consistency
 * Fixed bug 134921 : background services not crashing application when exceptions are thrown now
 * User Story 133832 : Added Application insights 
+* Move over to use the new academisation API end-points
 
 ---
 
