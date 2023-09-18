@@ -139,58 +139,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                         Urn = $"Mapped {input.ProjectUrn}"
                     });
             }
-
-            //[Fact]
-            //public async void GivenProject_MapsToProjectUpdate()
-            //{
-            //    await _subject.Update(_projectToUpdate);
-
-            //    _internalToUpdateMapper.Verify(m => m.Map(_projectToUpdate), Times.Once);
-            //}
-
-            //[Fact]
-            //public async void GivenProjectGetsMapped_PostsMappedProjectToTheApi()
-            //{
-            //    await _subject.Update(_projectToUpdate);
-            //    var expectedPostedContent = JsonConvert.SerializeObject(_mappedProject);
-
-            //    _httpClient.Verify(c => c.PatchAsync(
-            //        "academyTransferProject/12345",
-            //        It.Is<StringContent>(content => AssertStringContentMatches(expectedPostedContent, content).Result)
-            //    ), Times.Once);
-            //}
-
-            //[Fact]
-            //public async void GivenProjectCreated_MapsCreatedProject()
-            //{
-            //    await _subject.Update(_projectToUpdate);
-
-            //    _externalToInternalMapper.Verify(m =>
-            //        m.Map(It.Is<TramsProject>(project => project.ProjectUrn == _updatedProject.ProjectUrn)));
-            //}
-
-            //[Fact]
-            //public async void GivenProjectCreated_ReturnsMappedCreatedProject()
-            //{
-            //    var response = await _subject.Update(_projectToUpdate);
-
-            //    Assert.Equal($"Mapped {_updatedProject.ProjectUrn}", response.Result.Urn);
-            //}
-
-            //    [Theory]
-            //    [InlineData(HttpStatusCode.NotFound)]
-            //    [InlineData(HttpStatusCode.InternalServerError)]
-            //    public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
-            //    {
-            //        _httpClient.Setup(c => c.PatchAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
-            //            new HttpResponseMessage
-            //            {
-            //                StatusCode = httpStatusCode
-            //            });
-
-            //        var apiException = await Assert.ThrowsAsync<TramsApiException>(() => _subject.Update(_projectToUpdate));
-            //        Assert.Equal(httpStatusCode, apiException.StatusCode);
-            //    }
         }
 
         public class CreateProjectTests : TramsProjectsRepositoryTests
