@@ -71,14 +71,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 return Page();
             }
 
-            if (TargetDateViewModel.TargetDate.UnknownDate)
-            {
-                projectResult.Dates.Target = null;
-            }
-            else
-            {
-                projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsUniversalDateTimeString();
-            }
+            projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsString();
 
             projectResult.Dates.HasTargetDateForTransfer = !TargetDateViewModel.TargetDate.UnknownDate;
 

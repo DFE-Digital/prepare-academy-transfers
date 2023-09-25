@@ -67,14 +67,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 return Page();
             }
 
-            if (AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate)
-            {
-                projectResult.Dates.Htb = null;
-            }
-            else
-            {
-                projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsUniversalDateTimeString();
-            }
+            projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
 
             await _projectsRepository.UpdateDates(projectResult);
