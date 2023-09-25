@@ -128,7 +128,11 @@ public class DateValidator : AbstractValidator<DateViewModel>
 
    private static bool DateIsEmpty(DateInputViewModel dateVm, bool ignoreDay)
    {
-      return ignoreDay is false && string.IsNullOrWhiteSpace(dateVm.Day) &&
+      return
+
+            (ignoreDay || ignoreDay is false && string.IsNullOrWhiteSpace(dateVm.Day))
+            
+            &&
              string.IsNullOrWhiteSpace(dateVm.Month) &&
              string.IsNullOrWhiteSpace(dateVm.Year);
    }

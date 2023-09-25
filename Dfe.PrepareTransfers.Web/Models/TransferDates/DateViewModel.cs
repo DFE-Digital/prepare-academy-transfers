@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Models.Forms;
@@ -29,7 +30,17 @@ public class DateViewModel
       return $"{day}/{month}/{year}";
    }
 
-   public static DateInputViewModel SplitDateIntoDayMonthYear(string dateAsString)
+    public string DateInputAsUniversalDateTimeString()
+    {
+        if (string.IsNullOrWhiteSpace(Date?.Day) && string.IsNullOrWhiteSpace(Date?.Month) && string.IsNullOrWhiteSpace(Date?.Year))
+        {
+            return null;
+        }
+
+        return new DateTime(Convert.ToInt16(Date.Year), Convert.ToInt16(Date.Month), Convert.ToInt16(Date.Day)).ToString("u");
+    }
+
+    public static DateInputViewModel SplitDateIntoDayMonthYear(string dateAsString)
    {
       List<string> splitDate = DatesHelper.DateStringToDayMonthYear(dateAsString);
       return new DateInputViewModel { Day = splitDate[0], Month = splitDate[1], Year = splitDate[2] };
