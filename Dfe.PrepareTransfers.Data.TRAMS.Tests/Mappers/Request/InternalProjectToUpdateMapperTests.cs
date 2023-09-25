@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
@@ -132,8 +133,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
             {
                 Dates = new TransferDates
                 {
-                    Htb = "Date1",
-                    Target = "Date2",
+                    Htb = "10/10/2023",
+                    Target = "10/10/2024",
                     HasHtbDate = null,
                     HasTargetDateForTransfer = null,
                 },
@@ -142,8 +143,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
             var result = subject.Map(toMap);
             Assert.Null(result.Dates.HasHtbDate);
             Assert.Null(result.Dates.HasTargetDateForTransfer);
-            Assert.Equal(result.Dates.HtbDate, toMap.Dates.Htb);
-            Assert.Equal(result.Dates.TargetDateForTransfer, toMap.Dates.Target);
+            Assert.Equal(DateTime.Parse(toMap.Dates.Htb).ToString("u"), result.Dates.HtbDate);
+            Assert.Equal(DateTime.Parse(toMap.Dates.Target).ToString("u"), result.Dates.TargetDateForTransfer);
         }
 
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
@@ -169,8 +170,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
 
         private static void AssertDatesAreCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal(toMap.Dates.Htb, result.Dates.HtbDate);
-            Assert.Equal(toMap.Dates.Target, result.Dates.TargetDateForTransfer);
+            Assert.Equal(DateTime.Parse(toMap.Dates.Htb).ToString("u"), result.Dates.HtbDate);
+            Assert.Equal(DateTime.Parse(toMap.Dates.Target).ToString("u"), result.Dates.TargetDateForTransfer);
             Assert.True(result.Dates.HasHtbDate);
             Assert.True(result.Dates.HasTargetDateForTransfer);
         }
