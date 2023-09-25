@@ -94,7 +94,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.TransferDates
 
                 ProjectRepository.Verify(r =>
                         r.UpdateDates(It.Is<Data.Models.Project>(project =>
-                            project.Dates.Htb == _subject.AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString()
+                            project.Dates.Htb == _subject.AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsUniversalDateTimeString()
                             && project.Dates.HasHtbDate ==
                             !_subject.AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate)),
                     Times.Once);

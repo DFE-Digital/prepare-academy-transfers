@@ -6,6 +6,8 @@ using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Validators.TransferDates;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Dfe.Academisation.ExtensionMethods;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 {
@@ -65,17 +67,24 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 return Page();
             }
 
-            projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
+            if (AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate)
+            {
+                projectResult.Dates.Htb = null;
+            }
+            else
+            {
+                projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsUniversalDateTimeString();
+            }
             projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
 
             await _projectsRepository.UpdateDates(projectResult);
 
             if (ReturnToPreview)
             {
-                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new {Urn});
+                return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
-            return RedirectToPage("/Projects/TransferDates/Index", new {Urn});
+            return RedirectToPage("/Projects/TransferDates/Index", new { Urn });
         }
     }
 }

@@ -6,6 +6,7 @@ using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Validators.TransferDates;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 {
@@ -69,8 +70,16 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 validationResult.AddToModelState(ModelState, nameof(TargetDateViewModel));
                 return Page();
             }
-            
-            projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsString();
+
+            if (TargetDateViewModel.TargetDate.UnknownDate)
+            {
+                projectResult.Dates.Target = null;
+            }
+            else
+            {
+                projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsUniversalDateTimeString();
+            }
+
             projectResult.Dates.HasTargetDateForTransfer = !TargetDateViewModel.TargetDate.UnknownDate;
 
             await _projectsRepository.UpdateDates(projectResult);
