@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
@@ -143,8 +144,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
             var result = subject.Map(toMap);
             Assert.Null(result.Dates.HasHtbDate);
             Assert.Null(result.Dates.HasTargetDateForTransfer);
-            Assert.Equal(DateTime.Parse(toMap.Dates.Htb).ToString("u"), result.Dates.HtbDate);
-            Assert.Equal(DateTime.Parse(toMap.Dates.Target).ToString("u"), result.Dates.TargetDateForTransfer);
+            Assert.Equal(DateTime.ParseExact(toMap.Dates.Htb, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u"), result.Dates.HtbDate);
+            Assert.Equal(DateTime.ParseExact(toMap.Dates.Target, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u"), result.Dates.TargetDateForTransfer);
         }
 
         private static void AssertGeneralInformationIsCorrect(Project toMap, TramsProjectUpdate result)
@@ -170,8 +171,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
 
         private static void AssertDatesAreCorrect(Project toMap, TramsProjectUpdate result)
         {
-            Assert.Equal(DateTime.Parse(toMap.Dates.Htb).ToString("u"), result.Dates.HtbDate);
-            Assert.Equal(DateTime.Parse(toMap.Dates.Target).ToString("u"), result.Dates.TargetDateForTransfer);
+            Assert.Equal(DateTime.ParseExact(toMap.Dates.Htb, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u"), result.Dates.HtbDate);
+            Assert.Equal(DateTime.ParseExact(toMap.Dates.Target, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u"), result.Dates.TargetDateForTransfer);
             Assert.True(result.Dates.HasHtbDate);
             Assert.True(result.Dates.HasTargetDateForTransfer);
         }

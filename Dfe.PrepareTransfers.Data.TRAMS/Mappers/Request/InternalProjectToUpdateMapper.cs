@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
@@ -75,9 +76,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
         {
             return new AcademyTransferProjectDates
             {
-                HtbDate = input.Dates.HasHtbDate != false && input.Dates.Htb != null ? DateTime.Parse(input.Dates.Htb).ToString("u") : null,
+                HtbDate = input.Dates.HasHtbDate != false && input.Dates.Htb != null ? DateTime.ParseExact(input.Dates.Htb, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u") : null,
                 HasHtbDate = input.Dates.HasHtbDate,
-                TargetDateForTransfer = input.Dates.HasTargetDateForTransfer != false && input.Dates.Target != null ? DateTime.Parse(input.Dates.Target).ToString("u") : null,
+                TargetDateForTransfer = input.Dates.HasTargetDateForTransfer != false && input.Dates.Target != null ? DateTime.ParseExact(input.Dates.Target, "dd/MM/yyyy", CultureInfo.InvariantCulture).ToString("u") : null,
                 HasTargetDateForTransfer = input.Dates.HasTargetDateForTransfer
             };
         }
