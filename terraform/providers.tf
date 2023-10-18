@@ -3,4 +3,6 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
-provider "azapi" {}
+provider "statuscake" {
+  api_token = var.statuscake_api_token
+}
