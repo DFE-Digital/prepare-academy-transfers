@@ -218,3 +218,34 @@ variable "cdn_frontdoor_origin_host_header_override" {
   default     = ""
   nullable    = true
 }
+
+variable "statuscake_api_token" {
+  description = "API token for StatusCake"
+  type        = string
+  sensitive   = true
+  default     = "00000000000000000000000000000"
+}
+
+variable "statuscake_contact_group_name" {
+  description = "Name of the contact group in StatusCake"
+  type        = string
+  default     = ""
+}
+
+variable "statuscake_contact_group_integrations" {
+  description = "List of Integration IDs to connect to your Contact Group"
+  type        = list(string)
+  default     = []
+}
+
+variable "statuscake_monitored_resource_addresses" {
+  description = "The URLs to perform TLS checks on"
+  type        = list(string)
+  default     = []
+}
+
+variable "statuscake_contact_group_email_addresses" {
+  description = "List of email address that should receive notifications from StatusCake"
+  type        = list(string)
+  default     = []
+}
