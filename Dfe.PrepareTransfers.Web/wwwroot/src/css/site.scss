@@ -7,7 +7,34 @@ $govuk-new-link-styles: true;
 @import "application-card";
 @import "attachment";
 @import "cookie-banner";
+@import "node_modules/dfe-frontend-alpha/packages/dfefrontend";
 
+body,
+button,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+span,
+label,
+div,
+table,
+th,
+td,
+blockquote,
+li,
+dt,
+dd,
+tr,
+caption,
+.govuk-label,
+details {
+	font-family: BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif !important;
+}
 .input-validation-error {
 	border-color: #d4351c !important;
 }
