@@ -44,7 +44,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             };
 
             _trusts.Setup(r => r.GetByUkprn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Trust> {Result = _foundTrust});
+                .ReturnsAsync(_foundTrust);
 
             _foundAcademy = new Academy
             {

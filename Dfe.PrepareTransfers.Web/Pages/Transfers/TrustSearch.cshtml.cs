@@ -12,7 +12,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 {
     public class TrustSearchModel : TransfersPageModel, ISetTrusts
     {
-        public List<TrustSearchResult> Trusts { get; private set; }
+        public List<Trust> Trusts { get; private set; }
 
         [BindProperty(Name = "query", SupportsGet = true)]
         public string SearchQuery { get; set; } = "";
@@ -36,7 +36,9 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             }
 
             var result = await TrustsRepository.SearchTrusts(SearchQuery);
-            Trusts = result.Result.Where(trust => trust.Academies.Any()).ToList();
+            Trusts = result;
+            //ToDo: get establishments by ukprn
+            //Trusts = result.Where(trust => trust.Academies.Any()).ToList();
 
             var searchValidator = new OutgoingTrustSearchValidator();
             var searchValidationResult = await searchValidator.ValidateAsync(this);
@@ -63,7 +65,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             return RedirectToPage("/Transfers/TrustName", new { query = SearchQuery });
         }
 
-        void ISetTrusts.SetTrusts(IEnumerable<TrustSearchResult> trusts)
+        void ISetTrusts.SetTrusts(IEnumerable<Trust> trusts)
         {
            Trusts = trusts.ToList();
         }

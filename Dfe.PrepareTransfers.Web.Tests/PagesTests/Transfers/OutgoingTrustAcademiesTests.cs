@@ -1,4 +1,5 @@
-﻿using Dfe.PrepareTransfers.Data;
+﻿using Dfe.Academies.Contracts.V4.Trusts;
+using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Pages.Transfers;
 using Microsoft.AspNetCore.Http;
@@ -36,16 +37,15 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
 
             _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = new Trust
+                new Trust
                     {
-                        Academies = new List<Academy>
-                        {
-                            new Academy {Name = AcademyName},
-                            new Academy {Name = AcademyNameTwo}
-                        }
-                    }
+                        //ToDo: academies by ukprn
+                        //Academies = new List<Academy>
+                        //{
+                        //    new Academy {Name = AcademyName},
+                        //    new Academy {Name = AcademyNameTwo}
+                        //}
+                    
                 });
 
             var httpContext = new DefaultHttpContext();

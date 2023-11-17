@@ -39,7 +39,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
-            Academies = trustRepoResult.Result.Academies;
+            //Todo: get academies by trust ukprn
+            //Academies = trustRepoResult.Result.Academies;
 
             return Page();
         }

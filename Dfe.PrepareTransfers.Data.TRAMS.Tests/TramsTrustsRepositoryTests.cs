@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.Dfe.PrepareTransfers.Helpers;
@@ -13,16 +15,14 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
     public class TramsTrustsRepositoryTests
     {
         private readonly Mock<ITramsHttpClient> _client;
-        private readonly Mock<IMapper<TramsTrustSearchResult, TrustSearchResult>> _trustSearchResultsMapper;
-        private readonly Mock<IMapper<TramsTrust, Trust>> _trustMapper;
+        private readonly Mock<IMapper<TrustDto, Trust>> _trustMapper;
         private readonly TramsTrustsRepository _subject;
 
         public TramsTrustsRepositoryTests()
         {
             _client = new Mock<ITramsHttpClient>();
-            _trustSearchResultsMapper = new Mock<IMapper<TramsTrustSearchResult, TrustSearchResult>>();
-            _trustMapper = new Mock<IMapper<TramsTrust, Trust>>();
-            _subject = new TramsTrustsRepository(_client.Object, _trustSearchResultsMapper.Object, _trustMapper.Object);
+            _trustMapper = new Mock<IMapper<TrustDto, Trust>>();
+            _subject = new TramsTrustsRepository(_client.Object, _trustMapper.Object);
         }
 
         public class SearchTrustsTests : TramsTrustsRepositoryTests
@@ -51,17 +51,19 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                         JsonConvert.SerializeObject(TrustSearchResults.GetTrustSearchResults()))
                 });
 
-                _trustSearchResultsMapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>()))
-                    .Returns<TramsTrustSearchResult>(result =>
-                        new TrustSearchResult
+                _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
+                    .Returns<Trust>(
+                    result =>
+                        new Trust
                         {
                             Ukprn = $"Mapped {result.Ukprn}",
-                            TrustName = $"Mapped {result.GroupName}"
-                        });
+                            Name = $"Mapped {result.Name}"
+                        } 
+                        );
 
                 var response = await _subject.SearchTrusts();
 
-                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
+                Assert.Equal("Mapped 1", response[0].Ukprn);
             }
 
             [Fact]
@@ -69,18 +71,18 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             {
                 HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
 
-                _trustSearchResultsMapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>()))
-                    .Returns<TramsTrustSearchResult>(result =>
-                        new TrustSearchResult
+                _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
+                    .Returns<Trust>(result =>
+                        new Trust
                         {
                             Ukprn = $"Mapped {result.Ukprn}",
-                            TrustName = $"Mapped {result.GroupName}"
+                            Name = $"Mapped {result.Name}"
                         });
 
                 var response = await _subject.SearchTrusts();
 
-                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
-                Assert.Equal("Mapped 2", response.Result[1].Ukprn);
+                Assert.Equal("Mapped 1", response[0].Ukprn);
+                Assert.Equal("Mapped 2", response[1].Ukprn);
             }
             
             [Fact]
@@ -88,18 +90,18 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             {
                 HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
 
-                _trustSearchResultsMapper.Setup(m => m.Map(It.IsAny<TramsTrustSearchResult>()))
-                    .Returns<TramsTrustSearchResult>(result =>
-                        new TrustSearchResult
-                        {
-                            Ukprn = $"Mapped {result.Ukprn}",
-                            TrustName = $"Mapped {result.GroupName}"
-                        });
+                _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
+               .Returns<Trust>(result =>
+                   new Trust
+                   {
+                       Ukprn = $"Mapped {result.Ukprn}",
+                       Name = $"Mapped {result.Name}"
+                   });
 
                 var response = await _subject.SearchTrusts("query", "2");
 
-                Assert.Equal("Mapped 1", response.Result[0].Ukprn);
-                Assert.Single(response.Result);
+                Assert.Equal("Mapped 1", response[0].Ukprn);
+                Assert.Single(response);
             }
             
             [Theory]
@@ -115,7 +117,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
         public class GetTrustByUkprnTests : TramsTrustsRepositoryTests
         {
-            private readonly TramsTrust _foundTrust;
+            private readonly TrustDto _foundTrust;
 
             public GetTrustByUkprnTests()
             {
@@ -125,10 +127,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     Content = new StringContent(JsonConvert.SerializeObject(_foundTrust))
                 });
 
-                _trustMapper.Setup(m => m.Map(It.IsAny<TramsTrust>())).Returns<TramsTrust>((input) => new Trust()
+                _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>())).Returns<TrustDto>((input) => new Trust()
                 {
-                    Name = $"Mapped {input.GiasData.GroupName}",
-                    Ukprn = $"Mapped {input.GiasData.Ukprn}"
+                    Name = $"Mapped {input.Name}",
+                    Ukprn = $"Mapped {input.Ukprn}"
                 });
             }
 
@@ -146,7 +148,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 await _subject.GetByUkprn("12345");
 
                 _trustMapper.Verify(m =>
-                    m.Map(It.Is<TramsTrust>(trust => trust.GiasData.Ukprn == _foundTrust.GiasData.Ukprn)), Times.Once);
+                    m.Map(It.Is<TrustDto>(trust => trust.Ukprn == _foundTrust.Ukprn)), Times.Once);
             }
 
             [Fact]
@@ -154,7 +156,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             {
                 var response = await _subject.GetByUkprn("12345");
 
-                Assert.Equal($"Mapped {_foundTrust.GiasData.Ukprn}", response.Result.Ukprn);
+                Assert.Equal($"Mapped {_foundTrust.Ukprn}", response.Ukprn);
             }
             
             [Theory]
@@ -162,7 +164,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [InlineData(HttpStatusCode.InternalServerError)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                HttpClientTestHelpers.SetupGet<TramsTrust>(_client, null, httpStatusCode);
+                HttpClientTestHelpers.SetupGet<TrustDto>(_client, null, httpStatusCode);
                 
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetByUkprn("12345"));
             }

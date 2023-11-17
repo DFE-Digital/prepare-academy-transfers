@@ -37,7 +37,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             }
 
             var result = await _trustsRepository.GetByUkprn(TrustId);
-            Trust = result.Result;
+            Trust = result;
 
             return Page();
         }

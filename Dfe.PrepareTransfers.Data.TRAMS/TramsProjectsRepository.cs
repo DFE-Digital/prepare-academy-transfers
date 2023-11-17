@@ -80,22 +80,22 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
                 #region API Interim
 
-                RepositoryResult<Trust> outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
+                var outgoingTrust = await _trusts.GetByUkprn(project.OutgoingTrustUkprn);
                 project.OutgoingTrust = new TrustSummary
                 {
                     Ukprn = project.OutgoingTrustUkprn,
-                    GroupName = outgoingTrust?.Result?.Name
+                    GroupName = outgoingTrust?.Name
                 };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                    {
-                       RepositoryResult<Trust> incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+                       var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
                        RepositoryResult<Academy> outgoingAcademy =
                       await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
                        transferring.IncomingTrust = new TrustSummary
                        {
-                           GroupName = incomingTrust.Result.Name,
-                           GroupId = incomingTrust.Result.GiasGroupId,
+                           GroupName = incomingTrust.Name,
+                           GroupId = incomingTrust.GiasGroupId,
                            Ukprn = transferring.IncomingTrustUkprn
                        };
                        transferring.OutgoingAcademy = new AcademySummary

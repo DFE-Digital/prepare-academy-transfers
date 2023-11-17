@@ -40,7 +40,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
 
             var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
-            OutgoingTrust = outgoingTrustResponse.Result;
+            OutgoingTrust = outgoingTrustResponse;
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
@@ -48,11 +48,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
 
-                IncomingTrust = incomingTrustResponse.Result;
+                IncomingTrust = incomingTrustResponse;
             }
 
-            OutgoingAcademies = outgoingTrustResponse.Result.Academies
-                .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
+            //ToDo: fetch academies by trust ukprn
+            //OutgoingAcademies = outgoingTrustResponse.Result.Academies
+            //    .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
 
             return Page();
         }

@@ -71,10 +71,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _outgoingTrust = new Trust
             {
                 Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
-                Academies = new List<Academy>
-                    {
-                        _academyOne, _academyTwo, _academyThree
-                    }
+                //ToDo: academies by ukprn 
+                //Academies = new List<Academy>
+                //    {
+                //        _academyOne, _academyTwo, _academyThree
+                //    }
             };
 
             var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
@@ -88,16 +89,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
             _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = _outgoingTrust
-                });
+                 _outgoingTrust
+                );
 
             _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = _incomingTrust
-                });
+                _incomingTrust
+                );
         }
 
         public class OnGetAsync : CheckYourAnswersTests
