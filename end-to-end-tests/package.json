@@ -11,6 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "~12.1.0",
+    "cypress-axe": "^1.2.0",
     "cypress-grep": "^2.6.1",
     "cypress-localstorage-commands": "^1.6.1",
     "cypress-sql-server": "^1.0.0",
