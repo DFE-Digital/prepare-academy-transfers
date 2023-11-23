@@ -38,18 +38,22 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
 
             _session.Setup(s => s.TryGetValue("OutgoingTrustId", out trustIdByteArray)).Returns(true);
 
+            var trustUkprn = "1234";
+
             _trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
                 new Trust
-                    {
-                        //ToDo: academies by ukprn
-                        //Academies = new List<Academy>
-                        //{
-                        //    new Academy {Name = AcademyName},
-                        //    new Academy {Name = AcademyNameTwo}
-                        //}
-                    
-                });
+                {
+                    Ukprn = trustUkprn
 
+                });
+            _academyRepository.Setup(r => r.GetAcademiesByTrustUkprn(trustUkprn)).ReturnsAsync(
+                new List<Academy>
+                {
+
+                        new Academy {Name = AcademyName},
+                        new Academy {Name = AcademyNameTwo}
+
+                });
             var httpContext = new DefaultHttpContext();
             var sessionFeature = new SessionFeature { Session = _session.Object };
             httpContext.Features.Set<ISessionFeature>(sessionFeature);

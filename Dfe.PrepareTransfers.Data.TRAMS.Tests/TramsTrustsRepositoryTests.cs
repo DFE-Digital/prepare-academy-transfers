@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Dfe.Academies.Contracts.V4.Trusts;
@@ -38,7 +37,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
                 await _subject.SearchTrusts("Cats");
 
-                _client.Verify(c => c.GetAsync("trusts?groupName=Cats&ukprn=Cats&companiesHouseNumber=Cats"),
+                _client.Verify(c => c.GetAsync("v4/trusts?groupName=Cats&ukprn=Cats&companiesHouseNumber=Cats"),
                     Times.Once);
             }
 
@@ -52,7 +51,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 });
 
                 _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
-                    .Returns<Trust>(
+                    .Returns<TrustDto>(
                     result =>
                         new Trust
                         {
@@ -72,7 +71,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
 
                 _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
-                    .Returns<Trust>(result =>
+                    .Returns<TrustDto>(result =>
                         new Trust
                         {
                             Ukprn = $"Mapped {result.Ukprn}",
@@ -91,7 +90,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 HttpClientTestHelpers.SetupGet(_client, TrustSearchResults.GetTrustSearchResults(2));
 
                 _trustMapper.Setup(m => m.Map(It.IsAny<TrustDto>()))
-               .Returns<Trust>(result =>
+               .Returns<TrustDto>(result =>
                    new Trust
                    {
                        Ukprn = $"Mapped {result.Ukprn}",
@@ -139,7 +138,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             {
                 await _subject.GetByUkprn("12345");
 
-                _client.Verify(c => c.GetAsync("trust/12345"), Times.Once);
+                _client.Verify(c => c.GetAsync("v4/trust/12345"), Times.Once);
             }
 
             [Fact]

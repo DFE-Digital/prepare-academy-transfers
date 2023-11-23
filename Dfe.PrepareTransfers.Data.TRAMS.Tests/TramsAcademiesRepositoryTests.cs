@@ -41,20 +41,18 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
                 await _subject.GetAcademyByUkprn("12345");
 
-                _client.Verify(c => c.GetAsync("establishment/12345"), Times.Once);
+                _client.Verify(c => c.GetAsync("v4/establishment/12345"), Times.Once);
             }
 
             [Fact]
             public async void GivenUkprn_GetsAcademyFromCache()
             {
                 var cacheKey = "GetAcademyByUkprn_12345";
-                var academy = new RepositoryResult<Academy>
-                {
-                    Result = new Academy
+                var academy = new Academy
                     {
                         Urn = "toJson"
                     }
-                };
+                ;
                 await _distributedCache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(academy));
 
                 var result = await _subject.GetAcademyByUkprn("12345");
