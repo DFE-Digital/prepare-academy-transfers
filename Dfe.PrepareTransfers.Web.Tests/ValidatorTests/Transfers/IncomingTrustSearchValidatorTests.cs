@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         {
             var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object);
 
-            ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<TrustSearchResult>());
+            ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<Trust>());
 
             TestValidationResult<SearchIncomingTrustModel> result = await _validator.TestValidateAsync(trustSearch);
 
@@ -41,10 +41,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         {
             var trustSearch = new SearchIncomingTrustModel(_trustsRepository.Object);
 
-            ((ISetTrusts)trustSearch).SetTrusts(new List<TrustSearchResult>
+            ((ISetTrusts)trustSearch).SetTrusts(new List<Trust>
             {
-               new() { TrustName = "Trust One" },
-               new() { TrustName = "Trust Two" },
+               new() { Name = "Trust One" },
+               new() { Name = "Trust Two" },
             });
 
             var result = await _validator.TestValidateAsync(trustSearch);

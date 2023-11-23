@@ -44,14 +44,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         public async Task GivenErrorMessage_AddsErrorToModelState()
         {
             _trustsRepository.Setup(r => r.SearchTrusts("test", ""))
-                .ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Result = new List<TrustSearchResult>
-                        {
-                            new TrustSearchResult { Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
-                        }
-                    });
+                .ReturnsAsync( new List<Trust>() );
 
             _subject.TempData["ErrorMessage"] = "This is an error message";
             _subject.SearchQuery = "test";
@@ -76,8 +69,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         public async void GivenSearchReturnsNoTrusts_RedirectToTrustNamePageWithAnError()
         {
             _trustsRepository.Setup(r => r.SearchTrusts("Meow", ""))
-                .ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>> { Result = new List<TrustSearchResult>() });
+                .ReturnsAsync(new List<Trust>());
             _subject.SearchQuery = "Meow";
 
             var response = await _subject.OnGetAsync();
@@ -91,16 +83,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         public async void GivenSearchReturnsTrustWithNoAcademies_RedirectToTrustNamePageWithAnError()
         {
             _trustsRepository.Setup(r => r.SearchTrusts("Meow", ""))
-                .ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Result = new List<TrustSearchResult> { new TrustSearchResult
+                .ReturnsAsync(new List<Trust>() { new Trust
                         {
-                            TrustName = "Meow",
-                            Ukprn = "test",
-                            Academies = new List<TrustSearchAcademy>()
-                        } }
-                    });
+                            Name = "Meow",
+                            Ukprn = "test"
+                        } });
             _subject.SearchQuery = "Meow";
 
             var response = await _subject.OnGetAsync();
@@ -114,17 +101,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         public async Task GivenSearchingByString_SearchesForTrustsAndAssignsToModel()
         {
             const string searchQuery = "Trust name";
-            var trusts = new List<TrustSearchResult>
+            var trusts = new List<Trust>
             {
-                new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
-                new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
+                new Trust { Ukprn = "1234" },
+                new Trust { Ukprn = "4321" }
             };
-            _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, "")).ReturnsAsync(
-                new RepositoryResult<List<TrustSearchResult>>
-                {
-                    Result = trusts
-                }
-            );
+            _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, "")).ReturnsAsync(trusts);
             _subject.SearchQuery = searchQuery;
 
             var result = await _subject.OnGetAsync();

@@ -27,6 +27,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                     address.Town,
                     $"{address.County}, {address.Postcode}"
                 },
+                EstablishmentType = "Not available", // Not sure why this even here, surely thsi should be the trust type
                 CompaniesHouseNumber = input.CompaniesHouseNumber,
                 GiasGroupId = input.ReferenceNumber,
                 Name = input.Name,

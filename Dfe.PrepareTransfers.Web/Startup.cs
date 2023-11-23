@@ -37,6 +37,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Dfe.Academies.Contracts.V4.Trusts;
+using Dfe.Academies.Contracts.V4.Establishments;
 
 namespace Dfe.PrepareTransfers.Web;
 
@@ -245,6 +246,7 @@ public class Startup
         services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
         services.AddTransient<IMapper<TrustDto, Trust>, TramsTrustMapper>();
         services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
+        services.AddTransient<IMapper<EstablishmentDto, Academy>, AcademiesEstablishmentMapper>();
         services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
         services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
         services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();

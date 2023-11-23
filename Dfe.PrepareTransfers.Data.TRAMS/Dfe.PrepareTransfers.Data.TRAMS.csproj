@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.4" />
+      <PackageReference Include="Dfe.Academies.Contracts" Version="1.0.5" />
       <PackageReference Include="Dfe.Academisation.CorrelationIdMiddleware" Version="2.0.2" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dfe.Academies.Contracts.V4;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
@@ -15,7 +16,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         private readonly IMapper<TrustDto, Trust> _trustMapper;
 
         public TramsTrustsRepository(ITramsHttpClient httpClient,
-            IMapper<TrustDto, Trust> trustMapper)
+            IMapper<TrustDto, Trust> trustMapper
+            )
         {
             _httpClient = httpClient;
             _trustMapper = trustMapper;

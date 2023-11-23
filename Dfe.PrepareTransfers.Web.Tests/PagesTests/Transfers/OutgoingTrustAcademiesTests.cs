@@ -25,11 +25,13 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
 
         private readonly Mock<ISession> _session;
         private readonly Mock<ITrusts> _trustsRepository;
+        private readonly Mock<IAcademies> _academyRepository;
 
         public OutgoingTrustAcademiesTests()
         {
             _session = new Mock<ISession>();
             _trustsRepository = new Mock<ITrusts>();
+            _academyRepository = new Mock<IAcademies>();
 
             const string trustId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
             var trustIdByteArray = Encoding.UTF8.GetBytes(trustId);
@@ -68,7 +70,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
 
             public OnGetAsync()
             {
-                _subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                _subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
                 {
                     PageContext = pageContext
                 };
@@ -113,7 +115,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             [Fact]
             public async void WhenSelectedAcademyIdsIsNull_UpdatesTheModelStateAndReturnPageResult()
             {
-                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
                 {
                     SelectedAcademyIds = null,
                     PageContext = pageContext
@@ -129,7 +131,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             public async void GivenAcademyId_StoresItInTheSessionAndRedirectsToIncomingTrust()
             {
                 const string academyId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
                 {
                     SelectedAcademyIds = new List<string> { academyId },
                     PageContext = pageContext
@@ -151,7 +153,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             public async void GivenChangeLink_StoresItInTheSessionAndRedirectsToCheckYourAnswers()
             {
                 const string academyId = "9a7be920-eaa0-e911-a83f-000d3a3852af";
-                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+                var subject = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
                 {
                     SelectedAcademyIds = new List<string> { academyId },
                     PageContext = pageContext

@@ -89,7 +89,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                    {
                        var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                       RepositoryResult<Academy> outgoingAcademy =
+                       Academy outgoingAcademy =
                       await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
                        transferring.IncomingTrust = new TrustSummary
@@ -100,9 +100,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                        };
                        transferring.OutgoingAcademy = new AcademySummary
                        {
-                           Name = outgoingAcademy.Result.Name,
+                           Name = outgoingAcademy.Name,
                            Ukprn = transferring.OutgoingAcademyUkprn,
-                           Urn = outgoingAcademy.Result.Urn
+                           Urn = outgoingAcademy.Urn
                        };
 
                        return transferring;
@@ -302,7 +302,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
                 createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
                    {
-                       RepositoryResult<Academy> outgoingAcademy =
+                       Academy outgoingAcademy =
                       await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
                        transferring.IncomingTrust = new TrustSummary
                        {
@@ -310,9 +310,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                        };
                        transferring.OutgoingAcademy = new AcademySummary
                        {
-                           Name = outgoingAcademy.Result.Name,
+                           Name = outgoingAcademy.Name,
                            Ukprn = transferring.OutgoingAcademyUkprn,
-                           Urn = outgoingAcademy.Result.Urn
+                           Urn = outgoingAcademy.Urn
                        };
 
                        return transferring;

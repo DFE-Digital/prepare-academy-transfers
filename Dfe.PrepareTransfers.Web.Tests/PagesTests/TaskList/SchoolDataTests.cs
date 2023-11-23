@@ -19,7 +19,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.TaskList
         public SchoolDataTests()
         {
             Academies.Setup(s => s.GetAcademyByUkprn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Academy> {Result = new Academy()});
+                .ReturnsAsync(new Academy());
             ProjectRepositoryEducationPerformance.Setup(S => S.GetByAcademyUrn(It.IsAny<string>()))
                 .ReturnsAsync(new RepositoryResult<EducationPerformance>
                 {

@@ -17,10 +17,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         public List<string> SelectedAcademyIds { get; set; }
 
         protected readonly ITrusts _trustsRepository;
+        private readonly IAcademies _academyRepository;
 
-        public OutgoingTrustAcademiesModel(ITrusts trustsRepository)
+        public OutgoingTrustAcademiesModel(ITrusts trustsRepository, IAcademies academyRepository)
         {
             _trustsRepository = trustsRepository;
+            _academyRepository = academyRepository;
         }
 
         public async Task<IActionResult> OnGetAsync(bool change = false)
@@ -39,8 +41,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 
             var trustRepoResult = await _trustsRepository.GetByUkprn(outgoingTrustId);
 
-            //Todo: get academies by trust ukprn
-            //Academies = trustRepoResult.Result.Academies;
+            Academies = await _academyRepository.GetAcademiesByTrustUkprn(trustRepoResult.Ukprn);
 
             return Page();
         }

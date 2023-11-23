@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http;
+using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures;
@@ -15,14 +16,14 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
     public class TramsAcademiesRepositoryTests
     {
         private readonly Mock<ITramsHttpClient> _client;
-        private readonly Mock<IMapper<TramsEstablishment, Academy>> _mapper;
+        private readonly Mock<IMapper<EstablishmentDto, Academy>> _mapper;
         private readonly TramsEstablishmentRepository _subject;
         private readonly IDistributedCache _distributedCache;
 
         public TramsAcademiesRepositoryTests()
         {
             _client = new Mock<ITramsHttpClient>();
-            _mapper = new Mock<IMapper<TramsEstablishment, Academy>>();
+            _mapper = new Mock<IMapper<EstablishmentDto, Academy>>();
             var opts = Options.Create(new MemoryDistributedCacheOptions());
             _distributedCache = new MemoryDistributedCache(opts);
             _subject = new TramsEstablishmentRepository(_client.Object, _mapper.Object, _distributedCache);
@@ -69,7 +70,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     Content = new StringContent(JsonConvert.SerializeObject(academy))
                 });
 
-                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input =>
+                _mapper.Setup(m => m.Map(It.IsAny<EstablishmentDto>())).Returns<EstablishmentDto>(input =>
                     new Academy
                     {
                         Ukprn = $"Mapped {academy.Ukprn}"
@@ -92,7 +93,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 await _subject.GetAcademyByUkprn("12345");
 
                 _mapper.Verify(
-                    m => m.Map(It.Is<TramsEstablishment>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
+                    m => m.Map(It.Is<EstablishmentDto>(mappedAcademy => mappedAcademy.Ukprn == academy.Ukprn)),
                     Times.Once);
             }
 
@@ -105,7 +106,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     Content = new StringContent(JsonConvert.SerializeObject(academy))
                 });
 
-                _mapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>())).Returns<TramsEstablishment>(input =>
+                _mapper.Setup(m => m.Map(It.IsAny<EstablishmentDto>())).Returns<EstablishmentDto>(input =>
                     new Academy
                     {
                         Ukprn = $"Mapped {academy.Ukprn}"
@@ -113,7 +114,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
                 var response = await _subject.GetAcademyByUkprn("12345");
 
-                Assert.Equal("Mapped 12345", response.Result.Ukprn);
+                Assert.Equal("Mapped 12345", response.Ukprn);
             }
 
             [Theory]

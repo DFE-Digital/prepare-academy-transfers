@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         {
            var trustSearch = new TrustSearchModel(_trustsRepository.Object);
 
-           ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<TrustSearchResult>());
+           ((ISetTrusts)trustSearch).SetTrusts(Enumerable.Empty<Trust>());
 
             TestValidationResult<TrustSearchModel> result = await _validator.TestValidateAsync(trustSearch);
             result.ShouldHaveValidationErrorFor(x => x.Trusts)
@@ -40,10 +40,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         {
             var trustSearch = new TrustSearchModel(_trustsRepository.Object);
 
-            ((ISetTrusts)trustSearch).SetTrusts(new List<TrustSearchResult>
+            ((ISetTrusts)trustSearch).SetTrusts(new List<Trust>
             {
-               new() { TrustName = "Trust One", Academies = new List<TrustSearchAcademy> { new() } },
-               new() { TrustName = "Trust Two", Academies = new List<TrustSearchAcademy> { new() } }
+               new() { Name = "Trust One"},
+               new() { Name = "Trust Two" }
             });
 
             TestValidationResult<TrustSearchModel> result = await _validator.TestValidateAsync(trustSearch);

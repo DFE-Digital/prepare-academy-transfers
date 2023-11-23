@@ -33,7 +33,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList
         {
             var project = await _projects.GetByUrn(Urn); 
             var academy = await _academies.GetAcademyByUkprn(AcademyUkprn);
-            AcademyName = academy.Result.Name;
+            AcademyName = academy.Name;
             ProjectReference = project.Result.Reference;
             var educationPerformance =
                 _projectRepositoryEducationPerformance.GetByAcademyUrn(project.Result.OutgoingAcademyUrn).Result;

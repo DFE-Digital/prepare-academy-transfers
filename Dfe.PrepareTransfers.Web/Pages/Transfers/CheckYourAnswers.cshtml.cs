@@ -17,13 +17,15 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         private readonly ITrusts _trustsRepository;
         private readonly IProjects _projectsRepository;
         private readonly IReferenceNumberService _referenceNumberService;
+        private readonly IAcademies _academyRepository;
 
         public CheckYourAnswersModel(ITrusts trustsRepository, IProjects projectsRepository,
-            IReferenceNumberService referenceNumberService)
+            IReferenceNumberService referenceNumberService, IAcademies academyRepository)
         {
             _trustsRepository = trustsRepository;
             _projectsRepository = projectsRepository;
             _referenceNumberService = referenceNumberService;
+            _academyRepository = academyRepository;
         }
         
         [BindProperty]
@@ -51,9 +53,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 IncomingTrust = incomingTrustResponse;
             }
 
-            //ToDo: fetch academies by trust ukprn
-            //OutgoingAcademies = outgoingTrustResponse.Result.Academies
-            //    .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
+            OutgoingAcademies = await _academyRepository.GetAcademiesByTrustUkprn(outgoingTrustResponse.Ukprn);
+            OutgoingAcademies = OutgoingAcademies.Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
 
             return Page();
         }

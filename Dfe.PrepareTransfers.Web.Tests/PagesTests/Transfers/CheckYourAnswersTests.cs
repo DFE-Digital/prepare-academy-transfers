@@ -21,6 +21,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
     {
         private readonly PageContext _pageContext;
         private readonly TempDataDictionary _tempData;
+        private readonly Mock<IAcademies> _academyRepository;
         private readonly Mock<ITrusts> _trustsRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ISession> _session;
@@ -44,6 +45,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         {
             _session = new Mock<ISession>();
             _trustsRepository = new Mock<ITrusts>();
+            _academyRepository = new Mock<IAcademies>();
             _projectsRepository = new Mock<IProjects>();
             var referenceNumberService = new Mock<IReferenceNumberService>();
 
@@ -63,7 +65,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             };
 
             _subject = new CheckYourAnswersModel(_trustsRepository.Object, _projectsRepository.Object,
-                referenceNumberService.Object)
+                referenceNumberService.Object, _academyRepository.Object)
             {
                 PageContext = _pageContext,
                 TempData = _tempData
