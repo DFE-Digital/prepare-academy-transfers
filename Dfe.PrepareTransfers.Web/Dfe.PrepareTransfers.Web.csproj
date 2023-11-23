@@ -16,6 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Pages\Errors\Index.cshtml" />
+    <None Include="wwwroot\assets\images\dfe-logo.png" />
+    <None Include="wwwroot\assets\images\dfe-logo-alt.png" />
     <None Include="wwwroot\package-lock.json" />
     <None Include="wwwroot\package.json" />
     <None Include="wwwroot\src\**" />
@@ -61,5 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Shared\_DynamicBackLink.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\src\images\" />
   </ItemGroup>
 </Project>
