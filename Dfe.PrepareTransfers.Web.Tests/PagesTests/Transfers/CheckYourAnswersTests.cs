@@ -13,6 +13,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
@@ -73,11 +74,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _outgoingTrust = new Trust
             {
                 Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
-                //ToDo: academies by ukprn 
-                //Academies = new List<Academy>
-                //    {
-                //        _academyOne, _academyTwo, _academyThree
-                //    }
             };
 
             var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
@@ -97,6 +93,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
                 _incomingTrust
                 );
+
+            _academyRepository.Setup(x => x.GetAcademiesByTrustUkprn(It.IsAny<string>())).Returns(Task.FromResult(new List<Academy>()));
+            _academyRepository.Setup(x => x.GetAcademiesByTrustUkprn(It.Is<string>(y => y == _outgoingTrust.Ukprn))).Returns(Task.FromResult(new List<Academy>() { _academyOne, _academyTwo, _academyThree }));
         }
 
         public class OnGetAsync : CheckYourAnswersTests
