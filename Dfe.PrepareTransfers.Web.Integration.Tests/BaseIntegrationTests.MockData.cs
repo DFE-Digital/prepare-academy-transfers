@@ -30,11 +30,11 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
 			}
 
 			_factory.AddGetWithJsonResponse($"/transfer-project/{project.ProjectUrn}", project);
-			_factory.AddGetWithJsonResponse($"/trust/{project.TransferringAcademies[0].IncomingTrustUkprn}", AcademiesApiFixtures.Trust());
-			_factory.AddGetWithJsonResponse($"/trust/{project.OutgoingTrustUkprn}", AcademiesApiFixtures.Trust());
+			_factory.AddGetWithJsonResponse($"/v4/trust/{project.TransferringAcademies[0].IncomingTrustUkprn}", AcademiesApiFixtures.Trust());
+			_factory.AddGetWithJsonResponse($"/v4/trust/{project.OutgoingTrustUkprn}", AcademiesApiFixtures.Trust());
 			_factory.AddGetWithJsonResponse($"/educationPerformance/{project.TransferringAcademies[0].OutgoingAcademy.Urn}", AcademiesApiFixtures.EducationPerformance());
 			_factory.AddGetWithJsonResponse(
-				$"/establishment/{project.TransferringAcademies[0].OutgoingAcademyUkprn}", AcademiesApiFixtures.Establishment());
+				$"/v4/establishment/{project.TransferringAcademies[0].OutgoingAcademyUkprn}", AcademiesApiFixtures.Establishment());
 
 			return project;
 		}
