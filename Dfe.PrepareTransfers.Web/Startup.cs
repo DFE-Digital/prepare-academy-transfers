@@ -1,6 +1,3 @@
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Dfe.Academisation.CorrelationIdMiddleware;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
@@ -10,17 +7,18 @@ using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.EducationPerformance;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+using Dfe.PrepareTransfers.Helpers;
 using Dfe.PrepareTransfers.Web.Authorization;
 using Dfe.PrepareTransfers.Web.BackgroundServices;
+using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Options;
 using Dfe.PrepareTransfers.Web.Security;
 using Dfe.PrepareTransfers.Web.Services;
 using Dfe.PrepareTransfers.Web.Services.AzureAd;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Validators.Features;
-using Dfe.PrepareTransfers.Helpers;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +33,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
@@ -131,6 +132,9 @@ public class Startup
                }
            });
         services.AddHealthChecks();
+        // Initialize the ConversionsUrl
+        var serviceLinkOptions = Configuration.GetSection("ServiceLink").Get<ServiceLinkOptions>();
+        Links.InitializeConversionsUrl(serviceLinkOptions.ConversionsUrl);
     }
 
     /// <summary>
@@ -211,21 +215,21 @@ public class Startup
         {
             endpoints.MapGet("/", context =>
           {
-               context.Response.Redirect("project-type", false);
-               return Task.CompletedTask;
-           });
+              context.Response.Redirect("home", false);
+              return Task.CompletedTask;
+          });
             endpoints.MapRazorPages();
             endpoints.MapControllerRoute("default", "{controller}/{action}/");
             endpoints.MapHealthChecks("/health").WithMetadata(new AllowAnonymousAttribute());
         });
     }
 
-   private static void AddServices(IServiceCollection services, IConfiguration configuration)
-   {
-      var tramsApiBase = configuration["TRAMS_API_BASE"];
-      var tramsApiKey = configuration["TRAMS_API_KEY"];
-      var academisationApiBase = configuration["ACADEMISATION_API_BASE"];
-      var academisationApiKey = configuration["ACADEMISATION_API_KEY"];
+    private static void AddServices(IServiceCollection services, IConfiguration configuration)
+    {
+        var tramsApiBase = configuration["TRAMS_API_BASE"];
+        var tramsApiKey = configuration["TRAMS_API_KEY"];
+        var academisationApiBase = configuration["ACADEMISATION_API_BASE"];
+        var academisationApiKey = configuration["ACADEMISATION_API_KEY"];
 
         services.AddHttpClient("TramsApiClient", httpClient =>
         {
@@ -263,7 +267,7 @@ public class Startup
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IGraphClientFactory, GraphClientFactory>();
         services.AddTransient<IGraphUserService, GraphUserService>();
-        
+
         services.AddScoped<ITramsHttpClient, TramsHttpClient>();
         services.AddScoped<IAcademisationHttpClient, AcademisationHttpClient>();
         services.AddSingleton<PerformanceDataChannel>();

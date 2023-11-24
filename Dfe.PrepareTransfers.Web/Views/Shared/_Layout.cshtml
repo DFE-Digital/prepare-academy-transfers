@@ -34,6 +34,7 @@
     <link rel="apple-touch-icon" href="~/assets/images/govuk-apple-touch-icon.png">
     <link rel="stylesheet" href="~/dist/accessible-autocomplete.min.css" />
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <link rel="stylesheet" href="~/dist/dfefrontend-1.0.1.min.css" asp-add-nonce />
 
     <meta property="og:image" content="~/assets/images/govuk-opengraph-image.png">
 
@@ -76,19 +77,52 @@
 
 <partial name="_CookieBanner" />
 
-<header class="govuk-header " role="banner" data-module="govuk-header">
-    <div class="govuk-header__container govuk-width-container">
-        <div class="govuk-header__logo govuk-!-width-two-thirds">
-            <a href="/" class="govuk-header__link govuk-header__link--homepage">
-                <span class="govuk-header__logotype-text">
-                    Prepare conversions and transfers
-                </span>
-            </a>
+    <header class="dfe-header" role="banner" data-module="dfe-header">
+        <div class="dfe-width-container dfe-header__container">
+            <div class="dfe-header__logo">
+                <a asp-page="@Links.ProjectList.Index.PageName" class="dfe-header__link dfe-header__link--service">
+                    <img src="~/assets/images/dfe-logo.png" class="dfe-logo" alt="DfE Homepage">
+                    <img src="~/assets/images/dfe-logo-alt.png" class="dfe-logo-hover" alt="DfE Homepage">
+                    <span class="dfe-header__service-name">
+                        Prepare conversions and transfers
+                    </span>
+                </a>
+            </div>
         </div>
-    </div>
-</header>
+        <nav class="dfe-header__navigation" id="header-navigation" role="navigation" aria-label="Primary navigation" aria-labelledby="label-navigation">
+            <div class="dfe-width-container">
+                <p class="dfe-header__navigation-title">
+                    <span id="label-navigation">Menu</span>
+                    <button class="dfe-header__navigation-close" id="close-menu">
+                        <svg class="dfe-icon dfe-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="27" height="27">
+                            <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+                        </svg>
+                        <span class="govuk-visually-hidden">Close menu</span>
+                    </button>
+                </p>
+                <ul class="dfe-header__navigation-list">
+                    <li class="dfe-header__navigation-item">
+                        <a class="dfe-header__navigation-link" href="@Links.ConversionsUrl/project-list">
+                            Conversions
+                            <svg class="dfe-icon dfe-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="34" height="34">
+                                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="dfe-header__navigation-item  dfe-header__navigation-item--current">
+                        <a asp-page="@Links.ProjectList.Index.PageName" class="dfe-header__navigation-link">
+                            Transfers
+                            <svg class="dfe-icon dfe-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="34" height="34">
+                                <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-<div class="govuk-width-container ">
+<div class="dfe-width-container">
     <div class="govuk-phase-banner">
         <p class="govuk-phase-banner__content">
             <strong class="govuk-tag govuk-phase-banner__content__tag">
@@ -107,7 +141,7 @@
 </div>
 
 <footer class="govuk-footer " role="contentinfo">
-    <div class="govuk-width-container ">
+    <div class="dfe-width-container">
         <div class="govuk-footer__navigation">
             <div class="govuk-footer__section govuk-grid-column-one-half" data-cy="get-support-section">
                 <h2 class="govuk-footer__heading govuk-heading-m">Get support</h2>
