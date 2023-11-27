@@ -44,7 +44,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             };
 
             _trusts.Setup(r => r.GetByUkprn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Trust> {Result = _foundTrust});
+                .ReturnsAsync(_foundTrust);
 
             _foundAcademy = new Academy
             {
@@ -53,7 +53,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             };
 
             _academies.Setup(r => r.GetAcademyByUkprn(It.IsAny<string>()))
-                .ReturnsAsync(new RepositoryResult<Academy> {Result = _foundAcademy});
+                .ReturnsAsync(_foundAcademy);
         }
 
         public class GetByUrnTests : TramsProjectsRepositoryTests

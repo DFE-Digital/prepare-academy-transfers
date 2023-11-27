@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             _trustsRepository = trustsRepository;
         }
 
-        public List<TrustSearchResult> Trusts { get; private set; }
+        public List<Trust> Trusts { get; private set; }
 
         [BindProperty(Name = "query", SupportsGet = true)]
         public string SearchQuery { get; set; } = "";
@@ -41,7 +41,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var result = await _trustsRepository.SearchTrusts(SearchQuery, outgoingTrustId);
-            Trusts = result.Result;
+            Trusts = result;
 
             var searchValidator = new IncomingTrustSearchValidator();
             var searchValidationResult = await searchValidator.ValidateAsync(this);
@@ -75,7 +75,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             return RedirectToPage("/Transfers/IncomingTrust", new { query = SearchQuery });
         }
 
-        void ISetTrusts.SetTrusts(IEnumerable<TrustSearchResult> trusts)
+        void ISetTrusts.SetTrusts(IEnumerable<Trust> trusts)
         {
            Trusts = trusts.ToList();
         }

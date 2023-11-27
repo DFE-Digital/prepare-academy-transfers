@@ -67,11 +67,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
                 };
 
                 trustsRepository.Setup(r => r.GetByUkprn(trustId)).ReturnsAsync(
-                    new RepositoryResult<Trust>
-                    {
-                        Result = _foundTrust
-                    }
-                );
+                    _foundTrust );
 
             }
 

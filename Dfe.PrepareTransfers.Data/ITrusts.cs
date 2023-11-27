@@ -6,8 +6,8 @@ namespace Dfe.PrepareTransfers.Data
 {
     public interface ITrusts
     {
-        public Task<RepositoryResult<List<TrustSearchResult>>> SearchTrusts(string searchQuery = "", string outgoingTrustId = "");
+        public Task<List<Trust>> SearchTrusts(string searchQuery = "", string outgoingTrustId = "");
 
-        public Task<RepositoryResult<Trust>> GetByUkprn(string ukprn);
+        public Task<Trust> GetByUkprn(string ukprn);
     }
 }

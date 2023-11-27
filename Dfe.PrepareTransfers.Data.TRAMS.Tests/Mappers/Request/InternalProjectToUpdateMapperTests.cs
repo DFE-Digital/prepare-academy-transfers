@@ -101,8 +101,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
             AssertRationaleIsCorrect(toMap, result);
             AssertGeneralInformationIsCorrect(toMap, result);
         }
-
-        //todo: add test for multiple academies
         
         [Fact]
         public void GivenHasDateIsFalse_ShouldSetHasDateToNull()

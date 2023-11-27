@@ -12,17 +12,19 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
     {
         private readonly OutgoingTrustAcademiesValidator _validator;
         private readonly Mock<ITrusts> _trustsRepository;
+        private readonly Mock<IAcademies> _academyRepository;
 
         public OutgoingTrustAcademiesValidatorTests()
         {
             _validator = new OutgoingTrustAcademiesValidator();
             _trustsRepository = new Mock<ITrusts>();
+            _academyRepository = new Mock<IAcademies>();
         }
 
         [Fact]
         public async void WhenSelectedAcademyIdsIsNull_ShouldSetError()
         {
-            var request = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+            var request = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
             {
                 SelectedAcademyIds = null
             };
@@ -36,7 +38,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         [Fact]
         public async void WhenAcademyIdIsNotEmpty_ShouldNotSetError()
         {
-            var request = new OutgoingTrustAcademiesModel(_trustsRepository.Object)
+            var request = new OutgoingTrustAcademiesModel(_trustsRepository.Object, _academyRepository.Object)
             {
                 SelectedAcademyIds = new List<string> { "academy id" }
             };

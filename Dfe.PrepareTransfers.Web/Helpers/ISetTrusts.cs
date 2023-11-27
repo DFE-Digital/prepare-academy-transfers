@@ -5,5 +5,5 @@ namespace Dfe.PrepareTransfers.Web.Helpers;
 
 public interface ISetTrusts
 {
-   void SetTrusts(IEnumerable<TrustSearchResult> trusts);
+   void SetTrusts(IEnumerable<Trust> trusts);
 }
