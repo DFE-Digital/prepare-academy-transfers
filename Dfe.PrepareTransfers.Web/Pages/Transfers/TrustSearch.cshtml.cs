@@ -37,8 +37,6 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 
             var result = await TrustsRepository.SearchTrusts(SearchQuery);
             Trusts = result;
-            //ToDo: get establishments by ukprn, not sure this needed for a trust search
-            //Trusts = result.Where(trust => trust.Academies.Any()).ToList();
 
             var searchValidator = new OutgoingTrustSearchValidator();
             var searchValidationResult = await searchValidator.ValidateAsync(this);

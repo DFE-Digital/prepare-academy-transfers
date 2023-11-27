@@ -79,24 +79,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
         }
 
-        //[Fact]
-        //public async void GivenSearchReturnsTrustWithNoAcademies_RedirectToTrustNamePageWithAnError()
-        //{
-        //    _trustsRepository.Setup(r => r.SearchTrusts("Meow", ""))
-        //        .ReturnsAsync(new List<Trust>() { new Trust
-        //                {
-        //                    Name = "Meow",
-        //                    Ukprn = "test"
-        //                } });
-        //    _subject.SearchQuery = "Meow";
-
-        //    var response = await _subject.OnGetAsync();
-
-        //    var redirectResponse = AssertRedirectToPage(response, "/Transfers/TrustName");
-        //    Assert.Equal("Meow", redirectResponse.RouteValues["query"]);
-        //    Assert.Equal("We could not find any trusts matching your search criteria", _subject.TempData["ErrorMessage"]);
-        //}
-
         [Fact]
         public async Task GivenSearchingByString_SearchesForTrustsAndAssignsToModel()
         {

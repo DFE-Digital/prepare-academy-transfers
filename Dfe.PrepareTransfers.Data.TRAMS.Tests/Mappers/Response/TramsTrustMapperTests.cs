@@ -50,54 +50,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(trustToMap.Ukprn, result.Ukprn);
             Assert.Equal("Not available", result.EstablishmentType);
             Assert.Equal(expectedAddress, result.Address);
-            //Assert.Equal(trustToMap.IfdData.LeadRscRegion, result.LeadRscRegion);
         }
 
-        //ToDo: fix these once we can get establishments by ukprn
-        //[Fact]
-        //public void GivenTrustWithOneAcademy_MapASingleAcademy()
-        //{
-        //    _establishmentMapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>()))
-        //        .Returns<TramsEstablishment>(input => new Academy {Ukprn = $"Mapped {input.Ukprn}"});
-
-        //    var trustToMap = new TrustDto
-        //    {
-        //        GiasData = new TramsTrustGiasData(),
-        //        Establishments = new List<TramsEstablishment>
-        //        {
-        //            new TramsEstablishment {Ukprn = "001"}
-        //        }
-        //    };
-
-        //    var result = _subject.Map(trustToMap);
-        //    _establishmentMapper.Verify(m =>
-        //        m.Map(It.Is<TramsEstablishment>(establishment => establishment.Ukprn == "001")));
-        //    Assert.Equal("Mapped 001", result.Academies[0].Ukprn);
-        //}
-        
-        //[Fact]
-        //public void GivenTrustWithTwoAcademies_MapAcademies()
-        //{
-        //    _establishmentMapper.Setup(m => m.Map(It.IsAny<TramsEstablishment>()))
-        //        .Returns<TramsEstablishment>(input => new Academy {Ukprn = $"Mapped {input.Ukprn}"});
-
-        //    var trustToMap = new TramsTrust
-        //    {
-        //        GiasData = new TramsTrustGiasData(),
-        //        Establishments = new List<TramsEstablishment>
-        //        {
-        //            new TramsEstablishment {Ukprn = "001"},
-        //            new TramsEstablishment {Ukprn = "002"}
-        //        }
-        //    };
-
-        //    var result = _subject.Map(trustToMap);
-        //    _establishmentMapper.Verify(m =>
-        //        m.Map(It.Is<TramsEstablishment>(establishment => establishment.Ukprn == "001")));
-        //    _establishmentMapper.Verify(m =>
-        //        m.Map(It.Is<TramsEstablishment>(establishment => establishment.Ukprn == "002")));
-        //    Assert.Equal("Mapped 001", result.Academies[0].Ukprn);
-        //    Assert.Equal("Mapped 002", result.Academies[1].Ukprn);
-        //}
     }
 }
