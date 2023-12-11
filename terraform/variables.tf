@@ -67,6 +67,7 @@ variable "container_max_replicas" {
 variable "enable_event_hub" {
   description = "Send Azure Container App logs to an Event Hub sink"
   type        = bool
+  default     = false
 }
 
 variable "enable_logstash_consumer" {
