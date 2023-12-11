@@ -189,7 +189,7 @@
                             }
 
                             <li class="moj-pagination__item @markAsSelected">
-                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@pageNumber</a>
+                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link" aria-label="@ariaLabel">@pageNumber</a>
                             </li>
 
                             if (Model.HasNextPage && Model.NextPage == pageNumber && ((Model.NextPage + 1) < Model.TotalPages))

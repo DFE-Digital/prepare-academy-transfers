@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
         ? TotalProjectCount / PageSize
         : (TotalProjectCount / PageSize) + 1;
 
-        [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
+      [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
       [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
       [BindProperty(SupportsGet = true)] public string TitleFilter { get; set; }
 
