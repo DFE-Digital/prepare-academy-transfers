@@ -8,6 +8,12 @@
 @{
     ViewBag.Title = "Home";
     Layout = "_Layout";
+
+    var pagesToDisplay = new List<int>() { 1, Model.CurrentPage, Model.TotalPages };
+    if (Model.HasPreviousPage)
+        pagesToDisplay.Add(Model.PreviousPage);
+    if (Model.HasNextPage)
+        pagesToDisplay.Add(Model.NextPage);
 }
 
 @section BeforeMain
@@ -156,7 +162,7 @@
                 </tbody>
             </table>
 
-            <nav class="moj-pagination" id="pagination-label">
+            <nav class="moj-pagination" id="pagination-label" aria-label="pagination">
                 <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
                 <ul class="moj-pagination__list">
                     @if (Model.HasPreviousPage)
@@ -164,25 +170,44 @@
                         <li class="moj-pagination__item  moj-pagination__item--prev">
                             <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-TitleFilter="@Model.TitleFilter">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
-                        @for (var i = Model.StartingPage; i < Model.CurrentPage; i++)
+                    }
+                    @for (var pageIdx = 0; pageIdx < Model.TotalPages; pageIdx++)
+                    {
+                        var pageNumber = pageIdx + 1;
+                        var isCurrentPage = Model.CurrentPage == pageNumber;
+                        var markAsSelected = isCurrentPage ? "moj-pagination__item--active" : "";
+
+                        var ariaLabel = isCurrentPage ? $"Current page, page {pageNumber}" : $"Go to page {pageNumber}";
+
+                        if (pagesToDisplay.Contains(pageNumber))
                         {
-                            <li class="moj-pagination__item">
-                                <a asp-page="/Home/Index" asp-route-currentPage="@i" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@i</a>
+                            if (Model.HasPreviousPage && Model.PreviousPage == pageNumber && ((Model.PreviousPage - 1) > 1))
+                            {
+                                <li class="moj-pagination__item" aria-hidden="true">
+                                    &ctdot;
+                                </li>
+                            }
+
+                            <li class="moj-pagination__item @markAsSelected">
+                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@pageNumber</a>
                             </li>
+
+                            if (Model.HasNextPage && Model.NextPage == pageNumber && ((Model.NextPage + 1) < Model.TotalPages))
+                            {
+                                <li class="moj-pagination__item" aria-hidden="true">
+                                    &ctdot;
+                                </li>
+                            }
                         }
                     }
-                    <li class="moj-pagination__item moj-pagination__item--active">@Model.CurrentPage</li>
+
                     @if (Model.HasNextPage)
                     {
-                        <li class="moj-pagination__item">
-                            <a asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link">@Model.NextPage</a>
-                        </li>
                         <li class="moj-pagination__item  moj-pagination__item--next">
                             <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter">Next<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
                 </ul>
-                <p class="moj-pagination__results"></p>
             </nav>
         }
     </div>

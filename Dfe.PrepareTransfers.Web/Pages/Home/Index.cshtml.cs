@@ -34,8 +34,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
       public bool HasNextPage => TotalProjectCount > CurrentPage * PageSize;
       public int PreviousPage => CurrentPage - 1;
       public int NextPage => CurrentPage + 1;
+    public int TotalPages => TotalProjectCount % PageSize == 0
+        ? TotalProjectCount / PageSize
+        : (TotalProjectCount / PageSize) + 1;
 
-      [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
+        [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
       [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
       [BindProperty(SupportsGet = true)] public string TitleFilter { get; set; }
 
