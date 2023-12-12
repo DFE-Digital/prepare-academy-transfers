@@ -27,7 +27,7 @@ RUN npm run build
 # Stage 3 - Final
 ARG ASPNET_IMAGE_TAG
 FROM "mcr.microsoft.com/dotnet/aspnet:${ASPNET_IMAGE_TAG}" AS final
-COPY --from=publish /app /app
+COPY --from=build /app /app
 
 WORKDIR /app
 COPY ./script/web-docker-entrypoint.sh ./docker-entrypoint.sh
