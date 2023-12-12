@@ -1,8 +1,6 @@
 ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
 ARG NODEJS_IMAGE_TAG=18.12-bullseye
 
-
-
 # Stage 1 - Build project
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /build
@@ -11,7 +9,7 @@ COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
 COPY ./Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
 COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
 COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
-COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
+COPY ./Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
 WORKDIR /build/Dfe.PrepareTransfers.Web
 RUN --mount=type=secret,id=github_token dotnet nuget add source --username USERNAME --password $(cat /run/secrets/github_token) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
@@ -24,6 +22,7 @@ COPY ./Dfe.PrepareTransfers.Web/ /build/
 WORKDIR /build/wwwroot
 RUN npm install
 RUN npm run build
+COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
 
 # Stage 3 - Final
 ARG ASPNET_IMAGE_TAG
