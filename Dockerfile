@@ -11,7 +11,7 @@ COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentG
 COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
 COPY ./Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR /build/Dfe.PrepareTransfers
+WORKDIR /build
 RUN --mount=type=secret,id=github_token dotnet nuget add source --username USERNAME --password $(cat /run/secrets/github_token) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
 RUN dotnet restore Dfe.PrepareTransfers.sln
 RUN dotnet build -c Release Dfe.PrepareTransfers.sln --no-restore
