@@ -5,17 +5,17 @@ ARG NODEJS_IMAGE_TAG=18.12-bullseye
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
 WORKDIR /build
 
+
 COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
 COPY ./Dfe.PrepareTransfers.Data.TRAMS/ ./Dfe.PrepareTransfers.Data.TRAMS/
 COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentGeneration/
 COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
 COPY ./Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR /build
+WORKDIR /build/Dfe.PrepareTransfers.Web
 RUN --mount=type=secret,id=github_token dotnet nuget add source --username USERNAME --password $(cat /run/secrets/github_token) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
-RUN dotnet restore Dfe.PrepareTransfers.sln
-RUN dotnet build -c Release Dfe.PrepareTransfers.sln --no-restore
-RUN dotnet publish Dfe.PrepareTransfers.Web -c Release -o /app --no-restore
+RUN dotnet restore 
+RUN dotnet publish -c Release -o /app --no-restore
 
 # Stage 2 - Build assets
 FROM node:${NODEJS_IMAGE_TAG} as build
