@@ -11,18 +11,18 @@ COPY ./Dfe.PrepareTransfers.DocumentGeneration/ ./Dfe.PrepareTransfers.DocumentG
 COPY ./Dfe.PrepareTransfers.Helpers/ ./Dfe.PrepareTransfers.Helpers/
 COPY ./Dfe.PrepareTransfers.Web/ ./Dfe.PrepareTransfers.Web/
 
-WORKDIR /build/Dfe.PrepareTransfers.Web
+WORKDIR /build/Dfe.PrepareTransfers
 RUN --mount=type=secret,id=github_token dotnet nuget add source --username USERNAME --password $(cat /run/secrets/github_token) --store-password-in-clear-text --name github "https://nuget.pkg.github.com/DFE-Digital/index.json"
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app --no-restore
+RUN dotnet restore Dfe.PrepareTransfers.sln
+RUN dotnet build -c Release Dfe.PrepareTransfers.sln --no-restore
+RUN dotnet publish Dfe.PrepareTransfers.Web -c Release -o /app --no-restore
 
-# Stage 2 - Build frontend assets
-FROM node:${NODEJS_IMAGE_TAG} as frontend
-COPY ./Dfe.PrepareTransfers.Web/ /build/
-WORKDIR /build/wwwroot
+# Stage 2 - Build assets
+FROM node:${NODEJS_IMAGE_TAG} as build
+COPY --from=publish /app /app
+WORKDIR /app/wwwroot
 RUN npm install
 RUN npm run build
-COPY --from=frontend /build/ ./Dfe.PrepareTransfers.Web/
 
 # Stage 3 - Final
 ARG ASPNET_IMAGE_TAG
