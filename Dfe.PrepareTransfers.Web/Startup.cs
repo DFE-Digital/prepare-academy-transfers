@@ -79,6 +79,7 @@ public class Startup
            {
                options.Conventions.AuthorizeFolder("/");
                options.Conventions.AllowAnonymousToPage("/AccessibilityStatement");
+               options.Conventions.AllowAnonymousToPage("/Maintenance");
                options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
            })
            .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
