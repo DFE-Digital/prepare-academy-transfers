@@ -1,0 +1,22 @@
+@page
+@using Microsoft.Extensions.Configuration
+
+@inject IConfiguration _configuration
+
+@{
+    ViewData["Title"] = "Maintenance page";
+    Layout = "_Layout";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">This service is unavailable</h1>
+        <p class="govuk-body">
+            The Prepare transfers service is currently unavailable, but our team are working to fix that.
+        </p>
+        <p class="govuk-body">
+            Please try again later.
+        </p>
+
+    </div>
+</div>
