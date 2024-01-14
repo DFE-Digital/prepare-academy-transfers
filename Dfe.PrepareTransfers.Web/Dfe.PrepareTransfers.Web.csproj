@@ -67,4 +67,10 @@
   <ItemGroup>
     <Folder Include="wwwroot\src\images\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Pages\Transfers\NewTransfersInformation.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

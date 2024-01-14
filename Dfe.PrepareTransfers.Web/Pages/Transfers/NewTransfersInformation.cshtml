@@ -1,0 +1,37 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Transfers.NewTransfersInformation
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Create a new transfer";
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
+}
+
+@section BeforeMain
+    {
+    <a class="govuk-back-link" asp-page="/Home/Index">Back</a>
+    }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="get" asp-page="/Transfers/TrustName">
+            <div class="govuk-form-group @formClasses">
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--xl">
+                        Create a new transfer
+                    </label>
+                </h1>
+                <p class="govuk-body">
+                    Use this to create a new transfer project.
+                </p>                
+                <p class="govuk-body">You can use this form to create a transfer for any type of academy.</p>
+                <p class="govuk-body">
+                    You cannot add transfers that are part of a project to form a multi-academy trust yet.
+                </p>                
+            </div>
+            <button class="govuk-button" type="submit">Create a new transfer</button>
+        </form>
+    </div>
+</div>
