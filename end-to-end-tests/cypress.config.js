@@ -19,6 +19,7 @@ module.exports = defineConfig({
 
   modifyObstructiveCode: true,
   chromeWebSecurity: false,
+  userAgent: 'PrepareTransfers/1.0 Cypress',
 
   e2e: {
     setupNodeEvents(on, config) {

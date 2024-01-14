@@ -71,10 +71,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             public async void GivenNoSearchResultsForString_RedirectToIncomingTrustPageWithError()
             {
                 _trustsRepository.Setup(r => r.SearchTrusts("Trust name", TrustId)).ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Result = new List<TrustSearchResult>()
-                    });
+                    new List<Trust>());
                 _subject.SearchQuery = "Trust name";
 
                 var response = await _subject.OnGetAsync();
@@ -109,17 +106,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             public async Task GivenSearchingByString_SearchesForTrustsAndAssignsToModel()
             {
                 const string searchQuery = "Trust name";
-                var trusts = new List<TrustSearchResult>
+                var trusts = new List<Trust>
                 {
-                    new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
-                    new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
+                    new Trust { Ukprn = "1234"},
+                    new Trust { Ukprn = "4321" }
                 };
-                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Result = trusts
-                    }
-                );
+                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(trusts );
                 _subject.SearchQuery = searchQuery;
 
                 var result = await _subject.OnGetAsync();
@@ -150,17 +142,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             public async void WhenSelectedAcademyIdsIsNull_UpdatesTheModelStateAndReturnsPageResult()
             {
                 const string searchQuery = "Trust name";
-                var trusts = new List<TrustSearchResult>
+                var trusts = new List<Trust>
                 {
-                    new TrustSearchResult { Ukprn = "1234", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} },
-                    new TrustSearchResult { Ukprn = "4321", Academies = new List<TrustSearchAcademy> { new TrustSearchAcademy()} }
+                    new Trust { Ukprn = "1234" },
+                    new Trust { Ukprn = "4321" }
                 };
-                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(
-                    new RepositoryResult<List<TrustSearchResult>>
-                    {
-                        Result = trusts
-                    }
-                );
+                _trustsRepository.Setup(r => r.SearchTrusts(searchQuery, TrustId)).ReturnsAsync(trusts);
                 await _subject.OnGetAsync();
                 _subject.SelectedTrustId = null;
 

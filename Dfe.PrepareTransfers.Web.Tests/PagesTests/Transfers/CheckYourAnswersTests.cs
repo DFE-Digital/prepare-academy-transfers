@@ -13,6 +13,7 @@ using Moq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
@@ -21,6 +22,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
     {
         private readonly PageContext _pageContext;
         private readonly TempDataDictionary _tempData;
+        private readonly Mock<IAcademies> _academyRepository;
         private readonly Mock<ITrusts> _trustsRepository;
         private readonly Mock<IProjects> _projectsRepository;
         private readonly Mock<ISession> _session;
@@ -44,6 +46,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         {
             _session = new Mock<ISession>();
             _trustsRepository = new Mock<ITrusts>();
+            _academyRepository = new Mock<IAcademies>();
             _projectsRepository = new Mock<IProjects>();
             var referenceNumberService = new Mock<IReferenceNumberService>();
 
@@ -63,7 +66,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             };
 
             _subject = new CheckYourAnswersModel(_trustsRepository.Object, _projectsRepository.Object,
-                referenceNumberService.Object)
+                referenceNumberService.Object, _academyRepository.Object)
             {
                 PageContext = _pageContext,
                 TempData = _tempData
@@ -71,10 +74,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _outgoingTrust = new Trust
             {
                 Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
-                Academies = new List<Academy>
-                    {
-                        _academyOne, _academyTwo, _academyThree
-                    }
             };
 
             var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
@@ -88,16 +87,15 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             _session.Setup(s => s.TryGetValue("OutgoingAcademyIds", out outgoingAcademyIdsByteArray)).Returns(true);
 
             _trustsRepository.Setup(r => r.GetByUkprn(_outgoingTrust.Ukprn)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = _outgoingTrust
-                });
+                 _outgoingTrust
+                );
 
             _trustsRepository.Setup(r => r.GetByUkprn(_incomingTrust.Ukprn)).ReturnsAsync(
-                new RepositoryResult<Trust>
-                {
-                    Result = _incomingTrust
-                });
+                _incomingTrust
+                );
+
+            _academyRepository.Setup(x => x.GetAcademiesByTrustUkprn(It.IsAny<string>())).Returns(Task.FromResult(new List<Academy>()));
+            _academyRepository.Setup(x => x.GetAcademiesByTrustUkprn(It.Is<string>(y => y == _outgoingTrust.Ukprn))).Returns(Task.FromResult(new List<Academy>() { _academyOne, _academyTwo, _academyThree }));
         }
 
         public class OnGetAsync : CheckYourAnswersTests

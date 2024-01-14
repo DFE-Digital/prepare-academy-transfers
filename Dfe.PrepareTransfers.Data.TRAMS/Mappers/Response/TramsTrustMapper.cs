@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {
-    public class TramsTrustMapper : IMapper<TramsTrust, Trust>
+    public class TramsTrustMapper : IMapper<TrustDto, Trust>
     {
         private readonly IMapper<TramsEstablishment, Academy> _establishmentMapper;
 
@@ -14,25 +15,23 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             _establishmentMapper = establishmentMapper;
         }
 
-        public Trust Map(TramsTrust input)
+        public Trust Map(TrustDto input)
         {
-            var address = input.GiasData.GroupContactAddress;
+            var address = input.Address;
             return new Trust
             {
-                Academies = input.Establishments.Select(e => _establishmentMapper.Map(e)).ToList(),
                 Address = new List<string>
                 {
-                    input.GiasData.GroupName,
+                    input.Name,
                     address.Street,
                     address.Town,
                     $"{address.County}, {address.Postcode}"
                 },
-                CompaniesHouseNumber = input.GiasData.CompaniesHouseNumber,
-                EstablishmentType = "Not available",
-                GiasGroupId = input.GiasData.GroupId,
-                Name = input.GiasData.GroupName,
-                Ukprn = input.GiasData.Ukprn,
-                LeadRscRegion = input.IfdData.LeadRscRegion
+                EstablishmentType = "Not available", // Not sure why this even here, surely thsi should be the trust type
+                CompaniesHouseNumber = input.CompaniesHouseNumber,
+                GiasGroupId = input.ReferenceNumber,
+                Name = input.Name,
+                Ukprn = input.Ukprn
             };
         }
     }

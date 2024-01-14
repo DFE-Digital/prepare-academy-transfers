@@ -76,10 +76,8 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 });
 
             _academiesRepository.Setup(r => r.GetAcademyByUkprn(_academyUkprn)).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Result = _foundAcademy
-                });
+                _foundAcademy
+                );
 
             _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(_academyUrn))
                 .ReturnsAsync(
@@ -165,22 +163,16 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 });
 
             _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy1.ukprn)).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Result = foundAcademy1
-                });
+                foundAcademy1
+                );
             
             _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy2.ukprn)).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Result = foundAcademy2
-                });
+                foundAcademy2
+                );
             
             _academiesRepository.Setup(r => r.GetAcademyByUkprn(outgoingAcademy3.ukprn)).ReturnsAsync(
-                new RepositoryResult<Academy>
-                {
-                    Result = foundAcademy3
-                });
+                foundAcademy3
+                );
 
             _educationPerformanceRepository.Setup(r => r.GetByAcademyUrn(It.IsAny<string>()))
                 .ReturnsAsync(

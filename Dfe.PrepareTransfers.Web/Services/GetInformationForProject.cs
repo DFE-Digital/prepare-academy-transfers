@@ -33,7 +33,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             {
                 var academyResult =
                     await _academiesRepository.GetAcademyByUkprn(transferringAcademy.OutgoingAcademyUkprn);
-                var academy = academyResult.Result;
+                var academy = academyResult;
                 SetAdditionalInformation(academy, transferringAcademy);
                 academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName,
                     projectResult.Result.Urn);

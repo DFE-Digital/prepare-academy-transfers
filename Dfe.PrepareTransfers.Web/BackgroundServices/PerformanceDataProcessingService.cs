@@ -42,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.BackgroundServices
                 var educationPerformance = scope.ServiceProvider.GetRequiredService<IEducationPerformance>();
                 var academies = scope.ServiceProvider.GetRequiredService<IAcademies>();
                 var academy = await academies.GetAcademyByUkprn(academyUkprn);
-                await educationPerformance.GetByAcademyUrn(academy.Result.Urn);
+                await educationPerformance.GetByAcademyUrn(academy.Urn);
                 Log.ProcessedMessage(_logger, academyUkprn);
             }
         }

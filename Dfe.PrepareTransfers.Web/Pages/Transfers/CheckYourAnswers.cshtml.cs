@@ -17,13 +17,15 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         private readonly ITrusts _trustsRepository;
         private readonly IProjects _projectsRepository;
         private readonly IReferenceNumberService _referenceNumberService;
+        private readonly IAcademies _academyRepository;
 
         public CheckYourAnswersModel(ITrusts trustsRepository, IProjects projectsRepository,
-            IReferenceNumberService referenceNumberService)
+            IReferenceNumberService referenceNumberService, IAcademies academyRepository)
         {
             _trustsRepository = trustsRepository;
             _projectsRepository = projectsRepository;
             _referenceNumberService = referenceNumberService;
+            _academyRepository = academyRepository;
         }
         
         [BindProperty]
@@ -40,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
 
             var outgoingTrustResponse = await _trustsRepository.GetByUkprn(outgoingTrustId);
-            OutgoingTrust = outgoingTrustResponse.Result;
+            OutgoingTrust = outgoingTrustResponse;
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
 
@@ -48,11 +50,11 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             {
                 var incomingTrustResponse = await _trustsRepository.GetByUkprn(incomingTrustIdString);
 
-                IncomingTrust = incomingTrustResponse.Result;
+                IncomingTrust = incomingTrustResponse;
             }
 
-            OutgoingAcademies = outgoingTrustResponse.Result.Academies
-                .Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
+            OutgoingAcademies = await _academyRepository.GetAcademiesByTrustUkprn(outgoingTrustResponse.Ukprn);
+            OutgoingAcademies = OutgoingAcademies.Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
 
             return Page();
         }

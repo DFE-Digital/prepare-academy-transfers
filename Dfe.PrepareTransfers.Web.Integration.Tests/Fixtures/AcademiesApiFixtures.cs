@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Dfe.Academies.Contracts.V4;
+using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
@@ -137,26 +139,25 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
             return tramsProject;
         }
 
-        public static TramsTrust Trust()
+        public static TrustDto Trust()
         {
-            var tramsTrust = new TramsTrust
+            var tramsTrust = new TrustDto
             {
-                GiasData = new TramsTrustGiasData
-                {
+
                     CompaniesHouseNumber = "1231231",
-                    GroupContactAddress = new GroupContactAddress
+                    Address = new AddressDto
                     {
-                        AdditionalLine = "Extra line",
+                        Additional = "Extra line",
                         County = "County",
                         Locality = "Locality",
                         Postcode = "Postcode",
                         Street = "Street",
                         Town = "Town"
                     },
-                    GroupId = "0001",
-                    GroupName = IncomingTrustName,
+                    ReferenceNumber = "0001",
+                    Name = IncomingTrustName,
                     Ukprn = IncomingTrustUkprn
-                }
+
             };
             return tramsTrust;
         }
