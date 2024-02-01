@@ -1,5 +1,4 @@
 const ZapClient = require('zaproxy')
-const fs = require('fs')
 
 module.exports = {
     generateZapReport: async () => {

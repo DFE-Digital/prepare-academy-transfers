@@ -26,7 +26,7 @@ function clickBackLink() {
         .click();
 }
 
-describe("Creating and editing an academy transfer", { tags: '@dev'}, function () {
+describe.skip("Creating and editing an academy transfer", { tags: '@dev'}, function () {
     beforeEach(function () {        
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

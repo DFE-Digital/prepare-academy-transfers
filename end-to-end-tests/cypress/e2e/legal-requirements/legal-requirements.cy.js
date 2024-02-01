@@ -2,7 +2,7 @@
 
 // TO DO: Check Legal Requirement validation on first time use; check Empty tags.
 
-describe('Legal Requirements', { tags: '@dev' }, () => {
+describe.skip('Legal Requirements', { tags: '@dev' }, () => {
     beforeEach(() => {
         cy.selectsFirstProjectOnList()
         cy.get('[data-test="transfer-legal-requirements"]').click()

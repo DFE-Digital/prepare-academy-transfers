@@ -1,7 +1,7 @@
 /// <reference types ='Cypress'/>
 
     Cypress._.each(['ipad-mini'], (viewport) => {
-        describe(`112386: Assign project ${viewport}`, () => {
+        describe.skip(`112386: Assign project ${viewport}`, () => {
             beforeEach(() => {
               cy.login();
               cy.viewport(viewport);

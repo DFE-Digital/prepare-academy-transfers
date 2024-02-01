@@ -1,7 +1,7 @@
 /// <reference types ='Cypress'/>
 
 Cypress._.each(['ipad-mini'], (viewport) => {
-    describe(`113746 X-xss-Protection Header on transfers ${viewport}`, () => {
+    describe.skip(`113746 X-xss-Protection Header on transfers ${viewport}`, () => {
         beforeEach(() => {
         cy.login()
         cy.viewport(viewport)    

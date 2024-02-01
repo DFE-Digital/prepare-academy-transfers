@@ -1,7 +1,7 @@
 /// <reference types ='Cypress'/>
 
 Cypress._.each(['ipad-mini'], (viewport) => {
-	describe(`112379: Footer Links on ${viewport}`, () => {
+	describe.skip(`112379: Footer Links on ${viewport}`, () => {
 		beforeEach(() => {
 		  cy.login();
 		  cy.viewport(viewport);

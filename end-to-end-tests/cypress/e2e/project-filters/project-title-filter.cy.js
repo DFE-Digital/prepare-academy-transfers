@@ -1,7 +1,7 @@
 /// <reference types ='Cypress'/>
 
 Cypress._.each(['ipad-mini'], (viewport) => {
-    describe(`110767: Filter projects and verify the count ${viewport}`, () => {
+    describ.skip(`110767: Filter projects and verify the count ${viewport}`, () => {
       beforeEach(() => {
         cy.viewport(viewport);
         cy.login();

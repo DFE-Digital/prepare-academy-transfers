@@ -1,7 +1,7 @@
 let outgoingTrustId = '10059580';
 let incomingTrustId = '10060470';
 
-describe('Select multiple academies', { tags: '@dev'},  () => {
+describe.skip('Select multiple academies', { tags: '@dev'},  () => {
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

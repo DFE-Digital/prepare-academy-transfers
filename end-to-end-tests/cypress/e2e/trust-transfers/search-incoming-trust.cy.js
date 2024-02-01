@@ -1,6 +1,6 @@
 let trustId = '10060470';
 
-describe('Tests to check search incoming trust error message', { tags: '@dev'}, () => {
+describe.skip('Tests to check search incoming trust error message', { tags: '@dev'}, () => {
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

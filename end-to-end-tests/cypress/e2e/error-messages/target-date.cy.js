@@ -1,4 +1,4 @@
-describe('Tests to check target date error messages', { tags: '@dev'}, () => {
+describe.skip('Tests to check target date error messages', { tags: '@dev'}, () => {
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

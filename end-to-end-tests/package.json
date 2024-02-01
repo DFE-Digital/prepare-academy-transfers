@@ -1,14 +1,32 @@
 {
-  "name": "end-to-end-tests",
+  "name": "prepare-academy-transfers-cypress-tests",
   "version": "1.0.0",
+  "description": "Automated regression tests for the Academy Transfers service",
   "main": "index.js",
   "scripts": {
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DFE-Digital/prepare-academy-transfers.git"
+  },
+  "keywords": [
+    "testing",
+    "cypress"
+  ],
+  "contributors": [
+    "Mike Dally",
+    "Lisa Sau",
+    "Richika Dogra",
+    "Chris Sherlock"
+  ],
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DFE-Digital/prepare-academy-transfers/issues"
+  },
+  "homepage": "https://github.com/DFE-Digital/prepare-academy-transfers#readme",
   "devDependencies": {
     "cypress": "~12.1.0",
     "cypress-axe": "^1.2.0",
@@ -19,6 +37,5 @@
     "mysql": "^2.18.1",
     "zaproxy": "^2.0.0-rc.2"
   },
-  "dependencies": {},
-  "description": ""
+  "dependencies": {}
 }

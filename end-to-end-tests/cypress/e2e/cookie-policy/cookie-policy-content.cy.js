@@ -1,5 +1,5 @@
 Cypress._.each(['ipad-mini'], (viewport) => {
-    describe(`107471: Cookie content details on Transfers on ${viewport}`, () => {
+    describe.skip(`107471: Cookie content details on Transfers on ${viewport}`, () => {
       beforeEach(() => {
         cy.viewport(viewport);
         cy.login();

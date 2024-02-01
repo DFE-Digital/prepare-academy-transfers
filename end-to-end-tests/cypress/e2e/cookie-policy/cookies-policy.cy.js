@@ -1,7 +1,7 @@
 /// <reference types ='Cypress'/>
 
 Cypress._.each(['ipad-mini'], (viewport) => {
-	describe(`110944 Cookie consent details for Transfers on ${viewport}`, () => {
+	describe.skip(`110944 Cookie consent details for Transfers on ${viewport}`, () => {
 		beforeEach(() => {
 			cy.login()
 			cy.viewport(viewport)

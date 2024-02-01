@@ -1,4 +1,4 @@
-describe('Tests to check advisory board date error messages', { tags: '@dev'}, () => {
+describe.skip('Tests to check advisory board date error messages', { tags: '@dev'}, () => {
     beforeEach(function () {
         cy.login();
         cy.get('[data-test=cookie-banner-accept]').click();

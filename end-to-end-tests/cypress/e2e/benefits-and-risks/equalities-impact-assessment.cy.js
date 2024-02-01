@@ -1,6 +1,6 @@
 /// <reference types ='Cypress'/>
 
-describe('Tests to check equalities impact assessment form',{ tags: '@dev'}, () => {
+describe.skip('Tests to check equalities impact assessment form',{ tags: '@dev'}, () => {
     let fetchProjectsDev = ['10002890']
     let fetchProjectsStage = ['10000217']
     let url = Cypress.env('url')

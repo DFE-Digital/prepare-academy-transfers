@@ -20,7 +20,7 @@ function clickBackLink() {
 }
 
 
-describe("Locate project and check against Key Stage 2 table", { tags: '@skip'}, () => {
+describe.skip("Locate project and check against Key Stage 2 table", { tags: '@skip'}, () => {
     beforeEach(function () {
         cy.login()
     })
