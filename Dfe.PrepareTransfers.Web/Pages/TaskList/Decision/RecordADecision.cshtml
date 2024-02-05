@@ -1,0 +1,19 @@
+@page "/project/{urn}/record-a-decision"
+
+@model Dfe.PrepareTransfers.Web.Pages.Decision.RecordADecision
+
+@{
+    ViewBag.Title = "Record a decision";
+    Layout = "_Layout";
+}
+
+@section BeforeMain
+{   
+}
+<partial name="_IncomingTrustHeading" model="@Model.Project" />
+
+<div class="govuk-grid-column-full">
+    <partial name="_SubMenu" />
+</div>
+
+record-a-decision

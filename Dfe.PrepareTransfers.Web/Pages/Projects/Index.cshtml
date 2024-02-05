@@ -36,11 +36,15 @@
             <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
         </p>
 
+        <div class="govuk-grid-column-full">
+            <partial name="_SubMenu"  />
+        </div>
+
         <h2 class="govuk-heading-l">
-            Create a project template
+            Prepare a project document
         </h2>
         <p class="govuk-body">
-            By completing the following sections, you can create a project template that will help you prepare for an advisory board meeting.
+            By completing the following sections, you can prepare a project document that will help you prepare for an advisory board meeting.
         </p>
         <p class="govuk-body">You can complete them in any order.</p>
     </div>
@@ -106,17 +110,17 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l">
-            Preview or generate project template
+            Create your project document
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
-            Download the template as a Word document or preview its contents.
+            Project documents are in Microsoft Word format. You can preview them first and make changes to them afterwards.
         </p>
         <div class="govuk-button-group">
             <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-urn="@Model.Urn" method="get">
-                <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
+                <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project document</button>
             </form>
             <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
-                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb" data-google-analytics-project-generate>Generate project template</button>
+                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb" data-google-analytics-project-generate>Create project document</button>
             </form>
 
         </div>
