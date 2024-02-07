@@ -12,29 +12,20 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-const fs = require('fs');
-/**
- * @type {Cypress.PluginConfig}
- */
-// eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-    // `on` is used to hook into various events Cypress emits
-    // `config` is the resolved Cypress config
-    on('task', {
-        getDownloadedDoc({path}) {
-            let files = fs.readdirSync(path);
-            return files.find((fileName) => fileName.includes(".docx"))
-        }
-    });
-}
-/*
-  Using Cypress-SQL-Server to connect to the database
-*/
-const sqlServer = require('cypress-sql-server');
-module.exports = (on, config) => {
-  tasks = sqlServer.loadDBPlugin(config.env.db);
-  on('task', tasks);
-}
+// const fs = require('fs');
+// /**
+//  * @type {Cypress.PluginConfig}
+//  */
+// module.exports = (on, config) => {
+//     // `on` is used to hook into various events Cypress emits
+//     // `config` is the resolved Cypress config
+//     on('task', {
+//         getDownloadedDoc({path}) {
+//             let files = fs.readdirSync(path);
+//             return files.find((fileName) => fileName.includes(".docx"))
+//         }
+//     });
+// }
 
 // ***********************************************************
 
@@ -47,8 +38,11 @@ module.exports = (on, config) => {
  * @example {tags: '@spike'}
  * @example {tags: '@skip'}
  */
- module.export = (on, config) => {
+ module.exports = (on, config) => {
+
+  config.baseUrl = config.env.url
   
-  require('cypress-grep/src/plugin')(config)
+  require('@cypress/grep/src/plugin')(config)
+  return config
 }
 // ***********************************************************

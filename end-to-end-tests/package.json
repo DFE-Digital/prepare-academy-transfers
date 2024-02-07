@@ -6,7 +6,7 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "lint": "eslint . --ext .cy.js,.jsx,.ts,.tsx --ignore-path .gitignore"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
@@ -28,14 +28,13 @@
   },
   "homepage": "https://github.com/DFE-Digital/prepare-academy-transfers#readme",
   "devDependencies": {
-    "cypress": "~12.1.0",
+    "@cypress/grep": "^4.0.1",
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/parser": "^6.20.0",
+    "cypress": "~13.6.4",
     "cypress-axe": "^1.2.0",
-    "cypress-grep": "^2.6.1",
-    "cypress-localstorage-commands": "^1.6.1",
-    "cypress-sql-server": "^1.0.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "mysql": "^2.18.1",
+    "typescript": "^5.3.3",
     "zaproxy": "^2.0.0-rc.2"
-  },
-  "dependencies": {}
+  }
 }
