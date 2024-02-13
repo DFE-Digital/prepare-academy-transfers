@@ -17,11 +17,15 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
         <span class="govuk-caption-l">Project reference: @Model.ProjectReference</span>
+
         <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
             @Model.IncomingTrustName
         </h1>
 
-        <p class="govuk-body govuk-!-margin-bottom-8">
+        <p class="govuk-body govuk-!-margin-bottom-1">
+            Route: Transfer
+        </p>
+        <p class="govuk-body govuk-!-margin-bottom-5">
             Delivery officer:
 
             @if (Model.AssignedUser == null || string.IsNullOrWhiteSpace(Model?.AssignedUser.FullName))
@@ -35,12 +39,15 @@
 
             <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
         </p>
+        <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-8">
+            <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+        </p>
 
         <h2 class="govuk-heading-l">
-            Create a project template
+            Prepare a project document
         </h2>
         <p class="govuk-body">
-            By completing the following sections, you can create a project template that will help you prepare for an advisory board meeting.
+            Complete the following sections to create a project document that will help you prepare for an advisory board meeting.
         </p>
         <p class="govuk-body">You can complete them in any order.</p>
     </div>
@@ -50,7 +57,7 @@
     <div class="govuk-grid-column-three-quarters">
         <ol class="moj-task-list">
             <li>
-                <h3 class="moj-task-list__section">
+                <h3 class="moj-task-list__section govuk-!-margin-top-8">
                     Transfer details
                 </h3>
                 <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
@@ -66,18 +73,8 @@
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="benefits" asp-page="/Projects/BenefitsAndRisks/Index" asp-route-urn="@Model.Urn" data-test="transfer-benefits">Benefits and risks</a>
-                        </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
-                    </li>
-                        <li class="moj-task-list__item">
-                            <span class="moj-task-list__task-name">
-                                <a class="govuk-link" aria-describedby="legal-requirements" asp-page="/Projects/LegalRequirements/Index" asp-route-urn="@Model.Urn" data-test="transfer-legal-requirements">Legal requirements</a>
-                            </span><projectstatus id="legal-requirements" status="@Model.LegalRequirementsStatus"></projectstatus>
-                        </li>
-                    <li class="moj-task-list__item">
-                        <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="rationale" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn" data-test="transfer-rationale">Rationale</a>
-                        </span><projectstatus id="rationale" status="@Model.RationaleStatus"></projectstatus>
+                            <a class="govuk-link" aria-describedby="legal-requirements" asp-page="/Projects/LegalRequirements/Index" asp-route-urn="@Model.Urn" data-test="transfer-legal-requirements">Legal requirements</a>
+                        </span><projectstatus id="legal-requirements" status="@Model.LegalRequirementsStatus"></projectstatus>
                     </li>
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
@@ -87,15 +84,38 @@
                         </span><projectstatus id="academyandtrustinformation" , status="@Model.AcademyAndTrustInformationStatus"></projectstatus>
                     </li>
                 </ul>
+
+                <h3 class="moj-task-list__section govuk-!-margin-top-8">
+                    Give a case for this transfer
+                </h3>
+                <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a class="govuk-link" aria-describedby="benefits" asp-page="/Projects/BenefitsAndRisks/Index" asp-route-urn="@Model.Urn" data-test="transfer-benefits">Benefits and risks</a>
+                        </span><projectstatus id="benefits" status="@Model.BenefitsAndOtherFactorsStatus"></projectstatus>
+                    </li>
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a class="govuk-link" aria-describedby="rationale" asp-page="/Projects/Rationale/Index" asp-route-urn="@Model.Urn" data-test="transfer-rationale">Rationale</a>
+                        </span><projectstatus id="rationale" status="@Model.RationaleStatus"></projectstatus>
+                    </li>
+                </ul>
             </li>
             <li>
-                <h3 class="moj-task-list__section">
+                <h3 class="moj-task-list__section govuk-!-margin-top-8">
                     School data
                 </h3>
-                <ul class="govuk-list govuk-list--spaced">
+                <div class="govuk-inset-text show-white-space">
+                    This information will be added to your project document automatically
+                </div>
+                <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
                     @for (int i = 0; i < Model.Academies.Count; i++)
                     {
-                        <li><a data-test="sd-academy-@(i+1)" class="govuk-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.Academies[i].Item1">@Model.Academies[i].Item2</a></li>
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a data-test="sd-academy-@(i+1)" class="govuk-link" asp-page="/TaskList/SchoolData" asp-route-urn="@Model.Urn" asp-route-academyUkprn="@Model.Academies[i].Item1">@Model.Academies[i].Item2</a>
+                            </span>
+                        </li>
                     }
                 </ul>
             </li>
@@ -106,17 +126,17 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l">
-            Preview or generate project template
+            Create your project document
         </h2>
         <p class="govuk-body govuk-!-margin-bottom-6">
-            Download the template as a Word document or preview its contents.
+            Project documents are in Microsoft Word format. You can preview them first and make changes to them afterwards.
         </p>
         <div class="govuk-button-group">
             <form asp-page="@Links.HeadteacherBoard.Preview.PageName" asp-route-urn="@Model.Urn" method="get">
-                <button class="govuk-button" data-module="govuk-button" data-test="preview-htb">Preview project template</button>
+                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="preview-htb">Preview project document</button>
             </form>
             <form asp-page="/TaskList/HtbDocument/Download" asp-route-urn="@Model.Urn" method="get">
-                <button class="govuk-button govuk-button--secondary" data-module="govuk-button" data-test="generate-htb" data-google-analytics-project-generate>Generate project template</button>
+                <button class="govuk-button" data-module="govuk-button" data-test="generate-htb" data-google-analytics-project-generate>Create project document</button>
             </form>
 
         </div>
