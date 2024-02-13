@@ -55,7 +55,7 @@ describe('Create a project template', () => {
     checkAnswersPage
       .continue()
 
-    projectPage.getProject()
+    projectId = projectPage.getProject()
   })
 
   beforeEach(() => {
