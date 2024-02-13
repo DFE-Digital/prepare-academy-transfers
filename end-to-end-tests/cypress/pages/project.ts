@@ -145,6 +145,13 @@ class ProjectPage {
 
     return this
   }
+
+  public viewSchoolData(): this {
+
+    cy.get('[data-test="sd-academy-1"]').click()
+    
+    return this
+  }
 }
 
 const projectPage = new ProjectPage()
