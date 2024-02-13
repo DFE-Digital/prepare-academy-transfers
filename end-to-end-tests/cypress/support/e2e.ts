@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 // ***********************************************************
 // This example support/e2e.js is processed and
 // loaded automatically before your test files.
@@ -35,7 +37,7 @@ Cypress.dayjs = dayjs
 // ***********************************************************
 
 // Add downloaded file verification
-require('cy-verify-downloads').addCustomCommand();
+require('cy-verify-downloads').addCustomCommand()
 
 // ***********************************************************
 

@@ -12,37 +12,13 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-// const fs = require('fs');
 // /**
 //  * @type {Cypress.PluginConfig}
 //  */
-// module.exports = (on, config) => {
-//     // `on` is used to hook into various events Cypress emits
-//     // `config` is the resolved Cypress config
-//     on('task', {
-//         getDownloadedDoc({path}) {
-//             let files = fs.readdirSync(path);
-//             return files.find((fileName) => fileName.includes(".docx"))
-//         }
-//     });
-// }
-
-// ***********************************************************
-
-//***Cypress Grep module for filtering tests Any new tags should be added to the examples**
-/**
- * @example {{tags: '@dev'} : Development
- * @example {tags: '@stage'} : Staging
- * @example {tags: '@integration'} : Integration
- * @example {tags: ['@dev', '@stage']}
- * @example {tags: '@spike'}
- * @example {tags: '@skip'}
- */
- module.exports = (on, config) => {
-
-  config.baseUrl = config.env.url
-  
-  require('@cypress/grep/src/plugin')(config)
-  return config
+// eslint-disable-next-line no-unused-vars
+module.exports = (on, config) => {
+    // `on` is used to hook into various events Cypress emits
+    // `config` is the resolved Cypress config
 }
+
 // ***********************************************************

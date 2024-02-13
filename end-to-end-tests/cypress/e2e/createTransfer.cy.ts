@@ -11,7 +11,7 @@ import projectPage from 'cypress/pages/project'
 
 describe('Create a new transfer', () => {
 
-  let outgoingTrustData, incomingTrustData;
+  let outgoingTrustData, incomingTrustData
 
   beforeEach(() => {
     cy.visit(Cypress.env('url'))

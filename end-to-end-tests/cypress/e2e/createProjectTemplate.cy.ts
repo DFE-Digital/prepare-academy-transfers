@@ -20,7 +20,7 @@ import previewPage from 'cypress/pages/preview'
 
 describe('Create a project template', () => {
 
-  let outgoingTrustData, incomingTrustData, projectId;
+  let outgoingTrustData, incomingTrustData, projectId
   const advisoryBoardDate = Cypress.dayjs().add(3, 'month')
   const transferDate = Cypress.dayjs().add(4, 'month')
 

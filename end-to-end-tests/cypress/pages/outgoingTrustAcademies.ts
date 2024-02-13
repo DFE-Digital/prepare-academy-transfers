@@ -8,7 +8,7 @@ class OutgoingTrustAcademiesPage extends BasePage {
 
     academies.array.forEach(academy => {
       this.selectSingleAcademy(academy)
-    });
+    })
 
     return this
   }
