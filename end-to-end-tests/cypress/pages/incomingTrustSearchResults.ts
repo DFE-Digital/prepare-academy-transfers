@@ -8,7 +8,7 @@ class IncomingTrustSearchResultsPage extends BasePage {
 
     cy.get('label').contains(trustName).click()
 
-    this.continueTransfer()
+    this.continue()
 
     return this
   }

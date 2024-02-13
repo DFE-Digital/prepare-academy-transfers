@@ -15,16 +15,39 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+import 'cypress-axe'
 
+// ***********************************************************
+
+// Make dayjs available across all test files
 const dayjs = require('dayjs')
+
+declare global {
+    namespace Cypress {
+        interface Cypress {
+            dayjs: dayjs.Dayjs
+        }
+    }
+}
+
 Cypress.dayjs = dayjs
 
-beforeEach(() => {
+// ***********************************************************
+
+// Add downloaded file verification
+require('cy-verify-downloads').addCustomCommand();
+
+// ***********************************************************
+
+// Add auth bypass header before tests run
+before(() => {
     cy.intercept(
         { url: Cypress.env('url') + '**', middleware: true },
         //Add authorization to all Cypress requests
-        (req) => req.headers['Authorization'] = 'Bearer ' + Cypress.env('authorizationHeader'),
-        (req) => req.headers['AuthorizationRole'] = 'transfers.create'
+        (req) => {
+            req.headers['Authorization'] = 'Bearer ' + Cypress.env('authorizationHeader'),
+            req.headers['AuthorizationRole'] = 'transfers.create'
+        }
     )
 })
 
@@ -35,4 +58,4 @@ import registerCypressGrep from '@cypress/grep/src/support'
 registerCypressGrep()
 
 // ***********************************************************
-import 'cypress-axe'
+

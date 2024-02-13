@@ -1,6 +1,6 @@
 export class BasePage {
 
-  public continueTransfer(): this {
+  public continue(): this {
 
     cy.get('button').contains('Continue').click()
 

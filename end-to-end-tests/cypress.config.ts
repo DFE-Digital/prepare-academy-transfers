@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
-import { generateZapReport } from './cypress/plugins/generateZapReport'
+const { generateZapReport } = require('./cypress/plugins/generateZapReport')
+const { verifyDownloadTasks } = require('cy-verify-downloads');
 
 export default defineConfig({
   video: false,
@@ -12,7 +13,9 @@ export default defineConfig({
         if(process.env.ZAP) {
           await generateZapReport()
         }
-      })
+      }),
+
+      on('task', verifyDownloadTasks)
     },
   },
 });

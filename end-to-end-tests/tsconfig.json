@@ -102,9 +102,6 @@
 		"baseUrl": "./",
 	
 		"lib": ["esnext", "dom"],
-		"types": ["node", "cypress", "cypress-axe"]
-		
-		
-
+		"types": ["node", "cypress", "cypress-axe", "cy-verify-downloads", "./cypress/support"]
   }
 }

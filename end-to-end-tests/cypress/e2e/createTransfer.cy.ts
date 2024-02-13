@@ -27,26 +27,34 @@ describe('Create a new transfer', () => {
 
   it('Creates a new academy transfer', () => {
 
-    homePage.startCreateNewTransfer()
+    homePage
+      .startCreateNewTransfer()
 
-    newTransferPage.clickCreateNewTransfer()
+    newTransferPage
+      .clickCreateNewTransfer()
 
-    outgoingTrustSearchPage.searchTrustsByName(outgoingTrustData.name)
+    outgoingTrustSearchPage
+      .searchTrustsByName(outgoingTrustData.name)
 
-    outgoingTrustSearchResultsPage.selectTrust(outgoingTrustData.name)
+    outgoingTrustSearchResultsPage
+      .selectTrust(outgoingTrustData.name)
 
-    outgoingTrustDetailsPage.checkTrustDetails(outgoingTrustData)
-    outgoingTrustDetailsPage.continueTransfer()
+    outgoingTrustDetailsPage
+      .checkTrustDetails(outgoingTrustData)
+      .continue()
 
     outgoingTrustAcademiesPage.selectSingleAcademy(outgoingTrustData.academies)
-    outgoingTrustAcademiesPage.continueTransfer()
+      .continue()
 
-    incomingTrustSearchPage.searchTrustsByName(incomingTrustData.name)
+    incomingTrustSearchPage
+      .searchTrustsByName(incomingTrustData.name)
 
-    incomingTrustSearchResultsPage.selectTrust(incomingTrustData.name)
+    incomingTrustSearchResultsPage
+      .selectTrust(incomingTrustData.name)
 
-    checkAnswersPage.checkDetails(outgoingTrustData, incomingTrustData)
-    checkAnswersPage.continueTransfer()
+    checkAnswersPage
+      .checkDetails(outgoingTrustData, incomingTrustData)
+      .continue()
 
     cy.url().should('include', `${projectPage.slug}`)
   })
