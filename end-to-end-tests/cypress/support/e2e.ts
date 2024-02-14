@@ -26,6 +26,9 @@ const dayjs = require('dayjs')
 
 declare global {
     namespace Cypress {
+        interface Chainable {
+            excuteAccessibilityTests(): Chainable<Element>;
+        }
         interface Cypress {
             dayjs: dayjs.Dayjs
         }
@@ -42,7 +45,7 @@ require('cy-verify-downloads').addCustomCommand()
 // ***********************************************************
 
 // Add auth bypass header before tests run
-before(() => {
+beforeEach(() => {
     cy.intercept(
         { url: Cypress.env('url') + '**', middleware: true },
         //Add authorization to all Cypress requests

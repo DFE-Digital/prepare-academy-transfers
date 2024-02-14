@@ -2,6 +2,12 @@ class HomePage {
 
   public slug = 'home'
 
+  public open(): this {
+
+    cy.visit(Cypress.env('url'))
+    return this
+  }
+
   public startCreateNewTransfer(): this {
 
     cy.get('[data-test=create-transfer]').click()
@@ -63,6 +69,12 @@ class HomePage {
 
     cy.get('a').contains('Clear filters').click()
 
+    return this
+  }
+
+  public selectFirstProject(): this {
+
+    cy.get('[data-id*="project-link"]').first().click()
     return this
   }
 }

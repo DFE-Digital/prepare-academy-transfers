@@ -5,7 +5,8 @@ describe('Filter projects', () => {
   const projectTitle = 'Burnt Ash Primary School'
 
   beforeEach(() => {
-    cy.visit(Cypress.env('url'))
+    homePage
+      .open()
   })
 
   it('Can toggle the filter open and closed', () => {

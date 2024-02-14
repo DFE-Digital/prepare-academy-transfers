@@ -2,14 +2,11 @@ class ProjectPage {
 
   public slug = 'project'
 
-  public getProject(): string {
-    let projectId = ''
+  public loadProject(projectId): this {
 
-    cy.url().then((url) => {
-      projectId = url.split('/').at(-1)!
-    })
-
-    return projectId
+    cy.visit(`${Cypress.env('url')}project/${projectId}`)
+    
+    return this
   }
 
   public checkProjectId(id): this {
