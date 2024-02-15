@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Pages.Home;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -14,10 +17,24 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Home
         private readonly Mock<ILogger<Index>> _logger = new Mock<ILogger<Index>>();
         private readonly Index _subject;
         private readonly Mock<IUrlHelper> _urlHelper = new Mock<IUrlHelper>();
-        
+
         public IndexTests()
         {
-            _subject = new Index(ProjectRepository.Object, _logger.Object);
+            var tempData = new Mock<ITempDataDictionary>();
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Query = new QueryCollection();
+
+            var pageContext = new PageContext
+            {
+                HttpContext = httpContext
+            };
+
+            _subject = new Index(ProjectRepository.Object, _logger.Object)
+            {
+                PageContext = pageContext,
+                TempData = tempData.Object
+            };
+
             var foundProjects = new List<ProjectSearchResult>
             {
                 new ProjectSearchResult {Urn = "1"},
