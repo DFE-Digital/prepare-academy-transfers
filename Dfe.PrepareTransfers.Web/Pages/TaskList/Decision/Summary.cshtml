@@ -1,0 +1,176 @@
+﻿@page "/task-list/{urn}/decision/summary"
+@using Dfe.Academisation.ExtensionMethods
+@using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
+@using Dfe.PrepareTransfers.Helpers
+@model Dfe.PrepareTransfers.Pages.TaskList.Decision.SummaryModel
+@{
+   ViewData["Title"] = $"Check your {Model.DecisionText} answers";
+   Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <a asp-page="@Links.Decision.DecisionDate.PageName" asp-route-urn="@Model.Urn" class="govuk-back-link">Back</a>
+}
+
+<span id="selection-span" class="govuk-caption-l">@Model.TrustName</span>
+<h1 class="govuk-heading-l">Check your answers before recording this decision</h1>
+
+<dl class="govuk-summary-list">
+
+   <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+         Decision
+      </dt>
+      <dd class="govuk-summary-list__value">
+
+         @{
+            var decisionName = Model.Decision.GetDecisionAsFriendlyName();
+
+            var decisionClass = Model.Decision.Decision switch
+            {
+               AdvisoryBoardDecisions.Approved => "govuk-tag--green",
+               AdvisoryBoardDecisions.Deferred => "govuk-tag--orange",
+               _ => "govuk-tag--red"
+               };
+         }
+         @if (string.IsNullOrEmpty(decisionName))
+         {
+            <span class="empty">Empty</span>
+         }
+         else
+         {
+            <strong class="govuk-tag @decisionClass" id="decision">@decisionName</strong>
+         }
+
+      </dd>
+      <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.RecordDecision.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-decision-btn">
+            Change<span class="govuk-visually-hidden">decision</span>
+         </a>
+      </dd>
+   </div>
+   <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+         Who made this decision
+      </dt>
+      <dd class="govuk-summary-list__value">
+
+         @if (Model.Decision.DecisionMadeBy != null)
+         {
+            <div id="decision-made-by">@Model.Decision.DecisionMadeBy.ToDescription()</div>
+         }
+         else
+         {
+            <span class="empty">Empty</span>
+         }
+      </dd>
+      <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.WhoDecided.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-who-btn">
+            Change<span class="govuk-visually-hidden">who made this decision</span>
+         </a>
+      </dd>
+   </div>
+
+   @if (Model.Decision.Decision == AdvisoryBoardDecisions.Declined)
+   {
+      <div class="govuk-summary-list__row">
+         <dt class="govuk-summary-list__key">
+            Reasons
+         </dt>
+
+         <dd class="govuk-summary-list__value" id="decline-reasons">
+            @foreach (AdvisoryBoardDeclinedReasonDetails reason in Model.Decision.DeclinedReasons)
+            {
+               <div>@reason.Reason.ToDescription():</div>
+               <div class="govuk-!-margin-bottom-2">@reason.Details</div>
+            }
+         </dd>
+
+         <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.DeclineReason.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-declined-btn">
+               Change<span class="govuk-visually-hidden">rejected-reason</span>
+            </a>
+         </dd>
+      </div>
+   }
+
+   @if (Model.Decision.Decision == AdvisoryBoardDecisions.Deferred)
+   {
+      <div class="govuk-summary-list__row">
+         <dt class="govuk-summary-list__key">
+            Why was this project deferred
+         </dt>
+         <dd class="govuk-summary-list__value" id="deferred-reasons">
+
+            @foreach (AdvisoryBoardDeferredReasonDetails reason in Model.Decision.DeferredReasons)
+            {
+               <div>@reason.Reason.ToDescription():</div>
+               <div class="govuk-!-margin-bottom-2">@reason.Details</div>
+            }
+
+         </dd>
+         <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.WhyDeferred.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-deferred-btn">
+               Change<span class="govuk-visually-hidden">rejected-reason</span>
+            </a>
+         </dd>
+      </div>
+   }
+
+   @if (Model.Decision.Decision == AdvisoryBoardDecisions.Approved)
+   {
+      var conditionsSet = Model.Decision.ApprovedConditionsSet.GetValueOrDefault();
+
+      <div class="govuk-summary-list__row">
+         <dt class="govuk-summary-list__key">
+            Were any conditions set
+         </dt>
+         <dd class="govuk-summary-list__value" id="condition-set">
+            @if (conditionsSet)
+            {
+               <div class="govuk-!-margin-bottom-2">Yes:</div>
+               <div class="govuk-!-margin-bottom-2">@Model.Decision.ApprovedConditionsDetails</div>
+            }
+            else
+            {
+               <span>No</span>
+            }
+         </dd>
+         <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.AnyConditions.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-conditions-set-btn">
+               Change<span class="govuk-visually-hidden">condition answer</span>
+            </a>
+         </dd>
+      </div>
+   }
+
+   <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+         Date of decision
+      </dt>
+      <dd class="govuk-summary-list__value" id="decision-date">
+
+         @if (Model.Decision.AdvisoryBoardDecisionDate.HasValue)
+         {
+            <span>@Model.Decision.AdvisoryBoardDecisionDate.Value.ToString(Constants.DateTimeFormat)</span>
+         }
+         else
+         {
+            <span class="empty">Empty</span>
+         }
+
+      </dd>
+      <dd class="govuk-summary-list__actions">
+         <a class="govuk-link" asp-page="@Links.Decision.DecisionDate.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-date-btn">
+            Change<span class="govuk-visually-hidden">date of decision</span>
+         </a>
+      </dd>
+   </div>
+</dl>
+
+<form method="post">
+   <button class="govuk-button" data-module="govuk-button" id="submit-btn">
+      Record this decision
+   </button>
+</form>

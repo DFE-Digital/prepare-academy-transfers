@@ -81,4 +81,18 @@ public static class Links
             public static readonly LinkItem Home = Create("/Projects/LegalRequirements/OutgoingTrustConsent");
         }
     }
+
+    public static class Decision
+    {
+        public static readonly LinkItem RecordDecision = Create("/TaskList/Decision/RecordDecision");
+        public static readonly LinkItem WhoDecided = Create("/TaskList/Decision/WhoDecided");
+        public static readonly LinkItem DeclineReason = Create("/TaskList/Decision/DeclineReason");
+        public static readonly LinkItem AnyConditions = Create("/TaskList/Decision/AnyConditions");
+        public static readonly LinkItem DecisionDate = Create("/TaskList/Decision/DecisionDate");
+        public static readonly LinkItem WhyDeferred = Create("/TaskList/Decision/WhyDeferred");
+        public static readonly LinkItem Summary = Create("/TaskList/Decision/Summary");
+        public static readonly LinkItem SubMenuRecordADecision = Create("/TaskList/Decision/RecordADecision");
+
+    }
+
 }

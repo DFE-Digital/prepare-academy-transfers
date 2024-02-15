@@ -1,0 +1,73 @@
+﻿@model Dfe.PrepareTransfers.Web.Models.Forms.DateInputViewModel
+@{
+   var showError = !string.IsNullOrWhiteSpace(Model.ErrorMessage);
+}
+
+<div class="govuk-form-group @(showError ? "govuk-form-group--error" : "")">
+   <fieldset class="govuk-fieldset" role="group" aria-describedby="@Model.Id-hint">
+      @if (string.IsNullOrWhiteSpace(Model.Label) is false)
+      {
+         @if (Model.HeadingLabel)
+         {
+            <legend class="govuk-fieldset__legend--l">
+               <h1 class="govuk-fieldset__heading">
+                  @Model.Label
+               </h1>
+            </legend>
+         }
+         else
+         {
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+               @Model.Label
+            </legend>
+         }
+      }
+
+      <div id="@Model.Id-hint" class="govuk-hint">
+         @Model.Hint
+      </div>
+      @if (showError)
+      {
+         <span id="@Model.Id-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> @Model.ErrorMessage
+         </span>
+      }
+      <div class="govuk-date-input" id="@Model.Id">
+         <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+               <label class="govuk-label govuk-date-input__label" for="@Model.Id-day">
+                  Day
+               </label>
+               <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(Model.DayInvalid ? "govuk-input--error" : "")"
+                      id="@Model.Id-day" name="@Model.Name-day"
+                      value="@Model.Day"
+                      type="text">
+            </div>
+         </div>
+         <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+               <label class="govuk-label govuk-date-input__label" for="@Model.Id-month">
+                  Month
+               </label>
+               <input class="govuk-input govuk-date-input__input govuk-input--width-2 @(Model.MonthInvalid ? "govuk-input--error" : "")"
+                      id="@Model.Id-month"
+                      name="@Model.Name-month"
+                      value="@Model.Month"
+                      type="text">
+            </div>
+         </div>
+         <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+               <label class="govuk-label govuk-date-input__label" for="@Model.Id-year">
+                  Year
+               </label>
+               <input class="govuk-input govuk-date-input__input govuk-input--width-4 @(Model.YearInvalid ? "govuk-input--error" : "")"
+                      id="@Model.Id-year"
+                      name="@Model.Name-year"
+                      value="@Model.Year"
+                      type="text">
+            </div>
+         </div>
+      </div>
+   </fieldset>
+</div>

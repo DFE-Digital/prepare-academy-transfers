@@ -1,0 +1,72 @@
+﻿@page "/task-list/{urn}/decision/declined-reason"
+@using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
+@using Dfe.Academisation.ExtensionMethods
+@using Dfe.PrepareTransfers.Extensions
+@model Dfe.PrepareTransfers.Pages.TaskList.Decision.DeclineReasonModel
+@{
+   ViewData["Title"] = $"Why project was {Model.DecisionText}";
+   Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <partial name="_BackLink" model="@Model.BackLinkModel"/> 
+   <partial name="_ErrorSummary"/>
+}
+
+<span id="selection-span" class="govuk-caption-l">@Model.TrustName</span>
+
+<form method="post">
+
+   <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="declined-reasons-hint">
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+               Why was this project declined?
+            </h1>
+         </legend>
+
+         <div id="declined-reasons-hint" class="govuk-hint">
+            Select at least one option.
+         </div>
+
+         <div class="govuk-checkboxes @ModelState.GetErrorStyleClass()" data-module="govuk-checkboxes" id="DeclinedReasonSet">
+            @foreach (AdvisoryBoardDeclinedReasons declineOption in Model.DeclineOptions)
+            {
+               <div class="govuk-checkboxes__item" id="Decline@(declineOption)Reason">
+                  <input name="DeclinedReasons"
+                         checked="@Model.UI.IsChecked(declineOption)"
+                         class="govuk-checkboxes__input"
+                         id="@Model.UI.IdFor("declined-reasons", declineOption)"
+                         type="checkbox"
+                         value="@Model.UI.ValueFor(declineOption)"
+                         aria-controls="@Model.UI.IdFor("conditional-declined-reasons", declineOption)"
+                         aria-expanded="false">
+                  <label class="govuk-label govuk-checkboxes__label"
+                         for="@Model.UI.IdFor("declined-reasons", declineOption)">
+                     @declineOption.ToDescription()
+                  </label>
+               </div>
+
+               <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+                    id="@Model.UI.IdFor("conditional-declined-reasons", declineOption)">
+                  <div class="govuk-form-group">
+                     <label class="govuk-label" for="@Model.UI.IdFor("reason", declineOption)">
+                        Give reasons
+                     </label>
+
+                     <textarea name="@Model.UI.ReasonFieldFor(declineOption)" 
+									  class="govuk-textarea govuk-!-width-full"
+									  id="@Model.UI.IdFor("reason", declineOption)"
+									  rows="5">@Model.UI.ReasonValueFor(declineOption)</textarea>
+                  </div>
+               </div>
+            }
+         </div>
+      </fieldset>
+   </div>
+
+   <button class="govuk-button" data-module="govuk-button" id="submit-btn">
+      Continue
+   </button>
+</form>
