@@ -10,13 +10,12 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      working-directory: end-to-end-tests
     steps:
       - name: checkout code
         uses: actions/checkout@v2
 
       - name: lint cypress tests
         run: |
+          cd end-to-end-tests
           npm ci
           npm run lint        
