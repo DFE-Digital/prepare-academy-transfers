@@ -4,8 +4,6 @@
   "description": "Automated regression tests for the Academy Transfers service",
   "main": "index.js",
   "scripts": {
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "repository": {

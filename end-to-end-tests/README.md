@@ -48,40 +48,23 @@ By default, all recommended checks are set to `Error`.
 
 ## Security testing with ZAP
 
-The Cypress tests can also be run, proxied via OWASP ZAP for passive security scanning of the application.
+The Cypress tests can also be run proxied via the Zed Attack Proxy (ZAP) for passive security scanning of the application.
 
-These can be run using the configured docker-compose.yml, which will spin up containers for the ZAP daemon and the Cypress tests, including all networking required. You will need to update any config in the file before running
+Setup for running the ZAP daemon (via docker) can be found in the ZAP [documentation](https://www.zaproxy.org/docs/docker/about/#zap-headless).
 
-Create a `.env` file for docker, this file needs to include
+**Note**: You will need to mount a volume to your host system to be able to retrieve generated reports like `${PWD}/zapoutput/:/zap/wrk:rw`
 
-* all of your required cypress configuration
-* HTTP_PROXY e.g. http://zap:8080
-* ZAP_API_KEY, can be any random guid
+In your environment variables, you will need to set the following:
 
-Example env:
-```
-URL=<Enter URL>
-API_KEY=<Enter API key>
-HTTP_PROXY=http://zap:8080
-ZAP_API_KEY=<Enter random guid>
-```
-_Note: You might have trouble running this locally because of docker thinking localhost is the container and not your machine_
+| Key | Description | Example |
+|--|--|--|
+| `HTTP_PROXY` | The URL that the ZAP daemon is running at | `http://localhost:8080` |
+| `NO_PROXY` | A comma-separated list of URLS to bypass the proxy | `*.google.com,example.com` |
+| `ZAP` | Flag to identify security scanning enabled (default is `false`) | `true` |
+| `ZAP_ADDRESS` | The address that the ZAP daemon is running at | `localhost` |
+| `ZAP_PORT` | The port that the ZAP daemon is running at | `8080` |
+| `ZAP_API_KEY` | The API key configured for the ZAP daemon | `some-api-key` |
 
-To run docker compose use:
+You can then run the Cypress tests as normal using `npx cypress run`.
 
-`docker-compose -f docker-compose.yml --exit-code-from cypress`
-
-_Note: `--exit-code-from cypress` tells the container to quit when cypress finishes_
-
-You can also exclude URLs from being intercepted by using the NO_PROXY setting
-
-e.g. `NO_PROXY=*.google.com,yahoo.co.uk`
-
-Alternatively, you can run the Cypress tests against an existing ZAP proxy by setting the environment configuration
-```
-HTTP_PROXY="<zap-daemon-url>"
-NO_PROXY="<list-of-urls-to-ignore>"
-```
-and setting the runtime variables
-
-`zapReport=true,zapApiKey=<zap-api-key>,zapUrl="<zap-daemon-url>"`
+HTML reports will be generated at the end of the run which will contain any identified issues.

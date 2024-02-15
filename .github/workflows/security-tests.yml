@@ -63,16 +63,14 @@ jobs:
       - name: Run tests with scanner
         env:
           AUTH_HEADER: ${{ secrets.AUTH_HEADER_CYPRESS }}
-          db: ${{ secrets.DB_CONNECTION_STRING }}
           HTTP_PROXY: http://${{ env.ZAP_ADDRESS }}:${{ env.ZAP_PORT }}
-          KEY: ${{ secrets.CYPRESS_KEY }}
           NO_PROXY: "google-analytics.com,googletagmanager.com,microsoftonline.com,gvt1.com"
           URL: ${{ secrets.AZURE_ENDPOINT }}
           ZAP: true
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
           ZAP_ADDRESS: ${{ env.ZAP_ADDRESS }}
           ZAP_PORT: ${{ env.ZAP_PORT }}
-        run: npm run cypress:run -- --key $KEY --env url${URL,authorizationHeader=$AUTH_HEADER
+        run: npx cypress run --env url=$URL,authorizationHeader=$AUTH_HEADER
 
       - name: Get git sha
         if: '!cancelled()'

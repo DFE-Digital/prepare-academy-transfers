@@ -156,7 +156,7 @@ jobs:
         run: npm install
 
       - name: Run cypress
-        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+        run: npx cypress run --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
 
