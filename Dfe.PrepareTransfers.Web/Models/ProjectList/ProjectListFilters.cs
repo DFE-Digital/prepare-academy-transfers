@@ -17,7 +17,7 @@ public class ProjectListFilters
     [BindProperty]
     public string? Title { get; set; }
 
-    public bool IsFiltered => string.IsNullOrWhiteSpace(Title) is false;
+    public bool IsFiltered => !string.IsNullOrWhiteSpace(Title);
 
     public ProjectListFilters PersistUsing(IDictionary<string, object?> store)
     {
@@ -54,7 +54,7 @@ public class ProjectListFilters
 
     private string[] Get(string key, bool persist = false)
     {
-        if (_store.ContainsKey(key) is false) return Array.Empty<string>();
+        if (!_store.ContainsKey(key)) return Array.Empty<string>();
 
         string[]? value = (string[]?)_store[key];
         if (persist) Cache(key, value);
