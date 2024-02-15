@@ -4,63 +4,63 @@ using System.Net;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
+using Dfe.PrepareTransfers.Web.Models.ProjectList;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Home
 {
-   public class Index : PageModel
-   {
-      private const int PageSize = 10;
+    public class Index : PageModel
+    {
+        private const int PageSize = 10;
 
-      private readonly ILogger<Index> _logger;
-      private readonly IProjects _projectsRepository;
-      private List<ProjectSearchResult> _projects;
+        private readonly ILogger<Index> _logger;
+        private readonly IProjects _projectsRepository;
+        private List<ProjectSearchResult> _projects;
 
-      public IReadOnlyList<ProjectSearchResult> Projects => _projects.AsReadOnly();
-      public int TotalProjectCount { get; private set; }
+        public IReadOnlyList<ProjectSearchResult> Projects => _projects.AsReadOnly();
+        public int TotalProjectCount { get; private set; }
 
-      public int SearchCount { get; private set; }
-      public Index(IProjects projectsRepository, ILogger<Index> logger)
-      {
-         _projectsRepository = projectsRepository;
-         _logger = logger;
-      }
+        public int SearchCount { get; private set; }
+        public Index(IProjects projectsRepository, ILogger<Index> logger)
+        {
+            _projectsRepository = projectsRepository;
+            _logger = logger;
+        }
 
-      public int StartingPage { get; private set; } = 1;
-      public bool HasPreviousPage => CurrentPage > 1;
-      public bool HasNextPage => TotalProjectCount > CurrentPage * PageSize;
-      public int PreviousPage => CurrentPage - 1;
-      public int NextPage => CurrentPage + 1;
-    public int TotalPages => TotalProjectCount % PageSize == 0
-        ? TotalProjectCount / PageSize
-        : (TotalProjectCount / PageSize) + 1;
+        public int StartingPage { get; private set; } = 1;
+        public bool HasPreviousPage => CurrentPage > 1;
+        public bool HasNextPage => TotalProjectCount > CurrentPage * PageSize;
+        public int PreviousPage => CurrentPage - 1;
+        public int NextPage => CurrentPage + 1;
+        public int TotalPages => TotalProjectCount % PageSize == 0
+            ? TotalProjectCount / PageSize
+            : (TotalProjectCount / PageSize) + 1;
 
-      [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
-      [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
-      [BindProperty(SupportsGet = true)] public string TitleFilter { get; set; }
+        [BindProperty(SupportsGet = true)] public string ReturnUrl { get; set; }
+        [BindProperty(SupportsGet = true)] public int CurrentPage { get; set; } = 1;
 
-      public bool IsFiltered => string.IsNullOrWhiteSpace(TitleFilter) is false;
+        [BindProperty] public ProjectListFilters Filters { get; set; } = new();
 
-      public async Task<IActionResult> OnGetAsync()
-      {
+        public async Task<IActionResult> OnGetAsync()
+        {
+            Filters.PersistUsing(TempData).PopulateFrom(Request.Query);
 
-          if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
+            if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
-          RepositoryResult<List<ProjectSearchResult>> projects =
-              await _projectsRepository.GetProjects(CurrentPage, TitleFilter, PageSize);
-          
-          _projects = new List<ProjectSearchResult>(projects.Result.Where(r => r.Reference is not null));
-          SearchCount = projects.Result.Count;
-          TotalProjectCount = projects.TotalRecords;
-      
-          if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+            RepositoryResult<List<ProjectSearchResult>> projects =
+                  await _projectsRepository.GetProjects(CurrentPage, Filters.Title, PageSize);
 
-          _logger.LogInformation("Home page loaded");
-          return Page();
-      }
+            _projects = new List<ProjectSearchResult>(projects.Result.Where(r => r.Reference is not null));
+            SearchCount = projects.Result.Count;
+            TotalProjectCount = projects.TotalRecords;
+
+            if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+
+            _logger.LogInformation("Home page loaded");
+            return Page();
+        }
 
 
         /// <summary>
@@ -69,21 +69,21 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
         /// <param name="actionResult">action result to redirect to</param>
         /// <returns>true if redirecting</returns>
         private bool RedirectToReturnUrl(out IActionResult actionResult)
-      {
-         actionResult = null;
-         var decodedUrl = "";
-         if (!string.IsNullOrEmpty(ReturnUrl))
-         {
-             decodedUrl = WebUtility.UrlDecode(ReturnUrl);
-         }
+        {
+            actionResult = null;
+            var decodedUrl = "";
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {
+                decodedUrl = WebUtility.UrlDecode(ReturnUrl);
+            }
 
-         if (Url.IsLocalUrl(decodedUrl))
-         {
-            actionResult = Redirect(ReturnUrl);
-            return true;
-         }
+            if (Url.IsLocalUrl(decodedUrl))
+            {
+                actionResult = Redirect(ReturnUrl);
+                return true;
+            }
 
-         return false;
-      }
-   }
+            return false;
+        }
+    }
 }
