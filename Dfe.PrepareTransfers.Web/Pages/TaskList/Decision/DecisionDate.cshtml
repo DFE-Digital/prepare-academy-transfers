@@ -1,0 +1,27 @@
+﻿@page "/task-list/{urn}/decision/decision-date"
+@using Dfe.PrepareTransfers.Extensions
+@using Dfe.PrepareTransfers.TagHelpers
+@model Dfe.PrepareTransfers.Pages.TaskList.Decision.DecisionDate
+@{
+   ViewData["Title"] = $"Date {Model.DecisionText}";
+   Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <partial name="_BackLink" model="@Model.BackLinkModel"/> 
+   <partial name="_ErrorSummary"/>
+}
+
+<span id="selection-span" class="govuk-caption-l">@Model.TrustName</span>
+<h1 class="govuk-heading-l">Date conversion was @Model.DecisionText</h1>
+
+<form method="post">
+   <div class="govuk-form-group @ModelState.GetErrorStyleClass()">
+      <govuk-date-input heading-label="true" name="decision-date" asp-for="@Model.DateOfDecision" hint="For example, 27 3 2021"/>
+   </div>
+
+   <button class="govuk-button" data-module="govuk-button" id="submit-btn">
+      Continue
+   </button>
+</form>
