@@ -55,6 +55,7 @@ public class DecisionDate : DecisionBaseModel, IDateValidationMessageProvider
             { Decision: AdvisoryBoardDecisions.Approved } => Links.Decision.AnyConditions,
             { Decision: AdvisoryBoardDecisions.Declined } => Links.Decision.DeclineReason,
             { Decision: AdvisoryBoardDecisions.Deferred } => Links.Decision.WhyDeferred,
+            { Decision: AdvisoryBoardDecisions.Withdrawn } => Links.Decision.WhyWithdrawn,
             _ => throw new Exception("Unexpected decision state")
         };
     }
