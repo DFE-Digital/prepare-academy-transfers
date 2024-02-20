@@ -90,6 +90,7 @@ public static class Links
         public static readonly LinkItem AnyConditions = Create("/TaskList/Decision/AnyConditions");
         public static readonly LinkItem DecisionDate = Create("/TaskList/Decision/DecisionDate");
         public static readonly LinkItem WhyDeferred = Create("/TaskList/Decision/WhyDeferred");
+        public static readonly LinkItem WhyWithdrawn = Create("/TaskList/Decision/WhyWithdrawn");
         public static readonly LinkItem Summary = Create("/TaskList/Decision/Summary");
         public static readonly LinkItem SubMenuRecordADecision = Create("/TaskList/Decision/RecordADecision");
 

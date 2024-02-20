@@ -64,6 +64,7 @@ public class WhoDecidedModel : DecisionBaseModel
             AdvisoryBoardDecisions.Approved => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters),
             AdvisoryBoardDecisions.Declined => RedirectToPage(Links.Decision.DeclineReason.PageName, LinkParameters),
             AdvisoryBoardDecisions.Deferred => RedirectToPage(Links.Decision.WhyDeferred.PageName, LinkParameters),
+            AdvisoryBoardDecisions.Withdrawn => RedirectToPage(Links.Decision.WhyWithdrawn.PageName, LinkParameters),
             _ => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters)
         };
     }
