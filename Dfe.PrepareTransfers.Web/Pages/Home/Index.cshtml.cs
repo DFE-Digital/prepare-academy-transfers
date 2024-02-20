@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -84,6 +85,32 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
             }
 
             return false;
+        }
+
+        public async Task<FileStreamResult> OnGetDownload()
+        {
+            Filters.PersistUsing(TempData).PopulateFrom(Request.Query);
+            ApiResponse<FileStreamResult> response = await _projectsRepository.DownloadProjectExport(CurrentPage, PageSize, Filters.Title);
+
+            if (response.Success)
+            {
+                return response.Body;
+            }
+            else
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                writer.Write("");
+                writer.Flush();
+                stream.Position = 0;
+
+                var fileStreamResult = new FileStreamResult(stream, "text/csv")
+                {
+                    FileDownloadName = "empty.csv"
+                };
+
+                return fileStreamResult;
+            }
         }
     }
 }
