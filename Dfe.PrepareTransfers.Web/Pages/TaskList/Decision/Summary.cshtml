@@ -31,6 +31,7 @@
             {
                AdvisoryBoardDecisions.Approved => "govuk-tag--green",
                AdvisoryBoardDecisions.Deferred => "govuk-tag--orange",
+               AdvisoryBoardDecisions.Withdrawn => "govuk-tag--purple",
                _ => "govuk-tag--red"
                };
          }
@@ -117,6 +118,29 @@
          </dd>
       </div>
    }
+
+    @if (Model.Decision.Decision == AdvisoryBoardDecisions.Withdrawn)
+    {
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Why was this project withdrawn
+            </dt>
+            <dd class="govuk-summary-list__value" id="deferred-reasons">
+
+                @foreach (AdvisoryBoardWithdrawnReasonDetails reason in Model.Decision.WithdrawnReasons)
+                {
+                    <div>@reason.Reason.ToDescription():</div>
+                    <div class="govuk-!-margin-bottom-2">@reason.Details</div>
+                }
+
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="@Links.Decision.WhyWithdrawn.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-withdrawn-btn">
+                    Change<span class="govuk-visually-hidden">withdrawn-reason</span>
+                </a>
+            </dd>
+        </div>
+    }
 
    @if (Model.Decision.Decision == AdvisoryBoardDecisions.Approved)
    {

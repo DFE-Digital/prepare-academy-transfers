@@ -35,6 +35,7 @@
                     {
                         AdvisoryBoardDecisions.Approved => "govuk-tag--green",
                         AdvisoryBoardDecisions.Deferred => "govuk-tag--orange",
+                        AdvisoryBoardDecisions.Withdrawn => "govuk-tag--purple",
                         _ => "govuk-tag--red"
                     };
                 }
@@ -94,6 +95,23 @@
                 <dd class="govuk-summary-list__value" id="deferred-reasons">
 
                     @foreach (AdvisoryBoardDeferredReasonDetails reason in Model.Decision.DeferredReasons)
+                    {
+                        <div>@reason.Reason.ToDescription():</div>
+                        <div class="govuk-!-margin-bottom-2">@reason.Details</div>
+                    }
+                </dd>
+            </div>
+        }
+
+        @if (Model.Decision.Decision == AdvisoryBoardDecisions.Withdrawn)
+        {
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Why was this project withdrawn
+                </dt>
+                <dd class="govuk-summary-list__value" id="withdrawn-reasons">
+
+                    @foreach (AdvisoryBoardWithdrawnReasonDetails reason in Model.Decision.WithdrawnReasons)
                     {
                         <div>@reason.Reason.ToDescription():</div>
                         <div class="govuk-!-margin-bottom-2">@reason.Details</div>

@@ -1,0 +1,65 @@
+﻿@page "/task-list/{urn}/decision/why-withdrawn"
+@using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
+@using Dfe.Academisation.ExtensionMethods
+@using Dfe.PrepareTransfers.Extensions
+@model Dfe.PrepareTransfers.Pages.TaskList.Decision.WhyWithdrawnModel
+@{
+   ViewData["Title"] = $"Why project was {Model.DecisionText}";
+   Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <partial name="_BackLink" model="@Model.BackLinkModel"/> 
+   <partial name="_ErrorSummary"/>
+}
+
+<span id="selection-span" class="govuk-caption-l">@Model.TrustName</span>
+<h1 class="govuk-heading-l">Why was this project withdrawn?</h1>
+
+<form method="post">
+   <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+         </legend>
+         <div class="govuk-checkboxes @ModelState.GetErrorStyleClass()" data-module="govuk-checkboxes" id="WasReasonGiven">
+
+            <input type="hidden" asp-for="@Model.WasReasonGiven"/>
+
+            @{
+               CheckBoxAndLabel(AdvisoryBoardWithdrawnReason.AdditionalInformationNeeded, Model.AdditionalInformationNeededIsChecked, Model.AdditionalInformationNeededDetails);
+               CheckBoxAndLabel(AdvisoryBoardWithdrawnReason.AwaitingNextOfstedReport, Model.AwaitingNextOfstedReportIsChecked, Model.AwaitingNextOfstedReportDetails);
+               CheckBoxAndLabel(AdvisoryBoardWithdrawnReason.PerformanceConcerns, Model.PerformanceConcernsIsChecked, Model.PerformanceConcernsDetails);
+               CheckBoxAndLabel(AdvisoryBoardWithdrawnReason.Other, Model.OtherIsChecked, Model.OtherDetails);
+            }
+         </div>
+      </fieldset>
+   </div>
+
+   <button class="govuk-button" data-module="govuk-button" id="submit-btn">
+      Continue
+   </button>
+</form>
+
+@{
+   void CheckBoxAndLabel(AdvisoryBoardWithdrawnReason withdrawnReason, bool isChecked, string details)
+   {
+        <div class="govuk-checkboxes__item" id="@(withdrawnReason)Details">
+         <input class="govuk-checkboxes__input" id="@withdrawnReason.ToString().ToLower()-checkbox" name="@(withdrawnReason)IsChecked" type="checkbox"
+                data-aria-controls="conditional-@withdrawnReason" value="true" @(isChecked ? "checked" : "")>
+         <label class="govuk-label govuk-checkboxes__label" for="@withdrawnReason.ToString().ToLower()-checkbox">
+            @withdrawnReason.ToDescription()
+         </label>
+      </div>
+      <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@withdrawnReason">
+         <div class="govuk-form-group">
+            <label class="govuk-label" for="@withdrawnReason.ToString().ToLower()-txtarea">
+               Give reasons
+            </label>
+            <textarea class="govuk-textarea govuk-!-width-three-quarters" id="@withdrawnReason.ToString().ToLower()-txtarea" 
+                                name="@(withdrawnReason)Details" rows="5" aria-describedby="more-detail-hint">@details</textarea>
+         </div>
+
+      </div>
+   }
+}
