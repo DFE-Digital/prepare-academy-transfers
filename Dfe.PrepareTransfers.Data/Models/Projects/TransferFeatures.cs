@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Dfe.PrepareTransfers.Data.Models.Projects
@@ -17,6 +19,33 @@ namespace Dfe.PrepareTransfers.Data.Models.Projects
             OutgoingTrust,
             [Display(Name = "Sponsor or trust closure")]
             SponsorOrTrustClosure
+        }
+
+        public enum SpecificReasonForTheTransferTypes
+        {
+            // We store the enum name as a string in the API. This data was previously
+            Empty = 0,
+
+            [Display(Name = "Forced transfer following inadequate Ofsted inspection"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            Forced,
+            [Display(Name = "Finance"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            Finance,
+            [Display(Name = "Safeguarding"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            Safeguarding,
+            [Display(Name = "Sponsor/Trust closed"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            TrustClosed,
+
+            [Display(Name = "Voluntary transfers"), ReasonParent(ReasonForTheTransferTypes.OutgoingTrust)]
+            VoluntaryTransfer,          
+            [Display(Name = "Strategic consolidations"), ReasonParent(ReasonForTheTransferTypes.OutgoingTrust)]
+            Strategic,
+
+            [Display(Name = "Voluntary closures"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
+            VoluntaryClosure,
+            [Display(Name = "Voluntary closures following intervention"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
+            VoluntaryClosureIntervention,
+            [Display(Name = "Intervention closure"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
+            InterventionClosure,
         }
 
         public enum TransferTypes
@@ -42,6 +71,7 @@ namespace Dfe.PrepareTransfers.Data.Models.Projects
         }
 
         public ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
+        public SpecificReasonForTheTransferTypes SpecificReasonForTheTransfer { get; set; }
         public TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         public bool? IsCompleted { get; set; }

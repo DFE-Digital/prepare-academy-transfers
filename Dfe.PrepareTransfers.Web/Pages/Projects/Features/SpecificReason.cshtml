@@ -1,0 +1,50 @@
+﻿@page "/project/{urn}/features/specificreason"
+@using Dfe.PrepareTransfers.Web.Pages.Projects.Features
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.Features.SpecificReason
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Specific reason for the transfer";
+    Layout = "_Layout";
+    var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="@Model.Urn"/>
+            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
+            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">
+                            <span class="govuk-caption-l">
+                                @Model.IncomingTrustName
+                            </span>
+                            What are the specific reasons for this transfer?
+                        </h1>
+                    </legend>
+
+                    <p asp-gds-validation-for="@Model.SpecificReasonForTheTransfer"></p>
+
+                    @await Html.PartialAsync("_RadioButtons", SpecificReason.SpecificReasonRadioButtons(@Model.SpecificReasonForTheTransfer, @Model.ReasonForTheTransfer))
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Save and continue
+            </button>
+        </form>
+    </div>
+</div>

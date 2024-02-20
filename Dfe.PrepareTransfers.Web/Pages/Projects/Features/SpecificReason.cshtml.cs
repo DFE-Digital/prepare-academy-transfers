@@ -12,17 +12,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
 {
-    public class Reason : CommonPageModel
+    public class SpecificReason : CommonPageModel
     {
         private readonly IProjects _projects;
 
-        public Reason(IProjects projects)
+        public SpecificReason(IProjects projects)
         {
             _projects = projects;
         }
 
         [BindProperty]
+        public TransferFeatures.SpecificReasonForTheTransferTypes SpecificReasonForTheTransfer { get; set; }
+        [BindProperty]
         public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -31,6 +34,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
             ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
+            SpecificReasonForTheTransfer = projectResult.Features.SpecificReasonForTheTransfer;
             return Page();
         }
 
@@ -38,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
         {
             var project = await _projects.GetByUrn(Urn);
 
-            var validator = new FeaturesReasonValidator();
+            var validator = new FeaturesSpecificReasonValidator();
             var validationResults = await validator.ValidateAsync(this);
             validationResults.AddToModelState(ModelState, null);
 
@@ -47,7 +51,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
                 return Page();
             }
 
-            project.Result.Features.ReasonForTheTransfer = ReasonForTheTransfer;
+            project.Result.Features.SpecificReasonForTheTransfer = SpecificReasonForTheTransfer;
 
             await _projects.UpdateFeatures(project.Result);
 
@@ -56,21 +60,21 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
                 return RedirectToPage(Links.HeadteacherBoard.Preview.PageName, new { Urn });
             }
 
-            return RedirectToPage("/Projects/Features/SpecificReason", new { Urn });
+            return RedirectToPage("/Projects/Features/Index", new { Urn });
 
         }
 
-        public static List<RadioButtonViewModel> ReasonRadioButtons(TransferFeatures.ReasonForTheTransferTypes selected)
+        public static List<RadioButtonViewModel> SpecificReasonRadioButtons(TransferFeatures.SpecificReasonForTheTransferTypes selected, TransferFeatures.ReasonForTheTransferTypes parentReason)
         {
             var values =
-                EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayableValues(TransferFeatures.ReasonForTheTransferTypes
+                EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayableValues(TransferFeatures.SpecificReasonForTheTransferTypes
                     .Empty);
 
-            var result = values.Select(value => new RadioButtonViewModel
+            var result = values.Where(x => AttributeHelpers.GetAttribute<ReasonParentAttribute>(x).Parent == parentReason).Select(value => new RadioButtonViewModel
             {
                 Value = value.ToString(),
-                Name = nameof(ReasonForTheTransfer),
-                DisplayName = EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(value),
+                Name = nameof(SpecificReasonForTheTransfer),
+                DisplayName = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(value),
                 Checked = selected == value
             }).ToList();
 
