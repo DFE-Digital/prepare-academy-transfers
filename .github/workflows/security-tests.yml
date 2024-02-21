@@ -21,7 +21,7 @@ jobs:
         working-directory: end-to-end-tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create directory on runner
         run: |
@@ -34,7 +34,7 @@ jobs:
 
       - name: Restore ZAP container from cache if exists
         id: cache-docker-zap
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/ci/cache/docker/softwaresecurityproject
           key: cache-docker-zap-${{ env.ZAP_VERSION }}
@@ -53,7 +53,7 @@ jobs:
         run: docker run --name zap_container --rm -d -v ${{ github.workspace }}/zapoutput/:/zap/wrk:rw -u zap -p ${{ env.ZAP_PORT }}:${{ env.ZAP_PORT }} -i softwaresecurityproject/zap-stable zap.sh -daemon -port ${{ env.ZAP_PORT }} -host 0.0.0.0 -config api.key=${{ secrets.ZAP_API_KEY }} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config network.localServers.mainProxy.alpn.enabled=false -config network.localServers.mainProxy.address=0.0.0.0
 
       - name: Set up NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
