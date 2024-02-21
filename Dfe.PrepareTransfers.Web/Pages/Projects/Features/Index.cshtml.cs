@@ -12,6 +12,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
         private readonly IProjects _projects;
 
         public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
+        public TransferFeatures.SpecificReasonForTheTransferTypes SpecificReasonForTheTransfer { get; set; }
         public TransferFeatures.TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         [BindProperty]
@@ -32,6 +33,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             OtherTypeOfTransfer = projectResult.Features.OtherTypeOfTransfer;
             OutgoingAcademyUrn = projectResult.OutgoingAcademyUrn;
             ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
+            SpecificReasonForTheTransfer = projectResult.Features.SpecificReasonForTheTransfer;
             MarkSectionCompletedViewModel = new MarkSectionCompletedViewModel
             {
                 IsCompleted = projectResult.Features.IsCompleted ?? false,
