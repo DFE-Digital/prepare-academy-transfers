@@ -40,7 +40,28 @@
             <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
         </p>
         <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-8">
-            <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+            @{
+                var decisionClass = Model.ProjectStatus switch
+                {
+                    "Approved" => "govuk-tag--green",
+                    "Deferred" => "govuk-tag--orange",
+                    "Withdrawn" => "govuk-tag--purple",
+                    _ => "govuk-tag--red"
+                };
+
+                if (string.IsNullOrEmpty(Model.ProjectStatus))
+                {
+                    <strong class="govuk-tag govuk-tag--yellow">
+                        PRE ADVISORY BOARD
+                    </strong>
+                }
+                else
+                {
+                    <strong class="@($"govuk-tag {decisionClass}")">
+                        @Model.ProjectStatus
+                    </strong>
+                }
+            }
         </p>
 
         <div class="govuk-grid-column-full">

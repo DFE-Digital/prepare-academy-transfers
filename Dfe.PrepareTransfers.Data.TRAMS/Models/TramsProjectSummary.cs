@@ -10,6 +10,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
         public string ProjectReference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
+        public string Status { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }
         public User AssignedUser { get; set; }
     }

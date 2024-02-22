@@ -114,7 +114,30 @@
                             </td>
                             <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
                                 <p class="govuk-!-margin-top-0">
-                                    <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+                                    @{
+
+                                        var decisionClass = project.Status switch
+                                        {
+                                            "Approved" => "govuk-tag--green",
+                                            "Deferred" => "govuk-tag--orange",
+                                            "Withdrawn" => "govuk-tag--purple",
+                                            _ => "govuk-tag--red"
+                                        };
+
+
+                                        if (string.IsNullOrEmpty(project.Status))
+                                        {
+                                            <strong class="govuk-tag govuk-tag--yellow">
+                                                PRE ADVISORY BOARD
+                                            </strong>
+                                        }
+                                        else
+                                        {
+                                            <strong class="@($"govuk-tag {decisionClass}")" }>
+                                                @project.Status
+                                            </strong>
+                                        }
+                                    }
                                 </p>
                             </td>
                         </tr>
