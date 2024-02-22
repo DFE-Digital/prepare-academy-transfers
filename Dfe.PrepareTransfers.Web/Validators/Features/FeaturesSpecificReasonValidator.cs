@@ -2,6 +2,7 @@
 using FluentValidation;
 using Dfe.PrepareTransfers.Web.Pages.Projects.Features;
 using System.Linq;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Dfe.PrepareTransfers.Web.Validators.Features
 {
@@ -10,7 +11,7 @@ namespace Dfe.PrepareTransfers.Web.Validators.Features
         public FeaturesSpecificReasonValidator()
         {
             RuleFor(x => x.SpecificReasonsForTheTransfer)
-                .Must(collection => collection == null || collection.All(item => item != TransferFeatures.SpecificReasonForTheTransferTypes.Empty))
+                .Must(collection => collection.IsNullOrEmpty() || collection.All(item => item != TransferFeatures.SpecificReasonForTheTransferTypes.Empty))
                 .WithMessage("Select a specific reason for the transfer");
         }
     }
