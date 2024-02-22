@@ -9,6 +9,7 @@ using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Validators.Features;
 using Dfe.PrepareTransfers.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Dfe.PrepareTransfers.Web.Models.Benefits;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
 {
@@ -22,7 +23,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
         }
 
         [BindProperty]
-        public TransferFeatures.SpecificReasonForTheTransferTypes SpecificReasonForTheTransfer { get; set; }
+        public List<TransferFeatures.SpecificReasonForTheTransferTypes> SpecificReasonsForTheTransfer { get; set; }
         [BindProperty]
         public TransferFeatures.ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
 
@@ -34,7 +35,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             var projectResult = project.Result;
             IncomingTrustName = projectResult.IncomingTrustName;
             ReasonForTheTransfer = projectResult.Features.ReasonForTheTransfer;
-            SpecificReasonForTheTransfer = projectResult.Features.SpecificReasonForTheTransfer;
+            SpecificReasonsForTheTransfer = projectResult.Features.SpecificReasonsForTheTransfer;
             return Page();
         }
 
@@ -51,7 +52,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
                 return Page();
             }
 
-            project.Result.Features.SpecificReasonForTheTransfer = SpecificReasonForTheTransfer;
+            project.Result.Features.SpecificReasonsForTheTransfer = SpecificReasonsForTheTransfer;
 
             await _projects.UpdateFeatures(project.Result);
 
@@ -73,12 +74,32 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             var result = values.Where(x => AttributeHelpers.GetAttribute<ReasonParentAttribute>(x).Parent == parentReason).Select(value => new RadioButtonViewModel
             {
                 Value = value.ToString(),
-                Name = nameof(SpecificReasonForTheTransfer),
+                Name = nameof(SpecificReasonsForTheTransfer),
                 DisplayName = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(value),
                 Checked = selected == value
             }).ToList();
 
             return result;
+        }
+
+        public static IList<CheckboxViewModel> SpecificReasonsCheckboxes(List<TransferFeatures.SpecificReasonForTheTransferTypes> selected, TransferFeatures.ReasonForTheTransferTypes parentReason)
+        {
+            IList<CheckboxViewModel> items = new List<CheckboxViewModel>();
+            var values = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayableValues(TransferFeatures.SpecificReasonForTheTransferTypes.Empty)
+                .Where(x => AttributeHelpers.GetAttribute<ReasonParentAttribute>(x).Parent == parentReason);
+
+            foreach (var specificReason in values)
+            {
+                items.Add(new CheckboxViewModel
+                {
+                    DisplayName = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(specificReason),
+                    Name = nameof(SpecificReasonsForTheTransfer),
+                    Value = specificReason.ToString(),
+                    Checked = selected.Contains(specificReason)
+                });
+            }
+
+            return items;
         }
     }
 }

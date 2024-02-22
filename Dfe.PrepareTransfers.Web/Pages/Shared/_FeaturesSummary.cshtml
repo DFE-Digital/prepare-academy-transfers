@@ -30,13 +30,13 @@
             What are the specific reasons for this transfer?
         </dt>
         <dd class="govuk-summary-list__value">
-            @if (Model.SpecificReasonForTheTransfer == TransferFeatures.SpecificReasonForTheTransferTypes.Empty)
+            @if (!Model.SpecificReasonForTheTransfer.Any())
             {
                 <span class="dfe-empty-tag">Empty</span>
             }
             else
             {
-                var displayName = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(Model.SpecificReasonForTheTransfer);
+                var displayName = String.Join(", ", Model.SpecificReasonForTheTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(x)));
                 @displayName
             }
         </dd>

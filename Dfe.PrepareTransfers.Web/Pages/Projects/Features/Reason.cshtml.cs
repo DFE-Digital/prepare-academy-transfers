@@ -48,6 +48,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.Features
             }
 
             project.Result.Features.ReasonForTheTransfer = ReasonForTheTransfer;
+            // reset this value so old ones that don't match are not left
+            project.Result.Features.SpecificReasonsForTheTransfer = new List<TransferFeatures.SpecificReasonForTheTransferTypes>();
 
             await _projects.UpdateFeatures(project.Result);
 

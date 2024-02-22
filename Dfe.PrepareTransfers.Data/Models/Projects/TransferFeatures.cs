@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -71,7 +72,7 @@ namespace Dfe.PrepareTransfers.Data.Models.Projects
         }
 
         public ReasonForTheTransferTypes ReasonForTheTransfer { get; set; }
-        public SpecificReasonForTheTransferTypes SpecificReasonForTheTransfer { get; set; }
+        public List<SpecificReasonForTheTransferTypes> SpecificReasonsForTheTransfer { get; set; } = new();
         public TransferTypes TypeOfTransfer { get; set; }
         public string OtherTypeOfTransfer { get; set; }
         public bool? IsCompleted { get; set; }

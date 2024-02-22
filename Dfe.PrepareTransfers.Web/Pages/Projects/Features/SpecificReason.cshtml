@@ -1,5 +1,6 @@
 ﻿@page "/project/{urn}/features/specificreason"
 @using Dfe.PrepareTransfers.Web.Pages.Projects.Features
+@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.Projects.Features.SpecificReason
@@ -8,6 +9,7 @@
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Specific reason for the transfer";
     Layout = "_Layout";
     var formClasses = !ViewData.ModelState.IsValid ? "govuk-form-group--error" : "";
+    var selected = Model.SpecificReasonsForTheTransfer.Any() ? Model.SpecificReasonsForTheTransfer[0] : Dfe.PrepareTransfers.Data.Models.Projects.TransferFeatures.SpecificReasonForTheTransferTypes.Empty;
 }
 
 @section BeforeMain
@@ -22,9 +24,9 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn"/>
-            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
-            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.IncomingTrustName" />
 
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
@@ -33,13 +35,28 @@
                             <span class="govuk-caption-l">
                                 @Model.IncomingTrustName
                             </span>
-                            What are the specific reasons for this transfer?
+                            @(Model.ReasonForTheTransfer == Dfe.PrepareTransfers.Data.Models.Projects.TransferFeatures.ReasonForTheTransferTypes.Dfe
+                            ? "What are the specific reasons for this transfer?" 
+                            : "What is the specific reason for this transfer?")
                         </h1>
                     </legend>
 
-                    <p asp-gds-validation-for="@Model.SpecificReasonForTheTransfer"></p>
+                    <p asp-gds-validation-for="@Model.SpecificReasonsForTheTransfer"></p>
+                    @if (Model.ReasonForTheTransfer == Dfe.PrepareTransfers.Data.Models.Projects.TransferFeatures.ReasonForTheTransferTypes.Dfe)
+                    {
 
-                    @await Html.PartialAsync("_RadioButtons", SpecificReason.SpecificReasonRadioButtons(@Model.SpecificReasonForTheTransfer, @Model.ReasonForTheTransfer))
+                        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+
+                            <gds-checkboxes checkboxes="SpecificReason.SpecificReasonsCheckboxes(Model.SpecificReasonsForTheTransfer, @Model.ReasonForTheTransfer)" without-container="true"></gds-checkboxes>
+
+                        </div>
+                    }
+                    else
+                    {
+
+                        @await Html.PartialAsync("_RadioButtons", SpecificReason.SpecificReasonRadioButtons(selected, @Model.ReasonForTheTransfer))
+                    }
+
                 </fieldset>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">

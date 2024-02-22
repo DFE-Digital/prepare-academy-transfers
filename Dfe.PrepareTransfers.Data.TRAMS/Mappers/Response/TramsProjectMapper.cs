@@ -87,7 +87,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             {
                 TypeOfTransfer = EnumHelpers<TransferFeatures.TransferTypes>.Parse(input.Features.TypeOfTransfer),
                 OtherTypeOfTransfer = input.Features.OtherTransferTypeDescription,
-                SpecificReasonForTheTransfer = EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.Parse(input.Features.SpecificReasonForTransfer),
+                SpecificReasonsForTheTransfer = input.Features.SpecificReasonsForTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.Parse(x)).ToList(),
                 ReasonForTheTransfer =
                     EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.Parse(input.Features.WhoInitiatedTheTransfer),
                 IsCompleted = input.Features.IsCompleted
