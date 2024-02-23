@@ -47,6 +47,8 @@ public class SummaryModel : DecisionBaseModel
 
         await CreateOrUpdateDecision(urn, decision);
 
+        await UpdateProjectStatus(urn, decision.GetDecisionAsFriendlyName());
+
         SetDecisionInSession(urn, null);
 
         TempData.SetNotification("Done", "Decision recorded");
@@ -66,7 +68,14 @@ public class SummaryModel : DecisionBaseModel
         {
             await _advisoryBoardDecisionRepository.Update(decision);
         }
+    }
 
-        //TODO:EA update project status with decision friendly name 
+    private async Task UpdateProjectStatus(int urn, string decisionStatus)
+    {
+        var project = (await _projectRepository.GetByUrn(urn.ToString())).Result;
+
+        project.Status = decisionStatus;
+
+        await _projectRepository.UpdateStatus(project);
     }
 }

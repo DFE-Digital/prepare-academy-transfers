@@ -20,6 +20,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects
         public ProjectStatuses LegalRequirementsStatus { get; set; }
         public ProjectStatuses RationaleStatus { get; set; }
         public ProjectStatuses AcademyAndTrustInformationStatus { get; set; }
+        public string ProjectStatus { get; set; }
         public User AssignedUser { get; set; }
 
         /// <summary>
