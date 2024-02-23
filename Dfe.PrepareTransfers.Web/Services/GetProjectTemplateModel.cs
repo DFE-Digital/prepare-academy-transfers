@@ -12,6 +12,7 @@ using Dfe.PrepareTransfers.Web.Models.ProjectTemplate;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
 using Dfe.PrepareTransfers.Helpers;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
@@ -53,6 +54,9 @@ namespace Dfe.PrepareTransfers.Web.Services
                         .ReasonForTheTransfer != TransferFeatures.ReasonForTheTransferTypes.Empty ?
                     EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features
                         .ReasonForTheTransfer) : EmptyFieldMessage,
+                SpecificReasonsForTheTransfer = project.Features.SpecificReasonsForTheTransfer.Any() 
+                ? String.Join(", ", project.Features.SpecificReasonsForTheTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(x))) 
+                : EmptyFieldMessage,
                 TypeOfTransfer = TransferTypeSelector(project),
                 TransferBenefits = GetTransferBenefits(project.Benefits),
                 IncomingTrustAgreement = project.LegalRequirements.IncomingTrustAgreement != null ?project.LegalRequirements.IncomingTrustAgreement.ToDescription() : EmptyFieldMessage,

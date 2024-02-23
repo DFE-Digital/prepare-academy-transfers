@@ -6,7 +6,7 @@
  <dl class="govuk-summary-list">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
-                    What is the reason for this transfer?
+                    Why is this transfer happening?
                 </dt>
                 <dd class="govuk-summary-list__value">
                     @if (Model.ReasonForTheTransfer == TransferFeatures.ReasonForTheTransferTypes.Empty)
@@ -25,6 +25,27 @@
                     </a>
                 </dd>
             </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            What are the specific reasons for this transfer?
+        </dt>
+        <dd class="govuk-summary-list__value">
+            @if (!Model.SpecificReasonForTheTransfer.Any())
+            {
+                <span class="dfe-empty-tag">Empty</span>
+            }
+            else
+            {
+                var displayName = String.Join(", ", Model.SpecificReasonForTheTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(x)));
+                @displayName
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="/Projects/Features/SpecificReason" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)" data-test="initiated">
+                Change<span class="govuk-visually-hidden"> the specic reason for the transfer</span>
+            </a>
+        </dd>
+    </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
                     What type of transfer is it?

@@ -19,6 +19,7 @@ using Dfe.PrepareTransfers.Helpers;
 using System;
 using Dfe.PrepareTransfers.Web.Services.Responses;
 using Dfe.Academisation.ExtensionMethods;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
 {
@@ -196,12 +197,16 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 var createdText = ListOfExpectedElementData(placeholderDocument.Build());
 
                 var project = _getTestInformationForProject.Project;
+
+            var reasons = new List<TransferFeatures.SpecificReasonForTheTransferTypes>() { TransferFeatures.SpecificReasonForTheTransferTypes.Finance, TransferFeatures.SpecificReasonForTheTransferTypes.Safeguarding };
                
                 Assert.Equal("Features of the transfer", createdText[0].InnerText); 
                 Assert.Equal("Reason for this transfer", createdText[1].InnerText);
                 Assert.Equal(EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.GetDisplayValue(project.Features.ReasonForTheTransfer), createdText[2].InnerText);
-                Assert.Equal("What type of transfer is it?", createdText[3].InnerText);
-                Assert.Equal( EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer), createdText[4].InnerText);               
+                Assert.Equal("What are the specific reasons for this transfer?", createdText[3].InnerText);
+                Assert.Equal(String.Join(", ", reasons.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.GetDisplayValue(x))), createdText[4].InnerText);
+                Assert.Equal("What type of transfer is it?", createdText[5].InnerText);
+                Assert.Equal( EnumHelpers<TransferFeatures.TransferTypes>.GetDisplayValue(project.Features.TypeOfTransfer), createdText[6].InnerText);               
             }
     }
 }
