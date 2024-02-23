@@ -126,6 +126,21 @@
                     </li>
                 </ul>
             </li>
+            @if (Model.IsFormAMAT)
+            {
+                <li>
+                    <h3 class="moj-task-list__section govuk-!-margin-top-8">
+                        Create a trust template
+                    </h3>
+                    <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" aria-describedby="project-template" asp-page="/TaskList/TrustTemplate/Index" asp-route-urn="@Model.Urn" data-test="trust-template">Prepare your template</a>
+                            </span>
+                        </li>
+                    </ul>
+                </li>
+            }
             <li>
                 <h3 class="moj-task-list__section govuk-!-margin-top-8">
                     School data

@@ -48,6 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.HtbDocument
                 OtherTypeOfTransfer = project.Features.OtherTypeOfTransfer,
                 OutgoingAcademyUrn = project.OutgoingAcademyUrn,
                 ReasonForTheTransfer = project.Features.ReasonForTheTransfer,
+                SpecificReasonForTheTransfer = project.Features.SpecificReasonsForTheTransfer,
                 ReturnToPreview = true
             };
 

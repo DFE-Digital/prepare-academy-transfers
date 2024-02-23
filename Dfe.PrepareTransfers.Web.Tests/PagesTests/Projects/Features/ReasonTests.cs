@@ -35,12 +35,12 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.Features
         }
 
         [Fact]
-        public async void GivenUrnAndReason_RedirectsProjectToFeaturesSummary()
+        public async void GivenUrnAndReason_RedirectsProjectToSpecificReason()
         {
             _subject.ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe;
             var request = await _subject.OnPostAsync();
 
-            ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/Index",
+            ControllerTestHelpers.AssertResultRedirectsToPage(request, "/Projects/Features/SpecificReason",
                 new RouteValueDictionary(new {Urn = ProjectUrn0001}));
         }
 
