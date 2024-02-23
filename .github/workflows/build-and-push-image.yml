@@ -28,7 +28,7 @@ jobs:
       release: ${{ steps.var.outputs.release }}
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-22.04
     environment: ${{ needs.set-env.outputs.environment }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
@@ -81,7 +81,7 @@ jobs:
     needs: set-env
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
@@ -91,7 +91,7 @@ jobs:
           git push origin ${{ needs.set-env.outputs.release }}
 
       - name: Create release
-        uses: "actions/github-script@v6"
+        uses: "actions/github-script@v7"
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
@@ -143,12 +143,12 @@ jobs:
       run:
         working-directory: end-to-end-tests
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
       - name: Setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -156,13 +156,13 @@ jobs:
         run: npm install
 
       - name: Run cypress
-        run: npm run cypress:run -- --key ${{ secrets.CYPRESS_KEY }} --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
+        run: npx cypress run --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
 
       - name: Upload screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots-${{ needs.set-env.outputs.environment }}
           path: end-to-end-tests/cypress/screenshots
