@@ -369,5 +369,24 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             return new ApiResponse<FileStreamResult>(response.StatusCode, fileStreamResult);
         }
+
+        public async Task<bool> UpdateStatus(Project project)
+        {
+            var status = new
+            {
+                Status = project.Status
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(status), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-status", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Dfe.PrepareTransfers.Web.Services.DocumentGenerators
             build.AddTable(new List<TextElement[]>
          { 
             new[] { new TextElement { Value = "Reason for this transfer", Bold = true }, new TextElement { Value = projectTemplateModel.ReasonForTheTransfer}},
+            new[] { new TextElement { Value = "What are the specific reasons for this transfer?", Bold = true }, new TextElement { Value = projectTemplateModel.SpecificReasonsForTheTransfer}},
             new[] { new TextElement { Value = "What type of transfer is it?", Bold = true }, new TextElement { Value = projectTemplateModel.TypeOfTransfer}}
          });
          });

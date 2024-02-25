@@ -32,11 +32,11 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
                     OtherFactorsToConsider = new OtherFactorsToConsider
                     {
                         HighProfile = new OtherFactor
-                            {FurtherSpecification = "High profile", ShouldBeConsidered = true},
+                        { FurtherSpecification = "High profile", ShouldBeConsidered = true },
                         FinanceAndDebt = new OtherFactor
-                            {FurtherSpecification = "Finance", ShouldBeConsidered = true},
+                        { FurtherSpecification = "Finance", ShouldBeConsidered = true },
                         ComplexLandAndBuilding = new OtherFactor
-                            {FurtherSpecification = "Complex land and building", ShouldBeConsidered = true},
+                        { FurtherSpecification = "Complex land and building", ShouldBeConsidered = true },
                         OtherRisks = new OtherFactor
                         {
                             FurtherSpecification = "Other risks", ShouldBeConsidered = true
@@ -56,6 +56,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
                     TypeOfTransfer = TransferFeatures.TransferTypes.TrustsMerging.ToString(),
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
+                    SpecificReasonsForTransfer = new List<string>() { TransferFeatures.SpecificReasonForTheTransferTypes.Safeguarding.ToString() },
                     WhoInitiatedTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe.ToString(),
                     RddOrEsfaInterventionDetail = "Intervention details",
                     IsCompleted = true
@@ -166,11 +167,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
         private static void AssertFeaturesCorrect(TramsProject toMap, Project result)
         {
             var expectedType = EnumHelpers<TransferFeatures.TransferTypes>.Parse(toMap.Features.TypeOfTransfer);
+            var expectedReasons = toMap.Features.SpecificReasonsForTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.Parse(x)).ToList();
             var expectedInitiator =
                 EnumHelpers<TransferFeatures.ReasonForTheTransferTypes>.Parse(toMap.Features.WhoInitiatedTheTransfer);
             Assert.Equal(expectedType, result.Features.TypeOfTransfer);
             Assert.Equal(toMap.Features.OtherTransferTypeDescription, result.Features.OtherTypeOfTransfer);
             Assert.Equal(expectedInitiator, result.Features.ReasonForTheTransfer);
+            Assert.Equal(expectedReasons, result.Features.SpecificReasonsForTheTransfer);
             Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 

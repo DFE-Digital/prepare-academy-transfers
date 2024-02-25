@@ -40,8 +40,33 @@
             <a class="govuk-link govuk-!-padding-left-50" asp-page="@Links.ProjectAssignment.Index.PageName" asp-route-urn="@Model.Urn">Change</a>
         </p>
         <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-8">
-            <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+            @{
+                var decisionClass = Model.ProjectStatus switch
+                {
+                    "Approved" => "govuk-tag--green",
+                    "Deferred" => "govuk-tag--orange",
+                    "Withdrawn" => "govuk-tag--purple",
+                    _ => "govuk-tag--red"
+                };
+
+                if (string.IsNullOrEmpty(Model.ProjectStatus))
+                {
+                    <strong class="govuk-tag govuk-tag--yellow">
+                        PRE ADVISORY BOARD
+                    </strong>
+                }
+                else
+                {
+                    <strong class="@($"govuk-tag {decisionClass}")">
+                        @Model.ProjectStatus
+                    </strong>
+                }
+            }
         </p>
+
+        <div class="govuk-grid-column-full">
+            <partial name="_SubMenu"  />
+        </div>
 
         <h2 class="govuk-heading-l">
             Prepare a project document
@@ -101,6 +126,21 @@
                     </li>
                 </ul>
             </li>
+            @if (Model.IsFormAMAT)
+            {
+                <li>
+                    <h3 class="moj-task-list__section govuk-!-margin-top-8">
+                        Create a trust template
+                    </h3>
+                    <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                        <li class="moj-task-list__item">
+                            <span class="moj-task-list__task-name">
+                                <a class="govuk-link" aria-describedby="project-template" asp-page="/TaskList/TrustTemplate/Index" asp-route-urn="@Model.Urn" data-test="trust-template">Prepare your template</a>
+                            </span>
+                        </li>
+                    </ul>
+                </li>
+            }
             <li>
                 <h3 class="moj-task-list__section govuk-!-margin-top-8">
                     School data

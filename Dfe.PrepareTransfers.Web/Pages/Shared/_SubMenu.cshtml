@@ -1,0 +1,26 @@
+﻿@using Dfe.PrepareTransfers.TagHelpers
+@{
+    var urn = ViewContext.RouteData.Values["urn"];
+}
+
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+   <ul class="moj-sub-navigation__list govuk-!-margin-top-6">
+        <li class="moj-sub-navigation__item">
+           <sub-menu-link class="moj-sub-navigation__link"
+                            asp-page="@Links.Project.Index.PageName"
+                            asp-route-urn="@urn"
+           >
+              Project details
+           </sub-menu-link>
+        </li>
+
+        <li class="moj-sub-navigation__item">
+            <sub-menu-link class="moj-sub-navigation__link"
+                           asp-page="@Links.Decision.SubMenuRecordADecision.PageName"
+                           asp-route-urn="@urn">
+                Record a decision
+            </sub-menu-link>
+        </li>
+
+   </ul>
+</nav>

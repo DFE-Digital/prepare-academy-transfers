@@ -31,6 +31,9 @@ namespace Dfe.PrepareTransfers.Web.Models.ProjectTemplate
         [DocumentText("ReasonForTransfer")]
         public string ReasonForTheTransfer { get; set; }
 
+        [DocumentText("ReasonForTransfer")]
+        public string SpecificReasonsForTheTransfer { get; set; }
+
         [DocumentText("TypeOfTransfer")] public string TypeOfTransfer { get; set; }
 
         [DocumentText("TransferBenefits")] public string TransferBenefits { get; set; }
