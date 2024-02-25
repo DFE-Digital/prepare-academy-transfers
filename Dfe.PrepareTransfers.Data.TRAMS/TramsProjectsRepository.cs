@@ -27,7 +27,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
         private readonly ITrusts _trusts;
 
-        public TramsProjectsRepository(ITramsHttpClient httpClient,IAcademisationHttpClient academisationHttpClient,
+        public TramsProjectsRepository(ITramsHttpClient httpClient, IAcademisationHttpClient academisationHttpClient,
            IMapper<TramsProject, Project> externalToInternalProjectMapper,
            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
            ITrusts trusts, IMapper<Project, TramsProjectUpdate> internalToUpdateMapper)
@@ -353,15 +353,11 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<ApiResponse<FileStreamResult>> DownloadProjectExport(
-              int page,
-              int count,
-              string titleFilter = ""
-        )
+        public async Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "")
         {
-            AcademyTransferSearchModel searchModel = new() { TitleFilter = titleFilter, Page = page, Count = count };
+            AcademyTransferSearchModel searchModel = new() { TitleFilter = titleFilter };
 
-            var response = await _academisationHttpClient.PostAsync("/export/export-projects", JsonContent.Create(searchModel));
+            var response = await _academisationHttpClient.PostAsync("/export/export-transfer-projects", JsonContent.Create(searchModel));
 
             if (!response.IsSuccessStatusCode)
             {

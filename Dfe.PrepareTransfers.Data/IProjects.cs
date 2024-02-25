@@ -21,10 +21,6 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateDates(Project project);
         public Task<bool> UpdateAcademy(string urn, TransferringAcademies academy);
         public Task<bool> AssignUser(Project project);
-        public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(
-            int page,
-            int count,
-            string titleFilter = ""
-        );
+        public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "");
     }
 }
