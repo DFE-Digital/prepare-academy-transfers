@@ -1,17 +1,16 @@
-using Dfe.PrepareTransfers.Web.Models.Benefits;
+using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 {
     public class IsFormAMatModel : PageModel
     {
-        [BindProperty]
-        public bool? IsFormAMat { get; set; }
+        [BindProperty] 
+        public IsFormAMatViewModel IsFormAMatViewModel { get; set; } = new IsFormAMatViewModel();
 
         public IList<RadioButtonViewModel> RadioButtonsYesNo { get; set; }
 
@@ -19,7 +18,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             ViewData["ChangeLink"] = change;
 
-            RadioButtonsYesNo = GetRadioButtons(IsFormAMat);
+            RadioButtonsYesNo = GetRadioButtons(IsFormAMatViewModel.IsFormAMat);
             return Page();
         }
 
@@ -28,11 +27,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             if (!ModelState.IsValid)
             {
-                RadioButtonsYesNo = GetRadioButtons(IsFormAMat);
-                return Page();
+                return OnGet();
             }
 
-            var redirectPage = IsFormAMat.HasValue && IsFormAMat.Value ? "Transfers/ProposedTrustName" : "/Transfers/SearchIncomingTrust";
+            var redirectPage = IsFormAMatViewModel.IsFormAMat.HasValue && IsFormAMatViewModel.IsFormAMat.Value ? "Transfers/ProposedTrustName" : "/Transfers/IncomingTrust";
 
             return RedirectToPage(redirectPage);
         }        
@@ -44,21 +42,21 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 new RadioButtonViewModel
                 {
                     DisplayName = "Yes",
-                    Name = $"{nameof(IsFormAMat)}",
+                    Name = $"{nameof(IsFormAMatViewModel.IsFormAMat)}",
                     Value = "true",
                     Checked = valueSelected is true
                 },
                 new RadioButtonViewModel
                 {
                     DisplayName = "No",
-                    Name = $"{nameof(IsFormAMat)}",
+                    Name = $"{nameof(IsFormAMatViewModel.IsFormAMat)}",
                     Value = "false",
                     Checked = valueSelected is false
                 }
             };
 
             var selectedRadio =
-                list.FirstOrDefault(c => c.Value == IsFormAMat.ToString());
+                list.FirstOrDefault(c => c.Value == IsFormAMatViewModel.IsFormAMat.ToString());
             if (selectedRadio != null)
             {
                 selectedRadio.Checked = true;

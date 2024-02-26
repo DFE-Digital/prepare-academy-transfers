@@ -24,14 +24,14 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <form method="post">
+        <form method="post" novalidate="">
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" aria-required="true">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">Is the result of this transfer the formation of a new trust?</h1>
                     </legend>
 
-                    <p asp-gds-validation-for="IsFormAMat"></p>
+                    <p asp-gds-validation-for="IsFormAMatViewModel.IsFormAMat"></p>
                     <partial for="RadioButtonsYesNo" name="Shared/_InlineRadioButtons" />
                 </fieldset>
             </div>
