@@ -86,6 +86,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
                     WhoInitiatedTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe.ToString(),
+                    SpecificReasonsForTransfer = new List<string>() { TransferFeatures.SpecificReasonForTheTransferTypes.Safeguarding.ToString() },
                     RddOrEsfaInterventionDetail = "Intervention details",
                     IsCompleted = true
                 },

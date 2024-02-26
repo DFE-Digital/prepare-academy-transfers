@@ -14,4 +14,8 @@
       <ProjectReference Include="..\Dfe.PrepareTransfers.Helpers\Dfe.PrepareTransfers.Helpers.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="NewFolder\" />
+    </ItemGroup>
+
 </Project>

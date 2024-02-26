@@ -11,6 +11,7 @@ namespace Dfe.PrepareTransfers.Data.Models
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
         public string OutgoingTrustNameInTitleCase => OutgoingTrustName.ToTitleCase();
+        public string Status { get; set; }
         public List<TransferringAcademies> TransferringAcademies { get; set; }
         public User AssignedUser { get; set; }
         public string Urn { get; set; }

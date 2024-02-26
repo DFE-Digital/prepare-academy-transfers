@@ -1,0 +1,38 @@
+@page "/task-list/{urn}/trust-guidance"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.TrustTemplate.Index
+
+@{
+    ViewData["Title"] = "Prepare your trust template";
+    Layout = "_Layout";
+}
+@section BeforeMain
+{
+    <govuk-back-link link-item="@Links.ProjectList.Index" />
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">@Model.IncomingTrustName</span>
+        <h1 class="govuk-heading-l">Prepare the trust template</h1>
+        <p class="govuk-hint">You must prepare a trust template for the advisory board meeting. It helps them learn about the trust the academy will join. That informs their decision about if the project can proceed.</p>
+        <h1 class="govuk-heading-l govuk-!-margin-top-6">
+            How to prepare the trust template
+        </h1>
+        <ol class="govuk-list govuk-list--number">
+            <li>Check if a trust template already exists in the trust SharePoint folder</li>
+            <li>
+                <a href="https://educationgovuk.sharepoint.com/sites/lvedfe00116/SitePages/Headteacher-Board-Operational-Processes.aspx?xsdata=..." target="_blank" class="govuk-link">Download a new template (opens in new tab)</a>
+                if one does not exist or it is more than 3 months since it was last updated
+            </li>
+            <li>
+                Enter or update the information in the trust template
+            </li>
+            <li>Save the completed trust template in the trust's SharePoint folder</li>
+            <li>Share the template with your team leader for approval</li>
+        </ol>
+        <p class="govuk-body">Once approved, it is ready to take to the advisory board meeting.</p>
+        <a href="/project/@Model.Urn" class="govuk-button" data-module="govuk-button">
+            Return to task list
+        </a>
+    </div>
+</div>

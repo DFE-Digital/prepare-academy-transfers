@@ -30,6 +30,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
             indexPage.LegalRequirementsStatus = GetLegalRequirementsStatus(project.Result);
             indexPage.RationaleStatus = GetRationaleStatus(project.Result);
+            indexPage.ProjectStatus = project.Result.Status;
             indexPage.AssignedUser = project.Result.AssignedUser;
         }
 

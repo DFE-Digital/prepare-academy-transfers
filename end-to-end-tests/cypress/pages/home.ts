@@ -49,7 +49,7 @@ class HomePage {
 
   public filterProjects(projectTitle): this {
 
-    cy.get('#TitleFilter').type(projectTitle)
+    cy.get('[id="Title"]').type(projectTitle)
 
     cy.get('[data-cy="select-projectlist-filter-apply"]').click()
 
