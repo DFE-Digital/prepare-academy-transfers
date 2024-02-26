@@ -1,67 +1,73 @@
 ﻿using System.Collections.Generic;
+using Dfe.PrepareTransfers.Data;
+using System.IO;
+using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Web.Models.ProjectList;
+using Dfe.PrepareTransfers.Web.Pages.Home;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Moq;
 using Xunit;
+using System.Net;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Dfe.PrepareTransfers.Data.Models;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectListDownloadTests
 {
-    public class ProjectListDownloadTests
+    public class ProjectListDownloadTests : BaseTests
     {
-        [Fact]
-        public void PopulateFrom_ClearsFilters_WhenClearQueryParameterExists()
+        private readonly Mock<ILogger<Index>> _logger = new Mock<ILogger<Index>>();
+        private readonly Index _subject;
+
+        public ProjectListDownloadTests()
         {
-            // Arrange
-            var filters = new ProjectListFilters();
-            var store = new Dictionary<string, object>
+            var tempData = new Mock<ITempDataDictionary>();
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Query = new QueryCollection();
+
+            var pageContext = new PageContext
             {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
+                HttpContext = httpContext
             };
 
-            filters.PersistUsing(store);
-
-            var queryParameters = new List<KeyValuePair<string, StringValues>>
+            _subject = new Index(ProjectRepository.Object, _logger.Object)
             {
-                new("clear", new StringValues(new[] { "true" }))
+                PageContext = pageContext,
+                TempData = tempData.Object
             };
-
-            // Act
-            filters.PopulateFrom(queryParameters);
-
-            // Assert
-            Assert.False(filters.IsFiltered);
         }
 
         [Fact]
-        public void PersistUsing_SetsTitle_WhenStoreContainsTitle()
+        public async Task OnGetDownload_SuccessfulResponse_ReturnsFileStreamResult()
         {
-            // Arrange
-            var filters = new ProjectListFilters();
-            var store = new Dictionary<string, object>
-            {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
-            };
+            // Setup the mock to return a successful response
+            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<string>()))
+                .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.OK, new FileStreamResult(new MemoryStream(), "text/csv") { FileDownloadName = "exported_projects.csv" }));
 
             // Act
-            filters.PersistUsing(store);
+            var result = await _subject.OnGetDownload();
 
             // Assert
-            Assert.Equal("Bishop", filters.Title);
+            Assert.NotNull(result);
+            Assert.Equal("exported_projects.csv", result.FileDownloadName);
         }
 
         [Fact]
-        public void ClearFiltersFrom_RemovesAllFiltersFromStore()
+        public async Task OnGetDownload_UnsuccessfulResponse_ReturnsEmptyCsvFile()
         {
-            // Arrange
-            var store = new Dictionary<string, object>
-            {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
-            };
+            // Setup the mock to return an unsuccessful response
+            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<string>()))
+                .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.InternalServerError, null));
 
             // Act
-            ProjectListFilters.ClearFiltersFrom(store);
+            var result = await _subject.OnGetDownload();
 
             // Assert
-            Assert.Empty(store);
+            Assert.NotNull(result);
+            Assert.Equal("empty.csv", result.FileDownloadName);
         }
     }
 }
