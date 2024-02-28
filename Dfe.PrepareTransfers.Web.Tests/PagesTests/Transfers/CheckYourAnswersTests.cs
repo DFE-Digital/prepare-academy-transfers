@@ -65,15 +65,18 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
                 HttpContext = httpContext
             };
 
+            _outgoingTrust = new Trust
+            {
+                Name = "Test",
+                Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
+            };
+
             _subject = new CheckYourAnswersModel(_trustsRepository.Object, _projectsRepository.Object,
                 referenceNumberService.Object, _academyRepository.Object)
             {
                 PageContext = _pageContext,
-                TempData = _tempData
-            };
-            _outgoingTrust = new Trust
-            {
-                Ukprn = "9a7be920-eaa0-e911-a83f-000d3a3852af",
+                TempData = _tempData,
+                OutgoingTrust = _outgoingTrust
             };
 
             var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
@@ -81,6 +84,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
 
             var incomingTrustIdByteArray = Encoding.UTF8.GetBytes(_incomingTrust.Ukprn);
             _session.Setup(s => s.TryGetValue("IncomingTrustId", out incomingTrustIdByteArray)).Returns(true);
+
+            byte[] proposedTrustNameByteArray = null;
+            _session.Setup(s => s.TryGetValue("ProposedTrustName", out proposedTrustNameByteArray)).Returns(true);
 
             var outgoingAcademyIds = new List<string> { _academyOne.Ukprn, _academyTwo.Ukprn };
             var outgoingAcademyIdsByteArray = Encoding.UTF8.GetBytes(string.Join(",", outgoingAcademyIds));
@@ -160,6 +166,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
                 _session.Verify(s => s.TryGetValue("OutgoingTrustId", out foundByteArray), Times.Once);
                 _session.Verify(s => s.TryGetValue("IncomingTrustId", out foundByteArray), Times.Once);
                 _session.Verify(s => s.TryGetValue("OutgoingAcademyIds", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("ProposedTrustName", out foundByteArray), Times.Once);
             }
 
             [Fact]

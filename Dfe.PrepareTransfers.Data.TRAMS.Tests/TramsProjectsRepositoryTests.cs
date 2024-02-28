@@ -150,8 +150,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             public CreateProjectTests()
             {
                 _projectToCreate = new Project {Status = "New", OutgoingTrustUkprn = "10059868", TransferringAcademies = new List<Data.Models.Projects.TransferringAcademies>() { 
-                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066875", IncomingTrustUkprn = "10059612" },
-                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066884", IncomingTrustUkprn = "10059612" }} };
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066875", IncomingTrustUkprn = "10059612", IncomingTrustName = "Test Trust 1" },
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066884", IncomingTrustUkprn = "10059612", IncomingTrustName = "Test Trust 2" }} };
 
 
                 _mappedProject = InternalProjectToUpdateMapper.MapToCreate(_projectToCreate);

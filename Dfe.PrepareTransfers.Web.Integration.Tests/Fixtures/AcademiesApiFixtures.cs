@@ -113,6 +113,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                 {
                     new TransferringAcademy
                     {
+                        IncomingTrustName = "Test Trust",
                         IncomingTrust = new TrustSummary
                         {
                             GroupName = IncomingTrustName,
