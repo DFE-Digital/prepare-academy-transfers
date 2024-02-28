@@ -8,9 +8,9 @@ using Dfe.PrepareTransfers.Helpers;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {
-    public class TramsProjectMapper : IMapper<TramsProject, Project>
+    public class AcademisationProjectMapper : IMapper<AcademisationProject, Project>
     {
-        public Project Map(TramsProject input)
+        public Project Map(AcademisationProject input)
         {
             return new Project
             {
@@ -31,7 +31,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static TransferAcademyAndTrustInformation AcademyAndTrustInformation(TramsProject input)
+        private static TransferAcademyAndTrustInformation AcademyAndTrustInformation(AcademisationProject input)
         {
             return new TransferAcademyAndTrustInformation
             {
@@ -40,13 +40,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static List<TransferringAcademies> TransferringAcademies(TramsProject input)
+        private static List<TransferringAcademies> TransferringAcademies(AcademisationProject input)
         {
             return input.TransferringAcademies
                 .Select(transfer =>
                     new TransferringAcademies
                     {
-                        IncomingTrustName = transfer.IncomingTrust.GroupName,
+                        IncomingTrustName = string.IsNullOrEmpty(transfer.IncomingTrustName) ? transfer.IncomingTrust.GroupName : transfer.IncomingTrustName,
                         IncomingTrustUkprn = transfer.IncomingTrust.Ukprn,
                         OutgoingAcademyName = transfer.OutgoingAcademy.Name,
                         OutgoingAcademyUkprn = transfer.OutgoingAcademy.Ukprn,
@@ -61,7 +61,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 .ToList();
         }
 
-        private static TransferRationale Rationale(TramsProject input)
+        private static TransferRationale Rationale(AcademisationProject input)
         {
             return new TransferRationale
             {
@@ -70,7 +70,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 IsCompleted = input.Rationale.IsCompleted
             };
         }
-        private static TransferLegalRequirements LegalRequirements(TramsProject input)
+        private static TransferLegalRequirements LegalRequirements(AcademisationProject input)
         {
             return new TransferLegalRequirements()
             {
@@ -81,7 +81,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static TransferFeatures Features(TramsProject input)
+        private static TransferFeatures Features(AcademisationProject input)
         {
             return new TransferFeatures
             {
@@ -94,7 +94,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static TransferDates Dates(TramsProject input)
+        private static TransferDates Dates(AcademisationProject input)
         {
             return new TransferDates
             {
@@ -105,7 +105,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static TransferBenefits Benefits(TramsProject input)
+        private static TransferBenefits Benefits(AcademisationProject input)
         {
             var otherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
             var inputFactors = input.Benefits.OtherFactorsToConsider;

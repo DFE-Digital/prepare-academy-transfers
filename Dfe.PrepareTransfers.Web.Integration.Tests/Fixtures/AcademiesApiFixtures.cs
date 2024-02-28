@@ -43,9 +43,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
             return new List<TramsProjectSummary> { tramsProjectSummary };
         }
 
-        public static TramsProject Project()
+        public static AcademisationProject Project()
         {
-            var tramsProject = new TramsProject
+            var tramsProject = new AcademisationProject
             {
                 Benefits = new AcademyTransferProjectBenefits
                 {

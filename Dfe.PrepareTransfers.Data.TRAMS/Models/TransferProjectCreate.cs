@@ -7,7 +7,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
     public class TransferProjectCreate
     {
         public string OutgoingTrustUkprn { get; set; }
-        public string IncomingTrustUkprn { get; set; }
+        public string OutgoingTrustName { get; set; }
+        public string? IncomingTrustUkprn { get; set; }
+        public string IncomingTrustName { get; set; }
         public List<string> TransferringAcademyUkprns { get; set; }
 
     }

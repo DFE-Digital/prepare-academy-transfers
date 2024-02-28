@@ -30,7 +30,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 return OnGet();
             }
 
-            var redirectPage = IsFormAMatViewModel.IsFormAMat.HasValue && IsFormAMatViewModel.IsFormAMat.Value ? "Transfers/ProposedTrustName" : "/Transfers/IncomingTrust";
+            var redirectPage = IsFormAMatViewModel.IsFormAMat.HasValue && IsFormAMatViewModel.IsFormAMat.Value ? "/Transfers/ProposedTrustName" : "/Transfers/IncomingTrust";
 
             return RedirectToPage(redirectPage);
         }        

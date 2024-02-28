@@ -4,9 +4,9 @@ using Dfe.PrepareTransfers.Web.Models;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Models
 {
-    public class TramsProject
+    public class AcademisationProject
     {
-        public TramsProject()
+        public AcademisationProject()
         {
             Benefits = new AcademyTransferProjectBenefits();
             LegalRequirements = new AcademyTransferProjectLegalRequirements();
