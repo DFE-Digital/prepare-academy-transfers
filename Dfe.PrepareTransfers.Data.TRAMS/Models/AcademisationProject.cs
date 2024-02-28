@@ -31,5 +31,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
         public List<TransferringAcademy> TransferringAcademies { get; set; }
         public TrustSummary OutgoingTrust { get; set; }
         public User AssignedUser { get; set; }
+        public bool? IsFormAMat { get; set; }
+
     }
 }

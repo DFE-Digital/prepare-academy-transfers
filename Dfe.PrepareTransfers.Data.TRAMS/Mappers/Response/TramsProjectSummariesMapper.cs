@@ -23,7 +23,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                         IncomingTrustUkprn = academy.IncomingTrustUkprn,
                         IncomingTrustName = academy.IncomingTrustName
                     }).ToList(),
-                AssignedUser = input.AssignedUser
+                AssignedUser = input.AssignedUser,
+                IsFormAMat = input.IsFormAMat,
             };
         }
     }

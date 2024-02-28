@@ -15,6 +15,6 @@ namespace Dfe.PrepareTransfers.Web.Models
         [BindProperty]
         public string IncomingTrustName { get; set; }
         [BindProperty]
-        public bool IsFormAMAT { get; set; } = true;
+        public bool IsFormAMAT { get; set; }
     }
 }
