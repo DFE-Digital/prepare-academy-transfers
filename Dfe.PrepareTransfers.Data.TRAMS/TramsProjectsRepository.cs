@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
@@ -10,6 +11,7 @@ using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS
@@ -364,6 +366,23 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             // stay inline with current pattern
             throw new TramsApiException(response);
+        }
+
+        public async Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "")
+        {
+            AcademyTransferSearchModel searchModel = new() { TitleFilter = titleFilter };
+
+            var response = await _academisationHttpClient.PostAsync("/export/export-transfer-projects", JsonContent.Create(searchModel));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new ApiResponse<FileStreamResult>(response.StatusCode, null);
+            }
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            FileStreamResult fileStreamResult = new(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            return new ApiResponse<FileStreamResult>(response.StatusCode, fileStreamResult);
         }
 
         public async Task<bool> UpdateStatus(Project project)

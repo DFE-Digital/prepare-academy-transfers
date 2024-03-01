@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
@@ -23,7 +24,6 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateProjectName(string urn, string projectName);
 
         public Task<bool> AssignUser(Project project);
-
-
+        public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "");
     }
 }

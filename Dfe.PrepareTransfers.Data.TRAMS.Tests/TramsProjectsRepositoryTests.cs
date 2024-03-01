@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -112,6 +114,32 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetByUrn("12345"));
             }
         }
+        public class DownloadProjectExportTests : TramsProjectsRepositoryTests
+        {
+            [Fact]
+            public async void GivenExportFileReturned_GetsExportedTransfersFile()
+            {
+                _httpClient
+                    .Setup(client => client.PostAsync("/export/export-transfer-projects", It.IsAny<HttpContent>()))
+                    .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
+
+                var result = await _subject.DownloadProjectExport(It.IsAny<string>());
+                Assert.NotNull(result);
+                Assert.True(result.Success);
+            }
+
+            [Fact]
+            public async void GivenUnknownError_ReturnsNonSuccess()
+            {
+                _httpClient
+                    .Setup(client => client.PostAsync("/export/export-transfer-projects", It.IsAny<HttpContent>()))
+                    .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+
+                var result = await _subject.DownloadProjectExport(It.IsAny<string>());
+                Assert.NotNull(result);
+                Assert.False(result.Success);
+            }
+        }
 
         public class UpdateProjectTests : TramsProjectsRepositoryTests
         {
@@ -198,7 +226,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
                 Assert.Equal($"Mapped {_createdProject.ProjectUrn}", response.Result.Urn);
             }
-            
+
             [Theory]
             [InlineData(HttpStatusCode.NotFound)]
             [InlineData(HttpStatusCode.InternalServerError)]
@@ -209,7 +237,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     {
                         StatusCode = httpStatusCode
                     });
-                
+
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.Create(_projectToCreate));
             }
         }
@@ -287,19 +315,19 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             {
                 _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries,12)))
+                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
                 });
 
                 _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
                     .Returns<TramsProjectSummary>(
-                        input => new ProjectSearchResult {Urn = $"Mapped {input.ProjectUrn}"}
+                        input => new ProjectSearchResult { Urn = $"Mapped {input.ProjectUrn}" }
                     );
 
                 var result = await _subject.GetProjects();
 
                 Assert.Equal("Mapped 123", result.Result[0].Urn);
             }
-            
+
             [Theory]
             [InlineData(HttpStatusCode.NotFound)]
             [InlineData(HttpStatusCode.InternalServerError)]
@@ -309,7 +337,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 {
                     StatusCode = httpStatusCode
                 });
-                
+
                 await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetProjects());
             }
 
@@ -325,7 +353,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 });
 
                 await _subject.GetProjects(page);
-                
+
                 _httpClient.Verify(c => c.GetAsync($"transfer-project/GetTransferProjects?page={page}&count=10&title="), Times.Once());
             }
         }
@@ -336,6 +364,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             return expectedContent.Equals(actualContentString);
         }
 
-        
+
     }
 }
