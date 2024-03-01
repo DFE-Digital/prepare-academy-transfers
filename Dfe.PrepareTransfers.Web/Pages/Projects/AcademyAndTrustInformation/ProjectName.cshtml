@@ -1,0 +1,38 @@
+﻿@page "/project/{urn}/academy-and-trust-information/project-name"
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.Academisation.ExtensionMethods
+@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.ProjectNameModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Enter the project name";
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
+}
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-page="/Transfers/IsFormAMat" asp-route-change="@ViewData["ChangeLink"]">Back</a>
+}
+
+<div asp-gds-validation-summary></div>
+    
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form class="govuk-form" method="post">
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl" id="@nameof(Model.ProjectName)">
+                        <h1 class="govuk-fieldset__heading">
+                            Enter the project name
+                        </h1>
+                    </legend>
+                    <p asp-gds-validation-for="ProjectName"></p>
+                    <input class="govuk-input" name="ProjectName" id="ProjectName" type="text" aria-describedby="query-hint" value="@Model.ProjectName" />
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">
+                Continue
+            </button>
+        </form>
+    </div>
+</div>

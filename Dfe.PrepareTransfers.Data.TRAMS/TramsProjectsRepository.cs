@@ -384,5 +384,24 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             // stay inline with current pattern
             throw new TramsApiException(response);
         }
+
+        public async Task<bool> UpdateProjectName(string urn, string name)
+        {
+            var projectName = new
+            {
+                ProjectName = name
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(projectName), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{urn}/set-name", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateDates(Project project);
         public Task<bool> UpdateAcademy(string urn, TransferringAcademies academy);
         public Task<bool> UpdateStatus(Project project);
+        public Task<bool> UpdateProjectName(string urn, string projectName);
 
         public Task<bool> AssignUser(Project project);
 
