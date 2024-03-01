@@ -60,6 +60,7 @@ public class ProjectListFilters
         if (persist) Cache(key, value);
 
         return value ?? Array.Empty<string>();
+    
     }
 
     private string[] Cache(string key, string[]? value)
