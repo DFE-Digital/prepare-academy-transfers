@@ -15,5 +15,7 @@ namespace Dfe.PrepareTransfers.Data.Models
         public List<TransferringAcademies> TransferringAcademies { get; set; }
         public User AssignedUser { get; set; }
         public string Urn { get; set; }
+
+        public bool? IsFormAMat { get; set; }
     }
 }

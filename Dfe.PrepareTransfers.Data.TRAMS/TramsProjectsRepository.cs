@@ -19,7 +19,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
     public class TramsProjectsRepository : IProjects
     {
         private readonly IAcademies _academies;
-        private readonly IMapper<TramsProject, Project> _externalToInternalProjectMapper;
+        private readonly IMapper<AcademisationProject, Project> _externalToInternalProjectMapper;
         private readonly ITramsHttpClient _httpClient;
 
         private readonly IAcademisationHttpClient _academisationHttpClient;
@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         private readonly ITrusts _trusts;
 
         public TramsProjectsRepository(ITramsHttpClient httpClient, IAcademisationHttpClient academisationHttpClient,
-           IMapper<TramsProject, Project> externalToInternalProjectMapper,
+           IMapper<AcademisationProject, Project> externalToInternalProjectMapper,
            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
            ITrusts trusts, IMapper<Project, TramsProjectUpdate> internalToUpdateMapper)
         {
@@ -78,7 +78,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var project = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
+                var project = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
 
                 #region API Interim
 
@@ -90,16 +90,31 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                 };
                 project.TransferringAcademies = project.TransferringAcademies.Select(async transferring =>
                    {
-                       var incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
-                       Academy outgoingAcademy =
+                       Trust incomingTrust = null;
+
+                       if (!string.IsNullOrEmpty(transferring.IncomingTrustUkprn))
+                       {
+                           incomingTrust = await _trusts.GetByUkprn(transferring.IncomingTrustUkprn);
+
+                           transferring.IncomingTrust = new TrustSummary
+                           {
+                               GroupName = incomingTrust.Name,
+                               GroupId = incomingTrust.GiasGroupId,
+                               Ukprn = transferring.IncomingTrustUkprn
+                           };
+                       }
+                       else {
+                           // for form a mat
+                           transferring.IncomingTrust = new TrustSummary
+                           {
+                               GroupName = transferring.IncomingTrustName,
+                               Ukprn = transferring.IncomingTrustUkprn
+                           };
+                       }
+
+                      Academy outgoingAcademy =
                       await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
-                       transferring.IncomingTrust = new TrustSummary
-                       {
-                           GroupName = incomingTrust.Name,
-                           GroupId = incomingTrust.GiasGroupId,
-                           Ukprn = transferring.IncomingTrustUkprn
-                       };
                        transferring.OutgoingAcademy = new AcademySummary
                        {
                            Name = outgoingAcademy.Name,
@@ -296,7 +311,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
+                var createdProject = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
 
                 #region API Interim
 
@@ -380,6 +395,25 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             var content = new StringContent(JsonConvert.SerializeObject(status), Encoding.Default,
                "application/json");
             HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-status", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
+
+        public async Task<bool> UpdateProjectName(string urn, string name)
+        {
+            var projectName = new
+            {
+                ProjectName = name
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(projectName), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{urn}/set-name", content);
             if (response.IsSuccessStatusCode)
             {
                 return true;

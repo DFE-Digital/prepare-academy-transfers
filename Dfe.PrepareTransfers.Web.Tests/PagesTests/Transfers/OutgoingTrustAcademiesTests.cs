@@ -144,7 +144,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
                 var result = await subject.OnPostAsync();
 
                 var resultRedirect = Assert.IsType<RedirectToActionResult>(result);
-                Assert.Equal("IncomingTrust", resultRedirect.ActionName);
+                Assert.Equal("IsFormAMat", resultRedirect.ActionName);
                 Assert.Equal("Transfers", resultRedirect.ControllerName);
                 _session.Verify(s => s.Set(
                     "OutgoingAcademyIds",

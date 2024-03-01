@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
             return projects;
 		}
 
-		protected TramsProject GetProject(Action<TramsProject> postSetup = null)
+		protected AcademisationProject GetProject(Action<AcademisationProject> postSetup = null)
 		{
 			var project = AcademiesApiFixtures.Project();
 			if (postSetup != null)

@@ -46,7 +46,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             return new TransferProjectCreate
             {
                 OutgoingTrustUkprn = input.OutgoingTrustUkprn,
+                OutgoingTrustName = input.OutgoingTrustName,
                 IncomingTrustUkprn = input.IncomingTrustUkprn,
+                IncomingTrustName = input.IncomingTrustName,
                 TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList()
             };
         }

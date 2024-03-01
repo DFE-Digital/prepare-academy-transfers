@@ -53,13 +53,21 @@
             </a>
         </dd>
     </div>
-    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+    <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
             Project name
         </dt>
         <dd class="govuk-summary-list__value ">
             <displaynodataforemptystring>@Model.IncomingTrustName</displaynodataforemptystring>
         </dd>
+        @if (Model.IsFormAMAT)
+        {
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/ProjectName" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
+                    Change<span class="govuk-visually-hidden"> author</span>
+                </a>
+            </dd>
+        }
     </div>
     <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">

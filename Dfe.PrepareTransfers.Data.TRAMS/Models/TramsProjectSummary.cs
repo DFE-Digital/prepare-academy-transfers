@@ -13,5 +13,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
         public string Status { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }
         public User AssignedUser { get; set; }
+        public bool? IsFormAMat { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
         [Fact]
         public void GivenTramsProject_MapsCorrectly()
         {
-            var toMap = new TramsProject
+            var toMap = new AcademisationProject
             {
                 Benefits = new AcademyTransferProjectBenefits
                 {
@@ -113,7 +113,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
                 OutgoingTrustUkprn = "123"
             };
 
-            var subject = new TramsProjectMapper();
+            var subject = new AcademisationProjectMapper();
             var result = subject.Map(toMap);
 
             Assert.Equal(toMap.State, result.State);
@@ -132,7 +132,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             AssertTransferringAcademiesCorrect(toMap, result);
         }
 
-        private static void AssertGeneralInformationCorrect(TramsProject toMap, Project result)
+        private static void AssertGeneralInformationCorrect(AcademisationProject toMap, Project result)
         {
             Assert.Equal(toMap.GeneralInformation.Author, result.AcademyAndTrustInformation.Author);
             var expectedRecommendation =
@@ -140,7 +140,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedRecommendation, result.AcademyAndTrustInformation.Recommendation);
         }
 
-        private static void AssertTransferringAcademiesCorrect(TramsProject toMap, Project result)
+        private static void AssertTransferringAcademiesCorrect(AcademisationProject toMap, Project result)
         {
             var expectedTransfer = toMap.TransferringAcademies[0];
             Assert.Equal(expectedTransfer.IncomingTrust.GroupName, result.TransferringAcademies[0].IncomingTrustName);
@@ -150,21 +150,21 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(expectedTransfer.OutgoingAcademy.Urn, result.TransferringAcademies[0].OutgoingAcademyUrn);
         }
 
-        private static void AssertLegalRequirementsAreCorrect(TramsProject toMap, Project result)
+        private static void AssertLegalRequirementsAreCorrect(AcademisationProject toMap, Project result)
         {
             Assert.Equal(toMap.LegalRequirements.IncomingTrustAgreement, result.LegalRequirements.IncomingTrustAgreement.ToDescription());
             Assert.Equal(toMap.LegalRequirements.DiocesanConsent, result.LegalRequirements.DiocesanConsent.ToDescription());
             Assert.Equal(toMap.LegalRequirements.OutgoingTrustConsent, result.LegalRequirements.OutgoingTrustConsent.ToDescription());
             Assert.Equal(toMap.LegalRequirements.IsCompleted, result.LegalRequirements.IsCompleted);
         }
-        private static void AssertRationaleCorrect(TramsProject toMap, Project result)
+        private static void AssertRationaleCorrect(AcademisationProject toMap, Project result)
         {
             Assert.Equal(toMap.Rationale.ProjectRationale, result.Rationale.Project);
             Assert.Equal(toMap.Rationale.TrustSponsorRationale, result.Rationale.Trust);
             Assert.Equal(toMap.Rationale.IsCompleted, result.Rationale.IsCompleted);
         }
 
-        private static void AssertFeaturesCorrect(TramsProject toMap, Project result)
+        private static void AssertFeaturesCorrect(AcademisationProject toMap, Project result)
         {
             var expectedType = EnumHelpers<TransferFeatures.TransferTypes>.Parse(toMap.Features.TypeOfTransfer);
             var expectedReasons = toMap.Features.SpecificReasonsForTransfer.Select(x => EnumHelpers<TransferFeatures.SpecificReasonForTheTransferTypes>.Parse(x)).ToList();
@@ -177,7 +177,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.Features.IsCompleted, result.Features.IsCompleted);
         }
 
-        private static void AssertDatesCorrect(TramsProject toMap, Project result)
+        private static void AssertDatesCorrect(AcademisationProject toMap, Project result)
         {
             Assert.Equal(toMap.Dates.HtbDate, result.Dates.Htb);
             Assert.Equal(toMap.Dates.TargetDateForTransfer, result.Dates.Target);
@@ -185,7 +185,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
             Assert.Equal(toMap.Dates.HasTargetDateForTransfer, result.Dates.HasTargetDateForTransfer);
         }
 
-        private static void AssertBenefitsCorrect(TramsProject toMap, Project result)
+        private static void AssertBenefitsCorrect(AcademisationProject toMap, Project result)
         {
             var expectedBenefitsList = toMap.Benefits.IntendedTransferBenefits.SelectedBenefits
                 .Select(EnumHelpers<TransferBenefits.IntendedBenefit>.Parse)

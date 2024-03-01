@@ -258,7 +258,7 @@ public class Startup
         services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
         services.AddTransient<IMapper<EstablishmentDto, Academy>, AcademiesEstablishmentMapper>();
         services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
-        services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+        services.AddTransient<IMapper<AcademisationProject, Project>, AcademisationProjectMapper>();
         services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
         services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
         services.AddTransient<ITrusts, TramsTrustsRepository>();

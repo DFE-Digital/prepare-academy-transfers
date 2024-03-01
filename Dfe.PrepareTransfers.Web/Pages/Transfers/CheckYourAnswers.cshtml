@@ -91,28 +91,56 @@
                 </div>
             </dl>
         }
-        <h2 class="govuk-heading-m">Incoming trust</h2>
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">Name</dt>
-                @if (Model.IncomingTrust == null)
-                {
-                    <dd class="govuk-summary-list__value">None selected</dd>
-                }
-                else
-                {
-                    <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name.ToTitleCase()</dd>
-                }
-                <dd class="govuk-summary-list__actions">
-                    <a class="govuk-link" asp-page="/Transfers/IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden"> incoming trust</span></a>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-                <dt class="govuk-summary-list__key">UKPRN</dt>
-                <dd class="govuk-summary-list__value">@Model.IncomingTrust?.Ukprn</dd>
-            </div>
-        </dl>
+        @if (!Model.IsFormAMAT)
+        {
+            <h2 class="govuk-heading-m">Incoming trust</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Name</dt>
+                    @if (Model.IncomingTrust == null)
+                    {
+                        <dd class="govuk-summary-list__value">None selected</dd>
+                    }
+                    else
+                    {
+                        <dd class="govuk-summary-list__value">@Model.IncomingTrust.Name.ToTitleCase()</dd>
+                    }
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" asp-page="/Transfers/IncomingTrust" asp-route-change="true">Change <span class="govuk-visually-hidden"> incoming trust</span></a>
+                    </dd>
+                </div>
+                <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+                    <dt class="govuk-summary-list__key">UKPRN</dt>
+                    <dd class="govuk-summary-list__value">@Model.IncomingTrust?.Ukprn</dd>
+                </div>
+            </dl>
+        }
+        @if (Model.IsFormAMAT)
+        {
+            <h2 class="govuk-heading-m">New trust</h2>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">Name</dt>
+                    @if (Model.ProposedTrustName == null)
+                    {
+                        <dd class="govuk-summary-list__value">None selected</dd>
+                    }
+                    else
+                    {
+                        <dd class="govuk-summary-list__value">@Model.ProposedTrustName.ToTitleCase()</dd>
+                    }
+                    <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" asp-page="/Transfers/ProposedTrustName" asp-route-change="true">Change <span class="govuk-visually-hidden"> proposed trust name</span></a>
+                    </dd>
+                </div>
+            </dl>
+        }
         <form method="post">
+            <input type="hidden" asp-for="@Model.IsFormAMAT" />
+            <input type="hidden" asp-for="@Model.OutgoingTrust.Ukprn" />
+            <input type="hidden" asp-for="@Model.OutgoingTrust.Name" />
+            <input type="hidden" asp-for="@Model.IncomingTrust.Ukprn" />
+            <input type="hidden" asp-for="@Model.IncomingTrust.Name" />
             <button type="submit" data-module="govuk-button" data-prevent-double-click="true" class="govuk-button govuk-button-primary" data-test="create-project">Continue</button>
         </form>
     </div>

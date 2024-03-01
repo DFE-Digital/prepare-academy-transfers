@@ -19,7 +19,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
     {
         private readonly TramsProjectsRepository _subject;
         private readonly Mock<IAcademisationHttpClient> _httpClient;
-        private readonly Mock<IMapper<TramsProject, Project>> _externalToInternalMapper;
+        private readonly Mock<IMapper<AcademisationProject, Project>> _externalToInternalMapper;
         private readonly Mock<IMapper<TramsProjectSummary, ProjectSearchResult>> _summaryToInternalMapper;
         private readonly Mock<IMapper<Project, TramsProjectUpdate>> _internalToUpdateMapper;
         private readonly Mock<IAcademies> _academies;
@@ -30,7 +30,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
         public TramsProjectsRepositoryTests()
         {
             _httpClient = new Mock<IAcademisationHttpClient>();
-            _externalToInternalMapper = new Mock<IMapper<TramsProject, Project>>();
+            _externalToInternalMapper = new Mock<IMapper<AcademisationProject, Project>>();
             _summaryToInternalMapper = new Mock<IMapper<TramsProjectSummary, ProjectSearchResult>>();
             _internalToUpdateMapper = new Mock<IMapper<Project, TramsProjectUpdate>>();
             _academies = new Mock<IAcademies>();
@@ -60,7 +60,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
 
         public class GetByUrnTests : TramsProjectsRepositoryTests
         {
-            private readonly TramsProject _foundProject;
+            private readonly AcademisationProject _foundProject;
 
             public GetByUrnTests()
             {
@@ -69,7 +69,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(_foundProject))
                 });
-                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>(
+                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<AcademisationProject>())).Returns<AcademisationProject>(
                     externalProject =>
                         new Project
                         {
@@ -90,7 +90,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 await _subject.GetByUrn("12345");
 
                 _externalToInternalMapper.Verify(m =>
-                    m.Map(It.Is<TramsProject>(project => _foundProject.ProjectUrn == project.ProjectUrn)), Times.Once);
+                    m.Map(It.Is<AcademisationProject>(project => _foundProject.ProjectUrn == project.ProjectUrn)), Times.Once);
             }
 
             [Fact]
@@ -145,13 +145,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
         {
             private readonly Project _projectToUpdate;
             private readonly TramsProjectUpdate _mappedProject;
-            private readonly TramsProject _updatedProject;
+            private readonly AcademisationProject _updatedProject;
 
             public UpdateProjectTests()
             {
-                _projectToUpdate = new Project { Urn = "12345", Status = "New" };
-                _mappedProject = new TramsProjectUpdate { ProjectUrn = "12345" };
-                _updatedProject = new TramsProject { ProjectUrn = "12345 - Updated" };
+                _projectToUpdate = new Project {Urn = "12345", Status = "New"};
+                _mappedProject = new TramsProjectUpdate {ProjectUrn = "12345"};
+                _updatedProject = new AcademisationProject {ProjectUrn = "12345 - Updated"};
 
                 _internalToUpdateMapper.Setup(m => m.Map(_projectToUpdate)).Returns(_mappedProject);
 
@@ -161,7 +161,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                         Content = new StringContent(JsonConvert.SerializeObject(_updatedProject))
                     });
 
-                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>(input =>
+                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<AcademisationProject>())).Returns<AcademisationProject>(input =>
                     new Project
                     {
                         Urn = $"Mapped {input.ProjectUrn}"
@@ -173,22 +173,17 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
         {
             private readonly Project _projectToCreate;
             private readonly TransferProjectCreate _mappedProject;
-            private readonly TramsProject _createdProject;
+            private readonly AcademisationProject _createdProject;
 
             public CreateProjectTests()
             {
-                _projectToCreate = new Project
-                {
-                    Status = "New",
-                    OutgoingTrustUkprn = "10059868",
-                    TransferringAcademies = new List<Data.Models.Projects.TransferringAcademies>() {
-                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066875", IncomingTrustUkprn = "10059612" },
-                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066884", IncomingTrustUkprn = "10059612" }}
-                };
+                _projectToCreate = new Project {Status = "New", OutgoingTrustUkprn = "10059868", TransferringAcademies = new List<Data.Models.Projects.TransferringAcademies>() { 
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066875", IncomingTrustUkprn = "10059612", IncomingTrustName = "Test Trust 1" },
+                    new Data.Models.Projects.TransferringAcademies() { OutgoingAcademyUkprn = "10066884", IncomingTrustUkprn = "10059612", IncomingTrustName = "Test Trust 2" }} };
 
 
                 _mappedProject = InternalProjectToUpdateMapper.MapToCreate(_projectToCreate);
-                _createdProject = new TramsProject { ProjectUrn = "12345", Status = "Mapped new" };
+                _createdProject = new AcademisationProject {ProjectUrn = "12345", Status = "Mapped new"};
 
                 //_internalToUpdateMapper.Setup(m => m.(_projectToCreate)).Returns(_mappedProject);
                 _httpClient.Setup(c => c.PostAsync(It.IsAny<string>(), It.IsAny<HttpContent>())).ReturnsAsync(
@@ -196,7 +191,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     {
                         Content = new StringContent(JsonConvert.SerializeObject(_createdProject))
                     });
-                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProject>())).Returns<TramsProject>(input =>
+                _externalToInternalMapper.Setup(m => m.Map(It.IsAny<AcademisationProject>())).Returns<AcademisationProject>(input =>
                     new Project
                     {
                         Urn = $"Mapped {input.ProjectUrn}"
@@ -221,7 +216,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 await _subject.Create(_projectToCreate);
 
                 _externalToInternalMapper.Verify(m =>
-                    m.Map(It.Is<TramsProject>(project => project.ProjectUrn == _createdProject.ProjectUrn)));
+                    m.Map(It.Is<AcademisationProject>(project => project.ProjectUrn == _createdProject.ProjectUrn)));
             }
 
             [Fact]

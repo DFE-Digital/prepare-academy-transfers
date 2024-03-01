@@ -17,10 +17,10 @@
 }
 
 @section BeforeMain
-    {   
+{
 }
 
-    @if (Model.Filters.IsFiltered)
+@if (Model.Filters.IsFiltered)
 {
     <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
@@ -85,7 +85,9 @@
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @{var index = 0;}
+                    @{
+                        var index = 0;
+                    }
                     @foreach (ProjectSearchResult project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
                     {
                         TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.First();
@@ -97,9 +99,12 @@
                                             @firstOutgoingAcademy.IncomingTrustNameInTitleCase
                                         </a>
                                     </strong>
-                                    <span>
-                                        UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
-                                    </span>
+                                    @if (!project.IsFormAMat.HasValue || !project.IsFormAMat.Value)
+                                    {
+                                        <span>
+                                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
+                                        </span>
+                                    }
                                 </h2>
                                 <p class="govuk-!-margin-top-3">
                                     <div>Project reference: @project.Reference</div>
