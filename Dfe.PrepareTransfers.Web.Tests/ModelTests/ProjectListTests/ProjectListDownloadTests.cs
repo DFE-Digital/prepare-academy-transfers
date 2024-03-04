@@ -45,14 +45,14 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectList
         {
             // Setup the mock to return a successful response
             ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<string>()))
-                .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.OK, new FileStreamResult(new MemoryStream(), "text/csv") { FileDownloadName = "exported_projects.csv" }));
+                .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.OK, new FileStreamResult(new MemoryStream(), "text/csv")));
 
             // Act
             var result = await _subject.OnGetDownload();
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("exported_projects.csv", result.FileDownloadName);
+            Assert.Equal("project_list.xlsx", result.FileDownloadName);
         }
 
         [Fact]
