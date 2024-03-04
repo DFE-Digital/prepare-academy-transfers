@@ -404,7 +404,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<bool> UpdateProjectName(string urn, string name)
+        public async Task<bool> UpdateIncomingTrustName(string urn, string name)
         {
             var projectName = new
             {

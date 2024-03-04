@@ -1,8 +1,8 @@
-﻿@page "/project/{urn}/academy-and-trust-information/project-name"
+﻿@page "/project/{urn}/academy-and-trust-information/incoming-trust-name"
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.Academisation.ExtensionMethods
-@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.ProjectNameModel
+@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.IncomingTrustNameModel
 @{
     Layout = "_Layout";
     ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Enter the project name";
@@ -11,7 +11,7 @@
 
 @section BeforeMain
 {
-    <a class="govuk-back-link" asp-page="/Transfers/IsFormAMat" asp-route-change="@ViewData["ChangeLink"]">Back</a>
+    <a class="govuk-back-link" asp-page="/Projects/AcademyAndTrustInformation/Index" asp-route-urn="@Model.Urn">Back</a>
 }
 
 <div asp-gds-validation-summary></div>
@@ -19,15 +19,17 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form class="govuk-form" method="post">
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl" id="@nameof(Model.ProjectName)">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl" id="@nameof(Model.IncomingTrustName)">
                         <h1 class="govuk-fieldset__heading">
-                            Enter the project name
+                            Enter the incoming trust's name
                         </h1>
                     </legend>
-                    <p asp-gds-validation-for="ProjectName"></p>
-                    <input class="govuk-input" name="ProjectName" id="ProjectName" type="text" aria-describedby="query-hint" value="@Model.ProjectName" />
+                    <p asp-gds-validation-for="IncomingTrustName"></p>
+                    <input class="govuk-input" name="IncomingTrustName" id="IncomingTrustName" type="text" aria-describedby="query-hint" value="@Model.IncomingTrustName" />
                 </fieldset>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">
