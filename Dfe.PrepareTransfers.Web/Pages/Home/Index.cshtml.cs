@@ -94,7 +94,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
             if (response.Success)
             {
-                return response.Body;
+                var result = response.Body;
+                result.FileDownloadName = "project_list.xlsx";
+
+                return result;
             }
             else
             {
