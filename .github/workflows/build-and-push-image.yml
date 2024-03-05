@@ -116,7 +116,7 @@ jobs:
     environment: ${{ needs.set-env.outputs.environment }}
     steps:
       - name: Azure login with ACA credentials
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_ACA_CREDENTIALS }}
 
