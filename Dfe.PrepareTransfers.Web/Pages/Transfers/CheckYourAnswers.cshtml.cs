@@ -92,7 +92,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 {
                     OutgoingAcademyUkprn = id.ToString(),
                     IncomingTrustUkprn = IsFormAMAT ? null:  incomingTrustId,
-                    IncomingTrustName = IsFormAMAT ? proposedTrustName : null,
+                    IncomingTrustName = IsFormAMAT ? proposedTrustName : IncomingTrust.Name,
                 }).ToList()
             };
 
