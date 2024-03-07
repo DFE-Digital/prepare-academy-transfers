@@ -31,7 +31,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
         private readonly Trust _outgoingTrust;
 
         private readonly Trust _incomingTrust = new Trust
-        { Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210" };
+        { Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385210", Name = "Test", };
 
         private readonly Academy _academyOne = new Academy
         { Ukprn = "9a7be920-eaa0-e911-a83f-000d3a385211" };
@@ -76,7 +76,8 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
             {
                 PageContext = _pageContext,
                 TempData = _tempData,
-                OutgoingTrust = _outgoingTrust
+                OutgoingTrust = _outgoingTrust,
+                IncomingTrust = _incomingTrust
             };
 
             var outgoingTrustIdByteArray = Encoding.UTF8.GetBytes(_outgoingTrust.Ukprn);
