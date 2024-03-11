@@ -1,5 +1,17 @@
 ##Next
 
+
+* Changed Feedback Banner: The feedback banner has been updated to better capture user insights and improve engagement.
+* Accessibility Adjustments: Omitted phone numbers from the Accessibility Statements section.
+* Trust Template Content Replacement: Updated all content in the trust template with new guidance, eliminating references to KIM when a Transfer is part of a Form a MAT.
+* Added New Tab for Form a MAT Projects in Prepare: Introduced a dedicated tab for Form a Multi-Academy Trust (MAT) projects within Transfers, directing users to Form a MAT projects in Conversions.
+* Decision Recording Features:
+    * Introduced a Withdrawn Status to accurately document when a project is no longer proceeding.
+    * Added functionality to record decisions within Transfers.
+* Task List Updates: Updated the Transfers Task list to ensure alignment with the Conversions system, facilitating consistency across platforms.
+* Layout Improvements: Introduced a sub-tabbed layout for organisation within the system, aligned with the Conversions tasklist.
+
+
 ---
 
 ## 1.3.0
