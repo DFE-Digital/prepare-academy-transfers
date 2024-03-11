@@ -23,7 +23,10 @@
         </h1>
 
         <p class="govuk-body govuk-!-margin-bottom-1">
-            Route: Transfer
+            Route: @if (Model.IsFormAMAT)
+            {
+                <span>Form a MAT</span>
+            } Transfer
         </p>
         <p class="govuk-body govuk-!-margin-bottom-5">
             Delivery officer:

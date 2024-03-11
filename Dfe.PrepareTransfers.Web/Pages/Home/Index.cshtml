@@ -107,6 +107,12 @@
                                     }
                                 </h2>
                                 <p class="govuk-!-margin-top-3">
+                                    <div>
+                                        Route: @if (project.IsFormAMat.HasValue && project.IsFormAMat.Value)
+                                        {
+                                            <span>Form a MAT</span>
+                                        } Transfer
+                                    </div>
                                     <div>Project reference: @project.Reference</div>
                                     <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
                                     @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
