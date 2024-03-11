@@ -27,21 +27,21 @@ namespace Dfe.PrepareTransfers.Data.Models.Projects
             // We store the enum name as a string in the API. This data was previously
             Empty = 0,
 
-            [Display(Name = "Forced transfer following inadequate Ofsted inspection"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            [Display(Name = "Due to inadequate Ofsted inspection"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
             Forced,
             [Display(Name = "Finance"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
             Finance,
             [Display(Name = "Safeguarding"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
             Safeguarding,
-            [Display(Name = "Sponsor/Trust closed"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
+            [Display(Name = "Leadership and governance"), ReasonParent(ReasonForTheTransferTypes.Dfe)]
             TrustClosed,
 
             [Display(Name = "Voluntary transfers"), ReasonParent(ReasonForTheTransferTypes.OutgoingTrust)]
             VoluntaryTransfer,          
-            [Display(Name = "Strategic consolidations"), ReasonParent(ReasonForTheTransferTypes.OutgoingTrust)]
+            [Display(Name = "Strategic consolidation"), ReasonParent(ReasonForTheTransferTypes.OutgoingTrust)]
             Strategic,
 
-            [Display(Name = "Voluntary closures"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
+            [Display(Name = "Voluntary closure"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
             VoluntaryClosure,
             [Display(Name = "Voluntary closures following intervention"), ReasonParent(ReasonForTheTransferTypes.SponsorOrTrustClosure)]
             VoluntaryClosureIntervention,
