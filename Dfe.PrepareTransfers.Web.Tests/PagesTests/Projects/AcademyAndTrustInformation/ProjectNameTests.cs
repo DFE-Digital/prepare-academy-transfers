@@ -7,11 +7,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
 {
     public class ProjectTests : BaseTests
     {
-        private readonly ProjectNameModel _subject;
+        private readonly IncomingTrustNameModel _subject;
 
         protected ProjectTests()
         {
-            _subject = new ProjectNameModel(ProjectRepository.Object) { Urn = ProjectUrn0001 };
+            _subject = new IncomingTrustNameModel(ProjectRepository.Object) { Urn = ProjectUrn0001 };
         }
         public class OnPostAsync : ProjectTests
         {
@@ -23,10 +23,10 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
             [Fact]
             public async void GivenErrorInModelState_ReturnsCorrectPage()
             {
-                _subject.ModelState.AddModelError(nameof(_subject.ProjectName), "error");
+                _subject.ModelState.AddModelError(nameof(_subject.IncomingTrustName), "error");
                 var result = await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r => r.UpdateProjectName(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                ProjectRepository.Verify(r => r.UpdateIncomingTrustName(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
                 Assert.IsType<PageResult>(result);
             }
@@ -34,11 +34,11 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
             [Fact]
             public async void GivenUrnAndProject_UpdatesTheProject()
             {
-                _subject.ProjectName = "New Project Name";
+                _subject.IncomingTrustName = "New Project Name";
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.UpdateProjectName(It.IsAny<string>(), It.IsAny<string>()),
+                        r.UpdateIncomingTrustName(It.IsAny<string>(), It.IsAny<string>()),
                     Times.Once);
             }
         }

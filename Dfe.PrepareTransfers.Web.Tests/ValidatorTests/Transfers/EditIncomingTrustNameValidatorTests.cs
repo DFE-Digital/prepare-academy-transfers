@@ -7,14 +7,14 @@ using Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation;
 
 namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
 {
-    public class ProjectNameValidatorTests
+    public class EditIncomingTrustNameValidatorTests
     {
         private readonly Mock<IProjects> _projectRepository;
-        private readonly ProjectNameValidator _validator;
+        private readonly EditIncomingTrustNameValidator _validator;
 
-        public ProjectNameValidatorTests()
+        public EditIncomingTrustNameValidatorTests()
         {
-            _validator = new ProjectNameValidator();
+            _validator = new EditIncomingTrustNameValidator();
             _projectRepository = new Mock<IProjects>();
         }
 
@@ -24,22 +24,22 @@ namespace Dfe.PrepareTransfers.Web.Tests.ValidatorTests.Transfers
         [InlineData(" ")]
         public async void WhenProjectNameIsEmpty_ShouldSetError(string projectName)
         {
-            var projectSearch = new ProjectNameModel(_projectRepository.Object)
+            var projectSearch = new IncomingTrustNameModel(_projectRepository.Object)
             {
-                ProjectName = projectName
+                IncomingTrustName = projectName
             };
             var result = await _validator.TestValidateAsync(projectSearch);
 
-            result.ShouldHaveValidationErrorFor(x => x.ProjectName)
-                .WithErrorMessage("Enter the Project name");
+            result.ShouldHaveValidationErrorFor(x => x.IncomingTrustName)
+                .WithErrorMessage("Enter the Incoming trust name");
         }
 
         [Fact]
         public async void WhenProjectNameNotEmpty_ShouldNotSetError()
         {
-            var projectSearch = new ProjectNameModel(_projectRepository.Object)
+            var projectSearch = new IncomingTrustNameModel(_projectRepository.Object)
             {
-                ProjectName = "New Project Name"
+                IncomingTrustName = "New Project Name"
             };
             var result = await _validator.TestValidateAsync(projectSearch);
 
