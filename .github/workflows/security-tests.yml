@@ -86,7 +86,7 @@ jobs:
 
       - name: Push report to blob storage
         if: '!cancelled()'
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: azure
         with:
           azcliversion: 2.49.0
