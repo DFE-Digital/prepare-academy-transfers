@@ -1,5 +1,5 @@
 module "statuscake-tls-monitor" {
-  source = "github.com/dfe-digital/terraform-statuscake-tls-monitor?ref=v0.1.2"
+  source = "github.com/dfe-digital/terraform-statuscake-tls-monitor?ref=v0.1.3"
 
   statuscake_monitored_resource_addresses = local.statuscake_monitored_resource_addresses
   statuscake_alert_at = [ # days to alert on
