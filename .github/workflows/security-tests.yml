@@ -80,13 +80,13 @@ jobs:
 
       - name: Azure login with SPN
         if: '!cancelled()'
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           creds: ${{ secrets.OWASP_AZ_CREDENTIALS }}
 
       - name: Push report to blob storage
         if: '!cancelled()'
-        uses: azure/CLI@v1
+        uses: azure/CLI@v2
         id: azure
         with:
           azcliversion: 2.49.0
