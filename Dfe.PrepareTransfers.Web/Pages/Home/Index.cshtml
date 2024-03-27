@@ -17,10 +17,10 @@
 }
 
 @section BeforeMain
-    {   
+{
 }
 
-    @if (Model.IsFiltered)
+@if (Model.Filters.IsFiltered)
 {
     <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
@@ -39,14 +39,14 @@
 <div class="govuk-grid-row govuk-!-margin-bottom-9">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl" data-cy="select-heading">
-            Manage an academy transfer
+            Transfer projects
         </h1>
         <p class="govuk-body-l">
-            Use this service to start a new academy transfer project or update an existing project.
+            Find and manage existing transfer projects or create a new one.
         </p>
-        <a asp-page="/Transfers/TrustName" role="button" draggable="false"
+        <a asp-page="/Transfers/NewTransfersInformation" role="button" draggable="false"
            class="govuk-button govuk-button--start" data-module="govuk-button" data-test="create-transfer">
-            Start a new transfer project
+            Create a new transfer
             <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
                 <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
             </svg>
@@ -59,45 +59,7 @@
             @Model.TotalProjectCount projects found
         </h2>
 
-        <details class="govuk-details prepare-project-listing__filters-container" data-module="govuk-details" @(Model.IsFiltered ? "open" : null)>
-            <summary class="govuk-details__summary prepare-project-listing__fitlers-details-summary">
-                <span class="govuk-details__summary-text govuk-button govuk-button--secondary prepare-project-listing__button--main" data-cy="select-projectlist-filter-expand">
-                    Filter projects
-                </span>
-            </summary>
-            <div class="govuk-details__text prepare-project-listing__filters-details" data-id="filter-container">
-                <form method="get" class="form">
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-quarter">
-                            <div class="govuk-form-group">
-                                <h1 class="govuk-label-wrapper">
-                                    <label class="govuk-label govuk-label--s" for="filter-project-title">
-                                        Project title
-                                    </label>
-                                </h1>
-                                <div id="filter-project-title-hint" class="govuk-hint">
-                                    For example, The Rutland Learning Trust
-                                </div>
-
-                                <input asp-for="TitleFilter" class="govuk-input" type="text" aria-describedby="filter-project-title-hint">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-full">
-                            <div class="govuk-button-group">
-                                <button class="govuk-button govuk-button--secondary prepare-project-listing__button--apply" data-cy="select-projectlist-filter-apply" data-module="govuk-button ">
-                                    Apply filters
-                                </button>
-
-                                <a class="govuk-link" href="/home">Clear filters</a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </details>
+        <partial name="Shared/_ProjectListFilters" model="Model.Filters" />
 
         @if (Model.SearchCount == 0)
         {
@@ -111,6 +73,8 @@
         }
         else
         {
+            <a class="govuk-button govuk-button--secondary" asp-page-handler="Download"> Download as a spreadsheet</a>
+
             <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Model.TotalProjectCount projects found</caption>
 
@@ -121,7 +85,9 @@
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @{var index = 0;}
+                    @{
+                        var index = 0;
+                    }
                     @foreach (ProjectSearchResult project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
                     {
                         TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.First();
@@ -133,11 +99,20 @@
                                             @firstOutgoingAcademy.IncomingTrustNameInTitleCase
                                         </a>
                                     </strong>
-                                    <span>
-                                        UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
-                                    </span>
+                                    @if (!project.IsFormAMat.HasValue || !project.IsFormAMat.Value)
+                                    {
+                                        <span>
+                                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
+                                        </span>
+                                    }
                                 </h2>
                                 <p class="govuk-!-margin-top-3">
+                                    <div>
+                                        Route: @if (project.IsFormAMat.HasValue && project.IsFormAMat.Value)
+                                        {
+                                            <span>Form a MAT</span>
+                                        } Transfer
+                                    </div>
                                     <div>Project reference: @project.Reference</div>
                                     <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
                                     @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
@@ -152,7 +127,30 @@
                             </td>
                             <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
                                 <p class="govuk-!-margin-top-0">
-                                    <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
+                                    @{
+
+                                        var decisionClass = project.Status switch
+                                        {
+                                            "Approved" => "govuk-tag--green",
+                                            "Deferred" => "govuk-tag--orange",
+                                            "Withdrawn" => "govuk-tag--purple",
+                                            _ => "govuk-tag--red"
+                                        };
+
+
+                                        if (string.IsNullOrEmpty(project.Status))
+                                        {
+                                            <strong class="govuk-tag govuk-tag--yellow">
+                                                PRE ADVISORY BOARD
+                                            </strong>
+                                        }
+                                        else
+                                        {
+                                            <strong class="@($"govuk-tag {decisionClass}")" }>
+                                                @project.Status
+                                            </strong>
+                                        }
+                                    }
                                 </p>
                             </td>
                         </tr>
@@ -168,7 +166,7 @@
                     @if (Model.HasPreviousPage)
                     {
                         <li class="moj-pagination__item  moj-pagination__item--prev">
-                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-TitleFilter="@Model.TitleFilter">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-Title="@Model.Filters.Title">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
                     @for (var pageIdx = 0; pageIdx < Model.TotalPages; pageIdx++)
@@ -189,7 +187,7 @@
                             }
 
                             <li class="moj-pagination__item @markAsSelected">
-                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link" aria-label="@ariaLabel">@pageNumber</a>
+                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-Title="@Model.Filters.Title" class="moj-pagination__link" aria-label="@ariaLabel">@pageNumber</a>
                             </li>
 
                             if (Model.HasNextPage && Model.NextPage == pageNumber && ((Model.NextPage + 1) < Model.TotalPages))
@@ -204,7 +202,7 @@
                     @if (Model.HasNextPage)
                     {
                         <li class="moj-pagination__item  moj-pagination__item--next">
-                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-Title="@Model.Filters.Title">Next<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
                 </ul>

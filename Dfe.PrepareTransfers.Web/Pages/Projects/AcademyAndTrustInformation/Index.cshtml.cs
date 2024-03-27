@@ -32,6 +32,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation
             TargetDate = projectInformation.Project.Dates?.Target;
             OutgoingAcademyUrn = projectInformation.Project.OutgoingAcademyUrn;
             Urn = projectInformation.Project.Urn;
+            IsFormAMAT = projectInformation.Project.IsFormAMat.HasValue && projectInformation.Project.IsFormAMat.Value == true;
 
             return Page();
         }

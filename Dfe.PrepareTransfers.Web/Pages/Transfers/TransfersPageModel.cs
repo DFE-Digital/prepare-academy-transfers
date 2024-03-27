@@ -8,5 +8,6 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         protected const string IncomingTrustIdSessionKey = "IncomingTrustId";
         protected const string OutgoingTrustIdSessionKey = "OutgoingTrustId";
         protected const string ProjectCreatedSessionKey = "ProjectCreated";
+        protected const string ProposedTrustNameSessionKey = "ProposedTrustName";
     }
 }

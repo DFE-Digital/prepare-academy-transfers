@@ -5,10 +5,14 @@ locals {
   tags                                         = var.tags
   virtual_network_address_space                = var.virtual_network_address_space
   enable_container_registry                    = var.enable_container_registry
+  registry_admin_enabled                       = var.registry_admin_enabled
+  registry_use_managed_identity                = var.registry_use_managed_identity
+  registry_managed_identity_assign_role        = var.registry_managed_identity_assign_role
   image_name                                   = var.image_name
   container_command                            = var.container_command
   container_secret_environment_variables       = var.container_secret_environment_variables
   container_max_replicas                       = var.container_max_replicas
+  container_scale_http_concurrency             = var.container_scale_http_concurrency
   enable_event_hub                             = var.enable_event_hub
   enable_logstash_consumer                     = var.enable_logstash_consumer
   eventhub_export_log_analytics_table_names    = var.eventhub_export_log_analytics_table_names
@@ -27,7 +31,6 @@ locals {
   cdn_frontdoor_origin_host_header_override    = var.cdn_frontdoor_origin_host_header_override
   cdn_frontdoor_forwarding_protocol            = var.cdn_frontdoor_forwarding_protocol
   cdn_frontdoor_health_probe_protocol          = var.cdn_frontdoor_health_probe_protocol
-  key_vault_access_users                       = toset(var.key_vault_access_users)
   key_vault_access_ipv4                        = var.key_vault_access_ipv4
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path

@@ -43,9 +43,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
             return new List<TramsProjectSummary> { tramsProjectSummary };
         }
 
-        public static TramsProject Project()
+        public static AcademisationProject Project()
         {
-            var tramsProject = new TramsProject
+            var tramsProject = new AcademisationProject
             {
                 Benefits = new AcademyTransferProjectBenefits
                 {
@@ -86,6 +86,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     OtherTransferTypeDescription = "Other",
                     RddOrEsfaIntervention = true,
                     WhoInitiatedTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe.ToString(),
+                    SpecificReasonsForTransfer = new List<string>() { TransferFeatures.SpecificReasonForTheTransferTypes.Safeguarding.ToString() },
                     RddOrEsfaInterventionDetail = "Intervention details",
                     IsCompleted = true
                 },
@@ -112,6 +113,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                 {
                     new TransferringAcademy
                     {
+                        IncomingTrustName = "Test Trust",
                         IncomingTrust = new TrustSummary
                         {
                             GroupName = IncomingTrustName,

@@ -15,6 +15,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 Reference = input.ProjectReference,
                 OutgoingTrustName = input.OutgoingTrustName,
                 OutgoingTrustUkprn = input.OutgoingTrustUkprn,
+                Status = input.Status,
                 TransferringAcademies = input.TransferringAcademies.Select(
                     academy => new TransferringAcademies
                     {
@@ -22,7 +23,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                         IncomingTrustUkprn = academy.IncomingTrustUkprn,
                         IncomingTrustName = academy.IncomingTrustName
                     }).ToList(),
-                AssignedUser = input.AssignedUser
+                AssignedUser = input.AssignedUser,
+                IsFormAMat = input.IsFormAMat,
             };
         }
     }

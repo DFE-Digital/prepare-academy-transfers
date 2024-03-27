@@ -4,9 +4,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures
 {
     public static class TramsProjects
     {
-        public static TramsProject GetSingleProject()
+        public static AcademisationProject GetSingleProject()
         {
-            return new TramsProject
+            return new AcademisationProject
             {
                 ProjectUrn = "001"
             };

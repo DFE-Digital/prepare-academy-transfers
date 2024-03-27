@@ -39,6 +39,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
+using Dfe.PrepareTransfers.Services;
+using Dfe.PrepareTransfers.Data.Services.Interfaces;
+using Dfe.PrepareTransfers.Data.Services;
 
 namespace Dfe.PrepareTransfers.Web;
 
@@ -104,6 +107,7 @@ public class Startup
         AuthorizationPolicyBuilder policyBuilder = SetupAuthorizationPolicyBuilder();
         services.AddAuthorization(options => { options.DefaultPolicy = policyBuilder.Build(); });
 
+        services.AddScoped(sp => sp.GetService<IHttpContextAccessor>()?.HttpContext?.Session);
         services.AddSession(options =>
         {
             options.IdleTimeout = _authenticationExpiration;
@@ -247,13 +251,15 @@ public class Startup
         });
 
         services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
+        services.AddScoped<ErrorService>();
+
 
         services.AddTransient<IMapper<TramsTrustSearchResult, TrustSearchResult>, TramsSearchResultMapper>();
         services.AddTransient<IMapper<TrustDto, Trust>, TramsTrustMapper>();
         services.AddTransient<IMapper<TramsEstablishment, Academy>, TramsEstablishmentMapper>();
         services.AddTransient<IMapper<EstablishmentDto, Academy>, AcademiesEstablishmentMapper>();
         services.AddTransient<IMapper<TramsProjectSummary, ProjectSearchResult>, TramsProjectSummariesMapper>();
-        services.AddTransient<IMapper<TramsProject, Project>, TramsProjectMapper>();
+        services.AddTransient<IMapper<AcademisationProject, Project>, AcademisationProjectMapper>();
         services.AddTransient<IMapper<TramsEducationPerformance, EducationPerformance>, TramsEducationPerformanceMapper>();
         services.AddTransient<IMapper<Project, TramsProjectUpdate>, InternalProjectToUpdateMapper>();
         services.AddTransient<ITrusts, TramsTrustsRepository>();
@@ -271,6 +277,8 @@ public class Startup
 
         services.AddScoped<ITramsHttpClient, TramsHttpClient>();
         services.AddScoped<IAcademisationHttpClient, AcademisationHttpClient>();
+        services.AddScoped<IAcademyTransfersAdvisoryBoardDecisionRepository, AcademyTransfersAdvisoryBoardDecisionRepository>();
+        
         services.AddSingleton<PerformanceDataChannel>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();

@@ -3,11 +3,6 @@ variable "environment" {
   type        = string
 }
 
-variable "key_vault_access_users" {
-  description = "List of users that require access to the Key Vault where tfvars are stored. This should be a list of User Principle Names (Found in Active Directory) that need to run terraform"
-  type        = list(string)
-}
-
 variable "key_vault_access_ipv4" {
   description = "List of IPv4 Addresses that are permitted to access the Key Vault"
   type        = list(string)
@@ -43,6 +38,24 @@ variable "enable_container_registry" {
   type        = bool
 }
 
+variable "registry_admin_enabled" {
+  description = "Do you want to enable access key based authentication for your Container Registry?"
+  type        = bool
+  default     = true
+}
+
+variable "registry_use_managed_identity" {
+  description = "Create a User-Assigned Managed Identity for the Container App. Note: If you do not have 'Microsoft.Authorization/roleAssignments/write' permission, you will need to manually assign the 'AcrPull' Role to the identity"
+  type        = bool
+  default     = true
+}
+
+variable "registry_managed_identity_assign_role" {
+  description = "Assign the 'AcrPull' Role to the Container App User-Assigned Managed Identity. Note: If you do not have 'Microsoft.Authorization/roleAssignments/write' permission, you will need to manually assign the 'AcrPull' Role to the identity"
+  type        = bool
+  default     = false
+}
+
 variable "image_name" {
   description = "Image name"
   type        = string
@@ -62,6 +75,12 @@ variable "container_secret_environment_variables" {
 variable "container_max_replicas" {
   description = "Container max replicas"
   type        = number
+}
+
+variable "container_scale_http_concurrency" {
+  description = "When the number of concurrent HTTP requests exceeds this value, then another replica is added. Replicas continue to add to the pool up to the max-replicas amount."
+  type        = number
+  default     = 10
 }
 
 variable "enable_event_hub" {
