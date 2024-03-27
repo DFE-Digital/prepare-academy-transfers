@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AngleSharp" Version="1.0.1" />
+        <PackageReference Include="AngleSharp" Version="1.1.2" />
         <PackageReference Include="AngleSharp.Io" Version="1.0.0" />
         <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
         <PackageReference Include="FluentAssertions" Version="6.9.0" />
