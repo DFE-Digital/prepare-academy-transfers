@@ -36,12 +36,12 @@ using Microsoft.Identity.Web.UI;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Dfe.Academies.Contracts.V4.Trusts;
 using Dfe.Academies.Contracts.V4.Establishments;
 using Dfe.PrepareTransfers.Services;
 using Dfe.PrepareTransfers.Data.Services.Interfaces;
 using Dfe.PrepareTransfers.Data.Services;
+using Dfe.PrepareTransfers.Web.Routing;
 
 namespace Dfe.PrepareTransfers.Web;
 
@@ -82,7 +82,11 @@ public class Startup
                options.Conventions.AllowAnonymousToPage("/Maintenance");
                options.Conventions.AllowAnonymousToPage("/SessionTimedOut");
            })
-           .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; });
+           .AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = false; }).AddMvcOptions(options =>
+           {
+               options.MaxModelValidationErrors = 50;
+               options.Filters.Add(new MaintenancePageFilter(Configuration));
+           });
 
         services.AddControllersWithViews(options => options.Filters.Add(
               new AutoValidateAntiforgeryTokenAttribute()))
