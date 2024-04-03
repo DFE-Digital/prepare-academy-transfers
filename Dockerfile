@@ -1,4 +1,4 @@
-ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
+ARG ASPNET_IMAGE_TAG=8.0-bookworm-slim
 ARG NODEJS_IMAGE_TAG=18.12-bullseye
 
 # Stage 1 - Build frontend assets
@@ -9,7 +9,7 @@ RUN npm install
 RUN npm run build
 
 # Stage 2 - Build project
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS publish
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS publish
 WORKDIR /build
 
 COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/
@@ -31,4 +31,5 @@ COPY --from=publish /app /app
 WORKDIR /app
 COPY ./script/web-docker-entrypoint.sh ./docker-entrypoint.sh
 RUN chmod +x ./docker-entrypoint.sh
+ENV ASPNETCORE_HTTP_PORTS=80
 EXPOSE 80/tcp
