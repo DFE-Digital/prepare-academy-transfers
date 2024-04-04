@@ -133,6 +133,12 @@ variable "cdn_frontdoor_health_probe_protocol" {
   default     = "Https"
 }
 
+variable "enable_cdn_frontdoor_health_probe" {
+  description = "Enable CDN Front Door health probe"
+  type        = bool
+  default     = false
+}
+
 variable "container_health_probe_path" {
   description = "Specifies the path that is used to determine the liveness of the Container"
   type        = string

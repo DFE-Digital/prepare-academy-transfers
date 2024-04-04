@@ -31,6 +31,7 @@ locals {
   cdn_frontdoor_origin_host_header_override    = var.cdn_frontdoor_origin_host_header_override
   cdn_frontdoor_forwarding_protocol            = var.cdn_frontdoor_forwarding_protocol
   cdn_frontdoor_health_probe_protocol          = var.cdn_frontdoor_health_probe_protocol
+  enable_cdn_frontdoor_health_probe            = var.enable_cdn_frontdoor_health_probe
   key_vault_access_ipv4                        = var.key_vault_access_ipv4
   tfvars_filename                              = var.tfvars_filename
   container_health_probe_path                  = var.container_health_probe_path
