@@ -17,6 +17,7 @@ namespace Dfe.PrepareTransfers.Data.Models
             AcademyAndTrustInformation = new TransferAcademyAndTrustInformation();
         }
 
+        public int Id { get; set; }
         public string Urn { get; set; }
         public string Reference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
