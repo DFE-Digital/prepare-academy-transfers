@@ -42,9 +42,9 @@ public class AcademyTransfersAdvisoryBoardDecisionRepository : IAcademyTransfers
         }
     }
 
-   public async Task<RepositoryResult<AdvisoryBoardDecision>> Get(int urn)
+   public async Task<RepositoryResult<AdvisoryBoardDecision>> Get(int projectId)
    {
-        HttpResponseMessage response = await _academisationHttpClient.GetAsync($"/transfer-project/advisory-board-decision/{urn}");
+        HttpResponseMessage response = await _academisationHttpClient.GetAsync($"/transfer-project/advisory-board-decision/{projectId}");
 
         if (!response.IsSuccessStatusCode)
         {

@@ -14,6 +14,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
         {
             return new Project
             {
+                Id = input.Id,
                 Benefits = Benefits(input),
                 LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
