@@ -36,6 +36,14 @@ export default async function () {
     // Go to homepage
     await page.goto(baseUrl)
 
+    await page.locator('[data-cy="select-projectlist-filter-expand"]').click()
+
+    await page.locator('[id="Title"]').type('Rutland Learning Trust')
+
+    await page.locator('[data-cy="select-projectlist-filter-apply"]').click()
+
+    await page.locator('.govuk-notification-banner').isVisible()
+
     checkHeader(page)
 
   } finally {
