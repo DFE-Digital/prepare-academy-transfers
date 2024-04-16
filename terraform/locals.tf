@@ -20,6 +20,7 @@ locals {
   dns_zone_domain_name                         = var.dns_zone_domain_name
   dns_ns_records                               = var.dns_ns_records
   dns_txt_records                              = var.dns_txt_records
+  dns_mx_records                               = var.dns_mx_records
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   container_apps_allow_ips_inbound             = var.container_apps_allow_ips_inbound
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting

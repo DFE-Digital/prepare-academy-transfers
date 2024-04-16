@@ -222,6 +222,22 @@ variable "dns_txt_records" {
   )
 }
 
+variable "dns_mx_records" {
+  description = "DNS MX records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(
+        object({
+          preference : number,
+          exchange : string
+        })
+      )
+    })
+  )
+  default = {}
+}
+
 variable "cdn_frontdoor_custom_domains" {
   description = "Azure CDN Front Door custom domains. If they are within the DNS zone (optionally created), the Validation TXT records and ALIAS/CNAME records will be created"
   type        = list(string)
