@@ -49,7 +49,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 OutgoingTrustName = input.OutgoingTrustName,
                 IncomingTrustUkprn = input.IncomingTrustUkprn,
                 IncomingTrustName = input.IncomingTrustName,
-                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList()
+                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList(),
+                IsFormAMat = input.IsFormAMat
             };
         }
 

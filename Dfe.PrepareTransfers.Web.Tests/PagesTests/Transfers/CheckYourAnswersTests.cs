@@ -168,6 +168,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Transfers
                 _session.Verify(s => s.TryGetValue("IncomingTrustId", out foundByteArray), Times.Once);
                 _session.Verify(s => s.TryGetValue("OutgoingAcademyIds", out foundByteArray), Times.Once);
                 _session.Verify(s => s.TryGetValue("ProposedTrustName", out foundByteArray), Times.Once);
+                _session.Verify(s => s.TryGetValue("IsFormAMat", out foundByteArray), Times.Once);
             }
 
             [Fact]

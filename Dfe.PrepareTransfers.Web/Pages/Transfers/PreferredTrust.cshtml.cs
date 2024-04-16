@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 {
-    public class IsFormAMatModel : PageModel
+    public class PreferredTrustModel : PageModel
     {
         [BindProperty] 
-        public IsFormAMatViewModel IsFormAMatViewModel { get; set; } = new IsFormAMatViewModel();
+        public PreferredTrustViewModel PreferredTrustViewModel { get; set; } = new PreferredTrustViewModel();
 
         public IList<RadioButtonViewModel> RadioButtonsYesNo { get; set; }
 
@@ -18,7 +18,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             ViewData["ChangeLink"] = change;
 
-            RadioButtonsYesNo = GetRadioButtons(IsFormAMatViewModel.IsFormAMat);
+            RadioButtonsYesNo = GetRadioButtons(PreferredTrustViewModel.HasPreferredTrust);
             return Page();
         }
 
@@ -30,7 +30,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 return OnGet();
             }
 
-            var redirectPage = IsFormAMatViewModel.IsFormAMat.HasValue && IsFormAMatViewModel.IsFormAMat.Value ? "/Transfers/ProposedTrustName" : "/Transfers/PreferredTrust";
+            var redirectPage = PreferredTrustViewModel.HasPreferredTrust.HasValue && PreferredTrustViewModel.HasPreferredTrust.Value ? "/Transfers/IncomingTrust" : "/Transfers/checkyouranswers";
 
             return RedirectToPage(redirectPage);
         }        
@@ -42,21 +42,21 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 new RadioButtonViewModel
                 {
                     DisplayName = "Yes",
-                    Name = $"{nameof(IsFormAMatViewModel.IsFormAMat)}",
+                    Name = $"{nameof(PreferredTrustViewModel.HasPreferredTrust)}",
                     Value = "true",
                     Checked = valueSelected is true
                 },
                 new RadioButtonViewModel
                 {
                     DisplayName = "No",
-                    Name = $"{nameof(IsFormAMatViewModel.IsFormAMat)}",
+                    Name = $"{nameof(PreferredTrustViewModel.HasPreferredTrust)}",
                     Value = "false",
                     Checked = valueSelected is false
                 }
             };
 
             var selectedRadio =
-                list.FirstOrDefault(c => c.Value == IsFormAMatViewModel.IsFormAMat.ToString());
+                list.FirstOrDefault(c => c.Value == PreferredTrustViewModel.HasPreferredTrust.ToString());
             if (selectedRadio != null)
             {
                 selectedRadio.Checked = true;
