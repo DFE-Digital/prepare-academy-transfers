@@ -43,9 +43,9 @@ public class SummaryModel : DecisionBaseModel
         if (!ModelState.IsValid) return OnGet(urn);
 
         AdvisoryBoardDecision decision = GetDecisionFromSession(urn);
-        decision.TransferProjectId = urn;
+        decision.TransferProjectId = Id;
 
-        await CreateOrUpdateDecision(urn, decision);
+        await CreateOrUpdateDecision(Id, decision);
 
         await UpdateProjectStatus(urn, decision.GetDecisionAsFriendlyName());
 

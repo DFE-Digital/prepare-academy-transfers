@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Decision
         public async Task<IActionResult> OnGetAsync()
         {
             Project = (await _projectsRepository.GetByUrn(Urn)).Result;
-            Decision = (await _decisionRepository.Get(int.Parse(Urn))).Result;
+            Decision = (await _decisionRepository.Get(Project.Id)).Result;
 
             return Page();
         }

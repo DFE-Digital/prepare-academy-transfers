@@ -17,6 +17,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
             TransferringAcademies = new List<TransferringAcademy>();
             OutgoingTrust = new TrustSummary();
         }
+        public int Id { get; set; }
         public AcademyTransferProjectBenefits Benefits { get; set; }
         public AcademyTransferProjectLegalRequirements LegalRequirements { get; set; }
         public AcademyTransferProjectDates Dates { get; set; }
