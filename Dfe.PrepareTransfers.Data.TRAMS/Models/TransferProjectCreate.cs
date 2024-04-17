@@ -11,6 +11,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
         public string? IncomingTrustUkprn { get; set; }
         public string IncomingTrustName { get; set; }
         public List<string> TransferringAcademyUkprns { get; set; }
+        public bool? IsFormAMat { get; set; }
 
     }
 }

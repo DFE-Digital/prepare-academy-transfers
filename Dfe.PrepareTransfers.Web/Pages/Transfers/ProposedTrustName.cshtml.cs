@@ -41,7 +41,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                 return await OnGetAsync();
             }
 
+            var isFormAMat = true;
+
             HttpContext.Session.SetString(ProposedTrustNameSessionKey, ProposedTrustName);
+            HttpContext.Session.SetString(IsFormAMatSessionKey, isFormAMat.ToString());
 
             return RedirectToAction("CheckYourAnswers", "Transfers");
         }

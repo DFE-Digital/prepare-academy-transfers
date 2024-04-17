@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                     {
                         OutgoingAcademyUkprn = academy.OutgoingAcademyUkprn,
                         IncomingTrustUkprn = academy.IncomingTrustUkprn,
-                        IncomingTrustName = academy.IncomingTrustName
+                        IncomingTrustName = !string.IsNullOrEmpty(academy.IncomingTrustName) ? academy.IncomingTrustName : input.OutgoingTrustName
                     }).ToList(),
                 AssignedUser = input.AssignedUser,
                 IsFormAMat = input.IsFormAMat,
