@@ -8,6 +8,7 @@ locals {
   registry_admin_enabled                       = var.registry_admin_enabled
   registry_use_managed_identity                = var.registry_use_managed_identity
   registry_managed_identity_assign_role        = var.registry_managed_identity_assign_role
+  registry_server                              = var.registry_server
   image_name                                   = var.image_name
   container_command                            = var.container_command
   container_secret_environment_variables       = var.container_secret_environment_variables
@@ -20,6 +21,7 @@ locals {
   dns_zone_domain_name                         = var.dns_zone_domain_name
   dns_ns_records                               = var.dns_ns_records
   dns_txt_records                              = var.dns_txt_records
+  dns_mx_records                               = var.dns_mx_records
   enable_cdn_frontdoor                         = var.enable_cdn_frontdoor
   container_apps_allow_ips_inbound             = var.container_apps_allow_ips_inbound
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting

@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "axe-core": "^4.4.1",
-    "cypress-axe": "^0.14.0"
-  },
-  "devDependencies": {
-    "cypress": "^9.6.0"
-  }
-}
