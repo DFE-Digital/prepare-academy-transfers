@@ -8,8 +8,7 @@ namespace Dfe.PrepareTransfers.Data
 {
     public interface IProjects
     {
-        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default,
-           int pageSize = 10);
+        public Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(GetProjectSearchModel searchModel);
         public Task<RepositoryResult<Project>> GetByUrn(string urn);
         public Task<RepositoryResult<Project>> Create(Project project);
 
@@ -25,5 +24,6 @@ namespace Dfe.PrepareTransfers.Data
 
         public Task<bool> AssignUser(Project project);
         public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "");
+        public Task<ApiResponse<ProjectFilterParameters>> GetFilterParameters();
     }
 }

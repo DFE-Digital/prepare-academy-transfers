@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Dfe.Academisation.ExtensionMethods;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Models.ProjectList;
+using Dfe.PrepareTransfers.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -24,6 +28,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
         public int TotalProjectCount { get; private set; }
 
         public int SearchCount { get; private set; }
+
+        protected string NameOfUser => User?.FindFirstValue("name") ?? string.Empty;
+
+
         public Index(IProjects projectsRepository, ILogger<Index> logger)
         {
             _projectsRepository = projectsRepository;
@@ -50,14 +58,25 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
 
             if (RedirectToReturnUrl(out IActionResult actionResult)) return actionResult;
 
-            RepositoryResult<List<ProjectSearchResult>> projects =
-                  await _projectsRepository.GetProjects(CurrentPage, Filters.Title, PageSize);
+            var projectSearchModel = new GetProjectSearchModel(CurrentPage, PageSize, Filters.Title?.Trim(), Filters.SelectedOfficers, Filters.SelectedStatuses);
+
+            RepositoryResult<List<ProjectSearchResult>> projects = await _projectsRepository.GetProjects(projectSearchModel);
 
             _projects = new List<ProjectSearchResult>(projects.Result.Where(r => r.Reference is not null));
             SearchCount = projects.Result.Count;
             TotalProjectCount = projects.TotalRecords;
 
             if (CurrentPage - 5 > 1) StartingPage = CurrentPage - 5;
+
+            ApiResponse<ProjectFilterParameters> filterParametersResponse = await _projectsRepository.GetFilterParameters();
+
+            if (filterParametersResponse.Success)
+            {
+                Filters.AvailableStatuses = filterParametersResponse.Body.Statuses.ConvertAll(r => r.ToSentenceCase());
+                Filters.AvailableDeliveryOfficers = filterParametersResponse.Body.AssignedUsers.OrderByDescending(o => o.Equals(ProjectListHelper.ConvertToFirstLast(NameOfUser), StringComparison.OrdinalIgnoreCase))
+                   .ThenBy(o => o)
+                   .ToList();
+            }
 
             _logger.LogInformation("Home page loaded");
             return Page();

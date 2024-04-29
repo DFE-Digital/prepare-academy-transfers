@@ -11,19 +11,34 @@ namespace Dfe.PrepareTransfers.Web.Models.ProjectList;
 public class ProjectListFilters
 {
     public const string FilterTitle = nameof(FilterTitle);
+    public const string FilterStatuses = nameof(FilterStatuses);
+    public const string FilterOfficers = nameof(FilterOfficers);
 
     private IDictionary<string, object?> _store = null!;
+
+    public List<string> AvailableStatuses { get; set; } = new();
+    public List<string> AvailableDeliveryOfficers { get; set; } = new();
 
     [BindProperty]
     public string? Title { get; set; }
 
-    public bool IsFiltered => !string.IsNullOrWhiteSpace(Title);
+    [BindProperty]
+    public string[] SelectedStatuses { get; set; } = Array.Empty<string>();
+
+    [BindProperty]
+    public string[] SelectedOfficers { get; set; } = Array.Empty<string>();
+
+    public bool IsVisible => string.IsNullOrWhiteSpace(Title) is false ||
+                             SelectedStatuses.Length > 0 ||
+                             SelectedOfficers.Length > 0;
 
     public ProjectListFilters PersistUsing(IDictionary<string, object?> store)
     {
         _store = store;
 
         Title = Get(FilterTitle).FirstOrDefault()?.Trim();
+        SelectedStatuses = Get(FilterStatuses);
+        SelectedOfficers = Get(FilterOfficers);
 
         return this;
     }
@@ -37,14 +52,36 @@ public class ProjectListFilters
             ClearFilters();
 
             Title = default;
+            SelectedStatuses = Array.Empty<string>();
+            SelectedOfficers = Array.Empty<string>();
 
             return;
         }
 
-        Title = query.ContainsKey(nameof(Title))
-            ? Cache(FilterTitle, GetFromQuery(nameof(Title))).FirstOrDefault()?.Trim()
-            : Get(FilterTitle, true).FirstOrDefault()?.Trim();
+        if (query.ContainsKey("remove"))
+        {
+            SelectedStatuses = GetAndRemove(FilterStatuses, GetFromQuery(nameof(SelectedStatuses)), true);
+            SelectedOfficers = GetAndRemove(FilterOfficers, GetFromQuery(nameof(SelectedOfficers)), true);
 
+            return;
+        }
+
+        bool activeFilterChanges = query.ContainsKey(nameof(Title)) ||
+                                   query.ContainsKey(nameof(SelectedStatuses)) ||
+                                   query.ContainsKey(nameof(SelectedOfficers)); ;
+
+        if (activeFilterChanges)
+        {
+            Title = Cache(FilterTitle, GetFromQuery(nameof(Title))).FirstOrDefault()?.Trim();
+            SelectedStatuses = Cache(FilterStatuses, GetFromQuery(nameof(SelectedStatuses)));
+            SelectedOfficers = Cache(FilterOfficers, GetFromQuery(nameof(SelectedOfficers)));
+        }
+        else
+        {
+            Title = Get(FilterTitle, true).FirstOrDefault()?.Trim();
+            SelectedStatuses = Get(FilterStatuses, true);
+            SelectedOfficers = Get(FilterOfficers, true);
+        }
 
         string[] GetFromQuery(string key)
         {
@@ -54,13 +91,28 @@ public class ProjectListFilters
 
     private string[] Get(string key, bool persist = false)
     {
-        if (!_store.ContainsKey(key)) return Array.Empty<string>();
+        if (_store.ContainsKey(key) is false) return Array.Empty<string>();
 
         string[]? value = (string[]?)_store[key];
         if (persist) Cache(key, value);
 
         return value ?? Array.Empty<string>();
-    
+    }
+
+    private string[] GetAndRemove(string key, string[]? value, bool persist = false)
+    {
+        if (_store.ContainsKey(key) is false) return Array.Empty<string>();
+
+        string[]? currentValues = (string[]?)_store[key];
+
+        if (value is not null && value.Length > 0 && currentValues is not null)
+        {
+            currentValues = currentValues.Where(x => !value.Contains(x)).ToArray();
+        }
+
+        if (persist) Cache(key, currentValues);
+
+        return currentValues ?? Array.Empty<string>();
     }
 
     private string[] Cache(string key, string[]? value)
@@ -76,6 +128,8 @@ public class ProjectListFilters
     private void ClearFilters()
     {
         Cache(FilterTitle, default);
+        Cache(FilterStatuses, default);
+        Cache(FilterOfficers, default);
     }
 
     /// <summary>

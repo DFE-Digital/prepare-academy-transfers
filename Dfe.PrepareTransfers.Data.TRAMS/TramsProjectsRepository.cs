@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -27,6 +28,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
         private readonly IMapper<TramsProjectSummary, ProjectSearchResult> _summaryToInternalProjectMapper;
         private readonly ITrusts _trusts;
 
+        private readonly IReadOnlyDictionary<string, string> _aliasedStatuses = new Dictionary<string, string> { { "converter pre-ao (c)", "Pre advisory board" } };
+        private readonly IReadOnlyDictionary<string, string> _invertedAliasedStatuses;
+
+
         public TramsProjectsRepository(ITramsHttpClient httpClient, IAcademisationHttpClient academisationHttpClient,
            IMapper<AcademisationProject, Project> externalToInternalProjectMapper,
            IMapper<TramsProjectSummary, ProjectSearchResult> summaryToInternalProjectMapper, IAcademies academies,
@@ -39,33 +44,30 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             _academies = academies;
             _trusts = trusts;
             _internalToUpdateMapper = internalToUpdateMapper;
+            _invertedAliasedStatuses = _aliasedStatuses.ToDictionary(x => x.Value.ToLowerInvariant(), x => x.Key);
         }
 
-        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(int page = 1, string title = default,
-           int pageSize = 10)
+        public async Task<RepositoryResult<List<ProjectSearchResult>>> GetProjects(GetProjectSearchModel searchModel)
         {
-            var queryParameters = new Dictionary<string, string>
-         {
-            { "page", page.ToString() },
-            { "count", pageSize.ToString() },
-            { "title", title?.Trim() }
-         };
+            var content = new StringContent(JsonConvert.SerializeObject(searchModel), Encoding.Default,
+                "application/json");
 
             HttpResponseMessage response =
-               await _academisationHttpClient.GetAsync($"transfer-project/GetTransferProjects{queryParameters.ToQueryString()}");
+               await _academisationHttpClient.PostAsync("transfer-project/GetTransferProjects", content);
 
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var summaries = JsonConvert.DeserializeObject<PagedResult<TramsProjectSummary>>(apiResponse);
+
+                var summaries = JsonConvert.DeserializeObject<ApiV2Wrapper<IEnumerable<TramsProjectSummary>>>(apiResponse);
 
                 List<ProjectSearchResult> mappedSummaries =
-                   summaries.Results.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
+                   summaries.Data.Select(summary => _summaryToInternalProjectMapper.Map(summary)).ToList();
 
                 return new RepositoryResult<List<ProjectSearchResult>>
                 {
                     Result = mappedSummaries,
-                    TotalRecords = summaries.TotalCount
+                    TotalRecords = summaries.Paging.RecordCount
                 };
             }
 
@@ -421,6 +423,40 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             // stay inline with current pattern
             throw new TramsApiException(response);
+        }
+
+        public async Task<ApiResponse<ProjectFilterParameters>> GetFilterParameters()
+        {
+            HttpResponseMessage response = await _academisationHttpClient.GetAsync("/legacy/projects/status");
+
+            if (response.IsSuccessStatusCode is false)
+            {
+                throw new TramsApiException(response);
+            }
+
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            var filterParameters = JsonConvert.DeserializeObject<ProjectFilterParameters>(apiResponse);
+
+            filterParameters.Statuses =
+             filterParameters.Statuses.Select(x => _aliasedStatuses.ContainsKey(x.ToLowerInvariant()) ? _aliasedStatuses[x.ToLowerInvariant()] : x)
+                .Distinct()
+                .OrderBy(x => x)
+                .ToList();
+
+            filterParameters.Regions = new List<string>
+            {
+                "East Midlands",
+                "East of England",
+                "London",
+                "North East",
+                "North West",
+                "South East",
+                "South West",
+                "West Midlands",
+                "Yorkshire and the Humber"
+            };
+
+            return new ApiResponse<ProjectFilterParameters>(response.StatusCode, filterParameters);
         }
     }
 }
