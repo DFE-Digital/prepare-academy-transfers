@@ -38,6 +38,12 @@ variable "enable_container_registry" {
   type        = bool
 }
 
+variable "registry_server" {
+  description = "Container registry server (required if `enable_container_registry` is false)"
+  type        = string
+  default     = ""
+}
+
 variable "registry_admin_enabled" {
   description = "Do you want to enable access key based authentication for your Container Registry?"
   type        = bool
