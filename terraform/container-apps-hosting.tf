@@ -12,6 +12,7 @@ module "azure_container_apps_hosting" {
   registry_admin_enabled                = local.registry_admin_enabled
   registry_use_managed_identity         = local.registry_use_managed_identity
   registry_managed_identity_assign_role = local.registry_managed_identity_assign_role
+  registry_server                       = local.registry_server
 
   enable_event_hub                          = local.enable_event_hub
   enable_logstash_consumer                  = local.enable_logstash_consumer
