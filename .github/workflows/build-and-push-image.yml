@@ -30,14 +30,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get branch name for push/dispatch event
-        run: |
-          GIT_REF=${{ github.ref_name }}
-          echo "branch_ref=${GIT_REF}" >> $GITHUB_ENV
-
       - id: var
         run: |
-          GIT_REF=${{ env.branch_ref }}
+          GIT_REF=${{ github.ref_name }}
           GIT_BRANCH=${GIT_REF##*/}
           INPUT=${{ github.event.inputs.environment }}
           ENVIRONMENT=${INPUT:-"dev"}
@@ -51,7 +46,7 @@ jobs:
   deploy-image:
     name: Deploy '${{ needs.set-env.outputs.branch }}' to ${{ needs.set-env.outputs.environment }}
     needs: [ set-env ]
-    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@v1.1.0
+    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@v2.0.1
     with:
       docker-image-name: 'acatran-app'
       docker-build-file-name: './Dockerfile'
@@ -59,9 +54,8 @@ jobs:
       docker-build-args: |
         COMMIT_SHA="${{ needs.set-env.outputs.checked-out-sha }}"
     secrets:
-      azure-acr-client-id: ${{ secrets.AZURE_ACR_CLIENTID }}
-      azure-acr-secret: ${{ secrets.AZURE_ACR_SECRET }}
-      azure-acr-url: ${{ secrets.AZURE_ACR_URL }}
+      azure-acr-name: ${{ secrets.ACR_NAME }}
+      azure-acr-credentials: ${{ secrets.ACR_CREDENTIALS }}
       azure-aca-credentials: ${{ secrets.AZURE_ACA_CREDENTIALS }}
       azure-aca-name: ${{ secrets.AZURE_ACA_NAME }}
       azure-aca-resource-group: ${{ secrets.AZURE_ACA_RESOURCE_GROUP }}
