@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectFilt
             filters.PopulateFrom(queryParameters);
 
             // Assert
-            Assert.False(filters.IsFiltered);
+            Assert.False(filters.IsVisible);
         }
 
         [Fact]

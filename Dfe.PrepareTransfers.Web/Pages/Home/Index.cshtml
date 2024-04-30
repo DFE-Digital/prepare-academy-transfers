@@ -20,7 +20,7 @@
 {
 }
 
-@if (Model.Filters.IsFiltered)
+@if (Model.Filters.IsVisible)
 {
     <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
@@ -54,12 +54,15 @@
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+
+    <div class="govuk-grid-column-one-third">
+        <partial name="Shared/_ProjectListFilters" model="Model.Filters" />
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27" data-cy="select-projectlist-filter-count">
             @Model.TotalProjectCount projects found
         </h2>
-
-        <partial name="Shared/_ProjectListFilters" model="Model.Filters" />
 
         @if (Model.SearchCount == 0)
         {
@@ -81,82 +84,10 @@
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header app-!-width-three-fifths">Application information</th>
-                        <th class="govuk-table__header govuk-!-text-align-right app-!-width-two-fifths prepare-text-align-right">Project status</th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @{
-                        var index = 0;
-                    }
-                    @foreach (ProjectSearchResult project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
-                    {
-                        TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.First();
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">
-                                <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
-                                    <strong>
-                                        <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                                            @firstOutgoingAcademy.IncomingTrustNameInTitleCase
-                                        </a>
-                                    </strong>
-                                    @if (!project.IsFormAMat.HasValue || !project.IsFormAMat.Value)
-                                    {
-                                        <span>
-                                            UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
-                                        </span>
-                                    }
-                                </h2>
-                                <p class="govuk-!-margin-top-3">
-                                    <div>
-                                        Route: @if (project.IsFormAMat.HasValue && project.IsFormAMat.Value)
-                                        {
-                                            <span>Form a MAT</span>
-                                        } Transfer
-                                    </div>
-                                    <div>Project reference: @project.Reference</div>
-                                    <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
-                                    @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
-                                    {
-                                        <div id="@("delivery-officer-" + index)">Delivery officer: <span class="empty">Empty</span></div>
-                                    }
-                                    else
-                                    {
-                                        <div id="@("delivery-officer-" + index)">Delivery officer: <strong>@project.AssignedUser.FullName</strong></div>
-                                    }
-                                </p>
-                            </td>
-                            <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
-                                <p class="govuk-!-margin-top-0">
-                                    @{
-
-                                        var decisionClass = project.Status switch
-                                        {
-                                            "Approved" => "govuk-tag--green",
-                                            "Deferred" => "govuk-tag--orange",
-                                            "Withdrawn" => "govuk-tag--purple",
-                                            _ => "govuk-tag--red"
-                                        };
-
-
-                                        if (string.IsNullOrEmpty(project.Status))
-                                        {
-                                            <strong class="govuk-tag govuk-tag--yellow">
-                                                PRE ADVISORY BOARD
-                                            </strong>
-                                        }
-                                        else
-                                        {
-                                            <strong class="@($"govuk-tag {decisionClass}")" }>
-                                                @project.Status
-                                            </strong>
-                                        }
-                                    }
-                                </p>
-                            </td>
-                        </tr>
-
-                        index++;
-                    }
+                    <partial name="Shared/_ProjectListRows" model="Model.Projects" />
                 </tbody>
             </table>
 

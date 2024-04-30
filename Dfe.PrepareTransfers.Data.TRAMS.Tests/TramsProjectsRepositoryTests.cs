@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
+using AutoFixture;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
 using Dfe.PrepareTransfers.Data.TRAMS.Tests.TestFixtures;
-using Microsoft.AspNetCore.Http;
 using Moq;
 using Newtonsoft.Json;
 using Xunit;
@@ -26,6 +25,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
         private readonly Mock<ITrusts> _trusts;
         private readonly Trust _foundTrust;
         private readonly Academy _foundAcademy;
+        private readonly Fixture _fixture;
 
         public TramsProjectsRepositoryTests()
         {
@@ -44,6 +44,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                 Name = "Trust name",
                 GiasGroupId = "Group ID"
             };
+            _fixture = new Fixture();
 
             _trusts.Setup(r => r.GetByUkprn(It.IsAny<string>()))
                 .ReturnsAsync(_foundTrust);
@@ -268,12 +269,21 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [Fact]
             public async void GivenSingleProjectSummaryReturned_MapsCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
-                {
-                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
-                });
+                var searchModel = _fixture.Create<GetProjectSearchModel>();
 
-                await _subject.GetProjects();
+                ApiV2Wrapper<IEnumerable<TramsProjectSummary>> summaries = new() { 
+                    Data = _foundSummaries,
+                    Paging = new ApiV2PagingInfo()
+                    {
+                        RecordCount = _foundSummaries.Count
+                    }
+                };
+
+                _httpClient.Setup(c => c.PostAsync(It.Is<string>(x => x == "transfer-project/GetTransferProjects"), 
+                    It.IsAny<HttpContent>()))
+                .ReturnsAsync(new HttpResponseMessage { Content = new StringContent(JsonConvert.SerializeObject(summaries)) });
+
+                await _subject.GetProjects(searchModel);
 
                 _summaryToInternalMapper.Verify(m =>
                     m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
@@ -282,6 +292,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleProjectSummariesReturned_MapsCorrectly()
             {
+                var searchModel = _fixture.Create<GetProjectSearchModel>();
+
                 _foundSummaries.Add(
                     new TramsProjectSummary
                     {
@@ -297,12 +309,21 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     }
                 );
 
-                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                ApiV2Wrapper<IEnumerable<TramsProjectSummary>> summaries = new()
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries)))
+                    Data = _foundSummaries,
+                    Paging = new ApiV2PagingInfo()
+                    {
+                        RecordCount = _foundSummaries.Count
+                    }
+                };
+
+                _httpClient.Setup(c => c.PostAsync(It.Is<string>(x => x =="transfer-project/GetTransferProjects"), It.IsAny<HttpContent>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(summaries))
                 });
 
-                await _subject.GetProjects();
+                await _subject.GetProjects(searchModel);
 
                 _summaryToInternalMapper.Verify(m =>
                     m.Map(It.Is<TramsProjectSummary>(summary => summary.ProjectUrn == "123")), Times.Once);
@@ -313,9 +334,21 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [Fact]
             public async void GivenMultipleProjectSummaries_ReturnsMappedSummariesCorrectly()
             {
-                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                var searchModel = _fixture.Create<GetProjectSearchModel>();
+
+                ApiV2Wrapper<IEnumerable<TramsProjectSummary>> summaries = new()
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
+                    Data = _foundSummaries,
+                    Paging = new ApiV2PagingInfo()
+                    {
+                        RecordCount = _foundSummaries.Count
+                    }
+                };
+
+                _httpClient.Setup(c => c.PostAsync(It.Is<string>(x => x == "transfer-project/GetTransferProjects"),
+                    It.IsAny<HttpContent>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(summaries))
                 });
 
                 _summaryToInternalMapper.Setup(m => m.Map(It.IsAny<TramsProjectSummary>()))
@@ -323,7 +356,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                         input => new ProjectSearchResult { Urn = $"Mapped {input.ProjectUrn}" }
                     );
 
-                var result = await _subject.GetProjects();
+                var result = await _subject.GetProjects(searchModel);
 
                 Assert.Equal("Mapped 123", result.Result[0].Urn);
             }
@@ -333,28 +366,38 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
             [InlineData(HttpStatusCode.InternalServerError)]
             public async void GivenApiReturnsError_ThrowsApiError(HttpStatusCode httpStatusCode)
             {
-                _httpClient.Setup(c => c.GetAsync("transfer-project/GetTransferProjects?page=1&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                var searchModel = _fixture.Create<GetProjectSearchModel>();
+
+                _httpClient.Setup(c => c.PostAsync(It.Is<string>(x => x == "transfer-project/GetTransferProjects"), It.IsAny<HttpContent>())).ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = httpStatusCode
                 });
 
-                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetProjects());
+                await Assert.ThrowsAsync<TramsApiException>(() => _subject.GetProjects(searchModel));
             }
 
-            [Theory]
-            [InlineData(1)]
-            [InlineData(2)]
-            [InlineData(3)]
-            public async void GivenPage_GetsProjectForPage(int page)
+            [Fact]
+            public async void GivenPage_GetsProjectForPage()
             {
-                _httpClient.Setup(c => c.GetAsync($"transfer-project/GetTransferProjects?page={page}&count=10&title=")).ReturnsAsync(new HttpResponseMessage
+                var searchModel = It.IsAny<GetProjectSearchModel>();
+
+                ApiV2Wrapper<IEnumerable<TramsProjectSummary>> summaries = new()
                 {
-                    Content = new StringContent(JsonConvert.SerializeObject(new PagedResult<TramsProjectSummary>(_foundSummaries, 12)))
+                    Data = _foundSummaries,
+                    Paging = new ApiV2PagingInfo()
+                    {
+                        RecordCount = _foundSummaries.Count
+                    }
+                };
+
+                _httpClient.Setup(c => c.PostAsync(It.Is<string>(x => x == "transfer-project/GetTransferProjects"), It.IsAny<HttpContent>())).ReturnsAsync(new HttpResponseMessage
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(summaries))
                 });
 
-                await _subject.GetProjects(page);
+                await _subject.GetProjects(searchModel);
 
-                _httpClient.Verify(c => c.GetAsync($"transfer-project/GetTransferProjects?page={page}&count=10&title="), Times.Once());
+                _httpClient.Verify(c => c.PostAsync($"transfer-project/GetTransferProjects", It.IsAny<HttpContent>()), Times.Once());
             }
         }
 
