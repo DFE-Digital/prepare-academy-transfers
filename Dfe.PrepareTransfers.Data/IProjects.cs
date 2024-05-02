@@ -23,7 +23,7 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateIncomingTrustName(string urn, string projectName);
 
         public Task<bool> AssignUser(Project project);
-        public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "");
+        public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(GetProjectSearchModel searchModel);
         public Task<ApiResponse<ProjectFilterParameters>> GetFilterParameters();
     }
 }

@@ -109,7 +109,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Home
         public async Task<FileStreamResult> OnGetDownload()
         {
             Filters.PersistUsing(TempData).PopulateFrom(Request.Query);
-            ApiResponse<FileStreamResult> response = await _projectsRepository.DownloadProjectExport(Filters.Title);
+
+            var projectSearchModel = new GetProjectSearchModel(CurrentPage, PageSize, Filters.Title?.Trim(), Filters.SelectedOfficers, Filters.SelectedStatuses);
+
+            ApiResponse<FileStreamResult> response = await _projectsRepository.DownloadProjectExport(projectSearchModel);
 
             if (response.Success)
             {

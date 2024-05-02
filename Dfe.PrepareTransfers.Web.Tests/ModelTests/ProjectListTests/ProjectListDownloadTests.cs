@@ -44,7 +44,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectList
         public async Task OnGetDownload_SuccessfulResponse_ReturnsFileStreamResult()
         {
             // Setup the mock to return a successful response
-            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<string>()))
+            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<GetProjectSearchModel>()))
                 .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.OK, new FileStreamResult(new MemoryStream(), "text/csv")));
 
             // Act
@@ -59,7 +59,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectList
         public async Task OnGetDownload_UnsuccessfulResponse_ReturnsEmptyCsvFile()
         {
             // Setup the mock to return an unsuccessful response
-            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<string>()))
+            ProjectRepository.Setup(repo => repo.DownloadProjectExport(It.IsAny<GetProjectSearchModel>()))
                 .ReturnsAsync(new ApiResponse<FileStreamResult>(HttpStatusCode.InternalServerError, null));
 
             // Act
