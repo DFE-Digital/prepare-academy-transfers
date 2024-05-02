@@ -38,6 +38,12 @@ variable "enable_container_registry" {
   type        = bool
 }
 
+variable "registry_server" {
+  description = "Container registry server (required if `enable_container_registry` is false)"
+  type        = string
+  default     = ""
+}
+
 variable "registry_admin_enabled" {
   description = "Do you want to enable access key based authentication for your Container Registry?"
   type        = bool
@@ -220,6 +226,22 @@ variable "dns_txt_records" {
       records : list(string)
     })
   )
+}
+
+variable "dns_mx_records" {
+  description = "DNS MX records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(
+        object({
+          preference : number,
+          exchange : string
+        })
+      )
+    })
+  )
+  default = {}
 }
 
 variable "cdn_frontdoor_custom_domains" {

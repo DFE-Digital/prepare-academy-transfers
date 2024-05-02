@@ -15,7 +15,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.inputs.environment }}
 
 env:
-  DOCKER_IMAGE: acatran-app
   NODE_VERSION: 18.x
 
 jobs:
@@ -28,13 +27,12 @@ jobs:
       release: ${{ steps.var.outputs.release }}
       checked-out-sha: ${{ steps.var.outputs.checked-out-sha }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - id: var
         run: |
-          GIT_REF=${{ github.ref }}
+          GIT_REF=${{ github.ref_name }}
           GIT_BRANCH=${GIT_REF##*/}
           INPUT=${{ github.event.inputs.environment }}
           ENVIRONMENT=${INPUT:-"dev"}
@@ -45,36 +43,22 @@ jobs:
           echo "release=${RELEASE}" >> $GITHUB_OUTPUT
           echo "checked-out-sha=${CHECKED_OUT_SHA}" >> $GITHUB_OUTPUT
 
-  build-and-push-image:
-    name: Build and push to ACR
-    needs: set-env
-    runs-on: ubuntu-22.04
-    environment: ${{ needs.set-env.outputs.environment }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Azure Container Registry login
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.AZURE_ACR_CLIENTID }}
-          password: ${{ secrets.AZURE_ACR_SECRET }}
-          registry: ${{ secrets.AZURE_ACR_URL }}
-
-      - name: Build and push docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile
-          build-args: COMMIT_SHA=${{ needs.set-env.outputs.checked-out-sha }}
-          secrets: github_token=${{ secrets.GITHUB_TOKEN }}
-          tags: |
-            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.branch }}
-            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }}
-            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:sha-${{ needs.set-env.outputs.checked-out-sha }}
-            ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:latest
-          push: true
+  deploy-image:
+    name: Deploy '${{ needs.set-env.outputs.branch }}' to ${{ needs.set-env.outputs.environment }}
+    needs: [ set-env ]
+    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@v2.0.1
+    with:
+      docker-image-name: 'acatran-app'
+      docker-build-file-name: './Dockerfile'
+      environment: ${{ needs.set-env.outputs.environment }}
+      docker-build-args: |
+        COMMIT_SHA="${{ needs.set-env.outputs.checked-out-sha }}"
+    secrets:
+      azure-acr-name: ${{ secrets.ACR_NAME }}
+      azure-acr-credentials: ${{ secrets.ACR_CREDENTIALS }}
+      azure-aca-credentials: ${{ secrets.AZURE_ACA_CREDENTIALS }}
+      azure-aca-name: ${{ secrets.AZURE_ACA_NAME }}
+      azure-aca-resource-group: ${{ secrets.AZURE_ACA_RESOURCE_GROUP }}
 
   create-tag:
     name: Tag and release
@@ -108,30 +92,6 @@ jobs:
             } catch (error) {
               core.setFailed(error.message);
             }
-
-  deploy-image:
-    name: Deploy to ${{ needs.set-env.outputs.environment }} (${{ needs.set-env.outputs.release }})
-    needs: [ build-and-push-image, set-env ]
-    runs-on: ubuntu-22.04
-    environment: ${{ needs.set-env.outputs.environment }}
-    steps:
-      - name: Azure login with ACA credentials
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_ACA_CREDENTIALS }}
-
-      - name: Update Azure Container Apps Revision
-        uses: azure/CLI@v2
-        id: azure
-        with:
-          azcliversion: 2.45.0
-          inlineScript: |
-            az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp update \
-              --name ${{ secrets.AZURE_ACA_NAME }} \
-              --resource-group ${{ secrets.AZURE_ACA_RESOURCE_GROUP }} \
-              --image ${{ secrets.AZURE_ACR_URL }}/${{ env.DOCKER_IMAGE }}:${{ needs.set-env.outputs.release }} \
-              --output none
 
   cypress-tests:
     name: Run Cypress Tests
