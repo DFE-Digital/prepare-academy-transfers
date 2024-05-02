@@ -370,10 +370,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<ApiResponse<FileStreamResult>> DownloadProjectExport(string titleFilter = "")
+        public async Task<ApiResponse<FileStreamResult>> DownloadProjectExport(GetProjectSearchModel searchModel)
         {
-            AcademyTransferSearchModel searchModel = new() { TitleFilter = titleFilter };
-
             var response = await _academisationHttpClient.PostAsync("/export/export-transfer-projects", JsonContent.Create(searchModel));
 
             if (!response.IsSuccessStatusCode)

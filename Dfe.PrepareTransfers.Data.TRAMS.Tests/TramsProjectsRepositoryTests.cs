@@ -124,7 +124,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     .Setup(client => client.PostAsync("/export/export-transfer-projects", It.IsAny<HttpContent>()))
                     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
-                var result = await _subject.DownloadProjectExport(It.IsAny<string>());
+                var result = await _subject.DownloadProjectExport(It.IsAny<GetProjectSearchModel>());
                 Assert.NotNull(result);
                 Assert.True(result.Success);
             }
@@ -136,7 +136,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests
                     .Setup(client => client.PostAsync("/export/export-transfer-projects", It.IsAny<HttpContent>()))
                     .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError));
 
-                var result = await _subject.DownloadProjectExport(It.IsAny<string>());
+                var result = await _subject.DownloadProjectExport(It.IsAny<GetProjectSearchModel>());
                 Assert.NotNull(result);
                 Assert.False(result.Success);
             }
