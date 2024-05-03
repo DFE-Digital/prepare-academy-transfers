@@ -14,7 +14,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectFilt
             var filters = new ProjectListFilters();
             var store = new Dictionary<string, object>
             {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
+                { ProjectListFilters.TransfersFilterTitle, new string[] { "Bishop" } }
             };
 
             filters.PersistUsing(store);
@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectFilt
             var filters = new ProjectListFilters();
             var store = new Dictionary<string, object>
             {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
+                { ProjectListFilters.TransfersFilterTitle, new string[] { "Bishop" } }
             };
 
             // Act
@@ -54,7 +54,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ModelTests.ProjectListTests.ProjectFilt
             // Arrange
             var store = new Dictionary<string, object>
             {
-                { ProjectListFilters.FilterTitle, new string[] { "Bishop" } }
+                { ProjectListFilters.TransfersFilterTitle, new string[] { "Bishop" } }
             };
 
             // Act

@@ -10,9 +10,9 @@ namespace Dfe.PrepareTransfers.Web.Models.ProjectList;
 
 public class ProjectListFilters
 {
-    public const string FilterTitle = nameof(FilterTitle);
-    public const string FilterStatuses = nameof(FilterStatuses);
-    public const string FilterOfficers = nameof(FilterOfficers);
+    public const string TransfersFilterTitle = nameof(TransfersFilterTitle);
+    public const string TransfersFilterStatuses = nameof(TransfersFilterStatuses);
+    public const string TransfersFilterOfficers = nameof(TransfersFilterOfficers);
 
     private IDictionary<string, object?> _store = null!;
 
@@ -36,9 +36,9 @@ public class ProjectListFilters
     {
         _store = store;
 
-        Title = Get(FilterTitle).FirstOrDefault()?.Trim();
-        SelectedStatuses = Get(FilterStatuses);
-        SelectedOfficers = Get(FilterOfficers);
+        Title = Get(TransfersFilterTitle).FirstOrDefault()?.Trim();
+        SelectedStatuses = Get(TransfersFilterStatuses);
+        SelectedOfficers = Get(TransfersFilterOfficers);
 
         return this;
     }
@@ -60,8 +60,8 @@ public class ProjectListFilters
 
         if (query.ContainsKey("remove"))
         {
-            SelectedStatuses = GetAndRemove(FilterStatuses, GetFromQuery(nameof(SelectedStatuses)), true);
-            SelectedOfficers = GetAndRemove(FilterOfficers, GetFromQuery(nameof(SelectedOfficers)), true);
+            SelectedStatuses = GetAndRemove(TransfersFilterStatuses, GetFromQuery(nameof(SelectedStatuses)), true);
+            SelectedOfficers = GetAndRemove(TransfersFilterOfficers, GetFromQuery(nameof(SelectedOfficers)), true);
 
             return;
         }
@@ -72,15 +72,15 @@ public class ProjectListFilters
 
         if (activeFilterChanges)
         {
-            Title = Cache(FilterTitle, GetFromQuery(nameof(Title))).FirstOrDefault()?.Trim();
-            SelectedStatuses = Cache(FilterStatuses, GetFromQuery(nameof(SelectedStatuses)));
-            SelectedOfficers = Cache(FilterOfficers, GetFromQuery(nameof(SelectedOfficers)));
+            Title = Cache(TransfersFilterTitle, GetFromQuery(nameof(Title))).FirstOrDefault()?.Trim();
+            SelectedStatuses = Cache(TransfersFilterStatuses, GetFromQuery(nameof(SelectedStatuses)));
+            SelectedOfficers = Cache(TransfersFilterOfficers, GetFromQuery(nameof(SelectedOfficers)));
         }
         else
         {
-            Title = Get(FilterTitle, true).FirstOrDefault()?.Trim();
-            SelectedStatuses = Get(FilterStatuses, true);
-            SelectedOfficers = Get(FilterOfficers, true);
+            Title = Get(TransfersFilterTitle, true).FirstOrDefault()?.Trim();
+            SelectedStatuses = Get(TransfersFilterStatuses, true);
+            SelectedOfficers = Get(TransfersFilterOfficers, true);
         }
 
         string[] GetFromQuery(string key)
@@ -127,9 +127,9 @@ public class ProjectListFilters
 
     private void ClearFilters()
     {
-        Cache(FilterTitle, default);
-        Cache(FilterStatuses, default);
-        Cache(FilterOfficers, default);
+        Cache(TransfersFilterTitle, default);
+        Cache(TransfersFilterStatuses, default);
+        Cache(TransfersFilterOfficers, default);
     }
 
     /// <summary>
