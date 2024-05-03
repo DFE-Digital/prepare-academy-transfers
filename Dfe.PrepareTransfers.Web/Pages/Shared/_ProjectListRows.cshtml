@@ -9,7 +9,7 @@
 }
 @foreach (ProjectSearchResult project in Model)
 {
-    TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies?.First();
+    TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.FirstOrDefault();
 
     <tr class="govuk-table__row">
         <td class="govuk-table__cell">
@@ -25,7 +25,7 @@
             <p class="govuk-!-margin-top-3">
                 <div>
                     <strong>UKPRN:</strong>
-                    @((!project.IsFormAMat.HasValue || !project.IsFormAMat.Value) ? @firstOutgoingAcademy.IncomingTrustUkprn : @project.OutgoingTrustUkprn)
+                    @((!project.IsFormAMat.HasValue || !project.IsFormAMat.Value) ? @firstOutgoingAcademy?.IncomingTrustUkprn : @project.OutgoingTrustUkprn)
                 </div>
                 <div>
                     <strong>Route:</strong>
