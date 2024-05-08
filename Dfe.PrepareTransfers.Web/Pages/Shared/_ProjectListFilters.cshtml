@@ -100,7 +100,8 @@
                                             foreach (var officer in Model.AvailableDeliveryOfficers)
                                             {
                                                 <div class="govuk-checkboxes__item">
-                                                    <input class="govuk-checkboxes__input" id="filter-delivery-officer-@officer.Stub()" name="selectedOfficers" type="checkbox" value="@officer" data-cy="select-projectlist-filter-officer-@officer">
+                                                    <input class="govuk-checkboxes__input" id="filter-delivery-officer-@officer.Stub()" name="selectedOfficers" type="checkbox" value="@officer" data-cy="select-projectlist-filter-officer-@officer"
+                                                    @(Model.SelectedOfficers.Contains(officer) ? "checked" : null) />
                                                     <label class="govuk-label govuk-checkboxes__label" for="filter-delivery-officer-@officer.Stub()">
                                                         @officer
                                                     </label>
@@ -124,7 +125,8 @@
                                         @foreach (var status in Model.AvailableStatuses)
                                         {
                                             <div class="govuk-checkboxes__item">
-                                                <input class="govuk-checkboxes__input" id="filter-project-status-@status.Stub()" name="selectedStatuses" type="checkbox" value="@status" data-cy="select-projectlist-filter-status-@status" />
+                                                <input class="govuk-checkboxes__input" id="filter-project-status-@status.Stub()" name="selectedStatuses" type="checkbox" value="@status" data-cy="select-projectlist-filter-status-@status"
+                                                @(Model.SelectedStatuses.Contains(status) ? "checked" : null) />
                                                 <label class="govuk-label govuk-checkboxes__label" for="filter-project-status-@status.Stub()">
                                                     @status
                                                 </label>
