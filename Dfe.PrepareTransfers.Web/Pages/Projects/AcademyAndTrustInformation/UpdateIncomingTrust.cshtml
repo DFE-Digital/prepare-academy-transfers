@@ -1,0 +1,49 @@
+﻿@page "/project/{urn}/academy-and-trust-information/update-incoming-trust"
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.Academisation.ExtensionMethods
+@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.UpdateIncomingTrustModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What is the incoming trust name?";
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
+}
+
+@* 
+@section BeforeMain
+{
+    @if ((bool)ViewData["ChangeLink"])
+    {
+        <a class="govuk-back-link" asp-page="/Transfers/CheckYourAnswers">Back</a>
+    }
+    else
+    {
+        <a class="govuk-back-link" asp-page="/Transfers/OutgoingTrustAcademies">Back</a>
+    }
+} 
+*@
+
+<div asp-gds-validation-summary></div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="get" asp-page="/Transfers/SearchIncomingTrust">
+            <div class="govuk-form-group @formClasses">
+                <fieldset class="govuk-fieldset" aria-required="true">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">What is the incoming trust name?</h1>
+                    </legend>
+
+                    <p asp-gds-validation-for="SearchQuery"></p>
+
+                    <div id="query-hint" class="govuk-hint">
+                        Search by name, trust reference number or companies house number
+                    </div>
+
+                    <input class="govuk-input" name="query" id="SearchQuery" type="text" aria-describedby="query-hint" value="@Model.SearchQuery" />
+                </fieldset>
+            </div>
+            <button class="govuk-button" type="submit">Search</button>
+        </form>
+    </div>
+</div>
