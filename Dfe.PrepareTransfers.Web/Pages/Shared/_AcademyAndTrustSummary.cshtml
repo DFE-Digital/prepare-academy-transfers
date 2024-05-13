@@ -68,6 +68,14 @@
                 </a>
             </dd>
         }
+        else
+        {
+            <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" asp-page="/Projects/AcademyAndTrustInformation/UpdateIncomingTrust" asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview ? "true" : null)">
+                    Change
+                </a>
+            </dd>
+        }
     </div>
     <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
         <dt class="govuk-summary-list__key">

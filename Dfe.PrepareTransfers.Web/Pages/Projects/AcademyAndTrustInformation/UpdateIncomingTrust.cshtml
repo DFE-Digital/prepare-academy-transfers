@@ -1,0 +1,36 @@
+﻿@page "/project/{urn}/academy-and-trust-information/update-incoming-trust"
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Dfe.Academisation.ExtensionMethods
+@model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.UpdateIncomingTrustModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "What is the incoming trust name?";
+    var formClasses = ViewData.ModelState.IsValid ? "" : "govuk-form-group--error";
+}
+
+
+@section BeforeMain
+{
+    <a class="govuk-back-link" asp-page="/Projects/AcademyAndTrustInformation/Index" asp-route-urn="@Model.Urn">Back</a>
+} 
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post" data-id="form">
+            <div class="govuk-form-group @formClasses">
+                @*  *@
+                <h1 class="govuk-label-wrapper">
+                    <label class="govuk-label govuk-label--xl" for="SearchQuery">
+                        Which trust is involved?
+                    </label>
+                </h1>
+
+                <partial name="Shared/_AutoComplete" model="@Model.AutoCompleteSearchModel" />
+
+            </div>
+            <button class="govuk-button" type="submit" data-id="submit">Save and continue</button>
+        </form>
+    </div>
+</div>
