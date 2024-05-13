@@ -404,7 +404,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<bool> UpdateIncomingTrustName(string urn, string name, string incomingTrustUKPRN)
+        public async Task<bool> UpdateIncomingTrust(string urn, string name, string incomingTrustUKPRN)
         {
             var projectName = new
             {
@@ -414,7 +414,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             var content = new StringContent(JsonConvert.SerializeObject(projectName), Encoding.Default,
                "application/json");
-            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{urn}/set-name", content);
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{urn}/set-trust", content);
             if (response.IsSuccessStatusCode)
             {
                 return true;

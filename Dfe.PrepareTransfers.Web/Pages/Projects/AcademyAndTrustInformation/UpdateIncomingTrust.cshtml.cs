@@ -92,7 +92,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation
                 {
                     var trust = trusts.First();
 
-                    await _repository.UpdateIncomingTrustName(urn.ToString(), trustName, ukprn);
+                    await _repository.UpdateIncomingTrust(urn.ToString(), trustName, ukprn);
 
 
                     return RedirectToPage("/Projects/AcademyAndTrustInformation/Index", new { urn });
