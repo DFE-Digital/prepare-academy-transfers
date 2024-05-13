@@ -424,26 +424,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<bool> UpdateIncomingTrust(string urn, string name)
-        {
-            var projectName = new
-            {
-                ProjectName = name,
-                IncomingTrustUKPRN = ""
-            };
-
-            var content = new StringContent(JsonConvert.SerializeObject(projectName), Encoding.Default,
-               "application/json");
-            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{urn}/set-incoming-trust", content);
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
-            }
-
-            // stay inline with current pattern
-            throw new TramsApiException(response);
-        }
-
         public async Task<ApiResponse<ProjectFilterParameters>> GetFilterParameters()
         {
             HttpResponseMessage response = await _academisationHttpClient.GetAsync("/legacy/projects/status");
