@@ -1,0 +1,51 @@
+﻿@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using NetEscapades.AspNetCore.SecurityHeaders.TagHelpers
+@model AutoCompleteSearchModel
+
+<p asp-gds-validation-for="SearchQuery"></p>
+<div id="query-hint" class="govuk-hint">
+   @Model.Label
+</div>
+<div id="search"></div>
+<input type="hidden" id="SearchQuery" name="SearchQuery"/>
+
+<script type="application/javascript" asp-add-nonce>
+
+    function debounce(func, timeout = 500) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, args), timeout);
+        };
+    }    
+    
+    let loading = true;
+
+    function suggest(query, populateResults) {
+        const http = new XMLHttpRequest();        
+        http.onload = function() {
+           if (!loading || '@Html.Raw(Model.SearchQuery)' === '') populateResults(JSON.parse(this.responseText));
+           loading = false;
+        }
+        http.open('GET', `@Html.Raw(Model.SearchEndpoint)${query}`, true);
+        http.send();
+    }
+
+    const suggestDebounce = debounce((query, populateResults) => suggest(query, populateResults));
+
+    accessibleAutocomplete({
+        element: document.querySelector('#search'),
+        id: 'SearchQuery',
+        name: 'SearchQuery',
+        source: suggestDebounce,
+        showNoOptionsFound: false,
+        minLength: 3,
+        templates: {
+            inputValue: function(r) { return r && r.value; },
+            suggestion: function(r) { return r.suggestion; }
+        }
+    });
+
+    // setting the default option manually due to bug in autoselect - https://github.com/alphagov/accessible-autocomplete/issues/424
+    document.querySelector('#SearchQuery').value = '@Html.Raw(Model.SearchQuery)';
+</script>
