@@ -42,13 +42,13 @@ public class DecisionDate : DecisionBaseModel, IDateValidationMessageProvider
 
     string IDateValidationMessageProvider.AllMissing(string displayName)
     {
-        string idRaw = Request.RouteValues["id"] as string;
-        int id = int.Parse(idRaw ?? string.Empty);
-        AdvisoryBoardDecision decision = GetDecisionFromSession(id);
+        string urnRaw = Request.RouteValues["urn"] as string;
+        int urn = int.Parse(urnRaw ?? string.Empty);
+        AdvisoryBoardDecision decision = GetDecisionFromSession(urn);
         return $"Enter the date when the conversion was {decision.Decision.ToDescription().ToLowerInvariant()}";
     }
 
-    public LinkItem GetPageForBackLink(int id)
+    public LinkItem GetPageForBackLink(int urn)
     {
         return Decision switch
         {
