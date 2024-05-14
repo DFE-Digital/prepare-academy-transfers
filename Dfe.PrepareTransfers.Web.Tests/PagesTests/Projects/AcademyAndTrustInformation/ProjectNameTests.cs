@@ -26,7 +26,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
                 _subject.ModelState.AddModelError(nameof(_subject.IncomingTrustName), "error");
                 var result = await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r => r.UpdateIncomingTrustName(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                ProjectRepository.Verify(r => r.UpdateIncomingTrust(It.IsAny<string>(), It.IsAny<string>(), string.Empty), Times.Never);
 
                 Assert.IsType<PageResult>(result);
             }
@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.AcademyAndTrustInfo
                 await _subject.OnPostAsync();
 
                 ProjectRepository.Verify(r =>
-                        r.UpdateIncomingTrustName(It.IsAny<string>(), It.IsAny<string>()),
+                        r.UpdateIncomingTrust(It.IsAny<string>(), It.IsAny<string>(), string.Empty),
                     Times.Once);
             }
         }

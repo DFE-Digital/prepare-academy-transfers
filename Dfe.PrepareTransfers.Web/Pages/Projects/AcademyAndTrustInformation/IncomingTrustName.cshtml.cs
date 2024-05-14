@@ -41,7 +41,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation
                 return await OnGetAsync(Urn);
             }
 
-            await _projectRepository.UpdateIncomingTrustName(Urn, IncomingTrustName);
+            await _projectRepository.UpdateIncomingTrust(Urn, IncomingTrustName);
 
             if (ReturnToPreview)
             {
