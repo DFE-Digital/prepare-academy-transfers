@@ -27,7 +27,6 @@ public abstract class DecisionBaseModel : PageModel
     }
 
     public BackLinkModel BackLinkModel { get; set; }
-    public string TrustName { get; set; }
     public int Urn { get; set; }
     public int Id { get; set; }
 
@@ -40,7 +39,6 @@ public abstract class DecisionBaseModel : PageModel
    {
         Urn = urn;
         var project = await _repository.GetByUrn($"{Urn}");
-        TrustName = project.Result.IncomingTrustName;
         Id = project.Result.Id;
     }
 

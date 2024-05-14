@@ -11,5 +11,7 @@ public enum DecisionMadeBy
    OtherRegionalDirector = 1,
    [Description("Minister")] Minister = 2,
    [Description("Director General")] DirectorGeneral = 3,
-   [Description("None")] None = 4
+   [Description("Deputy Director")] DeputyDirector = 4,
+   [Description("Grade 6")] Grade6 = 5,
+    [Description("None")] None = 6
 }

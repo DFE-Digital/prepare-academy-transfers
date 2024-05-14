@@ -13,7 +13,7 @@
    <a asp-page="@Links.Decision.DecisionDate.PageName" asp-route-urn="@Model.Urn" class="govuk-back-link">Back</a>
 }
 
-<span id="selection-span" class="govuk-caption-l">@Model.TrustName</span>
+<span id="selection-span" class="govuk-caption-l">Record the decision</span>
 <h1 class="govuk-heading-l">Check your answers before recording this decision</h1>
 
 <dl class="govuk-summary-list">
@@ -72,6 +72,27 @@
          </a>
       </dd>
    </div>
+
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Decision maker's name
+        </dt>
+        <dd class="govuk-summary-list__value" id="decision-maker-name">
+            @if (Model.Decision.DecisionMakerName != null)
+            {
+                <span>@Model.Decision.DecisionMakerName</span>
+            }
+            else
+            {
+                <span class="empty">Empty</span>
+            }
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="@Links.Decision.DecisionMaker.PageName" asp-route-urn="@Model.Urn" asp-route-obl="true" id="change-decision-maker-btn">
+                Change<span class="govuk-visually-hidden"> decision maker's name</span>
+            </a>
+        </dd>
+    </div>
 
    @if (Model.Decision.Decision == AdvisoryBoardDecisions.Declined)
    {

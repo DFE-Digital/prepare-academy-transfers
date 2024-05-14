@@ -1,6 +1,7 @@
 using Dfe.Academisation.ExtensionMethods;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision;
+using Dfe.PrepareTransfers.Models;
 using Dfe.PrepareTransfers.Pages.TaskList.Decision.Models;
 using Dfe.PrepareTransfers.Services;
 using Dfe.PrepareTransfers.Web.Models;
@@ -9,63 +10,55 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Dfe.PrepareTransfers.Pages.TaskList.Decision;
 
-public class WhoDecidedModel : DecisionBaseModel
+public class DecisionMaker : DecisionBaseModel
 {
     private readonly ErrorService _errorService;
-    private readonly IProjects _projectsRepository;
 
-    public WhoDecidedModel(
-       IProjects repository,
-       ISession session,
-       ErrorService errorService
-       )
+    public DecisionMaker(IProjects repository,
+                       ISession session,
+                       ErrorService errorService)
       : base(repository, session)
     {
         _errorService = errorService;
     }
 
-   [BindProperty]
-   [Required(ErrorMessage = "Select who made the decision")]
-   public DecisionMadeBy? DecisionMadeBy { get; set; }
+   [BindProperty(Name = "decision-maker-name")]
+   [Required]
+    public string DecisionMakerName { get; set; }
 
-   public string DecisionText { get; set; }
 
-   public IEnumerable<DecisionMadeBy> DecisionMadeByOptions => Enum.GetValues(typeof(DecisionMadeBy)).Cast<DecisionMadeBy>();
+    public AdvisoryBoardDecision Decision { get; set; }
 
-   public IActionResult OnGet(int urn)
-   {
-        SetBackLinkModel(Links.Decision.RecordDecision, urn);
+    public IActionResult OnGet(int urn)
+    {
         AdvisoryBoardDecision decision = GetDecisionFromSession(urn);
+        if (decision.Decision == null) return RedirectToPage(Links.Project.Index.PageName, new { urn });
 
-        DecisionMadeBy = decision?.DecisionMadeBy;
-        DecisionText = decision == null ? string.Empty : decision.Decision.ToDescription().ToLowerInvariant();
+        Decision = GetDecisionFromSession(urn);
+        DecisionMakerName = Decision.DecisionMakerName;
+
+        SetBackLinkModel(Links.Decision.WhoDecided, urn);
+
         return Page();
-   }
+    }
 
    public IActionResult OnPost(int urn)
    {
         if (!ModelState.IsValid)
         {
-            _errorService.AddErrors(new[] { "DecisionMadeBy" }, ModelState);
+            _errorService.AddError("decision-maker-name", "Enter the decision maker's name");
             return OnGet(urn);
         }
 
-        AdvisoryBoardDecision decision = GetDecisionFromSession(urn) ?? new AdvisoryBoardDecision();
-        decision.DecisionMadeBy = DecisionMadeBy;
+        AdvisoryBoardDecision decision = GetDecisionFromSession(urn);
+        decision.DecisionMakerName = DecisionMakerName;
 
         SetDecisionInSession(urn, decision);
 
-
-        return DetermineRedirectPage(decision);
-    }
-
-    private IActionResult DetermineRedirectPage(AdvisoryBoardDecision decision)
-    {
-        var pageToReturnTo = decision.Decision switch
+        return decision.Decision switch
         {
             AdvisoryBoardDecisions.Approved => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters),
             AdvisoryBoardDecisions.Declined => RedirectToPage(Links.Decision.DeclineReason.PageName, LinkParameters),
@@ -73,7 +66,5 @@ public class WhoDecidedModel : DecisionBaseModel
             AdvisoryBoardDecisions.Withdrawn => RedirectToPage(Links.Decision.WhyWithdrawn.PageName, LinkParameters),
             _ => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters)
         };
-
-        return decision.DecisionMadeBy == Data.Models.AdvisoryBoardDecision.DecisionMadeBy.None ? pageToReturnTo : RedirectToPage(Links.Decision.DecisionMaker.PageName, LinkParameters);
     }
 }
