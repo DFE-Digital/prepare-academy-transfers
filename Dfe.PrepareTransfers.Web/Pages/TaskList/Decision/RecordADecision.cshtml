@@ -69,6 +69,15 @@
             </dd>
         </div>
 
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                Decision maker's name
+            </dt>
+            <dd class="govuk-summary-list__value">
+                <div id="decision-maker-name">@Model.Decision.DecisionMakerName</div>
+            </dd>
+        </div>
+
         @if (Model.Decision.Decision == AdvisoryBoardDecisions.Declined)
         {
             <div class="govuk-summary-list__row">

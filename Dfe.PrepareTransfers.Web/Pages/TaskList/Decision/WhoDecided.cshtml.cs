@@ -59,13 +59,6 @@ public class WhoDecidedModel : DecisionBaseModel
 
         SetDecisionInSession(urn, decision);
 
-        return decision.Decision switch
-        {
-            AdvisoryBoardDecisions.Approved => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters),
-            AdvisoryBoardDecisions.Declined => RedirectToPage(Links.Decision.DeclineReason.PageName, LinkParameters),
-            AdvisoryBoardDecisions.Deferred => RedirectToPage(Links.Decision.WhyDeferred.PageName, LinkParameters),
-            AdvisoryBoardDecisions.Withdrawn => RedirectToPage(Links.Decision.WhyWithdrawn.PageName, LinkParameters),
-            _ => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters)
-        };
+        return RedirectToPage(Links.Decision.DecisionMaker.PageName, LinkParameters);
     }
 }
