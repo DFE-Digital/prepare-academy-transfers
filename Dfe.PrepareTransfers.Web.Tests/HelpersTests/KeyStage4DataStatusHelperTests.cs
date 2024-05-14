@@ -1,7 +1,7 @@
 ﻿using Dfe.PrepareTransfers.Web.Helpers;
+using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using Xunit;
 
 namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
@@ -42,17 +42,17 @@ namespace Dfe.PrepareTransfers.Web.Tests.HelpersTests
         }
         public static IEnumerable<object[]> RevisedDates()
         {
-            yield return new object[] { new DateTime(DateTime.Now.Year, 1, 3) };
-            yield return new object[] { new DateTime(DateTime.Now.Year, 2, 11) };
-            yield return new object[] { new DateTime(DateTime.Now.Year, 3, 21) };
-            yield return new object[] { new DateTime(DateTime.Now.Year, 4, 14) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 1, 3) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 2, 11) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 3, 21) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 4, 14) };
         }
         public static IEnumerable<object[]> FinalDates()
         {
             yield return new object[] { new DateTime(DateTime.Now.Year - 2, 1, 3) };
             yield return new object[] { new DateTime(DateTime.Now.Year - 2, 2, 11) };
-            yield return new object[] { new DateTime(DateTime.Now.Year, 5, 21) };
-            yield return new object[] { new DateTime(DateTime.Now.Year, 6, 14) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 5, 21) };
+            yield return new object[] { new DateTime(DateTime.Now.Year - 1, 6, 14) };
         }
     }
 }

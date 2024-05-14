@@ -1,9 +1,9 @@
+using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
+using Microsoft.AspNetCore.Html;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
-using Microsoft.AspNetCore.Html;
 
 namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
 {
@@ -54,7 +54,7 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
         private static string truncateNullableDecimal(decimal? nullableDecimalToTruncate)
         {
             decimal decimalToTruncate = Convert.ToDecimal(nullableDecimalToTruncate);
-           
+
             return decimalToTruncate.ToString("0.##");
         }
 
@@ -125,7 +125,7 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers
         {
             var formattedKeyStage4Results = keyStage4Results.OrderByDescending(a => a.Year)
                 .Concat(Enumerable.Range(0, 3).Select(_ => new KeyStage4())).Take(3).ToList();
-            
+
             return GetResultsWithNextLatestYearPopulatedForMissingYearData(formattedKeyStage4Results).ToList();
         }
 
