@@ -59,6 +59,21 @@ public class WhoDecidedModel : DecisionBaseModel
 
         SetDecisionInSession(urn, decision);
 
-        return RedirectToPage(Links.Decision.DecisionMaker.PageName, LinkParameters);
+
+        return DetermineRedirectPage(decision);
+    }
+
+    private IActionResult DetermineRedirectPage(AdvisoryBoardDecision decision)
+    {
+        var pageToReturnTo = decision.Decision switch
+        {
+            AdvisoryBoardDecisions.Approved => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters),
+            AdvisoryBoardDecisions.Declined => RedirectToPage(Links.Decision.DeclineReason.PageName, LinkParameters),
+            AdvisoryBoardDecisions.Deferred => RedirectToPage(Links.Decision.WhyDeferred.PageName, LinkParameters),
+            AdvisoryBoardDecisions.Withdrawn => RedirectToPage(Links.Decision.WhyWithdrawn.PageName, LinkParameters),
+            _ => RedirectToPage(Links.Decision.AnyConditions.PageName, LinkParameters)
+        };
+
+        return decision.DecisionMadeBy == Data.Models.AdvisoryBoardDecision.DecisionMadeBy.None ? pageToReturnTo : RedirectToPage(Links.Decision.DecisionMaker.PageName, LinkParameters);
     }
 }

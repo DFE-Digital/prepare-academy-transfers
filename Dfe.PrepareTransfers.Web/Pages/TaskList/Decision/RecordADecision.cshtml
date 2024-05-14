@@ -74,7 +74,14 @@
                 Decision maker's name
             </dt>
             <dd class="govuk-summary-list__value">
-                <div id="decision-maker-name">@Model.Decision.DecisionMakerName</div>
+                @if (Model.Decision.DecisionMakerName != null)
+                {
+                    <span>@Model.Decision.DecisionMakerName</span>
+                }
+                else
+                {
+                    <span class="empty">Empty</span>
+                }
             </dd>
         </div>
 
