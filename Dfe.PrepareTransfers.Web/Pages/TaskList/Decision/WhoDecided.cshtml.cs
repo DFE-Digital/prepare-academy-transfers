@@ -56,9 +56,9 @@ public class WhoDecidedModel : DecisionBaseModel
 
         AdvisoryBoardDecision decision = GetDecisionFromSession(urn) ?? new AdvisoryBoardDecision();
         decision.DecisionMadeBy = DecisionMadeBy;
+        decision.DecisionMakerName = DecisionMadeBy == Data.Models.AdvisoryBoardDecision.DecisionMadeBy.None ? null : decision.DecisionMakerName;
 
         SetDecisionInSession(urn, decision);
-
 
         return DetermineRedirectPage(decision);
     }
