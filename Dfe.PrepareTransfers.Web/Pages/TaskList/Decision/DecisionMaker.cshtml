@@ -18,7 +18,7 @@
 
 <form method="post">
    <div class="govuk-form-group @ModelState.GetErrorStyleClass()">
-        <label class="govuk-label govuk-label--m" for="decision-maker-name">
+        <label class="govuk-hint" for="decision-maker-name">
             Enter the name of the person who made the decision
         </label>
         <input class="govuk-input govuk-!-width-two-thirds" id="decision-maker-name" name="decision-maker-name" type="text" value="@Model.DecisionMakerName">
