@@ -4,16 +4,16 @@ on:
   push:
     branches: [ main ]
     paths:
-    - 'Dfe.PrepareTransfers.*'
-    - '!end-to-end-tests'
-    - '*.csproj'
+    - 'Dfe.PrepareTransfers.*/**'
+    - '!end-to-end-tests/**'
+    - '**/*.csproj'
   pull_request:
     branches: [ main ]
     types: [ opened, synchronize, reopened]
     paths:
-    - 'Dfe.PrepareTransfers.*'
-    - '!end-to-end-tests'
-    - '*.csproj'
+    - 'Dfe.PrepareTransfers.*/**'
+    - '!end-to-end-tests/**'
+    - '**/*.csproj'
 
 env:
   DOTNET_VERSION: '6.0.403'
