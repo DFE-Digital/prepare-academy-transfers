@@ -1,8 +1,8 @@
-﻿using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text.Encodings.Web;
 
 namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 {
@@ -11,8 +11,9 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
     {
         public string Key { get; set; }
         public string Value { get; set; }
-
         public bool ShowAction { get; set; }
+        public string ActionUrl { get; set; }
+        public string ActionText { get; set; }
 
         private readonly HtmlEncoder _htmlEncoder;
 
@@ -26,7 +27,7 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             output.AddClass("govuk-summary-list__row", _htmlEncoder);
-            if (ShowAction)
+            if (!ShowAction)
             {
                 output.AddClass("govuk-summary-list__row--no-actions", _htmlEncoder);
             }
@@ -48,6 +49,20 @@ namespace Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
             output.Content.AppendHtml(dd.RenderStartTag());
             output.Content.AppendHtml(dd.RenderBody());
             output.Content.AppendHtml(dd.RenderEndTag());
+
+            if (ShowAction && !string.IsNullOrWhiteSpace(ActionUrl) && !string.IsNullOrWhiteSpace(ActionText))
+            {
+                var actionDiv = new TagBuilder("div");
+                actionDiv.AddCssClass("govuk-summary-list__actions");
+
+                var actionLink = new TagBuilder("a");
+                actionLink.AddCssClass("govuk-link");
+                actionLink.Attributes["href"] = ActionUrl;
+                actionLink.InnerHtml.SetContent(ActionText);
+
+                actionDiv.InnerHtml.AppendHtml(actionLink);
+                output.Content.AppendHtml(actionDiv);
+            }
         }
     }
 }
