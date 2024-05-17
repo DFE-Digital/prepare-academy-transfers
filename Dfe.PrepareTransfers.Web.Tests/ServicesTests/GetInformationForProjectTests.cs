@@ -47,9 +47,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
             _foundProject = new Project
             {
                 Urn = _projectUrn,
-                TransferringAcademies = new List<TransferringAcademies>
+                TransferringAcademies = new List<TransferringAcademy>
                 {
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         OutgoingAcademyUkprn = _academyUkprn, 
                         OutgoingAcademyUrn = _academyUrn,
@@ -129,21 +129,21 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
             var foundProjectWithMultipleAcademies = new Project
             {
                 Urn = projectUrn,
-                TransferringAcademies = new List<TransferringAcademies>
+                TransferringAcademies = new List<TransferringAcademy>
                 {
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         OutgoingAcademyUkprn = outgoingAcademy1.ukprn,
                         OutgoingAcademyUrn = outgoingAcademy1.urn,
                         IncomingTrustName = incomingTrustName
                     },
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         OutgoingAcademyUkprn = outgoingAcademy2.ukprn,
                         OutgoingAcademyUrn = outgoingAcademy2.urn,
                         IncomingTrustName = incomingTrustName
                     },
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         OutgoingAcademyUkprn = outgoingAcademy3.ukprn,
                         OutgoingAcademyUrn = outgoingAcademy3.urn,

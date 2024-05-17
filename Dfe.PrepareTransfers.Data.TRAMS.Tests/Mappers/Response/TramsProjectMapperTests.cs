@@ -81,9 +81,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Response
                 },
                 ProjectUrn = "Urn",
                 ProjectReference = "SW-SAT-12345678",
-                TransferringAcademies = new List<TransferringAcademy>
+                TransferringAcademies = new List<Models.AcademyTransferProject.TransferringAcademy>
                 {
-                    new TransferringAcademy
+                    new Models.AcademyTransferProject.TransferringAcademy
                     {
                         IncomingTrust = new TrustSummary
                         {

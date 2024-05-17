@@ -56,9 +56,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Tests.Mappers.Request
                 Status = "Status",
                 Urn = "12345",
                 Reference = "SW-MAT-12345678",
-                TransferringAcademies = new List<TransferringAcademies>
+                TransferringAcademies = new List<TransferringAcademy>
                 {
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         IncomingTrustUkprn = "1234", OutgoingAcademyUkprn = "4321", IncomingTrustName = "incoming trust",
                         PupilNumbersAdditionalInformation = "PupilNumbersAdditionalInformation",

@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.Projects.LatestOfstedJudgeme
             {
                 await _subject.OnPostAsync();
 
-                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.LatestOfstedReportAdditionalInformation == _subject.AdditionalInformationViewModel.AdditionalInformation)
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademy>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.LatestOfstedReportAdditionalInformation == _subject.AdditionalInformationViewModel.AdditionalInformation)
                 ), Times.Once);
             }
 

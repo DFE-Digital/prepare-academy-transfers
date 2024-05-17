@@ -287,7 +287,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<bool> UpdateAcademy(string projectUrn, TransferringAcademies transferringAcademy)
+        public async Task<bool> UpdateAcademy(string projectUrn, Data.Models.Projects.TransferringAcademy transferringAcademy)
         {
             var academy = InternalProjectToUpdateMapper.TransferringAcademy(transferringAcademy);
             //need to map to the command here to pull the rationale out

@@ -29,7 +29,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 },
                 Ukprn = input.Ukprn,
                 Urn = input.Urn,
-                LastChangedDate = input.GiasLastChangedDate
+                LastChangedDate = input.GiasLastChangedDate,
+                Region = input.Gor.Name
             };
         }
 

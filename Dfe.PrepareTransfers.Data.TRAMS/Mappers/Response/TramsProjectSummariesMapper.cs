@@ -17,7 +17,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                 OutgoingTrustUkprn = input.OutgoingTrustUkprn,
                 Status = input.Status,
                 TransferringAcademies = input.TransferringAcademies.Select(
-                    academy => new TransferringAcademies
+                    academy => new TransferringAcademy
                     {
                         OutgoingAcademyUkprn = academy.OutgoingAcademyUkprn,
                         IncomingTrustUkprn = academy.IncomingTrustUkprn,

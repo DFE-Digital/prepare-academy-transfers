@@ -17,6 +17,7 @@
 <h1 class="govuk-heading-xl">Check trust and academy details</h1>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        <form method="post">
         <h2 class="govuk-heading-m">Outgoing trust</h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             <div class="govuk-summary-list__row">
@@ -135,7 +136,6 @@
                 </div>
             </dl>
         }
-        <form method="post">
             <input type="hidden" asp-for="@Model.IsFormAMAT" />
             <input type="hidden" asp-for="@Model.OutgoingTrust.Ukprn" />
             <input type="hidden" asp-for="@Model.OutgoingTrust.Name" />

@@ -42,11 +42,11 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             };
         }
 
-        private static List<TransferringAcademies> TransferringAcademies(AcademisationProject input)
+        private static List<TransferringAcademy> TransferringAcademies(AcademisationProject input)
         {
             return input.TransferringAcademies
                 .Select(transfer =>
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         IncomingTrustName = string.IsNullOrEmpty(transfer.IncomingTrustName) ? transfer.IncomingTrust.GroupName : transfer.IncomingTrustName,
                         IncomingTrustUkprn = transfer.IncomingTrust.Ukprn,

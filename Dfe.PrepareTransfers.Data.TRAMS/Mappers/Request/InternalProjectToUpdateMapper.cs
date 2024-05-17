@@ -47,9 +47,14 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             {
                 OutgoingTrustUkprn = input.OutgoingTrustUkprn,
                 OutgoingTrustName = input.OutgoingTrustName,
-                IncomingTrustUkprn = input.IncomingTrustUkprn,
-                IncomingTrustName = input.IncomingTrustName,
-                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList(),
+                TransferringAcademies = input.TransferringAcademies.Select(x => 
+                new Models.AcademyTransferProject.TransferringAcademy() { 
+                    IncomingTrustUkprn = x.IncomingTrustUkprn, 
+                    IncomingTrustName = x.IncomingTrustName, 
+                    OutgoingAcademyUkprn = x.OutgoingAcademyUkprn,
+                    Region = x.Region,
+                    LocalAuthority = x.LocalAuthority             
+                }).ToList(),
                 IsFormAMat = input.IsFormAMat
             };
         }
@@ -112,7 +117,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 }).ToList();
         }
 
-        public static TransferringAcademyUpdate TransferringAcademy(TransferringAcademies input)
+        public static TransferringAcademyUpdate TransferringAcademy(Data.Models.Projects.TransferringAcademy input)
         {
             return new TransferringAcademyUpdate
                 {

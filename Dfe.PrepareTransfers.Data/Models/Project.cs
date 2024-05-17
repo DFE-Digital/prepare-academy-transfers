@@ -8,7 +8,7 @@ namespace Dfe.PrepareTransfers.Data.Models
     {
         public Project()
         {
-            TransferringAcademies = new List<TransferringAcademies>();
+            TransferringAcademies = new List<TransferringAcademy>();
             Features = new TransferFeatures();
             Dates = new TransferDates();
             Benefits = new TransferBenefits();
@@ -25,7 +25,7 @@ namespace Dfe.PrepareTransfers.Data.Models
 
         public string State { get; set; }
         public string Status { get; set; }
-        public List<TransferringAcademies> TransferringAcademies { get; set; }
+        public List<TransferringAcademy> TransferringAcademies { get; set; }
         public TransferFeatures Features { get; set; }
         public TransferDates Dates { get; set; }
         public TransferBenefits Benefits { get; set; }

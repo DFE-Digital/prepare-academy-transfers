@@ -8,9 +8,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models
     {
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
-        public string? IncomingTrustUkprn { get; set; }
-        public string IncomingTrustName { get; set; }
-        public List<string> TransferringAcademyUkprns { get; set; }
+        public List<TransferringAcademy> TransferringAcademies { get; set; }
         public bool? IsFormAMat { get; set; }
 
     }

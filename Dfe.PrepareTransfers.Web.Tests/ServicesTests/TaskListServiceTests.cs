@@ -48,7 +48,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
         [Fact]
         public void GivenNoTransferringAcademies_ThrowsOutOfRangeException()
         {
-            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademies>();
+            FoundProjectFromRepo.TransferringAcademies = new List<TransferringAcademy>();
             Assert.Throws<ArgumentOutOfRangeException>(() => _subject.BuildTaskListStatuses(_index));
         }
 
