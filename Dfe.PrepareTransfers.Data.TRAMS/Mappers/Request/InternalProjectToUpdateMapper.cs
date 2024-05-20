@@ -130,7 +130,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation ?? string.Empty
             };
         }
-        public static TransferringAcademyGeneralInformationUpdate TransferringAcademyGeneralInformation(TransferringAcademies input)
+        public static TransferringAcademyGeneralInformationUpdate TransferringAcademyGeneralInformation(Data.Models.Projects.TransferringAcademy input)
         {
             return new TransferringAcademyGeneralInformationUpdate
             {

@@ -19,7 +19,7 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateLegalRequirements(Project project);
         public Task<bool> UpdateDates(Project project);
         public Task<bool> UpdateAcademy(string urn, TransferringAcademy academy);
-        public Task<bool> UpdateAcademyGeneralInformation(string projectUrn, TransferringAcademies transferringAcademy);
+        public Task<bool> UpdateAcademyGeneralInformation(string projectUrn, TransferringAcademy transferringAcademy);
         public Task<bool> UpdateStatus(Project project);
         public Task<bool> UpdateIncomingTrust(string urn, string projectName, string incomingTrustUKPRN = "");
 

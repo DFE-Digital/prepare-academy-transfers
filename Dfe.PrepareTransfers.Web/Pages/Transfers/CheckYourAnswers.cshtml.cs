@@ -65,7 +65,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(List<Academy> OutgoingAcademies)
+        public async Task<IActionResult> OnPostAsync()
         {
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var incomingTrustId = HttpContext.Session.GetString(IncomingTrustIdSessionKey);

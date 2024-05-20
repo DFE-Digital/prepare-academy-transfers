@@ -71,7 +71,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             academyDomain.PupilNumbers.AdditionalInformation = academy.PupilNumbersAdditionalInformation;
             academyDomain.LatestOfstedJudgement.AdditionalInformation = academy.LatestOfstedReportAdditionalInformation;
         }
-        private static void SetGeneralInformation(Academy academyDomain, TransferringAcademies academy)
+        private static void SetGeneralInformation(Academy academyDomain, TransferringAcademy academy)
         {
             academyDomain.PFIScheme = academy.PFIScheme;
             academyDomain.PFISchemeDetails = academy.PFISchemeDetails;
