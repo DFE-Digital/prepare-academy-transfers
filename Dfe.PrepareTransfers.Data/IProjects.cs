@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Data
 {
@@ -19,6 +19,7 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> UpdateLegalRequirements(Project project);
         public Task<bool> UpdateDates(Project project);
         public Task<bool> UpdateAcademy(string urn, TransferringAcademy academy);
+        public Task<bool> UpdateAcademyGeneralInformation(string projectUrn, TransferringAcademies transferringAcademy);
         public Task<bool> UpdateStatus(Project project);
         public Task<bool> UpdateIncomingTrust(string urn, string projectName, string incomingTrustUKPRN = "");
 

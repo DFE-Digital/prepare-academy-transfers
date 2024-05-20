@@ -1,4 +1,10 @@
-using System;
+using Dfe.PrepareTransfers.Data.Models;
+using Dfe.PrepareTransfers.Data.Models.Projects;
+using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
+using Dfe.PrepareTransfers.Data.TRAMS.Models;
+using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -6,14 +12,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
-using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
-using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
-using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
-using Dfe.PrepareTransfers.Data.TRAMS.Models;
-using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS
 {
@@ -105,7 +103,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                                Ukprn = transferring.IncomingTrustUkprn
                            };
                        }
-                       else {
+                       else
+                       {
                            // for form a mat
                            transferring.IncomingTrust = new TrustSummary
                            {
@@ -114,8 +113,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                            };
                        }
 
-                      Academy outgoingAcademy =
-                      await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
+                       Academy outgoingAcademy =
+                       await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
 
                        transferring.OutgoingAcademy = new AcademySummary
                        {
@@ -303,7 +302,22 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             // stay inline with current pattern
             throw new TramsApiException(response);
         }
+        public async Task<bool> UpdateAcademyGeneralInformation(string projectUrn, TransferringAcademies transferringAcademy)
+        {
+            var academy = InternalProjectToUpdateMapper.TransferringAcademyGeneralInformation(transferringAcademy);
+            //need to map to the command here to pull the rationale out
 
+            var content = new StringContent(JsonConvert.SerializeObject(academy), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{projectUrn}/set-academy-general-information", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
         public async Task<RepositoryResult<Project>> Create(Project project)
         {
             var externalProject = InternalProjectToUpdateMapper.MapToCreate(project);

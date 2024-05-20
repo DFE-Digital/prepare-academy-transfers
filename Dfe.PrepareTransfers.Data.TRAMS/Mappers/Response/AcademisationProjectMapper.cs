@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
 {
@@ -38,7 +38,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             return new TransferAcademyAndTrustInformation
             {
                 Author = input.GeneralInformation.Author,
-                Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.Parse(input.GeneralInformation.Recommendation) 
+                Recommendation = EnumHelpers<TransferAcademyAndTrustInformation.RecommendationResult>.Parse(input.GeneralInformation.Recommendation)
             };
         }
 
@@ -57,7 +57,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                         LatestOfstedReportAdditionalInformation = transfer.LatestOfstedReportAdditionalInformation,
                         KeyStage2PerformanceAdditionalInformation = transfer.KeyStage2PerformanceAdditionalInformation,
                         KeyStage4PerformanceAdditionalInformation = transfer.KeyStage4PerformanceAdditionalInformation,
-                        KeyStage5PerformanceAdditionalInformation = transfer.KeyStage5PerformanceAdditionalInformation
+                        KeyStage5PerformanceAdditionalInformation = transfer.KeyStage5PerformanceAdditionalInformation,
+                        PFIScheme = transfer.PFIScheme,
+                        PFISchemeDetails = transfer.PFISchemeDetails
                     }
                 )
                 .ToList();
@@ -112,27 +114,27 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
             var otherFactors = new Dictionary<TransferBenefits.OtherFactor, string>();
             var inputFactors = input.Benefits.OtherFactorsToConsider;
             if (inputFactors.HighProfile.ShouldBeConsidered != null &&
-                (bool) inputFactors.HighProfile.ShouldBeConsidered)
+                (bool)inputFactors.HighProfile.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.HighProfile] = inputFactors.HighProfile.FurtherSpecification;
             }
 
             if (inputFactors.FinanceAndDebt.ShouldBeConsidered != null &&
-                (bool) inputFactors.FinanceAndDebt.ShouldBeConsidered)
+                (bool)inputFactors.FinanceAndDebt.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.FinanceAndDebtConcerns] =
                     inputFactors.FinanceAndDebt.FurtherSpecification;
             }
 
             if (inputFactors.ComplexLandAndBuilding.ShouldBeConsidered != null &&
-                (bool) inputFactors.ComplexLandAndBuilding.ShouldBeConsidered)
+                (bool)inputFactors.ComplexLandAndBuilding.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.ComplexLandAndBuildingIssues] =
                     inputFactors.ComplexLandAndBuilding.FurtherSpecification;
             }
-            
+
             if (inputFactors.OtherRisks.ShouldBeConsidered != null &&
-                (bool) inputFactors.OtherRisks.ShouldBeConsidered)
+                (bool)inputFactors.OtherRisks.ShouldBeConsidered)
             {
                 otherFactors[TransferBenefits.OtherFactor.OtherRisks] =
                     inputFactors.OtherRisks.FurtherSpecification;

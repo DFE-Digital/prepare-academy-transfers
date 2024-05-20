@@ -13,11 +13,13 @@ namespace Dfe.PrepareTransfers.Data.Models.Projects
         public string LocalAuthority { get; set; }
         public string LastChangedDate { get; set; }
         public string OutgoingAcademyUrn { get; set; }
+        public string? PFIScheme { get; set; }
+        public string? PFISchemeDetails { get; set; }
 
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedReportAdditionalInformation { get; set; }
         public string KeyStage2PerformanceAdditionalInformation { get; set; }
         public string KeyStage4PerformanceAdditionalInformation { get; set; }
-        public string KeyStage5PerformanceAdditionalInformation { get; set; }                
+        public string KeyStage5PerformanceAdditionalInformation { get; set; }
     }
 }
