@@ -1,11 +1,11 @@
-using System;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 {
@@ -27,11 +27,12 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
         public string DistanceFromAcademyToTrustHq { get; set; }
         public string GIASLastChangedDate { get; set; }
         public string MP { get; set; }
-        
+
         [BindProperty(SupportsGet = true)]
         public string AcademyUkprn { get; set; }
-        
+
         public string AcademyName { get; set; }
+        public string Urn { get; set; }
 
         public Index(IGetInformationForProject getInformationForProject)
         {
@@ -50,13 +51,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
             NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})";
             FreeSchoolMeals = generalInformation.PercentageFsm;
             PublishedAdmissionNumber = generalInformation.Pan;
-            PrivateFinanceInitiative = generalInformation.Pfi;
+            PrivateFinanceInitiative = $"{academy.PFIScheme} {academy.PFISchemeDetails}";
             ViabilityIssues = generalInformation.ViabilityIssue;
             FinancialDeficit = generalInformation.Deficit;
             SchoolType = generalInformation.SchoolType;
             DiocesePercent = generalInformation.DiocesesPercent;
             DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
             MP = generalInformation.MpAndParty;
+            Urn = urn;
             GIASLastChangedDate = "N/A";
             if (academy.LastChangedDate.IsNullOrEmpty() is false)
             {
