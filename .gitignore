@@ -238,3 +238,4 @@ backend.vars
 
 # Redirector
 /Dfe.PrepareTransfers.Redirector/wwwroot/dist/
+end-to-end-tests/cypress.env.json
