@@ -1,3 +1,4 @@
+@using Dfe.Academisation.ExtensionMethods
 @using Dfe.PrepareTransfers.Data.Models
 @using Dfe.PrepareTransfers.Data.Models.Projects
 
@@ -17,7 +18,7 @@
             <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
                 <strong>
                     <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                        @(firstOutgoingAcademy?.IncomingTrustName ?? project.OutgoingTrustName)
+                        @(firstOutgoingAcademy?.IncomingTrustName ?? project.OutgoingTrustName.SplitPascalCase())
                     </a>
                 </strong>
             </h2>
