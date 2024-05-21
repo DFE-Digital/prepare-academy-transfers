@@ -25,7 +25,7 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests
             Document.QuerySelector("h1.govuk-heading-xl").TextContent.Trim().Should().Be("Transfer projects");
             Document.QuerySelector("[data-cy=select-projectlist-filter-count]").TextContent.Trim().Should().Be("1 projects found");
             Document.QuerySelector("[data-id=project-link-001]").TextContent
-              .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName);
+              .Trim().Should().Be(projects.First().TransferringAcademies[0].IncomingTrustName.ToTitleCase());
         }
     }
 }
