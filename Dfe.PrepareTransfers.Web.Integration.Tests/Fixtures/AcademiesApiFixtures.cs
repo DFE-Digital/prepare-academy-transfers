@@ -217,7 +217,8 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     Pan = "Pan",
                     Pfi = "Pfi",
                     ViabilityIssue = "Viability issue"
-                }
+                },
+                Gor = new NameAndCode { Name = "Region Name" }
             };
         }
 
