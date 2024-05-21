@@ -1,0 +1,74 @@
+﻿@page "/project/{urn}/general-information/{academyUkprn}/pfi-scheme";
+
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.PFISchemeModel
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "PFI Scheme";
+    Layout = "_Layout";
+
+    var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link"
+           asp-page="/Projects/GeneralInformation/Index"
+           asp-route-urn="@Model.Urn"
+           asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
+    </backtopreview>
+
+}
+
+<div asp-gds-validation-summary></div>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-form-group @formClasses">
+            <fieldset class="govuk-fieldset" aria-describedby="diocesan-consent-hint">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading" data-test="header">
+                        <span class="govuk-caption-l">
+                            @Model.AcademyName
+                        </span>
+                        Is your school part of a PFI (Private Finance Initiative) scheme?
+                    </h1>
+                    <form method="post">
+                    <div class="govuk-form-group">
+                        <div class="govuk-radios govuk-!-margin-top-4" data-module="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input asp-for="@Model.YesChecked" data-test="pfi-scheme-yes-input" class="govuk-radios__input" type="radio" value="true" aria-controls="conditional-partofpfischemeSaved" id="radio-yes" data-cy="select-radio-yes">
+                                <label class="govuk-label govuk-radios__label" for="radio-yes" data-test="pfi-scheme-yes-label">
+                                    Yes
+                                </label>
+                            </div>
+
+                            <div class="govuk-radios__conditional" id="conditional-partofpfischemeSaved" data-cy="select-sharepoint-section">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label">
+                                        Which PFI scheme is the school part of?
+                                    </label>
+                                    <inline-error for="@nameof(Model.PFISchemeViewModel.PFIScheme)" />
+                                    <textarea asp-for="@Model.PFISchemeViewModel.PFISchemeDetails" data-test="pfi-scheme-details-input" class="govuk-textarea" rows="5" aria-describedby="conditional-partofpfischemeSaved" aria-label="text-area-for-pfi-scheme"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input asp-for="@Model.YesChecked" data-test="pfi-scheme-no-input" class="govuk-radios__input" type="radio" value="false" id="radio-no" data-cy="select-radio-no">
+                                <label class="govuk-label govuk-radios__label" for="radio-no" data-test="pfi-scheme-no-label">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <button class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" type="submit" data-test="submit-btn">
+                            Save and continue
+                        </button>
+                    </div>
+                    </form>
+        </div>
+    </div>
+</div>

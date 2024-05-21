@@ -80,13 +80,13 @@
                 </div>
                 <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">PFI (private finance initiative)</dt>
-                    @if (string.IsNullOrEmpty(academy.Pfi))
+                    @if (string.IsNullOrEmpty(academy.PFIScheme))
                     {
                         <dd class="govuk-summary-list__value">Does not apply</dd>
                     }
                     else
                     {
-                        <dd class="govuk-summary-list__value">@academy.Pfi</dd>
+                        <dd class="govuk-summary-list__value">$"{@academy.PFIScheme} {@academy.PFISchemeDetails}"</dd>
                     }
                 </div>
             </dl>

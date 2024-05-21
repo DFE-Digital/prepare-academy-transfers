@@ -11,7 +11,7 @@
 * Task List Updates: Updated the Transfers Task list to ensure alignment with the Conversions system, facilitating consistency across platforms.
 * Layout Improvements: Introduced a sub-tabbed layout for organisation within the system, aligned with the Conversions tasklist.
 * Key stage statuses now more accurately reflect their status for when the most recent academic year is >1 year ago
-
+* Added ability to edit PFI schemes within a Transfer project for their requisite Transferring Academies
 
 ---
 

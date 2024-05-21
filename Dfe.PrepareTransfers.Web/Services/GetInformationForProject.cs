@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Dfe.PrepareTransfers.Web.Services.Responses;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
-	public class GetInformationForProject : IGetInformationForProject
+    public class GetInformationForProject : IGetInformationForProject
     {
         private readonly IProjects _projectsRepository;
         private readonly IAcademies _academiesRepository;
@@ -20,7 +20,7 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             _academiesRepository = academiesRepository;
             _projectsRepository = projectsRepository;
-            _educationPerformanceRepository = educationPerformanceRepository;  
+            _educationPerformanceRepository = educationPerformanceRepository;
         }
 
         public async Task<GetInformationForProjectResponse> Execute(string projectUrn)
@@ -35,6 +35,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                     await _academiesRepository.GetAcademyByUkprn(transferringAcademy.OutgoingAcademyUkprn);
                 var academy = academyResult;
                 SetAdditionalInformation(academy, transferringAcademy);
+                SetGeneralInformation(academy, transferringAcademy);
                 academy.EducationPerformance = await SetPerformanceData(transferringAcademy, academy.LocalAuthorityName,
                     projectResult.Result.Urn);
                 outgoingAcademies.Add(academy);
@@ -69,6 +70,11 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             academyDomain.PupilNumbers.AdditionalInformation = academy.PupilNumbersAdditionalInformation;
             academyDomain.LatestOfstedJudgement.AdditionalInformation = academy.LatestOfstedReportAdditionalInformation;
+        }
+        private static void SetGeneralInformation(Academy academyDomain, TransferringAcademies academy)
+        {
+            academyDomain.PFIScheme = academy.PFIScheme;
+            academyDomain.PFISchemeDetails = academy.PFISchemeDetails;
         }
     }
 }

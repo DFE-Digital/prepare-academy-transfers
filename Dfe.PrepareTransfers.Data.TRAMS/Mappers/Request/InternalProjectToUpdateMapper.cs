@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.ExtensionMethods;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
 {
@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 Status = input.Status,
                 ProjectUrn = input.Urn,
                 ProjectReference = input.Reference,
-                TransferringAcademies = TransferringAcademies (input),
+                TransferringAcademies = TransferringAcademies(input),
                 Benefits = Benefits(input),
                 LegalRequirements = LegalRequirements(input),
                 Dates = Dates(input),
@@ -115,17 +115,25 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
         public static TransferringAcademyUpdate TransferringAcademy(TransferringAcademies input)
         {
             return new TransferringAcademyUpdate
-                {
-                    //IncomingTrustUkprn = input.IncomingTrustUkprn,
-                    TransferringAcademyUkprn = input.OutgoingAcademyUkprn,
-                    PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation ?? string.Empty,
-                    LatestOfstedReportAdditionalInformation = input.LatestOfstedReportAdditionalInformation ?? string.Empty,
-                    KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation ?? string.Empty,
-                    KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation ?? string.Empty,
-                    KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation ?? string.Empty
-                };
+            {
+                //IncomingTrustUkprn = input.IncomingTrustUkprn,
+                TransferringAcademyUkprn = input.OutgoingAcademyUkprn,
+                PupilNumbersAdditionalInformation = input.PupilNumbersAdditionalInformation ?? string.Empty,
+                LatestOfstedReportAdditionalInformation = input.LatestOfstedReportAdditionalInformation ?? string.Empty,
+                KeyStage2PerformanceAdditionalInformation = input.KeyStage2PerformanceAdditionalInformation ?? string.Empty,
+                KeyStage4PerformanceAdditionalInformation = input.KeyStage4PerformanceAdditionalInformation ?? string.Empty,
+                KeyStage5PerformanceAdditionalInformation = input.KeyStage5PerformanceAdditionalInformation ?? string.Empty
+            };
         }
-
+        public static TransferringAcademyGeneralInformationUpdate TransferringAcademyGeneralInformation(TransferringAcademies input)
+        {
+            return new TransferringAcademyGeneralInformationUpdate
+            {
+                TransferringAcademyUkprn = input.OutgoingAcademyUkprn,
+                PFIScheme = input.PFIScheme ?? string.Empty,
+                PFISchemeDetails = input.PFISchemeDetails ?? string.Empty
+            };
+        }
         public static AcademyTransferProjectBenefits Benefits(Project input)
         {
             return new AcademyTransferProjectBenefits
