@@ -3,6 +3,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IConfiguration _configuration
 
+@{
+    var notificationBannerMessage = _configuration["NotificationBannerMessage"] ?? string.Empty;
+}
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
 <head>
@@ -76,6 +80,24 @@
 <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
 <partial name="_CookieBanner" />
+
+    @if (!string.IsNullOrWhiteSpace(@notificationBannerMessage))
+    {
+        <div class="govuk-extra-width-container">
+            <section class="govuk-notification-banner govuk-!-margin-bottom-0" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__header">
+                    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                        Important
+                    </h2>
+                </div>
+                <div class="govuk-notification-banner__content">
+                    <p>
+                        @notificationBannerMessage
+                    </p>
+                </div>
+            </section>
+        </div>
+    }
 
     <header class="dfe-header" role="banner" data-module="dfe-header">
         <div class="dfe-width-container dfe-header__container">
