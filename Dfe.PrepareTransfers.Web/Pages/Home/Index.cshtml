@@ -17,10 +17,10 @@
 }
 
 @section BeforeMain
-    {   
+{
 }
 
-    @if (Model.IsFiltered)
+@if (Model.Filters.IsVisible)
 {
     <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
         <div class="govuk-notification-banner__header">
@@ -54,50 +54,15 @@
     </div>
 </div>
 <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+
+    <div class="govuk-grid-column-one-third">
+        <partial name="Shared/_ProjectListFilters" model="Model.Filters" />
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
         <h2 class="govuk-heading-l govuk-!-margin-bottom-2 govuk-!-font-size-27" data-cy="select-projectlist-filter-count">
             @Model.TotalProjectCount projects found
         </h2>
-
-        <details class="govuk-details prepare-project-listing__filters-container" data-module="govuk-details" @(Model.IsFiltered ? "open" : null)>
-            <summary class="govuk-details__summary prepare-project-listing__fitlers-details-summary">
-                <span class="govuk-details__summary-text govuk-button govuk-button--secondary prepare-project-listing__button--main" data-cy="select-projectlist-filter-expand">
-                    Filter projects
-                </span>
-            </summary>
-            <div class="govuk-details__text prepare-project-listing__filters-details" data-id="filter-container">
-                <form method="get" class="form">
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-quarter">
-                            <div class="govuk-form-group">
-                                <h1 class="govuk-label-wrapper">
-                                    <label class="govuk-label govuk-label--s" for="filter-project-title">
-                                        Project title
-                                    </label>
-                                </h1>
-                                <div id="filter-project-title-hint" class="govuk-hint">
-                                    For example, The Rutland Learning Trust
-                                </div>
-
-                                <input asp-for="TitleFilter" class="govuk-input" type="text" aria-describedby="filter-project-title-hint">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-full">
-                            <div class="govuk-button-group">
-                                <button class="govuk-button govuk-button--secondary prepare-project-listing__button--apply" data-cy="select-projectlist-filter-apply" data-module="govuk-button ">
-                                    Apply filters
-                                </button>
-
-                                <a class="govuk-link" href="/home">Clear filters</a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </details>
 
         @if (Model.SearchCount == 0)
         {
@@ -111,54 +76,18 @@
         }
         else
         {
+            <a class="govuk-button govuk-button--secondary" asp-page-handler="Download"> Download as a spreadsheet</a>
+
             <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">@Model.TotalProjectCount projects found</caption>
 
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header app-!-width-three-fifths">Application information</th>
-                        <th class="govuk-table__header govuk-!-text-align-right app-!-width-two-fifths prepare-text-align-right">Project status</th>
                     </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    @{var index = 0;}
-                    @foreach (ProjectSearchResult project in Model.Projects.Where(p => p.TransferringAcademies.Any()))
-                    {
-                        TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.First();
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">
-                                <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
-                                    <strong>
-                                        <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
-                                            @firstOutgoingAcademy.IncomingTrustNameInTitleCase
-                                        </a>
-                                    </strong>
-                                    <span>
-                                        UKPRN @firstOutgoingAcademy.IncomingTrustUkprn
-                                    </span>
-                                </h2>
-                                <p class="govuk-!-margin-top-3">
-                                    <div>Project reference: @project.Reference</div>
-                                    <div>Outgoing trust: @project.OutgoingTrustNameInTitleCase</div>
-                                    @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
-                                    {
-                                        <div id="@("delivery-officer-" + index)">Delivery officer: <span class="empty">Empty</span></div>
-                                    }
-                                    else
-                                    {
-                                        <div id="@("delivery-officer-" + index)">Delivery officer: <strong>@project.AssignedUser.FullName</strong></div>
-                                    }
-                                </p>
-                            </td>
-                            <td class="govuk-table__cell govuk-table__cell prepare-text-align-right">
-                                <p class="govuk-!-margin-top-0">
-                                    <strong class="govuk-tag govuk-tag--yellow">PRE ADVISORY BOARD</strong>
-                                </p>
-                            </td>
-                        </tr>
-
-                        index++;
-                    }
+                    <partial name="Shared/_ProjectListRows" model="Model.Projects" />
                 </tbody>
             </table>
 
@@ -168,7 +97,7 @@
                     @if (Model.HasPreviousPage)
                     {
                         <li class="moj-pagination__item  moj-pagination__item--prev">
-                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-TitleFilter="@Model.TitleFilter">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.PreviousPage" asp-route-Title="@Model.Filters.Title">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
                     @for (var pageIdx = 0; pageIdx < Model.TotalPages; pageIdx++)
@@ -189,7 +118,7 @@
                             }
 
                             <li class="moj-pagination__item @markAsSelected">
-                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-TitleFilter="@Model.TitleFilter" class="moj-pagination__link" aria-label="@ariaLabel">@pageNumber</a>
+                                <a id="@pageNumber" asp-page="/Home/Index" asp-route-currentPage="@pageNumber" asp-route-Title="@Model.Filters.Title" class="moj-pagination__link" aria-label="@ariaLabel">@pageNumber</a>
                             </li>
 
                             if (Model.HasNextPage && Model.NextPage == pageNumber && ((Model.NextPage + 1) < Model.TotalPages))
@@ -204,7 +133,7 @@
                     @if (Model.HasNextPage)
                     {
                         <li class="moj-pagination__item  moj-pagination__item--next">
-                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-TitleFilter="@Model.TitleFilter">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                            <a class="moj-pagination__link" asp-page="/Home/Index" asp-route-currentPage="@Model.NextPage" asp-route-Title="@Model.Filters.Title">Next<span class="govuk-visually-hidden"> set of pages</span></a>
                         </li>
                     }
                 </ul>

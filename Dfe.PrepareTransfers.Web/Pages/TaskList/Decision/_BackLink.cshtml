@@ -1,0 +1,11 @@
+﻿@model Dfe.PrepareTransfers.Pages.TaskList.Decision.BackLinkModel
+@{
+   bool overideBackLink;
+   bool.TryParse(Context.Request.Query["obl"], out overideBackLink);
+   if (overideBackLink)
+   {
+      Model.LinkPage = Links.Decision.Summary.PageName;
+   }
+}
+
+<a asp-page="@Model.LinkPage" asp-route-urn="@Model.LinkRouteId" class="govuk-back-link" data-cy="select-backlink">@(overideBackLink ? "Back" : Model.LinkText)</a>

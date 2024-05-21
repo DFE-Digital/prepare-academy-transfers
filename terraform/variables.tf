@@ -3,11 +3,6 @@ variable "environment" {
   type        = string
 }
 
-variable "key_vault_access_users" {
-  description = "List of users that require access to the Key Vault where tfvars are stored. This should be a list of User Principle Names (Found in Active Directory) that need to run terraform"
-  type        = list(string)
-}
-
 variable "key_vault_access_ipv4" {
   description = "List of IPv4 Addresses that are permitted to access the Key Vault"
   type        = list(string)
@@ -41,6 +36,12 @@ variable "virtual_network_address_space" {
 variable "enable_container_registry" {
   description = "Set to true to create a container registry"
   type        = bool
+}
+
+variable "registry_server" {
+  description = "Container registry server (required if `enable_container_registry` is false)"
+  type        = string
+  default     = ""
 }
 
 variable "registry_admin_enabled" {
@@ -80,6 +81,12 @@ variable "container_secret_environment_variables" {
 variable "container_max_replicas" {
   description = "Container max replicas"
   type        = number
+}
+
+variable "container_scale_http_concurrency" {
+  description = "When the number of concurrent HTTP requests exceeds this value, then another replica is added. Replicas continue to add to the pool up to the max-replicas amount."
+  type        = number
+  default     = 10
 }
 
 variable "enable_event_hub" {
@@ -130,6 +137,12 @@ variable "cdn_frontdoor_health_probe_protocol" {
   description = "Use Http or Https"
   type        = string
   default     = "Https"
+}
+
+variable "enable_cdn_frontdoor_health_probe" {
+  description = "Enable CDN Front Door health probe"
+  type        = bool
+  default     = false
 }
 
 variable "container_health_probe_path" {
@@ -213,6 +226,22 @@ variable "dns_txt_records" {
       records : list(string)
     })
   )
+}
+
+variable "dns_mx_records" {
+  description = "DNS MX records to add to the DNS Zone"
+  type = map(
+    object({
+      ttl : optional(number, 300),
+      records : list(
+        object({
+          preference : number,
+          exchange : string
+        })
+      )
+    })
+  )
+  default = {}
 }
 
 variable "cdn_frontdoor_custom_domains" {

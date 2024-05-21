@@ -1,0 +1,84 @@
+@using Dfe.PrepareTransfers.Data.Models
+@using Dfe.PrepareTransfers.Data.Models.Projects
+
+@model IEnumerable<ProjectSearchResult>
+
+
+@{
+    var index = 0;
+}
+@foreach (ProjectSearchResult project in Model)
+{
+    TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.FirstOrDefault();
+
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+
+            <h2 class="govuk-caption-l govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+                <strong>
+                    <a data-id="project-link-@project.Urn" class="govuk-link" asp-page="/Projects/Index" asp-route-urn="@project.Urn">
+                        @(firstOutgoingAcademy?.IncomingTrustName ?? project.OutgoingTrustName)
+                    </a>
+                </strong>
+            </h2>
+
+            <p class="govuk-!-margin-top-3">
+                <div>
+                    <strong>UKPRN:</strong>
+                    @((!project.IsFormAMat.HasValue || !project.IsFormAMat.Value) ? @firstOutgoingAcademy?.IncomingTrustUkprn : @project.OutgoingTrustUkprn)
+                </div>
+                <div>
+                    <strong>Route:</strong>
+                    @if (project.IsFormAMat.HasValue && project.IsFormAMat.Value)
+                    {
+                        <span>Form a MAT</span>
+                    } Transfer
+                </div>
+
+                <div><strong>Project reference</strong> @project.Reference</div>
+              @*   <div><strong>Local authority:</strong> NOT IMPLEMENTED</div>
+                <div><strong>Region:</strong> NOT IMPLEMENTED</div> *@
+                <div><strong>Outgoing trust:</strong> @project.OutgoingTrustNameInTitleCase</div>
+                @* <div><strong>Advisory board date:</strong> NOT IMPLEMENTED</div> *@
+                @if (string.IsNullOrWhiteSpace(project?.AssignedUser?.FullName))
+                {
+                    <div id="@("delivery-officer-" + index)"><strong>Assigned to:</strong> <span class="empty">Empty</span></div>
+                }
+                else
+                {
+                    <div id="@("delivery-officer-" + index)"><strong>Assigned to:</strong> <strong>@project.AssignedUser.FullName</strong></div>
+                }
+            </p>
+
+
+            <p class="govuk-!-margin-top-3">
+                @{
+
+                    var decisionClass = project.Status switch
+                    {
+                        "Approved" => "govuk-tag--green",
+                        "Deferred" => "govuk-tag--orange",
+                        "Withdrawn" => "govuk-tag--purple",
+                        _ => "govuk-tag--red"
+                    };
+
+                    if (string.IsNullOrEmpty(project.Status))
+                    {
+                        <strong class="govuk-tag govuk-tag--yellow">
+                            PRE ADVISORY BOARD
+                        </strong>
+                    }
+                    else
+                    {
+                        <strong class="@($"govuk-tag {decisionClass}")" }>
+                            @project.Status
+                        </strong>
+                    }
+                }
+            </p>
+        </td>
+    </tr>
+
+  
+    index++;
+}

@@ -3,9 +3,17 @@ name: .NET Build and Test
 on:
   push:
     branches: [ main ]
+    paths:
+    - 'Dfe.PrepareTransfers.*/**'
+    - '!end-to-end-tests/**'
+    - '**/*.csproj'
   pull_request:
     branches: [ main ]
     types: [ opened, synchronize, reopened]
+    paths:
+    - 'Dfe.PrepareTransfers.*/**'
+    - '!end-to-end-tests/**'
+    - '**/*.csproj'
 
 env:
   DOTNET_VERSION: '6.0.403'
@@ -15,23 +23,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Shallow clones disabled for a better relevancy of SC analysis
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Setup JDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'microsoft'
         java-version: ${{ env.JAVA_VERSION }}
 
     - name: Cache SonarCloud packages
-      uses: actions/cache@v1
+      uses: actions/cache@v4
       with:
         path: ~\sonar\cache
         key: ${{ runner.os }}-sonar

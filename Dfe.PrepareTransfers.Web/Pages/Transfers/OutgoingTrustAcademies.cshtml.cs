@@ -60,7 +60,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             var academyIdsString = string.Join(",", SelectedAcademyIds);
             HttpContext.Session.SetString(OutgoingAcademyIdSessionKey, academyIdsString);
 
-            return RedirectToAction(change ? "CheckYourAnswers" : "IncomingTrust", controllerName: "Transfers");
+            return RedirectToAction(change ? "CheckYourAnswers" : "IsFormAMat", controllerName: "Transfers");
         }
     }
 }

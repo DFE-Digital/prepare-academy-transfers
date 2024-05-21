@@ -1,0 +1,151 @@
+﻿@using Dfe.PrepareTransfers.Web.Utils
+@model Dfe.PrepareTransfers.Web.Models.ProjectList.ProjectListFilters
+<div class="moj-filter">
+
+    <div class="moj-filter__header">
+
+        <div class="moj-filter__header-title">
+            <h2 class="govuk-heading-m">Filter</h2>
+        </div>
+
+        <div class="moj-filter__header-action">
+        </div>
+
+    </div>
+
+    <div class="moj-filter__content">
+        <div if="Model.IsVisible" class="moj-filter__selected">
+
+            <div class="moj-filter__selected-heading">
+
+                <div class="moj-filter__heading-title">
+                    <h2 class="govuk-heading-m">Selected filters</h2>
+                </div>
+
+                <div class="moj-filter__heading-action">
+                    <p><a class="govuk-link govuk-link--no-visited-state" data-cy="clear-filter" href="@Url.RouteUrl(ViewContext.RouteData.Values)?clear">Clear filters</a></p>
+                </div>
+
+            </div>
+            @if (Model.SelectedOfficers.Length > 0)
+            {
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Assigned to</h3>
+
+                <ul class="moj-filter-tags">
+                    @{
+                        foreach (var officer in Model.SelectedOfficers)
+                        {
+                            <li><a class="moj-filter__tag" href="@Url.RouteUrl(ViewContext.RouteData.Values)?remove&selectedOfficers=@officer"><span class="govuk-visually-hidden">Remove this filter</span> @officer.Stub()</a></li>
+                        }
+                    }
+
+                </ul>
+            }
+            @if (Model.SelectedStatuses.Length > 0)
+            {
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Project status</h3>
+
+                <ul class="moj-filter-tags">
+                    @{
+                        foreach (var status in Model.SelectedStatuses)
+                        {
+                            <li><a class="moj-filter__tag" href="@Url.RouteUrl(ViewContext.RouteData.Values)?remove&SelectedStatuses=@status"><span class="govuk-visually-hidden">Remove this filter</span> @status.Stub()</a></li>
+                        }
+                    }
+
+                </ul>
+            }
+        </div>
+
+        <div class="moj-filter__options">
+            <form method="get" class="form">
+                <button class="govuk-button" data-module="govuk-button" data-test-id="submit-button" data-cy='select-projectlist-filter-apply'>
+                    Apply filters
+                </button>
+
+                <div class="govuk-form-group">
+                    <label class="govuk-label govuk-label--m" for="projects">
+                        Search for projects
+                    </label>
+                    <span class="govuk-hint">You can search by school name, academy name, trust name, URN, UKPRN and project reference</span>
+                    <input id="Title" name="Title" asp-for="Title" type="text" class="govuk-input" aria-describedby="filter-project-title-hint"
+                           data-cy="select-projectlist-filter-title">
+
+                </div>
+
+                <div class="govuk-form-group">
+
+                    <fieldset class="govuk-fieldset">
+                        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                            <div class="govuk-accordion__section">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-officers-heading">
+                                            Assigned to
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div class="govuk-accordion__section-content" aria-labelledby="accordion-officers-heading">
+                                    <input type="text" class="govuk-input govuk-!-display-none govuk-!-margin-bottom-2" id="filter-searches" placeholder="Type to filter officers...">
+                                    <div class="govuk-checkboxes">
+                                        @{
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="filter-delivery-officer-not-assigned"
+                                                       name="selectedOfficers" type="checkbox" value="Not assigned" @(Model.SelectedOfficers.Contains("Not assigned") ? "checked" : null)
+                                                       data-cy="select-projectlist-filter-officer-not-assigned">
+                                                <label class="govuk-label govuk-checkboxes__label" for="filter-delivery-officer-not-assigned">
+                                                    Not assigned
+                                                </label>
+                                            </div>
+                                            foreach (var officer in Model.AvailableDeliveryOfficers)
+                                            {
+                                                <div class="govuk-checkboxes__item">
+                                                    <input class="govuk-checkboxes__input" id="filter-delivery-officer-@officer.Stub()" name="selectedOfficers" type="checkbox" value="@officer" data-cy="select-projectlist-filter-officer-@officer"
+                                                    @(Model.SelectedOfficers.Contains(officer) ? "checked" : null) />
+                                                    <label class="govuk-label govuk-checkboxes__label" for="filter-delivery-officer-@officer.Stub()">
+                                                        @officer
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="govuk-accordion__section">
+                                <div class="govuk-accordion__section-header">
+                                    <h2 class="govuk-accordion__section-heading">
+                                        <span class="govuk-accordion__section-button" id="accordion-project-statuses-heading" data-cy="select-projectlist-filter-project-status">
+                                            Project Status
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div class="govuk-accordion__section-content" aria-labelledby="accordion-project-statuses-heading">
+                                    <input type="text" class="govuk-input govuk-!-display-none govuk-!-margin-bottom-2" id="filter-searches" placeholder="Type to filter project statuses...">
+                                    <div class="govuk-checkboxes">
+                                        @foreach (var status in Model.AvailableStatuses)
+                                        {
+                                            <div class="govuk-checkboxes__item">
+                                                <input class="govuk-checkboxes__input" id="filter-project-status-@status.Stub()" name="selectedStatuses" type="checkbox" value="@status" data-cy="select-projectlist-filter-status-@status"
+                                                @(Model.SelectedStatuses.Contains(status) ? "checked" : null) />
+                                                <label class="govuk-label govuk-checkboxes__label" for="filter-project-status-@status.Stub()">
+                                                    @status
+                                                </label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="~/src/filter.js" asp-add-nonce></script>
+
+

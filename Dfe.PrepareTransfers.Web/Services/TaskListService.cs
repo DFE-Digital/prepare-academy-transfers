@@ -21,7 +21,7 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             var project = _projectRepository.GetByUrn(indexPage.Urn).Result;
             indexPage.ProjectReference = project.Result.Reference;
-            indexPage.IncomingTrustName = project.Result.IncomingTrustName.ToTitleCase();
+            indexPage.IncomingTrustName = !string.IsNullOrEmpty(project.Result.IncomingTrustName) ? project.Result.IncomingTrustName.ToTitleCase() : project.Result.OutgoingTrustName.ToTitleCase();
             indexPage.Academies = project.Result.TransferringAcademies
                 .Select(a => new Tuple<string, string>(a.OutgoingAcademyUkprn,a.OutgoingAcademyName)).ToList();
             indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);
@@ -30,7 +30,9 @@ namespace Dfe.PrepareTransfers.Web.Services
             indexPage.BenefitsAndOtherFactorsStatus = GetBenefitsAndOtherFactorsStatus(project.Result);
             indexPage.LegalRequirementsStatus = GetLegalRequirementsStatus(project.Result);
             indexPage.RationaleStatus = GetRationaleStatus(project.Result);
+            indexPage.ProjectStatus = project.Result.Status;
             indexPage.AssignedUser = project.Result.AssignedUser;
+            indexPage.IsFormAMAT = project.Result.IsFormAMat.HasValue && project.Result.IsFormAMat.Value;
         }
 
         private static ProjectStatuses GetAcademyAndTrustInformationStatus(Project project)

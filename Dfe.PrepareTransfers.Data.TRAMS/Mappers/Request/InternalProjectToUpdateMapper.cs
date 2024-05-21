@@ -46,8 +46,11 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             return new TransferProjectCreate
             {
                 OutgoingTrustUkprn = input.OutgoingTrustUkprn,
+                OutgoingTrustName = input.OutgoingTrustName,
                 IncomingTrustUkprn = input.IncomingTrustUkprn,
-                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList()
+                IncomingTrustName = input.IncomingTrustName,
+                TransferringAcademyUkprns = input.TransferringAcademies.Select(x => x.OutgoingAcademyUkprn).ToList(),
+                IsFormAMat = input.IsFormAMat
             };
         }
 
@@ -68,6 +71,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
                 TypeOfTransfer = input.Features.TypeOfTransfer.ToString(),
                 OtherTransferTypeDescription = input.Features.OtherTypeOfTransfer,
                 WhoInitiatedTheTransfer = input.Features.ReasonForTheTransfer.ToString(),
+                SpecificReasonsForTransfer = input.Features.SpecificReasonsForTheTransfer.Select(x => x.ToString()).ToList(),
                 IsCompleted = input.Features.IsCompleted
             };
         }

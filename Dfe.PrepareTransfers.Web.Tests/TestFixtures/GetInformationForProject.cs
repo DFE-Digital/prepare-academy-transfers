@@ -28,6 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.TestFixtures
                 Features = new TransferFeatures
                 {
                     ReasonForTheTransfer = TransferFeatures.ReasonForTheTransferTypes.Dfe,
+                    SpecificReasonsForTheTransfer = new List<TransferFeatures.SpecificReasonForTheTransferTypes>() { TransferFeatures.SpecificReasonForTheTransferTypes.Finance, TransferFeatures.SpecificReasonForTheTransferTypes.Safeguarding },
                     TypeOfTransfer = TransferFeatures.TransferTypes.SatClosure
                 },
                 Benefits = new TransferBenefits

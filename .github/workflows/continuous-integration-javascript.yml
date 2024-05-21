@@ -2,20 +2,20 @@ name: Cypress test linting
 
 on:
   pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
     paths:
-      - end-to-end-tests
-    types: [opened, synchronize]
+      - end-to-end-tests/**
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      working-directory: end-to-end-tests
     steps:
       - name: checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: lint cypress tests
         run: |
+          cd end-to-end-tests
           npm ci
           npm run lint        

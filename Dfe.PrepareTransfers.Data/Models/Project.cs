@@ -17,6 +17,7 @@ namespace Dfe.PrepareTransfers.Data.Models
             AcademyAndTrustInformation = new TransferAcademyAndTrustInformation();
         }
 
+        public int Id { get; set; }
         public string Urn { get; set; }
         public string Reference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
@@ -38,5 +39,6 @@ namespace Dfe.PrepareTransfers.Data.Models
         public string IncomingTrustUkprn => TransferringAcademies[0].IncomingTrustUkprn;
         public string IncomingTrustName => TransferringAcademies[0].IncomingTrustNameInTitleCase;
         public User AssignedUser { get; set; }
+        public bool? IsFormAMat { get; set; }
     }
 }

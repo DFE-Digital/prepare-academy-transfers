@@ -1,5 +1,5 @@
 module "azure_container_apps_hosting" {
-  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.4.5"
+  source = "github.com/DFE-Digital/terraform-azurerm-container-apps-hosting?ref=v1.6.2"
 
   environment    = local.environment
   project_name   = local.project_name
@@ -12,6 +12,7 @@ module "azure_container_apps_hosting" {
   registry_admin_enabled                = local.registry_admin_enabled
   registry_use_managed_identity         = local.registry_use_managed_identity
   registry_managed_identity_assign_role = local.registry_managed_identity_assign_role
+  registry_server                       = local.registry_server
 
   enable_event_hub                          = local.enable_event_hub
   enable_logstash_consumer                  = local.enable_logstash_consumer
@@ -21,11 +22,13 @@ module "azure_container_apps_hosting" {
   dns_zone_domain_name = local.dns_zone_domain_name
   dns_ns_records       = local.dns_ns_records
   dns_txt_records      = local.dns_txt_records
+  dns_mx_records       = local.dns_mx_records
 
   image_name                             = local.image_name
   container_command                      = local.container_command
   container_secret_environment_variables = local.container_secret_environment_variables
   container_max_replicas                 = local.container_max_replicas
+  container_scale_http_concurrency       = local.container_scale_http_concurrency
 
   enable_cdn_frontdoor                      = local.enable_cdn_frontdoor
   cdn_frontdoor_forwarding_protocol         = local.cdn_frontdoor_forwarding_protocol
@@ -37,6 +40,7 @@ module "azure_container_apps_hosting" {
   cdn_frontdoor_origin_fqdn_override        = local.cdn_frontdoor_origin_fqdn_override
   cdn_frontdoor_origin_host_header_override = local.cdn_frontdoor_origin_host_header_override
   cdn_frontdoor_health_probe_protocol       = local.cdn_frontdoor_health_probe_protocol
+  enable_cdn_frontdoor_health_probe         = local.enable_cdn_frontdoor_health_probe
   container_apps_allow_ips_inbound          = local.container_apps_allow_ips_inbound
 
   container_health_probe_path     = local.container_health_probe_path

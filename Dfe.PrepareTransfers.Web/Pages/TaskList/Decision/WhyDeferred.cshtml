@@ -1,0 +1,65 @@
+﻿@page "/task-list/{urn}/decision/why-deferred"
+@using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
+@using Dfe.Academisation.ExtensionMethods
+@using Dfe.PrepareTransfers.Extensions
+@model Dfe.PrepareTransfers.Pages.TaskList.Decision.WhyDeferredModel
+@{
+   ViewData["Title"] = $"Why project was {Model.DecisionText}";
+   Layout = "_Layout";
+}
+
+@section BeforeMain
+{
+   <partial name="_BackLink" model="@Model.BackLinkModel"/> 
+   <partial name="_ErrorSummary"/>
+}
+
+<span id="selection-span" class="govuk-caption-l">Record the decision</span>
+<h1 class="govuk-heading-l">Why was this project deferred?</h1>
+
+<form method="post">
+   <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset">
+         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+         </legend>
+         <div class="govuk-checkboxes @ModelState.GetErrorStyleClass()" data-module="govuk-checkboxes" id="WasReasonGiven">
+
+            <input type="hidden" asp-for="@Model.WasReasonGiven"/>
+
+            @{
+               CheckBoxAndLabel(AdvisoryBoardDeferredReason.AdditionalInformationNeeded, Model.AdditionalInformationNeededIsChecked, Model.AdditionalInformationNeededDetails);
+               CheckBoxAndLabel(AdvisoryBoardDeferredReason.AwaitingNextOfstedReport, Model.AwaitingNextOfstedReportIsChecked, Model.AwaitingNextOfstedReportDetails);
+               CheckBoxAndLabel(AdvisoryBoardDeferredReason.PerformanceConcerns, Model.PerformanceConcernsIsChecked, Model.PerformanceConcernsDetails);
+               CheckBoxAndLabel(AdvisoryBoardDeferredReason.Other, Model.OtherIsChecked, Model.OtherDetails);
+            }
+         </div>
+      </fieldset>
+   </div>
+
+   <button class="govuk-button" data-module="govuk-button" id="submit-btn">
+      Continue
+   </button>
+</form>
+
+@{
+   void CheckBoxAndLabel(AdvisoryBoardDeferredReason deferredReason, bool isChecked, string details)
+   {
+      <div class="govuk-checkboxes__item" id="@(deferredReason)Details">
+         <input class="govuk-checkboxes__input" id="@deferredReason.ToString().ToLower()-checkbox" name="@(deferredReason)IsChecked" type="checkbox"
+                data-aria-controls="conditional-@deferredReason" value="true" @(isChecked ? "checked" : "")>
+         <label class="govuk-label govuk-checkboxes__label" for="@deferredReason.ToString().ToLower()-checkbox">
+            @deferredReason.ToDescription()
+         </label>
+      </div>
+      <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@deferredReason">
+         <div class="govuk-form-group">
+            <label class="govuk-label" for="@deferredReason.ToString().ToLower()-txtarea">
+               Give reasons
+            </label>
+            <textarea class="govuk-textarea govuk-!-width-three-quarters" id="@deferredReason.ToString().ToLower()-txtarea" 
+                                name="@(deferredReason)Details" rows="5" aria-describedby="more-detail-hint">@details</textarea>
+         </div>
+
+      </div>
+   }
+}

@@ -27,13 +27,15 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             _referenceNumberService = referenceNumberService;
             _academyRepository = academyRepository;
         }
-        
+
         [BindProperty]
         public Trust OutgoingTrust { get; set; }
         [BindProperty]
         public List<Academy> OutgoingAcademies { get; set; }
         [BindProperty]
         public Trust IncomingTrust { get; set; }
+        [BindProperty]
+        public string ProposedTrustName { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -45,6 +47,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             OutgoingTrust = outgoingTrustResponse;
 
             var incomingTrustIdString = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
+            ProposedTrustName = HttpContext.Session.GetString(ProposedTrustNameSessionKey);
 
             if (incomingTrustIdString != null)
             {
@@ -52,6 +55,9 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
 
                 IncomingTrust = incomingTrustResponse;
             }
+
+            string isFormAMat = HttpContext.Session.GetString(IsFormAMatSessionKey);
+            IsFormAMAT = !string.IsNullOrEmpty(isFormAMat) && isFormAMat.ToLower().Equals("true");
 
             OutgoingAcademies = await _academyRepository.GetAcademiesByTrustUkprn(outgoingTrustResponse.Ukprn);
             OutgoingAcademies = OutgoingAcademies.Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
@@ -63,11 +69,13 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
         {
             var outgoingTrustId = HttpContext.Session.GetString(OutgoingTrustIdSessionKey);
             var incomingTrustId = HttpContext.Session.GetString(IncomingTrustIdSessionKey);
+            var proposedTrustName = HttpContext.Session.GetString(ProposedTrustNameSessionKey);
+            var isFormAMat = HttpContext.Session.GetString(IsFormAMatSessionKey);
+
             var academyIds = Session.GetStringListFromSession(HttpContext.Session, OutgoingAcademyIdSessionKey);
 
             //Redirect any duplicate requests (Session has been cleared)
-            if (string.IsNullOrWhiteSpace(outgoingTrustId) || string.IsNullOrWhiteSpace(incomingTrustId) ||
-                !academyIds.Any())
+            if (string.IsNullOrWhiteSpace(outgoingTrustId) || !academyIds.Any())
             {
                 var urnCreated = HttpContext.Session.GetString(ProjectCreatedSessionKey);
                 return !string.IsNullOrWhiteSpace(urnCreated)
@@ -81,11 +89,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             var project = new Project
             {
                 OutgoingTrustUkprn = outgoingTrustId,
+                OutgoingTrustName = OutgoingTrust.Name,
                 TransferringAcademies = academyIds.Select(id => new TransferringAcademies
                 {
                     OutgoingAcademyUkprn = id.ToString(),
-                    IncomingTrustUkprn = incomingTrustId
-                }).ToList()
+                    IncomingTrustUkprn = IsFormAMAT ? null:  incomingTrustId,
+                    IncomingTrustName = IsFormAMAT ? proposedTrustName : IncomingTrust.Name,
+                }).ToList(),
+                IsFormAMat = !string.IsNullOrEmpty(isFormAMat) && isFormAMat.ToLower().Equals("true")
             };
 
             var createResponse = await _projectsRepository.Create(project);
@@ -93,6 +104,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
             HttpContext.Session.Remove(OutgoingTrustIdSessionKey);
             HttpContext.Session.Remove(IncomingTrustIdSessionKey);
             HttpContext.Session.Remove(OutgoingAcademyIdSessionKey);
+            HttpContext.Session.Remove(ProposedTrustNameSessionKey);
+            HttpContext.Session.Remove(IsFormAMatSessionKey);
 
             return RedirectToPage($"/Projects/{nameof(Projects.Index)}", new
             {
