@@ -5,6 +5,9 @@ const { verifyDownloadTasks } = require('cy-verify-downloads')
 export default defineConfig({
   video: false,
   userAgent: 'PrepareTransfers/1.0 Cypress',
+  
+  chromeWebSecurity: false, // Disable Chrome web security to allow cross-origin requests and cookies
+  
   e2e: {
     // eslint-disable-next-line no-unused-vars
     setupNodeEvents(on, config) {
