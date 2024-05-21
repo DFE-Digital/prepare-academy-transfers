@@ -1,6 +1,7 @@
 @using Dfe.Academisation.ExtensionMethods
 @using Dfe.PrepareTransfers.Data.Models
 @using Dfe.PrepareTransfers.Data.Models.Projects
+@using Microsoft.AspNetCore.Html
 
 @model IEnumerable<ProjectSearchResult>
 
@@ -26,7 +27,19 @@
             <p class="govuk-!-margin-top-3">
                 <div>
                     <strong>UKPRN:</strong>
-                    @((!project.IsFormAMat.HasValue || !project.IsFormAMat.Value) ? @firstOutgoingAcademy?.IncomingTrustUkprn : @project.OutgoingTrustUkprn)
+                    @{
+                        var result = !project.IsFormAMat.HasValue || !project.IsFormAMat.Value
+                        ? string.IsNullOrEmpty(firstOutgoingAcademy?.IncomingTrustUkprn)
+                        ? new HtmlString("<span class=\"empty\">Empty</span>")
+                        : new HtmlString(firstOutgoingAcademy?.IncomingTrustUkprn)
+                        : string.IsNullOrEmpty(project?.OutgoingTrustUkprn)
+                        ? new HtmlString("<span class=\"empty\">Empty</span>")
+                        : new HtmlString(project?.OutgoingTrustUkprn);
+                    }
+
+                    @result
+
+
                 </div>
                 <div>
                     <strong>Route:</strong>
