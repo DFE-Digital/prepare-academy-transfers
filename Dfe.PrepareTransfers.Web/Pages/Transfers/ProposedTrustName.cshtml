@@ -28,7 +28,7 @@
                         </h1>
                     </legend>
                     <p asp-gds-validation-for="ProposedTrustName"></p>
-                    <input class="govuk-input" name="ProposedTrustName" id="ProposedTrustName" type="text" aria-describedby="query-hint" value="@Model.ProposedTrustName" />
+                    <input class="govuk-input" name="ProposedTrustName" id="ProposedTrustName" data-cy="ProposedTrustNameID" type="text" aria-describedby="query-hint" value="@Model.ProposedTrustName" />
                     <input hidden type="text" name="change" value="@ViewData["ChangeLink"].ToString()" />
                 </fieldset>
             </div>
