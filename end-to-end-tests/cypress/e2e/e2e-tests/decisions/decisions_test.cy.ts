@@ -23,7 +23,7 @@ describe('Transfer Project Tests', () => {
     transferProject.selectOptionById('false');
     transferProject.submitForm();
 
-    // Assertion for trust name and Companies House number
+    // Assertion for trust name and URN Number
     transferProject.assertTrustName('Greater Manchester Academies Trust');
     transferProject.assertURNNumber('136105');
 
