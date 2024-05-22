@@ -115,7 +115,7 @@ jobs:
       - name: Npm install
         run: npm install
 
-      - name: Run cypress (dev)
+      - name: Run cypress (${{ needs.set-env.outputs.environment }})
         run: npm run cy:run -- --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}, academisationApiUrl=${{secrets.CYPRESS_ACADEMISATION_API_URL}}, academisationApiKey=${{ secrets.CYPRESS_ACADEMISATION_API_KEY}}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
@@ -124,7 +124,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-dev
+          name: screenshots-${{ needs.set-env.outputs.environment }}
           path: end-to-end-tests/cypress/screenshots
 
       - name: Generate report
@@ -137,11 +137,11 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reports-dev
+          name: reports-${{ needs.set-env.outputs.environment }}
           path: end-to-end-tests/cypress/mochareports
 
       - name: Report results
         if: always()
-        run: npm run cy:notify -- --custom-text="Environment dev, See more information https://github.com/DFE-Digital/prepare-academy-transfers/actions/runs/${{github.run_id}}"
+        run: npm run cy:notify -- --custom-text="Environment ${{ needs.set-env.outputs.environment }}, See more information https://github.com/DFE-Digital/prepare-academy-transfers/actions/runs/${{github.run_id}}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
