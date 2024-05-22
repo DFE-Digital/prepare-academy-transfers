@@ -63,15 +63,10 @@ describe('Create a new transfer', () => {
           outgoingTrustAcademiesPage.selectOptionYes();
           outgoingTrustAcademiesPage.submitForm();
 
-      // // Select the option (Is there a preferred trust for these academies?) with id "false", then click continue
-      // outgoingTrustAcademiesPage.selectOptionById('false');
-      // outgoingTrustAcademiesPage.submitForm();
-
+   
       incomingTrustSearchPage
         .searchTrustsByName(incomingTrustData.name)
 
-      // incomingTrustSearchResultsPage
-      //   .selectTrust(incomingTrustData.name)
 
       checkAnswersPage
         .checkDetails(outgoingTrustData, incomingTrustData)
