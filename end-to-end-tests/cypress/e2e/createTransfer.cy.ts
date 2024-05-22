@@ -5,7 +5,6 @@ import outgoingTrustSearchResultsPage from 'cypress/pages/outgoingTrustSearchRes
 import outgoingTrustDetailsPage from 'cypress/pages/outgoingTrustDetailsPage'
 import outgoingTrustAcademiesPage from 'cypress/pages/outgoingTrustAcademies'
 import incomingTrustSearchPage from 'cypress/pages/incomingTrustSearch'
-import incomingTrustSearchResultsPage from 'cypress/pages/incomingTrustSearchResults'
 import checkAnswersPage from 'cypress/pages/checkAnswers'
 import projectPage from 'cypress/pages/project'
 import benefitsPage from 'cypress/pages/benefits'
@@ -17,6 +16,8 @@ import previewPage from 'cypress/pages/preview'
 import projectAssignmentPage from 'cypress/pages/projectAssignment'
 import rationalePage from 'cypress/pages/rationale'
 import trustInformationProjectDatesPage from 'cypress/pages/trustInformationProjectDates'
+
+
 
 describe('Create a new transfer', () => {
 
@@ -58,11 +59,19 @@ describe('Create a new transfer', () => {
       outgoingTrustAcademiesPage.selectSingleAcademy(outgoingTrustData.academies)
         .continue()
 
+          // Select the option (Is the result of this transfer the formation of a new trust?) with id "false", then click continue
+          outgoingTrustAcademiesPage.selectOptionYes();
+          outgoingTrustAcademiesPage.submitForm();
+
+      // // Select the option (Is there a preferred trust for these academies?) with id "false", then click continue
+      // outgoingTrustAcademiesPage.selectOptionById('false');
+      // outgoingTrustAcademiesPage.submitForm();
+
       incomingTrustSearchPage
         .searchTrustsByName(incomingTrustData.name)
 
-      incomingTrustSearchResultsPage
-        .selectTrust(incomingTrustData.name)
+      // incomingTrustSearchResultsPage
+      //   .selectTrust(incomingTrustData.name)
 
       checkAnswersPage
         .checkDetails(outgoingTrustData, incomingTrustData)

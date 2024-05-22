@@ -4,9 +4,9 @@ class IncomingTrustSearchPage {
 
   public searchTrustsByName(trustName): this {
 
-    cy.get('#SearchQuery').type(trustName)
+    cy.get('[data-cy="ProposedTrustNameID"]').type(trustName)
 
-    cy.get('button').contains('Search').click()
+    cy.get('button').contains('Continue').click()
 
     return this
   }

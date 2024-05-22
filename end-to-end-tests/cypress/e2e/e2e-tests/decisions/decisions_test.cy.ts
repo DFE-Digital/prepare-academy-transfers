@@ -1,80 +1,57 @@
-describe('Transfer Project Tests', () => {
+import { NewTransferProjectWithDecisions } from 'cypress/pages/newTransferProjectWithDecisions';
 
-    beforeEach(() => {
-      cy.visit(Cypress.env('url'));
-    });
-  
-    it('Creating a transfer project', () => {
-      // Step 2: Click on "Create a new transfer project"
-      cy.get('[data-test="create-transfer"]').click();
-  
-      // Step 3: Assertion for trust name and Companies House number
-      cy.get('.govuk-summary-list__value').should('contain', 'Greater Manchester Academies Trust');
-      cy.get('.govuk-summary-list__value').should('contain', '06754335');
-  
-      // Step 4: Click continue
-      cy.get('[data-test="confirm-outgoing-trust"]').click();
-  
-      // Step 5: Select the option with id "10030221"
-      cy.get('#10030221').click();
-  
-      // Step 6: Click submit
-      cy.get('[type="submit"]').click();
-  
-      // Step 7: Select the option with id "false", then click continue
-      cy.get('#false').click();
-      cy.get('[type="submit"]').click();
-  
-      // Step 8: Select the option with id "false", then click continue
-      cy.get('#false').click();
-      cy.get('[type="submit"]').click();
-  
-      // Step 12: Click submit
-      cy.get('[type="submit"]').click();
-  
-      // Step 13: Click on "Record a decision" button
-      cy.contains('Record a decision').click();
-  
-      // Step 14: Click on "Record a decision" button
-      cy.get('#record-decision-link').click();
-  
-      // Step 15: Click on "Deferred" radio button, then click submit
-      cy.get('#deferred-radio').click();
-      cy.get('#submit-btn').click();
-  
-      // Step 16: Click on "Grade 6" radio button, then click submit
-      cy.get('#grade6-radio').click();
-      cy.get('#submit-btn').click();
-  
-      // Step 17: Enter "Fahad Darwish" in the text field, then click continue
-      cy.get('#decision-maker-name').type('Fahad Darwish');
-      cy.get('#submit-btn').click();
-  
-      // Step 18: Click on "Performance concerns" checkbox, enter "Cypress Test", then click submit
-      cy.get('#performanceconcerns-checkbox').check();
-      cy.get('#performanceconcerns-txtarea').type('Cypress Test');
-      cy.get('#submit-btn').click();
-  
-      // Step 19: Enter date and click submit
-      cy.get('#decision-date-day').type('12');
-      cy.get('#decision-date-month').type('12');
-      cy.get('#decision-date-year').type('2023');
-      cy.get('#submit-btn').click();
-  
-      // Step 20: Click submit
-      cy.get('#submit-btn').click();
-  
-      // Step 21: Click submit
-      cy.get('#submit-btn').click();
-  
-      // Step 22: Click on "Record a decision" and verify the information matches
-      cy.contains('Record a decision').click();
-      cy.get('#decision').should('contain', 'Deferred');
-      cy.get('#decision-made-by').should('contain', 'Deputy Director');
-      cy.get('#deferred-reasons').should('contain', 'Performance concerns:');
-      cy.get('#deferred-reasons').should('contain', 'Cypress Test');
-      cy.get('#decision-date').should('contain', '12 December 2023');
-    });
-  
+describe('Transfer Project Tests', () => {
+  const transferProject = new NewTransferProjectWithDecisions();
+
+  beforeEach(() => {
+    transferProject.visit(Cypress.env('url'));
   });
-  
+
+  it('Creating a transfer project and checking Decision of that project', () => {
+    transferProject.createNewTransferProject();
+    transferProject.searchOutgoingTrust('Greater Manchester Academies Trust');
+    transferProject.selectOutgoingTrust('10058252');
+    transferProject.confirmOutgoingTrust();
+    transferProject.selectOptionById('10030221');
+    transferProject.submitForm();
+
+    // Select the option (Is the result of this transfer the formation of a new trust?) with id "false", then click continue
+    transferProject.selectOptionById('false');
+    transferProject.submitForm();
+
+    // Select the option (Is there a preferred trust for these academies?) with id "false", then click continue
+    transferProject.selectOptionById('false');
+    transferProject.submitForm();
+
+    // Assertion for trust name and Companies House number
+    transferProject.assertTrustName('Greater Manchester Academies Trust');
+    transferProject.assertURNNumber('136105');
+
+    // Click continue
+    transferProject.createProjectButton();
+
+    // Click on "Record a decision" button
+    transferProject.recordDecision();
+
+    // Click on "Deferred" radio button, then click submit
+    transferProject.makeDecision('deferred');
+
+    // Click on "Grade 6" radio button, then click submit
+    transferProject.makeDecision('grade6');
+
+    // Enter "Fahad Darwish" in the text field, then click continue
+    transferProject.enterDecisionMakerName('Fahad Darwish');
+
+    // Click on "Performance concerns" checkbox, enter "Cypress Test", then click submit
+    transferProject.addPerformanceConcerns('Cypress Test');
+
+    // Enter date and click submit
+    transferProject.enterDecisionDate('12', '12', '2023');
+
+    // Click submit
+    transferProject.submitFormRecordDecision();
+
+    // Click on "Record a decision" and verify the information matches
+    transferProject.verifyDecisionDetails();
+  });
+});

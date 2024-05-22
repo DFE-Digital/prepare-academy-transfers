@@ -67,7 +67,7 @@ class HomePage {
 
   public clearFilters(): this {
 
-    cy.get('a').contains('Clear filters').click()
+    cy.get('[data-cy="clear-filter"]').click()
 
     return this
   }

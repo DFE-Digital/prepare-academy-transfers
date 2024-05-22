@@ -37,7 +37,7 @@ class TrustInformationProjectDatesPage {
     
     cy.get('dd').eq(0).should('contain.text', advisoryBoardDate.format('D MMMM YYYY'))
     cy.get('dd').eq(5).should('contain.text', projectName)
-    cy.get('dd').eq(6).should('contain.text', transferDate.format('1 MMMM YYYY'))
+    cy.get('dd').eq(7).should('contain.text', transferDate.format('1 MMMM YYYY'))
 
     return this
   }

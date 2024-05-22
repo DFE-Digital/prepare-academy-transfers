@@ -51,7 +51,7 @@ beforeEach(() => {
         { url: Cypress.env('url') + '**', middleware: true },
         //Add authorization to all Cypress requests
         (req) => {
-            req.headers['Authorization'] = 'Bearer' + Cypress.env('authorizationHeader'),
+            req.headers['Authorization'] = 'Bearer ' + Cypress.env('authorizationHeader'),
             req.headers['AuthorizationRole'] = 'transfers.create'
         }
     )

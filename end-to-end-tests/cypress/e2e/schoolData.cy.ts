@@ -10,7 +10,6 @@ describe('School Data', () => {
 
     homePage
       .open()
-      .toggleFilterProjects(true)
       .filterProjects(trustName)
       .selectFirstProject()
 

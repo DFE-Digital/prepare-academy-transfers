@@ -1,26 +1,33 @@
-import { BasePage } from './basePage'
+import { BasePage } from './basePage';
 
 class CheckAnswersPage extends BasePage {
 
-  public slug = 'transfers/checkyouranswers'
+  public slug = 'transfers/checkyouranswers';
 
   public checkDetails(outgoingTrust, incomingTrust): this {
 
-    cy.get('.govuk-grid-column-full').as('trustAcademiesDetails')
+    cy.get('.govuk-grid-column-full').as('trustAcademiesDetails');
 
-    cy.get('@trustAcademiesDetails').should('contain.text', outgoingTrust.name)
-    cy.get('@trustAcademiesDetails').should('contain.text', outgoingTrust.ukPrn)
+    cy.get('@trustAcademiesDetails').then($el => {
+      const textContent = $el.text().trim();
+      
+      expect(textContent).to.contain(outgoingTrust.name.trim());
+      expect(textContent).to.contain(outgoingTrust.ukPrn.trim());
+      expect(textContent).to.contain(outgoingTrust.academies.trim());
+      expect(textContent).to.contain(incomingTrust.name.trim());
+      //expect(textContent).to.contain(incomingTrust.ukPrn.trim());
+    });
 
-    cy.get('@trustAcademiesDetails').should('contain.text', outgoingTrust.academies)
+    return this;
+  }
 
-    cy.get('@trustAcademiesDetails').should('contain.text', incomingTrust.name)
-    cy.get('@trustAcademiesDetails').should('contain.text', incomingTrust.ukPrn)
-
-    return this
+  public continue(): this {
+    cy.get('button.govuk-button').contains('Continue').click();
+    return this;
   }
 
 }
 
-const checkAnswersPage = new CheckAnswersPage()
+const checkAnswersPage = new CheckAnswersPage();
 
-export default checkAnswersPage
+export default checkAnswersPage;
