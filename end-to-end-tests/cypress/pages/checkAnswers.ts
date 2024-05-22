@@ -15,7 +15,7 @@ class CheckAnswersPage extends BasePage {
       expect(textContent).to.contain(outgoingTrust.ukPrn.trim());
       expect(textContent).to.contain(outgoingTrust.academies.trim());
       expect(textContent).to.contain(incomingTrust.name.trim());
-      //expect(textContent).to.contain(incomingTrust.ukPrn.trim());
+      
     });
 
     return this;
