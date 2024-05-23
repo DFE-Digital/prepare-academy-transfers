@@ -17,8 +17,6 @@ import projectAssignmentPage from 'cypress/pages/projectAssignment'
 import rationalePage from 'cypress/pages/rationale'
 import trustInformationProjectDatesPage from 'cypress/pages/trustInformationProjectDates'
 
-
-
 describe('Create a new transfer', () => {
 
   let outgoingTrustData, incomingTrustData, projectId
