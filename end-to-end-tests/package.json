@@ -4,8 +4,17 @@
   "description": "Automated regression tests for the Academy Transfers service",
   "main": "index.js",
   "scripts": {
+    "cy:open": "cypress open --browser edge",
+    "cy:run": "npm run clean:reports && cypress run --browser edge",
+    "cy:zap": "npm run clean:reports && cypress run --browser electron",
+    "cy:notify": "cypress-slack-reporter",
+    "clean:reports": "rm -rf cypress/reports/mocha/*.json",
+    "combine:reports": "mochawesome-merge  cypress/reports/mocha/*.json> mochareports/report.json",
+    "create:html:report": "marge  mochareports/report.json -f report -o mochareports",
+    "generate:html:report": "npm run combine:reports && npm run create:html:report",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
+
   "repository": {
     "type": "git",
     "url": "https://github.com/DFE-Digital/prepare-academy-transfers.git"
@@ -15,10 +24,8 @@
     "cypress"
   ],
   "contributors": [
-    "Mike Dally",
-    "Lisa Sau",
-    "Richika Dogra",
-    "Chris Sherlock"
+    "Chris Sherlock",
+    "Fahad Darwish"
   ],
   "license": "ISC",
   "bugs": {
@@ -34,6 +41,7 @@
     "cypress-axe": "^1.2.0",
     "dayjs": "^1.11.10",
     "eslint-plugin-cypress": "^2.12.1",
+    "cypress-slack-reporter": "^1.5.3",
     "typescript": "^5.3.3",
     "zaproxy": "^2.0.0-rc.2"
   }

@@ -18,11 +18,11 @@
         <dl class="govuk-summary-list govuk-summary-list--no-border">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Trust name</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.Name.ToTitleCase()</dd>
+                <dd class="govuk-summary-list__value" data-cy="trust_name">@Model.Trust.Name.ToTitleCase()</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Companies House number</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.CompaniesHouseNumber</dd>
+                <dd class="govuk-summary-list__value" data-cy="companyHouseNo">@Model.Trust.CompaniesHouseNumber</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Type</dt>
@@ -30,7 +30,7 @@
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">UKPRN</dt>
-                <dd class="govuk-summary-list__value">@Model.Trust.Ukprn</dd>
+                <dd class="govuk-summary-list__value" data-cy="UKPRN">@Model.Trust.Ukprn</dd>
             </div>
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Address</dt>

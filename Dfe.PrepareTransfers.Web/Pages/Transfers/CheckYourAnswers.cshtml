@@ -21,7 +21,7 @@
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">Name</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Name.ToTitleCase()</dd>
+                <dd class="govuk-summary-list__value" data-cy="trust_Name">@Model.OutgoingTrust.Name.ToTitleCase()</dd>
                 <dd class="govuk-summary-list__actions">
                     <a class="govuk-link" asp-page="/Transfers/TrustName" asp-route-change="true">
                         Change <span class="govuk-visually-hidden"> outgoing trust</span>
@@ -30,7 +30,7 @@
             </div>
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                 <dt class="govuk-summary-list__key">UKPRN</dt>
-                <dd class="govuk-summary-list__value">@Model.OutgoingTrust.Ukprn</dd>
+                <dd class="govuk-summary-list__value" data-cy="UKPRN">@Model.OutgoingTrust.Ukprn</dd>
             </div>
         </dl>
         @foreach (var academy in Model.OutgoingAcademies)
@@ -46,7 +46,7 @@
                 </div>
                 <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">URN</dt>
-                    <dd class="govuk-summary-list__value">@academy.Urn</dd>
+                    <dd class="govuk-summary-list__value" data-cy="URN_Id">@academy.Urn</dd>
                 </div>
                 <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
                     <dt class="govuk-summary-list__key">Local Authority</dt>
