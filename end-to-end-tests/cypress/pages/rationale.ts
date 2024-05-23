@@ -8,7 +8,8 @@ class RationalePage {
 
     cy.get('h1').should('contain.text', 'Write the rationale for the project')
 
-    cy.get('[data-test="project-rationale"]').clear().type('Cypress project rationale')
+    cy.get('[data-test="project-rationale"]').clear()
+    cy.get('[data-test="project-rationale"]').type('Cypress project rationale')
 
     cy.get('button').contains('Save and continue').click()
 
@@ -24,7 +25,8 @@ class RationalePage {
 
     cy.get('h1').should('contain.text', 'Write the rationale for the incoming trust or sponsor')
 
-    cy.get('[data-test="trust-rationale"]').clear().type('Cypress trust rationale')
+    cy.get('[data-test="trust-rationale"]').clear()
+    cy.get('[data-test="trust-rationale"]').type('Cypress trust rationale')
 
     cy.get('button').contains('Save and continue').click()
 

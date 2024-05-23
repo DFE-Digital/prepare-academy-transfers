@@ -10,9 +10,12 @@ class DatesPage {
     // Check 'I don't know' checkbox is available
     cy.get('[id="AdvisoryBoardViewModel_AdvisoryBoardDate_UnknownDate"]').should('exist')
 
-    cy.get('[data-test="day"]').clear().type(date.date())
-    cy.get('[data-test="month"]').clear().type(date.month() + 1)
-    cy.get('[data-test="year"]').clear().type(date.year())
+    cy.get('[data-test="day"]').clear()
+    cy.get('[data-test="day"]').type(date.date())
+    cy.get('[data-test="month"]').clear()
+    cy.get('[data-test="month"]').type(date.month() + 1)
+    cy.get('[data-test="year"]').clear()
+    cy.get('[data-test="year"]').type(date.year())
 
     cy.get('button').contains('Save and continue').click()
 
@@ -30,8 +33,10 @@ class DatesPage {
     // Check 'I don't know' checkbox is available
     cy.get('[id="TargetDateViewModel_TargetDate_UnknownDate"]').should('exist')
 
-    cy.get('[data-test="month"]').clear().type(date.month() + 1)
-    cy.get('[data-test="year"]').clear().type(date.year())
+    cy.get('[data-test="month"]').clear()
+    cy.get('[data-test="month"]').type(date.month() + 1)
+    cy.get('[data-test="year"]').clear()
+    cy.get('[data-test="year"]').type(date.year())
 
     cy.get('button').contains('Save and continue').click()
 

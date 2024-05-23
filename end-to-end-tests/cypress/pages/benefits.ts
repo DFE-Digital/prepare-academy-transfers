@@ -62,7 +62,8 @@ class BenefitsPage {
 
     cy.get('h1').should('contain.text', 'What other risks are there? (optional)')
 
-    cy.get('[data-test="high-profile-transfer"]').clear().type('Cypress risks')
+    cy.get('[data-test="high-profile-transfer"]').clear()
+    cy.get('[data-test="high-profile-transfer"]').type('Cypress risks')
 
     cy.get('button').contains('Save and continue').click()
 
