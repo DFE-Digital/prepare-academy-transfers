@@ -9,12 +9,11 @@
     "cy:zap": "npm run clean:reports && cypress run --browser electron",
     "cy:notify": "cypress-slack-reporter",
     "clean:reports": "rm -rf cypress/reports/mocha/*.json",
-    "combine:reports": "mochawesome-merge  cypress/reports/mocha/*.json> mochareports/report.json",
-    "create:html:report": "marge  mochareports/report.json -f report -o mochareports",
+    "combine:reports": "mochawesome-merge cypress/reports/mocha/*.json > mochareports/report.json",
+    "create:html:report": "marge mochareports/report.json -f report -o mochareports",
     "generate:html:report": "npm run combine:reports && npm run create:html:report",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/DFE-Digital/prepare-academy-transfers.git"
@@ -39,6 +38,7 @@
     "cy-verify-downloads": "^0.2.3",
     "cypress": "~13.6.4",
     "cypress-axe": "^1.2.0",
+    "cypress-multi-reporters": "^1.6.3",  
     "dayjs": "^1.11.10",
     "eslint-plugin-cypress": "^2.12.1",
     "cypress-slack-reporter": "^1.5.3",
