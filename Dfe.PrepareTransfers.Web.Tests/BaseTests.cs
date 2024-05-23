@@ -44,9 +44,9 @@ namespace Dfe.PrepareTransfers.Web.Tests
             {
                 Urn = ProjectUrn0001,
                 Reference = ProjectReference,
-                TransferringAcademies = new List<TransferringAcademies>
+                TransferringAcademies = new List<TransferringAcademy>
                 {
-                    new TransferringAcademies()
+                    new TransferringAcademy()
                     {
                         OutgoingAcademyName = OutgoingAcademyName,
                         OutgoingAcademyUrn = AcademyUrn,
@@ -68,7 +68,7 @@ namespace Dfe.PrepareTransfers.Web.Tests
             
             var fixture = new Fixture();
             
-            var populatedTransferringAcademy = fixture.Build<TransferringAcademies>()
+            var populatedTransferringAcademy = fixture.Build<TransferringAcademy>()
                 .With(a => a.OutgoingAcademyName, OutgoingAcademyName)
                 .With(a => a.OutgoingAcademyUrn, AcademyUrn)
                 .With(a => a.LastChangedDate, AcademyLastChangedDate)
@@ -76,7 +76,7 @@ namespace Dfe.PrepareTransfers.Web.Tests
             
             FoundPopulatedProjectFromRepo = fixture.Build<Project>()
                 .With(p => p.Urn, PopulatedProjectUrn)
-                .With(p => p.TransferringAcademies, new List<TransferringAcademies> {populatedTransferringAcademy})
+                .With(p => p.TransferringAcademies, new List<TransferringAcademy> {populatedTransferringAcademy})
                 .Create();
             
             ProjectRepository.Setup(s => s.GetByUrn(PopulatedProjectUrn)).ReturnsAsync(
@@ -112,9 +112,9 @@ namespace Dfe.PrepareTransfers.Web.Tests
                 Project = new Project
                 {
                     Urn = ProjectUrn0001,
-                    TransferringAcademies = new List<TransferringAcademies>
+                    TransferringAcademies = new List<TransferringAcademy>
                     {
-                        new TransferringAcademies
+                        new TransferringAcademy
                         {
                             OutgoingAcademyUrn = AcademyUrn,
                             IncomingTrustName = "incoming trust name"

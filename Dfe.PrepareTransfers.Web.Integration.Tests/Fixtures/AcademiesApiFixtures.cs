@@ -29,9 +29,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                 OutgoingTrustName = OutgoingTrustName,
                 ProjectReference = "REF-SW-123456789",
                 ProjectUrn = ProjectUrn,
-                TransferringAcademies = new List<TransferringAcademy>
+                TransferringAcademies = new List<Data.TRAMS.Models.AcademyTransferProject.TransferringAcademy>
                 {
-                    new TransferringAcademy
+                    new Data.TRAMS.Models.AcademyTransferProject.TransferringAcademy
                     {
                         IncomingTrustUkprn = IncomingTrustUkprn,
                         IncomingTrustName = IncomingTrustName,
@@ -61,11 +61,14 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     OtherFactorsToConsider = new OtherFactorsToConsider
                     {
                         HighProfile = new OtherFactor
-                            {FurtherSpecification = "High profile", ShouldBeConsidered = true},
+                        {
+                            FurtherSpecification = "High profile", ShouldBeConsidered = true},
                         FinanceAndDebt = new OtherFactor
-                            {FurtherSpecification = "Finance", ShouldBeConsidered = true},
+                        {
+                            FurtherSpecification = "Finance", ShouldBeConsidered = true},
                         ComplexLandAndBuilding = new OtherFactor
-                            {FurtherSpecification = "Complex land and building", ShouldBeConsidered = true},
+                        {
+                            FurtherSpecification = "Complex land and building", ShouldBeConsidered = true},
                         OtherRisks = new OtherFactor
                         {
                             FurtherSpecification = "Other risks", ShouldBeConsidered = true
@@ -109,9 +112,9 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     Ukprn = OutgoingTrustUkprn
                 },
                 ProjectUrn = ProjectUrn,
-                TransferringAcademies = new List<TransferringAcademy>
+                TransferringAcademies = new List<Data.TRAMS.Models.AcademyTransferProject.TransferringAcademy>
                 {
-                    new TransferringAcademy
+                    new Data.TRAMS.Models.AcademyTransferProject.TransferringAcademy
                     {
                         IncomingTrustName = "Test Trust",
                         IncomingTrust = new TrustSummary
@@ -214,7 +217,8 @@ namespace Dfe.PrepareTransfers.Web.Integration.Tests.Fixtures
                     Pan = "Pan",
                     Pfi = "Pfi",
                     ViabilityIssue = "Viability issue"
-                }
+                },
+                Gor = new NameAndCode { Name = "Region Name" }
             };
         }
 

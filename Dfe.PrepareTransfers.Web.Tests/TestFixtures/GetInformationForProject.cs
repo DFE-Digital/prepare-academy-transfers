@@ -52,9 +52,9 @@ namespace Dfe.PrepareTransfers.Web.Tests.TestFixtures
                     OutgoingTrustConsent = ThreeOptions.NotApplicable,
                     
                 },
-                TransferringAcademies = new List<TransferringAcademies>
+                TransferringAcademies = new List<TransferringAcademy>
                 {
-                    new TransferringAcademies
+                    new TransferringAcademy
                     {
                         IncomingTrustName = "incoming trust name",
                         PupilNumbersAdditionalInformation = "pupil numbers additional info",

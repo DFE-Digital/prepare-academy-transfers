@@ -129,7 +129,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.TaskList.HtbDocument
                 const string additionalInfo = "some additional info";
                 _subject.AdditionalInformationViewModel.AdditionalInformation = additionalInfo;
                 await _subject.OnPostAsync();
-                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.KeyStage4PerformanceAdditionalInformation == additionalInfo)
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademy>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.KeyStage4PerformanceAdditionalInformation == additionalInfo)
                 ), Times.Once);
             }
 

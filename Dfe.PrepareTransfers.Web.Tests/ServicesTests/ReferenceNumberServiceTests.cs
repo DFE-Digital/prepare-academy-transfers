@@ -39,7 +39,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 new Project
                 {
                     Urn = ProjectUrn0001,
-                    TransferringAcademies = new List<TransferringAcademies>()
+                    TransferringAcademies = new List<TransferringAcademy>()
                     {
                         new()
                         {
@@ -57,7 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 new Project
                 {
                     Urn = ProjectUrn0001,
-                    TransferringAcademies = new List<TransferringAcademies>()
+                    TransferringAcademies = new List<TransferringAcademy>()
                     {
                         new()
                         {

@@ -7,6 +7,8 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject
         public string OutgoingAcademyUkprn { get; set; }
         public string IncomingTrustUkprn { get; set; }
         public string IncomingTrustName { get; set; }
+        public string Region { get; set; }
+        public string LocalAuthority { get; set; }
         public string PupilNumbersAdditionalInformation { get; set; }
         public string LatestOfstedReportAdditionalInformation { get; set; }
         public string KeyStage2PerformanceAdditionalInformation { get; set; }

@@ -141,49 +141,6 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        //public async Task<RepositoryResult<Project>> Update(Project project)
-        //{
-        //    TramsProjectUpdate externalProject = _internalToUpdateMapper.Map(project);
-        //    var content = new StringContent(JsonConvert.SerializeObject(externalProject), Encoding.Default,
-        //       "application/json");
-        //    HttpResponseMessage response = await _httpClient.PatchAsync($"academyTransferProject/{project.Urn}", content);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var apiResponse = await response.Content.ReadAsStringAsync();
-        //        var createdProject = JsonConvert.DeserializeObject<TramsProject>(apiResponse);
-
-        //        #region API Interim
-
-        //        createdProject.OutgoingTrust = new TrustSummary { Ukprn = createdProject.OutgoingTrustUkprn };
-        //        createdProject.TransferringAcademies = createdProject.TransferringAcademies.Select(async transferring =>
-        //           {
-        //               RepositoryResult<Academy> outgoingAcademy =
-        //              await _academies.GetAcademyByUkprn(transferring.OutgoingAcademyUkprn);
-
-        //               transferring.IncomingTrust = new TrustSummary { Ukprn = transferring.IncomingTrustUkprn };
-        //               transferring.OutgoingAcademy = new AcademySummary
-        //               {
-        //                   Name = outgoingAcademy.Result.Name,
-        //                   Ukprn = transferring.OutgoingAcademyUkprn,
-        //                   Urn = outgoingAcademy.Result.Urn
-        //               };
-
-        //               return transferring;
-        //           })
-        //           .Select(t => t.Result)
-        //           .ToList();
-
-        //        #endregion
-
-        //        return new RepositoryResult<Project>
-        //        {
-        //            Result = _externalToInternalProjectMapper.Map(createdProject)
-        //        };
-        //    }
-
-        //    throw new TramsApiException(response);
-        //}
-
         public async Task<bool> UpdateRationale(Project project)
         {
             var rationale = InternalProjectToUpdateMapper.Rationale(project);
@@ -286,7 +243,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             throw new TramsApiException(response);
         }
 
-        public async Task<bool> UpdateAcademy(string projectUrn, TransferringAcademies transferringAcademy)
+        public async Task<bool> UpdateAcademy(string projectUrn, Data.Models.Projects.TransferringAcademy transferringAcademy)
         {
             var academy = InternalProjectToUpdateMapper.TransferringAcademy(transferringAcademy);
             //need to map to the command here to pull the rationale out
@@ -302,7 +259,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             // stay inline with current pattern
             throw new TramsApiException(response);
         }
-        public async Task<bool> UpdateAcademyGeneralInformation(string projectUrn, TransferringAcademies transferringAcademy)
+        public async Task<bool> UpdateAcademyGeneralInformation(string projectUrn, Data.Models.Projects.TransferringAcademy transferringAcademy)
         {
             var academy = InternalProjectToUpdateMapper.TransferringAcademyGeneralInformation(transferringAcademy);
             //need to map to the command here to pull the rationale out

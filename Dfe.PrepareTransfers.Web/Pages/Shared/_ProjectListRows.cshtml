@@ -11,7 +11,7 @@
 }
 @foreach (ProjectSearchResult project in Model)
 {
-    TransferringAcademies firstOutgoingAcademy = project.TransferringAcademies.FirstOrDefault();
+    TransferringAcademy firstOutgoingAcademy = project.TransferringAcademies.FirstOrDefault();
 
     <tr class="govuk-table__row">
         <td class="govuk-table__cell">

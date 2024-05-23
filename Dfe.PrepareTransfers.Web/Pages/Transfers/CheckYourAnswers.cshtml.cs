@@ -86,15 +86,20 @@ namespace Dfe.PrepareTransfers.Web.Pages.Transfers
                     : throw new Exception("Cannot create project");
             }
 
+            OutgoingAcademies = await _academyRepository.GetAcademiesByTrustUkprn(outgoingTrustId);
+            OutgoingAcademies = OutgoingAcademies.Where(academy => academyIds.Contains(academy.Ukprn)).ToList();
+
             var project = new Project
             {
                 OutgoingTrustUkprn = outgoingTrustId,
                 OutgoingTrustName = OutgoingTrust.Name,
-                TransferringAcademies = academyIds.Select(id => new TransferringAcademies
+                TransferringAcademies = OutgoingAcademies.Select(x => new TransferringAcademy
                 {
-                    OutgoingAcademyUkprn = id.ToString(),
+                    OutgoingAcademyUkprn = x.Ukprn.ToString(),
                     IncomingTrustUkprn = IsFormAMAT ? null:  incomingTrustId,
                     IncomingTrustName = IsFormAMAT ? proposedTrustName : IncomingTrust.Name,
+                    Region =  x.Region,
+                    LocalAuthority = x.LocalAuthorityName
                 }).ToList(),
                 IsFormAMat = !string.IsNullOrEmpty(isFormAMat) && isFormAMat.ToLower().Equals("true")
             };

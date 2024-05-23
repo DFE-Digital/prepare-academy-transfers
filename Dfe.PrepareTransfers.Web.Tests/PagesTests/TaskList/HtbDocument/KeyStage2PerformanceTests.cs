@@ -119,7 +119,7 @@ namespace Dfe.PrepareTransfers.Web.Tests.PagesTests.TaskList.HtbDocument
                     AddOrEditAdditionalInformation = true
                 };
                 await _subject.OnPostAsync();
-                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademies>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.KeyStage2PerformanceAdditionalInformation == additionalInfo)
+                ProjectRepository.Verify(r => r.UpdateAcademy(It.Is<string>(x => x == _subject.Urn), It.Is<TransferringAcademy>(academy => academy.OutgoingAcademyUkprn == _subject.AcademyUkprn && academy.KeyStage2PerformanceAdditionalInformation == additionalInfo)
                 ));
             }
             

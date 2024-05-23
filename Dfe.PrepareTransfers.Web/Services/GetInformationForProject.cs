@@ -50,7 +50,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             return response;
         }
 
-        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademies transferringAcademy,
+        private async Task<EducationPerformance> SetPerformanceData(TransferringAcademy transferringAcademy,
             string localAuthorityName, string projectUrn)
         {
             var educationPerformanceResult =
@@ -66,12 +66,12 @@ namespace Dfe.PrepareTransfers.Web.Services
             return performance;
         }
 
-        private static void SetAdditionalInformation(Academy academyDomain, TransferringAcademies academy)
+        private static void SetAdditionalInformation(Academy academyDomain, TransferringAcademy academy)
         {
             academyDomain.PupilNumbers.AdditionalInformation = academy.PupilNumbersAdditionalInformation;
             academyDomain.LatestOfstedJudgement.AdditionalInformation = academy.LatestOfstedReportAdditionalInformation;
         }
-        private static void SetGeneralInformation(Academy academyDomain, TransferringAcademies academy)
+        private static void SetGeneralInformation(Academy academyDomain, TransferringAcademy academy)
         {
             academyDomain.PFIScheme = academy.PFIScheme;
             academyDomain.PFISchemeDetails = academy.PFISchemeDetails;
