@@ -22,7 +22,8 @@ class TrustInformationProjectDatesPage {
     cy.get('[value="Approve"]').click()
 
     cy.get('label[for="author"]').should('contain.text', 'Enter the full name of the author of this project template')
-    cy.get('input[id="author"]').clear().type('Chris Sherlock')
+    cy.get('input[id="author"]').clear()
+    cy.get('input[id="author"]').type('Chris Sherlock')
 
     cy.get('button').contains('Save and continue').click()
 
