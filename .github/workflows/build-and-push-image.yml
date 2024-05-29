@@ -125,7 +125,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-${{ needs.set-env.outputs.environment }}
-          path: end-to-end-tests/cypress/screenshots
+          path: screenshots
 
       - name: Generate report
         if: always()
@@ -138,7 +138,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reports-${{ needs.set-env.outputs.environment }}
-          path: cypress/mochareports
+          path: mochareports
 
       - name: Report results
         if: always()
