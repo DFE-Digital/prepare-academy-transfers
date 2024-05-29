@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: reports-dev
-          path: mochareports
+          path: mochareports/
 
       - name: Report results
         if: always()
