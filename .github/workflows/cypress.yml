@@ -1,4 +1,4 @@
-name: Run Cypress Manually Triggered
+name: Run Cypress tests
 
 on:
   workflow_call:
