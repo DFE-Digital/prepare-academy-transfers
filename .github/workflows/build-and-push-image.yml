@@ -95,6 +95,7 @@ jobs:
 
   cypress-tests:
     name: Run Cypress Tests
+    needs: [ set-env, deploy-image ]
     if: needs.set-env.outputs.environment == 'staging' || needs.set-env.outputs.environment == 'dev'
     uses: ./.github/workflows/cypress.yml
     with:
