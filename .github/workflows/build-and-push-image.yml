@@ -94,6 +94,7 @@ jobs:
             }
 
   cypress-tests:
+    name: Run Cypress Tests
     if: needs.set-env.outputs.environment == 'staging' || needs.set-env.outputs.environment == 'dev'
     uses: ./.github/workflows/cypress.yml
     with:
