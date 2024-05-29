@@ -6,6 +6,19 @@ on:
       environment:
         required: true
         type: string
+    secrets:
+      AZURE_ENDPOINT:
+        required: true
+      CYPRESS_TEST_SECRET:
+        required: true
+      CYPRESS_ACADEMISATION_API_URL:
+        required: true
+      CYPRESS_ACADEMISATION_API_KEY:
+        required: true
+      DB_CONNECTION_STRING:
+        required: true
+      SLACK_WEBHOOK_URL:
+        required: true
   workflow_dispatch:
     inputs:
       environment:
