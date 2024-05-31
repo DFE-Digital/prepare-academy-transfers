@@ -1,7 +1,30 @@
-name: Run Cypress Manually Triggered
+name: Run Cypress tests
 
 on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      AZURE_ENDPOINT:
+        required: true
+      CYPRESS_TEST_SECRET:
+        required: true
+      CYPRESS_ACADEMISATION_API_URL:
+        required: true
+      CYPRESS_ACADEMISATION_API_KEY:
+        required: true
+      DB_CONNECTION_STRING:
+        required: true
+      SLACK_WEBHOOK_URL:
+        required: true
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        type: environment
 
 concurrency:
   group: ${{ github.workflow }}
@@ -13,7 +36,7 @@ jobs:
   cypress-tests:
     name: Run Cypress Tests
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: end-to-end-tests/
@@ -30,7 +53,8 @@ jobs:
       - name: Npm install
         run: npm install
 
-      - name: Run cypress (dev)
+      - name: Run Cypress (${{ inputs.environment }})
+        if: inputs.environment == 'staging' || inputs.environment == 'dev'
         run: npm run cy:run -- --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.CYPRESS_TEST_SECRET }}, academisationApiUrl=${{secrets.CYPRESS_ACADEMISATION_API_URL}}, academisationApiKey=${{ secrets.CYPRESS_ACADEMISATION_API_KEY}}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
@@ -57,6 +81,6 @@ jobs:
 
       - name: Report results
         if: always()
-        run: npm run cy:notify -- --custom-text="Environment dev, See more information https://github.com/DFE-Digital/prepare-academy-transfers/actions/runs/${{github.run_id}}"
+        run: npm run cy:notify -- --custom-text="Environment ${{ inputs.environment }}, See more information https://github.com/DFE-Digital/prepare-academy-transfers/actions/runs/${{github.run_id}}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
