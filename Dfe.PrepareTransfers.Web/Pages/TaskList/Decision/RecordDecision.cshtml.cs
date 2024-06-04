@@ -28,17 +28,17 @@ public class RecordDecision : DecisionBaseModel
         PropagateBackLinkOverride = false;
     }
 
-   [BindProperty]
-   [Required(ErrorMessage = "Select a decision")]
-   public AdvisoryBoardDecisions? AdvisoryBoardDecision { get; set; }
+    [BindProperty]
+    [Required(ErrorMessage = "Select a decision")]
+    public AdvisoryBoardDecisions? AdvisoryBoardDecision { get; set; }
 
-   public async Task<IActionResult> OnGet(int urn)
-   {
+    public async Task<IActionResult> OnGet(int urn)
+    {
         AdvisoryBoardDecision sessionDecision = GetDecisionFromSession(urn);
 
         if (sessionDecision.Decision == null)
         {
-            RepositoryResult<AdvisoryBoardDecision> savedDecision = await _decisionRepository.Get(urn);
+            RepositoryResult<AdvisoryBoardDecision> savedDecision = await _decisionRepository.Get(Id);
             SetDecisionInSession(urn, savedDecision?.Result);
             AdvisoryBoardDecision = savedDecision?.Result?.Decision;
         }
