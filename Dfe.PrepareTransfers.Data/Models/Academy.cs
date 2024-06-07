@@ -25,6 +25,8 @@ namespace Dfe.PrepareTransfers.Data.Models
         public string FaithSchool { get; set; }
         public string PFIScheme { get; set; }
         public string PFISchemeDetails { get; set; }
+        public decimal? DistanceFromAcademyToTrustHq { get; set; }
+        public string DistanceFromAcademyToTrustHqDetails { get; set; }
         public GeneralInformation GeneralInformation { get; set; }
         public PupilNumbers PupilNumbers { get; set; }
         public LatestOfstedJudgement LatestOfstedJudgement { get; set; }

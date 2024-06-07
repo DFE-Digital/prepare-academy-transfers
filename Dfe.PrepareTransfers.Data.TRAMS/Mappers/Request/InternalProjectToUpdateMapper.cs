@@ -136,7 +136,9 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request
             {
                 TransferringAcademyUkprn = input.OutgoingAcademyUkprn,
                 PFIScheme = input.PFIScheme ?? string.Empty,
-                PFISchemeDetails = input.PFISchemeDetails ?? string.Empty
+                PFISchemeDetails = input.PFISchemeDetails ?? string.Empty,
+                DistanceFromAcademyToTrustHq = input.DistanceFromAcademyToTrustHq,
+                DistanceFromAcademyToTrustHqDetails = input.DistanceFromAcademyToTrustHqDetails ?? string.Empty
             };
         }
         public static AcademyTransferProjectBenefits Benefits(Project input)
