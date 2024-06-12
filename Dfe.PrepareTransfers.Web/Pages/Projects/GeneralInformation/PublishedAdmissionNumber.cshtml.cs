@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 {
-    public class DistanceFromTrustModel : CommonPageModel
+    public class PublishedAdmissionNumberModel : CommonPageModel
     {
         public string AcademyName { get; set; }
 
-        [BindProperty] public string DistanceToTrust { get; set; }
-        [BindProperty] public string DistanceFromAcademyToTrustHqDetails { get; set; }
+        [BindProperty] public string PublishedAdmissionNumber { get; set; }
 
         public bool IsPreview { get; set; }
 
@@ -22,7 +21,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public DistanceFromTrustModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public PublishedAdmissionNumberModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
         {
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
@@ -35,26 +34,24 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 
             OutgoingAcademyUrn = academy.Urn;
             AcademyName = academy.Name;
-            DistanceToTrust = academy.DistanceFromAcademyToTrustHq;
-            DistanceFromAcademyToTrustHqDetails = academy.DistanceFromAcademyToTrustHqDetails;
+            PublishedAdmissionNumber = academy.PublishedAdmissionNumber;
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-
-            if (string.IsNullOrEmpty(DistanceToTrust))
+            if (string.IsNullOrEmpty(PublishedAdmissionNumber))
             {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide distance to trust.");
+                ModelState.AddModelError("Published Admission Number", "Please provide a published admission number");
             }
-            else if (!decimal.TryParse(DistanceToTrust, out var distanceToTrust))
+            else if (!int.TryParse(PublishedAdmissionNumber, out var publishedAdmissionNumber))
             {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide a valid distance to trust.");
+                ModelState.AddModelError("Published Admission Number", "Please provide a valid published admission number.");
             }
             else
             {
-                DistanceToTrust = distanceToTrust.ToString();
+                PublishedAdmissionNumber = publishedAdmissionNumber.ToString();
             }
 
             if (!ModelState.IsValid)
@@ -67,8 +64,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 
             var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
 
-            academy.DistanceFromAcademyToTrustHq = DistanceToTrust;
-            academy.DistanceFromAcademyToTrustHqDetails = DistanceFromAcademyToTrustHqDetails;
+            academy.PublishedAdmissionNumber = PublishedAdmissionNumber;
 
             await _projectsRepository.UpdateAcademyGeneralInformation(model.Result.Urn, academy);
 

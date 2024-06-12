@@ -59,7 +59,13 @@ namespace Dfe.PrepareTransfers.Data.TRAMS.Mappers.Response
                         KeyStage4PerformanceAdditionalInformation = transfer.KeyStage4PerformanceAdditionalInformation,
                         KeyStage5PerformanceAdditionalInformation = transfer.KeyStage5PerformanceAdditionalInformation,
                         PFIScheme = transfer.PFIScheme,
-                        PFISchemeDetails = transfer.PFISchemeDetails
+                        PFISchemeDetails = transfer.PFISchemeDetails,
+                        DistanceFromAcademyToTrustHq = transfer.DistanceFromAcademyToTrustHq,
+                        DistanceFromAcademyToTrustHqDetails = transfer.DistanceFromAcademyToTrustHqDetails,
+                        ViabilityIssues = transfer.ViabilityIssues,
+                        FinancialDeficit = transfer.FinancialDeficit,
+                        MPNameAndParty = transfer.MPNameAndParty,
+                        PublishedAdmissionNumber = transfer.PublishedAdmissionNumber
                     }
                 )
                 .ToList();

@@ -1,0 +1,59 @@
+﻿@page "/project/{urn}/general-information/{academyUkprn}/enter-MP-name-and-political-party";
+
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.MPNameAndPartyModel
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Enter the name of the MP and their political party";
+    Layout = "_Layout";
+
+    var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link"
+           asp-page="/Projects/GeneralInformation/Index"
+           asp-route-urn="@Model.Urn"
+           asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
+    </backtopreview>
+
+}
+
+<div asp-gds-validation-summary></div>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-form-group @formClasses">
+            <fieldset class="govuk-fieldset" aria-describedby="diocesan-consent-hint">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading" data-test="header">
+                        <span class="govuk-caption-l">
+                            @Model.AcademyName
+                        </span>
+                        Enter the name of the MP and their political party
+                    </h1>
+                    <p class="govuk-body">Use the school and trust's postcodes to measure the distance on Bing or Google maps. <a href="https://www.theyworkforyou.com/" target="_blank">They Work For You (opens in a new tab)</a></p>
+
+                    <h2 class="govuk-heading-m">Academy postcode</h2>
+                    <p class="govuk-body" id="school-postcode">@Model.AcademyPostCode</p>
+
+                    <form method="post">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-label--m" for="member-of-parliament-name-and-party">
+                                Enter the MP's name and party
+                            </label>
+                            <input class="govuk-input govuk-input--width-20 " id="member-of-parliament-name-and-party" name="MPNameAndParty" type="text" value="@Model.MPNameAndParty">
+                        </div>
+                        <button class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" type="submit" data-test="submit-btn">
+                            Save and continue
+                        </button>
+                    </form>
+                </div>
+    </div>
+    <partial name="_UsefulInformation" />
+</div>

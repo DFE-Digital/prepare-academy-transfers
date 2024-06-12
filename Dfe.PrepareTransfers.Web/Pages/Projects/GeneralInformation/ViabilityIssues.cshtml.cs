@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 {
-    public class DistanceFromTrustModel : CommonPageModel
+    public class ViabilityIssuesModel : CommonPageModel
     {
         public string AcademyName { get; set; }
 
-        [BindProperty] public string DistanceToTrust { get; set; }
-        [BindProperty] public string DistanceFromAcademyToTrustHqDetails { get; set; }
-
         public bool IsPreview { get; set; }
+        
+        [BindProperty]
+        public bool? YesChecked { get; set; }
 
         [BindProperty(SupportsGet = true)] public string AcademyUkprn { get; set; }
 
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public DistanceFromTrustModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public ViabilityIssuesModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
         {
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
@@ -32,29 +32,19 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
         {
             var projectInformation = await _getInformationForProject.Execute(Urn);
             var academy = projectInformation.OutgoingAcademies.First(a => a.Ukprn == AcademyUkprn);
+            var pupilNumbers = academy.PupilNumbers;
+            YesChecked = academy.ViabilityIssues?.ToLower().Contains("yes") ?? false;
 
             OutgoingAcademyUrn = academy.Urn;
             AcademyName = academy.Name;
-            DistanceToTrust = academy.DistanceFromAcademyToTrustHq;
-            DistanceFromAcademyToTrustHqDetails = academy.DistanceFromAcademyToTrustHqDetails;
-
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-
-            if (string.IsNullOrEmpty(DistanceToTrust))
+            if (!YesChecked.HasValue)
             {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide distance to trust.");
-            }
-            else if (!decimal.TryParse(DistanceToTrust, out var distanceToTrust))
-            {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide a valid distance to trust.");
-            }
-            else
-            {
-                DistanceToTrust = distanceToTrust.ToString();
+                ModelState.AddModelError("Viability Issues", "Please select an option.");
             }
 
             if (!ModelState.IsValid)
@@ -67,8 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 
             var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
 
-            academy.DistanceFromAcademyToTrustHq = DistanceToTrust;
-            academy.DistanceFromAcademyToTrustHqDetails = DistanceFromAcademyToTrustHqDetails;
+            academy.ViabilityIssues = YesChecked == true ? "Yes" : "No";
 
             await _projectsRepository.UpdateAcademyGeneralInformation(model.Result.Urn, academy);
 

@@ -1,6 +1,5 @@
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Web.Models;
-using Dfe.PrepareTransfers.Web.Models.Forms;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -8,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 {
-    public class DistanceFromTrustModel : CommonPageModel
+    public class MPNameAndPartyModel : CommonPageModel
     {
         public string AcademyName { get; set; }
 
-        [BindProperty] public string DistanceToTrust { get; set; }
-        [BindProperty] public string DistanceFromAcademyToTrustHqDetails { get; set; }
+        [BindProperty] public string MPNameAndParty { get; set; }
 
         public bool IsPreview { get; set; }
 
         [BindProperty(SupportsGet = true)] public string AcademyUkprn { get; set; }
+        [BindProperty(SupportsGet = true)] public string AcademyPostCode { get; set; }
 
         private readonly IGetInformationForProject _getInformationForProject;
         private readonly IProjects _projectsRepository;
 
-        public DistanceFromTrustModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
+        public MPNameAndPartyModel(IGetInformationForProject getInformationForProject, IProjects projectsRepository)
         {
             _getInformationForProject = getInformationForProject;
             _projectsRepository = projectsRepository;
@@ -35,26 +34,17 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 
             OutgoingAcademyUrn = academy.Urn;
             AcademyName = academy.Name;
-            DistanceToTrust = academy.DistanceFromAcademyToTrustHq;
-            DistanceFromAcademyToTrustHqDetails = academy.DistanceFromAcademyToTrustHqDetails;
+            AcademyPostCode = academy.Address.Last() ?? "";
+            MPNameAndParty = academy.MPNameAndParty;
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-
-            if (string.IsNullOrEmpty(DistanceToTrust))
+            if (string.IsNullOrEmpty(MPNameAndParty))
             {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide distance to trust.");
-            }
-            else if (!decimal.TryParse(DistanceToTrust, out var distanceToTrust))
-            {
-                ModelState.AddModelError(nameof(DistanceToTrust), "Please provide a valid distance to trust.");
-            }
-            else
-            {
-                DistanceToTrust = distanceToTrust.ToString();
+                ModelState.AddModelError("MP (Party)", "Please provide MP (Party).");
             }
 
             if (!ModelState.IsValid)
@@ -67,8 +57,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
 
             var academy = model.Result.TransferringAcademies.First(a => a.OutgoingAcademyUkprn == AcademyUkprn);
 
-            academy.DistanceFromAcademyToTrustHq = DistanceToTrust;
-            academy.DistanceFromAcademyToTrustHqDetails = DistanceFromAcademyToTrustHqDetails;
+            academy.MPNameAndParty = MPNameAndParty;
 
             await _projectsRepository.UpdateAcademyGeneralInformation(model.Result.Urn, academy);
 

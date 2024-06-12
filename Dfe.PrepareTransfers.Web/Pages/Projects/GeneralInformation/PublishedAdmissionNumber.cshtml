@@ -1,11 +1,11 @@
-﻿@page "/project/{urn}/general-information/{academyUkprn}/distance-from-trust";
+﻿@page "/project/{urn}/general-information/{academyUkprn}/published-admission-number";
 
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.DistanceFromTrustModel
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.PublishedAdmissionNumberModel
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "How far is the converting school from the trust";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Update the academy's published admission number (PAN) if it's not correct";
     Layout = "_Layout";
 
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
@@ -35,9 +35,8 @@
                         <span class="govuk-caption-l">
                             @Model.AcademyName
                         </span>
-                        How far is the transferring academies from the trust or other academies in the trust?
+                        Update the academy's published admission number (PAN) if it's not correct
                     </h1>
-                    <p class="govuk-body">Use the academy and trust's postcodes to measure the distance on Bing or Google maps.</p>
                     <div id="distance-to-trust-headquarters-hint" class="govuk-hint">
                         For example, 20
                     </div>
@@ -45,18 +44,9 @@
                     <form method="post">
                         <div class="govuk-form-group">
                             <div class="govuk-input__wrapper">
-                                <input class="govuk-input govuk-input--width-10" id="distance-to-trust-headquarters" name="DistanceToTrust" type="text" value="@Model.DistanceToTrust">
-                                <div class="govuk-input__suffix" aria-hidden="true">miles</div>
+                                <input class="govuk-input govuk-input--width-10" id="published-admission-number" name="PublishedAdmissionNumber" type="number" value="@Model.PublishedAdmissionNumber">
                             </div>
                         </div>
-
-                        <label class="govuk-label">
-                            Add any additional information if you need to
-                        </label>
-                        <div id="distance-to-trust-headquarters-hint" class="govuk-hint">
-                            This information will go into your project template under the academy overview section.
-                        </div>
-                        <textarea class="govuk-textarea" rows="5" data-test="distance-to-trust-headquarters-additional-information" name="DistanceFromAcademyToTrustHqDetails">@Model.DistanceFromAcademyToTrustHqDetails</textarea>
                         <button class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" type="submit" data-test="submit-btn">
                             Save and continue
                         </button>
@@ -64,6 +54,7 @@
 
                 
                 </div>
+    
     </div>
     <partial name="_UsefulInformation" />
 </div>

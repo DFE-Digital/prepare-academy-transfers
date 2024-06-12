@@ -14,12 +14,12 @@
     <hr class="govuk-section-break govuk-section-break--m">
 </div>
 <dl class="govuk-summary-list">
-    <gds-key-value key="Published admission number (PAN)" value="@Model.PublishedAdmissionNumber" />
+    <gds-key-value key="Published admission number (PAN)" value="@Model.PublishedAdmissionNumber" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/published-admission-number" action-text="Change" />
     <gds-key-value key="Private finance initiative (PFI) scheme" value="@Model.PrivateFinanceInitiative" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/pfi-scheme" action-text="Change" />
-    <gds-key-value key="Viability issues" value="@Model.ViabilityIssues" />
-    <gds-key-value key="Financial deficit" value="@Model.FinancialDeficit" />
+    <gds-key-value key="Viability issues" value="@Model.ViabilityIssues" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/viability-issues" action-text="Change" />
+    <gds-key-value key="Financial deficit" value="@Model.FinancialDeficit" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/financial-deficit" action-text="Change" />
     <gds-key-value key="School type" value="@Model.SchoolType" />
     <gds-key-value key="Percentage of good or outstanding academies in the diocesan trust" value="@Model.DiocesePercent" />
     <gds-key-value key="Distance from the academy to the trust headquarters" value="@Model.DistanceFromAcademyToTrustHq" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/distance-from-trust" action-text="Change" />
-    <gds-key-value key="MP (Party)" value="@Model.MP" />
+    <gds-key-value key="MP (Party)" value="@Model.MP" show-action="true" action-url="/project/@Model.Urn/general-information/@Model.AcademyUkprn/enter-MP-name-and-political-party" action-text="Change" />
 </dl>
