@@ -1,0 +1,60 @@
+﻿@page "/project/{urn}/general-information/{academyUkprn}/published-admission-number";
+
+@using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.PublishedAdmissionNumberModel
+
+@{
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Update the academy's published admission number (PAN) if it's not correct";
+    Layout = "_Layout";
+
+    var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
+}
+
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link"
+           asp-page="/Projects/GeneralInformation/Index"
+           asp-route-urn="@Model.Urn"
+           asp-route-academyUkprn="@Model.AcademyUkprn">Back</a>
+    </backtopreview>
+
+}
+
+<div asp-gds-validation-summary></div>
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <div class="govuk-form-group @formClasses">
+            <fieldset class="govuk-fieldset" aria-describedby="diocesan-consent-hint">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading" data-test="header">
+                        <span class="govuk-caption-l">
+                            @Model.AcademyName
+                        </span>
+                        Update the academy's published admission number (PAN) if it's not correct
+                    </h1>
+                    <div id="distance-to-trust-headquarters-hint" class="govuk-hint">
+                        For example, 20
+                    </div>
+
+                    <form method="post">
+                        <div class="govuk-form-group">
+                            <div class="govuk-input__wrapper">
+                                <input class="govuk-input govuk-input--width-10" id="published-admission-number" name="PublishedAdmissionNumber" type="number" value="@Model.PublishedAdmissionNumber">
+                            </div>
+                        </div>
+                        <button class="govuk-button govuk-!-margin-top-4" data-module="govuk-button" type="submit" data-test="submit-btn">
+                            Save and continue
+                        </button>
+                    </form>
+
+                
+                </div>
+    
+    </div>
+    <partial name="_UsefulInformation" />
+</div>

@@ -1,11 +1,11 @@
-﻿@page "/project/{urn}/general-information/{academyUkprn}/pfi-scheme";
+﻿@page "/project/{urn}/general-information/{academyUkprn}/financial-deficit";
 
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.PFISchemeModel
+@model Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation.FinancialDeficitModel
 
 @{
-    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "PFI Scheme";
+    ViewBag.Title = (!ViewData.ModelState.IsValid ? "Error: " : "") + "Financial Deficit";
     Layout = "_Layout";
 
     var formClasses = ViewData.ModelState.IsValid ? string.Empty : "govuk-form-group--error";
@@ -35,31 +35,21 @@
                         <span class="govuk-caption-l">
                             @Model.AcademyName
                         </span>
-                        Is your academy part of a PFI (Private Finance Initiative) scheme?
+                        Is there a financial deficit at the academy in its current financial year?
                     </h1>
                     <form method="post">
                     <div class="govuk-form-group">
                         <div class="govuk-radios govuk-!-margin-top-4" data-module="govuk-radios">
                             <div class="govuk-radios__item">
-                                <input asp-for="@Model.YesChecked" data-test="pfi-scheme-yes-input" class="govuk-radios__input" type="radio" value="true" aria-controls="conditional-partofpfischemeSaved" id="radio-yes" data-cy="select-radio-yes">
-                                <label class="govuk-label govuk-radios__label" for="radio-yes" data-test="pfi-scheme-yes-label">
+                                <input asp-for="@Model.YesChecked" data-test="financial-defecit-yes-input" class="govuk-radios__input" type="radio" value="true" id="radio-yes" data-cy="select-radio-yes">
+                                <label class="govuk-label govuk-radios__label" for="radio-yes" data-test="financial-defecit-yes-label">
                                     Yes
                                 </label>
                             </div>
 
-                            <div class="govuk-radios__conditional" id="conditional-partofpfischemeSaved" data-cy="select-sharepoint-section">
-                                <div class="govuk-form-group">
-                                    <label class="govuk-label">
-                                        Which PFI scheme is the school part of?
-                                    </label>
-                                    <inline-error for="@nameof(Model.PFISchemeViewModel.PFIScheme)" />
-                                    <textarea asp-for="@Model.PFISchemeViewModel.PFISchemeDetails" data-test="pfi-scheme-details-input" class="govuk-textarea" rows="5" aria-describedby="conditional-partofpfischemeSaved" aria-label="text-area-for-pfi-scheme"></textarea>
-                                </div>
-                            </div>
-
                             <div class="govuk-radios__item">
-                                <input asp-for="@Model.YesChecked" data-test="pfi-scheme-no-input" class="govuk-radios__input" type="radio" value="false" id="radio-no" data-cy="select-radio-no">
-                                <label class="govuk-label govuk-radios__label" for="radio-no" data-test="pfi-scheme-no-label">
+                                <input asp-for="@Model.YesChecked" data-test="financial-defecit-no-input" class="govuk-radios__input" type="radio" value="false" id="radio-no" data-cy="select-radio-no">
+                                <label class="govuk-label govuk-radios__label" for="radio-no" data-test="financial-defecit-no-label">
                                     No
                                 </label>
                             </div>

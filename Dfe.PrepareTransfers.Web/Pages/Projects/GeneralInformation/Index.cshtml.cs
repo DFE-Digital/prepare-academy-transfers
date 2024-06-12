@@ -50,14 +50,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.GeneralInformation
             Capacity = generalInformation.Capacity;
             NumberOnRoll = $"{generalInformation.NumberOnRoll} ({generalInformation.PercentageFull})";
             FreeSchoolMeals = generalInformation.PercentageFsm;
-            PublishedAdmissionNumber = generalInformation.Pan;
+            PublishedAdmissionNumber = academy.PublishedAdmissionNumber;
             PrivateFinanceInitiative = $"{academy.PFIScheme} {academy.PFISchemeDetails}";
-            ViabilityIssues = generalInformation.ViabilityIssue;
-            FinancialDeficit = generalInformation.Deficit;
+            ViabilityIssues = academy.ViabilityIssues;
+            FinancialDeficit = academy.FinancialDeficit;
             SchoolType = generalInformation.SchoolType;
             DiocesePercent = generalInformation.DiocesesPercent;
-            DistanceFromAcademyToTrustHq = generalInformation.DistanceToSponsorHq;
-            MP = generalInformation.MpAndParty;
+            DistanceFromAcademyToTrustHq = $"{academy.DistanceFromAcademyToTrustHq?.ToString()} {academy.DistanceFromAcademyToTrustHqDetails}";
+            MP = academy.MPNameAndParty;
             Urn = urn;
             GIASLastChangedDate = "N/A";
             if (academy.LastChangedDate.IsNullOrEmpty() is false)

@@ -75,6 +75,12 @@ namespace Dfe.PrepareTransfers.Web.Services
         {
             academyDomain.PFIScheme = academy.PFIScheme;
             academyDomain.PFISchemeDetails = academy.PFISchemeDetails;
+            academyDomain.DistanceFromAcademyToTrustHq = academy.DistanceFromAcademyToTrustHq;
+            academyDomain.DistanceFromAcademyToTrustHqDetails = academy.DistanceFromAcademyToTrustHqDetails;
+            academyDomain.ViabilityIssues = academy.ViabilityIssues;
+            academyDomain.FinancialDeficit = academy.FinancialDeficit;
+            academyDomain.MPNameAndParty = academy.MPNameAndParty;
+            academyDomain.PublishedAdmissionNumber = academy.PublishedAdmissionNumber;
         }
     }
 }
