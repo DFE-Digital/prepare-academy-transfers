@@ -99,4 +99,13 @@ export class NewTransferProjectWithDecisions {
     cy.get('[data-cy="URN_Id"]').should('contain', expectedNumber);
     return this;
   }
+
+  public deleteProject(projectId: string): this {
+    const deleteUrl = `https://dev.prepare-transfers.education.gov.uk/project/${projectId}/delete`;
+    cy.request('DELETE', deleteUrl).then((response) => {
+      expect(response.status).to.eq(200); // Verify the response status
+    });
+    return this;
+  }
+
 }
