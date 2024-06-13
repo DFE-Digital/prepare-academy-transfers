@@ -102,7 +102,7 @@ jobs:
       environment: ${{ needs.set-env.outputs.environment }}
     secrets:
       AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
-      CYPRESS_TEST_SECRET: ${{ secrets.CYPRESS_TEST_SECRET }}
+      AUTH_HEADER_CYPRESS: ${{ secrets.AUTH_HEADER_CYPRESS }}
       CYPRESS_ACADEMISATION_API_URL: ${{ secrets.CYPRESS_ACADEMISATION_API_URL }}
       CYPRESS_ACADEMISATION_API_KEY: ${{ secrets.CYPRESS_ACADEMISATION_API_KEY }}
       DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}

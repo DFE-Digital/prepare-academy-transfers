@@ -9,7 +9,7 @@ on:
     secrets:
       AZURE_ENDPOINT:
         required: true
-      CYPRESS_TEST_SECRET:
+      AUTH_HEADER_CYPRESS:
         required: true
       CYPRESS_ACADEMISATION_API_URL:
         required: true
@@ -55,7 +55,7 @@ jobs:
 
       - name: Run Cypress (${{ inputs.environment }})
         if: inputs.environment == 'staging' || inputs.environment == 'dev'
-        run: npm run cy:run -- --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.CYPRESS_TEST_SECRET }}, academisationApiUrl=${{secrets.CYPRESS_ACADEMISATION_API_URL}}, academisationApiKey=${{ secrets.CYPRESS_ACADEMISATION_API_KEY}}'
+        run: npm run cy:run -- --env url='${{ secrets.AZURE_ENDPOINT }}',authorizationHeader='${{ secrets.AUTH_HEADER_CYPRESS }}, academisationApiUrl=${{secrets.CYPRESS_ACADEMISATION_API_URL}}, academisationApiKey=${{ secrets.CYPRESS_ACADEMISATION_API_KEY}}'
         env:
           db: ${{ secrets.DB_CONNECTION_STRING }}
 
