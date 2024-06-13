@@ -2,7 +2,7 @@ import { NewTransferProjectWithDecisions } from 'cypress/pages/newTransferProjec
 
 describe('Transfer Project Tests', () => {
   const transferProject = new NewTransferProjectWithDecisions();
-  let projectId: string | undefined;
+  let projectId: string;
 
   beforeEach(() => {
     transferProject.visit(Cypress.env('url'));
@@ -31,14 +31,17 @@ describe('Transfer Project Tests', () => {
       .submitFormRecordDecision()
       .verifyDecisionDetails();
 
-    // Capture the projectId dynamically from the URL
+      // Capture the projectId dynamically from the URL
     cy.url().then((url) => {
-      projectId = url.match(/project\/(\d+)/)?.[1]; 
+      const match = url.match(/project\/(\d+)/);
+      if (match && match[1]) {
+        projectId = match[1]; 
+
+        // Delete the project and verify that it was deleted successfully
+        transferProject.deleteProject(projectId);
+      } else {
+        throw new Error('Project ID not found in the URL');
+      }
     });
-    
-    // Delete the project and verify that it was deleted successfully
-    if (projectId) {
-      transferProject.deleteProject(projectId);
-    }
   });
 });

@@ -101,11 +101,20 @@ export class NewTransferProjectWithDecisions {
   }
 
   public deleteProject(projectId: string): this {
-    const deleteUrl = `https://dev.prepare-transfers.education.gov.uk/project/${projectId}/delete`;
-    cy.request('DELETE', deleteUrl).then((response) => {
+    const deleteUrl = `${Cypress.env('url')}/project/${projectId}/delete`;
+    const authToken = Cypress.env('authToken');
+
+    cy.request({
+      method: 'DELETE',
+      url: deleteUrl,
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    }).then((response) => {
       expect(response.status).to.eq(200); // Verify the response status
     });
+
     return this;
   }
-
 }
+
