@@ -101,14 +101,15 @@ export class NewTransferProjectWithDecisions {
   }
 
   public deleteProject(projectId: string): this {
-    const deleteUrl = `${Cypress.env('url')}/project/${projectId}/delete`;
-    const authToken = Cypress.env('authToken');
+    const deleteUrl = `${Cypress.env('academisationApiUrl')}/transfer-project/${projectId}/delete`;
+    const academisationApiKey = Cypress.env('academisationApiKey');
+
 
     cy.request({
       method: 'DELETE',
       url: deleteUrl,
       headers: {
-        'Authorization': `Bearer ${authToken}`
+        'x-api-key': academisationApiKey,
       }
     }).then((response) => {
       expect(response.status).to.eq(200); // Verify the response status
