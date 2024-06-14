@@ -99,4 +99,23 @@ export class NewTransferProjectWithDecisions {
     cy.get('[data-cy="URN_Id"]').should('contain', expectedNumber);
     return this;
   }
+
+  public deleteProject(projectId: string): this {
+    const deleteUrl = `${Cypress.env('academisationApiUrl')}/transfer-project/${projectId}/delete`;
+    const academisationApiKey = Cypress.env('academisationApiKey');
+
+
+    cy.request({
+      method: 'DELETE',
+      url: deleteUrl,
+      headers: {
+        'x-api-key': academisationApiKey,
+      }
+    }).then((response) => {
+      expect(response.status).to.eq(200); // Verify the response status
+    });
+
+    return this;
+  }
 }
+
