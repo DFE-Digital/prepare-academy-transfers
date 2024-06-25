@@ -3,15 +3,7 @@
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Dfe.PrepareTransfers.Web.Pages.Projects.AcademyAndTrustInformation.Index
-<dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-        <dt class="govuk-summary-list__key">
-            Advisory board
-        </dt>
-        <dd class="govuk-summary-list__value ">
-            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.AdvisoryBoardDate)</displaynodataforemptystring>
-        </dd>
-    </div>
+<dl class="govuk-summary-list">    
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
             Recommendation
@@ -76,13 +68,5 @@
                 </a>
             </dd>
         }
-    </div>
-    <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-        <dt class="govuk-summary-list__key">
-            Proposed academy transfer
-        </dt>
-        <dd class="govuk-summary-list__value ">
-            <displaynodataforemptystring>@DatesHelper.DateStringToGovUkDate(Model.TargetDate)</displaynodataforemptystring>
-        </dd>
     </div>
 </dl>

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using Dfe.Academisation.ExtensionMethods;
+﻿using Dfe.Academisation.ExtensionMethods;
 using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Services.Interfaces;
+using System;
+using System.Linq;
 
 namespace Dfe.PrepareTransfers.Web.Services
 {
@@ -23,7 +23,7 @@ namespace Dfe.PrepareTransfers.Web.Services
             indexPage.ProjectReference = project.Result.Reference;
             indexPage.IncomingTrustName = !string.IsNullOrEmpty(project.Result.IncomingTrustName) ? project.Result.IncomingTrustName.ToTitleCase() : project.Result.OutgoingTrustName.ToTitleCase();
             indexPage.Academies = project.Result.TransferringAcademies
-                .Select(a => new Tuple<string, string>(a.OutgoingAcademyUkprn,a.OutgoingAcademyName)).ToList();
+                .Select(a => new Tuple<string, string>(a.OutgoingAcademyUkprn, a.OutgoingAcademyName)).ToList();
             indexPage.AcademyAndTrustInformationStatus = GetAcademyAndTrustInformationStatus(project.Result);
             indexPage.FeatureTransferStatus = GetFeatureTransferStatus(project.Result);
             indexPage.TransferDatesStatus = GetTransferDatesStatus(project.Result);
@@ -72,8 +72,7 @@ namespace Dfe.PrepareTransfers.Web.Services
                 return ProjectStatuses.NotStarted;
             }
 
-            if ((!string.IsNullOrEmpty(project.Dates.Target) || project.Dates.HasTargetDateForTransfer == false) &&
-                (!string.IsNullOrEmpty(project.Dates.Htb) || project.Dates.HasHtbDate == false))
+            if (project.Dates.IsCompleted is true)
             {
                 return ProjectStatuses.Completed;
             }

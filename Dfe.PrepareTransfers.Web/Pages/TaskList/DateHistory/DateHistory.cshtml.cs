@@ -7,20 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace Dfe.PrepareTransfers.Web.Pages.Decision
+namespace Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory
 {
-    public class RecordADecision : CommonPageModel
+    public class DateHistory : CommonPageModel
     {
-        private readonly ILogger<RecordADecision> _logger;
-        private readonly IAcademyTransfersAdvisoryBoardDecisionRepository _decisionRepository;
+        private readonly ILogger<DateHistory> _logger;
         private readonly IProjects _projectsRepository;
 
         public Project Project { get; set; }
         public AdvisoryBoardDecision Decision { get; set; }
 
-        public RecordADecision(IAcademyTransfersAdvisoryBoardDecisionRepository decisionRepository, IProjects projectsRepository, ILogger<RecordADecision> logger)
+        public DateHistory(IAcademyTransfersAdvisoryBoardDecisionRepository decisionRepository, IProjects projectsRepository, ILogger<DateHistory> logger)
         {
-            _decisionRepository = decisionRepository;
             _projectsRepository = projectsRepository;
             _logger = logger;
         }
@@ -28,10 +26,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Decision
         public async Task<IActionResult> OnGetAsync()
         {
             Project = (await _projectsRepository.GetByUrn(Urn)).Result;
-            Decision = (await _decisionRepository.Get(Project.Id)).Result;
 
             return Page();
         }
-
     }
 }

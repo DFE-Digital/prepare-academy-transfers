@@ -1,5 +1,4 @@
 using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
@@ -78,7 +77,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var project = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
+                AcademisationProject project = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
 
                 #region API Interim
 

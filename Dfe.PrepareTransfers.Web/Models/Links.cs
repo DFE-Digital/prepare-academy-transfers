@@ -60,7 +60,10 @@ public static class Links
     {
         public static readonly LinkItem Index = Create("/Projects/ProjectAssignment/Index");
     }
-
+    public static class TransferDateHistory
+    {
+        public static readonly LinkItem Index = Create("/TaskList/DateHistory/DateHistory");
+    }
     public static class LegalRequirements
     {
         public static readonly LinkItem Index = Create("/Projects/LegalRequirements/Index");

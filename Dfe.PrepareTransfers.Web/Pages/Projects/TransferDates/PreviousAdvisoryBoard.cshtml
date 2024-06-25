@@ -1,14 +1,14 @@
-@page "/project/{urn}/transfer-dates/advisory-board-date"
+@page "/project/{urn}/transfer-dates/previous-advisory-board-date"
 @using Dfe.Academisation.ExtensionMethods
 @using Dfe.PrepareTransfers.Web.ExtensionMethods
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
-@model Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates.AdvisoryBoard
+@model Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates.PreviousAdvisoryBoard
 
 
 @{
    Layout = "_Layout";
-   ViewBag.Title = ViewData.ModelState.BuildPageTitle("Advisory board date");
+   ViewBag.Title = ViewData.ModelState.BuildPageTitle("Previous advisory board date");
    var formClasses = ViewData.ModelState.GetFormGroupErrorStyle();
    var dayInputError = ViewData.ModelState.GetFormFieldErrorStyle("AdvisoryBoardViewModel.AdvisoryBoardDate.Date", "AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Day");
    var monthInputError = ViewData.ModelState.GetFormFieldErrorStyle("AdvisoryBoardViewModel.AdvisoryBoardDate.Date", "AdvisoryBoardViewModel.AdvisoryBoardDate.Date.Month");
