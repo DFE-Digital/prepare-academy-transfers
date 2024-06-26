@@ -241,7 +241,23 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             // stay inline with current pattern
             throw new TramsApiException(response);
         }
+        public async Task<bool> UpdateDates(Project project, List<ReasonChange> reasonsChanged, string ChangedBy)
+        {
+            AcademyTransferTargetProjectDates dates = InternalProjectToUpdateMapper.TargetDates(project);
 
+            dates.ChangedBy = ChangedBy;
+            dates.ReasonsChanged = reasonsChanged;
+            var content = new StringContent(JsonConvert.SerializeObject(dates), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-transfer-dates", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
         public async Task<bool> UpdateAcademy(string projectUrn, Data.Models.Projects.TransferringAcademy transferringAcademy)
         {
             var academy = InternalProjectToUpdateMapper.TransferringAcademy(transferringAcademy);

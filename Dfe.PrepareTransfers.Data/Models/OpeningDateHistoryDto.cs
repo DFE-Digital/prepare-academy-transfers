@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Dfe.PrepareTransfers.Data.Models
 {
@@ -8,7 +9,18 @@ namespace Dfe.PrepareTransfers.Data.Models
         public string ChangedBy { get; set; }
         public DateTime? OldDate { get; set; }
         public DateTime? NewDate { get; set; }
-        public string ReasonForChange { get; set; }
-        public string ReasonForChangeDetails { get; set; }
+        public List<ReasonChange> ReasonsChanged { get; set; }
+    }
+    public class ReasonChange
+    {
+        public ReasonChange(string heading, string details)
+        {
+            Heading = heading;
+            Details = details;
+        }
+
+        public string Heading { get; set; }
+        public string Details { get; set; }
+
     }
 }

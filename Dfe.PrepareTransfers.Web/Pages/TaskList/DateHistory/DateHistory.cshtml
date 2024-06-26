@@ -53,11 +53,16 @@
                             <dd class="govuk-summary-list__value">@history.OldDate?.ToString("d MMMM yyyy")</dd>
                         </div>
                         <div class="govuk-summary-list__row">
+                                                                                    
                             <dt class="govuk-summary-list__key">Reason for new date</dt>
-                            <dd class="govuk-summary-list__value">
-                                <strong>@history.ReasonForChange</strong><br />
-                                @history.ReasonForChange
-                            </dd>
+                            @foreach (var reason in history.ReasonsChanged)
+                            {
+                                <dd class="govuk-summary-list__value">
+                                <strong>@reason.Heading</strong><br />
+                                @reason.Details
+                                </dd>
+                            }
+                            
                         </div>
                     </dl>
                 </div>
