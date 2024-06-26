@@ -6,7 +6,7 @@ namespace Dfe.PrepareTransfers.Data.Models
     {
         public string Name { get; set; }
         public string Ukprn { get; set; }
-        
+
         //public string LeadRscRegion { get; set; }
         public string CompaniesHouseNumber { get; set; }
         public string EstablishmentType { get; set; }

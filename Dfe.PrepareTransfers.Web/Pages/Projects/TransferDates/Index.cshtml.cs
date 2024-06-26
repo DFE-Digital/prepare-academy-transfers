@@ -23,8 +23,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
         public async Task<IActionResult> OnGetAsync()
         {
             var project = await _projectsRepository.GetByUrn(Urn);
-
             Data.Models.Project projectResult = project.Result;
+            IncomingTrustName = projectResult.IncomingTrustName;
             ProjectReference = projectResult.Reference;
             AdvisoryBoardDate = projectResult.Dates?.Htb;
             PreviousAdvisoryBoardDate = projectResult.Dates?.PreviousAdvisoryBoardDate;

@@ -1,8 +1,7 @@
 @page "/project/{urn}/date-history"
-@using Dfe.Academisation.ExtensionMethods
-@using Dfe.PrepareTransfers.Helpers
+@using Dfe.PrepareTransfers.Data.Models
 @using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
-
+@using Dfe.PrepareTransfers.Data.TRAMS
 @model Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory.DateHistory
 
 @{
@@ -11,7 +10,7 @@
 }
 
 @section BeforeMain
-{   
+{
 }
 <partial name="_IncomingTrustHeading" model="@Model.Project" />
 
@@ -20,6 +19,49 @@
 </div>
 <div class="govuk-!-margin-bottom-12">
     <h2 class="govuk-heading-l govuk-!-margin-bottom govuk-!-font-size-36">Transfer date history</h2>
-    <p class="govuk-body">The proposed transfer date has not been entered yet. When it has been it will be displayed here.</p>
-    <p class="govuk-body">Any future changes to the proposed transfer date will also be shown here.</p>
+
+    @if (Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any())
+    {
+        <p class="govuk-body">The proposed transfer date has not been entered yet. When it has been it will be displayed here.</p>
+        <p class="govuk-body">Any future changes to the proposed transfer date will also be shown here.</p>
+    }
+    else
+    {
+        <p class="govuk-body">The current proposed transfer date is <strong>@Model.OpeningDateHistory.OrderByDescending(h => h.ChangedAt).FirstOrDefault()?.NewDate?.ToString("d MMMM yyyy")</strong>.</p>
+
+        <h3 class="govuk-heading-m">Transfer date changes</h3>
+        @foreach (var history in Model.OpeningDateHistory.OrderByDescending(h => h.ChangedAt))
+        {
+            <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                    <h2 class="govuk-summary-card__title">
+                        Changed on @history.ChangedAt.ToString("dd MMMM yyyy h:mmtt")
+                    </h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                    <dl class="govuk-summary-list">
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">Changed by</dt>
+                            <dd class="govuk-summary-list__value">@history.ChangedBy</dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">Date changed to</dt>
+                            <dd class="govuk-summary-list__value">@history.NewDate?.ToString("d MMMM yyyy")</dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">Date changed from</dt>
+                            <dd class="govuk-summary-list__value">@history.OldDate?.ToString("d MMMM yyyy")</dd>
+                        </div>
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">Reason for new date</dt>
+                            <dd class="govuk-summary-list__value">
+                                <strong>@history.ReasonForChange</strong><br />
+                                @history.ReasonForChange
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        }
+    }
 </div>

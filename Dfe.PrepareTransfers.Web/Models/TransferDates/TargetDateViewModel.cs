@@ -6,4 +6,5 @@ namespace Dfe.PrepareTransfers.Web.Models.TransferDates
     {
         public DateViewModel TargetDate { get; set; }
     }
+
 }

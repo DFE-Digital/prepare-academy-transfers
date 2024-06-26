@@ -427,5 +427,16 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
 
             return new ApiResponse<ProjectFilterParameters>(response.StatusCode, filterParameters);
         }
+        public async Task<IEnumerable<OpeningDateHistoryDto>> GetOpeningDateHistory(int urn)
+        {
+            HttpResponseMessage response = await _academisationHttpClient.GetAsync($"transfer-project/{urn}/opening-date-history");
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IEnumerable<OpeningDateHistoryDto>>(apiResponse);
+            }
+
+            throw new TramsApiException(response);
+        }
     }
 }

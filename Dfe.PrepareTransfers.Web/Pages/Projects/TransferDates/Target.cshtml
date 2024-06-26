@@ -1,4 +1,5 @@
 @page "/project/{urn}/transfer-dates/target-date"
+@using Dfe.Academisation.ExtensionMethods
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.PrepareTransfers.Web.ExtensionMethods
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
@@ -6,10 +7,10 @@
 
 
 @{
-   Layout = "_Layout";
-   ViewBag.Title = ViewData.ModelState.BuildPageTitle("When is the expected date for the transfer?");
-   var formClasses = ViewData.ModelState.GetFormGroupErrorStyle();
-   var inputError = ViewData.ModelState.GetFormFieldErrorStyle("TargetDateViewModel.TargetDate.Date");
+    Layout = "_Layout";
+    ViewBag.Title = ViewData.ModelState.BuildPageTitle("When is the expected date for the transfer?");
+    var formClasses = ViewData.ModelState.GetFormGroupErrorStyle();
+    var inputError = ViewData.ModelState.GetFormFieldErrorStyle("TargetDateViewModel.TargetDate.Date");
 }
 
 @section BeforeMain
@@ -21,29 +22,36 @@
 
 <div asp-gds-validation-summary></div>
 
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate="">
-            <input type="hidden" asp-for="@Model.Urn"/>
-            <input type="hidden" asp-for="@Model.ReturnToPreview"/>
-            <input type="hidden" asp-for="@Model.IncomingTrustName"/>
+            <input type="hidden" asp-for="@Model.Urn" />
+            <input type="hidden" asp-for="@Model.ReturnToPreview" />
+            <input type="hidden" asp-for="@Model.IncomingTrustName" />
             <div class="govuk-form-group @formClasses">
                 <fieldset class="govuk-fieldset" role="group" aria-describedby="target-date-for-transfer-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h1 class="govuk-fieldset__heading">
+                        <h1 class="govuk-fieldset__heading govuk-heading-xl">
                             <span class="govuk-caption-l">
-                                @Model.IncomingTrustName
+                                @Model.IncomingTrustName?.ToTitleCase()
                             </span>
-                            When is the expected date for the transfer?
+                            Proposed transfer date
                         </h1>
                     </legend>
-                    <div id="target-date-for-transfer-hint" class="govuk-hint">
-                        For example, 9 2007. You can change this date later.
+                    <p class="govuk-body">You can change the transfer date at any time during the project. Any new date must be agreed with the academy and all other stakeholders.</p>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-ab-date-hint">
+                        <h1 class="govuk-fieldset__heading" id="AdvisoryBoardViewModel_AdvisoryBoardDate_Date">
+                            Enter proposed transfer date
+                        </h1>
+                    </legend>
+                    <div id="set-ab-date-hint" class="govuk-hint">
+                        Academies must transfer on the first day of a month, so you only need to enter the month and year. For example, 3 2021
                     </div>
 
-                   <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date"></p>
-                   <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Month"></p>
-                   <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Year"></p>
+                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date"></p>
+                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Month"></p>
+                    <p asp-gds-validation-for="TargetDateViewModel.TargetDate.Date.Year"></p>
 
                     <div class="govuk-date-input" id="transfer-first-discussed-date">
                         <div class="govuk-date-input__item">
@@ -62,18 +70,7 @@
                                 <input asp-for="TargetDateViewModel.TargetDate.Date.Year" class="govuk-input govuk-date-input__input govuk-input--width-4 @inputError" type="text" pattern="[0-9]*" inputmode="numeric" data-test="year">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="govuk-body govuk-!-margin-top-4">or</div>
-
-                    <div class="govuk-checkboxes govuk-!-margin-top-4" data-module="govuk-checkboxes">
-                        <div class="govuk-checkboxes__item">
-                            <input asp-for="TargetDateViewModel.TargetDate.UnknownDate" class="govuk-checkboxes__input" type="checkbox">
-                            <label asp-for="TargetDateViewModel.TargetDate.UnknownDate" class="govuk-label govuk-checkboxes__label">
-                                I do not know this
-                            </label>
-                        </div>
-                    </div>
+                    </div>                  
                 </fieldset>
             </div>
             <button class="govuk-button" data-module="govuk-button" type="submit">

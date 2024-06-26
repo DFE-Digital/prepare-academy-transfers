@@ -26,5 +26,6 @@ namespace Dfe.PrepareTransfers.Data
         public Task<bool> AssignUser(Project project);
         public Task<ApiResponse<FileStreamResult>> DownloadProjectExport(GetProjectSearchModel searchModel);
         public Task<ApiResponse<ProjectFilterParameters>> GetFilterParameters();
+        public Task<IEnumerable<OpeningDateHistoryDto>> GetOpeningDateHistory(int urn);
     }
 }
