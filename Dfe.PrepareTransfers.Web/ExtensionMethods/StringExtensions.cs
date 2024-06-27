@@ -1,11 +1,10 @@
-﻿namespace Dfe.PrepareConversions.Extensions;
+﻿namespace Dfe.PrepareTransfers.Web.ExtensionMethods;
 
-using Dfe.PrepareTransfers.Web.ExtensionMethods;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using System;
 
 public static class StringExtensions
 {
@@ -121,5 +120,13 @@ public static class StringExtensions
     public static string RemoveNonAlphanumericOrWhiteSpace(this string str)
     {
         return new Regex("[^\\w\\s-]", RegexOptions.None, TimeSpan.FromSeconds(1.0)).Replace(str, string.Empty);
+    }
+    public static string ToFormattedDate(this string dateStr)
+    {
+        if (DateTime.TryParse(dateStr, out DateTime date))
+        {
+            return date.ToString("d MMMM yyyy");
+        }
+        return "Invalid date format";
     }
 }

@@ -1,12 +1,10 @@
 using Dfe.PrepareTransfers.Data;
-using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Web.Models;
 using Dfe.PrepareTransfers.Web.Models.TransferDates;
 using Dfe.PrepareTransfers.Web.Validators.TransferDates;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,6 +17,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
         [BindProperty]
         [CustomizeValidator(Skip = true)]
         public TargetDateViewModel TargetDateViewModel { get; set; }
+        public bool TargetDateAlreadyExists { get; set; }
+        public string ExistingTargetDate { get; set; }
 
         public Target(IProjects projectsRepository)
         {
@@ -30,6 +30,8 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             var project = await _projectsRepository.GetByUrn(Urn);
 
             var projectResult = project.Result;
+            TargetDateAlreadyExists = projectResult.Dates.Target is not null;
+            if (TargetDateAlreadyExists) ExistingTargetDate = projectResult.Dates.Target;
 
             TargetDateViewModel = new TargetDateViewModel
             {
@@ -72,13 +74,15 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 validationResult.AddToModelState(ModelState, nameof(TargetDateViewModel));
                 return Page();
             }
-
+            if (projectResult.Dates.Target is not null)
+            {
+                return RedirectToPage("/Projects/TransferDates/Reason", new { Urn, TargetDate = TargetDateViewModel.TargetDate.DateInputAsString() });
+            }
             projectResult.Dates.Target = TargetDateViewModel.TargetDate.DateInputAsString();
 
             projectResult.Dates.HasTargetDateForTransfer = !TargetDateViewModel.TargetDate.UnknownDate;
-            var ChangedBy = NameOfUser;
-            var ReasonsChanged = new List<ReasonChange> { new ReasonChange("Test Head", "Test Details") };
-            await _projectsRepository.UpdateDates(projectResult, ReasonsChanged, ChangedBy);
+
+            await _projectsRepository.UpdateDates(projectResult);
 
             if (ReturnToPreview)
             {

@@ -55,14 +55,13 @@
                         <div class="govuk-summary-list__row">
                                                                                     
                             <dt class="govuk-summary-list__key">Reason for new date</dt>
+                            <dd class="govuk-summary-list__value">
                             @foreach (var reason in history.ReasonsChanged)
-                            {
-                                <dd class="govuk-summary-list__value">
-                                <strong>@reason.Heading</strong><br />
-                                @reason.Details
-                                </dd>
+                            {                                
+                                    <p class="govuk-body"><strong>@reason.Heading</strong></p>
+                                    <p class="govuk-body">@reason.Details</p>                                
                             }
-                            
+                            </dd>
                         </div>
                     </dl>
                 </div>
