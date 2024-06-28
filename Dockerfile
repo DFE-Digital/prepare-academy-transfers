@@ -1,5 +1,5 @@
 ARG ASPNET_IMAGE_TAG=8.0-bookworm-slim
-ARG NODEJS_IMAGE_TAG=18.12-bullseye
+ARG NODEJS_IMAGE_TAG=18.20-bullseye
 
 # Stage 1 - Build frontend assets
 FROM node:${NODEJS_IMAGE_TAG} as frontend
