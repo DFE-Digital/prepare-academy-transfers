@@ -14,7 +14,7 @@ on:
     - '!end-to-end-tests/**'
 
 env:
-  DOTNET_VERSION: '6.0.403'
+  DOTNET_VERSION: '8.0.x'
   JAVA_VERSION: '17'
 
 jobs:
