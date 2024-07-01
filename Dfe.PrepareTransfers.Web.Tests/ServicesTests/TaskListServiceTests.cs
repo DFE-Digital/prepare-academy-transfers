@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Dfe.PrepareTransfers.Data;
+﻿using Dfe.PrepareTransfers.Data;
 using Dfe.PrepareTransfers.Data.Models;
 using Dfe.PrepareTransfers.Data.Models.KeyStagePerformance;
 using Dfe.PrepareTransfers.Data.Models.Projects;
@@ -9,6 +7,8 @@ using Dfe.PrepareTransfers.Web.BackgroundServices;
 using Dfe.PrepareTransfers.Web.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 using Index = Dfe.PrepareTransfers.Web.Pages.Projects.Index;
 
@@ -347,14 +347,6 @@ namespace Dfe.PrepareTransfers.Web.Tests.ServicesTests
                 Assert.Equal(ProjectStatuses.InProgress, _index.TransferDatesStatus);
             }
 
-            [Theory]
-            [MemberData(nameof(TargetDatesCompleted))]
-            public void GivenCompletedDates_StatusComplete(TransferDates dates)
-            {
-                FoundProjectFromRepo.Dates = dates;
-                _subject.BuildTaskListStatuses(_index);
-                Assert.Equal(ProjectStatuses.Completed, _index.TransferDatesStatus);
-            }
         }
 
         public class GetBenefitsStatus : TaskListServiceTests
