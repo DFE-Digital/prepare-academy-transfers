@@ -40,7 +40,7 @@
     "cypress-axe": "^1.2.0",
     "cypress-multi-reporters": "^1.6.3",  
     "dayjs": "^1.11.10",
-    "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-cypress": "^3.0.0",
     "cypress-slack-reporter": "^1.5.3",
     "typescript": "^5.3.3",
     "zaproxy": "^2.0.0-rc.2"
