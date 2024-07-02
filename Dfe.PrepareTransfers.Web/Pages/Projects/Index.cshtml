@@ -86,6 +86,17 @@
         <ol class="moj-task-list">
             <li>
                 <h3 class="moj-task-list__section govuk-!-margin-top-8">
+                    Advisory board and transfer dates
+                </h3>
+                <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
+                    <li class="moj-task-list__item">
+                        <span class="moj-task-list__task-name">
+                            <a class="govuk-link" aria-describedby="dates" asp-page="/Projects/TransferDates/Index" asp-route-urn="@Model.Urn" data-test="transfer-dates">Confirm project dates</a>
+                        </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
+                    </li>
+                </ul>
+
+                <h3 class="moj-task-list__section govuk-!-margin-top-8">
                     Transfer details
                 </h3>
                 <ul class="moj-task-list__items govuk-!-padding-left-0 govuk-!-margin-bottom-6">
@@ -93,12 +104,7 @@
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="features" asp-page="/Projects/Features/Index" asp-route-urn="@Model.Urn" data-test="transfer-features">Features of the transfer</a>
                         </span><projectstatus id="features" status="@Model.FeatureTransferStatus"></projectstatus>
-                    </li>
-                    <li class="moj-task-list__item">
-                        <span class="moj-task-list__task-name">
-                            <a class="govuk-link" aria-describedby="dates" asp-page="/Projects/TransferDates/Index" asp-route-urn="@Model.Urn" data-test="transfer-dates">Transfer dates</a>
-                        </span><projectstatus id="dates" status="@Model.TransferDatesStatus"></projectstatus>
-                    </li>
+                    </li>                    
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="legal-requirements" asp-page="/Projects/LegalRequirements/Index" asp-route-urn="@Model.Urn" data-test="transfer-legal-requirements">Legal requirements</a>
@@ -107,7 +113,7 @@
                     <li class="moj-task-list__item">
                         <span class="moj-task-list__task-name">
                             <a class="govuk-link" aria-describedby="academyandtrustinformation" asp-page="/Projects/AcademyAndTrustInformation/Index" asp-route-urn="@Model.Urn" data-test="academy-trust-information">
-                                Trust information and project dates
+                                Trust information
                             </a>
                         </span><projectstatus id="academyandtrustinformation" , status="@Model.AcademyAndTrustInformationStatus"></projectstatus>
                     </li>

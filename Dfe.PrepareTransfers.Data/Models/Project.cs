@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Web.Models;
+using System.Collections.Generic;
 
 namespace Dfe.PrepareTransfers.Data.Models
 {
@@ -22,7 +22,6 @@ namespace Dfe.PrepareTransfers.Data.Models
         public string Reference { get; set; }
         public string OutgoingTrustUkprn { get; set; }
         public string OutgoingTrustName { get; set; }
-
         public string State { get; set; }
         public string Status { get; set; }
         public List<TransferringAcademy> TransferringAcademies { get; set; }

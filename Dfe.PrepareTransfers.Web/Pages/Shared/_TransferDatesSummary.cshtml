@@ -19,7 +19,21 @@
     </div>
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-            Expected date for transfer
+            Previous advisory board
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <datesummary value="@Model.PreviousAdvisoryBoardDate"></datesummary>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" asp-page="/Projects/TransferDates/PreviousAdvisoryBoard" data-test="ab-date"
+               asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
+                Change<span class="govuk-visually-hidden"> Previous advisory board</span>
+            </a>
+        </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Proposed transfer date
         </dt>
         <dd class="govuk-summary-list__value">
             <datesummary value="@Model.TargetDate" has-date="@Model.HasTargetDate"></datesummary>
@@ -27,7 +41,7 @@
         <dd class="govuk-summary-list__actions">
             <a class="govuk-link" asp-page="/Projects/TransferDates/Target" data-test="target-date"
                asp-route-urn="@Model.Urn" asp-route-returnToPreview="@(Model.ReturnToPreview  ? "true" : null)">
-                Change<span class="govuk-visually-hidden"> expected date for transfer</span>
+                Change<span class="govuk-visually-hidden"> Proposed transfer date</span>
             </a>
         </dd>
     </div>

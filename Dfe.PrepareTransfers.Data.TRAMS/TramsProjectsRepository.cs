@@ -1,5 +1,4 @@
 using Dfe.PrepareTransfers.Data.Models;
-using Dfe.PrepareTransfers.Data.Models.Projects;
 using Dfe.PrepareTransfers.Data.TRAMS.Mappers.Request;
 using Dfe.PrepareTransfers.Data.TRAMS.Models;
 using Dfe.PrepareTransfers.Data.TRAMS.Models.AcademyTransferProject;
@@ -78,7 +77,7 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
-                var project = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
+                AcademisationProject project = JsonConvert.DeserializeObject<AcademisationProject>(apiResponse);
 
                 #region API Interim
 
@@ -242,7 +241,23 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             // stay inline with current pattern
             throw new TramsApiException(response);
         }
+        public async Task<bool> UpdateDates(Project project, List<ReasonChange> reasonsChanged, string ChangedBy)
+        {
+            AcademyTransferTargetProjectDates dates = InternalProjectToUpdateMapper.TargetDates(project);
 
+            dates.ChangedBy = ChangedBy;
+            dates.ReasonsChanged = reasonsChanged;
+            var content = new StringContent(JsonConvert.SerializeObject(dates), Encoding.Default,
+               "application/json");
+            HttpResponseMessage response = await _academisationHttpClient.PutAsync($"transfer-project/{project.Urn}/set-transfer-dates", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            // stay inline with current pattern
+            throw new TramsApiException(response);
+        }
         public async Task<bool> UpdateAcademy(string projectUrn, Data.Models.Projects.TransferringAcademy transferringAcademy)
         {
             var academy = InternalProjectToUpdateMapper.TransferringAcademy(transferringAcademy);
@@ -427,6 +442,17 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
             };
 
             return new ApiResponse<ProjectFilterParameters>(response.StatusCode, filterParameters);
+        }
+        public async Task<IEnumerable<OpeningDateHistoryDto>> GetOpeningDateHistory(int urn)
+        {
+            HttpResponseMessage response = await _academisationHttpClient.GetAsync($"transfer-project/{urn}/opening-date-history");
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<IEnumerable<OpeningDateHistoryDto>>(apiResponse);
+            }
+
+            throw new TramsApiException(response);
         }
     }
 }

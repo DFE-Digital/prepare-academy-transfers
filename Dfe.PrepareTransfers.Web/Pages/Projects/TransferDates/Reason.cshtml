@@ -1,0 +1,58 @@
+@page "{urn}/transfer-dates/reason"
+@using Dfe.PrepareTransfers.Web.ExtensionMethods
+@model Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates.Reason
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Reasons for transfer date change";
+}
+@section BeforeMain
+{
+    <backtopreview urn="@Model.Urn" return-to-preview="@Model.ReturnToPreview">
+        <a class="govuk-back-link" asp-page="/Projects/TransferDates/Target" asp-route-urn="@Model.Urn">Back</a>
+    </backtopreview>
+}
+
+<div asp-gds-validation-summary></div>
+<section class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading govuk-heading-xl">
+                <span class="govuk-caption-l">
+                    @Model.IncomingTrustName?.ToTitleCase()
+                </span>
+                Reasons for transfer date change
+            </h1>
+        </legend>
+        <p>The new proposed transfer date is <strong>@Model.TargetDate.ToFormattedDate()</strong>.</p>
+        <form method="post" novalidate="">
+            <input type="hidden" asp-for="Urn" />
+            <input type="hidden" asp-for="TargetDate" />
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" role="group" aria-describedby="reasons-for-date-change-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1 class="govuk-fieldset__heading">Reasons for date change</h1>
+                    </legend>
+                    <span id="reasons-for-date-change-hint" class="govuk-hint">Select all that apply and provide details.</span>
+                    <div class="govuk-checkboxes govuk-!-margin-top-9" data-module="govuk-checkboxes">
+                        @foreach (var reason in Model.ReasonOptions)
+                        {
+                            var checkboxId = reason.Heading.ToLower().Replace(" ", "-");
+                            var textareaName = $"Details{reason.Heading.Replace(" ", "")}";
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input" id="@checkboxId" name="Reasons" type="checkbox" value="@checkboxId" data-aria-controls="conditional-@checkboxId">
+                                <label class="govuk-label govuk-checkboxes__label" for="@checkboxId">@reason.Heading</label>
+                            </div>
+                            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-@checkboxId">
+                                <div class="govuk-form-group">
+                                    <label class="govuk-label" for="@textareaName">Enter details about the reason for change.</label>
+                                    <textarea class="govuk-textarea" id="@textareaName" name="@textareaName"></textarea>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <button class="govuk-button" data-module="govuk-button" type="submit">Save and continue</button>
+        </form>
+    </div>
+</section>

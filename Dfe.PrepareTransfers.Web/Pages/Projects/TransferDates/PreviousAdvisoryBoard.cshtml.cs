@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 {
-    public class AdvisoryBoard : CommonPageModel
+    public class PreviousAdvisoryBoard : CommonPageModel
     {
         private readonly IProjects _projectsRepository;
 
         [BindProperty] public AdvisoryBoardViewModel AdvisoryBoardViewModel { get; set; }
         public string TrustName { get; set; }
 
-        public AdvisoryBoard(IProjects projectsRepository)
+        public PreviousAdvisoryBoard(IProjects projectsRepository)
         {
             _projectsRepository = projectsRepository;
         }
@@ -66,8 +66,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 return Page();
             }
 
-            projectResult.Dates.Htb = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
-            projectResult.Dates.HasHtbDate = !AdvisoryBoardViewModel.AdvisoryBoardDate.UnknownDate;
+            projectResult.Dates.PreviousAdvisoryBoardDate = AdvisoryBoardViewModel.AdvisoryBoardDate.DateInputAsString();
 
             await _projectsRepository.UpdateDates(projectResult);
 
