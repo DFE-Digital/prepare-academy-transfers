@@ -17,7 +17,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory
 
         public Project Project { get; set; }
         public AdvisoryBoardDecision Decision { get; set; }
-        public IEnumerable<OpeningDateHistoryDto> OpeningDateHistory { get; set; }
+        public IEnumerable<OpeningDateHistoryDto>? OpeningDateHistory { get; set; }
 
         public DateHistory(IProjects projectsRepository, ILogger<DateHistory> logger)
         {
@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory
         public async Task<IActionResult> OnGetAsync()
         {
             Project = (await _projectsRepository.GetByUrn(Urn)).Result;
-            OpeningDateHistory = await _projectsRepository.GetOpeningDateHistory(Convert.ToInt32(Urn));
+            OpeningDateHistory = await _projectsRepository.GetOpeningDateHistory(Convert.ToInt32(Urn)) ?? null;
 
             return Page();
         }

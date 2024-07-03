@@ -451,7 +451,10 @@ namespace Dfe.PrepareTransfers.Data.TRAMS
                 var apiResponse = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<OpeningDateHistoryDto>>(apiResponse);
             }
-
+            if (response.StatusCode is System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
             throw new TramsApiException(response);
         }
     }
