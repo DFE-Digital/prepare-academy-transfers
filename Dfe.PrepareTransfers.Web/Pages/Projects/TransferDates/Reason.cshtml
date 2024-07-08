@@ -37,7 +37,7 @@
                         @foreach (var reason in Model.ReasonOptions)
                         {
                             var checkboxId = reason.Heading.ToLower().Replace(" ", "-");
-                            var textareaName = $"Details{reason.Heading.Replace(" ", "")}";
+                            var textareaName = $"Details[{checkboxId}]";
                             <div class="govuk-checkboxes__item">
                                 <input class="govuk-checkboxes__input" id="@checkboxId" name="Reasons" type="checkbox" value="@checkboxId" data-aria-controls="conditional-@checkboxId">
                                 <label class="govuk-label govuk-checkboxes__label" for="@checkboxId">@reason.Heading</label>
