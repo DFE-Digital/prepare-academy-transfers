@@ -85,6 +85,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             return RedirectToPage("/Projects/TransferDates/Index", new { Urn });
         }
 
+
         private List<ReasonChange> GetReasonOptions(bool isDateSooner)
         {
             var soonerReasons = new List<string> { "faster-progress", "error-correction" };

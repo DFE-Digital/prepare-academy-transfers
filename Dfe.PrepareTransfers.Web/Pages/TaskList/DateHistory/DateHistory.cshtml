@@ -2,6 +2,7 @@
 @using Dfe.PrepareTransfers.Data.Models
 @using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
 @using Dfe.PrepareTransfers.Data.TRAMS
+@using Dfe.PrepareTransfers.Web.ExtensionMethods
 @model Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory.DateHistory
 
 @{
@@ -18,15 +19,22 @@
     <partial name="_SubMenu" />
 </div>
 <div class="govuk-!-margin-bottom-12">
-    <h2 class="govuk-heading-l govuk-!-margin-bottom govuk-!-font-size-36">Transfer date history</h2>
+    
 
-    @if (Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any())
+    @if ((Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any()) && Model.Project.Dates.Target is not null) 
     {
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-12 govuk-!-font-size-36">Current proposed transfer date</h2>
+        <p class="govuk-body">The current proposed transfer date is <strong>@Model.Project.Dates.Target.ToFormattedDate()</strong>.</p>
+    }
+    else if ((Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any()) && Model.Project.Dates.Target is null)
+    {        
+        <h2 class="govuk-heading-l govuk-!-margin-bottom govuk-!-font-size-36">Transfer date history</h2>
         <p class="govuk-body">The proposed transfer date has not been entered yet. When it has been it will be displayed here.</p>
         <p class="govuk-body">Any future changes to the proposed transfer date will also be shown here.</p>
     }
     else
     {
+        <h2 class="govuk-heading-l govuk-!-margin-bottom govuk-!-font-size-36">Current proposed transfer date</h2>
         <p class="govuk-body">The current proposed transfer date is <strong>@Model.OpeningDateHistory.OrderByDescending(h => h.ChangedAt).FirstOrDefault()?.NewDate?.ToString("d MMMM yyyy")</strong>.</p>
 
         <h3 class="govuk-heading-m">Transfer date changes</h3>
