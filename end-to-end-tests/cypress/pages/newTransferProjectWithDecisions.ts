@@ -83,7 +83,7 @@ export class NewTransferProjectWithDecisions {
   public verifyDecisionDetails(): this {
     cy.contains('Record a decision').click();
     cy.get('#decision').should('contain', 'Deferred');
-    cy.get('#decision-made-by').should('contain', 'Deputy Director');
+    cy.get('#decision-made-by').should('contain', 'Grade 6');
     cy.get('#deferred-reasons').should('contain', 'Performance concerns:');
     cy.get('#deferred-reasons').should('contain', 'Cypress Test');
     cy.get('#decision-date').should('contain', '12 December 2023');
