@@ -28,8 +28,8 @@ class TrustInformationProjectDatesPage {
     cy.get('button').contains('Save and continue').click()
 
     // Check the table has been updated
-    cy.get('dd').eq(1).should('contain.text', 'Approve')
-    cy.get('dd').eq(3).should('contain.text', 'Chris Sherlock')
+    cy.get('dd').eq(0).should('contain.text', 'Approve')
+    cy.get('dd').eq(2).should('contain.text', 'Chris Sherlock')
 
     return this
   }
