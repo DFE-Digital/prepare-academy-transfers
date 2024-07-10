@@ -24,14 +24,14 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 
         private readonly Dictionary<string, string> reasonMappings = new()
         {
-            { "faster-progress", "Project is progressing faster than expected" },
+            { "project-is-progressing-faster-than-expected", "Project is progressing faster than expected" },
             { "error-correction", "Correcting an error" },
             { "incoming-trust", "Incoming trust" },
             { "outgoing-trust", "Outgoing trust" },
             { "school", "School" },
-            { "local-authority", "LA (local authority)" },
+            { "la-(local-authority)", "LA (local authority)" },
             { "diocese", "Diocese" },
-            { "tupe", "TuPE (Transfer of Undertakings Protection of Employment rights)" },
+            { "tupe-(transfer-of-undertakings-protection-of-employment-rights)", "TuPE (Transfer of Undertakings Protection of Employment rights)" },
             { "pensions", "Pensions" },
             { "union", "Union" },
             { "negative-press-coverage", "Negative press coverage" },
@@ -42,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             { "buildings", "Buildings" },
             { "legal-documents", "Legal documents" },
             { "voluntary-deferral", "Voluntary deferral" },
-            { "federation", "In a federation" }
+            { "in-a-federation", "In a federation" }
         };
 
         public Reason(IProjects projectsRepository)
@@ -88,7 +88,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 
         private List<ReasonChange> GetReasonOptions(bool isDateSooner)
         {
-            var soonerReasons = new List<string> { "faster-progress", "error-correction" };
+            var soonerReasons = new List<string> { "project-is-progressing-faster-than-expected", "error-correction" };
             var laterReasons = reasonMappings.Keys.Except(soonerReasons).ToList();
 
             return (isDateSooner ? soonerReasons : laterReasons)
