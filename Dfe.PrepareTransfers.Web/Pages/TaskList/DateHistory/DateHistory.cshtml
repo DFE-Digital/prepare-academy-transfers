@@ -2,6 +2,7 @@
 @using Dfe.PrepareTransfers.Data.Models
 @using Dfe.PrepareTransfers.Data.Models.AdvisoryBoardDecision
 @using Dfe.PrepareTransfers.Data.TRAMS
+@using Dfe.PrepareTransfers.Helpers
 @using Dfe.PrepareTransfers.Web.ExtensionMethods
 @model Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory.DateHistory
 
@@ -24,7 +25,7 @@
     @if ((Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any()) && Model.Project.Dates.Target is not null) 
     {
         <h2 class="govuk-heading-l govuk-!-margin-bottom-12 govuk-!-font-size-36">Current proposed transfer date</h2>
-        <p class="govuk-body">The current proposed transfer date is <strong>@Model.Project.Dates.Target.ToFormattedDate()</strong>.</p>
+        <p class="govuk-body">The current proposed transfer date is <strong>@DatesHelper.DateStringToGovUkDate(Model.Project.Dates.Target)</strong>.</p>
     }
     else if ((Model.OpeningDateHistory == null || !Model.OpeningDateHistory.Any()) && Model.Project.Dates.Target is null)
     {        

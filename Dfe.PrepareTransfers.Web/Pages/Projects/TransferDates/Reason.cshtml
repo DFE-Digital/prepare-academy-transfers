@@ -1,4 +1,5 @@
 @page "{urn}/transfer-dates/reason"
+@using Dfe.PrepareTransfers.Helpers
 @using Dfe.PrepareTransfers.Web.ExtensionMethods
 @model Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates.Reason
 @{
@@ -23,7 +24,7 @@
                 Reasons for transfer date change
             </h1>
         </legend>
-        <p>The new proposed transfer date is <strong>@Model.TargetDate.ToFormattedDate()</strong>.</p>
+        <p>The new proposed transfer date is <strong>@DatesHelper.DateStringToGovUkDate(Model.TargetDate)</strong>.</p>
         <form method="post" novalidate="">
             <input type="hidden" asp-for="Urn" />
             <input type="hidden" asp-for="TargetDate" />
