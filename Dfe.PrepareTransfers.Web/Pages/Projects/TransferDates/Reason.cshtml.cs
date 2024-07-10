@@ -24,7 +24,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 
         private readonly Dictionary<string, string> reasonMappings = new()
         {
-            { "faster-progress", "Project is progressing faster than expected" },
+            { "project-is-progressing-faster-than-expected", "Project is progressing faster than expected" },
             { "error-correction", "Correcting an error" },
             { "incoming-trust", "Incoming trust" },
             { "outgoing-trust", "Outgoing trust" },
@@ -88,7 +88,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
 
         private List<ReasonChange> GetReasonOptions(bool isDateSooner)
         {
-            var soonerReasons = new List<string> { "faster-progress", "error-correction" };
+            var soonerReasons = new List<string> { "project-is-progressing-faster-than-expected", "error-correction" };
             var laterReasons = reasonMappings.Keys.Except(soonerReasons).ToList();
 
             return (isDateSooner ? soonerReasons : laterReasons)
