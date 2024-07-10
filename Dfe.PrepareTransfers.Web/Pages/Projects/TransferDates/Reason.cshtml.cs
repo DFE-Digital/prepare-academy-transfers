@@ -58,13 +58,18 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             var project = await _projectsRepository.GetByUrn(Urn);
             var projectResult = project.Result;
 
+            CalculateReasonOptions(projectResult);
+
+            return Page();
+        }
+
+        private void CalculateReasonOptions(Project projectResult)
+        {
             DateTime newDate = DateTime.ParseExact(TargetDate, "dd/MM/yyyy", null);
             DateTime existingDate = DateTime.ParseExact(projectResult.Dates.Target, "dd/MM/yyyy", null);
             IsDateSooner = newDate < existingDate;
             IncomingTrustName = projectResult.IncomingTrustName;
             ReasonOptions = GetReasonOptions(IsDateSooner);
-
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -85,6 +90,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             {
                 ModelState.AddModelError(nameof(Reasons), "Please provide details for the selected reasons.");
                 // Return the same page to show the error
+                CalculateReasonOptions(projectResult);
                 return Page();
             }
 
