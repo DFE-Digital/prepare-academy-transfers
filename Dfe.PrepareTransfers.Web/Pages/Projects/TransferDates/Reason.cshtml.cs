@@ -80,10 +80,19 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 .Select(reason => new ReasonChange(reasonMappings[reason], Details.TryGetValue(reason, out string value) ? value : string.Empty))
                 .ToList();
 
+            // Check if any item in reasonsChanged has null or empty details
+            if (reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)))
+            {
+                ModelState.AddModelError(nameof(Reasons), "Please provide details for the selected reasons.");
+                // Return the same page to show the error
+                return Page();
+            }
+
             await _projectsRepository.UpdateDates(projectResult, reasonsChanged, User.Identity.Name ?? string.Empty);
 
             return RedirectToPage("/Projects/TransferDates/Index", new { Urn });
         }
+
 
 
         private List<ReasonChange> GetReasonOptions(bool isDateSooner)
