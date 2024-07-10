@@ -85,7 +85,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 .ToList();
 
             // Check if any item in reasonsChanged has any selected
-            if (reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)) || reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Heading)))
+            if (reasonsChanged.Count == 0 || reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)) || reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Heading)))
             {
                 ModelState.AddModelError(nameof(Reasons), "Please provide details for the selected reasons.");
                 CalculateReasonOptions(projectResult);
