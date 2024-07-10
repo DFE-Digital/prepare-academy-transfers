@@ -18,7 +18,6 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
         public List<string> Reasons { get; set; }
         [BindProperty]
         public Dictionary<string, string> Details { get; set; } = [];
-
         public List<ReasonChange> ReasonOptions { get; set; }
         public bool IsDateSooner { get; set; }
 
@@ -85,11 +84,10 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 .Select(reason => new ReasonChange(reasonMappings[reason], Details.TryGetValue(reason, out string value) ? value : string.Empty))
                 .ToList();
 
-            // Check if any item in reasonsChanged has null or empty details
-            if (reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)))
+            // Check if any item in reasonsChanged has any selected
+            if (reasonsChanged.Count == 0 || reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)) || reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Heading)))
             {
                 ModelState.AddModelError(nameof(Reasons), "Please provide details for the selected reasons.");
-                // Return the same page to show the error
                 CalculateReasonOptions(projectResult);
                 return Page();
             }
