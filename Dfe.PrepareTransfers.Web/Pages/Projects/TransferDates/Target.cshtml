@@ -1,4 +1,5 @@
 @page "/project/{urn}/transfer-dates/target-date"
+@using Dfe.PrepareTransfers.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Dfe.PrepareTransfers.Web.ExtensionMethods
 @using Dfe.PrepareTransfers.Web.Dfe.PrepareTransfers.Helpers.TagHelpers
@@ -97,7 +98,7 @@
                                 Proposed transfer date
                             </h1>
                         </legend>
-                        <p class="govuk-body">The current proposed transfer date is <strong>@Model.ExistingTargetDate.ToFormattedDate().</strong></p>
+                        <p class="govuk-body">The current proposed transfer date is <strong>@DatesHelper.DateStringToGovUkDate(Model.ExistingTargetDate)</strong></p>
                         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l" aria-describedby="set-ab-date-hint">
                             <h1 class="govuk-fieldset__heading" id="AdvisoryBoardViewModel_AdvisoryBoardDate_Date">
                                 Enter new proposed transfer date
