@@ -29,9 +29,9 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             { "incoming-trust", "Incoming trust" },
             { "outgoing-trust", "Outgoing trust" },
             { "school", "School" },
-            { "local-authority", "LA (local authority)" },
+            { "la-(local-authority)", "LA (local authority)" },
             { "diocese", "Diocese" },
-            { "tupe", "TuPE (Transfer of Undertakings Protection of Employment rights)" },
+            { "tupe-(transfer-of-undertakings-protection-of-employment-rights)", "TuPE (Transfer of Undertakings Protection of Employment rights)" },
             { "pensions", "Pensions" },
             { "union", "Union" },
             { "negative-press-coverage", "Negative press coverage" },
@@ -42,7 +42,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             { "buildings", "Buildings" },
             { "legal-documents", "Legal documents" },
             { "voluntary-deferral", "Voluntary deferral" },
-            { "federation", "In a federation" }
+            { "in-a-federation", "In a federation" }
         };
 
         public Reason(IProjects projectsRepository)
