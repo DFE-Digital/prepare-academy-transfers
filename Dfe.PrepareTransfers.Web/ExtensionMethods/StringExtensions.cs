@@ -123,7 +123,7 @@ public static class StringExtensions
     }
     public static string ToFormattedDate(this string dateStr)
     {
-        if (DateTime.TryParse(dateStr, out DateTime date))
+        if (DateTime.TryParse(dateStr, out DateTime date, ))
         {
             return date.ToString("d MMMM yyyy");
         }
