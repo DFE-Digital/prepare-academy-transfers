@@ -31,7 +31,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             {
                 AdvisoryBoardDate = new DateViewModel
                 {
-                    Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.Htb),
+                    Date = DateViewModel.SplitDateIntoDayMonthYear(projectResult.Dates.PreviousAdvisoryBoardDate),
                     UnknownDate = projectResult.Dates.HasHtbDate is false
                 }
             };

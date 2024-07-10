@@ -144,6 +144,15 @@ public class Startup
         // Initialize the ConversionsUrl
         var serviceLinkOptions = Configuration.GetSection("ServiceLink").Get<ServiceLinkOptions>();
         Links.InitializeConversionsUrl(serviceLinkOptions.ConversionsUrl);
+
+        // Enforce HTTPS in ASP.NET Core
+        // @link https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?
+        services.AddHsts(options =>
+        {
+            options.Preload = true;
+            options.IncludeSubDomains = true;
+            options.MaxAge = TimeSpan.FromDays(365);
+        });
     }
 
     /// <summary>
@@ -167,6 +176,15 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // Ensure we do not lose X-Forwarded-* Headers when behind a Proxy
+        var forwardOptions = new ForwardedHeadersOptions {
+            ForwardedHeaders = ForwardedHeaders.All,
+            RequireHeaderSymmetry = false
+        };
+        forwardOptions.KnownNetworks.Clear();
+        forwardOptions.KnownProxies.Clear();
+        app.UseForwardedHeaders(forwardOptions);
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -174,13 +192,11 @@ public class Startup
         else
         {
             app.UseExceptionHandler("/Errors");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
         }
 
         app.UseSecurityHeaders(SecurityHeadersDefinitions
-           .GetHeaderPolicyCollection(env.IsDevelopment(), GetTypedConfiguration<AllowedExternalSourcesOptions>())
-           .AddXssProtectionDisabled());
+           .GetHeaderPolicyCollection(env.IsDevelopment(), GetTypedConfiguration<AllowedExternalSourcesOptions>()));
+        app.UseHsts();
 
         app.UseCookiePolicy(new CookiePolicyOptions
         {
@@ -194,16 +210,6 @@ public class Startup
         {
             app.UseHttpsRedirection();
         }
-
-        //For Azure AD redirect uri to remain https
-        var forwardOptions = new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.All,
-            RequireHeaderSymmetry = false
-        };
-        forwardOptions.KnownNetworks.Clear();
-        forwardOptions.KnownProxies.Clear();
-        app.UseForwardedHeaders(forwardOptions);
 
         app.UseStaticFiles();
 
@@ -282,7 +288,7 @@ public class Startup
         services.AddScoped<ITramsHttpClient, TramsHttpClient>();
         services.AddScoped<IAcademisationHttpClient, AcademisationHttpClient>();
         services.AddScoped<IAcademyTransfersAdvisoryBoardDecisionRepository, AcademyTransfersAdvisoryBoardDecisionRepository>();
-        
+
         services.AddSingleton<PerformanceDataChannel>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.AddSingleton<IAuthorizationHandler, HeaderRequirementHandler>();
