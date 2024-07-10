@@ -58,13 +58,18 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
             var project = await _projectsRepository.GetByUrn(Urn);
             var projectResult = project.Result;
 
+            CalculateReasonOptions(projectResult);
+
+            return Page();
+        }
+
+        private void CalculateReasonOptions(Project projectResult)
+        {
             DateTime newDate = DateTime.ParseExact(TargetDate, "dd/MM/yyyy", null);
             DateTime existingDate = DateTime.ParseExact(projectResult.Dates.Target, "dd/MM/yyyy", null);
             IsDateSooner = newDate < existingDate;
             IncomingTrustName = projectResult.IncomingTrustName;
             ReasonOptions = GetReasonOptions(IsDateSooner);
-
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -80,10 +85,20 @@ namespace Dfe.PrepareTransfers.Web.Pages.Projects.TransferDates
                 .Select(reason => new ReasonChange(reasonMappings[reason], Details.TryGetValue(reason, out string value) ? value : string.Empty))
                 .ToList();
 
+            // Check if any item in reasonsChanged has null or empty details
+            if (reasonsChanged.Any(rc => string.IsNullOrEmpty(rc.Details)))
+            {
+                ModelState.AddModelError(nameof(Reasons), "Please provide details for the selected reasons.");
+                // Return the same page to show the error
+                CalculateReasonOptions(projectResult);
+                return Page();
+            }
+
             await _projectsRepository.UpdateDates(projectResult, reasonsChanged, User.Identity.Name ?? string.Empty);
 
             return RedirectToPage("/Projects/TransferDates/Index", new { Urn });
         }
+
 
 
         private List<ReasonChange> GetReasonOptions(bool isDateSooner)
