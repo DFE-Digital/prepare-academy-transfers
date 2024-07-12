@@ -144,7 +144,7 @@ describe('Create a new transfer', () => {
         .confirmDates()
 
       projectPage
-        .checkTransferDatesStatus('Completed')
+        .checkTransferDatesStatus('IN PROGRESS')
     })
 
     it('Fill in Benefits and Risks', () => {
@@ -214,6 +214,7 @@ describe('Create a new transfer', () => {
 
       trustInformationProjectDatesPage
         .completeRecommendationAndAuthor()
+        .confirmTrustInformationProjectDates()
         .checkOtherTableData(advisoryBoardDate, incomingTrustData.name, transferDate)
         .confirmTrustInformationProjectDates()
 

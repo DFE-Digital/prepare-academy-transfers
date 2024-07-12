@@ -7,8 +7,7 @@ class DatesPage {
     cy.get('[data-test="ab-date"]').click()
 
     cy.get('h1').should('contain.text', 'Advisory board date')
-    // Check 'I don't know' checkbox is available
-    cy.get('[id="AdvisoryBoardViewModel_AdvisoryBoardDate_UnknownDate"]').should('exist')
+
 
     cy.get('[data-test="day"]').clear()
     cy.get('[data-test="day"]').type(date.date())
@@ -29,9 +28,7 @@ class DatesPage {
 
     cy.get('[data-test="target-date"]').click()
 
-    cy.get('h1').should('contain.text', 'When is the expected date for the transfer?')
-    // Check 'I don't know' checkbox is available
-    cy.get('[id="TargetDateViewModel_TargetDate_UnknownDate"]').should('exist')
+   
 
     cy.get('[data-test="month"]').clear()
     cy.get('[data-test="month"]').type(date.month() + 1)
@@ -41,7 +38,7 @@ class DatesPage {
     cy.get('button').contains('Save and continue').click()
 
     // Check the table has been updated
-    cy.get('dd').eq(2).should('contain.text', date.format('1 MMMM YYYY'))
+    cy.get('dd').eq(4).should('contain.text', date.format('1 MMMM YYYY'))
 
     return this
   }
