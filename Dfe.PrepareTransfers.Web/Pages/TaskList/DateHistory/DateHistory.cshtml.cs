@@ -28,7 +28,7 @@ namespace Dfe.PrepareTransfers.Web.Pages.TaskList.DateHistory
         public async Task<IActionResult> OnGetAsync()
         {
             Project = (await _projectsRepository.GetByUrn(Urn)).Result;
-            OpeningDateHistory = await _projectsRepository.GetOpeningDateHistory(Convert.ToInt32(Urn)) ?? null;
+            OpeningDateHistory = await _projectsRepository.GetOpeningDateHistory(Convert.ToInt32(Project.Id)) ?? null;
 
             return Page();
         }
