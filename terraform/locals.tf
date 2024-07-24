@@ -26,6 +26,7 @@ locals {
   container_apps_allow_ips_inbound             = var.container_apps_allow_ips_inbound
   cdn_frontdoor_enable_rate_limiting           = var.cdn_frontdoor_enable_rate_limiting
   cdn_frontdoor_rate_limiting_threshold        = var.cdn_frontdoor_rate_limiting_threshold
+  cdn_frontdoor_waf_custom_rules               = var.cdn_frontdoor_waf_custom_rules
   cdn_frontdoor_host_add_response_headers      = var.cdn_frontdoor_host_add_response_headers
   cdn_frontdoor_custom_domains                 = var.cdn_frontdoor_custom_domains
   cdn_frontdoor_host_redirects                 = var.cdn_frontdoor_host_redirects
