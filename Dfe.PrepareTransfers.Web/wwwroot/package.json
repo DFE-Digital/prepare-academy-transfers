@@ -18,6 +18,6 @@
     "@ministryofjustice/frontend": "^0.2.6",
     "accessible-autocomplete": "^2.0.4",
     "dfe-frontend-alpha": "^1.0.1",
-    "govuk-frontend": "^4.3.1"
+    "govuk-frontend": "^5.0.0"
   }
 }
