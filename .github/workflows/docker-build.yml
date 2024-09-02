@@ -1,4 +1,4 @@
-name: Docker build
+name: Run Docker build
 
 on:
   pull_request:
@@ -20,4 +20,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           secrets: github_token=${{ secrets.GITHUB_TOKEN }}
+          cache-from: type=gha
+          cache-to: type=gha
           push: false
