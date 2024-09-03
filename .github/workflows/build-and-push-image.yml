@@ -46,7 +46,7 @@ jobs:
   deploy-image:
     name: Deploy '${{ needs.set-env.outputs.branch }}' to ${{ needs.set-env.outputs.environment }}
     needs: [ set-env ]
-    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@v2.3.0
+    uses: DFE-Digital/deploy-azure-container-apps-action/.github/workflows/build-push-deploy.yml@v2.4.0
     with:
       docker-image-name: 'acatran-app'
       docker-build-file-name: './Dockerfile'
