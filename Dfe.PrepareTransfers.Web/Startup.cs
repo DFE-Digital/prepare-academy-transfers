@@ -250,14 +250,20 @@ public class Startup
         {
             httpClient.BaseAddress = new Uri(tramsApiBase);
             httpClient.DefaultRequestHeaders.Add("ApiKey", tramsApiKey);
-            httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+            // Content-Type only works with requests when a BODY is attached, otherwise it's ignored
+            httpClient.DefaultRequestHeaders.AddWithoutValidation("Content-Type", "application/json");
+            // Always expect a JSON response from the API
+            httpClient.DefaultRequestHeaders.Accept.Add("application/json");
         });
 
         services.AddHttpClient("AcademisationApiClient", httpClient =>
         {
             httpClient.BaseAddress = new Uri(academisationApiBase);
             httpClient.DefaultRequestHeaders.Add("x-api-key", academisationApiKey);
-            httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+            // Content-Type only works with requests when a BODY is attached, otherwise it's ignored
+            httpClient.DefaultRequestHeaders.AddWithoutValidation("Content-Type", "application/json");
+            // Always expect a JSON response from the API
+            httpClient.DefaultRequestHeaders.Accept.Add("application/json");
         });
 
         services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
