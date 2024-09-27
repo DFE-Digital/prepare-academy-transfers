@@ -1,5 +1,5 @@
 module "azurerm_key_vault" {
-  source = "github.com/DFE-Digital/terraform-azurerm-key-vault-tfvars?ref=v0.4.2"
+  source = "github.com/DFE-Digital/terraform-azurerm-key-vault-tfvars?ref=v0.5.0"
 
   environment                             = local.environment
   project_name                            = local.project_name
