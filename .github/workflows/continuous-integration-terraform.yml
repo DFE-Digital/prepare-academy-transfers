@@ -28,7 +28,7 @@ jobs:
           fi
 
       - name: Validate Terraform docs
-        uses: terraform-docs/gh-actions@v1.2.0
+        uses: terraform-docs/gh-actions@v1.3.0
         with:
           working-dir: terraform
           config-file: .terraform-docs.yml
