@@ -251,6 +251,7 @@ public class Startup
             httpClient.BaseAddress = new Uri(tramsApiBase);
             httpClient.DefaultRequestHeaders.Add("ApiKey", tramsApiKey);
             httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "PrepareTransfers/1.0");
         });
 
         services.AddHttpClient("AcademisationApiClient", httpClient =>
@@ -258,6 +259,7 @@ public class Startup
             httpClient.BaseAddress = new Uri(academisationApiBase);
             httpClient.DefaultRequestHeaders.Add("x-api-key", academisationApiKey);
             httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "PrepareTransfers/1.0");
         });
 
         services.AddScoped<IReferenceNumberService, ReferenceNumberService>();
