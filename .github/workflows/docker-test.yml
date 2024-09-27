@@ -30,7 +30,7 @@ jobs:
         run: docker save -o ${{ github.ref_name }}.tar ${{ steps.build.outputs.imageid }}
 
       - name: Scan Docker image for CVEs
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.24.0
         with:
           input: ${{ github.ref_name }}.tar
           format: 'sarif'
