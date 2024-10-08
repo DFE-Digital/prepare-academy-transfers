@@ -9,7 +9,7 @@ RUN npm install
 RUN npm run build
 
 # Stage 2 - Build project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS publish
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS publish
 WORKDIR /build
 
 COPY ./Dfe.PrepareTransfers.Data/ ./Dfe.PrepareTransfers.Data/

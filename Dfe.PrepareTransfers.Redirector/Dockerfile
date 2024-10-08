@@ -9,7 +9,7 @@ RUN npm install
 RUN npm run build
 
 # Stage 2 - DotNet
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnetBuild
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dotnetBuild
 WORKDIR /build
 COPY . .
 RUN  rm -rf ./Dfe.PrepareTransfers.Redirector/wwwroot/src
