@@ -15,7 +15,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^0.2.6",
+    "@ministryofjustice/frontend": "^2.0.0",
     "accessible-autocomplete": "^2.0.4",
     "dfe-frontend-alpha": "^1.0.1",
     "govuk-frontend": "^4.3.1"
