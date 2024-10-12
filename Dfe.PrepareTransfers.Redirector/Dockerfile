@@ -1,5 +1,5 @@
 ARG ASPNET_IMAGE_TAG=6.0-bullseye-slim
-ARG NODEJS_IMAGE_TAG=18.20-bullseye
+ARG NODEJS_IMAGE_TAG=20.18-bullseye
 
 # Stage 1 - Node Assets
 FROM node:${NODEJS_IMAGE_TAG} AS frontendBuild
